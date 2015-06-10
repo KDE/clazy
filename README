@@ -1,0 +1,7 @@
+* Read https://wiki.kdab.com/display/KDABTech/Clang+plugins on how to build llvm and clang
+* Build and install the plugin
+* Create a clang+++ sh script and put it on your path, it should have the following contents:
+  clang++ -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings $@
+
+* Change your mkspec to use clang+++, or, for cmake projects export CXX=clang+++
+
