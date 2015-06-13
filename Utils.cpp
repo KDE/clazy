@@ -44,13 +44,6 @@ bool Utils::isQObject(CXXRecordDecl *decl)
     return false;
 }
 
-void Utils::emitWarning(CompilerInstance &instance, SourceLocation loc, const char *error)
-{
-    FullSourceLoc full(loc, instance.getSourceManager());
-    unsigned id = instance.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error);
-    DiagnosticBuilder B = instance.getDiagnostics().Report(full, id);
-}
-
 bool Utils::hasEnding(const std::string &fullString, const std::string &ending)
 {
     if (fullString.length() >= ending.length()) {

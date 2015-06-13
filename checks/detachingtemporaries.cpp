@@ -81,7 +81,7 @@ void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
         auto temporary = dyn_cast<CXXBindTemporaryExpr>(*stm->child_begin());
         if (temporary) {
             std::string error = std::string("Don't call ") + className + "::" + functionName + std::string("() on temporary [-Wmore-warnings-detaching-temporary]");
-            Utils::emitWarning(m_ci, stm->getLocStart(), error.c_str());
+            emitWarning(stm->getLocStart(), error.c_str());
         }
     }
 }

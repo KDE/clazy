@@ -57,7 +57,7 @@ void DuplicateExpensiveStatement::inspectStatement(Stmt *stm)
                     m_expensiveCounts[m_currentFunctionDecl][valueDecl]++;
                     if (m_expensiveCounts[m_currentFunctionDecl][valueDecl] > 1) {
                         llvm::errs() << m_currentFunctionDecl->getNameAsString() << " " << m_expensiveCounts[m_currentFunctionDecl][valueDecl] << "\n";
-                        Utils::emitWarning(m_ci, memberCallExpr->getLocStart(), "Duplicate expensive statement [-Wmore-warnings-duplicate-expensive-statement]");
+                        emitWarning(memberCallExpr->getLocStart(), "Duplicate expensive statement [-Wmore-warnings-duplicate-expensive-statement]");
                     }
                 }
             }

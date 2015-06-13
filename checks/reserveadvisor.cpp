@@ -115,7 +115,7 @@ bool ReserveAdvisor::acceptsValueDecl(ValueDecl *valueDecl) const
 
 void ReserveAdvisor::printWarning(const SourceLocation &loc)
 {
-    Utils::emitWarning(m_ci, loc, "Reserve candidate [-Wmore-warnings-reserve-candidate]");
+    emitWarning(loc, "Reserve candidate [-Wmore-warnings-reserve-candidate]");
 }
 
 void ReserveAdvisor::VisitStmt(clang::Stmt *stm)

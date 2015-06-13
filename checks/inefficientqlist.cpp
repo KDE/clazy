@@ -62,7 +62,7 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
 
     if (size_of_T > size_of_void) {
         string s = string("Use QVector instead of QList for type with size [-Wmore-warnings-qlist]") + to_string(size_of_T);
-        Utils::emitWarning(m_ci, decl->getLocStart(), s.c_str());
+        emitWarning(decl->getLocStart(), s.c_str());
     }
 }
 

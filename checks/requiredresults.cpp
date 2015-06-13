@@ -116,7 +116,7 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
 
         if (!bailout) {
             std::string error = std::string("Unused result of const member (") + methodName + std::string(") [-Wmore-warnings-unused-result]");
-            Utils::emitWarning(m_ci, callExpr->getLocStart(), error.c_str());
+            emitWarning(callExpr->getLocStart(), error.c_str());
         }
     }
 }

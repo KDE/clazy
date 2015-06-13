@@ -39,10 +39,10 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
         return;
 
     if (Utils::isQObject(castFrom))
-        Utils::emitWarning(m_ci, dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast [-Wmore-warnings-bogus-dynamic_cast]");
+        emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast [-Wmore-warnings-bogus-dynamic_cast]");
 
     if (dynExp->isAlwaysNull()) {
-        Utils::emitWarning(m_ci, dynExp->getLocStart(), "That dynamic_cast is always null [-Wmore-warnings-bogus-dynamic_cast]");
+        emitWarning(dynExp->getLocStart(), "That dynamic_cast is always null [-Wmore-warnings-bogus-dynamic_cast]");
         return;
     }
 
@@ -51,9 +51,9 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
         return;
 
     if (castFrom == castTo) {
-        Utils::emitWarning(m_ci, stm->getLocStart(), "Casting to itself [-Wmore-warnings-bogus-dynamic_cast]");
+        emitWarning(stm->getLocStart(), "Casting to itself [-Wmore-warnings-bogus-dynamic_cast]");
     } else if (Utils::isChildOf(/*child=*/castFrom, castTo)) {
-        Utils::emitWarning(m_ci, stm->getLocStart(), "explicitly casting to base is unnecessary [-Wmore-warnings-bogus-dynamic_cast]");
+        emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary [-Wmore-warnings-bogus-dynamic_cast]");
     }
 }
 

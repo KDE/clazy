@@ -42,9 +42,6 @@ namespace Utils {
     /// Returns true if the class inherits from QObject
     bool isQObject(clang::CXXRecordDecl *decl);
 
-    /// Prints a compiler warning to stderr
-    void emitWarning(clang::CompilerInstance &instance, clang::SourceLocation loc, const char *error);
-
     /// Returns true if fullString ends in ending
     bool hasEnding(const std::string &fullString, const std::string &ending);
 

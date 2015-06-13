@@ -38,7 +38,7 @@ void QMapKeyChecker::VisitDecl(clang::Decl *decl)
     QualType qt = templateArguments[0].getAsType();
     const Type *t = qt.getTypePtrOrNull();
     if (t && t->isPointerType()) {
-        Utils::emitWarning(m_ci, decl->getLocStart(), "Use QHash<K,T> instead of QMap<K,T> when K is a pointer");
+        emitWarning(decl->getLocStart(), "Use QHash<K,T> instead of QMap<K,T> when K is a pointer");
     }
 }
 

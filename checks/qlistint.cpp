@@ -45,7 +45,7 @@ void ListInt::VisitDecl(Decl *decl)
         return;
 
     if (t->isIntegerType())
-        Utils::emitWarning(m_ci, decl->getLocStart(), "Use QVarLengthArray instead of QList<int>");
+        emitWarning(decl->getLocStart(), "Use QVarLengthArray instead of QList<int>");
 }
 
 void ListInt::VisitStmt(Stmt *)

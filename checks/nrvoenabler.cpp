@@ -51,14 +51,12 @@ void NRVOEnabler::VisitDecl(clang::Decl *decl)
         }
 
         std::string error = "returned type is large (" + std::to_string(size_of_T) + " bytes )" + qt.getAsString();
-        Utils::emitWarning(m_ci, fDecl->getLocStart(), error.c_str());
+        emitWarning(fDecl->getLocStart(), error.c_str());
     }
 }
 
 void NRVOEnabler::VisitStmt(clang::Stmt *)
 {
-
-
 }
 
 std::string NRVOEnabler::name() const

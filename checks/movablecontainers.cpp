@@ -63,8 +63,8 @@ void MovableContainers::VisitDecl(clang::Decl *decl)
             std::stringstream out;
             out << m_ci.getASTContext().getTypeSize(qt2)/8;
             s = "Make this class movable: " + typeName + " [-Wmore-warnings-movable]";
-            Utils::emitWarning(m_ci, decl->getLocStart(), s.c_str());
-            Utils::emitWarning(m_ci, t->getAsCXXRecordDecl()->getLocStart(), "Type declared here:");
+            emitWarning(decl->getLocStart(), s.c_str());
+            emitWarning(t->getAsCXXRecordDecl()->getLocStart(), "Type declared here:");
         }
     }
 }
