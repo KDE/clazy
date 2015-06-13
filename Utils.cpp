@@ -18,7 +18,6 @@
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ParentMap.h>
-#include <string>
 
 using namespace clang;
 using namespace std;

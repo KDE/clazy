@@ -71,3 +71,10 @@ std::vector<std::string> CheckBase::filesToIgnore() const
 {
     return {};
 }
+
+void CheckBase::emitWarning(clang::SourceLocation loc, const char *error)
+{
+    FullSourceLoc full(loc, m_ci.getSourceManager());
+    unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error);
+    DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
+}

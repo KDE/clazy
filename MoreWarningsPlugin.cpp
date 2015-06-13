@@ -16,6 +16,7 @@
 #include "checks/duplicateexpensivestatement.h"
 #include "checks/dynamic_cast.h"
 #include "checks/inefficientqlist.h"
+#include "checks/foreachdetachments.h"
 #include "checks/movablecontainers.h"
 #include "checks/nonpodstatic.h"
 #include "checks/nrvoenabler.h"
@@ -59,6 +60,7 @@ public:
         m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));
         m_checks.push_back(std::shared_ptr<VariantSanitizer>(new VariantSanitizer(ci)));
         m_checks.push_back(std::shared_ptr<QMapKeyChecker>(new QMapKeyChecker(ci)));
+        m_checks.push_back(std::shared_ptr<ForeachDetachments>(new ForeachDetachments(ci)));
 
         // These are commented because they are either WIP or have to many false-positives
         /// m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
