@@ -45,14 +45,16 @@ void MovableContainers::VisitDecl(clang::Decl *decl)
 
     if (tal.size() != 1) return;
     QualType qt2 = tal[0].getAsType();
+
+    const Type *t = qt2.getTypePtrOrNull();
+    if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->getDefinition() == nullptr) return; // Don't crash if we only have a fwd decl
+
     const int size_of_void = 32; // performance on arm is more important
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2); // QList<T>
 
     const bool isMovable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
 
     if (size_of_T <= size_of_void && isMovable) {
-        const Type *t = qt2.getTypePtrOrNull();
-        if (t == nullptr || t->getAsCXXRecordDecl() == nullptr) return;
 
         std::string typeName = t->getAsCXXRecordDecl()->getName();
         if (m_typeInfos.count(t->getAsCXXRecordDecl()->getQualifiedNameAsString()) != 0)
