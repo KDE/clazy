@@ -41,10 +41,10 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     if (Utils::isQObject(castFrom))
         emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast [-Wmore-warnings-bogus-dynamic_cast]");
 
-    if (dynExp->isAlwaysNull()) {
-        emitWarning(dynExp->getLocStart(), "That dynamic_cast is always null [-Wmore-warnings-bogus-dynamic_cast]");
-        return;
-    }
+    //if (dynExp->isAlwaysNull()) { // Crashing in Type.h  assert(isa<T>(CanonicalType))
+      //  emitWarning(dynExp->getLocStart(), "That dynamic_cast is always null [-Wmore-warnings-bogus-dynamic_cast]");
+//        return;
+  //  }
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);
     if (castTo == nullptr)
