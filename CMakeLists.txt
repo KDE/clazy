@@ -5,11 +5,6 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 
-set (LLVM_SRC_DIR /data/extra2/sources/llvm)
-set (CLANG_SRC_DIR /data/extra2/sources/llvm/tools/clang)
-set (LLVM_BUILD_DIR /data/extra2/sources/llvm/build)
-set (CLANG_BUILD_DIR /data/extra2/sources/llvm/build/tools/clang)
-
 add_definitions (-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions (-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
@@ -45,12 +40,9 @@ set (LLVM_LIBS
 macro(add_clang_plugin name)
     set (srcs ${ARGN})
 
-    include_directories( "${LLVM_SRC_DIR}/include"
-        "${CLANG_SRC_DIR}/include"
-        "${CLANG_BUILD_DIR}/include"
-        "${LLVM_INSTALL_PREFIX}/include" ${CMAKE_SOURCE_DIR} )
+    include_directories("${LLVM_INSTALL_PREFIX}/include" ${CMAKE_SOURCE_DIR})
 
-    link_directories( "${LLVM_BUILD_DIR}/lib" "${LLVM_INSTALL_PREFIX}/lib")
+    link_directories("${LLVM_INSTALL_PREFIX}/lib")
 
     add_library( ${name} SHARED ${srcs} )
 
@@ -123,3 +115,5 @@ add_clang_plugin(ClangMoreWarningsPlugin
 set_target_properties(ClangMoreWarningsPlugin PROPERTIES
     LINKER_LANGUAGE CXX
     PREFIX "")
+
+install(TARGETS ClangMoreWarningsPlugin DESTINATION lib)
