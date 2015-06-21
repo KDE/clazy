@@ -62,6 +62,7 @@ void ForeachDetachments::VisitStmt(clang::Stmt *stmt)
     if (valueDecl == nullptr)
         return;
 
+    // const containers are fine
     if (valueDecl->getType().isConstQualified())
         return;
 
