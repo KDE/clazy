@@ -35,7 +35,7 @@ static bool isAReserveClass(CXXRecordDecl *recordDecl)
     if (recordDecl == nullptr)
         return false;
 
-    static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet"};
+    static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet", "QVarLengthArray"};
 
     auto it = classes.cbegin();
     auto end = classes.cend();
