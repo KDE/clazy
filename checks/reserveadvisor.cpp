@@ -47,20 +47,38 @@ static bool isAReserveClass(CXXRecordDecl *recordDecl)
     return false;
 }
 
+static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)
+{
+    if (paramType == nullptr)
+        return false;
+
+    if (paramType->getAsCXXRecordDecl() && paramType->getAsCXXRecordDecl() == classDecl)
+        return true;
+
+    const CXXRecordDecl *paramClassDecl = paramType->getPointeeCXXRecordDecl();
+    return paramClassDecl && paramClassDecl == classDecl;
+}
+
 static bool isCandidateMethod(CXXMethodDecl *methodDecl)
 {
     if (methodDecl == nullptr)
         return false;
 
-    CXXRecordDecl *decl = methodDecl->getParent();
-    if (decl == nullptr)
+    CXXRecordDecl *classDecl = methodDecl->getParent();
+    if (classDecl == nullptr)
         return false;
 
     auto methodName = methodDecl->getNameAsString();
     if (methodName != "append" && methodName != "push_back" && methodName != "push" /*&& methodName != "insert"*/)
         return false;
 
-    if (!isAReserveClass(decl))
+    if (!isAReserveClass(classDecl))
+        return false;
+
+    // Catch cases like: QList<T>::append(const QList<T> &), which don't make sense to reserve.
+    // In this case, the parameter has the same type of the class
+    ParmVarDecl *parm = methodDecl->getParamDecl(0);
+    if (paramIsSameTypeAs(parm->getType().getTypePtrOrNull(), classDecl))
         return false;
 
     return true;
@@ -84,11 +102,17 @@ static bool isCandidateOperator(CXXOperatorCallExpr *oper)
     if (operatorName != "operator<<" && operatorName != "operator+=")
         return false;
 
-    CXXRecordDecl *recordRecl = calleeDecl->getParent();
-    if (recordRecl == nullptr)
+    CXXRecordDecl *recordDecl = calleeDecl->getParent();
+    if (recordDecl == nullptr)
         return false;
 
-    if (!isAReserveClass(recordRecl))
+    if (!isAReserveClass(recordDecl))
+        return false;
+
+    // Catch cases like: QList<T>::append(const QList<T> &), which don't make sense to reserve.
+    // In this case, the parameter has the same type of the class
+    ParmVarDecl *parm = calleeDecl->getParamDecl(0);
+    if (paramIsSameTypeAs(parm->getType().getTypePtrOrNull(), recordDecl))
         return false;
 
     return true;
