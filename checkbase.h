@@ -27,7 +27,7 @@ protected:
     virtual void VisitDecl(clang::Decl *decl);
     bool shouldIgnoreFile(const std::string &filename) const;
     virtual std::vector<std::string> filesToIgnore() const;
-    void emitWarning(clang::SourceLocation loc, const char *error);
+    void emitWarning(clang::SourceLocation loc, const char *error) const;
 
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;

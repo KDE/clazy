@@ -108,6 +108,7 @@ add_clang_plugin(ClangMoreWarningsPlugin
                  checks/requiredresults.cpp
                  checks/reserveadvisor.cpp
                  checks/variantsanitizer.cpp
+                 checks/virtualcallsfromctor.cpp
                  MoreWarningsPlugin.cpp
                  Utils.cpp
                  )

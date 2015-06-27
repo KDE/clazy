@@ -26,6 +26,7 @@
 #include "checks/requiredresults.h"
 #include "checks/reserveadvisor.h"
 #include "checks/variantsanitizer.h"
+#include "checks/virtualcallsfromctor.h"
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
@@ -61,6 +62,7 @@ public:
         m_checks.push_back(std::shared_ptr<VariantSanitizer>(new VariantSanitizer(ci)));
         m_checks.push_back(std::shared_ptr<QMapKeyChecker>(new QMapKeyChecker(ci)));
         m_checks.push_back(std::shared_ptr<ForeachDetachments>(new ForeachDetachments(ci)));
+        m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
 
         // These are commented because they are either WIP or have to many false-positives
         /// m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
