@@ -46,17 +46,6 @@ void CheckBase::VisitDecl(Decl *)
 
 bool CheckBase::shouldIgnoreFile(const std::string &filename) const
 {
-/*    std::vector<std::string> files { "x86_64-unknown-linux-gnu",
-                                     "qsharedpointer_impl.h",
-                                     "bearer",
-                                     "boost",
-                                     "CMakeTmp",
-                                     "ksharedptr.h",
-                                     "qlist.h",
-                                     "moc_", ".moc", "tst_", "qrc",
-                                     "kresources" };
-*/
-
     const std::vector<std::string> files = filesToIgnore();
     for (auto &file : files) {
         bool contains = filename.find(file) != std::string::npos;

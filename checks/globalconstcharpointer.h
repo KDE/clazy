@@ -15,6 +15,8 @@
 
 #include "checkbase.h"
 
+#include <vector>
+
 /**
  * Finds where you're using const char *foo; instead of const char *const foo; or const char []foo;
  * The first case adds a pointer in .data, pointing to .rodata, the other cases only use .rodata
@@ -25,6 +27,7 @@ public:
     explicit GlobalConstCharPointer(clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
     std::string name() const override;
+    std::vector<std::string> filesToIgnore() const override;
 };
 
 #endif

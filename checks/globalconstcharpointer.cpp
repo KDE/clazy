@@ -45,3 +45,9 @@ std::string GlobalConstCharPointer::name() const
 {
     return "global-const-char-pointer";
 }
+
+std::vector<std::string> GlobalConstCharPointer::filesToIgnore() const
+{
+    static const std::vector<std::string> files = {"errno.h", "getopt.h", "StdHeader.h", "3rdparty", "mysql.h"};
+    return files;
+}
