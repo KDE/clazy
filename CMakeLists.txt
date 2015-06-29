@@ -99,6 +99,7 @@ add_clang_plugin(ClangMoreWarningsPlugin
                  checks/duplicateexpensivestatement.cpp
                  checks/dynamic_cast.cpp
                  checks/foreachdetachments.cpp
+                 checks/globalconstcharpointer.cpp
                  checks/inefficientqlist.cpp
                  checks/qlistint.cpp
                  checks/qmapkey.cpp
