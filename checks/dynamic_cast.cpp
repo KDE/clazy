@@ -29,10 +29,6 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     if (dynExp == nullptr)
         return;
 
-    SourceManager &sm = m_ci.getSourceManager();
-    if (shouldIgnoreFile(sm.getFilename(stm->getLocStart())))
-        return;
-
     auto namedCast = dyn_cast<CXXNamedCastExpr>(stm);
     CXXRecordDecl *castFrom = Utils::namedCastInnerDecl(namedCast);
     if (castFrom == nullptr)

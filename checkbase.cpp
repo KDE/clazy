@@ -36,11 +36,17 @@ CheckBase::~CheckBase()
 
 void CheckBase::VisitStatement(Stmt *stm)
 {
-    VisitStmt(stm);
+    SourceManager &sm = m_ci.getSourceManager();
+    if (!shouldIgnoreFile(sm.getFilename(stm->getLocStart())))
+        VisitStmt(stm);
 }
 
 void CheckBase::VisitDeclaration(Decl *decl)
 {
+    SourceManager &sm = m_ci.getSourceManager();
+    if (shouldIgnoreFile(sm.getFilename(decl->getLocStart())))
+        return;
+
     auto mdecl = dyn_cast<CXXMethodDecl>(decl);
     if (mdecl)
         m_lastMethodDecl = mdecl;
