@@ -26,7 +26,6 @@ CheckBase::CheckBase(CompilerInstance &ci)
 {
     ASTContext &context = m_ci.getASTContext();
     m_tu = context.getTranslationUnitDecl();
-    //m_parentMap = new ParentMap(m_tu->getBody());
     m_lastMethodDecl = nullptr;
 }
 
