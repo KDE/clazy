@@ -1,6 +1,8 @@
 #include "foreachdetachments.h"
 #include "Utils.h"
 
+#include <clang/AST/AST.h>
+
 using namespace clang;
 using namespace std;
 
@@ -62,6 +64,8 @@ void ForeachDetachments::VisitStmt(clang::Stmt *stmt)
     if (valueDecl == nullptr)
         return;
 
+    checkBigTypeMissingRef();
+
     // const containers are fine
     if (valueDecl->getType().isConstQualified())
         return;
@@ -76,6 +80,81 @@ void ForeachDetachments::VisitStmt(clang::Stmt *stmt)
 std::string ForeachDetachments::name() const
 {
     return "foreach-detachment";
+}
+
+void ForeachDetachments::checkBigTypeMissingRef()
+{
+    // Get the inner forstm
+    vector<ForStmt*> forStatements;
+    Utils::getChilds2<ForStmt>(m_lastForStmt->getBody(), forStatements);
+    if (forStatements.empty())
+        return;
+
+    // Get the variable declaration (lhs of foreach)
+    vector<DeclStmt*> varDecls;
+    Utils::getChilds2<DeclStmt>(forStatements.at(0), varDecls);
+    if (varDecls.empty())
+        return;
+
+    Decl *decl = varDecls.at(0)->getSingleDecl();
+    if (decl == nullptr)
+        return;
+    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    if (varDecl == nullptr)
+        return;
+
+    QualType qt = varDecl->getType();
+    const Type *t = qt.getTypePtrOrNull();
+    if (t == nullptr || t->isLValueReferenceType()) // it's a reference, we're good
+        return;
+
+    const int size_of_T = m_ci.getASTContext().getTypeSize(varDecl->getType()) / 8;
+    const bool isLarge = size_of_T > 16;
+    CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
+
+    // other ctors are fine, just check copy ctor and dtor
+    const bool isUserNonTrivial = recordDecl && (recordDecl->hasUserDeclaredCopyConstructor() || recordDecl->hasUserDeclaredDestructor());
+    // const bool isLiteral = t->isLiteralType(m_ci.getASTContext());
+
+    std::string error;
+    if (isLarge) {
+        error = "Missing reference in foreach with sizeof(T) = ";
+        error += std::to_string(size_of_T) + " bytes";
+    } else if (isUserNonTrivial) {
+        error = "Missing reference in foreach with non trivial type";
+    }
+
+    if (error.empty()) // No warning
+        return;
+
+    error += " [-Wmore-warnings-missing-ref-foreach]";
+
+    // If it's const, then it's definitely missing &. But if it's not const, there might be a non-const member call, which we should allow
+    if (qt.isConstQualified()) {
+        emitWarning(varDecl->getLocStart(), error.c_str());
+        return;
+    }
+
+
+    // Lets look for it.
+    std::vector<CXXMemberCallExpr*> memberCalls;
+    Utils::getChilds2<CXXMemberCallExpr>(forStatements.at(0), memberCalls);
+
+    for (auto it = memberCalls.cbegin(), end = memberCalls.cend(); it != end; ++it) {
+        CXXMemberCallExpr *memberCall = *it;
+        CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
+        if (methodDecl == nullptr || methodDecl->isConst())
+            continue;
+
+        ValueDecl *valueDecl = Utils::valueDeclForMemberCall(*it);
+        if (valueDecl == nullptr)
+            continue;
+
+        if (valueDecl == varDecl) // We found it, a non-const member call is ok, no ref needed
+            return;
+    }
+
+    emitWarning(varDecl->getLocStart(), error.c_str());
 }
 
 bool ForeachDetachments::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)

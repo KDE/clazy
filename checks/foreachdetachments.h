@@ -19,6 +19,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
     std::string name() const override;
 private:
+    void checkBigTypeMissingRef();
     bool containsDetachments(clang::Stmt *stmt, clang::ValueDecl *containerValueDecl);
     clang::ForStmt *m_lastForStmt = nullptr;
 };
