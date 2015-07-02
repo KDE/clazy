@@ -1,4 +1,4 @@
-#include "foreachdetachments.h"
+#include "foreacher.h"
 #include "Utils.h"
 
 #include <clang/AST/AST.h>
@@ -28,13 +28,13 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
     return methodsMap;
 }
 
-ForeachDetachments::ForeachDetachments(clang::CompilerInstance &ci)
+Foreacher::Foreacher(clang::CompilerInstance &ci)
     : CheckBase(ci)
 {
 
 }
 
-void ForeachDetachments::VisitStmt(clang::Stmt *stmt)
+void Foreacher::VisitStmt(clang::Stmt *stmt)
 {
     auto forStm = dyn_cast<ForStmt>(stmt);
     if (forStm != nullptr) {
@@ -77,12 +77,12 @@ void ForeachDetachments::VisitStmt(clang::Stmt *stmt)
 }
 
 
-std::string ForeachDetachments::name() const
+std::string Foreacher::name() const
 {
-    return "foreach-detachment";
+    return "foreach";
 }
 
-void ForeachDetachments::checkBigTypeMissingRef()
+void Foreacher::checkBigTypeMissingRef()
 {
     // Get the inner forstm
     vector<ForStmt*> forStatements;
@@ -157,7 +157,7 @@ void ForeachDetachments::checkBigTypeMissingRef()
     emitWarning(varDecl->getLocStart(), error.c_str());
 }
 
-bool ForeachDetachments::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)
+bool Foreacher::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)
 {
     if (stm == nullptr)
         return false;

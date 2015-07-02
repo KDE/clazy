@@ -16,7 +16,7 @@
 #include "checks/duplicateexpensivestatement.h"
 #include "checks/dynamic_cast.h"
 #include "checks/inefficientqlist.h"
-#include "checks/foreachdetachments.h"
+#include "checks/foreacher.h"
 #include "checks/globalconstcharpointer.h"
 #include "checks/movablecontainers.h"
 #include "checks/nonpodstatic.h"
@@ -62,7 +62,7 @@ public:
         m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));
         m_checks.push_back(std::shared_ptr<VariantSanitizer>(new VariantSanitizer(ci)));
         m_checks.push_back(std::shared_ptr<QMapKeyChecker>(new QMapKeyChecker(ci)));
-        m_checks.push_back(std::shared_ptr<ForeachDetachments>(new ForeachDetachments(ci)));
+        m_checks.push_back(std::shared_ptr<Foreacher>(new Foreacher(ci)));
         m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
         m_checks.push_back(std::shared_ptr<GlobalConstCharPointer>(new GlobalConstCharPointer(ci)));
 

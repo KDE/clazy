@@ -98,7 +98,7 @@ add_clang_plugin(ClangMoreWarningsPlugin
                  checks/detachingtemporaries.cpp
                  checks/duplicateexpensivestatement.cpp
                  checks/dynamic_cast.cpp
-                 checks/foreachdetachments.cpp
+                 checks/foreacher.cpp
                  checks/globalconstcharpointer.cpp
                  checks/inefficientqlist.cpp
                  checks/qlistint.cpp
