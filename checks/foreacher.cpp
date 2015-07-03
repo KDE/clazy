@@ -79,7 +79,7 @@ void Foreacher::VisitStmt(clang::Stmt *stmt)
 
 std::string Foreacher::name() const
 {
-    return "foreach";
+    return "foreacher";
 }
 
 void Foreacher::checkBigTypeMissingRef()

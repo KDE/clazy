@@ -4,3 +4,6 @@ CMakeLists.txt.user
 ClangMoreWarningsPlugin.cbp
 cmake_install.cmake
 lib/
+compile.output
+test.output
+Makefile
