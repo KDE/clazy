@@ -16,10 +16,10 @@ for folder in */ ; do
 
     grep "warning:" compile.output &> test.output
 
-    if ! diff -q test.output test.expected &> /dev/null ; then
+    if ! diff -q test.expected test.output &> /dev/null ; then
         echo "[FAIL] $folder"
         echo
-        diff -Naur test.output test.expected
+        diff -Naur test.expected test.output
     else
         echo "[OK] $folder"
     fi
