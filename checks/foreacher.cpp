@@ -209,7 +209,7 @@ void Foreacher::checkBigTypeMissingRef()
             if (t == nullptr)
                 continue;
 
-            if (t->isReferenceType() && !qt.isConstQualified())
+            if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified())
                 return; // function receives non-const ref, so our foreach variable cant be const-ref
 
             ++param;

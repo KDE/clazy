@@ -33,6 +33,8 @@ struct SmallNonTrivial
 extern void nop();
 extern void nop2(BigTrivial &); // non-const-ref
 extern void nop3(const BigTrivial &); // const-ref
+extern void nop4(BigTrivial *); // pointer
+
 void test_missing_ref()
 {
     QList<Trivial> trivials;
@@ -76,8 +78,13 @@ void test_missing_ref()
         nop2(t);
     }
 
-    // Test #9: No warning
+    // Test #9: Warning
     foreach (BigTrivial t, bigTrivials) {
         nop3(t);
+    }
+
+    // Test #9: No warning
+    foreach (BigTrivial t, bigTrivials) {
+        nop4(&t);
     }
 }
