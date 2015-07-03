@@ -174,6 +174,41 @@ void Foreacher::checkBigTypeMissingRef()
             return;
     }
 
+    // Look for a method call that takes our variable by non-const reference
+    std::vector<CallExpr*> callExprs;
+    Utils::getChilds2<CallExpr>(forStatements.at(0), callExprs);
+    for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
+        CallExpr *callexpr = *it;
+        FunctionDecl *fDecl = callexpr->getDirectCallee();
+        if (fDecl == nullptr)
+            continue;
+
+        int param = 0;
+        for (auto arg = callexpr->arg_begin(), arg_end = callexpr->arg_end(); arg != arg_end; ++arg) {
+            DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
+            if (refExpr == nullptr)
+                continue;
+
+            if (refExpr->getDecl() != varDecl) // It's our variable ?
+                continue;
+
+            // It is, lets see if the callee takes our variable by const-ref
+            ParmVarDecl *paramDecl = fDecl->getParamDecl(param);
+            if (paramDecl == nullptr)
+                continue;
+
+            QualType qt = paramDecl->getType();
+            const Type *t = qt.getTypePtrOrNull();
+            if (t == nullptr)
+                continue;
+
+            if (t->isReferenceType() && !qt.isConstQualified())
+                return; // function receives non-const ref, so our foreach variable cant be const-ref
+
+            ++param;
+        }
+    }
+
     emitWarning(varDecl->getLocStart(), error.c_str());
 }
 
