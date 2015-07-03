@@ -186,8 +186,15 @@ void Foreacher::checkBigTypeMissingRef()
         int param = 0;
         for (auto arg = callexpr->arg_begin(), arg_end = callexpr->arg_end(); arg != arg_end; ++arg) {
             DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
-            if (refExpr == nullptr)
-                continue;
+            if (refExpr == nullptr)  {
+                if (!(*arg)->children().empty()) {
+                    refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
+                    if (refExpr == nullptr)
+                        continue;
+                } else {
+                    continue;
+                }
+            }
 
             if (refExpr->getDecl() != varDecl) // It's our variable ?
                 continue;
