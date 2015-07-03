@@ -62,4 +62,11 @@ void test_missing_ref()
     foreach (BigTrivial t, bigTrivials) {
         t.nonConstFoo();
     }
+
+    // Test #7: No warning
+    foreach (BigTrivial t, bigTrivials) {
+        t = BigTrivial();
+        t++;
+        --t;
+    }
 }

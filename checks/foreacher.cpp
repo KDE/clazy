@@ -154,6 +154,26 @@ void Foreacher::checkBigTypeMissingRef()
             return;
     }
 
+    // Check for operator calls:
+    std::vector<CXXOperatorCallExpr*> operatorCalls;
+    Utils::getChilds2<CXXOperatorCallExpr>(forStatements.at(0), operatorCalls);
+    for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
+        CXXOperatorCallExpr *operatorExpr = *it;
+        FunctionDecl *fDecl = operatorExpr->getDirectCallee();
+        if (fDecl == nullptr)
+            continue;
+        CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
+        if (methodDecl == nullptr || methodDecl->isConst())
+            continue;
+
+        ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(*it);
+        if (valueDecl == nullptr)
+            continue;
+
+        if (valueDecl == varDecl) // We found it, a non-const operator call is ok, no ref needed
+            return;
+    }
+
     emitWarning(varDecl->getLocStart(), error.c_str());
 }
 
