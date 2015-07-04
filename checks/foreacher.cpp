@@ -183,7 +183,7 @@ void Foreacher::checkBigTypeMissingRef()
         if (fDecl == nullptr)
             continue;
 
-        int param = 0;
+        uint param = 0;
         for (auto arg = callexpr->arg_begin(), arg_end = callexpr->arg_end(); arg != arg_end; ++arg) {
             DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
             if (refExpr == nullptr)  {
@@ -200,6 +200,9 @@ void Foreacher::checkBigTypeMissingRef()
                 continue;
 
             // It is, lets see if the callee takes our variable by const-ref
+            if (param >= fDecl->param_size())
+                continue;
+
             ParmVarDecl *paramDecl = fDecl->getParamDecl(param);
             if (paramDecl == nullptr)
                 continue;
