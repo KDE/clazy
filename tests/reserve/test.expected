@@ -1,0 +1,2 @@
+main.cpp:8:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidate]
+main.cpp:7:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidate]
