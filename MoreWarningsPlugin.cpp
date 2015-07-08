@@ -17,6 +17,7 @@
 #include "checks/dynamic_cast.h"
 #include "checks/inefficientqlist.h"
 #include "checks/foreacher.h"
+#include "checks/functionargsbyref.h"
 #include "checks/globalconstcharpointer.h"
 #include "checks/movablecontainers.h"
 #include "checks/nonpodstatic.h"
@@ -65,6 +66,7 @@ public:
         m_checks.push_back(std::shared_ptr<Foreacher>(new Foreacher(ci)));
         m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
         m_checks.push_back(std::shared_ptr<GlobalConstCharPointer>(new GlobalConstCharPointer(ci)));
+        m_checks.push_back(std::shared_ptr<FunctionArgsByRef>(new FunctionArgsByRef(ci)));
 
         // These are commented because they are either WIP or have to many false-positives
         /// m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));

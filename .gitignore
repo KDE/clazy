@@ -7,3 +7,4 @@ lib/
 compile.output
 test.output
 Makefile
+*.o

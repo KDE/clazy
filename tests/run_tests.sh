@@ -10,7 +10,8 @@ CXX="clang++ -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so
 
 for folder in */ ; do
     cd ${folder}
-    $CXX main.cpp -o /tmp/foo.o &> compile.output
+    echo $CXX main.cpp > compile.output
+    $CXX main.cpp -o /tmp/foo.o &>> compile.output
 
     if [ ! $? ] ; then echo "build error! See ${folder}compile.output" ; exit -1 ; fi
 

@@ -136,88 +136,12 @@ void Foreacher::checkBigTypeMissingRef()
     }
 
 
-    // Lets look for it.
-    std::vector<CXXMemberCallExpr*> memberCalls;
-    Utils::getChilds2<CXXMemberCallExpr>(forStatements.at(0), memberCalls);
-
-    for (auto it = memberCalls.cbegin(), end = memberCalls.cend(); it != end; ++it) {
-        CXXMemberCallExpr *memberCall = *it;
-        CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
-        if (methodDecl == nullptr || methodDecl->isConst())
-            continue;
-
-        ValueDecl *valueDecl = Utils::valueDeclForMemberCall(*it);
-        if (valueDecl == nullptr)
-            continue;
-
-        if (valueDecl == varDecl) // We found it, a non-const member call is ok, no ref needed
-            return;
-    }
-
-    // Check for operator calls:
-    std::vector<CXXOperatorCallExpr*> operatorCalls;
-    Utils::getChilds2<CXXOperatorCallExpr>(forStatements.at(0), operatorCalls);
-    for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
-        CXXOperatorCallExpr *operatorExpr = *it;
-        FunctionDecl *fDecl = operatorExpr->getDirectCallee();
-        if (fDecl == nullptr)
-            continue;
-        CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
-        if (methodDecl == nullptr || methodDecl->isConst())
-            continue;
-
-        ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(*it);
-        if (valueDecl == nullptr)
-            continue;
-
-        if (valueDecl == varDecl) // We found it, a non-const operator call is ok, no ref needed
-            return;
-    }
+    if (Utils::containsNonConstMemberCall(forStatements.at(0), varDecl))
+        return;
 
     // Look for a method call that takes our variable by non-const reference
-    std::vector<CallExpr*> callExprs;
-    Utils::getChilds2<CallExpr>(forStatements.at(0), callExprs);
-    for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
-        CallExpr *callexpr = *it;
-        FunctionDecl *fDecl = callexpr->getDirectCallee();
-        if (fDecl == nullptr)
-            continue;
-
-        uint param = 0;
-        for (auto arg = callexpr->arg_begin(), arg_end = callexpr->arg_end(); arg != arg_end; ++arg) {
-            DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
-            if (refExpr == nullptr)  {
-                if (!(*arg)->children().empty()) {
-                    refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
-                    if (refExpr == nullptr)
-                        continue;
-                } else {
-                    continue;
-                }
-            }
-
-            if (refExpr->getDecl() != varDecl) // It's our variable ?
-                continue;
-
-            // It is, lets see if the callee takes our variable by const-ref
-            if (param >= fDecl->param_size())
-                continue;
-
-            ParmVarDecl *paramDecl = fDecl->getParamDecl(param);
-            if (paramDecl == nullptr)
-                continue;
-
-            QualType qt = paramDecl->getType();
-            const Type *t = qt.getTypePtrOrNull();
-            if (t == nullptr)
-                continue;
-
-            if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified())
-                return; // function receives non-const ref, so our foreach variable cant be const-ref
-
-            ++param;
-        }
-    }
+    if (Utils::containsCallByRef(forStatements.at(0), varDecl))
+        return;
 
     emitWarning(varDecl->getLocStart(), error.c_str());
 }
