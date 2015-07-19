@@ -24,7 +24,12 @@ static bool shouldIgnoreClass(const std::string &qualifiedClassName)
                                               "QGenericReturnArgument",
                                               "QColor", // TODO: Remove in Qt6
                                               "QStringRef", // TODO: Remove in Qt6
-                                              "QList::const_iterator" // TODO: Remove in Qt6
+                                              "QList::const_iterator", // TODO: Remove in Qt6
+                                              "QJsonArray::const_iterator", // TODO: Remove in Qt6
+                                              "QList<QString>::const_iterator",  // TODO: Remove in Qt6
+                                              "QtMetaTypePrivate::QSequentialIterableImpl",
+                                              "QtMetaTypePrivate::QAssociativeIterableImpl"
+
                                              };
     return std::find(ignoreList.cbegin(), ignoreList.cend(), qualifiedClassName) != ignoreList.cend();
 }
@@ -53,7 +58,9 @@ std::vector<string> FunctionArgsByRef::filesToIgnore() const
         "qimage.h",    // TODO: Uncomment in Qt6
         "qevent.h", // TODO: Uncomment in Qt6
         "avxintrin.h", // Some clang internal
-        "avx2intrin.h" // Some clang internal
+        "avx2intrin.h", // Some clang internal
+        "qnoncontiguousbytedevice.cpp",
+        "qlocale_unix.cpp"
     };
 }
 
@@ -92,7 +99,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
             if (!isSmall) {
                 error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
             } else if (isUserNonTrivial) {
-                error += "Missing reference on non-trivial type";
+                error += "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
             }
         } else if (isConst && isReference && !isUserNonTrivial && isSmall) {
             //error += "Don't use by-ref on small trivial type";
@@ -102,7 +109,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
             if (!isSmall) {
                 error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
             } else if (isUserNonTrivial) {
-                error += "Missing reference on non-trivial type";
+                error += "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
             }
         }
 
