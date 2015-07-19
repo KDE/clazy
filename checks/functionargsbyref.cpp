@@ -20,9 +20,12 @@ using namespace std;
 
 static bool shouldIgnoreClass(const std::string &qualifiedClassName)
 {
-    // Too many warnings in qdebug.h
-    // QColor won't have copy-ctor in Qt6
-    static const vector<string> ignoreList = {"QDebug", "QGenericReturnArgument", "QColor"};
+    static const vector<string> ignoreList = {"QDebug", // Too many warnings
+                                              "QGenericReturnArgument",
+                                              "QColor", // TODO: Remove in Qt6
+                                              "QStringRef", // TODO: Remove in Qt6
+                                              "QList::const_iterator" // TODO: Remove in Qt6
+                                             };
     return std::find(ignoreList.cbegin(), ignoreList.cend(), qualifiedClassName) != ignoreList.cend();
 }
 
@@ -54,10 +57,17 @@ std::vector<string> FunctionArgsByRef::filesToIgnore() const
     };
 }
 
+static std::string warningMsgForSmallType(int sizeOf, const std::string &typeName)
+{
+    std::string sizeStr = std::to_string(sizeOf);
+    return "Missing reference on large type sizeof " + typeName + " is " + sizeStr + " bytes)";
+}
+
 void FunctionArgsByRef::VisitDecl(Decl *decl)
 {
     FunctionDecl *functionDecl = dyn_cast<FunctionDecl>(decl);
-    if (functionDecl == nullptr || !functionDecl->hasBody() || shouldIgnoreFunction(functionDecl->getNameAsString())) return;
+    if (functionDecl == nullptr || !functionDecl->hasBody() || shouldIgnoreFunction(functionDecl->getNameAsString())
+            || !functionDecl->isThisDeclarationADefinition()) return;
 
     Stmt *body = functionDecl->getBody();
 
@@ -80,7 +90,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         std::string error;
         if (isConst && !isReference) {
             if (!isSmall) {
-                error += "Missing reference on large type";
+                error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
             } else if (isUserNonTrivial) {
                 error += "Missing reference on non-trivial type";
             }
@@ -90,7 +100,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
             if (Utils::containsNonConstMemberCall(body, param) || Utils::containsCallByRef(body, param))
                 continue;
             if (!isSmall) {
-                error += "Missing reference on large type";
+                error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
             } else if (isUserNonTrivial) {
                 error += "Missing reference on non-trivial type";
             }
