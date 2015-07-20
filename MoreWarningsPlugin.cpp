@@ -67,9 +67,9 @@ public:
         m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
         m_checks.push_back(std::shared_ptr<GlobalConstCharPointer>(new GlobalConstCharPointer(ci)));
         m_checks.push_back(std::shared_ptr<FunctionArgsByRef>(new FunctionArgsByRef(ci)));
+        m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
 
         // These are commented because they are either WIP or have to many false-positives
-        /// m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
         /// m_checks.push_back(std::shared_ptr<NRVOEnabler>(new NRVOEnabler(ci)));
         /// m_checks.push_back(std::shared_ptr<RequiredResults>(new RequiredResults(ci)));
         /// m_checks.push_back(std::shared_ptr<ListInt>(new ListInt(ci)));

@@ -106,6 +106,9 @@ namespace Utils {
     // while (bar) { foo.setValue(); // non-const call }
     bool containsNonConstMemberCall(clang::Stmt *body, const clang::VarDecl *varDecl);
 
+    // Returns true if there's an assignment to varDecl in body
+    bool containsAssignment(clang::Stmt *body, const clang::VarDecl *varDecl);
+
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)
     // By ref or pointer
     bool containsCallByRef(clang::Stmt *body, const clang::VarDecl *varDecl);

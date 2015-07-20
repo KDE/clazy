@@ -505,3 +505,28 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
 
     return false;
 }
+
+
+bool Utils::containsAssignment(Stmt *body, const VarDecl *varDecl)
+{
+    // Check for operator calls:
+    std::vector<CXXOperatorCallExpr*> operatorCalls;
+    Utils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
+    for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
+        CXXOperatorCallExpr *operatorExpr = *it;
+        FunctionDecl *fDecl = operatorExpr->getDirectCallee();
+        if (fDecl != nullptr) {
+            CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
+            if (methodDecl != nullptr && methodDecl->isCopyAssignmentOperator()) {
+                ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
+                if (valueDecl == nullptr)
+                    continue;
+
+                if (valueDecl == varDecl)
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}

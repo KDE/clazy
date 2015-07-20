@@ -21,9 +21,41 @@
 using namespace clang;
 using namespace std;
 
+enum IgnoreMode {
+    None = 0,
+    NonLocalVariable = 1,
+    InFunctionWithSameReturnType = 2,
+    IsAssignedTooInFunction = 4
+};
+
 InefficientQList::InefficientQList(clang::CompilerInstance &ci)
     : CheckBase(ci)
 {
+}
+
+static bool shouldIgnoreVariable(VarDecl *varDecl, int ignoreMode)
+{
+    DeclContext *context = varDecl->getDeclContext();
+    FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
+
+    if (ignoreMode & NonLocalVariable) {
+        if (fDecl == nullptr)
+            return true;
+    }
+
+    if (ignoreMode & IsAssignedTooInFunction) {
+        if (fDecl != nullptr && fDecl->getReturnType() == varDecl->getType())
+            return true;
+    }
+
+    if (ignoreMode & IsAssignedTooInFunction) {
+        if (fDecl != nullptr) {
+            if (Utils::containsAssignment(fDecl->getBody(), varDecl))
+                return true;
+        }
+    }
+
+    return false;
 }
 
 void InefficientQList::VisitDecl(clang::Decl *decl)
@@ -37,12 +69,7 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
     if (t == nullptr)
         return;
 
-    DeclContext *context = varDecl->getDeclContext();
-    FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
-    if (context == nullptr || fDecl == nullptr) // only locals, feel free to change
-        return;
-    QualType returnType = fDecl->getReturnType();
-    if (returnType == type)
+    if (shouldIgnoreVariable(varDecl, NonLocalVariable | InFunctionWithSameReturnType | IsAssignedTooInFunction))
         return;
 
     CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
@@ -57,11 +84,11 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
 
     if (tal.size() != 1) return;
     QualType qt2 = tal[0].getAsType();
-    const int size_of_void = 64; // performance on arm is more important
+    const int size_of_void = 8 * 8; // 64 bits
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
 
     if (size_of_T > size_of_void) {
-        string s = string("Use QVector instead of QList for type with size [-Wmore-warnings-qlist]") + to_string(size_of_T);
+        string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes [-Wmore-warnings-qlist]");
         emitWarning(decl->getLocStart(), s.c_str());
     }
 }

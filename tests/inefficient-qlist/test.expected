@@ -1,0 +1,2 @@
+main.cpp:24:5: warning: Use QVector instead of QList for type with size 9 bytes [-Wmore-warnings-qlist]
+main.cpp:38:11: warning: Use QVector instead of QList for type with size 9 bytes [-Wmore-warnings-qlist]
