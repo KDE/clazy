@@ -10,7 +10,7 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **********************************************************************/
 
-#include "movablecontainers.h"
+#include "missingtypeinfo.h"
 #include "Utils.h"
 
 #include <clang/AST/AST.h>
@@ -21,14 +21,14 @@
 using namespace std;
 using namespace clang;
 
-// Recomends usages of Q_PRIMITIVE_TYPE, don't advise for non-POD types that are movable
+// Recomends usages of Q_PRIMITIVE_TYPE on trivially-copyable types, unless they already have this classification
 
-MovableContainers::MovableContainers(clang::CompilerInstance &ci)
+MissingTypeinfo::MissingTypeinfo(clang::CompilerInstance &ci)
     : CheckBase(ci)
 {
 }
 
-void MovableContainers::VisitDecl(clang::Decl *decl)
+void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 {
     // Catches QTypeInfo<Foo> to know type classification
     auto templateDef = dyn_cast<ClassTemplateSpecializationDecl>(decl);
@@ -38,7 +38,13 @@ void MovableContainers::VisitDecl(clang::Decl *decl)
 
     // Catches QList<Foo>
     ClassTemplateSpecializationDecl *tstdecl = Utils::templateDecl(decl);
-    if (tstdecl == nullptr || tstdecl->getName() != "QList")
+    if (tstdecl == nullptr)
+        return;
+
+    const bool isQList = tstdecl->getName() == "QList";
+    const bool isQVector = tstdecl->getName() == "QVector";
+
+    if (tstdecl == nullptr || (!isQList && !isQVector))
         return;
 
     const TemplateArgumentList &tal = tstdecl->getTemplateArgs();
@@ -49,12 +55,13 @@ void MovableContainers::VisitDecl(clang::Decl *decl)
     const Type *t = qt2.getTypePtrOrNull();
     if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->getDefinition() == nullptr) return; // Don't crash if we only have a fwd decl
 
-    const int size_of_void = 32; // performance on arm is more important
-    const int size_of_T = m_ci.getASTContext().getTypeSize(qt2); // QList<T>
+    const int size_of_void = 64; // TODO arm 32bit ?
+    const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
 
-    const bool isMovable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
+    const bool isCopyable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
+    const bool isTooBigForQList = size_of_T <= size_of_void;
 
-    if (size_of_T <= size_of_void && isMovable) {
+    if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
 
         std::string typeName = t->getAsCXXRecordDecl()->getName();
         if (m_typeInfos.count(t->getAsCXXRecordDecl()->getQualifiedNameAsString()) != 0)
@@ -64,14 +71,14 @@ void MovableContainers::VisitDecl(clang::Decl *decl)
             std::string s;
             std::stringstream out;
             out << m_ci.getASTContext().getTypeSize(qt2)/8;
-            s = "Make this class movable: " + typeName + " [-Wmore-warnings-movable]";
+            s = "Q_DECLARE_PRIMITIVE candidate: " + typeName + " [-Wmore-warnings-missing-typeinfo]";
             emitWarning(decl->getLocStart(), s.c_str());
             emitWarning(t->getAsCXXRecordDecl()->getLocStart(), "Type declared here:");
         }
     }
 }
 
-void MovableContainers::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
+void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (decl->getName() == "QTypeInfo") {
         auto &args = decl->getTemplateArgs();
@@ -81,19 +88,20 @@ void MovableContainers::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
         QualType qt = args[0].getAsType();
         const Type *t = qt.getTypePtrOrNull();
         CXXRecordDecl *recordDecl =  t ? t->getAsCXXRecordDecl() : nullptr;
+        llvm::errs() << qt.getAsString() << " foo\n";
         if (recordDecl != nullptr) {
             m_typeInfos.insert(recordDecl->getQualifiedNameAsString());
         }
     }
 }
 
-bool MovableContainers::ignoreTypeInfo(const std::string &className) const
+bool MissingTypeinfo::ignoreTypeInfo(const std::string &className) const
 {
     std::vector<std::string> primitives {"QPair"};
     return std::find(primitives.begin(), primitives.end(), className) != primitives.end();
 }
 
-std::string MovableContainers::name() const
+std::string MissingTypeinfo::name() const
 {
-    return "mark-it-primitive";
+    return "missing-typeinfo";
 }

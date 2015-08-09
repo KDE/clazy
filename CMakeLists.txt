@@ -104,7 +104,7 @@ add_clang_plugin(ClangMoreWarningsPlugin
                  checks/qlistint.cpp
                  checks/functionargsbyref.cpp
                  checks/qmapkey.cpp
-                 checks/movablecontainers.cpp
+                 checks/missingtypeinfo.cpp
                  checks/nonpodstatic.cpp
                  checks/nrvoenabler.cpp
                  checks/requiredresults.cpp

@@ -19,7 +19,7 @@
 #include "checks/foreacher.h"
 #include "checks/functionargsbyref.h"
 #include "checks/globalconstcharpointer.h"
-#include "checks/movablecontainers.h"
+#include "checks/missingtypeinfo.h"
 #include "checks/nonpodstatic.h"
 #include "checks/nrvoenabler.h"
 #include "checks/assertwithsideeffects.h"
@@ -57,7 +57,7 @@ public:
         : m_ci(ci)
     {
         m_checks.push_back(std::shared_ptr<DetachingTemporaries>(new DetachingTemporaries(ci)));
-        m_checks.push_back(std::shared_ptr<MovableContainers>(new MovableContainers(ci)));
+        m_checks.push_back(std::shared_ptr<MissingTypeinfo>(new MissingTypeinfo(ci)));
         m_checks.push_back(std::shared_ptr<BogusDynamicCast>(new BogusDynamicCast(ci)));
         m_checks.push_back(std::shared_ptr<NonPodStatic>(new NonPodStatic(ci)));
         m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));

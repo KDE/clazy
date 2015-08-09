@@ -21,13 +21,12 @@ class ClassTemplateSpecializationDecl;
 
 /**
  * Advises usage of Q_PRIMITIVE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
- *
- * Consider using QVector<T> instead.
+ * or using QVector<T>.
  */
-class MovableContainers : public CheckBase
+class MissingTypeinfo : public CheckBase
 {
 public:
-    explicit MovableContainers(clang::CompilerInstance &ci);
+    explicit MissingTypeinfo(clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
     std::string name() const override;
 private:
