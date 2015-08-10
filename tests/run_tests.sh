@@ -6,7 +6,7 @@ QT_FLAGS="-I /usr/include/qt/ -fPIC"
 
 #-------------------------------------------------------------------------------
 
-CXX="clang++ -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c ${QT_FLAGS} -Xclang -plugin-arg-more-warnings -Xclang "
+CXX="clang++ -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c ${QT_FLAGS} -Xclang -plugin-arg-more-warnings -Xclang "
 
 for folder in */ ; do
     cd ${folder}
