@@ -1,0 +1,2 @@
+main.cpp:21:5: warning: Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wmore-warnings-variant]
+main.cpp:22:5: warning: Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wmore-warnings-variant]
