@@ -46,9 +46,9 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
     std::vector<Stmt*> processedStmts;
     if (containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts)) {
         if (ctorDecl != nullptr)
-            emitWarning(ctorOrDtorBody->getLocStart(), "Calling virtual function in CTOR [-Wmore-warnings-virtual-call-ctor]");
+            emitWarning(ctorOrDtorBody->getLocStart(), "Calling pure virtual function in CTOR [-Wmore-warnings-virtual-call-ctor]");
         else
-            emitWarning(ctorOrDtorBody->getLocStart(), "Calling virtual function in DTOR [-Wmore-warnings-virtual-call-dtor]");
+            emitWarning(ctorOrDtorBody->getLocStart(), "Calling pure virtual function in DTOR [-Wmore-warnings-virtual-call-dtor]");
     }
 }
 
