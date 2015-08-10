@@ -73,5 +73,5 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
 
 std::string VariantSanitizer::name() const
 {
-    return "assert-with-side-effects";
+    return "variant-sanitizer";
 }

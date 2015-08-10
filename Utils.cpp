@@ -19,6 +19,8 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ParentMap.h>
 
+#include <sstream>
+
 using namespace clang;
 using namespace std;
 
@@ -529,4 +531,16 @@ bool Utils::containsAssignment(Stmt *body, const VarDecl *varDecl)
     }
 
     return false;
+}
+
+std::vector<std::string> Utils::splitString(const string &str, char separator)
+{
+    std::string token;
+    std::vector<std::string> result;
+    std::istringstream istream(str);
+    while (std::getline(istream, token, separator)) {
+        result.push_back(token);
+    }
+
+    return result;
 }

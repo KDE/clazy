@@ -113,6 +113,8 @@ namespace Utils {
     // By ref or pointer
     bool containsCallByRef(clang::Stmt *body, const clang::VarDecl *varDecl);
 
+    std::vector<std::string> splitString(const std::string &str, char separator);
+
     template <typename T>
     void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list)
     {

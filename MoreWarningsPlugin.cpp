@@ -43,31 +43,106 @@
 #include <iostream>
 
 using namespace clang;
+using namespace std;
 
 // TODO:
-// * Use plugin arguments to choose which checks to enable
 // * Unit-tests
 
 namespace {
 
+enum Check {
+    InvalidCheck = -1, // Don't change order
+    DetachingTemporariesCheck = 0,
+    MissingTypeinfoCheck,
+    BogusDynamicCastCheck,
+    NonPodStaticCheck,
+    ReserveAdvisorCheck,
+    VariantSanitizerCheck,
+    QMapPointerKeyCheck,
+    ForeacherCheck,
+    VirtualCallsFromCTORCheck,
+    GlobalConstCharPointerCheck,
+    FunctionArgsByRefCheck,
+    InefficientQListCheck,
+    LastCheck
+};
+
+static const vector<string> & availableChecksStr()
+{
+    static const vector<string> texts = { "detaching-temporary",
+                                          "missing-typeinfo",
+                                          "bogus-dynamic-cast",
+                                          "non-pod-global-static",
+                                          "reserve-candidate",
+                                          "variant-sanitizer",
+                                          "qmap-with-key-pointer",
+                                          "foreacher",
+                                          "virtual-call-ctor",
+                                          "global-const-char-pointer",
+                                          "function-args-by-ref",
+                                          "inefficient-qlist"
+                                        };
+
+    assert(texts.size() == LastCheck);
+    return texts;
+}
+
+static Check checkFromText(const std::string &checkStr)
+{
+    const vector<string> &checksStr = availableChecksStr();
+
+    auto it = std::find(checksStr.cbegin(), checksStr.cend(), checkStr);
+    return it == checksStr.cend() ? InvalidCheck : static_cast<Check>(it - checksStr.cbegin());
+}
+
 class MoreWarningsASTConsumer : public ASTConsumer, public RecursiveASTVisitor<MoreWarningsASTConsumer>
 {
 public:
-    MoreWarningsASTConsumer(CompilerInstance &ci)
+    MoreWarningsASTConsumer(CompilerInstance &ci, const vector<Check> checks)
         : m_ci(ci)
     {
-        m_checks.push_back(std::shared_ptr<DetachingTemporaries>(new DetachingTemporaries(ci)));
-        m_checks.push_back(std::shared_ptr<MissingTypeinfo>(new MissingTypeinfo(ci)));
-        m_checks.push_back(std::shared_ptr<BogusDynamicCast>(new BogusDynamicCast(ci)));
-        m_checks.push_back(std::shared_ptr<NonPodStatic>(new NonPodStatic(ci)));
-        m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));
-        m_checks.push_back(std::shared_ptr<VariantSanitizer>(new VariantSanitizer(ci)));
-        m_checks.push_back(std::shared_ptr<QMapKeyChecker>(new QMapKeyChecker(ci)));
-        m_checks.push_back(std::shared_ptr<Foreacher>(new Foreacher(ci)));
-        m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
-        m_checks.push_back(std::shared_ptr<GlobalConstCharPointer>(new GlobalConstCharPointer(ci)));
-        m_checks.push_back(std::shared_ptr<FunctionArgsByRef>(new FunctionArgsByRef(ci)));
-        m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
+        for (uint i = 0; i < checks.size(); ++i) {
+            switch (checks[i]) {
+            case DetachingTemporariesCheck:
+                m_checks.push_back(std::shared_ptr<DetachingTemporaries>(new DetachingTemporaries(ci)));
+                break;
+            case MissingTypeinfoCheck:
+                m_checks.push_back(std::shared_ptr<MissingTypeinfo>(new MissingTypeinfo(ci)));
+                break;
+            case BogusDynamicCastCheck:
+                m_checks.push_back(std::shared_ptr<BogusDynamicCast>(new BogusDynamicCast(ci)));
+                break;
+            case NonPodStaticCheck:
+                m_checks.push_back(std::shared_ptr<NonPodStatic>(new NonPodStatic(ci)));
+                break;
+            case ReserveAdvisorCheck:
+                m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));
+                break;
+            case VariantSanitizerCheck:
+                m_checks.push_back(std::shared_ptr<VariantSanitizer>(new VariantSanitizer(ci)));
+                break;
+            case QMapPointerKeyCheck:
+                m_checks.push_back(std::shared_ptr<QMapKeyChecker>(new QMapKeyChecker(ci)));
+                break;
+            case ForeacherCheck:
+                m_checks.push_back(std::shared_ptr<Foreacher>(new Foreacher(ci)));
+                break;
+            case VirtualCallsFromCTORCheck:
+                m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
+                break;
+            case GlobalConstCharPointerCheck:
+                m_checks.push_back(std::shared_ptr<GlobalConstCharPointer>(new GlobalConstCharPointer(ci)));
+                break;
+            case FunctionArgsByRefCheck:
+                m_checks.push_back(std::shared_ptr<FunctionArgsByRef>(new FunctionArgsByRef(ci)));
+                break;
+            case InefficientQListCheck:
+                m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
+                break;
+            default:
+                assert(false);
+            }
+        }
 
         // These are commented because they are either WIP or have to many false-positives
         /// m_checks.push_back(std::shared_ptr<NRVOEnabler>(new NRVOEnabler(ci)));
@@ -112,35 +187,60 @@ public:
 
 class MoreWarningsAction : public PluginASTAction {
 protected:
-    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &CI, llvm::StringRef)
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
     {
-        return llvm::make_unique<MoreWarningsASTConsumer>(CI);
+        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks);
     }
 
-    bool ParseArgs(const CompilerInstance &CI,
-                   const std::vector<std::string> &args) {
-        for (unsigned i = 0, e = args.size(); i != e; ++i) {
-            llvm::errs() << "PrintFunctionNames arg = " << args[i] << "\n";
+    bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args) override
+    {
+        if (args.empty() || args[0] == "help" || args.size() > 1) {
+            PrintHelp(llvm::errs());
+            return false;
+        }
 
-            // Example error handling.
-            if (args[i] == "-an-error") {
-                DiagnosticsEngine &D = CI.getDiagnostics();
-                unsigned DiagID = D.getCustomDiagID(
-                            DiagnosticsEngine::Error, "invalid argument '%0'");
-                D.Report(DiagID);
+        vector<string> requestedChecks = Utils::splitString(args[0], ',');
+        if (requestedChecks.empty()) {
+            PrintHelp(llvm::errs());
+            return false;
+        }
+
+        // Remove duplicates:
+        sort(requestedChecks.begin(), requestedChecks.end());
+        requestedChecks.erase(unique(requestedChecks.begin(), requestedChecks.end()), requestedChecks.end());
+
+        m_checks.reserve(LastCheck);
+
+        for (uint i = 0, e = requestedChecks.size(); i != e; ++i) {
+            Check check = checkFromText(requestedChecks[i]);
+            if (check == InvalidCheck) {
+                llvm::errs() << "Invalid argument: " << requestedChecks[i] << "\n";
                 return false;
+            } else {
+                m_checks.push_back(check);
             }
         }
-        if (args.size() && args[0] == "help")
-            PrintHelp(llvm::errs());
+
+        if (m_checks.empty()) { // No checks supplied, use all of them
+            for (int i = 0; i < LastCheck; ++i) {
+                m_checks.push_back(static_cast<Check>(i));
+            }
+        }
 
         return true;
     }
 
     void PrintHelp(llvm::raw_ostream &ros)
     {
-        ros << "Help for MoreWarningsPlugin plugin goes here\n";
+        const vector<string> &checksStr = availableChecksStr();
+        ros << "Available plugins:\n\n";
+        for (uint i = 1; i < checksStr.size(); ++i) {
+            ros << checksStr[i] << "\n";
+        }
     }
+
+private:
+    vector<Check> m_checks;
 };
 
 }
