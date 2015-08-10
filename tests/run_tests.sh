@@ -11,8 +11,8 @@ CXX="clang++ -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMor
 for folder in */ ; do
     cd ${folder}
     CURRENT_CHECK_NAME=${PWD##*/}
-    echo $CXX $CURRENT_CHECK_NAME main.cpp > compile.output
-    $CXX $CURRENT_CHECK_NAME main.cpp -o /tmp/foo.o &>> compile.output
+    echo $CXX $CURRENT_CHECK_NAME *.cpp > compile.output
+    $CXX $CURRENT_CHECK_NAME *.cpp -o /tmp/foo.o &>> compile.output
 
     if [ ! $? ] ; then echo "build error! See ${folder}compile.output" ; exit -1 ; fi
 
