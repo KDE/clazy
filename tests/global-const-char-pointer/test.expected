@@ -1,0 +1,1 @@
+main.cpp:7:1: warning: non const global char * [-Wmore-warnings-global-const-char-pointer]
