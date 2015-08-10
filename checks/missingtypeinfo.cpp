@@ -88,7 +88,7 @@ void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
         QualType qt = args[0].getAsType();
         const Type *t = qt.getTypePtrOrNull();
         CXXRecordDecl *recordDecl =  t ? t->getAsCXXRecordDecl() : nullptr;
-        llvm::errs() << qt.getAsString() << " foo\n";
+        // llvm::errs() << qt.getAsString() << " foo\n";
         if (recordDecl != nullptr) {
             m_typeInfos.insert(recordDecl->getQualifiedNameAsString());
         }
