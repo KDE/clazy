@@ -56,7 +56,7 @@ enum Check {
     MissingTypeinfoCheck,
     BogusDynamicCastCheck,
     NonPodStaticCheck,
-    ReserveAdvisorCheck,
+    ReserveCandidatesCheck,
     VariantSanitizerCheck,
     QMapPointerKeyCheck,
     ForeacherCheck,
@@ -73,7 +73,7 @@ static const vector<string> & availableChecksStr()
                                           "missing-typeinfo",
                                           "bogus-dynamic-cast",
                                           "non-pod-global-static",
-                                          "reserve-candidate",
+                                          "reserve-candidates",
                                           "variant-sanitizer",
                                           "qmap-with-key-pointer",
                                           "foreacher",
@@ -115,7 +115,7 @@ public:
             case NonPodStaticCheck:
                 m_checks.push_back(std::shared_ptr<NonPodStatic>(new NonPodStatic(ci)));
                 break;
-            case ReserveAdvisorCheck:
+            case ReserveCandidatesCheck:
                 m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));
                 break;
             case VariantSanitizerCheck:

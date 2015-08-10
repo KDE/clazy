@@ -223,5 +223,5 @@ void ReserveAdvisor::checkIfReserveStatement(Stmt *stm)
 
 std::string ReserveAdvisor::name() const
 {
-    return "reserve-candidate";
+    return "reserve-candidates";
 }
