@@ -6,12 +6,13 @@ QT_FLAGS="-I /usr/include/qt/ -fPIC"
 
 #-------------------------------------------------------------------------------
 
-CXX="clang++ -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c ${QT_FLAGS}"
+CXX="clang++ -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c ${QT_FLAGS} -Xclang -plugin-arg-more-warnings -Xclang "
 
 for folder in */ ; do
     cd ${folder}
-    echo $CXX main.cpp > compile.output
-    $CXX main.cpp -o /tmp/foo.o &>> compile.output
+    CURRENT_CHECK_NAME=${PWD##*/}
+    echo $CXX $CURRENT_CHECK_NAME main.cpp > compile.output
+    $CXX $CURRENT_CHECK_NAME main.cpp -o /tmp/foo.o &>> compile.output
 
     if [ ! $? ] ; then echo "build error! See ${folder}compile.output" ; exit -1 ; fi
 
