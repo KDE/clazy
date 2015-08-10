@@ -194,7 +194,15 @@ protected:
 
     bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args) override
     {
-        if (args.empty() || args[0] == "help" || args.size() > 1) {
+        // No checks supplied, use all of them
+        if (args.empty()) {
+            for (int i = 0; i < LastCheck; ++i) {
+                m_checks.push_back(static_cast<Check>(i));
+            }
+            return true;
+        }
+
+        if (args[0] == "help" || args.size() > 1) {
             PrintHelp(llvm::errs());
             return false;
         }
@@ -218,12 +226,6 @@ protected:
                 return false;
             } else {
                 m_checks.push_back(check);
-            }
-        }
-
-        if (m_checks.empty()) { // No checks supplied, use all of them
-            for (int i = 0; i < LastCheck; ++i) {
-                m_checks.push_back(static_cast<Check>(i));
             }
         }
 
