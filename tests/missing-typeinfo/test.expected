@@ -1,0 +1,4 @@
+main.cpp:27:5: warning: Q_DECLARE_PRIMITIVE candidate: B [-Wmore-warnings-missing-typeinfo]
+main.cpp:14:1: warning: Type declared here:
+main.cpp:29:5: warning: Q_DECLARE_PRIMITIVE candidate: B [-Wmore-warnings-missing-typeinfo]
+main.cpp:14:1: warning: Type declared here:

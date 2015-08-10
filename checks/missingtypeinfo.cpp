@@ -21,8 +21,6 @@
 using namespace std;
 using namespace clang;
 
-// Recomends usages of Q_PRIMITIVE_TYPE on trivially-copyable types, unless they already have this classification
-
 MissingTypeinfo::MissingTypeinfo(clang::CompilerInstance &ci)
     : CheckBase(ci)
 {
