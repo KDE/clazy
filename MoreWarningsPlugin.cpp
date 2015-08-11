@@ -45,9 +45,6 @@
 using namespace clang;
 using namespace std;
 
-// TODO:
-// * Unit-tests
-
 namespace {
 
 enum Check {
