@@ -69,8 +69,8 @@ void test_missing_ref()
     // Test #7: No warning
     foreach (BigTrivial t, bigTrivials) {
         t = BigTrivial();
-        t++;
-        --t;
+
+
     }
 
     // Test #8: No warning
