@@ -16,7 +16,7 @@
 
 struct A
 {
-
+    virtual void foo() { }
 };
 
 struct B : public A
