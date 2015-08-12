@@ -1,4 +1,4 @@
 main.cpp:22:9: warning: Called here [-Wmore-warnings-virtual-call-ctor]
-main.cpp:11:5: warning: Calling virtual function in CTOR [-Wmore-warnings-virtual-call-ctor]
+main.cpp:11:5: warning: Calling pure virtual function in CTOR [-Wmore-warnings-virtual-call-ctor]
 main.cpp:22:9: warning: Called here [-Wmore-warnings-virtual-call-ctor]
-main.cpp:16:5: warning: Calling virtual function in DTOR [-Wmore-warnings-virtual-call-dtor]
+main.cpp:16:5: warning: Calling pure virtual function in DTOR [-Wmore-warnings-virtual-call-dtor]
