@@ -9,8 +9,8 @@ QT_FLAGS = "-I /usr/include/qt/ -fPIC"
 #-------------------------------------------------------------------------------
 # Global variables
 
-_compiler_comand = "clang++ -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c *.cpp " + QT_FLAGS + " -Xclang -plugin-arg-more-warnings -Xclang "
-_dump_ast_command = "clang++ -fsyntax-only -Xclang -ast-dump -c *.cpp " + QT_FLAGS
+_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c *.cpp " + QT_FLAGS + " -Xclang -plugin-arg-more-warnings -Xclang "
+_dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _dump_ast = "--dump-ast" in sys.argv
 
 
