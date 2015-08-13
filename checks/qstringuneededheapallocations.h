@@ -20,9 +20,11 @@
 #include <string>
 
 /**
- * Finds places where you're using QString(char*) CTOR.
- * You shouldn't, because code like str.contains("foo") creates temporary QString objects (and allocates)
- * while str.contains(QStringLiteral("foo")) doesn't
+ * Finds places where there are uneeded memory allocations due to temporary QStrings.
+ *
+ * For example:
+ * QString s = QLatin1String("foo"); // should be QStringLiteral
+ * QString::fromLatin1("foo") and QString::fromUtf8("foo") // should be QStringLiteral, or QLatin1String if being passed to an overload taking QLatin1String
  */
 class QStringUneededHeapAllocations : public CheckBase
 {
