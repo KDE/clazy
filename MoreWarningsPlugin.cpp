@@ -29,6 +29,7 @@
 #include "checks/reserveadvisor.h"
 #include "checks/variantsanitizer.h"
 #include "checks/virtualcallsfromctor.h"
+#include "checks/qstringuneededheapallocations.h"
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
@@ -61,6 +62,7 @@ enum Check {
     GlobalConstCharPointerCheck,
     FunctionArgsByRefCheck,
     InefficientQListCheck,
+    QStringUneededHeapAllocationsCheck,
     LastCheck
 };
 
@@ -77,7 +79,8 @@ static const vector<string> & availableChecksStr()
                                           "virtual-call-ctor",
                                           "global-const-char-pointer",
                                           "function-args-by-ref",
-                                          "inefficient-qlist"
+                                          "inefficient-qlist",
+                                          "qstring-uneeded-heap-allocations"
                                         };
 
     assert(texts.size() == LastCheck);
@@ -135,6 +138,9 @@ public:
                 break;
             case InefficientQListCheck:
                 m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
+                break;
+            case QStringUneededHeapAllocationsCheck:
+                m_checks.push_back(std::shared_ptr<QStringUneededHeapAllocations>(new QStringUneededHeapAllocations(ci)));
                 break;
             default:
                 assert(false);

@@ -116,7 +116,7 @@ namespace Utils {
     std::vector<std::string> splitString(const std::string &str, char separator);
 
     template <typename T>
-    void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list)
+    void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
     {
         if (stmt == nullptr)
             return;
@@ -128,8 +128,12 @@ namespace Utils {
         auto it = stmt->child_begin();
         auto end = stmt->child_end();
 
-        for (; it != end; ++it) {
-            getChilds2(*it, result_list);
+        if (depth > 0 || depth == -1) {
+            if (depth > 0)
+                --depth;
+            for (; it != end; ++it) {
+                getChilds2(*it, result_list, depth);
+            }
         }
     }
 

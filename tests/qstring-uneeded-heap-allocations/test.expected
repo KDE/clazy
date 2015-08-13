@@ -1,0 +1,6 @@
+main.cpp:19:17: warning: QString(const char*) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:22:18: warning: QString(const char*) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:26:5: warning: QString(const char*) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:30:18: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:31:18: warning: QString::fromUtf8() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:37:18: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
