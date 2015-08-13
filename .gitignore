@@ -8,3 +8,4 @@ compile.output
 test.output
 Makefile
 *.o
+ast_dump.output
