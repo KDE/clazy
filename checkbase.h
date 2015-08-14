@@ -42,7 +42,7 @@ protected:
     virtual std::vector<std::string> filesToIgnore() const;
     void emitWarning(clang::SourceLocation loc, const char *error) const;
     void emitWarning(clang::SourceLocation loc, std::string error) const;
-    void emitWarning(clang::SourceLocation loc, std::string error, const clang::FixItHint *) const;
+    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits) const;
 
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;

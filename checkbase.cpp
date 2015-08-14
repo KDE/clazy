@@ -82,20 +82,20 @@ std::vector<std::string> CheckBase::filesToIgnore() const
 
 void CheckBase::emitWarning(clang::SourceLocation loc, const char *error) const
 {
-    emitWarning(loc, string(error), nullptr);
+    emitWarning(loc, string(error), {});
 }
 
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error) const
 {
-    emitWarning(loc, error, nullptr);
+    emitWarning(loc, error, {});
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const clang::FixItHint *fixit) const
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const vector<FixItHint> &fixits) const
 {
     error += string(" [-Wmore-warnings-") + name() + string("]");
     FullSourceLoc full(loc, m_ci.getSourceManager());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
-    if (fixit != nullptr)
-        B.AddFixItHint(*fixit);
+    for (FixItHint fixit : fixits)
+        B.AddFixItHint(fixit);
 }

@@ -45,22 +45,29 @@ std::string QStringUneededHeapAllocations::name() const
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
-static Stmt *qlatin1CtorExpr(Stmt *stm)
+static Stmt *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
 {
     if (stm == nullptr)
         return nullptr;
 
-    vector<CXXConstructExpr*> constructorExprs;
-    Utils::getChilds2(stm, constructorExprs);
-    for (auto expr : constructorExprs) {
-        CXXConstructorDecl *ctor = expr->getConstructor();
-        if (!isOfClass(ctor, "QLatin1String"))
-            continue;
+    CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stm);
+    if (constructExpr != nullptr) {
+        CXXConstructorDecl *ctor = constructExpr->getConstructor();
+        if (isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1))
+            return constructExpr;
+    }
 
-        if (!hasCharPtrArgument(ctor, 1))
-            continue;
+    if (ternary == nullptr) {
+        ternary = dyn_cast<ConditionalOperator>(stm);
+    }
 
-        return expr;
+    auto it = stm->child_begin();
+    auto end = stm->child_end();
+
+    for (; it != end; ++it) {
+        auto expr = qlatin1CtorExpr(*it, ternary);
+        if (expr != nullptr)
+            return expr;
     }
 
     return nullptr;
@@ -125,21 +132,45 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     string msg = string("QString(") + paramType + string(") being called");
 
     if (paramType == "QLatin1String") {
-        FixItHint fixit = fixItReplaceQLatin1StringWithQStringLiteral(qlatin1CtorExpr(stm));
-        emitWarning(stm->getLocStart(), msg, &fixit);
+        ConditionalOperator *ternary = nullptr;
+        Stmt *begin = qlatin1CtorExpr(stm, ternary);
+        vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
+                                                      : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);
+
+        emitWarning(stm->getLocStart(), msg, fixits);
     } else {
         emitWarning(stm->getLocStart(), msg);
     }
 }
 
-FixItHint QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin)
+vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin)
 {
-    llvm::errs() << begin->getLocStart().printToString(m_ci.getSourceManager()) << "f\n";
+    vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
-    FixItHint hint = FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral");
-    return hint;
+    fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral"));
+    return fixits;
 }
+
+vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQStringLiteralInTernary(clang::ConditionalOperator *ternary)
+{
+    vector<CXXConstructExpr*> constructExprs;
+    Utils::getChilds2<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
+
+    vector<FixItHint> fixits;
+    fixits.reserve(2);
+    if (constructExprs.size() != 2) {
+        assert(false);
+        return fixits;
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        SourceLocation rangeStart = constructExprs[i]->getLocStart();
+        SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+        fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral"));
+    }
+
+    return fixits;}
 
 void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
 {

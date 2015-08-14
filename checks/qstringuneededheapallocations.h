@@ -21,6 +21,7 @@
 
 namespace clang {
 class FixItHint;
+class ConditionalOperator;
 }
 
 /**
@@ -42,7 +43,8 @@ private:
     void VisitFromLatin1OrUtf8(clang::Stmt *);
     void VisitAssignOperatorQLatin1String(clang::Stmt *);
 
-    clang::FixItHint fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin);
+    std::vector<clang::FixItHint> fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin);
+    std::vector<clang::FixItHint> fixItReplaceQLatin1StringWithQStringLiteralInTernary(clang::ConditionalOperator *);
 };
 
 #endif
