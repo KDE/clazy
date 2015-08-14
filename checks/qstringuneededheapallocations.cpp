@@ -139,15 +139,15 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (!method_has_ctor_with_char_pointer_arg(ctorDecl, paramType))
         return;
 
-    string msg = string("QString(") + paramType + string(") being called [-Wmore-warnings-qstring-uneeded-heap-allocations]");
+    string msg = string("QString(") + paramType + string(") being called");
 
     if (paramType == "QLatin1String") {
         Stmt *culpritCtor = qlatin1CtorExpr(stm);
         SourceLocation rangeEnd = Lexer::getLocForEndOfToken(culpritCtor->getLocStart(), -1, m_ci.getSourceManager(), m_ci.getLangOpts());
         FixItHint hint = FixItHint::CreateReplacement(SourceRange(culpritCtor->getLocStart(), rangeEnd), "QStringLiteral");
-        emitWarning(stm->getLocStart(), msg.c_str(), &hint);
+        emitWarning(stm->getLocStart(), msg, &hint);
     } else {
-        emitWarning(stm->getLocStart(), msg.c_str());
+        emitWarning(stm->getLocStart(), msg);
     }
 }
 
@@ -176,8 +176,8 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     if (!method_has_ctor_with_char_pointer_arg(methodDecl, paramType) || paramType == "QLatin1String")
         return;
 
-    string msg = string("QString(") + paramType + string(") being called [-Wmore-warnings-qstring-uneeded-heap-allocations]");
-    emitWarning(stm->getLocStart(), msg.c_str());
+    string msg = string("QString(") + paramType + string(") being called");
+    emitWarning(stm->getLocStart(), msg);
 }
 
 void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
@@ -205,9 +205,9 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
 
     if (functionName == "fromLatin1") {
-        emitWarning(stmt->getLocStart(), "QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]");
+        emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"));
     } else {
-        emitWarning(stmt->getLocStart(), "QString::fromUtf8() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]");
+        emitWarning(stmt->getLocStart(), string("QString::fromUtf8() being passed a literal"));
     }
 }
 
@@ -232,5 +232,5 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (functionName != "operator=" || !containsStringLiteralNoCallExpr(stmt))
         return;
 
-    emitWarning(stmt->getLocStart(), "QString::operator=(QLatin1String(\"literal\") [-Wmore-warnings-qstring-uneeded-heap-allocations]");
+    emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"));
 }

@@ -21,6 +21,7 @@
 #include <vector>
 
 using namespace clang;
+using namespace std;
 
 CheckBase::CheckBase(CompilerInstance &ci)
     : m_ci(ci)
@@ -81,13 +82,19 @@ std::vector<std::string> CheckBase::filesToIgnore() const
 
 void CheckBase::emitWarning(clang::SourceLocation loc, const char *error) const
 {
+    emitWarning(loc, string(error), nullptr);
+}
+
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error) const
+{
     emitWarning(loc, error, nullptr);
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, const char *error, const clang::FixItHint *fixit) const
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const clang::FixItHint *fixit) const
 {
+    error += string(" [-Wmore-warnings-") + name() + string("]");
     FullSourceLoc full(loc, m_ci.getSourceManager());
-    unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error);
+    unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
     if (fixit != nullptr)
         B.AddFixItHint(*fixit);
