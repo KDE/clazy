@@ -12,6 +12,8 @@
 
 #include "qstringuneededheapallocations.h"
 #include "Utils.h"
+#include "StringUtils.h"
+#include "MethodSignatureUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -20,6 +22,7 @@
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
 #include <clang/Lex/Lexer.h>
 #include <iostream>
+
 using namespace clang;
 using namespace std;
 
@@ -69,7 +72,7 @@ static bool method_has_ctor_with_char_pointer_arg(CXXMethodDecl *methodDecl, str
     return true;
 }
 
-// Returns the first occurrence of a QLatin1String CTOR call
+// Returns the first occurrence of a QLatin1String(char*) CTOR call
 static Stmt *qlatin1CtorExpr(Stmt *stm)
 {
     if (stm == nullptr)
@@ -78,8 +81,11 @@ static Stmt *qlatin1CtorExpr(Stmt *stm)
     vector<CXXConstructExpr*> constructorExprs;
     Utils::getChilds2(stm, constructorExprs);
     for (auto expr : constructorExprs) {
-        CXXConstructorDecl *ctorDecl = expr->getConstructor();
-        if (ctorDecl->getParent()->getNameAsString() != "QLatin1String")
+        CXXConstructorDecl *ctor = expr->getConstructor();
+        if (!isOfClass(ctor, "QLatin1String"))
+            continue;
+
+        if (!hasCharPtrArgument(ctor, 1))
             continue;
 
         return expr;
@@ -142,13 +148,20 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     string msg = string("QString(") + paramType + string(") being called");
 
     if (paramType == "QLatin1String") {
-        Stmt *culpritCtor = qlatin1CtorExpr(stm);
-        SourceLocation rangeEnd = Lexer::getLocForEndOfToken(culpritCtor->getLocStart(), -1, m_ci.getSourceManager(), m_ci.getLangOpts());
-        FixItHint hint = FixItHint::CreateReplacement(SourceRange(culpritCtor->getLocStart(), rangeEnd), "QStringLiteral");
-        emitWarning(stm->getLocStart(), msg, &hint);
+        FixItHint fixit = fixItReplaceQLatin1StringWithQStringLiteral(qlatin1CtorExpr(stm));
+        emitWarning(stm->getLocStart(), msg, &fixit);
     } else {
         emitWarning(stm->getLocStart(), msg);
     }
+}
+
+FixItHint QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin)
+{
+    llvm::errs() << begin->getLocStart().printToString(m_ci.getSourceManager()) << "f\n";
+    SourceLocation rangeStart = begin->getLocStart();
+    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+    FixItHint hint = FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral");
+    return hint;
 }
 
 void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)

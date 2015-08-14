@@ -19,6 +19,10 @@
 #include <vector>
 #include <string>
 
+namespace clang {
+class FixItHint;
+}
+
 /**
  * Finds places where there are uneeded memory allocations due to temporary QStrings.
  *
@@ -37,6 +41,8 @@ private:
     void VisitOperatorCall(clang::Stmt *);
     void VisitFromLatin1OrUtf8(clang::Stmt *);
     void VisitAssignOperatorQLatin1String(clang::Stmt *);
+
+    clang::FixItHint fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin);
 };
 
 #endif
