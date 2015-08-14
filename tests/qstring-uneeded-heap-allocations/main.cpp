@@ -35,4 +35,22 @@ void test()
     QString s123 = QString::fromLatin1(some_char_pointer_indirection("foo")); // OK
 
     QString s9 = QLatin1String("string"); // Warning
+    s9 =  QLatin1String("string"); // Warning
+    s9 =  QLatin1String(some_char_pointer_indirection("foo")); // OK
+    QString s10 = true ? QLatin1String("string1") : QLatin1String("string2"); // Warning
+    s10 = true ? QLatin1String("string1") :  QLatin1String("string2"); // Warning
+
+    QString s11 = QString(QLatin1String("foo")); // Warning
 }
+
+struct A
+{
+    A() : member(QLatin1String("foo")) {} // Warning
+    QString member;
+};
+
+struct A2
+{
+    A2() : member(QStringLiteral("foo")) {} // OK
+    QString member;
+};

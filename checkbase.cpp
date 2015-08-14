@@ -16,6 +16,7 @@
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/ParentMap.h>
+#include <clang/Rewrite/Frontend/FixItRewriter.h>
 
 #include <vector>
 
@@ -80,7 +81,14 @@ std::vector<std::string> CheckBase::filesToIgnore() const
 
 void CheckBase::emitWarning(clang::SourceLocation loc, const char *error) const
 {
+    emitWarning(loc, error, nullptr);
+}
+
+void CheckBase::emitWarning(clang::SourceLocation loc, const char *error, const clang::FixItHint *fixit) const
+{
     FullSourceLoc full(loc, m_ci.getSourceManager());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error);
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
+    if (fixit != nullptr)
+        B.AddFixItHint(*fixit);
 }

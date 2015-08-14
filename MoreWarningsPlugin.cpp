@@ -38,6 +38,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Lex/Lexer.h"
+#include "clang/Rewrite/Frontend/FixItRewriter.h"
 
 #include <stdio.h>
 #include <sstream>
@@ -95,11 +96,31 @@ static Check checkFromText(const std::string &checkStr)
     return it == checksStr.cend() ? InvalidCheck : static_cast<Check>(it - checksStr.cbegin());
 }
 
+class MyFixItOptions : public FixItOptions
+{
+public:
+    MyFixItOptions()
+    {
+        InPlace = true;
+        FixWhatYouCan = true;
+        FixOnlyWarnings = true;
+        Silent = false;
+    }
+
+    std::string RewriteFilename(const std::string &Filename, int &fd) override
+    {
+        fd = -1;
+        return Filename;
+    }
+};
+
 class MoreWarningsASTConsumer : public ASTConsumer, public RecursiveASTVisitor<MoreWarningsASTConsumer>
 {
 public:
-    MoreWarningsASTConsumer(CompilerInstance &ci, const vector<Check> checks)
+    MoreWarningsASTConsumer(CompilerInstance &ci, vector<Check> checks, bool enableFixits)
         : m_ci(ci)
+        , m_fixitsEnabled(enableFixits)
+        , m_rewriter(enableFixits ? new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions()) : nullptr)
     {
         for (uint i = 0; i < checks.size(); ++i) {
             switch (checks[i]) {
@@ -155,6 +176,14 @@ public:
         /// m_checks.push_back(std::shared_ptr<AssertWithSideEffects>(new AssertWithSideEffects(ci)));
     }
 
+    ~MoreWarningsASTConsumer()
+    {
+        if (m_fixitsEnabled) {
+            m_rewriter->WriteFixedFiles();
+            delete m_rewriter;
+        }
+    }
+
     bool VisitDecl(Decl *decl)
     {
         auto it = m_checks.cbegin();
@@ -184,6 +213,8 @@ public:
 
     CompilerInstance &m_ci;
     std::vector<std::shared_ptr<CheckBase> > m_checks;
+    bool m_fixitsEnabled;
+    FixItRewriter *m_rewriter;
 };
 
 //------------------------------------------------------------------------------
@@ -192,11 +223,12 @@ class MoreWarningsAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
     {
-        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks);
+        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks, m_fixitsEnabled);
     }
 
     bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args) override
     {
+        m_fixitsEnabled = false; // TODO: Create an argument
         // No checks supplied, use all of them
         if (args.empty()) {
             for (int i = 0; i < LastCheck; ++i) {
@@ -246,6 +278,7 @@ protected:
 
 private:
     vector<Check> m_checks;
+    bool m_fixitsEnabled;
 };
 
 }

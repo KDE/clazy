@@ -21,6 +21,7 @@ class Stmt;
 class Decl;
 class ParentMap;
 class TranslationUnitDecl;
+class FixItHint;
 }
 
 class CheckBase
@@ -40,6 +41,7 @@ protected:
     bool shouldIgnoreFile(const std::string &filename) const;
     virtual std::vector<std::string> filesToIgnore() const;
     void emitWarning(clang::SourceLocation loc, const char *error) const;
+    void emitWarning(clang::SourceLocation loc, const char *error, const clang::FixItHint *) const;
 
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;

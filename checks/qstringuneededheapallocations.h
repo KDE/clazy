@@ -36,6 +36,7 @@ private:
     void VisitCtor(clang::Stmt *);
     void VisitOperatorCall(clang::Stmt *);
     void VisitFromLatin1OrUtf8(clang::Stmt *);
+    void VisitAssignOperatorQLatin1String(clang::Stmt *);
 };
 
 #endif

@@ -16,7 +16,10 @@
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Expr.h>
-
+#include <clang/Basic/Diagnostic.h>
+#include <clang/Rewrite/Frontend/FixItRewriter.h>
+#include <clang/Lex/Lexer.h>
+#include <iostream>
 using namespace clang;
 using namespace std;
 
@@ -30,6 +33,7 @@ void QStringUneededHeapAllocations::VisitStmt(clang::Stmt *stm)
     VisitCtor(stm);
     VisitOperatorCall(stm);
     VisitFromLatin1OrUtf8(stm);
+    VisitAssignOperatorQLatin1String(stm);
 }
 
 std::string QStringUneededHeapAllocations::name() const
@@ -65,6 +69,53 @@ static bool method_has_ctor_with_char_pointer_arg(CXXMethodDecl *methodDecl, str
     return true;
 }
 
+// Returns the first occurrence of a QLatin1String CTOR call
+static Stmt *qlatin1CtorExpr(Stmt *stm)
+{
+    if (stm == nullptr)
+        return nullptr;
+
+    vector<CXXConstructExpr*> constructorExprs;
+    Utils::getChilds2(stm, constructorExprs);
+    for (auto expr : constructorExprs) {
+        CXXConstructorDecl *ctorDecl = expr->getConstructor();
+        if (ctorDecl->getParent()->getNameAsString() != "QLatin1String")
+            continue;
+
+        return expr;
+    }
+
+    return nullptr;
+}
+
+// Returns true if there's a literal in the hierarchy, but aborts if it's parented on CallExpr
+// so, returns true for: QLatin1String("foo") but false for QLatin1String(indirection("foo"));
+//
+static bool containsStringLiteralNoCallExpr(Stmt *stmt)
+{
+    if (stmt == nullptr)
+        return false;
+
+    StringLiteral *sl = dyn_cast<StringLiteral>(stmt);
+    if (sl != nullptr)
+        return true;
+
+    auto it = stmt->child_begin();
+    auto end = stmt->child_end();
+
+    for (; it != end; ++it) {
+        if (*it == nullptr)
+            continue;
+        CallExpr *callExpr = dyn_cast<CallExpr>(*it);
+        if (callExpr)
+            continue;
+
+        if (containsStringLiteralNoCallExpr(*it))
+            return true;
+    }
+
+    return false;
+}
 
 void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 {
@@ -89,7 +140,15 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         return;
 
     string msg = string("QString(") + paramType + string(") being called [-Wmore-warnings-qstring-uneeded-heap-allocations]");
-    emitWarning(stm->getLocStart(), msg.c_str());
+
+    if (paramType == "QLatin1String") {
+        Stmt *culpritCtor = qlatin1CtorExpr(stm);
+        SourceLocation rangeEnd = Lexer::getLocForEndOfToken(culpritCtor->getLocStart(), -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+        FixItHint hint = FixItHint::CreateReplacement(SourceRange(culpritCtor->getLocStart(), rangeEnd), "QStringLiteral");
+        emitWarning(stm->getLocStart(), msg.c_str(), &hint);
+    } else {
+        emitWarning(stm->getLocStart(), msg.c_str());
+    }
 }
 
 void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
@@ -142,9 +201,7 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (methodDecl->getParent()->getNameAsString() != "QString")
         return;
 
-    std::vector<StringLiteral*> stringLiterals;
-    Utils::getChilds2<StringLiteral>(callExpr, stringLiterals, /*depth=*/ 2);
-    if (stringLiterals.empty())
+    if (!containsStringLiteralNoCallExpr(callExpr))
         return;
 
     if (functionName == "fromLatin1") {
@@ -152,4 +209,28 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     } else {
         emitWarning(stmt->getLocStart(), "QString::fromUtf8() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]");
     }
+}
+
+void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
+{
+    CXXOperatorCallExpr *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
+    if (callExpr == nullptr)
+        return;
+
+    FunctionDecl *functionDecl = callExpr->getDirectCallee();
+    if (functionDecl == nullptr)
+        return;
+
+    CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    if (methodDecl == nullptr)
+        return;
+
+    if (methodDecl->getParent()->getNameAsString() != "QString")
+        return;
+
+    std::string functionName = functionDecl->getNameAsString();
+    if (functionName != "operator=" || !containsStringLiteralNoCallExpr(stmt))
+        return;
+
+    emitWarning(stmt->getLocStart(), "QString::operator=(QLatin1String(\"literal\") [-Wmore-warnings-qstring-uneeded-heap-allocations]");
 }

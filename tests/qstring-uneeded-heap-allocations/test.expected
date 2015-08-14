@@ -4,3 +4,8 @@ main.cpp:26:5: warning: QString(const char*) being called [-Wmore-warnings-qstri
 main.cpp:30:18: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:31:18: warning: QString::fromUtf8() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:37:18: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:38:5: warning: QString::operator=(QLatin1String("literal") [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:40:19: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:41:5: warning: QString::operator=(QLatin1String("literal") [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:43:19: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:48:11: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
