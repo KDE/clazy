@@ -246,7 +246,7 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (methodDecl == nullptr)
         return;
 
-    if (!isOfClass(methodDecl, "QString") || functionDecl->getNameAsString() != "operator=")
+    if (!isOfClass(methodDecl, "QString") || functionDecl->getNameAsString() != "operator=" || !hasArgumentOfType(functionDecl, "class QLatin1String", 1))
         return;
 
     if (!containsStringLiteralNoCallExpr(stmt))
