@@ -11,9 +11,15 @@ inline std::string classNameFor(T *ctorDecl)
 }
 
 template <>
-inline std::string classNameFor<clang::CXXConstructorDecl>(clang::CXXConstructorDecl *ctorDecl)
+inline std::string classNameFor(clang::CXXConstructorDecl *ctorDecl)
 {
     return ctorDecl->getParent()->getNameAsString();
+}
+
+template <>
+inline std::string classNameFor(clang::CXXMethodDecl *method)
+{
+    return method->getParent()->getNameAsString();
 }
 
 template <typename T>

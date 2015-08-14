@@ -145,6 +145,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 
 vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin)
 {
+    assert(begin != nullptr);
     vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
@@ -245,11 +246,10 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (methodDecl == nullptr)
         return;
 
-    if (methodDecl->getParent()->getNameAsString() != "QString")
+    if (!isOfClass(methodDecl, "QString") || functionDecl->getNameAsString() != "operator=")
         return;
 
-    std::string functionName = functionDecl->getNameAsString();
-    if (functionName != "operator=" || !containsStringLiteralNoCallExpr(stmt))
+    if (!containsStringLiteralNoCallExpr(stmt))
         return;
 
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"));
