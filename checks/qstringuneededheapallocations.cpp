@@ -44,34 +44,6 @@ std::string QStringUneededHeapAllocations::name() const
     return "qstring-uneeded-heap-allocations";
 }
 
-// Returns if the method has only one argument and it's char*
-static bool method_has_ctor_with_char_pointer_arg(CXXMethodDecl *methodDecl, string &paramType)
-{
-    if (methodDecl->param_size() != 1)
-        return false;
-
-    ParmVarDecl *firstParm = *methodDecl->param_begin();
-    QualType qt = firstParm->getType();
-
-    if (qt.getAsString() == "class QLatin1String") {
-        paramType = "QLatin1String";
-        return true;
-    }
-
-    const Type *t = qt.getTypePtrOrNull();
-    if (t == nullptr)
-        return false;
-
-    if (t->getPointeeType().getTypePtrOrNull() == nullptr)
-        return false;
-
-    if (!t->getPointeeType().getTypePtrOrNull()->isCharType())
-        return false;
-
-    paramType = "const char*";
-    return true;
-}
-
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
 static Stmt *qlatin1CtorExpr(Stmt *stm)
 {
@@ -142,8 +114,13 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         return;
 
     string paramType;
-    if (!method_has_ctor_with_char_pointer_arg(ctorDecl, paramType))
+    if (hasCharPtrArgument(ctorDecl, 1)) {
+        paramType = "const char*";
+    } else if (hasArgumentOfType(ctorDecl, "class QLatin1String", 1)) {
+        paramType = "QLatin1String";
+    } else {
         return;
+    }
 
     string msg = string("QString(") + paramType + string(") being called");
 
@@ -185,11 +162,10 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     if (methodDecl == nullptr || methodDecl->getParent()->getNameAsString() != "QString")
         return;
 
-    string paramType;
-    if (!method_has_ctor_with_char_pointer_arg(methodDecl, paramType) || paramType == "QLatin1String")
+    if (!hasCharPtrArgument(methodDecl))
         return;
 
-    string msg = string("QString(") + paramType + string(") being called");
+    string msg = string("QString(const char*) being called");
     emitWarning(stm->getLocStart(), msg);
 }
 
