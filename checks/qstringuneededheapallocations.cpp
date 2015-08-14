@@ -252,5 +252,10 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (!containsStringLiteralNoCallExpr(stmt))
         return;
 
-    emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"));
+    ConditionalOperator *ternary = nullptr;
+    Stmt *begin = qlatin1CtorExpr(stmt, ternary);
+    vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
+                                                  : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);
+
+    emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
