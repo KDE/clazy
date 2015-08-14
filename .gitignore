@@ -9,3 +9,4 @@ test.output
 Makefile
 *.o
 ast_dump.output
+install_manifest.txt
