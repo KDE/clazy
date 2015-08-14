@@ -60,7 +60,8 @@ std::vector<string> FunctionArgsByRef::filesToIgnore() const
         "avxintrin.h", // Some clang internal
         "avx2intrin.h", // Some clang internal
         "qnoncontiguousbytedevice.cpp",
-        "qlocale_unix.cpp"
+        "qlocale_unix.cpp",
+        "/clang/"
     };
 }
 
