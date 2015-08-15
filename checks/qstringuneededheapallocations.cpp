@@ -53,8 +53,10 @@ static Stmt *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
     CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stm);
     if (constructExpr != nullptr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
-        if (isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1))
-            return constructExpr;
+        if (isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1)) {
+            if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false))
+                return constructExpr;
+        }
     }
 
     if (ternary == nullptr) {
@@ -105,39 +107,31 @@ static bool containsStringLiteralNoCallExpr(Stmt *stmt)
 void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 {
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
-    if (ctorExpr == nullptr)
-        return;
-
-    std::vector<StringLiteral*> stringLiterals;
-    Utils::getChilds2<StringLiteral>(ctorExpr, stringLiterals);
-
-    //  We're only after string literals, str.contains(some_method_returning_const_char_is_fine())
-    if (stringLiterals.empty())
+    if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/ true))
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
     if (!isOfClass(ctorDecl, "QString"))
         return;
 
+    bool isQLatin1String = false;
     string paramType;
     if (hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
     } else if (hasArgumentOfType(ctorDecl, "class QLatin1String", 1)) {
         paramType = "QLatin1String";
+        isQLatin1String = true;
     } else {
         return;
     }
 
     string msg = string("QString(") + paramType + string(") being called");
 
-    if (paramType == "QLatin1String") {
+    if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
         Stmt *begin = qlatin1CtorExpr(stm, ternary);
-        if (begin == nullptr) {
-            // This shouldn't happen
-            emitWarning(stm->getLocStart(), string("requires manual evaluation"));
+        if (begin == nullptr)
             return;
-        }
 
         vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
                                                       : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);
@@ -260,11 +254,8 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     ConditionalOperator *ternary = nullptr;
     Stmt *begin = qlatin1CtorExpr(stmt, ternary);
 
-    if (begin == nullptr) {
-        // This shouldn't happen
-        emitWarning(stmt->getLocStart(), string("requires manual evaluation"));
+    if (begin == nullptr)
         return;
-    }
 
     vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
                                                   : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);

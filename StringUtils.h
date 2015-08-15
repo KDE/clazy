@@ -25,7 +25,7 @@ inline std::string classNameFor(clang::CXXMethodDecl *method)
 template <typename T>
 inline bool isOfClass(T *node, const std::string &className)
 {
-    return classNameFor<T>(node) == className;
+    return node && classNameFor<T>(node) == className;
 }
 
 #endif

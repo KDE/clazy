@@ -552,3 +552,23 @@ bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
     getChilds2<clang::CXXDefaultArgExpr>(expr, exprs, 1);
     return !exprs.empty();
 }
+
+
+bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty)
+{
+    if (stm == nullptr)
+        return false;
+
+    std::vector<StringLiteral*> stringLiterals;
+    Utils::getChilds2<StringLiteral>(stm, stringLiterals);
+
+    if (allowEmpty)
+        return !stringLiterals.empty();
+
+    for (StringLiteral *sl : stringLiterals) {
+        if (sl->getLength() > 0)
+            return true;
+    }
+
+    return false;
+}

@@ -43,8 +43,8 @@ void test()
     QString s11 = QString(QLatin1String("foo")); // Warning
     QStringList stringList;
     stringList << QString::fromLatin1("foo", 1); // OK
+    QString s12 = QLatin1String(""); // OK, QString is optimized for the empty case
 }
-
 
 
 
