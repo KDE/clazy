@@ -54,7 +54,7 @@ static Stmt *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
     if (constructExpr != nullptr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
         if (isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1)) {
-            if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false))
+            if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false, 2))
                 return constructExpr;
         }
     }

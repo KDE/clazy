@@ -7,7 +7,6 @@ const char * some_char_pointer_indirection(const char *)
 }
 
 
-
 const char * some_char_pointer()
 {
     return nullptr;
@@ -16,6 +15,7 @@ const char * some_char_pointer()
 void test()
 {
     QString s1;
+    const char *cstring = "foo";
     s1.contains("string"); // Warning
     s1.contains(some_char_pointer()); // OK
 
@@ -44,8 +44,8 @@ void test()
     QStringList stringList;
     stringList << QString::fromLatin1("foo", 1); // OK
     QString s12 = QLatin1String(""); // OK, QString is optimized for the empty case
+    QString s = QLatin1String(cstring + sizeof("foo")); // OK
 }
-
 
 
 

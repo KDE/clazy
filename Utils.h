@@ -143,7 +143,7 @@ namespace Utils {
 
     // If there's a child of type StringLiteral, returns true
     // if allowEmpty is false, "" will be ignored
-    bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true);
+    bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
     /// Goes into a statement and returns it's childs of type T
     /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal

@@ -554,13 +554,13 @@ bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 }
 
 
-bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty)
+bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
 {
     if (stm == nullptr)
         return false;
 
     std::vector<StringLiteral*> stringLiterals;
-    Utils::getChilds2<StringLiteral>(stm, stringLiterals);
+    Utils::getChilds2<StringLiteral>(stm, stringLiterals, depth);
 
     if (allowEmpty)
         return !stringLiterals.empty();
