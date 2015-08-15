@@ -12,7 +12,7 @@ QT_FLAGS = "-I /usr/include/qt/ -fPIC"
 _compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c *.cpp " + QT_FLAGS + " -Xclang -plugin-arg-more-warnings -Xclang "
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _dump_ast = "--dump-ast" in sys.argv
-
+_verbose = "--verbose" in sys.argv
 
 #-------------------------------------------------------------------------------
 # utility functions
@@ -52,7 +52,11 @@ def print_differences(file1, file2):
     return run_command("diff -Naur test.expected test.output")
 
 def run_check_unit_tests(check):
-    if not run_command(_compiler_comand + check + " &> compile.output"):
+    cmd = _compiler_comand + check
+    if _verbose:
+        print "Running: " + cmd
+
+    if not run_command(cmd + " &> compile.output"):
         print "[FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
         print
         return False
@@ -77,12 +81,15 @@ if "--help" in sys.argv:
     sys.exit(0)
 
 args = sys.argv[1:]
+
+switches = ["--verbose"]
+
 if _dump_ast:
     del(args[args.index("--dump-ast")])
 
 
 all_checks = get_check_list()
-requested_checks = args
+requested_checks = filter(lambda x: x not in switches, args)
 
 for check in requested_checks:
     if check not in all_checks:
