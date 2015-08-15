@@ -134,6 +134,12 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (paramType == "QLatin1String") {
         ConditionalOperator *ternary = nullptr;
         Stmt *begin = qlatin1CtorExpr(stm, ternary);
+        if (begin == nullptr) {
+            // This shouldn't happen
+            emitWarning(stm->getLocStart(), string("requires manual evaluation"));
+            return;
+        }
+
         vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
                                                       : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);
 
@@ -145,7 +151,6 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 
 vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin)
 {
-    assert(begin != nullptr);
     vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
@@ -161,6 +166,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQS
     vector<FixItHint> fixits;
     fixits.reserve(2);
     if (constructExprs.size() != 2) {
+        llvm::errs() << "Weird ternary operator with " << constructExprs.size() << " at " << ternary->getLocStart().printToString(m_ci.getSourceManager()) << "\n";
         assert(false);
         return fixits;
     }
@@ -222,6 +228,9 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (methodDecl->getParent()->getNameAsString() != "QString")
         return;
 
+    if (!Utils::callHasDefaultArguments(callExpr) || !hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
+        return;
+
     if (!containsStringLiteralNoCallExpr(callExpr))
         return;
 
@@ -254,6 +263,13 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 
     ConditionalOperator *ternary = nullptr;
     Stmt *begin = qlatin1CtorExpr(stmt, ternary);
+
+    if (begin == nullptr) {
+        // This shouldn't happen
+        emitWarning(stmt->getLocStart(), string("requires manual evaluation"));
+        return;
+    }
+
     vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
                                                   : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);
 

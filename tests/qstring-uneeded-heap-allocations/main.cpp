@@ -1,5 +1,5 @@
 #include <QtCore/QString>
-
+#include <QtCore/QStringList>
 
 const char * some_char_pointer_indirection(const char *)
 {
@@ -41,7 +41,14 @@ void test()
     s10 = true ? QLatin1String("string1") :  QLatin1String("string2"); // Warning
 
     QString s11 = QString(QLatin1String("foo")); // Warning
+    QStringList stringList;
+    stringList << QString::fromLatin1("foo", 1); // OK
 }
+
+
+
+
+
 
 struct A
 {

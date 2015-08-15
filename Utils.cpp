@@ -545,3 +545,10 @@ std::vector<std::string> Utils::splitString(const string &str, char separator)
 
     return result;
 }
+
+bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
+{
+    std::vector<clang::CXXDefaultArgExpr*> exprs;
+    getChilds2<clang::CXXDefaultArgExpr>(expr, exprs, 1);
+    return !exprs.empty();
+}

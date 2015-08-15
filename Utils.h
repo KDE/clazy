@@ -137,6 +137,10 @@ namespace Utils {
         }
     }
 
+    // QString::fromLatin1("foo")    -> true
+    // QString::fromLatin1("foo", 1) -> false
+    bool callHasDefaultArguments(clang::CallExpr *expr);
+
     /// Goes into a statement and returns it's childs of type T
     /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
 
