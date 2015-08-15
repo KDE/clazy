@@ -218,7 +218,7 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (functionName != "fromLatin1" && functionName != "fromUtf8")
         return;
 
-    if (methodDecl->getParent()->getNameAsString() != "QString")
+    if (!isOfClass(methodDecl, "QString"))
         return;
 
     if (!Utils::callHasDefaultArguments(callExpr) || !hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
