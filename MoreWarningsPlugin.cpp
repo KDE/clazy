@@ -11,6 +11,7 @@
 **********************************************************************/
 
 #include "Utils.h"
+#include "conviniencesingleton.h"
 #include "checkbase.h"
 #include "checks/detachingtemporaries.h"
 #include "checks/duplicateexpensivestatement.h"
@@ -39,6 +40,7 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Lex/Lexer.h"
 #include "clang/Rewrite/Frontend/FixItRewriter.h"
+#include "clang/AST/ParentMap.h"
 
 #include <stdio.h>
 #include <sstream>
@@ -121,7 +123,10 @@ public:
         : m_ci(ci)
         , m_fixitsEnabled(enableFixits)
         , m_rewriter(enableFixits ? new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions()) : nullptr)
+        , m_parentMap(nullptr)
     {
+        ConvinienceSingleton::instance()->sm = &m_ci.getSourceManager();
+
         for (uint i = 0; i < checks.size(); ++i) {
             switch (checks[i]) {
             case DetachingTemporariesCheck:
@@ -184,6 +189,14 @@ public:
         }
     }
 
+    void setParentMap(ParentMap *map)
+    {
+        delete m_parentMap;
+        m_parentMap = map;
+        for (auto check : m_checks)
+            check->setParentMap(map);
+    }
+
     bool VisitDecl(Decl *decl)
     {
         auto it = m_checks.cbegin();
@@ -197,6 +210,12 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
+        // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
+        // So re-set a parent map each time we go into a different hieararchy
+        if (m_parentMap == nullptr || m_parentMap->getParent(stm) == nullptr) {
+            setParentMap(new ParentMap(stm));
+        }
+
         auto it = m_checks.cbegin();
         auto end = m_checks.cend();
         for (; it != end; ++it) {
@@ -215,6 +234,7 @@ public:
     std::vector<std::shared_ptr<CheckBase> > m_checks;
     bool m_fixitsEnabled;
     FixItRewriter *m_rewriter;
+    ParentMap *m_parentMap;
 };
 
 //------------------------------------------------------------------------------
@@ -291,6 +311,7 @@ protected:
     void PrintHelp(llvm::raw_ostream &ros)
     {
         const vector<string> &checksStr = availableChecksStr();
+
         ros << "Available plugins:\n\n";
         for (uint i = 1; i < checksStr.size(); ++i) {
             ros << checksStr[i] << "\n";

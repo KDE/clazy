@@ -210,6 +210,8 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
             SourceRange range(callExpr->getLocStart(), literal->getLocStart().getLocWithOffset(-2));
             fixits.push_back(FixItHint::CreateReplacement(range, "QStringLiteral"));
         } else {
+            llvm::errs() << "Failed to apply fixit for location: ";
+            StringUtils::printLocation(callExpr);
             assert(false);
         }
     }
