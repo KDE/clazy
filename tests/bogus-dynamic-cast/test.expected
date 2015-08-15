@@ -1,6 +1,6 @@
-main.cpp:32:5: warning: explicitly casting to base is unnecessary [-Wmore-warnings-bogus-dynamic_cast]
+main.cpp:32:5: warning: explicitly casting to base is unnecessary [-Wmore-warnings-bogus-dynamic-cast]
     dynamic_cast<A*>(b); // warning: Casting to base
-main.cpp:33:5: warning: Casting to itself [-Wmore-warnings-bogus-dynamic_cast]
+main.cpp:33:5: warning: Casting to itself [-Wmore-warnings-bogus-dynamic-cast]
     dynamic_cast<A*>(a); // warning: Casting to itself
-main.cpp:35:5: warning: Casting to itself [-Wmore-warnings-bogus-dynamic_cast]
+main.cpp:35:5: warning: Casting to itself [-Wmore-warnings-bogus-dynamic-cast]
     dynamic_cast<B*>(b); // warning: Casting to itself

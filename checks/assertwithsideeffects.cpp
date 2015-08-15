@@ -57,7 +57,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
 
     // Now, look for UnaryOperators, BinaryOperators and function calls
     if (Utils::childsHaveSideEffects(co->getCond())) {
-        emitWarning(co->getLocStart(), "Code inside Q_ASSERT has side-effects but won't be built in release mode [-Wmore-warnings-assert-with-side-effects]");
+        emitWarning(co->getLocStart(), "Code inside Q_ASSERT has side-effects but won't be built in release mode");
     }
 }
 

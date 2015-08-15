@@ -80,19 +80,16 @@ std::vector<std::string> CheckBase::filesToIgnore() const
     return {};
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, const char *error) const
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag) const
 {
-    emitWarning(loc, string(error), {});
+    emitWarning(loc, error, {}, printWarningTag);
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error) const
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const vector<FixItHint> &fixits, bool printWarningTag) const
 {
-    emitWarning(loc, error, {});
-}
+    if (printWarningTag)
+        error += string(" [-Wmore-warnings-") + name() + string("]");
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const vector<FixItHint> &fixits) const
-{
-    error += string(" [-Wmore-warnings-") + name() + string("]");
     FullSourceLoc full(loc, m_ci.getSourceManager());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);

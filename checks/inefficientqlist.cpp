@@ -88,7 +88,7 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
 
     if (size_of_T > size_of_void) {
-        string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes [-Wmore-warnings-qlist]");
+        string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");
         emitWarning(decl->getLocStart(), s.c_str());
     }
 }

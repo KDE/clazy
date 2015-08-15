@@ -38,7 +38,7 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
     if (pointeeType == nullptr || !pointeeType->isCharType())
         return;
 
-    emitWarning(decl->getLocStart(), "non const global char * [-Wmore-warnings-global-const-char-pointer]");
+    emitWarning(decl->getLocStart(), "non const global char *");
 }
 
 std::string GlobalConstCharPointer::name() const

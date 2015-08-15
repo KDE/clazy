@@ -40,9 +40,8 @@ protected:
     virtual void VisitDecl(clang::Decl *decl);
     bool shouldIgnoreFile(const std::string &filename) const;
     virtual std::vector<std::string> filesToIgnore() const;
-    void emitWarning(clang::SourceLocation loc, const char *error) const;
-    void emitWarning(clang::SourceLocation loc, std::string error) const;
-    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits) const;
+    void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true) const;
+    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true) const;
 
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;

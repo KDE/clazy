@@ -72,7 +72,7 @@ void Foreacher::VisitStmt(clang::Stmt *stmt)
 
     // Now look inside the for statement for detachments
     if (containsDetachments(m_lastForStmt, valueDecl)) {
-        emitWarning(stmt->getLocStart(), "foreach container detached [-Wmore-warnings-foreach-detachment]");
+        emitWarning(stmt->getLocStart(), "foreach container detached");
     }
 }
 
@@ -126,8 +126,6 @@ void Foreacher::checkBigTypeMissingRef()
 
     if (error.empty()) // No warning
         return;
-
-    error += " [-Wmore-warnings-missing-ref-foreach]";
 
     // If it's const, then it's definitely missing &. But if it's not const, there might be a non-const member call, which we should allow
     if (qt.isConstQualified()) {

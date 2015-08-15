@@ -115,7 +115,6 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         }
 
         if (!error.empty()) {
-            error += " [-Wmore-warnings-function-args-by-ref]";
             emitWarning(param->getLocStart(), error.c_str());
         }
     }

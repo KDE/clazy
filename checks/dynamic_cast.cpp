@@ -35,10 +35,10 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
         return;
 
     //if (Utils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
-        //emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast [-Wmore-warnings-bogus-dynamic_cast]");
+        //emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
     //if (dynExp->isAlwaysNull()) { // Crashing in Type.h  assert(isa<T>(CanonicalType))
-      //  emitWarning(dynExp->getLocStart(), "That dynamic_cast is always null [-Wmore-warnings-bogus-dynamic_cast]");
+      //  emitWarning(dynExp->getLocStart(), "That dynamic_cast is always null");
 //        return;
   //  }
 
@@ -47,9 +47,9 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
         return;
 
     if (castFrom == castTo) {
-        emitWarning(stm->getLocStart(), "Casting to itself [-Wmore-warnings-bogus-dynamic_cast]");
+        emitWarning(stm->getLocStart(), "Casting to itself");
     } else if (Utils::isChildOf(/*child=*/castFrom, castTo)) {
-        emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary [-Wmore-warnings-bogus-dynamic_cast]");
+        emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary");
     }
 }
 

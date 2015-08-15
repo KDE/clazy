@@ -58,7 +58,7 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
         return;
 
     if (!shouldIgnoreType(t->getAsCXXRecordDecl()->getName())) {
-        std::string error = "non-POD static [-Wmore-warnings-non-pod-static]";
+        std::string error = "non-POD static";
         emitWarning(decl->getLocStart(), error.c_str());
     }
 }

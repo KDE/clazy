@@ -66,7 +66,7 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
     }
 
     if (matches) {
-        std::string error = std::string("Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wmore-warnings-variant]");
+        std::string error = std::string("Use QVariant::toFoo() instead of QVariant::value<Foo>()");
         emitWarning(stm->getLocStart(), error.c_str());
     }
 }
