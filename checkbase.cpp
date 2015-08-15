@@ -55,6 +55,11 @@ void CheckBase::VisitDeclaration(Decl *decl)
     VisitDecl(decl);
 }
 
+void CheckBase::setParentMap(ParentMap *parentMap)
+{
+    m_parentMap = parentMap;
+}
+
 void CheckBase::VisitStmt(Stmt *)
 {
 }

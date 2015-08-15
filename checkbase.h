@@ -35,6 +35,8 @@ public:
 
     virtual std::string name() const = 0;
 
+    void setParentMap(clang::ParentMap *parentMap);
+
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);

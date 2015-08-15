@@ -21,6 +21,8 @@
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
 #include <clang/Lex/Lexer.h>
+#include <clang/AST/ParentMap.h>
+
 #include <iostream>
 
 using namespace clang;
@@ -104,6 +106,17 @@ static bool containsStringLiteralNoCallExpr(Stmt *stmt)
     return false;
 }
 
+// For QString::fromLatin1("foo") returns "foo"
+static StringLiteral* stringLiteralForCall(CallExpr *call)
+{
+    if (!call)
+        return nullptr;
+
+    vector<StringLiteral*> literals;
+    Utils::getChilds2(call, literals, 2);
+    return literals.empty() ? nullptr : literals[0];
+}
+
 void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 {
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
@@ -172,6 +185,38 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQS
 
     return fixits;}
 
+std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFromUtf8(CallExpr *callExpr)
+{
+    Stmt *grandParent = Utils::parent(m_parentMap, callExpr, 2);
+    if (grandParent == nullptr)
+        return {};
+
+    vector<FixItHint> fixits;
+
+    ImplicitCastExpr *implicitCastExpr = dyn_cast<ImplicitCastExpr>(grandParent);
+
+    bool toStringLiteralForSure = false;
+    if (implicitCastExpr) {
+        // QString::fromLatin1("foo % 1").arg(foo) can only be replaced by QStringLiteral, due to arg() call
+        // to detect that, we check if the grandparent is an implicit cast to QString
+        auto record = implicitCastExpr->getBestDynamicClassType();
+        if (record && record->getNameAsString() == "QString")
+            toStringLiteralForSure = true;
+    }
+
+    if (toStringLiteralForSure) {
+        StringLiteral *literal = stringLiteralForCall(callExpr);
+        if (literal) {
+            SourceRange range(callExpr->getLocStart(), literal->getLocStart().getLocWithOffset(-2));
+            fixits.push_back(FixItHint::CreateReplacement(range, "QStringLiteral"));
+        } else {
+            assert(false);
+        }
+    }
+
+    return fixits;
+}
+
 void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
 {
     CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
@@ -227,10 +272,12 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (!containsStringLiteralNoCallExpr(callExpr))
         return;
 
+    std::vector<FixItHint> fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr);
+
     if (functionName == "fromLatin1") {
-        emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"));
+        emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"), fixits);
     } else {
-        emitWarning(stmt->getLocStart(), string("QString::fromUtf8() being passed a literal"));
+        emitWarning(stmt->getLocStart(), string("QString::fromUtf8() being passed a literal"), fixits);
     }
 }
 

@@ -145,6 +145,11 @@ namespace Utils {
     // if allowEmpty is false, "" will be ignored
     bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
+    // If depth = 0, return s
+    // If depth = 1, returns parent of s
+    // etc.
+    clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, uint depth = 1);
+
     /// Goes into a statement and returns it's childs of type T
     /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
 

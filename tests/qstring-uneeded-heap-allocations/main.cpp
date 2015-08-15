@@ -45,8 +45,8 @@ void test()
     stringList << QString::fromLatin1("foo", 1); // OK
     QString s12 = QLatin1String(""); // OK, QString is optimized for the empty case
     QString s = QLatin1String(cstring + sizeof("foo")); // OK
+    s = QString::fromLatin1("bar %1").arg(1);
 }
-
 
 
 

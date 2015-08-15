@@ -572,3 +572,12 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
 
     return false;
 }
+
+Stmt *Utils::parent(ParentMap *map, Stmt *s, uint depth)
+{
+    if (s == nullptr)
+        return nullptr;
+
+    return depth == 0 ? s
+                      : parent(map, map->getParent(s), depth - 1);
+}
