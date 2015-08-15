@@ -11,8 +11,10 @@ QT_FLAGS = "-I /usr/include/qt/ -fPIC"
 
 _compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c *.cpp " + QT_FLAGS + " -Xclang -plugin-arg-more-warnings -Xclang "
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
+_fixit_arguments = "-Xclang -plugin-arg-more-warnings -Xclang fixits"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
+_fixits = "--fixits" in sys.argv
 
 #-------------------------------------------------------------------------------
 # utility functions
@@ -53,6 +55,10 @@ def print_differences(file1, file2):
 
 def run_check_unit_tests(check):
     cmd = _compiler_comand + check
+
+    if _fixits:
+        cmd += " " + _fixit_arguments
+
     if _verbose:
         print "Running: " + cmd
 
@@ -82,7 +88,7 @@ if "--help" in sys.argv:
 
 args = sys.argv[1:]
 
-switches = ["--verbose"]
+switches = ["--verbose", "--dump-ast", "--fixits"]
 
 if _dump_ast:
     del(args[args.index("--dump-ast")])

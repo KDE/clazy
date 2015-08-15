@@ -226,41 +226,62 @@ protected:
         return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks, m_fixitsEnabled);
     }
 
-    bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args) override
+    bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_) override
     {
-        m_fixitsEnabled = false; // TODO: Create an argument
-        // No checks supplied, use all of them
+        std::vector<std::string> args = args_;
+
+        if (std::find(args.cbegin(), args.cend(), "help") != args.cend()) {
+            llvm::errs() << "Help:\n";
+            PrintHelp(llvm::errs());
+            return false;
+        }
+
+        auto it = std::find(args.cbegin(), args.cend(), "fixits");
+        if (it != args.cend()) {
+            m_fixitsEnabled = true;
+            args.erase(it, it + 1);
+        }
+
         if (args.empty()) {
+            // No check specified, use all of them
             for (int i = 0; i < LastCheck; ++i) {
                 m_checks.push_back(static_cast<Check>(i));
             }
-            return true;
-        }
+        } else if (args.size() > 1) {
+            // Too many arguments.
+            llvm::errs() << "Too many arguments: ";
+            for (const std::string &a : args)
+                llvm::errs() << a << " ";
+            llvm::errs() << "\n";
 
-        if (args[0] == "help" || args.size() > 1) {
             PrintHelp(llvm::errs());
             return false;
-        }
-
-        vector<string> requestedChecks = Utils::splitString(args[0], ',');
-        if (requestedChecks.empty()) {
-            PrintHelp(llvm::errs());
-            return false;
-        }
-
-        // Remove duplicates:
-        sort(requestedChecks.begin(), requestedChecks.end());
-        requestedChecks.erase(unique(requestedChecks.begin(), requestedChecks.end()), requestedChecks.end());
-
-        m_checks.reserve(LastCheck);
-
-        for (uint i = 0, e = requestedChecks.size(); i != e; ++i) {
-            Check check = checkFromText(requestedChecks[i]);
-            if (check == InvalidCheck) {
-                llvm::errs() << "Invalid argument: " << requestedChecks[i] << "\n";
+        } else if (args.size() == 1) {
+            vector<string> requestedChecks = Utils::splitString(args[0], ',');
+            if (requestedChecks.empty()) {
+                llvm::errs() << "No requested checks!";
+                PrintHelp(llvm::errs());
                 return false;
-            } else {
-                m_checks.push_back(check);
+            }
+            // Remove duplicates:
+            sort(requestedChecks.begin(), requestedChecks.end());
+            requestedChecks.erase(unique(requestedChecks.begin(), requestedChecks.end()), requestedChecks.end());
+
+            m_checks.reserve(LastCheck);
+
+            for (uint i = 0, e = requestedChecks.size(); i != e; ++i) {
+                Check check = checkFromText(requestedChecks[i]);
+                if (check == InvalidCheck) {
+                    llvm::errs() << "Invalid argument: " << requestedChecks[i] << "\n";
+                    return false;
+                } else {
+                    m_checks.push_back(check);
+                }
+            }
+
+            if (m_checks.size() != 1 && m_fixitsEnabled) {
+                m_fixitsEnabled = false;
+                llvm::errs() << "Disable fixits because more than 1 check was specified. Fixits are experimental and are only supported when running only one check\n";
             }
         }
 
@@ -278,7 +299,7 @@ protected:
 
 private:
     vector<Check> m_checks;
-    bool m_fixitsEnabled;
+    bool m_fixitsEnabled = false;
 };
 
 }
