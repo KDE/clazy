@@ -206,7 +206,7 @@ public:
         return true;
     }
 
-    void HandleTranslationUnit(ASTContext &ctx)
+    void HandleTranslationUnit(ASTContext &ctx) override
     {
         TraverseDecl(ctx.getTranslationUnitDecl());
     }
