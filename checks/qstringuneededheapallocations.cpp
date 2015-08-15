@@ -116,8 +116,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    CXXRecordDecl *recordDecl = ctorDecl->getParent();
-    if (recordDecl->getNameAsString() != "QString")
+    if (!isOfClass(ctorDecl, "QString"))
         return;
 
     string paramType;
@@ -197,7 +196,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
-    if (methodDecl == nullptr || methodDecl->getParent()->getNameAsString() != "QString")
+    if (!isOfClass(methodDecl, "QString"))
         return;
 
     if (!hasCharPtrArgument(methodDecl))
@@ -252,9 +251,6 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (methodDecl == nullptr)
-        return;
-
     if (!isOfClass(methodDecl, "QString") || functionDecl->getNameAsString() != "operator=" || !hasArgumentOfType(functionDecl, "class QLatin1String", 1))
         return;
 
