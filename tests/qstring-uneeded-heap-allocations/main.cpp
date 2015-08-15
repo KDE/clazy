@@ -59,5 +59,8 @@ struct A
 struct A2
 {
     A2() : member(QStringLiteral("foo")) {} // OK
+    void  test(const QString &calendarType = QLatin1String("gregorian") ); // Warning
     QString member;
 };
+
+
