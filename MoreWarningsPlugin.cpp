@@ -122,7 +122,7 @@ public:
     MoreWarningsASTConsumer(CompilerInstance &ci, vector<Check> checks, bool enableFixits)
         : m_ci(ci)
         , m_fixitsEnabled(enableFixits)
-        , m_rewriter(enableFixits ? new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions()) : nullptr)
+        , m_rewriter(m_fixitsEnabled ? new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions()) : nullptr)
         , m_parentMap(nullptr)
     {
         ConvinienceSingleton::instance()->sm = &m_ci.getSourceManager();

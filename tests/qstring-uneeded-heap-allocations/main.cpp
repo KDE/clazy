@@ -83,9 +83,18 @@ struct A2
 void test3()
 {
     QString s;
-    if (s == QString::fromLatin1("foo"))
+    if (s == QString::fromLatin1("foo")) // Warning
         return;
-    if (s == QString::fromLatin1("foo %1").arg(1))
+    if (s == QString::fromLatin1("foo %1").arg(1)) // Warning
         return;
 }
 
+void test4(const QString &) {}
+
+void test5()
+{
+    test4(QString::fromLatin1("foo")); // Warning
+    QString s;
+    s.contains(QString::fromLatin1("a"));
+    s.compare(QString::fromLatin1("a"), QString::fromLatin1("a"));
+}

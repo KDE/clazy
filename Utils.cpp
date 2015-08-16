@@ -11,6 +11,8 @@
 **********************************************************************/
 
 #include "Utils.h"
+#include "MethodSignatureUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
@@ -600,4 +602,38 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
     }
 
     return true;
+}
+
+bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &className, const std::string &argumentType)
+{
+    if (!op)
+        return false;
+
+    FunctionDecl *functionDecl = op->getDirectCallee();
+    if (!functionDecl)
+        return false;
+
+    CXXMethodDecl *methodDecl = dyn_cast<clang::CXXMethodDecl>(functionDecl);
+    if (!className.empty() && !isOfClass(methodDecl, className))
+        return false;
+
+    if (functionDecl->getNameAsString() != "operator=")
+        return false;
+
+    if (!argumentType.empty() && !hasArgumentOfType(functionDecl, argumentType, 1)) {
+        return false;
+    }
+
+    return true;
+}
+
+
+bool Utils::isImplicitCastTo(Stmt *s, const string &className)
+{
+    ImplicitCastExpr *expr = dyn_cast<ImplicitCastExpr>(s);
+    if (!expr)
+        return false;
+
+    auto record = expr->getBestDynamicClassType();
+    return record && record->getNameAsString() == className;
 }

@@ -15,3 +15,7 @@ main.cpp:72:11: warning: QString(QLatin1String) being called [-Wmore-warnings-qs
 main.cpp:79:46: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:86:14: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:88:14: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:96:11: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:98:16: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:99:15: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:99:41: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]

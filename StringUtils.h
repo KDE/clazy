@@ -3,6 +3,7 @@
 
 #include "conviniencesingleton.h"
 
+#include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
 #include <string>
 
@@ -24,6 +25,12 @@ inline std::string classNameFor(clang::CXXMethodDecl *method)
     return method->getParent()->getNameAsString();
 }
 
+template <>
+inline std::string classNameFor(clang::CXXConstructExpr *expr)
+{
+    return classNameFor(expr->getConstructor());
+}
+
 template <typename T>
 inline bool isOfClass(T *node, const std::string &className)
 {
@@ -31,6 +38,11 @@ inline bool isOfClass(T *node, const std::string &className)
 }
 
 namespace StringUtils {
+
+inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::string> &functionNames)
+{
+    return func && std::find(functionNames.cbegin(), functionNames.cend(), func->getNameAsString()) != functionNames.cend();
+}
 
 inline void printLocation(const clang::SourceLocation &loc, bool newLine = true)
 {
@@ -50,7 +62,6 @@ inline void printLocation(const clang::Stmt *s, bool newLine = true)
     if (s)
         printLocation(s->getLocStart(), newLine);
 }
-
 
 }
 
