@@ -47,7 +47,24 @@ void test()
     QString s = QLatin1String(cstring + sizeof("foo")); // OK
     s = QString::fromLatin1("bar %1").arg(1);
     s = QString::fromLatin1(true ? "foo" : "foo2").arg(1);
+    s += QString::fromLatin1(  // Warning: Multi-line, to test FIXIT
+        "foo" );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 struct A
