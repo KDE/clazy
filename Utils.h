@@ -36,6 +36,7 @@ namespace clang {
     class SourceLocation;
     class ExprWithCleanups;
     class ValueDecl;
+    class ConditionalOperator;
 }
 
 namespace Utils {
@@ -183,6 +184,10 @@ namespace Utils {
             }
         }
     }
+
+    // returns true if the ternary operator has two string literal arguments, such as:
+    // foo ? "bar" : "baz"
+    bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
 
     clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
 }

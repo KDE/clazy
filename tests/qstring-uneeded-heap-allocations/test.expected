@@ -9,5 +9,6 @@ main.cpp:40:19: warning: QString(QLatin1String) being called [-Wmore-warnings-qs
 main.cpp:41:5: warning: QString::operator=(QLatin1String("literal") [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:43:19: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:48:9: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
+main.cpp:49:9: warning: QString::fromLatin1() being passed a literal [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:55:11: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]
 main.cpp:62:46: warning: QString(QLatin1String) being called [-Wmore-warnings-qstring-uneeded-heap-allocations]

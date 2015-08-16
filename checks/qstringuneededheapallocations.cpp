@@ -258,21 +258,30 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (methodDecl == nullptr)
+    if (!isOfClass(methodDecl, "QString"))
         return;
 
     std::string functionName = functionDecl->getNameAsString();
     if (functionName != "fromLatin1" && functionName != "fromUtf8")
         return;
 
-    if (!isOfClass(methodDecl, "QString"))
-        return;
-
     if (!Utils::callHasDefaultArguments(callExpr) || !hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
         return;
 
+    StringUtils::printLocation(callExpr);
+
     if (!containsStringLiteralNoCallExpr(callExpr))
         return;
+
+    vector<ConditionalOperator*> ternaries;
+    Utils::getChilds2(callExpr, ternaries, 2);
+    if (!ternaries.empty()) {
+        auto ternary = ternaries[0];
+        if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {
+            emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"));
+            return;
+        }
+    }
 
     std::vector<FixItHint> fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr);
 

@@ -581,3 +581,19 @@ Stmt *Utils::parent(ParentMap *map, Stmt *s, uint depth)
     return depth == 0 ? s
                       : parent(map, map->getParent(s), depth - 1);
 }
+
+bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
+{
+    bool skipFirst = true;
+    for (auto it = ternary->child_begin(), e = ternary->child_end(); it != e; ++it) {
+        if (skipFirst) {
+            skipFirst = false;
+            continue;
+        }
+        auto arrayToPointerDecay = dyn_cast<ImplicitCastExpr>(*it);
+        if (!arrayToPointerDecay || !dyn_cast<StringLiteral>(*(arrayToPointerDecay->child_begin())))
+            return false;
+    }
+
+    return true;
+}
