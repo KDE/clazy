@@ -590,6 +590,10 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
             skipFirst = false;
             continue;
         }
+
+        if (dyn_cast<StringLiteral>(*it))
+            continue;
+
         auto arrayToPointerDecay = dyn_cast<ImplicitCastExpr>(*it);
         if (!arrayToPointerDecay || !dyn_cast<StringLiteral>(*(arrayToPointerDecay->child_begin())))
             return false;
