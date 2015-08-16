@@ -80,4 +80,12 @@ struct A2
     QString member;
 };
 
+void test3()
+{
+    QString s;
+    if (s == QString::fromLatin1("foo"))
+        return;
+    if (s == QString::fromLatin1("foo %1").arg(1))
+        return;
+}
 
