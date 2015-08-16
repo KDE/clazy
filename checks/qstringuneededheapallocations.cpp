@@ -173,7 +173,20 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceQLatin1StringWithQS
     vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+
+    if (rangeEnd.isInvalid()) {
+        // Fallback. Have seen a case in the wild where the above would fail, it's very rare
+        rangeEnd = rangeStart.getLocWithOffset(sizeof("QLatin1String") - 2);
+        if (rangeEnd.isInvalid()) {
+            StringUtils::printLocation(rangeStart);
+            StringUtils::printLocation(rangeEnd);
+            StringUtils::printLocation(Lexer::getLocForEndOfToken(rangeStart, 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
+            emitManualFixitWarning(begin->getLocStart());
+        }
+    }
+
     fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral"));
+
     return fixits;
 }
 
