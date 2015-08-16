@@ -154,8 +154,10 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
         Stmt *begin = qlatin1CtorExpr(stm, ternary);
-        if (begin == nullptr)
+        if (begin == nullptr) {
+            emitManualFixitWarning(stm->getLocStart());
             return;
+        }
 
         vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceQLatin1StringWithQStringLiteral(begin)
                                                       : fixItReplaceQLatin1StringWithQStringLiteralInTernary(ternary);

@@ -101,3 +101,8 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
     for (FixItHint fixit : fixits)
         B.AddFixItHint(fixit);
 }
+
+void CheckBase::emitManualFixitWarning(clang::SourceLocation loc)
+{
+    emitWarning(loc, "FixIt failed, requires manual intervention", {}, false);
+}

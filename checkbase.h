@@ -45,6 +45,8 @@ protected:
     void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true) const;
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true) const;
 
+    void emitManualFixitWarning(clang::SourceLocation loc);
+
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;
     clang::ParentMap *m_parentMap;
