@@ -333,8 +333,9 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         auto ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {
             emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"));
-            return;
         }
+
+        return;
     }
 
     std::vector<FixItHint> fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr);
