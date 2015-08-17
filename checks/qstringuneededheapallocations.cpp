@@ -265,7 +265,6 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
 
     StringLiteral *literal = stringLiteralForCall(callExpr);
     if (literal) {
-
         auto classNameLoc = Lexer::getLocForEndOfToken(callExpr->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
         auto scopeOperatorLoc = Lexer::getLocForEndOfToken(classNameLoc, 0, m_ci.getSourceManager(), m_ci.getLangOpts());
         auto methodNameLoc = Lexer::getLocForEndOfToken(scopeOperatorLoc, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
@@ -274,9 +273,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
         SourceRange range(callExpr->getLocStart(), methodNameLoc);
         fixits.push_back(FixItHint::CreateReplacement(range, replacement));
     } else {
-        llvm::errs() << "Failed to apply fixit for location: ";
-        StringUtils::printLocation(callExpr);
-        assert(false);
+        emitManualFixitWarning(callExpr->getLocStart());
     }
 
     return fixits;
