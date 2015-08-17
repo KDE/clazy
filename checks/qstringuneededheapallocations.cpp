@@ -155,7 +155,6 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         ConditionalOperator *ternary = nullptr;
         Stmt *begin = qlatin1CtorExpr(stm, ternary);
         if (begin == nullptr) {
-            emitManualFixitWarning(stm->getLocStart());
             return;
         }
 
