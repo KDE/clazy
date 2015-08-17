@@ -11,6 +11,8 @@
 **********************************************************************/
 
 #include "Utils.h"
+#include "StringUtils.h"
+
 #include "conviniencesingleton.h"
 #include "checkbase.h"
 #include "checks/detachingtemporaries.h"
@@ -210,6 +212,11 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
+        // FIXME: clang crashes in calendarsupport/utils.cpp, backtrace looks like a llvm bug
+        bool contains = m_ci.getSourceManager().getFilename(stm->getLocStart()).find("calendarsupport/utils.cpp") != std::string::npos;
+        if (contains)
+            return true;
+
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
         // So re-set a parent map each time we go into a different hieararchy
         if (m_parentMap == nullptr || m_parentMap->getParent(stm) == nullptr) {
