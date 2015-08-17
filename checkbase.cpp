@@ -104,5 +104,5 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
 
 void CheckBase::emitManualFixitWarning(clang::SourceLocation loc)
 {
-    emitWarning(loc, "FixIt failed, requires manual intervention", {}, false);
+    emitWarning(loc, "FixIt failed, requires manual intervention", {}, true);
 }
