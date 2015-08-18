@@ -24,9 +24,8 @@
 class RequiredResults : public CheckBase
 {
 public:
-    explicit RequiredResults(clang::CompilerInstance &ci);
+    RequiredResults(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
-    std::string name() const override;
 private:
     bool shouldIgnoreMethod(const std::string &qualifiedName);
 };

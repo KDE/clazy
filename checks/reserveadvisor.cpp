@@ -12,6 +12,7 @@
 
 #include "reserveadvisor.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -25,8 +26,8 @@
 using namespace clang;
 using namespace std;
 
-ReserveAdvisor::ReserveAdvisor(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+ReserveAdvisor::ReserveAdvisor(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -221,7 +222,4 @@ void ReserveAdvisor::checkIfReserveStatement(Stmt *stm)
     }
 }
 
-std::string ReserveAdvisor::name() const
-{
-    return "reserve-candidates";
-}
+REGISTER_CHECK("reserve-candidates", ReserveAdvisor)

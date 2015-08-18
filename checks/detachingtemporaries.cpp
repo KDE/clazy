@@ -10,6 +10,7 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **********************************************************************/
 
+#include "checkmanager.h"
 #include "detachingtemporaries.h"
 #include "Utils.h"
 
@@ -20,8 +21,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingTemporaries::DetachingTemporaries(CompilerInstance &ci)
-    : CheckBase(ci)
+DetachingTemporaries::DetachingTemporaries(const std::string &name)
+    : CheckBase(name)
 {
     m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back", "takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
     m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "fill", "insert" };
@@ -86,7 +87,4 @@ void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
     }
 }
 
-std::string DetachingTemporaries::name() const
-{
-    return "detaching-temporary";
-}
+REGISTER_CHECK("detaching-temporary", DetachingTemporaries)

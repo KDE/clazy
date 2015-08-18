@@ -12,6 +12,7 @@
 
 #include "functionargsbyref.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -41,14 +42,9 @@ static bool shouldIgnoreFunction(const std::string &methodName)
     return std::find(ignoreList.cbegin(), ignoreList.cend(), methodName) != ignoreList.cend();
 }
 
-FunctionArgsByRef::FunctionArgsByRef(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+FunctionArgsByRef::FunctionArgsByRef(const std::string &name)
+    : CheckBase(name)
 {
-}
-
-std::string FunctionArgsByRef::name() const
-{
-    return "function-args-by-ref";
 }
 
 std::vector<string> FunctionArgsByRef::filesToIgnore() const
@@ -119,3 +115,5 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         }
     }
 }
+
+REGISTER_CHECK("function-args-by-ref", FunctionArgsByRef)

@@ -12,13 +12,14 @@
 
 #include "assertwithsideeffects.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Expr.h>
 
 using namespace clang;
 
-AssertWithSideEffects::AssertWithSideEffects(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+AssertWithSideEffects::AssertWithSideEffects(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -61,7 +62,5 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
     }
 }
 
-std::string AssertWithSideEffects::name() const
-{
-    return "assert-with-side-effects";
-}
+
+REGISTER_CHECK("assert-with-side-effects", AssertWithSideEffects)

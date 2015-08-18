@@ -11,6 +11,7 @@
 **********************************************************************/
 
 #include "checkbase.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -23,8 +24,9 @@
 using namespace clang;
 using namespace std;
 
-CheckBase::CheckBase(CompilerInstance &ci)
-    : m_ci(ci)
+CheckBase::CheckBase(const string &name)
+    : m_ci(*CheckManager::instance()->m_ci)
+    , m_name(name)
 {
     ASTContext &context = m_ci.getASTContext();
     m_tu = context.getTranslationUnitDecl();
@@ -53,6 +55,11 @@ void CheckBase::VisitDeclaration(Decl *decl)
         m_lastMethodDecl = mdecl;
 
     VisitDecl(decl);
+}
+
+string CheckBase::name() const
+{
+    return m_name;
 }
 
 void CheckBase::setParentMap(ParentMap *parentMap)

@@ -12,14 +12,15 @@
 
 #include "nrvoenabler.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
 using namespace std;
 
-NRVOEnabler::NRVOEnabler(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+NRVOEnabler::NRVOEnabler(const std::string &name)
+    : CheckBase(name)
 {
 
 }
@@ -46,7 +47,7 @@ void NRVOEnabler::VisitDecl(clang::Decl *decl)
             vector<CXXConstructExpr*> cexprs;
             Utils::getChilds2(ret, cexprs);
             if (!cexprs.empty()) {
-                llvm::errs() << "isElidable=" << cexprs.at(0)->isElidable() << "\n";
+                //llvm::errs() << "isElidable=" << cexprs.at(0)->isElidable() << "\n";
             }
         }
 
@@ -59,7 +60,4 @@ void NRVOEnabler::VisitStmt(clang::Stmt *)
 {
 }
 
-std::string NRVOEnabler::name() const
-{
-    return "nrvo";
-}
+REGISTER_CHECK("nrvo", NRVOEnabler)

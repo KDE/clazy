@@ -12,6 +12,7 @@
 
 #include "missingtypeinfo.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclTemplate.h>
@@ -21,8 +22,8 @@
 using namespace std;
 using namespace clang;
 
-MissingTypeinfo::MissingTypeinfo(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+MissingTypeinfo::MissingTypeinfo(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -99,7 +100,5 @@ bool MissingTypeinfo::ignoreTypeInfo(const std::string &className) const
     return std::find(primitives.begin(), primitives.end(), className) != primitives.end();
 }
 
-std::string MissingTypeinfo::name() const
-{
-    return "missing-typeinfo";
-}
+
+REGISTER_CHECK("missing-typeinfo", MissingTypeinfo)

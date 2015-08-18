@@ -12,6 +12,7 @@
 
 #include "inefficientqlist.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -28,8 +29,8 @@ enum IgnoreMode {
     IsAssignedTooInFunction = 4
 };
 
-InefficientQList::InefficientQList(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+InefficientQList::InefficientQList(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -93,7 +94,5 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
     }
 }
 
-std::string InefficientQList::name() const
-{
-    return "inefficient-qlist";
-}
+
+REGISTER_CHECK("inefficient-qlist", InefficientQList)

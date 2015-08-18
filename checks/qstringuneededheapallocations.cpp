@@ -14,6 +14,7 @@
 #include "Utils.h"
 #include "StringUtils.h"
 #include "MethodSignatureUtils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -28,8 +29,14 @@
 using namespace clang;
 using namespace std;
 
-QStringUneededHeapAllocations::QStringUneededHeapAllocations(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+enum Fixit {
+    FixitNone = 0,
+    QLatin1StringAllocations = 0x1,
+    FromLatin1_FromUtf8Allocations = 0x2
+};
+
+QStringUneededHeapAllocations::QStringUneededHeapAllocations(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -39,11 +46,6 @@ void QStringUneededHeapAllocations::VisitStmt(clang::Stmt *stm)
     VisitOperatorCall(stm);
     VisitFromLatin1OrUtf8(stm);
     VisitAssignOperatorQLatin1String(stm);
-}
-
-std::string QStringUneededHeapAllocations::name() const
-{
-    return "qstring-uneeded-heap-allocations";
 }
 
 static bool betterTakeQLatin1String(CXXMethodDecl *method)
@@ -367,3 +369,8 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
+
+const char *const s_checkName = "qstring-uneeded-heap-allocations";
+REGISTER_CHECK(s_checkName, QStringUneededHeapAllocations)
+REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)
+REGISTER_FIXIT(FromLatin1_FromUtf8Allocations, "fix-fromLatin1_fromUtf8-allocations", s_checkName)

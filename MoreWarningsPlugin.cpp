@@ -13,26 +13,8 @@
 #include "Utils.h"
 #include "StringUtils.h"
 
-#include "conviniencesingleton.h"
 #include "checkbase.h"
-#include "checks/detachingtemporaries.h"
-#include "checks/duplicateexpensivestatement.h"
-#include "checks/dynamic_cast.h"
-#include "checks/inefficientqlist.h"
-#include "checks/foreacher.h"
-#include "checks/functionargsbyref.h"
-#include "checks/globalconstcharpointer.h"
-#include "checks/missingtypeinfo.h"
-#include "checks/nonpodstatic.h"
-#include "checks/nrvoenabler.h"
-#include "checks/assertwithsideeffects.h"
-#include "checks/qlistint.h"
-#include "checks/qmapkey.h"
-#include "checks/requiredresults.h"
-#include "checks/reserveadvisor.h"
-#include "checks/variantsanitizer.h"
-#include "checks/virtualcallsfromctor.h"
-#include "checks/qstringuneededheapallocations.h"
+#include "checkmanager.h"
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
@@ -53,52 +35,6 @@ using namespace std;
 
 namespace {
 
-enum Check {
-    InvalidCheck = -1, // Don't change order
-    DetachingTemporariesCheck = 0,
-    MissingTypeinfoCheck,
-    BogusDynamicCastCheck,
-    NonPodStaticCheck,
-    ReserveCandidatesCheck,
-    VariantSanitizerCheck,
-    QMapPointerKeyCheck,
-    ForeacherCheck,
-    VirtualCallsFromCTORCheck,
-    GlobalConstCharPointerCheck,
-    FunctionArgsByRefCheck,
-    InefficientQListCheck,
-    QStringUneededHeapAllocationsCheck,
-    LastCheck
-};
-
-static const vector<string> & availableChecksStr()
-{
-    static const vector<string> texts = { "detaching-temporary",
-                                          "missing-typeinfo",
-                                          "bogus-dynamic-cast",
-                                          "non-pod-global-static",
-                                          "reserve-candidates",
-                                          "variant-sanitizer",
-                                          "qmap-with-key-pointer",
-                                          "foreacher",
-                                          "virtual-call-ctor",
-                                          "global-const-char-pointer",
-                                          "function-args-by-ref",
-                                          "inefficient-qlist",
-                                          "qstring-uneeded-heap-allocations"
-                                        };
-
-    assert(texts.size() == LastCheck);
-    return texts;
-}
-
-static Check checkFromText(const std::string &checkStr)
-{
-    const vector<string> &checksStr = availableChecksStr();
-
-    auto it = std::find(checksStr.cbegin(), checksStr.cend(), checkStr);
-    return it == checksStr.cend() ? InvalidCheck : static_cast<Check>(it - checksStr.cbegin());
-}
 
 class MyFixItOptions : public FixItOptions
 {
@@ -121,59 +57,17 @@ public:
 class MoreWarningsASTConsumer : public ASTConsumer, public RecursiveASTVisitor<MoreWarningsASTConsumer>
 {
 public:
-    MoreWarningsASTConsumer(CompilerInstance &ci, vector<Check> checks, bool enableFixits)
+    MoreWarningsASTConsumer(CompilerInstance &ci, const vector<string> &requestedChecks)
         : m_ci(ci)
-        , m_fixitsEnabled(enableFixits)
-        , m_rewriter(m_fixitsEnabled ? new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions()) : nullptr)
+        , m_rewriter(nullptr)
         , m_parentMap(nullptr)
+        , m_checkManager(CheckManager::instance())
     {
-        ConvinienceSingleton::instance()->sm = &m_ci.getSourceManager();
+        m_checkManager->setCompilerInstance(&m_ci);
+        m_checkManager->createCheckers(requestedChecks);
+        if (m_checkManager->fixitsEnabled())
+            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions());
 
-        for (uint i = 0; i < checks.size(); ++i) {
-            switch (checks[i]) {
-            case DetachingTemporariesCheck:
-                m_checks.push_back(std::shared_ptr<DetachingTemporaries>(new DetachingTemporaries(ci)));
-                break;
-            case MissingTypeinfoCheck:
-                m_checks.push_back(std::shared_ptr<MissingTypeinfo>(new MissingTypeinfo(ci)));
-                break;
-            case BogusDynamicCastCheck:
-                m_checks.push_back(std::shared_ptr<BogusDynamicCast>(new BogusDynamicCast(ci)));
-                break;
-            case NonPodStaticCheck:
-                m_checks.push_back(std::shared_ptr<NonPodStatic>(new NonPodStatic(ci)));
-                break;
-            case ReserveCandidatesCheck:
-                m_checks.push_back(std::shared_ptr<ReserveAdvisor>(new ReserveAdvisor(ci)));
-                break;
-            case VariantSanitizerCheck:
-                m_checks.push_back(std::shared_ptr<VariantSanitizer>(new VariantSanitizer(ci)));
-                break;
-            case QMapPointerKeyCheck:
-                m_checks.push_back(std::shared_ptr<QMapKeyChecker>(new QMapKeyChecker(ci)));
-                break;
-            case ForeacherCheck:
-                m_checks.push_back(std::shared_ptr<Foreacher>(new Foreacher(ci)));
-                break;
-            case VirtualCallsFromCTORCheck:
-                m_checks.push_back(std::shared_ptr<VirtualCallsFromCTOR>(new VirtualCallsFromCTOR(ci)));
-                break;
-            case GlobalConstCharPointerCheck:
-                m_checks.push_back(std::shared_ptr<GlobalConstCharPointer>(new GlobalConstCharPointer(ci)));
-                break;
-            case FunctionArgsByRefCheck:
-                m_checks.push_back(std::shared_ptr<FunctionArgsByRef>(new FunctionArgsByRef(ci)));
-                break;
-            case InefficientQListCheck:
-                m_checks.push_back(std::shared_ptr<InefficientQList>(new InefficientQList(ci)));
-                break;
-            case QStringUneededHeapAllocationsCheck:
-                m_checks.push_back(std::shared_ptr<QStringUneededHeapAllocations>(new QStringUneededHeapAllocations(ci)));
-                break;
-            default:
-                assert(false);
-            }
-        }
 
         // These are commented because they are either WIP or have to many false-positives
         /// m_checks.push_back(std::shared_ptr<NRVOEnabler>(new NRVOEnabler(ci)));
@@ -185,7 +79,7 @@ public:
 
     ~MoreWarningsASTConsumer()
     {
-        if (m_fixitsEnabled) {
+        if (m_rewriter != nullptr) {
             m_rewriter->WriteFixedFiles();
             delete m_rewriter;
         }
@@ -195,15 +89,15 @@ public:
     {
         delete m_parentMap;
         m_parentMap = map;
-        for (auto check : m_checks)
+        auto &createdChecks = m_checkManager->createdChecks();
+        for (auto &check : createdChecks)
             check->setParentMap(map);
     }
 
     bool VisitDecl(Decl *decl)
     {
-        auto it = m_checks.cbegin();
-        auto end = m_checks.cend();
-        for (; it != end; ++it) {
+        auto &createdChecks = m_checkManager->createdChecks();
+        for (auto it = createdChecks.cbegin(), end = createdChecks.cend(); it != end; ++it) {
             (*it)->VisitDeclaration(decl);
         }
 
@@ -220,12 +114,12 @@ public:
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
         // So re-set a parent map each time we go into a different hieararchy
         if (m_parentMap == nullptr || m_parentMap->getParent(stm) == nullptr) {
+            assert(stm != nullptr);
             setParentMap(new ParentMap(stm));
         }
 
-        auto it = m_checks.cbegin();
-        auto end = m_checks.cend();
-        for (; it != end; ++it) {
+        auto &createdChecks = m_checkManager->createdChecks();
+        for (auto it = createdChecks.cbegin(), end = createdChecks.cend(); it != end; ++it) {
             (*it)->VisitStatement(stm);
         }
 
@@ -238,10 +132,9 @@ public:
     }
 
     CompilerInstance &m_ci;
-    std::vector<std::shared_ptr<CheckBase> > m_checks;
-    bool m_fixitsEnabled;
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
+    CheckManager *m_checkManager;
 };
 
 //------------------------------------------------------------------------------
@@ -250,7 +143,7 @@ class MoreWarningsAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
     {
-        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks, m_fixitsEnabled);
+        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks);
     }
 
     bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_) override
@@ -263,17 +156,10 @@ protected:
             return false;
         }
 
-        auto it = std::find(args.cbegin(), args.cend(), "fixits");
-        if (it != args.cend()) {
-            m_fixitsEnabled = true;
-            args.erase(it, it + 1);
-        }
-
+        auto availableCheckNames = CheckManager::instance()->availableCheckNames();
         if (args.empty()) {
             // No check specified, use all of them
-            for (int i = 0; i < LastCheck; ++i) {
-                m_checks.push_back(static_cast<Check>(i));
-            }
+            m_checks = availableCheckNames;
         } else if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
@@ -294,21 +180,16 @@ protected:
             sort(requestedChecks.begin(), requestedChecks.end());
             requestedChecks.erase(unique(requestedChecks.begin(), requestedChecks.end()), requestedChecks.end());
 
-            m_checks.reserve(LastCheck);
+            m_checks.reserve(requestedChecks.size());
 
             for (uint i = 0, e = requestedChecks.size(); i != e; ++i) {
-                Check check = checkFromText(requestedChecks[i]);
-                if (check == InvalidCheck) {
-                    llvm::errs() << "Invalid argument: " << requestedChecks[i] << "\n";
+                string checkName = requestedChecks[i];
+                if (std::find(availableCheckNames.cbegin(), availableCheckNames.cend(), checkName) == availableCheckNames.cend()) {
+                    llvm::errs() << "Invalid argument: " << checkName << "\n";
                     return false;
                 } else {
-                    m_checks.push_back(check);
+                    m_checks.push_back(checkName);
                 }
-            }
-
-            if (m_checks.size() != 1 && m_fixitsEnabled) {
-                m_fixitsEnabled = false;
-                llvm::errs() << "Disable fixits because more than 1 check was specified. Fixits are experimental and are only supported when running only one check\n";
             }
         }
 
@@ -317,17 +198,39 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros)
     {
-        const vector<string> &checksStr = availableChecksStr();
+        const vector<string> &names = CheckManager::instance()->availableCheckNames();
 
-        ros << "Available plugins:\n\n";
-        for (uint i = 1; i < checksStr.size(); ++i) {
-            ros << checksStr[i] << "\n";
+        ros << "Available checks:\n\n";
+        for (uint i = 1; i < names.size(); ++i) {
+            auto padded = names[i];
+            padded.insert(padded.end(), 39 - padded.size(), ' ');
+            ros << names[i];
+            auto fixits = CheckManager::instance()->availableFixIts(names[i]);
+            if (!fixits.empty()) {
+                ros << "    (";
+                bool isFirst = true;
+                for (auto fixit : fixits) {
+                    if (isFirst) {
+                        isFirst = false;
+                    } else {
+                        ros << ",";
+                    }
+
+                    ros << fixit.name;
+                }
+                ros << ")";
+            }
+            ros << "\n";
         }
+
+        ros << "\n" << "To enable fixits for a check set the environment variable MORE_WARNINGS_FIXIT"
+            << "\n" << "For example MORE_WARNINGS_FIXIT=\"fix-qlatin1string-allocations\""
+            << "\n" << "FixIts are experimental and rewrite your code, therefore only one FixIt is allowed per build, specifying a list of different FixIts is not supported"
+            << "\n";
     }
 
 private:
-    vector<Check> m_checks;
-    bool m_fixitsEnabled = false;
+    vector<string> m_checks;
 };
 
 }

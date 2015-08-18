@@ -11,24 +11,28 @@ QT_FLAGS = "-I /usr/include/qt/ -fPIC"
 
 _compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -c *.cpp " + QT_FLAGS + " -Xclang -plugin-arg-more-warnings -Xclang "
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
-_fixit_arguments = "-Xclang -plugin-arg-more-warnings -Xclang fixits"
+_help_command = "clang++ -Xclang -load -Xclang ClangMoreWarningsPlugin.so -Xclang -add-plugin -Xclang more-warnings -Xclang -plugin-arg-more-warnings -Xclang help -c empty.cpp"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
-_fixits = "--fixits" in sys.argv
+_help = "--help" in sys.argv
 
 #-------------------------------------------------------------------------------
 # utility functions
-def print_usage():
-    print "Usage:"
-    print sys.argv[0] + " [--help] [--dump-ast] [check1,check2,check3]"
-    print
-    print "Without any check supplied, all checks will be run."
-    print "--dump-ast is provided for debugging purposes.\n"
 
 def run_command(cmd):
     if os.system(cmd) != 0:
         return False
     return True
+
+def print_usage():
+    print "Usage for " + sys.argv[0].strip("./") + ":\n"
+    print "    " + sys.argv[0] + " [--help] [--dump-ast] [check1,check2,check3]"
+    print
+    print "    Without any check supplied, all checks will be run."
+    print "    --dump-ast is provided for debugging purposes.\n"
+    print "Help for clang plugin:"
+    print
+    run_command(_help_command)
 
 def run_command2(cmd):
     return os.popen(cmd).readlines()
@@ -56,9 +60,6 @@ def print_differences(file1, file2):
 def run_check_unit_tests(check):
     cmd = _compiler_comand + check
 
-    if _fixits:
-        cmd += " " + _fixit_arguments
-
     if _verbose:
         print "Running: " + cmd
 
@@ -82,13 +83,13 @@ def dump_ast(check):
 #-------------------------------------------------------------------------------
 # main
 
-if "--help" in sys.argv:
+if _help:
     print_usage()
     sys.exit(0)
 
 args = sys.argv[1:]
 
-switches = ["--verbose", "--dump-ast", "--fixits"]
+switches = ["--verbose", "--dump-ast", "--help"]
 
 if _dump_ast:
     del(args[args.index("--dump-ast")])

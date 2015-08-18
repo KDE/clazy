@@ -12,6 +12,7 @@
 
 #include "qmapkey.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -20,8 +21,8 @@
 using namespace clang;
 using namespace std;
 
-QMapKeyChecker::QMapKeyChecker(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+QMapKeyChecker::QMapKeyChecker(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -42,7 +43,4 @@ void QMapKeyChecker::VisitDecl(clang::Decl *decl)
     }
 }
 
-std::string QMapKeyChecker::name() const
-{
-    return "qmap-with-key-pointer";
-}
+REGISTER_CHECK("qmap-with-key-pointer", QMapKeyChecker)

@@ -23,9 +23,8 @@
 class VariantSanitizer : public CheckBase
 {
 public:
-    explicit VariantSanitizer(clang::CompilerInstance &ci);
+    VariantSanitizer(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
-    std::string name() const override;
 };
 
 #endif

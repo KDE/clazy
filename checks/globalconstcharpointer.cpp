@@ -11,14 +11,15 @@
 **********************************************************************/
 
 #include "globalconstcharpointer.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 
 using namespace clang;
 
-GlobalConstCharPointer::GlobalConstCharPointer(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -41,13 +42,10 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
     emitWarning(decl->getLocStart(), "non const global char *");
 }
 
-std::string GlobalConstCharPointer::name() const
-{
-    return "global-const-char-pointer";
-}
-
 std::vector<std::string> GlobalConstCharPointer::filesToIgnore() const
 {
     static const std::vector<std::string> files = {"errno.h", "getopt.h", "StdHeader.h", "3rdparty", "mysql.h"};
     return files;
 }
+
+REGISTER_CHECK("global-const-char-pointer", GlobalConstCharPointer)

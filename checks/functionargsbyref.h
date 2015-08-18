@@ -26,9 +26,8 @@ class Decl;
 class FunctionArgsByRef : public CheckBase
 {
 public:
-    explicit FunctionArgsByRef(clang::CompilerInstance &ci);
+    FunctionArgsByRef(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
-    std::string name() const override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
 };

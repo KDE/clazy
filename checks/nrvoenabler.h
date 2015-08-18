@@ -21,10 +21,9 @@
 class NRVOEnabler : public CheckBase
 {
 public:
-    explicit NRVOEnabler(clang::CompilerInstance &ci);
+    NRVOEnabler(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
-    std::string name() const override;
 };
 
 #endif

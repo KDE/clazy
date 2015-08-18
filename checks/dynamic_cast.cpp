@@ -12,14 +12,15 @@
 
 #include "dynamic_cast.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
 
 using namespace clang;
 
-BogusDynamicCast::BogusDynamicCast(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+BogusDynamicCast::BogusDynamicCast(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -53,7 +54,4 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     }
 }
 
-std::string BogusDynamicCast::name() const
-{
-    return "bogus-dynamic-cast";
-}
+REGISTER_CHECK("bogus-dynamic-cast", BogusDynamicCast)

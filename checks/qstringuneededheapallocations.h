@@ -35,9 +35,8 @@ class CallExpr;
 class QStringUneededHeapAllocations : public CheckBase
 {
 public:
-    explicit QStringUneededHeapAllocations(clang::CompilerInstance &ci);
+    QStringUneededHeapAllocations(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
-    std::string name() const override;
 private:
     void VisitCtor(clang::Stmt *);
     void VisitOperatorCall(clang::Stmt *);

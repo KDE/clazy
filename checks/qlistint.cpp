@@ -12,6 +12,7 @@
 
 #include "qlistint.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -23,8 +24,8 @@ using namespace std;
 // TODO: Check if we're not in a method returning QList<int>
 
 
-ListInt::ListInt(CompilerInstance &ci)
-    : CheckBase(ci)
+ListInt::ListInt(const std::string &name)
+    : CheckBase(name)
 {
 
 }
@@ -52,7 +53,4 @@ void ListInt::VisitStmt(Stmt *)
 {
 }
 
-std::string ListInt::name() const
-{
-    return "qlist-of-int";
-}
+REGISTER_CHECK("qlist-of-int", ListInt)

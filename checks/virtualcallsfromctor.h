@@ -34,10 +34,9 @@ class SourceLocation;
 class VirtualCallsFromCTOR : public CheckBase
 {
 public:
-    explicit VirtualCallsFromCTOR(clang::CompilerInstance &ci);
+    VirtualCallsFromCTOR(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
     void VisitDecl(clang::Decl *decl) override;
-    std::string name() const override;
 
 private:
     bool containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<clang::Stmt*> &processedStmts) const;

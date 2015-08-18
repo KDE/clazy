@@ -18,9 +18,8 @@
 class AssertWithSideEffects : public CheckBase
 {
 public:
-    explicit AssertWithSideEffects(clang::CompilerInstance &ci);
+    AssertWithSideEffects(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
-    std::string name() const override;
 };
 
 #endif

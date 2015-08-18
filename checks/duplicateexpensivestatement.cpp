@@ -12,6 +12,7 @@
 
 #include "duplicateexpensivestatement.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 using namespace clang;
 using namespace std;
@@ -22,8 +23,8 @@ static bool nameMatches(const std::string &qualifiedName)
     return !qualifiedName.empty() && std::find(names.cbegin(), names.cend(), qualifiedName) != names.cend();
 }
 
-DuplicateExpensiveStatement::DuplicateExpensiveStatement(CompilerInstance &ci)
-    : CheckBase(ci)
+DuplicateExpensiveStatement::DuplicateExpensiveStatement(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -34,11 +35,6 @@ void DuplicateExpensiveStatement::VisitDecl(Decl *decl)
        m_currentFunctionDecl = functionDecl;
        inspectStatement(functionDecl->getBody());
    }
-}
-
-std::string DuplicateExpensiveStatement::name() const
-{
-    return "duplicate-expensive-statement";
 }
 
 void DuplicateExpensiveStatement::inspectStatement(Stmt *stm)
@@ -70,3 +66,5 @@ void DuplicateExpensiveStatement::inspectStatement(Stmt *stm)
         inspectStatement(*it);
     }
 }
+
+REGISTER_CHECK("duplicate-expensive-statement", DuplicateExpensiveStatement)

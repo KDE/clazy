@@ -12,12 +12,13 @@
 
 #include "variantsanitizer.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 using namespace std;
 using namespace clang;
 
-VariantSanitizer::VariantSanitizer(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+VariantSanitizer::VariantSanitizer(const std::string &name)
+    : CheckBase(name)
 {
 
 }
@@ -71,7 +72,4 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
     }
 }
 
-std::string VariantSanitizer::name() const
-{
-    return "variant-sanitizer";
-}
+REGISTER_CHECK("variant-sanitizer", VariantSanitizer)

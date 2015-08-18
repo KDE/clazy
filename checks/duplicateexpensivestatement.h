@@ -22,9 +22,8 @@ class ValueDecl;
 
 class DuplicateExpensiveStatement : public CheckBase {
 public:
-    explicit DuplicateExpensiveStatement(clang::CompilerInstance &ci);
+    DuplicateExpensiveStatement(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
-    std::string name() const override;
 private:
     void inspectStatement(clang::Stmt *stm);
     std::map<clang::FunctionDecl*, std::map<clang::ValueDecl*, int> > m_expensiveCounts;

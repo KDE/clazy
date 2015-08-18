@@ -17,10 +17,9 @@
 
 class ListInt : public CheckBase {
 public:
-    explicit ListInt(clang::CompilerInstance &ci);
+    ListInt(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stm) override;
-    std::string name() const override;
 };
 
 #endif

@@ -31,9 +31,8 @@
 class DetachingTemporaries : public CheckBase
 {
 public:
-    explicit DetachingTemporaries(clang::CompilerInstance &ci);
+    DetachingTemporaries(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
-    std::string name() const override;
 private:
     std::map<std::string, std::vector<std::string>> m_methodsByType;
 };

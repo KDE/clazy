@@ -12,6 +12,7 @@
 
 #include "virtualcallsfromctor.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -19,8 +20,8 @@
 using namespace std;
 using namespace clang;
 
-VirtualCallsFromCTOR::VirtualCallsFromCTOR(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name)
+    : CheckBase(name)
 {
 
 }
@@ -50,11 +51,6 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
         else
             emitWarning(ctorOrDtorBody->getLocStart(), "Calling pure virtual function in DTOR");
     }
-}
-
-std::string VirtualCallsFromCTOR::name() const
-{
-    return "virtual-call-ctor";
 }
 
 bool VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts) const
@@ -89,3 +85,5 @@ bool VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, 
 
     return false;
 }
+
+REGISTER_CHECK("virtual-call-ctor", VirtualCallsFromCTOR)

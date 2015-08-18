@@ -94,7 +94,7 @@ set (USER_LIBS
 
 add_clang_plugin(ClangMoreWarningsPlugin
                  checkbase.cpp
-                 conviniencesingleton.cpp
+                 checkmanager.cpp
                  checks/assertwithsideeffects.cpp
                  checks/detachingtemporaries.cpp
                  checks/duplicateexpensivestatement.cpp

@@ -20,9 +20,8 @@
  */
 class QMapKeyChecker : public CheckBase {
 public:
-    explicit QMapKeyChecker(clang::CompilerInstance &ci);
+    QMapKeyChecker(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
-    std::string name() const override;
 };
 
 #endif

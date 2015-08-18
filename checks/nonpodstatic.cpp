@@ -12,6 +12,7 @@
 
 #include "nonpodstatic.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 
@@ -25,8 +26,8 @@ static bool shouldIgnoreType(const std::string &name)
     return find(blacklist.cbegin(), blacklist.cend(), name) != blacklist.cend();
 }
 
-NonPodStatic::NonPodStatic(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+NonPodStatic::NonPodStatic(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -68,7 +69,4 @@ std::vector<string> NonPodStatic::filesToIgnore() const
     return {"main.cpp"};
 }
 
-std::string NonPodStatic::name() const
-{
-    return "non-pod-global-static";
-}
+REGISTER_CHECK("non-pod-global-static", NonPodStatic)

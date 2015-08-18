@@ -32,9 +32,8 @@ class ValueDecl;
 class ReserveAdvisor : public CheckBase
 {
 public:
-    explicit ReserveAdvisor(clang::CompilerInstance &ci);
+    ReserveAdvisor(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
-    std::string name() const override;
 
 private:
     void checkIfReserveStatement(clang::Stmt *stmt);

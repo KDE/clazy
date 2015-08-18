@@ -12,6 +12,7 @@
 
 #include "requiredresults.h"
 #include "Utils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -19,8 +20,8 @@
 
 using namespace clang;
 
-RequiredResults::RequiredResults(clang::CompilerInstance &ci)
-    : CheckBase(ci)
+RequiredResults::RequiredResults(const std::string &name)
+    : CheckBase(name)
 {
 }
 
@@ -121,7 +122,4 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
     }
 }
 
-std::string RequiredResults::name() const
-{
-    return "unused-result";
-}
+REGISTER_CHECK("unused-result", RequiredResults)

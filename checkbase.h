@@ -14,6 +14,7 @@
 #define CHECK_BASE_H
 
 #include <clang/Frontend/CompilerInstance.h>
+#include <string>
 
 namespace clang {
 class CXXMethodDecl;
@@ -27,13 +28,14 @@ class FixItHint;
 class CheckBase
 {
 public:
-    explicit CheckBase(clang::CompilerInstance &m_ci);
+    typedef std::vector<std::unique_ptr<CheckBase> > List;
+    explicit CheckBase(const std::string &name);
     ~CheckBase();
 
     void VisitStatement(clang::Stmt *stm);
     void VisitDeclaration(clang::Decl *stm);
 
-    virtual std::string name() const = 0;
+    std::string name() const;
 
     void setParentMap(clang::ParentMap *parentMap);
 
@@ -51,6 +53,7 @@ protected:
     clang::TranslationUnitDecl *m_tu;
     clang::ParentMap *m_parentMap;
     clang::CXXMethodDecl *m_lastMethodDecl;
+    std::string m_name;
 };
 
 #endif
