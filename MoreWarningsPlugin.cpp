@@ -54,6 +54,20 @@ public:
     }
 };
 
+static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
+{
+    if (!s)
+        return;
+
+    auto it = s->child_begin();
+    auto e = s->child_end();
+    for (; it != e; ++it) {
+        llvm::errs() << "Patching " << (*it)->getStmtClassName() << "\n";
+        map->setParent(*it, s);
+        manuallyPopulateParentMap(map, *it);
+    }
+}
+
 class MoreWarningsASTConsumer : public ASTConsumer, public RecursiveASTVisitor<MoreWarningsASTConsumer>
 {
 public:
@@ -98,14 +112,18 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
-        // FIXME: clang crashes in calendarsupport/utils.cpp, backtrace looks like a llvm bug
-        bool contains = m_ci.getSourceManager().getFilename(stm->getLocStart()).find("calendarsupport/utils.cpp") != std::string::npos;
-        if (contains)
-            return true;
+        static Stmt *lastStm = nullptr;
+        // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
+        if (lastStm && isa<CXXCatchStmt>(lastStm) && m_parentMap && !m_parentMap->hasParent(stm)) {
+            m_parentMap->setParent(stm, lastStm);
+            manuallyPopulateParentMap(m_parentMap, stm);
+        }
+
+        lastStm = stm;
 
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
         // So re-set a parent map each time we go into a different hieararchy
-        if (m_parentMap == nullptr || m_parentMap->getParent(stm) == nullptr) {
+        if (m_parentMap == nullptr || !m_parentMap->hasParent(stm)) {
             assert(stm != nullptr);
             setParentMap(new ParentMap(stm));
         }

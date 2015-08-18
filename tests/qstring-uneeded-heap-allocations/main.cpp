@@ -98,3 +98,13 @@ void test5()
     s.contains(QString::fromLatin1("a"));
     s.compare(QString::fromLatin1("a"), QString::fromLatin1("a"));
 }
+
+#include <exception>
+void exceptionTest() // Just to test a crash
+{
+    try {
+
+    } catch (std::exception e) {
+
+    }
+}
