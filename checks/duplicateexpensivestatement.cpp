@@ -67,4 +67,4 @@ void DuplicateExpensiveStatement::inspectStatement(Stmt *stm)
     }
 }
 
-REGISTER_CHECK("duplicate-expensive-statement", DuplicateExpensiveStatement)
+// REGISTER_CHECK("duplicate-expensive-statement", DuplicateExpensiveStatement)

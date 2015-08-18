@@ -63,4 +63,4 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
 }
 
 
-REGISTER_CHECK("assert-with-side-effects", AssertWithSideEffects)
+// REGISTER_CHECK("assert-with-side-effects", AssertWithSideEffects)

@@ -122,4 +122,4 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
     }
 }
 
-REGISTER_CHECK("unused-result", RequiredResults)
+// REGISTER_CHECK("unused-result", RequiredResults)

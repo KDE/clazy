@@ -67,14 +67,6 @@ public:
         m_checkManager->createCheckers(requestedChecks);
         if (m_checkManager->fixitsEnabled())
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions());
-
-
-        // These are commented because they are either WIP or have to many false-positives
-        /// m_checks.push_back(std::shared_ptr<NRVOEnabler>(new NRVOEnabler(ci)));
-        /// m_checks.push_back(std::shared_ptr<RequiredResults>(new RequiredResults(ci)));
-        /// m_checks.push_back(std::shared_ptr<ListInt>(new ListInt(ci)));
-        /// m_checks.push_back(std::shared_ptr<DuplicateExpensiveStatement>(new DuplicateExpensiveStatement(ci)));
-        /// m_checks.push_back(std::shared_ptr<AssertWithSideEffects>(new AssertWithSideEffects(ci)));
     }
 
     ~MoreWarningsASTConsumer()

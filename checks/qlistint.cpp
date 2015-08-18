@@ -53,4 +53,4 @@ void ListInt::VisitStmt(Stmt *)
 {
 }
 
-REGISTER_CHECK("qlist-of-int", ListInt)
+// REGISTER_CHECK("qlist-of-int", ListInt)

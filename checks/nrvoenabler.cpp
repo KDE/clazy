@@ -60,4 +60,4 @@ void NRVOEnabler::VisitStmt(clang::Stmt *)
 {
 }
 
-REGISTER_CHECK("nrvo", NRVOEnabler)
+// REGISTER_CHECK("nrvo", NRVOEnabler)
