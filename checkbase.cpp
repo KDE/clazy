@@ -27,6 +27,7 @@ using namespace std;
 CheckBase::CheckBase(const string &name)
     : m_ci(*CheckManager::instance()->m_ci)
     , m_name(name)
+    , m_lastDecl(nullptr)
 {
     ASTContext &context = m_ci.getASTContext();
     m_tu = context.getTranslationUnitDecl();
@@ -39,17 +40,17 @@ CheckBase::~CheckBase()
 
 void CheckBase::VisitStatement(Stmt *stm)
 {
-    SourceManager &sm = m_ci.getSourceManager();
-    if (!shouldIgnoreFile(sm.getFilename(stm->getLocStart())))
+    if (!shouldIgnoreFile(stm->getLocStart())) {
         VisitStmt(stm);
+    }
 }
 
 void CheckBase::VisitDeclaration(Decl *decl)
 {
-    SourceManager &sm = m_ci.getSourceManager();
-    if (shouldIgnoreFile(sm.getFilename(decl->getLocStart())))
+    if (shouldIgnoreFile(decl->getLocStart()))
         return;
 
+    m_lastDecl = decl;
     auto mdecl = dyn_cast<CXXMethodDecl>(decl);
     if (mdecl)
         m_lastMethodDecl = mdecl;
@@ -75,8 +76,13 @@ void CheckBase::VisitDecl(Decl *)
 {
 }
 
-bool CheckBase::shouldIgnoreFile(const std::string &filename) const
+bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 {
+    if (!loc.isValid() || m_ci.getSourceManager().isInSystemHeader(loc))
+        return true;
+
+    auto filename = m_ci.getSourceManager().getFilename(loc);
+
     const std::vector<std::string> files = filesToIgnore();
     for (auto &file : files) {
         bool contains = filename.find(file) != std::string::npos;

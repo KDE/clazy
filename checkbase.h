@@ -42,7 +42,7 @@ public:
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
-    bool shouldIgnoreFile(const std::string &filename) const;
+    bool shouldIgnoreFile(clang::SourceLocation) const;
     virtual std::vector<std::string> filesToIgnore() const;
     void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true) const;
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true) const;
@@ -54,6 +54,8 @@ protected:
     clang::ParentMap *m_parentMap;
     clang::CXXMethodDecl *m_lastMethodDecl;
     std::string m_name;
+
+    clang::Decl *m_lastDecl;
 };
 
 #endif

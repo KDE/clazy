@@ -46,14 +46,6 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
     if (isTrivial)
         return;
 
-    SourceManager &sm = m_ci.getSourceManager();
-    std::string filename = sm.getFilename(decl->getLocStart());
-    if (filename.empty())
-        filename = decl->getLocation().printToString(sm);
-
-    if (CheckBase::shouldIgnoreFile(filename))
-        return;
-
     const Type *t = qt.getTypePtrOrNull();
     if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || Utils::hasConstexprCtor(t->getAsCXXRecordDecl()))
         return;
