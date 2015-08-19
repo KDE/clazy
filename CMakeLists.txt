@@ -102,6 +102,7 @@ add_clang_plugin(ClangMoreWarningsPlugin
                  checks/foreacher.cpp
                  checks/globalconstcharpointer.cpp
                  checks/inefficientqlist.cpp
+                 checks/implicitcasts.cpp
                  checks/qlistint.cpp
                  checks/qstringuneededheapallocations.cpp
                  checks/functionargsbyref.cpp

@@ -1,7 +1,7 @@
 #ifndef MORE_WARNINGS_STRING_UTILS_H
 #define MORE_WARNINGS_STRING_UTILS_H
 
-#include "conviniencesingleton.h"
+#include "checkmanager.h"
 
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
@@ -46,7 +46,7 @@ inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::st
 
 inline void printLocation(const clang::SourceLocation &loc, bool newLine = true)
 {
-    llvm::errs() << loc.printToString(*(ConvinienceSingleton::instance()->sm));
+    llvm::errs() << loc.printToString(*(CheckManager::instance()->m_sm));
     if (newLine)
         llvm::errs() << "\n";
 }

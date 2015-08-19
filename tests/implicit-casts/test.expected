@@ -1,0 +1,2 @@
+main.cpp:13:9: warning: Implicit cast from bool [-Wmore-warnings-implicit-casts]
+main.cpp:14:9: warning: Implicit cast from bool [-Wmore-warnings-implicit-casts]

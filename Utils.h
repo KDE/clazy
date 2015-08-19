@@ -151,6 +151,9 @@ namespace Utils {
     // etc.
     clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, uint depth = 1);
 
+    bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
+    bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
+
     /// Goes into a statement and returns it's childs of type T
     /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
 

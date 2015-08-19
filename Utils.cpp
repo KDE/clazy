@@ -637,3 +637,43 @@ bool Utils::isImplicitCastTo(Stmt *s, const string &className)
     auto record = expr->getBestDynamicClassType();
     return record && record->getNameAsString() == className;
 }
+
+
+bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<string> &anyOf)
+{
+    if (!s)
+        return false;
+
+    CXXOperatorCallExpr *oper = dyn_cast<CXXOperatorCallExpr>(s);
+    if (oper) {
+        auto func = oper->getDirectCallee();
+        if (func) {
+            if (anyOf.empty())
+                return true;
+
+            auto method = dyn_cast<CXXMethodDecl>(func);
+            if (method) {
+                auto record = method->getParent();
+                if (record && find(anyOf.cbegin(), anyOf.cend(), record->getNameAsString()) != anyOf.cend())
+                    return true;
+            }
+        }
+    }
+
+    return isInsideOperatorCall(map, Utils::parent(map, s), anyOf);
+}
+
+
+bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &anyOf)
+{
+    if (!s)
+        return false;
+
+    CXXConstructExpr *expr = dyn_cast<CXXConstructExpr>(s);
+    if (expr && expr->getConstructor()) {
+        if (find(anyOf.cbegin(), anyOf.cend(), expr->getConstructor()->getNameAsString()) != anyOf.cend())
+            return true;
+    }
+
+    return insideCTORCall(map, Utils::parent(map, s), anyOf);
+}
