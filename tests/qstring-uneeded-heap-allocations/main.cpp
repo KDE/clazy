@@ -40,7 +40,7 @@ void test()
     QString s10 = true ? QLatin1String("string1") : QLatin1String("string2"); // Warning
     s10 = true ? QLatin1String("string1") :  QLatin1String("string2"); // Warning
 
-    QString s11 = QString(QLatin1String("foo")); // Warning, TODO
+    QString s11 = QString(QLatin1String("foo")); // Warning
     QStringList stringList;
     stringList << QString::fromLatin1("foo", 1); // OK
     QString s12 = QLatin1String(""); // OK, QString is optimized for the empty case
