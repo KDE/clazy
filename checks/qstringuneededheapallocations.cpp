@@ -184,7 +184,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString");
                     } else {
                         //llvm::errs() << "case2\n";
-                        fixits = fixItRawLiteral(lt);
+                        fixits = fixItRawLiteral(lt, "QStringLiteral");
                     }
                 }
             }
@@ -305,7 +305,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
     return fixits;
 }
 
-std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::StringLiteral *lt)
+std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::StringLiteral *lt, const string &replacement)
 {
     vector<FixItHint> fixits;
 
@@ -318,8 +318,8 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
     } else {
         SourceLocation end = Lexer::getLocForEndOfToken(lt->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
         fixits.push_back(createInsertion(end, ")"));
-        string replacement = lt->getLength() == 0 ? "QLatin1String(" : "QStringLiteral(";
-        fixits.push_back(createInsertion(start, replacement));
+        string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
+        fixits.push_back(createInsertion(start, revisedReplacement + std::string("(")));
     }
 
     return fixits;
@@ -357,7 +357,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     if (literals.empty()) {
         emitManualFixitWarning(stm->getLocStart());
     } else {
-        fixits = fixItRawLiteral(literals[0]);
+        fixits = fixItRawLiteral(literals[0], "QLatin1String");
     }
 
     string msg = string("QString(const char*) being called");
