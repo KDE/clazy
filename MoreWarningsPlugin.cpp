@@ -39,18 +39,18 @@ namespace {
 class MyFixItOptions : public FixItOptions
 {
 public:
-    MyFixItOptions()
+    MyFixItOptions(bool inplace)
     {
-        InPlace = true;
+        InPlace = inplace;
         FixWhatYouCan = true;
         FixOnlyWarnings = true;
         Silent = false;
     }
 
-    std::string RewriteFilename(const std::string &Filename, int &fd) override
+    std::string RewriteFilename(const std::string &filename, int &fd) override
     {
         fd = -1;
-        return Filename;
+        return InPlace ? filename : filename + "_fixed";
     }
 };
 
@@ -71,7 +71,7 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 class MoreWarningsASTConsumer : public ASTConsumer, public RecursiveASTVisitor<MoreWarningsASTConsumer>
 {
 public:
-    MoreWarningsASTConsumer(CompilerInstance &ci, const vector<string> &requestedChecks)
+    MoreWarningsASTConsumer(CompilerInstance &ci, const vector<string> &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
@@ -80,7 +80,7 @@ public:
         m_checkManager->setCompilerInstance(&m_ci);
         m_checkManager->createCheckers(requestedChecks);
         if (m_checkManager->fixitsEnabled())
-            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions());
+            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
     }
 
     ~MoreWarningsASTConsumer()
@@ -153,7 +153,7 @@ class MoreWarningsAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
     {
-        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks);
+        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks, m_inplaceFixits);
     }
 
     bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_) override
@@ -164,6 +164,12 @@ protected:
             llvm::errs() << "Help:\n";
             PrintHelp(llvm::errs());
             return false;
+        }
+
+        auto it = std::find(args.cbegin(), args.cend(), "no-inplace-fixits");
+        if (it != args.cend()) {
+            m_inplaceFixits = false; // Unit-tests don't use inplace fixits
+            args.erase(it, it + 1);
         }
 
         auto availableCheckNames = CheckManager::instance()->availableCheckNames();
@@ -241,6 +247,7 @@ protected:
 
 private:
     vector<string> m_checks;
+    bool m_inplaceFixits = true;
 };
 
 }
