@@ -23,6 +23,7 @@ class Decl;
 class ParentMap;
 class TranslationUnitDecl;
 class FixItHint;
+class PresumedLoc;
 }
 
 class CheckBase
@@ -48,6 +49,10 @@ protected:
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true) const;
 
     void emitManualFixitWarning(clang::SourceLocation loc);
+    bool locationAlreadyFixed(clang::SourceLocation loc) const;
+
+    clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
+    clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
 
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;
@@ -56,6 +61,8 @@ protected:
     std::string m_name;
 
     clang::Decl *m_lastDecl;
+private:
+    std::vector<uint> m_fixitLocationHistory;
 };
 
 #endif

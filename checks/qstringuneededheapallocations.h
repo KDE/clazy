@@ -23,6 +23,7 @@ namespace clang {
 class FixItHint;
 class ConditionalOperator;
 class CallExpr;
+class StringLiteral;
 }
 
 /**
@@ -43,9 +44,10 @@ private:
     void VisitFromLatin1OrUtf8(clang::Stmt *);
     void VisitAssignOperatorQLatin1String(clang::Stmt *);
 
-    std::vector<clang::FixItHint> fixItReplaceQLatin1StringWithQStringLiteral(clang::Stmt *begin);
-    std::vector<clang::FixItHint> fixItReplaceQLatin1StringWithQStringLiteralInTernary(clang::ConditionalOperator *);
+    std::vector<clang::FixItHint> fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee);
+    std::vector<clang::FixItHint> fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *);
     std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr);
+    std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt);
 };
 
 #endif

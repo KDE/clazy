@@ -12,6 +12,7 @@
 
 #include "checkbase.h"
 #include "checkmanager.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -111,11 +112,47 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
     FullSourceLoc full(loc, m_ci.getSourceManager());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
-    for (FixItHint fixit : fixits)
-        B.AddFixItHint(fixit);
+    for (FixItHint fixit : fixits) {
+        if (!fixit.isNull())
+            B.AddFixItHint(fixit);
+    }
 }
 
 void CheckBase::emitManualFixitWarning(clang::SourceLocation loc)
 {
     emitWarning(loc, "FixIt failed, requires manual intervention", {}, true);
+}
+
+bool CheckBase::locationAlreadyFixed(SourceLocation loc) const
+{
+    PresumedLoc ploc = m_ci.getSourceManager().getPresumedLoc(loc);
+    for (auto rawLoc : m_fixitLocationHistory) {
+        SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
+        PresumedLoc p = m_ci.getSourceManager().getPresumedLoc(l);
+        if (p.getColumn() == ploc.getColumn() && p.getLine() == ploc.getLine() && string(p.getFilename()) == string(ploc.getFilename()))
+            return true;
+    }
+
+    return false;
+}
+
+clang::FixItHint CheckBase::createReplacement(const SourceRange &range, const string &replacement)
+{
+    if (range.getBegin().isInvalid() || locationAlreadyFixed(range.getBegin())) {
+        return {};
+    } else {
+        m_fixitLocationHistory.push_back(range.getBegin().getRawEncoding());
+        return FixItHint::CreateReplacement(range, replacement);
+    }
+}
+
+clang::FixItHint CheckBase::createInsertion(const SourceLocation &start, const string &insertion)
+{
+    if (start.isInvalid() || locationAlreadyFixed(start)) {
+        return {};
+    } else {
+        StringUtils::printLocation(start);
+        m_fixitLocationHistory.push_back(start.getRawEncoding());
+        return FixItHint::CreateInsertion(start, insertion);
+    }
 }
