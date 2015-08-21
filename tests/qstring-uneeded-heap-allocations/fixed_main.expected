@@ -40,7 +40,7 @@ void test()
     QString s10 = true ? QStringLiteral("string1") : QStringLiteral("string2"); // Warning
     s10 = true ? QStringLiteral("string1") :  QStringLiteral("string2"); // Warning
 
-    QString s11 = QString(QLatin1String("foo")); // Warning, TODO
+    QString s11 = QStringLiteral("foo"); // Warning
     QStringList stringList;
     stringList << QString::fromLatin1("foo", 1); // OK
     QString s12 = QLatin1String(""); // OK, QString is optimized for the empty case
@@ -75,9 +75,11 @@ struct A
 
 struct A2
 {
-    A2() : member(QStringLiteral("foo")) {} // OK
+    A2() : member(QStringLiteral("foo")) // OK
+         , member2(QStringLiteral("foo")) {} // Warning
     void  test(const QString &calendarType = QStringLiteral("gregorian") ); // Warning
     QString member;
+    QString member2;
 };
 
 void test3()

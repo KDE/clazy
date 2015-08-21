@@ -60,7 +60,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method)
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
-static Stmt *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
+static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
 {
     if (stm == nullptr)
         return nullptr;
@@ -155,13 +155,30 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 
     if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
-        Stmt *begin = qlatin1CtorExpr(stm, ternary);
-        if (begin == nullptr) {
+        CXXConstructExpr *qlatin1Ctor = qlatin1CtorExpr(stm, ternary);
+        if (qlatin1Ctor == nullptr) {
             return;
         }
 
-        vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String")
-                                                      : fixItReplaceWordWithWordInTernary(ternary);
+        vector<FixItHint> fixits;
+        if (ternary == nullptr) {
+
+            fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String");
+            bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(Utils::parent(m_parentMap, ctorExpr));
+            if (shouldRemoveQString) {
+                llvm::errs() << "foo " << ctorExpr->isListInitialization() << "-" << qlatin1Ctor->isListInitialization() << "\n";
+                StringUtils::printRange(ctorExpr->getParenOrBraceRange());
+                StringUtils::printRange(qlatin1Ctor->getParenOrBraceRange());
+
+                // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
+                auto removalFixits = fixItRemoveToken(ctorExpr, true);
+                if (!removalFixits.empty())  {
+                    std::copy(removalFixits.begin(), removalFixits.end(), std::back_inserter(fixits));
+                }
+            }
+        } else {
+            fixits = fixItReplaceWordWithWordInTernary(ternary);
+        }
 
         emitWarning(stm->getLocStart(), msg, fixits);
     } else {
@@ -320,6 +337,28 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
         fixits.push_back(createInsertion(end, ")"));
         string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
         fixits.push_back(createInsertion(start, revisedReplacement + std::string("(")));
+    }
+
+    return fixits;
+}
+
+vector<FixItHint> QStringUneededHeapAllocations::fixItRemoveToken(Stmt *stmt, bool removeParenthesis)
+{
+    SourceLocation start = stmt->getLocStart();
+    SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+
+    vector<FixItHint> fixits;
+
+    if (start.isValid() && end.isValid()) {
+        fixits.push_back(FixItHint::CreateRemoval(SourceRange(start, end)));
+
+        if (removeParenthesis) {
+            // Remove the last parenthesis
+            fixits.push_back(FixItHint::CreateRemoval(SourceRange(stmt->getLocEnd(), stmt->getLocEnd())));
+        }
+
+    } else {
+        emitManualFixitWarning(start);
     }
 
     return fixits;

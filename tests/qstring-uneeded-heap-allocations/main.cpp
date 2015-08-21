@@ -75,9 +75,11 @@ struct A
 
 struct A2
 {
-    A2() : member(QStringLiteral("foo")) {} // OK
+    A2() : member(QStringLiteral("foo")) // OK
+         , member2(QString(QLatin1String("foo"))) {} // Warning
     void  test(const QString &calendarType = QLatin1String("gregorian") ); // Warning
     QString member;
+    QString member2;
 };
 
 void test3()
