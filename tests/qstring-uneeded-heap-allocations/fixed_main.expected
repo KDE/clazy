@@ -45,12 +45,12 @@ void test()
     stringList << QString::fromLatin1("foo", 1); // OK
     QString s12 = QLatin1String(""); // OK, QString is optimized for the empty case
     QString s = QLatin1String(cstring + sizeof("foo")); // OK
-    s = QString::fromLatin1("bar %1").arg(1); // Warning
+    s = QStringLiteral("bar %1").arg(1); // Warning
     s = QString::fromLatin1(true ? "foo" : "foo2").arg(1); // Warning
-    s += QString::fromLatin1(  // Warning: Multi-line, to test FIXIT
+    s += QLatin1String(  // Warning: Multi-line, to test FIXIT
         "foo" );
     QString::fromLatin1(true ? cstring : "cstring"); // OK
-    QString escaped = "\\\\"; // Warning, to test fixit
+    QString escaped = QStringLiteral("\\\\"); // Warning
     QString s13 = QStringLiteral("foo"); // Warning
     QString s14 = QLatin1String(""); // Warning
     QString s15 = QLatin1String(""); // Warning
@@ -85,7 +85,7 @@ void test3()
     QString s;
     if (s == QLatin1String("foo")) // Warning
         return;
-    if (s == QLatin1String("foo %1").arg(1)) // Warning
+    if (s == QStringLiteral("foo %1").arg(1)) // Warning
         return;
 }
 
@@ -95,8 +95,8 @@ void test5()
 {
     test4(QStringLiteral("foo")); // Warning
     QString s;
-    s.contains(QLatin1String("a")); // Warning
-    s.compare(QStringLiteral("a"), QStringLiteral("a")); // Warning
+    s.contains(QStringLiteral("a")); // Warning
+    s.compare(QStringLiteral("a"), QLatin1String("a")); // Warning
 }
 
 #include <exception>

@@ -50,7 +50,7 @@ void test()
     s += QString::fromLatin1(  // Warning: Multi-line, to test FIXIT
         "foo" );
     QString::fromLatin1(true ? cstring : "cstring"); // OK
-    QString escaped = "\\\\"; // Warning, to test fixit
+    QString escaped = "\\\\"; // Warning
     QString s13 = QString("foo"); // Warning
     QString s14 = QString(""); // Warning
     QString s15 = ""; // Warning
