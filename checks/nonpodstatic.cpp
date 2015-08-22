@@ -47,7 +47,7 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
         return;
 
     const Type *t = qt.getTypePtrOrNull();
-    if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || Utils::hasConstexprCtor(t->getAsCXXRecordDecl()))
+    if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->isLiteral())
         return;
 
     if (!shouldIgnoreType(t->getAsCXXRecordDecl()->getName())) {

@@ -1,1 +1,1 @@
-foo.cpp:23:1: warning: non-POD static [-Wmore-warnings-non-pod-static]
+foo.cpp:23:1: warning: non-POD static [-Wmore-warnings-non-pod-global-static]
