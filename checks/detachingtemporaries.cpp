@@ -137,9 +137,11 @@ void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    CXXTemporaryObjectExpr *possibleCtorCall = dyn_cast_or_null<CXXTemporaryObjectExpr>(Utils::getFirstChildAtDepth(expr, 2));
+    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(Utils::getFirstChildAtDepth(expr, 2));
     if (possibleCtorCall != nullptr)
         return;
+
+    // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
 
     std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(methodDecl) + std::string("() on temporary");
     emitWarning(stm->getLocStart(), error.c_str());

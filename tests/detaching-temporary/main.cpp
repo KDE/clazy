@@ -77,4 +77,6 @@ void test_global_static()
 void test_ctor()
 {
     QStringList().first();
+    QByteArray key = "key";
+    QByteArray(key + key).data();
 }
