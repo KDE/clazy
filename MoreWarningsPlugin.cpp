@@ -172,10 +172,9 @@ protected:
             args.erase(it, it + 1);
         }
 
-        auto availableCheckNames = CheckManager::instance()->availableCheckNames();
         if (args.empty()) {
             // No check specified, use all of them
-            m_checks = availableCheckNames;
+            m_checks = CheckManager::instance()->availableCheckNames(false);
         } else if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
@@ -200,6 +199,7 @@ protected:
 
             for (uint i = 0, e = requestedChecks.size(); i != e; ++i) {
                 string checkName = requestedChecks[i];
+                auto availableCheckNames = CheckManager::instance()->availableCheckNames(true);
                 if (std::find(availableCheckNames.cbegin(), availableCheckNames.cend(), checkName) == availableCheckNames.cend()) {
                     llvm::errs() << "Invalid argument: " << checkName << "\n";
                     return false;
@@ -214,7 +214,7 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros)
     {
-        const vector<string> &names = CheckManager::instance()->availableCheckNames();
+        const vector<string> &names = CheckManager::instance()->availableCheckNames(false);
 
         ros << "Available checks:\n\n";
         for (uint i = 1; i < names.size(); ++i) {

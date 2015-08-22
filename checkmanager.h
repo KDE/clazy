@@ -33,15 +33,20 @@ struct RegisteredFixIt {
 
 using FactoryFunction = std::function<CheckBase*()>;
 
+enum CheckFlag {
+    NoFlag = 0,
+    HiddenFlag = 1 // Check won't be printed in help, or in "all" mode, but can be used if explicitely specified
+};
+
 class CheckManager
 {
 public:
     static CheckManager *instance();
-    int registerCheck(const std::string &name, FactoryFunction);
+    int registerCheck(const std::string &name, int checkFlags, FactoryFunction);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     void setCompilerInstance(clang::CompilerInstance *);
-    std::vector<std::string> availableCheckNames() const;
+    std::vector<std::string> availableCheckNames(bool includeHidden) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
     void createCheckers(const std::vector<std::string> &requestedChecks);
     const CheckBase::List &createdChecks() const;
@@ -65,7 +70,10 @@ private:
 };
 
 #define REGISTER_CHECK(CHECK_NAME, CLASS_NAME) \
-    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, [](){ return new CLASS_NAME(CHECK_NAME); }); \
+    REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, NoFlag)
+
+#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, FLAGS) \
+    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, (int)FLAGS, [](){ return new CLASS_NAME(CHECK_NAME); }); \
     inline void silence_warning() { (void)dummy; }
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \

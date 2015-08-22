@@ -18,9 +18,9 @@ using namespace std;
 
 struct RegisteredCheck {
     std::string name;
+    int flags;
     FactoryFunction factory;
 };
-
 
 
 CheckManager *CheckManager::instance()
@@ -41,11 +41,11 @@ CheckManager::CheckManager() : m_enableAllFixits(false)
     }
 }
 
-int CheckManager::registerCheck(const std::string &name, FactoryFunction factory)
+int CheckManager::registerCheck(const std::string &name, int checkFlags, FactoryFunction factory)
 {
     assert(factory != nullptr);
     assert(!name.empty());
-    m_registeredChecks.push_back({ name, factory});
+    m_registeredChecks.push_back({name, checkFlags, factory});
 
     return 0;
 }
@@ -109,12 +109,14 @@ string CheckManager::checkNameForFixIt(const string &fixitName) const
     return {};
 }
 
-vector<string> CheckManager::availableCheckNames() const
+vector<string> CheckManager::availableCheckNames(bool includeHidden) const
 {
     vector<string> names;
     names.reserve(m_registeredChecks.size());
-    for (auto rc : m_registeredChecks)
-        names.push_back(rc.name);
+    for (auto rc : m_registeredChecks) {
+        if (includeHidden || !(rc.flags & HiddenFlag))
+            names.push_back(rc.name);
+    }
     return names;
 }
 

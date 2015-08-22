@@ -85,4 +85,4 @@ std::vector<string> ImplicitCasts::filesToIgnore() const
     return files;
 }
 
-// REGISTER_CHECK("implicit-casts", ImplicitCasts)
+REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, HiddenFlag)
