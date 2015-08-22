@@ -80,3 +80,11 @@ void test_ctor()
     QByteArray key = "key";
     QByteArray(key + key).data();
 }
+
+struct TestThis : public QList<int>
+{
+    void foo()
+    {
+        begin();
+    }
+};

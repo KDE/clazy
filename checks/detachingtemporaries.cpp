@@ -141,6 +141,10 @@ void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
     if (possibleCtorCall != nullptr)
         return;
 
+    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(Utils::getFirstChildAtDepth(expr, 1));
+    if (possibleThisCall != nullptr)
+        return;
+
     // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
 
     std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(methodDecl) + std::string("() on temporary");
