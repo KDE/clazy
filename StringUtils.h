@@ -54,6 +54,7 @@ inline void printLocation(const clang::SourceLocation &loc, bool newLine = true)
 inline void printRange(const clang::SourceRange &range, bool newLine = true)
 {
     printLocation(range.getBegin(), false);
+    llvm::errs() << "-";
     printLocation(range.getEnd(), newLine);
 }
 
