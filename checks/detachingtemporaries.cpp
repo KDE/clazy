@@ -52,7 +52,7 @@ bool isAllowedChainedMethod(const std::string &methodName)
                                            "QApplication::topLevelWidgets", "QAbstractItemView::selectedIndexes",
                                            "QListWidget::selectedItems", "QFile::encodeName", "QFile::decodeName",
                                            "QItemSelectionModel::selectedRows", "QTreeWidget::selectedItems",
-                                           "QTableWidget::selectedItems"};
+                                           "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList"};
     return find(allowed.cbegin(), allowed.cend(), methodName) != allowed.cend();
 }
 
@@ -129,6 +129,13 @@ void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
         }
     }
 
+    // Check if this is a QGlobalStatic
+    if (auto operatorExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
+        auto method = dyn_cast_or_null<CXXMethodDecl>(operatorExpr->getDirectCallee());
+        if (method &&  method->getParent()->getNameAsString() == "QGlobalStatic") {
+            return;
+        }
+    }
 
     std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(methodDecl) + std::string("() on temporary");
     emitWarning(stm->getLocStart(), error.c_str());

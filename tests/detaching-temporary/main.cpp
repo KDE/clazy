@@ -65,3 +65,11 @@ void foo(QStringList *list)
 {
     auto it = list->begin();
 }
+
+typedef QMap<int, QStringList> StringMap;
+Q_GLOBAL_STATIC(StringMap, sISOMap)
+void test_global_static()
+{
+    sISOMap()->insert(1, QStringList());
+    sISOMap->insert(1, QStringList());
+}
