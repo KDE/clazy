@@ -1,1 +1,4 @@
-main.cpp:10:5: warning: Don't call QList::first() on temporary [-Wmore-warnings-detaching-temporary]
+main.cpp:15:5: warning: Don't call QList::first() on temporary [-Wmore-warnings-detaching-temporary]
+main.cpp:40:5: warning: Don't call QList::first() on temporary [-Wmore-warnings-detaching-temporary]
+main.cpp:45:5: warning: Don't call QList::first() on temporary [-Wmore-warnings-detaching-temporary]
+main.cpp:47:5: warning: Don't call QList::first() on temporary [-Wmore-warnings-detaching-temporary]

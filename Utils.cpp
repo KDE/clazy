@@ -677,3 +677,16 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
 
     return insideCTORCall(map, Utils::parent(map, s), anyOf);
 }
+
+vector<Stmt*> Utils::childs(clang::Stmt *parent)
+{
+    vector<Stmt*> children;
+
+    if (!parent)
+        return children;
+
+    for (auto it = parent->child_begin(), end = parent->child_end(); it != end; ++it)
+        children.push_back(*it);
+
+    return children;
+}

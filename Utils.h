@@ -198,6 +198,8 @@ namespace Utils {
     bool isImplicitCastTo(clang::Stmt *, const std::string &);
 
     clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
+
+    std::vector<clang::Stmt*> childs(clang::Stmt *parent);
 }
 
 #endif
