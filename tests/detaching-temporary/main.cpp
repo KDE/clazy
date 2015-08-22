@@ -73,3 +73,8 @@ void test_global_static()
     sISOMap()->insert(1, QStringList());
     sISOMap->insert(1, QStringList());
 }
+
+void test_ctor()
+{
+    QStringList().first();
+}

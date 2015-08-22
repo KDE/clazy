@@ -690,3 +690,11 @@ vector<Stmt*> Utils::childs(clang::Stmt *parent)
 
     return children;
 }
+
+clang::Stmt * Utils::getFirstChildAtDepth(clang::Stmt *s, uint depth)
+{
+    if (depth == 0 || s == nullptr)
+        return s;
+
+    return s->child_begin() == s->child_end() ? nullptr : getFirstChildAtDepth(*s->child_begin(), --depth);
+}

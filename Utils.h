@@ -200,6 +200,8 @@ namespace Utils {
     clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
 
     std::vector<clang::Stmt*> childs(clang::Stmt *parent);
+
+    clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, uint depth);
 }
 
 #endif
