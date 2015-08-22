@@ -29,14 +29,16 @@ CheckManager *CheckManager::instance()
     return s_instance;
 }
 
-CheckManager::CheckManager()
+CheckManager::CheckManager() : m_enableAllFixits(false)
 {
     m_registeredChecks.reserve(30);
     const char *variable = getenv("MORE_WARNINGS_FIXIT");
     if (variable != nullptr) {
-        m_requestedFixitName = string(variable);
+        if (string(variable) == string("all_fixits"))
+            m_enableAllFixits = true;
+        else
+            m_requestedFixitName = string(variable);
     }
-
 }
 
 int CheckManager::registerCheck(const std::string &name, FactoryFunction factory)
@@ -156,5 +158,10 @@ const CheckBase::List &CheckManager::createdChecks() const
 
 bool CheckManager::fixitsEnabled() const
 {
-    return !m_requestedFixitName.empty();
+    return !m_requestedFixitName.empty() || m_enableAllFixits;
+}
+
+bool CheckManager::allFixitsEnabled() const
+{
+    return m_enableAllFixits;
 }

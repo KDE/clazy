@@ -165,5 +165,5 @@ void CheckBase::setEnabledFixits(int fixits)
 
 bool CheckBase::isFixitEnabled(int fixit) const
 {
-    return m_enabledFixits & fixit;
+    return (m_enabledFixits & fixit) || CheckManager::instance()->allFixitsEnabled();
 }

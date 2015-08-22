@@ -50,6 +50,8 @@ public:
     // Public for convinence
     clang::CompilerInstance *m_ci;
     clang::SourceManager *m_sm;
+
+    bool allFixitsEnabled() const;
 private:
     CheckManager();
     std::unique_ptr<CheckBase> createCheck(const std::string &name);
@@ -59,6 +61,7 @@ private:
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
+    bool m_enableAllFixits;
 };
 
 #define REGISTER_CHECK(CHECK_NAME, CLASS_NAME) \
