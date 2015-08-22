@@ -29,6 +29,7 @@ CheckBase::CheckBase(const string &name)
     : m_ci(*CheckManager::instance()->m_ci)
     , m_name(name)
     , m_lastDecl(nullptr)
+    , m_enabledFixits(0)
 {
     ASTContext &context = m_ci.getASTContext();
     m_tu = context.getTranslationUnitDecl();
@@ -155,4 +156,14 @@ clang::FixItHint CheckBase::createInsertion(const SourceLocation &start, const s
         m_fixitLocationHistory.push_back(start.getRawEncoding());
         return FixItHint::CreateInsertion(start, insertion);
     }
+}
+
+void CheckBase::setEnabledFixits(int fixits)
+{
+    m_enabledFixits = fixits;
+}
+
+bool CheckBase::isFixitEnabled(int fixit) const
+{
+    return m_enabledFixits & fixit;
 }

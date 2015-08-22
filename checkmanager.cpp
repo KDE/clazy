@@ -63,8 +63,9 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
             return 0;
         }
     }
-
-    fixits.push_back({id, fixitName});
+    RegisteredFixIt fixit = {id, fixitName};
+    fixits.push_back(fixit);
+    m_fixitByName.insert({fixitName, fixit});
 
     return 0;
 }
@@ -83,11 +84,15 @@ unique_ptr<CheckBase> CheckManager::createCheck(const string &name)
         }
     }
 
+    llvm::errs() << "Invalid check name " << name << "\n";
     return nullptr;
 }
 
 string CheckManager::checkNameForFixIt(const string &fixitName) const
 {
+    if (fixitName.empty())
+        return {};
+
     for (auto &registeredCheck : m_registeredChecks) {
         auto it = m_fixitsByCheckName.find(registeredCheck.name);
         if (it != m_fixitsByCheckName.end()) {
@@ -119,17 +124,28 @@ RegisteredFixIt::List CheckManager::availableFixIts(const string &checkName) con
 
 void CheckManager::createCheckers(const vector<string> &requestedChecks)
 {
+    const string fixitCheckName = checkNameForFixIt(m_requestedFixitName);
+    RegisteredFixIt fixit = m_fixitByName[m_requestedFixitName];
+
     m_createdChecks.clear();
     m_createdChecks.reserve(requestedChecks.size() + 1);
-    for (auto checkName : requestedChecks)
+    for (auto checkName : requestedChecks) {
         m_createdChecks.push_back(createCheck(checkName));
+        if (checkName == fixitCheckName) {
+            m_createdChecks.back()->setEnabledFixits(fixit.id);
+        }
+    }
 
     if (!m_requestedFixitName.empty()) {
         // We have one fixit enabled, we better have the check instance too.
-        const string checkName = checkNameForFixIt(m_requestedFixitName);
-        if (!checkName.empty() && std::find(requestedChecks.cbegin(), requestedChecks.cend(), checkName) == requestedChecks.cend()) {
-            m_createdChecks.push_back(createCheck(checkName));
+        if (!fixitCheckName.empty()) {
+            auto it = std::find(requestedChecks.cbegin(), requestedChecks.cend(), fixitCheckName);
+            if (it == requestedChecks.cend()) {
+                m_createdChecks.push_back(createCheck(fixitCheckName));
+                m_createdChecks.back()->setEnabledFixits(fixit.id);
+            }
         }
+
     }
 }
 

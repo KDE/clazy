@@ -39,6 +39,8 @@ public:
     std::string name() const;
 
     void setParentMap(clang::ParentMap *parentMap);
+    void setEnabledFixits(int);
+    bool isFixitEnabled(int fixit) const;
 
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
@@ -63,6 +65,7 @@ protected:
     clang::Decl *m_lastDecl;
 private:
     std::vector<uint> m_fixitLocationHistory;
+    int m_enabledFixits;
 };
 
 #endif

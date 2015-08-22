@@ -24,7 +24,9 @@ struct RegisteredCheck;
 
 struct RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
-    int id;
+    RegisteredFixIt() : id(-1) {}
+    RegisteredFixIt(int id, const std::string &name) : id(id), name(name) {}
+    int id = -1;
     std::string name;
     bool operator==(const RegisteredFixIt &other) const { return id == other.id; }
 };
@@ -55,6 +57,7 @@ private:
     std::vector<RegisteredCheck> m_registeredChecks;
     CheckBase::List m_createdChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
+    std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
 };
 

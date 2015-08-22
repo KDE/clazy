@@ -32,7 +32,8 @@ using namespace std;
 enum Fixit {
     FixitNone = 0,
     QLatin1StringAllocations = 0x1,
-    FromLatin1_FromUtf8Allocations = 0x2
+    FromLatin1_FromUtf8Allocations = 0x2,
+    CharPtrAllocations = 0x4,
 };
 
 QStringUneededHeapAllocations::QStringUneededHeapAllocations(const std::string &name)
@@ -161,23 +162,20 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         }
 
         vector<FixItHint> fixits;
-        if (ternary == nullptr) {
-
-            fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String");
-            bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(Utils::parent(m_parentMap, ctorExpr));
-            if (shouldRemoveQString) {
-                llvm::errs() << "foo " << ctorExpr->isListInitialization() << "-" << qlatin1Ctor->isListInitialization() << "\n";
-                StringUtils::printRange(ctorExpr->getParenOrBraceRange());
-                StringUtils::printRange(qlatin1Ctor->getParenOrBraceRange());
-
-                // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
-                auto removalFixits = fixItRemoveToken(ctorExpr, true);
-                if (!removalFixits.empty())  {
-                    std::copy(removalFixits.begin(), removalFixits.end(), std::back_inserter(fixits));
+        if (isFixitEnabled(QLatin1StringAllocations)) {
+            if (ternary == nullptr) {
+                fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String");
+                bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(Utils::parent(m_parentMap, ctorExpr));
+                if (shouldRemoveQString) {
+                    // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
+                    auto removalFixits = fixItRemoveToken(ctorExpr, true);
+                    if (!removalFixits.empty())  {
+                        std::copy(removalFixits.begin(), removalFixits.end(), std::back_inserter(fixits));
+                    }
                 }
+            } else {
+                fixits = fixItReplaceWordWithWordInTernary(ternary);
             }
-        } else {
-            fixits = fixItReplaceWordWithWordInTernary(ternary);
         }
 
         emitWarning(stm->getLocStart(), msg, fixits);
@@ -187,7 +185,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
             auto pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
             if (pointerDecay && pointerDecay->child_begin() != pointerDecay->child_end()) {
                 StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
-                if (lt) {
+                if (lt && isFixitEnabled(CharPtrAllocations)) {
                     Stmt *grandParent = Utils::parent(m_parentMap, lt, 2);
                     Stmt *grandGrandParent = Utils::parent(m_parentMap, lt, 3);
                     Stmt *grandGrandGrandParent = Utils::parent(m_parentMap, lt, 4);
@@ -393,10 +391,12 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     vector<StringLiteral*> literals;
     Utils::getChilds2<StringLiteral>(stm, literals, 2);
 
-    if (literals.empty()) {
-        emitManualFixitWarning(stm->getLocStart());
-    } else {
-        fixits = fixItRawLiteral(literals[0], "QLatin1String");
+    if (isFixitEnabled(CharPtrAllocations)) {
+        if (literals.empty()) {
+            emitManualFixitWarning(stm->getLocStart());
+        } else {
+            fixits = fixItRawLiteral(literals[0], "QLatin1String");
+        }
     }
 
     string msg = string("QString(const char*) being called");
@@ -434,7 +434,11 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
     }
 
-    std::vector<FixItHint> fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr);
+    std::vector<FixItHint> fixits;
+
+    if (isFixitEnabled(FromLatin1_FromUtf8Allocations)) {
+        fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr);
+    }
 
     if (functionDecl->getNameAsString() == "fromLatin1") {
         emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"), fixits);
@@ -459,8 +463,12 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (begin == nullptr)
         return;
 
-    vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String")
-                                                  : fixItReplaceWordWithWordInTernary(ternary);
+    vector<FixItHint> fixits;
+
+    if (isFixitEnabled(QLatin1StringAllocations)) {
+        fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String")
+                                    : fixItReplaceWordWithWordInTernary(ternary);
+    }
 
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
@@ -469,3 +477,4 @@ const char *const s_checkName = "qstring-uneeded-heap-allocations";
 REGISTER_CHECK(s_checkName, QStringUneededHeapAllocations)
 REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)
 REGISTER_FIXIT(FromLatin1_FromUtf8Allocations, "fix-fromLatin1_fromUtf8-allocations", s_checkName)
+REGISTER_FIXIT(CharPtrAllocations, "fix-fromCharPtrAllocations", s_checkName)
