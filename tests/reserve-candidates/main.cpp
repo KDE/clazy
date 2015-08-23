@@ -88,3 +88,12 @@ void test_nesting()
             v2 << i; // Warning
     }
 }
+
+void test_misc()
+{
+    QVector<int> v2;
+    for (int i = 0; i < 10; ) {
+        v2 << i; // OK
+    }
+
+}

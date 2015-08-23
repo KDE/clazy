@@ -267,7 +267,7 @@ bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm) const
 {
     auto forstm = dyn_cast<ForStmt>(stm);
     if (forstm)
-        return expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
+        return forstm->getInc() == nullptr || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
 
     auto whilestm = dyn_cast<WhileStmt>(stm);
     if (whilestm)
