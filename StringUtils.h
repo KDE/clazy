@@ -2,6 +2,7 @@
 #define MORE_WARNINGS_STRING_UTILS_H
 
 #include "checkmanager.h"
+#include "Utils.h"
 
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
@@ -64,6 +65,13 @@ inline void printLocation(const clang::Stmt *s, bool newLine = true)
         printLocation(s->getLocStart(), newLine);
 }
 
+inline void printLocation(clang::PresumedLoc loc, bool newLine = true)
+{
+    llvm::errs() << loc.getFilename() << " " << loc.getLine() << ":" << loc.getColumn();
+    if (newLine)
+        llvm::errs() << "\n";
+}
+
 inline std::string qualifiedMethodName(clang::CXXMethodDecl *method)
 {
     // method->getQualifiedNameAsString() returns the name with template arguments, so do a little hack here
@@ -71,6 +79,18 @@ inline std::string qualifiedMethodName(clang::CXXMethodDecl *method)
         return "";
 
     return method->getParent()->getNameAsString() + "::" + method->getNameAsString();
+}
+
+inline void printParents(clang::ParentMap *map, clang::Stmt *s)
+{
+    int level = 0;
+    llvm::errs() << (s ? s->getStmtClassName() : nullptr) << "\n";
+
+    while (clang::Stmt *parent = Utils::parent(map, s)) {
+        ++level;
+        llvm::errs() << std::string(level, ' ') << parent->getStmtClassName() << "\n";
+        s = parent;
+    }
 }
 
 }

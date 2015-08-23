@@ -13,6 +13,7 @@
 #include "reserveadvisor.h"
 #include "Utils.h"
 #include "checkmanager.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -20,6 +21,7 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/DeclTemplate.h>
+#include <clang/Lex/Lexer.h>
 
 #include <vector>
 
@@ -263,19 +265,26 @@ bool ReserveAdvisor::expressionIsTooComplex(clang::Expr *expr) const
     return false;
 }
 
-bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm) const
+bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
 {
+    isLoop = false;
     auto forstm = dyn_cast<ForStmt>(stm);
-    if (forstm)
+    if (forstm) {
+        isLoop = true;
         return forstm->getInc() == nullptr || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
+    }
 
     auto whilestm = dyn_cast<WhileStmt>(stm);
-    if (whilestm)
+    if (whilestm) {
+        isLoop = true;
         return expressionIsTooComplex(whilestm->getCond());
+    }
 
     auto dostm = dyn_cast<DoStmt>(stm);
-    if (dostm)
+    if (dostm) {
+        isLoop = true;
         return expressionIsTooComplex(dostm->getCond());
+    }
 
     return false;
 }
@@ -285,14 +294,64 @@ bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation
     if (s == nullptr || declLocation.isInvalid())
         return false;
 
-    while (Stmt *parent = Utils::parent(m_parentMap, s)) {
-        if (loopIsTooComplex(parent)) {
-            return !m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation);
+    int loopCount = 0;
+    int foreachCount = 0;
+
+    static vector<uint> nonComplexOnesCache;
+    static vector<uint> complexOnesCache;
+    auto rawLoc = s->getLocStart().getRawEncoding();
+
+
+    // For some reason we generate two warnings on some foreaches, so cache the ones we processed
+    // and return true so we don't trigger a warning
+    if (find(nonComplexOnesCache.cbegin(), nonComplexOnesCache.cend(), rawLoc) != nonComplexOnesCache.cend())
+        return true;
+
+    if (find(complexOnesCache.cbegin(), complexOnesCache.cend(), rawLoc) != complexOnesCache.cend())
+        return true;
+
+    Stmt *it = s;
+    PresumedLoc lastForeachForStm;
+    while (Stmt *parent = Utils::parent(m_parentMap, it)) {
+        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation)) {
+            nonComplexOnesCache.push_back(rawLoc);
+            return false;
         }
 
-        s = parent;
+        bool isLoop = false;
+        if (loopIsTooComplex(parent, isLoop)) {
+            complexOnesCache.push_back(rawLoc);
+            return true;
+        }
+
+        if (isLoop)
+            loopCount++;
+
+        auto macro = Lexer::getImmediateMacroName(parent->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
+        if (macro == string("Q_FOREACH")) {
+            auto ploc = m_ci.getSourceManager().getPresumedLoc(parent->getLocStart());
+            if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
+                // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting
+            } else {
+                foreachCount++;
+                lastForeachForStm = ploc;
+            }
+        }
+
+        if (foreachCount > 1) { // two foreaches are almost always a false-positve
+            complexOnesCache.push_back(rawLoc);
+            return true;
+        }
+
+        if (loopCount >= 4) {
+            complexOnesCache.push_back(rawLoc);
+            return true;
+        }
+
+        it = parent;
     }
 
+    nonComplexOnesCache.push_back(rawLoc);
     return false;
 }
 

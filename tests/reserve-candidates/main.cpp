@@ -87,6 +87,26 @@ void test_nesting()
         for (int i = 0; i < 10; ++i)
             v2 << i; // Warning
     }
+
+    QVector<int> v3;
+    // Too many levels, this is ok, unless all of the cond expressions where literals but that's unlikely
+    for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10;  ++i) {
+            for (int i = 0; i < 10; ++i) {
+                for (int i = 0; i < 10; ++i) {
+                    v3 << i; // OK
+                }
+            }
+        }
+    }
+
+    QVector<int> a,b,c,d,e;
+    foreach (int i, a)
+        foreach (int i2, b)
+                c << 1; // OK
+
+    foreach (int i2, d)
+        e << 1; // Warning
 }
 
 void test_misc()
@@ -95,5 +115,4 @@ void test_misc()
     for (int i = 0; i < 10; ) {
         v2 << i; // OK
     }
-
 }

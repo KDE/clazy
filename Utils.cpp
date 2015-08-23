@@ -698,3 +698,10 @@ clang::Stmt * Utils::getFirstChildAtDepth(clang::Stmt *s, uint depth)
 
     return s->child_begin() == s->child_end() ? nullptr : getFirstChildAtDepth(*s->child_begin(), --depth);
 }
+
+bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2)
+{
+    return l1.getColumn() == l2.getColumn() &&
+           l1.getLine()   == l2.getLine()   &&
+            string(l1.getFilename()) == string(l2.getFilename());
+}

@@ -202,6 +202,8 @@ namespace Utils {
     std::vector<clang::Stmt*> childs(clang::Stmt *parent);
 
     clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, uint depth);
+
+    bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 }
 
 #endif
