@@ -19,6 +19,7 @@
 
 namespace clang {
 class ValueDecl;
+class Expr;
 }
 
 /**
@@ -40,6 +41,9 @@ private:
     bool containerWasReserved(clang::ValueDecl*) const;
     bool acceptsValueDecl(clang::ValueDecl *valueDecl) const;
     void printWarning(const clang::SourceLocation &);
+    bool expressionIsTooComplex(clang::Expr *) const;
+    bool loopIsTooComplex(clang::Stmt *) const;
+    bool isInComplexLoop(clang::Stmt *, clang::SourceLocation declLocation) const;
 
     std::vector<clang::ValueDecl*> m_foundReserves;
 };

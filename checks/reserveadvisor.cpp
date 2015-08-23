@@ -154,6 +154,9 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
     if (!forstm && !whilestm && !dostm)
         return;
 
+    if (!forstm)
+        return;
+
     auto body = forstm ? forstm->getBody()
                        : whilestm ? whilestm->getBody()
                                   : dostm->getBody();
@@ -177,6 +180,13 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
         if (!acceptsValueDecl(valueDecl))
             continue;
 
+        // We only want containers defined outside of the loop we're examining
+        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
+            return;
+
+        if (isInComplexLoop(callExpr, valueDecl->getLocStart()))
+            return;
+
         if (Utils::loopCanBeInterrupted(body, m_ci, callExpr->getLocStart()))
             continue;
 
@@ -190,6 +200,13 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
         ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(callExpr);
         if (!acceptsValueDecl(valueDecl))
             continue;
+
+        // We only want containers defined outside of the loop we're examining
+        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
+            return;
+
+        if (isInComplexLoop(callExpr, valueDecl->getLocStart()))
+            return;
 
         if (Utils::loopCanBeInterrupted(body, m_ci, callExpr->getLocStart()))
             continue;
@@ -220,6 +237,63 @@ void ReserveAdvisor::checkIfReserveStatement(Stmt *stm)
     if (std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) == m_foundReserves.cend()) {
         m_foundReserves.push_back(valueDecl);
     }
+}
+
+bool ReserveAdvisor::expressionIsTooComplex(clang::Expr *expr) const
+{
+    if (!expr)
+        return false;
+
+    vector<CallExpr*> callExprs;
+    Utils::getChilds2<CallExpr>(expr, callExprs);
+
+    for (CallExpr *callExpr : callExprs) {
+        QualType qt = callExpr->getType();
+        const Type *t = qt.getTypePtrOrNull();
+        if (t && (!t->isIntegerType() || t->isBooleanType()))
+            return true;
+    }
+
+    vector<ArraySubscriptExpr*> subscriptExprs;
+    Utils::getChilds2<ArraySubscriptExpr>(expr, subscriptExprs);
+    if (!subscriptExprs.empty())
+        return true;
+
+    // llvm::errs() << expr->getStmtClassName() << "\n";
+    return false;
+}
+
+bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm) const
+{
+    auto forstm = dyn_cast<ForStmt>(stm);
+    if (forstm)
+        return expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
+
+    auto whilestm = dyn_cast<WhileStmt>(stm);
+    if (whilestm)
+        return expressionIsTooComplex(whilestm->getCond());
+
+    auto dostm = dyn_cast<DoStmt>(stm);
+    if (dostm)
+        return expressionIsTooComplex(dostm->getCond());
+
+    return false;
+}
+
+bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation) const
+{
+    if (s == nullptr || declLocation.isInvalid())
+        return false;
+
+    while (Stmt *parent = Utils::parent(m_parentMap, s)) {
+        if (loopIsTooComplex(parent)) {
+            return !m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation);
+        }
+
+        s = parent;
+    }
+
+    return false;
 }
 
 REGISTER_CHECK("reserve-candidates", ReserveAdvisor)

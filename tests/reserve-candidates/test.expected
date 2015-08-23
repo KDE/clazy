@@ -1,2 +1,7 @@
 main.cpp:8:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
 main.cpp:7:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
+main.cpp:61:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
+main.cpp:65:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
+main.cpp:69:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
+main.cpp:73:9: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
+main.cpp:88:13: warning: Reserve candidate [-Wmore-warnings-reserve-candidates]
