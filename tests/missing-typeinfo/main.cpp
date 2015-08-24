@@ -1,6 +1,6 @@
 #include <QtCore/QList>
 #include <QtCore/QVector>
-
+#include <QtCore/QTime>
 
 
 
@@ -30,4 +30,6 @@ void test()
 
     QList<C> l5;
     QVector<C> l6;
+    QList<QTime> t;
+    QVector<QTime> t2;
 }
