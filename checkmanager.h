@@ -57,6 +57,9 @@ public:
     clang::SourceManager *m_sm;
 
     bool allFixitsEnabled() const;
+
+    std::vector<std::string> checkNamesForCommaSeparatedString(const std::string &str) const;
+
 private:
     CheckManager();
     std::unique_ptr<CheckBase> createCheck(const std::string &name);

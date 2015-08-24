@@ -185,27 +185,11 @@ protected:
             PrintHelp(llvm::errs());
             return false;
         } else if (args.size() == 1) {
-            vector<string> requestedChecks = Utils::splitString(args[0], ',');
-            if (requestedChecks.empty()) {
+            m_checks = CheckManager::instance()->checkNamesForCommaSeparatedString(args[0]);
+            if (m_checks.empty()) {
                 llvm::errs() << "No requested checks!";
                 PrintHelp(llvm::errs());
                 return false;
-            }
-            // Remove duplicates:
-            sort(requestedChecks.begin(), requestedChecks.end());
-            requestedChecks.erase(unique(requestedChecks.begin(), requestedChecks.end()), requestedChecks.end());
-
-            m_checks.reserve(requestedChecks.size());
-
-            for (uint i = 0, e = requestedChecks.size(); i != e; ++i) {
-                string checkName = requestedChecks[i];
-                auto availableCheckNames = CheckManager::instance()->availableCheckNames(true);
-                if (std::find(availableCheckNames.cbegin(), availableCheckNames.cend(), checkName) == availableCheckNames.cend()) {
-                    llvm::errs() << "Invalid argument: " << checkName << "\n";
-                    return false;
-                } else {
-                    m_checks.push_back(checkName);
-                }
             }
         }
 

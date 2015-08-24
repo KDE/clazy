@@ -11,8 +11,9 @@
 **********************************************************************/
 
 #include "checkmanager.h"
+#include "Utils.h"
 
-#include "stdlib.h"
+#include <stdlib.h>
 
 using namespace std;
 
@@ -20,6 +21,10 @@ struct RegisteredCheck {
     std::string name;
     int flags;
     FactoryFunction factory;
+    bool operator==(const std::string &name) const
+    {
+        return this->name == name;
+    }
 };
 
 
@@ -166,4 +171,22 @@ bool CheckManager::fixitsEnabled() const
 bool CheckManager::allFixitsEnabled() const
 {
     return m_enableAllFixits;
+}
+
+std::vector<string> CheckManager::checkNamesForCommaSeparatedString(const string &str) const
+{
+    vector<string> checkNames = Utils::splitString(str, ',');
+    vector<string> result;
+
+    for (const string &name : checkNames) {
+        if (find(result.cbegin(), result.cend(), name) != result.cend())
+            continue;
+
+        if (find(m_registeredChecks.cbegin(), m_registeredChecks.cend(), name) == m_registeredChecks.cend())
+            llvm::errs() << "Invalid check: " << name << "\n";
+        else
+            result.push_back(str);
+    }
+
+    return result;
 }
