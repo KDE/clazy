@@ -70,7 +70,7 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
             std::string s;
             std::stringstream out;
             out << m_ci.getASTContext().getTypeSize(qt2)/8;
-            s = "Q_DECLARE_PRIMITIVE candidate: " + typeName;
+            s = "Missing Q_DECLARE_TYPEINFO: " + typeName;
             emitWarning(decl->getLocStart(), s.c_str());
             emitWarning(t->getAsCXXRecordDecl()->getLocStart(), "Type declared here:", false);
         }
@@ -101,4 +101,4 @@ bool MissingTypeinfo::ignoreTypeInfo(const std::string &className) const
 }
 
 
-REGISTER_CHECK("missing-typeinfo", MissingTypeinfo)
+REGISTER_CHECK_WITH_FLAGS("missing-typeinfo", MissingTypeinfo, HiddenFlag)

@@ -20,8 +20,8 @@ class ClassTemplateSpecializationDecl;
 }
 
 /**
- * Advises usage of Q_PRIMITIVE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
- * or using QVector<T>. Unless they already have this classification.
+ * Advises usage of Q_PRIMITIVE_TYPE or Q_MOVABLE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
+ * or using QVector<T>. Unless they already have a classification.
  */
 class MissingTypeinfo : public CheckBase
 {
