@@ -32,12 +32,12 @@ CheckManager *CheckManager::instance()
 CheckManager::CheckManager() : m_enableAllFixits(false)
 {
     m_registeredChecks.reserve(30);
-    const char *variable = getenv("MORE_WARNINGS_FIXIT");
-    if (variable != nullptr) {
-        if (string(variable) == string("all_fixits"))
+    const char *fixitsEnv = getenv("MORE_WARNINGS_FIXIT");
+    if (fixitsEnv != nullptr) {
+        if (string(fixitsEnv) == string("all_fixits"))
             m_enableAllFixits = true;
         else
-            m_requestedFixitName = string(variable);
+            m_requestedFixitName = string(fixitsEnv);
     }
 }
 
