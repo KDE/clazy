@@ -24,6 +24,7 @@ class ParentMap;
 class TranslationUnitDecl;
 class FixItHint;
 class PresumedLoc;
+class SourceLocation;
 }
 
 class CheckBase
@@ -49,8 +50,9 @@ protected:
     virtual std::vector<std::string> filesToIgnore() const;
     void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
+    void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
-    void emitManualFixitWarning(clang::SourceLocation loc);
+    void queueManualFixitWarning(clang::SourceLocation loc, int fixitType);
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
 
     clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
@@ -65,6 +67,7 @@ protected:
     clang::Decl *m_lastDecl;
 private:
     std::vector<uint> m_emittedWarningsInMacro;
+    std::vector<clang::SourceLocation> m_queuedManualInterventionWarnings;
     int m_enabledFixits;
 };
 

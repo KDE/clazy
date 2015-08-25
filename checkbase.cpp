@@ -113,9 +113,21 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
+    const string tag = string(" [-Wmore-warnings-") + name() + string("]");
     if (printWarningTag)
-        error += string(" [-Wmore-warnings-") + name() + string("]");
+        error += tag;
 
+    reallyEmitWarning(loc, error, fixits);
+
+    for (auto l : m_queuedManualInterventionWarnings) {
+        reallyEmitWarning(l, string("FixIt failed, requires manual intervention") + tag, {});
+    }
+
+    m_queuedManualInterventionWarnings.clear();
+}
+
+void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
+{
     FullSourceLoc full(loc, m_ci.getSourceManager());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
@@ -125,9 +137,10 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
     }
 }
 
-void CheckBase::emitManualFixitWarning(clang::SourceLocation loc)
+void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, int fixitType)
 {
-    emitWarning(loc, "FixIt failed, requires manual intervention", {}, true);
+    if (isFixitEnabled(fixitType))
+        m_queuedManualInterventionWarnings.push_back(loc);
 }
 
 bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const

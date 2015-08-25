@@ -163,18 +163,22 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 
         vector<FixItHint> fixits;
         if (isFixitEnabled(QLatin1StringAllocations)) {
-            if (ternary == nullptr) {
-                fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String");
-                bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(Utils::parent(m_parentMap, ctorExpr));
-                if (shouldRemoveQString) {
-                    // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
-                    auto removalFixits = fixItRemoveToken(ctorExpr, true);
-                    if (!removalFixits.empty())  {
-                        std::copy(removalFixits.begin(), removalFixits.end(), std::back_inserter(fixits));
+            if (!qlatin1Ctor->getLocStart().isMacroID()) {
+                if (ternary == nullptr) {
+                    fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String", QLatin1StringAllocations);
+                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(Utils::parent(m_parentMap, ctorExpr));
+                    if (shouldRemoveQString) {
+                        // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
+                        auto removalFixits = fixItRemoveToken(ctorExpr, true);
+                        if (!removalFixits.empty())  {
+                            std::copy(removalFixits.begin(), removalFixits.end(), std::back_inserter(fixits));
+                        }
                     }
+                } else {
+                    fixits = fixItReplaceWordWithWordInTernary(ternary);
                 }
             } else {
-                fixits = fixItReplaceWordWithWordInTernary(ternary);
+                queueManualFixitWarning(qlatin1Ctor->getLocStart(), QLatin1StringAllocations);
             }
         }
 
@@ -194,9 +198,11 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                         //llvm::errs() << "case1\n";
                         const bool literalIsEmpty = lt->getLength() == 0;
                         if (literalIsEmpty)
-                            fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString");
+                            fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString", CharPtrAllocations);
+                        else if (!ctorExpr->getLocStart().isMacroID())
+                            fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString", CharPtrAllocations);
                         else
-                            fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString");
+                            queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations);
                     } else {
                         //llvm::errs() << "case2\n";
                         fixits = fixItRawLiteral(lt, "QStringLiteral");
@@ -209,7 +215,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     }
 }
 
-vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee)
+vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee, int fixitType)
 {
     vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
@@ -222,7 +228,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
             StringUtils::printLocation(rangeStart);
             StringUtils::printLocation(rangeEnd);
             StringUtils::printLocation(Lexer::getLocForEndOfToken(rangeStart, 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
-            emitManualFixitWarning(begin->getLocStart());
+            queueManualFixitWarning(begin->getLocStart(), fixitType);
             return {};
         }
     }
@@ -305,6 +311,11 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
     const std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap) ? "QStringLiteral"
                                                                                      : "QLatin1String";
 
+    if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {
+        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations);
+        return {};
+    }
+
     StringLiteral *literal = stringLiteralForCall(callExpr);
     if (literal) {
         auto classNameLoc = Lexer::getLocForEndOfToken(callExpr->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
@@ -314,7 +325,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
         SourceRange range(callExpr->getLocStart(), methodNameLoc);
         fixits.push_back(FixItHint::CreateReplacement(range, replacement));
     } else {
-        emitManualFixitWarning(callExpr->getLocStart());
+        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations);
     }
 
     return fixits;
@@ -329,11 +340,17 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
 
     SourceLocation start = lt->getLocStart();
     if (start.isMacroID()) {
-        emitManualFixitWarning(start);
+        queueManualFixitWarning(start, CharPtrAllocations);
     } else {
+        string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
+
+        if (revisedReplacement == "QStringLiteral" && lt->getLocStart().isMacroID()) {
+            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations);
+            return {};
+        }
+
         SourceLocation end = Lexer::getLocForEndOfToken(lt->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
         fixits.push_back(createInsertion(end, ")"));
-        string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
         fixits.push_back(createInsertion(start, revisedReplacement + std::string("(")));
     }
 
@@ -356,7 +373,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItRemoveToken(Stmt *stmt, bo
         }
 
     } else {
-        emitManualFixitWarning(start);
+        queueManualFixitWarning(start, QLatin1StringAllocations);
     }
 
     return fixits;
@@ -393,7 +410,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
 
     if (isFixitEnabled(CharPtrAllocations)) {
         if (literals.empty()) {
-            emitManualFixitWarning(stm->getLocStart());
+            queueManualFixitWarning(stm->getLocStart(), CharPtrAllocations);
         } else {
             fixits = fixItRawLiteral(literals[0], "QLatin1String");
         }
@@ -466,7 +483,7 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     vector<FixItHint> fixits;
 
     if (isFixitEnabled(QLatin1StringAllocations)) {
-        fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String")
+        fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String", QLatin1StringAllocations)
                                     : fixItReplaceWordWithWordInTernary(ternary);
     }
 
