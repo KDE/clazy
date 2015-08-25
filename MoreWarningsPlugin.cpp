@@ -78,7 +78,7 @@ public:
         , m_checkManager(CheckManager::instance())
     {
         m_checkManager->setCompilerInstance(&m_ci);
-        m_checkManager->createCheckers(requestedChecks);
+        m_checkManager->createChecks(requestedChecks);
         if (m_checkManager->fixitsEnabled())
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
     }
@@ -173,8 +173,13 @@ protected:
         }
 
         if (args.empty()) {
-            // No check specified, use all of them
-            m_checks = CheckManager::instance()->availableCheckNames(false);
+            // No check specified, check the env variable
+            m_checks = CheckManager::instance()->requestedCheckNamesThroughEnv();
+            if (m_checks.empty()) {
+                llvm::errs() << "No requested checks! ";
+                PrintHelp(llvm::errs());
+                return false;
+            }
         } else if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
@@ -187,7 +192,7 @@ protected:
         } else if (args.size() == 1) {
             m_checks = CheckManager::instance()->checkNamesForCommaSeparatedString(args[0]);
             if (m_checks.empty()) {
-                llvm::errs() << "No requested checks!";
+                llvm::errs() << "No requested checks! ";
                 PrintHelp(llvm::errs());
                 return false;
             }
@@ -200,7 +205,16 @@ protected:
     {
         const vector<string> &names = CheckManager::instance()->availableCheckNames(false);
 
-        ros << "Available checks:\n\n";
+        ros << "To specify which checks to enable set the MORE_WARNINGS_CHECKS env variable, for example:\n";
+        ros << "export MORE_WARNINGS_CHECKS=\"reserve-candidates,qstring-uneeded-heap-allocations\"\n\n";
+        ros << "or pass as compiler arguments, for example:\n";
+        ros << "-Xclang -plugin-arg-more-warnings -Xclang reserve-candidates,qstring-uneeded-heap-allocations\n";
+        ros << "\n";
+        ros << "To enable FixIts for a check, also set the env variable MORE_WARNINGS_FIXIT, for example:\n";
+        ros << "export MORE_WARNINGS_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
+        ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\n\n";
+
+        ros << "Available checks and FixIts:\n\n";
         for (uint i = 1; i < names.size(); ++i) {
             auto padded = names[i];
             padded.insert(padded.end(), 39 - padded.size(), ' ');
@@ -223,10 +237,7 @@ protected:
             ros << "\n";
         }
 
-        ros << "\n" << "To enable fixits for a check set the environment variable MORE_WARNINGS_FIXIT"
-            << "\n" << "For example MORE_WARNINGS_FIXIT=\"fix-qlatin1string-allocations\""
-            << "\n" << "FixIts are experimental and rewrite your code, therefore only one FixIt is allowed per build, specifying a list of different FixIts is not supported"
-            << "\n";
+        exit(-2);
     }
 
 private:

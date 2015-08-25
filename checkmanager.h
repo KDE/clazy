@@ -47,8 +47,10 @@ public:
 
     void setCompilerInstance(clang::CompilerInstance *);
     std::vector<std::string> availableCheckNames(bool includeHidden) const;
+    std::vector<std::string> requestedCheckNamesThroughEnv() const;
+
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
-    void createCheckers(const std::vector<std::string> &requestedChecks);
+    void createChecks(std::vector<std::string> requestedChecks);
     const CheckBase::List &createdChecks() const;
     bool fixitsEnabled() const;
 

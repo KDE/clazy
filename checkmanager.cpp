@@ -21,12 +21,7 @@ struct RegisteredCheck {
     std::string name;
     int flags;
     FactoryFunction factory;
-    bool operator==(const std::string &name) const
-    {
-        return this->name == name;
-    }
 };
-
 
 CheckManager *CheckManager::instance()
 {
@@ -125,13 +120,29 @@ vector<string> CheckManager::availableCheckNames(bool includeHidden) const
     return names;
 }
 
+std::vector<string> CheckManager::requestedCheckNamesThroughEnv() const
+{
+    static vector<string> requestedChecksThroughEnv;
+    if (requestedChecksThroughEnv.empty()) {
+        const char *checksEnv = getenv("MORE_WARNINGS_CHECKS");
+        if (checksEnv != nullptr) {
+            requestedChecksThroughEnv = checkNamesForCommaSeparatedString(checksEnv);
+        }
+        string checkName = checkNameForFixIt(m_requestedFixitName);
+        if (!checkName.empty() && find(requestedChecksThroughEnv.cbegin(), requestedChecksThroughEnv.cend(), checkName) == requestedChecksThroughEnv.cend())
+            requestedChecksThroughEnv.push_back(checkName);
+    }
+
+    return requestedChecksThroughEnv;
+}
+
 RegisteredFixIt::List CheckManager::availableFixIts(const string &checkName) const
 {
     auto it = m_fixitsByCheckName.find(checkName);
     return it == m_fixitsByCheckName.end() ? RegisteredFixIt::List() : (*it).second;
 }
 
-void CheckManager::createCheckers(const vector<string> &requestedChecks)
+void CheckManager::createChecks(vector<string> requestedChecks)
 {
     const string fixitCheckName = checkNameForFixIt(m_requestedFixitName);
     RegisteredFixIt fixit = m_fixitByName[m_requestedFixitName];
@@ -182,10 +193,10 @@ std::vector<string> CheckManager::checkNamesForCommaSeparatedString(const string
         if (find(result.cbegin(), result.cend(), name) != result.cend())
             continue;
 
-        if (find(m_registeredChecks.cbegin(), m_registeredChecks.cend(), name) == m_registeredChecks.cend())
+        if (find_if(m_registeredChecks.cbegin(), m_registeredChecks.cend(), [&name](const RegisteredCheck &r) { return r.name == name;}) == m_registeredChecks.cend())
             llvm::errs() << "Invalid check: " << name << "\n";
         else
-            result.push_back(str);
+            result.push_back(name);
     }
 
     return result;
