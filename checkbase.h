@@ -47,11 +47,11 @@ protected:
     virtual void VisitDecl(clang::Decl *decl);
     bool shouldIgnoreFile(clang::SourceLocation) const;
     virtual std::vector<std::string> filesToIgnore() const;
-    void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true) const;
-    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true) const;
+    void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true);
+    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
 
     void emitManualFixitWarning(clang::SourceLocation loc);
-    bool locationAlreadyFixed(clang::SourceLocation loc) const;
+    bool warningAlreadyEmitted(clang::SourceLocation loc) const;
 
     clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
     clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
@@ -64,7 +64,7 @@ protected:
 
     clang::Decl *m_lastDecl;
 private:
-    std::vector<uint> m_fixitLocationHistory;
+    std::vector<uint> m_emittedWarningsInMacro;
     int m_enabledFixits;
 };
 

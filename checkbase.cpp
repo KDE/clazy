@@ -100,13 +100,19 @@ std::vector<std::string> CheckBase::filesToIgnore() const
     return {};
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag) const
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag)
 {
     emitWarning(loc, error, {}, printWarningTag);
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const vector<FixItHint> &fixits, bool printWarningTag) const
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const vector<FixItHint> &fixits, bool printWarningTag)
 {
+    if (loc.isMacroID()) {
+        if (warningAlreadyEmitted(loc))
+            return; // For warnings in macro arguments we get a warning in each place the argument is used within the expanded macro, so filter all the dups
+        m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
+    }
+
     if (printWarningTag)
         error += string(" [-Wmore-warnings-") + name() + string("]");
 
@@ -124,13 +130,13 @@ void CheckBase::emitManualFixitWarning(clang::SourceLocation loc)
     emitWarning(loc, "FixIt failed, requires manual intervention", {}, true);
 }
 
-bool CheckBase::locationAlreadyFixed(SourceLocation loc) const
+bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
 {
     PresumedLoc ploc = m_ci.getSourceManager().getPresumedLoc(loc);
-    for (auto rawLoc : m_fixitLocationHistory) {
+    for (auto rawLoc : m_emittedWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
         PresumedLoc p = m_ci.getSourceManager().getPresumedLoc(l);
-        if (p.getColumn() == ploc.getColumn() && p.getLine() == ploc.getLine() && string(p.getFilename()) == string(ploc.getFilename()))
+        if (Utils::presumedLocationsEqual(p, ploc))
             return true;
     }
 
@@ -139,21 +145,19 @@ bool CheckBase::locationAlreadyFixed(SourceLocation loc) const
 
 clang::FixItHint CheckBase::createReplacement(const SourceRange &range, const string &replacement)
 {
-    if (range.getBegin().isInvalid() || locationAlreadyFixed(range.getBegin())) {
+    if (range.getBegin().isInvalid()) {
         return {};
     } else {
-        m_fixitLocationHistory.push_back(range.getBegin().getRawEncoding());
         return FixItHint::CreateReplacement(range, replacement);
     }
 }
 
 clang::FixItHint CheckBase::createInsertion(const SourceLocation &start, const string &insertion)
 {
-    if (start.isInvalid() || locationAlreadyFixed(start)) {
+    if (start.isInvalid()) {
         return {};
     } else {
         StringUtils::printLocation(start);
-        m_fixitLocationHistory.push_back(start.getRawEncoding());
         return FixItHint::CreateInsertion(start, insertion);
     }
 }

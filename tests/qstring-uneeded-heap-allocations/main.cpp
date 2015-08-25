@@ -111,4 +111,11 @@ void exceptionTest() // Just to test a crash
     }
 }
 
+QStringList returns_stringlist(QString) { return {}; }
 
+void test_foreach()
+{
+    foreach (const QString &s, returns_stringlist(QLatin1String("bar"))) // Warning
+    {
+    }
+}

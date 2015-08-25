@@ -39,7 +39,7 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 
 private:
-    bool containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<clang::Stmt*> &processedStmts) const;
+    bool containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<clang::Stmt*> &processedStmts);
 };
 
 

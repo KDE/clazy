@@ -53,7 +53,7 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
     }
 }
 
-bool VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts) const
+bool VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
 {
     if (stmt == nullptr)
         return false;
