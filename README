@@ -56,4 +56,6 @@ You can enable a fixit through the env variable, for example:
 export CLAZY_FIXIT="fix-qlatin1string-allocations"
 
 Only one fixit can be enabled each time.
+WARNING: Backup your code, don't blame me if a fixit is not applied correctly.
+For better results don't use parallel builds, otherwise a fixit being applied in an header file might be done twice.
 --------------------------------------------------------------------------------
