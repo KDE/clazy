@@ -177,8 +177,8 @@ protected:
             m_checks = CheckManager::instance()->requestedCheckNamesThroughEnv();
             if (m_checks.empty()) {
                 llvm::errs() << "No requested checks! ";
-                PrintHelp(llvm::errs());
-                return false;
+                //PrintHelp(llvm::errs());
+                return true;
             }
         } else if (args.size() > 1) {
             // Too many arguments.
