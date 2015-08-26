@@ -32,7 +32,7 @@ CheckManager *CheckManager::instance()
 CheckManager::CheckManager() : m_enableAllFixits(false)
 {
     m_registeredChecks.reserve(30);
-    const char *fixitsEnv = getenv("MORE_WARNINGS_FIXIT");
+    const char *fixitsEnv = getenv("CLAZY_FIXIT");
     if (fixitsEnv != nullptr) {
         if (string(fixitsEnv) == string("all_fixits"))
             m_enableAllFixits = true;
@@ -124,7 +124,7 @@ std::vector<string> CheckManager::requestedCheckNamesThroughEnv() const
 {
     static vector<string> requestedChecksThroughEnv;
     if (requestedChecksThroughEnv.empty()) {
-        const char *checksEnv = getenv("MORE_WARNINGS_CHECKS");
+        const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv != nullptr) {
             requestedChecksThroughEnv = checkNamesForCommaSeparatedString(checksEnv);
         }

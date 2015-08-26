@@ -10,8 +10,8 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **********************************************************************/
 
-#ifndef MORE_WARNINGS_DYNAMIC_CAST_H
-#define MORE_WARNINGS_DYNAMIC_CAST_H
+#ifndef CLANG_LAZY_DYNAMIC_CAST_H
+#define CLANG_LAZY_DYNAMIC_CAST_H
 
 #include "checkbase.h"
 

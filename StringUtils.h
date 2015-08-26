@@ -1,5 +1,5 @@
-#ifndef MORE_WARNINGS_STRING_UTILS_H
-#define MORE_WARNINGS_STRING_UTILS_H
+#ifndef CLANG_LAZY_STRING_UTILS_H
+#define CLANG_LAZY_STRING_UTILS_H
 
 #include "checkmanager.h"
 #include "Utils.h"

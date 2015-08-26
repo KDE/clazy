@@ -10,8 +10,8 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **********************************************************************/
 
-#ifndef MORE_WARNINGS_CAST_FROM_ASCII_TO_STRING_H
-#define MORE_WARNINGS_CAST_FROM_ASCII_TO_STRING_H
+#ifndef CLANG_LAZY_CAST_FROM_ASCII_TO_STRING_H
+#define CLANG_LAZY_CAST_FROM_ASCII_TO_STRING_H
 
 #include "checkbase.h"
 

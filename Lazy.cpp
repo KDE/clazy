@@ -68,10 +68,10 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
     }
 }
 
-class MoreWarningsASTConsumer : public ASTConsumer, public RecursiveASTVisitor<MoreWarningsASTConsumer>
+class LazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<LazyASTConsumer>
 {
 public:
-    MoreWarningsASTConsumer(CompilerInstance &ci, const vector<string> &requestedChecks, bool inplaceFixits)
+    LazyASTConsumer(CompilerInstance &ci, const vector<string> &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
@@ -83,7 +83,7 @@ public:
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
     }
 
-    ~MoreWarningsASTConsumer()
+    ~LazyASTConsumer()
     {
         if (m_rewriter != nullptr) {
             m_rewriter->WriteFixedFiles();
@@ -149,11 +149,11 @@ public:
 
 //------------------------------------------------------------------------------
 
-class MoreWarningsAction : public PluginASTAction {
+class LazyASTAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
     {
-        return llvm::make_unique<MoreWarningsASTConsumer>(ci, m_checks, m_inplaceFixits);
+        return llvm::make_unique<LazyASTConsumer>(ci, m_checks, m_inplaceFixits);
     }
 
     bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_) override
@@ -205,13 +205,13 @@ protected:
     {
         const vector<string> &names = CheckManager::instance()->availableCheckNames(false);
 
-        ros << "To specify which checks to enable set the MORE_WARNINGS_CHECKS env variable, for example:\n";
-        ros << "export MORE_WARNINGS_CHECKS=\"reserve-candidates,qstring-uneeded-heap-allocations\"\n\n";
+        ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
+        ros << "export CLAZY_CHECKS=\"reserve-candidates,qstring-uneeded-heap-allocations\"\n\n";
         ros << "or pass as compiler arguments, for example:\n";
-        ros << "-Xclang -plugin-arg-more-warnings -Xclang reserve-candidates,qstring-uneeded-heap-allocations\n";
+        ros << "-Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-uneeded-heap-allocations\n";
         ros << "\n";
-        ros << "To enable FixIts for a check, also set the env variable MORE_WARNINGS_FIXIT, for example:\n";
-        ros << "export MORE_WARNINGS_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
+        ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
+        ros << "export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
         ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\n\n";
 
         ros << "Available checks and FixIts:\n\n";
@@ -247,5 +247,5 @@ private:
 
 }
 
-static FrontendPluginRegistry::Add<MoreWarningsAction>
-X("more-warnings", "more warnings plugin");
+static FrontendPluginRegistry::Add<LazyASTAction>
+X("clang-lazy", "clang lazy plugin");

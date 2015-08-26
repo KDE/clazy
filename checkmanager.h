@@ -10,8 +10,8 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **********************************************************************/
 
-#ifndef MORE_WARNINGS_CHECK_MANAGER_H
-#define MORE_WARNINGS_CHECK_MANAGER_H
+#ifndef CLANG_LAZY_CHECK_MANAGER_H
+#define CLANG_LAZY_CHECK_MANAGER_H
 
 #include "checkbase.h"
 

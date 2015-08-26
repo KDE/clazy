@@ -113,7 +113,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
-    const string tag = string(" [-Wmore-warnings-") + name() + string("]");
+    const string tag = string(" [-Wclazy-") + name() + string("]");
     if (printWarningTag)
         error += tag;
 

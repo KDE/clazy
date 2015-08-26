@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-project (ClangMoreWarningsPlugin)
+project (ClangLazy)
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
@@ -66,7 +66,7 @@ macro(add_clang_plugin name)
 endmacro(add_clang_plugin)
 
 
-set(SYMBOL_FILE MoreWarningsPlugin.exports)
+set(SYMBOL_FILE Lazy.exports)
 
 set (CLANG_LIBS
     #clang
@@ -92,7 +92,7 @@ set (USER_LIBS
     #pthread
 )
 
-add_clang_plugin(ClangMoreWarningsPlugin
+add_clang_plugin(ClangLazy
                  checkbase.cpp
                  checkmanager.cpp
                  checks/assertwithsideeffects.cpp
@@ -114,12 +114,12 @@ add_clang_plugin(ClangMoreWarningsPlugin
                  checks/reserveadvisor.cpp
                  checks/variantsanitizer.cpp
                  checks/virtualcallsfromctor.cpp
-                 MoreWarningsPlugin.cpp
+                 Lazy.cpp
                  Utils.cpp
                  )
 
-set_target_properties(ClangMoreWarningsPlugin PROPERTIES
+set_target_properties(ClangLazy PROPERTIES
     LINKER_LANGUAGE CXX
     PREFIX "")
 
-install(TARGETS ClangMoreWarningsPlugin DESTINATION lib)
+install(TARGETS ClangLazy DESTINATION lib)
