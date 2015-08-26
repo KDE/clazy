@@ -1,7 +1,59 @@
-* Read https://wiki.kdab.com/display/KDABTech/Clang+plugins on how to build llvm and clang
-* Build and install the plugin
-* Create a clang+++ sh script and put it on your path, it should have the following contents:
-  clang++ -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy $@
+--------------------------------------------------------------------------------
+BUILD INSTRUCTIONS
 
-* Change your mkspec to use clang+++, or, for cmake projects export CXX=clang+++
+* Build and install llvm/clang trunk if your distro doesn't provide it (tested with clang 3.7)
+  $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
+  $ mkdir <some_directory>/build && cd <some_directory>/build
+  $ ../configure --enable-optimized --prefix=<prefix> && make && make install
 
+* Build the clang-lazy plugin
+  $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
+  $ make && make install
+
+--------------------------------------------------------------------------------
+USAGE INSTRUCTIONS
+
+You should now have the clazy command available to you, in <prefix>/bin/.
+Compile your programs with it instead of clang++/g++.
+
+Note that this command is just a convenience wrapper which calls:
+clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy
+
+To make it the default compiler for cmake projects just:
+export CXX="clazy"
+Don't forget to clean and re-run cmake
+
+To make it the default compiler for qmake projects hack the mkspec:
+Edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++
+Then run qmake -spec linux-clang
+
+
+Finally, you need to choose which checks to enable. This is done through CLAZY_CHECKS env variable.
+For example:
+export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor"
+
+Instead of using the env variable, you can also pass an argument to the compiler:
+-Xclang -plugin-arg-clang-lazy -Xclang bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor
+
+Available checks:
+
+bogus-dynamic-cast
+foreacher
+global-const-char-pointer
+inefficient-qlist
+qstring-uneeded-heap-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+function-args-by-ref
+qmap-with-key-pointer
+non-pod-global-static
+reserve-candidates
+variant-sanitizer
+virtual-call-ctor
+--------------------------------------------------------------------------------
+ENABLING FIXITS
+
+Some checks support fixits, in which clazy will re-write your source files whenever it can fix something.
+You can enable a fixit through the env variable, for example:
+export CLAZY_FIXIT="fix-qlatin1string-allocations"
+
+Only one fixit can be enabled each time.
+--------------------------------------------------------------------------------
