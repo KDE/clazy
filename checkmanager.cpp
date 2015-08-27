@@ -141,7 +141,7 @@ std::vector<string> CheckManager::requestedCheckNamesThroughEnv() const
     if (requestedChecksThroughEnv.empty()) {
         const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv != nullptr) {
-            requestedChecksThroughEnv = checkNamesForCommaSeparatedString(checksEnv);
+            requestedChecksThroughEnv = string(checksEnv) == "all_checks" ? availableCheckNames(false) : checkNamesForCommaSeparatedString(checksEnv);
         }
         string checkName = checkNameForFixIt(m_requestedFixitName);
         if (!checkName.empty() && find(requestedChecksThroughEnv.cbegin(), requestedChecksThroughEnv.cend(), checkName) == requestedChecksThroughEnv.cend())

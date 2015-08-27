@@ -191,7 +191,7 @@ protected:
             // No check specified, check the env variable
             m_checks = CheckManager::instance()->requestedCheckNamesThroughEnv();
             if (m_checks.empty()) {
-                llvm::errs() << "No requested checks!\n";
+                llvm::errs() << "No requested checks! Set CLAZY_CHECKS env variable\n";
                 //PrintHelp(llvm::errs());
                 return true;
             }
@@ -207,7 +207,7 @@ protected:
         } else if (args.size() == 1) {
             m_checks = CheckManager::instance()->checkNamesForCommaSeparatedString(args[0]);
             if (m_checks.empty()) {
-                llvm::errs() << "No requested checks!\n";
+                llvm::errs() << "No requested checks! Set CLAZY_CHECKS env variable\n";
                 PrintHelp(llvm::errs());
                 return false;
             }
