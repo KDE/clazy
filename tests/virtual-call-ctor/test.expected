@@ -1,4 +1,4 @@
-main.cpp:22:9: warning: Called here [-Wclazy-virtual-call-ctor]
-main.cpp:11:5: warning: Calling pure virtual function in CTOR [-Wclazy-virtual-call-ctor]
-main.cpp:22:9: warning: Called here [-Wclazy-virtual-call-ctor]
-main.cpp:16:5: warning: Calling pure virtual function in DTOR [-Wclazy-virtual-call-ctor]
+main.cpp:10:5: warning: Calling pure virtual function in CTOR [-Wclazy-virtual-call-ctor]
+main.cpp:12:9: warning: Called here [-Wclazy-virtual-call-ctor]
+main.cpp:15:5: warning: Calling pure virtual function in DTOR [-Wclazy-virtual-call-ctor]
+main.cpp:17:9: warning: Called here [-Wclazy-virtual-call-ctor]

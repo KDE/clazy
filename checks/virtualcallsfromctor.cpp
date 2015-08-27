@@ -60,22 +60,25 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
     CXXRecordDecl *classDecl = ctorDecl ? ctorDecl->getParent() : dtorDecl->getParent();
 
     std::vector<Stmt*> processedStmts;
-    if (containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts)) {
-        if (ctorDecl != nullptr)
-            emitWarning(ctorOrDtorBody->getLocStart(), "Calling pure virtual function in CTOR");
-        else
-            emitWarning(ctorOrDtorBody->getLocStart(), "Calling pure virtual function in DTOR");
+    SourceLocation loc = containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts);
+    if (loc.isValid()) {
+        if (ctorDecl != nullptr) {
+            emitWarning(decl->getLocStart(), "Calling pure virtual function in CTOR");
+        } else {
+            emitWarning(decl->getLocStart(), "Calling pure virtual function in DTOR");
+        }
+        emitWarning(loc, "Called here");
     }
 }
 
-bool VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
+SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
 {
     if (stmt == nullptr)
-        return false;
+        return {};
 
     // already processed ? we don't want recurring calls
     if (std::find(processedStmts.cbegin(), processedStmts.cend(), stmt) != processedStmts.cend())
-        return false;
+        return {};
 
     processedStmts.push_back(stmt);
 
@@ -89,16 +92,15 @@ bool VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, 
 
         if (memberDecl->getParent() == classDecl) {
             if (memberDecl->isPure()) {
-                emitWarning(callExpr->getLocStart(), "Called here");
-                return true;
+                return callExpr->getLocStart();
             } else {
-                if (containsVirtualCall(classDecl, memberDecl->getBody(), processedStmts))
-                    return true;
+                if (containsVirtualCall(classDecl, memberDecl->getBody(), processedStmts).isValid())
+                    return callExpr->getLocStart();
             }
         }
     }
 
-    return false;
+    return {};
 }
 
 REGISTER_CHECK("virtual-call-ctor", VirtualCallsFromCTOR)
