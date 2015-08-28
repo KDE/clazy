@@ -114,25 +114,25 @@ bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 ClassTemplateSpecializationDecl *Utils::templateDecl(Decl *decl)
 {
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl) return 0;
+    if (!varDecl) return nullptr;
     QualType qt = varDecl->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t) return 0;
+    if (!t) return nullptr;
     CXXRecordDecl *classDecl = t->getAsCXXRecordDecl();
-    if (!classDecl) return 0;
+    if (!classDecl) return nullptr;
     return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
 }
 
 CXXRecordDecl * Utils::namedCastInnerDecl(CXXNamedCastExpr *staticOrDynamicCast)
 {
     Expr *e = staticOrDynamicCast->getSubExpr();
-    if (!e) return 0;
+    if (!e) return nullptr;
     QualType qt = e->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t) return 0;
+    if (!t) return nullptr;
     QualType qt2 = t->getPointeeType();
     const Type *t2 = qt2.getTypePtrOrNull();
-    if (!t2) return 0;
+    if (!t2) return nullptr;
     return t2->getAsCXXRecordDecl();
 }
 
@@ -142,7 +142,7 @@ CXXRecordDecl * Utils::namedCastOuterDecl(CXXNamedCastExpr *staticOrDynamicCast)
     const Type *t = qt.getTypePtrOrNull();
     QualType qt2 = t->getPointeeType();
     const Type *t2 = qt2.getTypePtrOrNull();
-    if (!t2) return 0;
+    if (!t2) return nullptr;
     return t2->getAsCXXRecordDecl();
 }
 
