@@ -153,3 +153,27 @@ public:
     B b;
 };
 
+struct Node
+{
+    Node *next;
+    int next2;
+};
+
+void testNode()
+{
+    QVector<int> v, v2;
+    Node *node;
+    for (int i = 0; i < 10; node = node->next) // OK
+        v << i;
+
+    for (int i = 0; i < 10; i = i + 1) v << i; // Warning
+
+    for (auto it = v2.cbegin(), e = v2.cend(); it != e; ++it)
+        v << 0; // Warning
+
+    for (auto it = v2.cbegin(), e = v2.cend(); it != e; it = it + 1)
+        v << 0; // Warning
+
+    for (int i = 0; i < 10; i = node->next2)
+        v << i; // OK
+}

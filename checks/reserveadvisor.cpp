@@ -294,6 +294,14 @@ bool ReserveAdvisor::expressionIsTooComplex(clang::Expr *expr) const
     if (!subscriptExprs.empty())
         return true;
 
+    BinaryOperator* binary = dyn_cast<BinaryOperator>(expr);
+    if (binary && binary->isAssignmentOp()) { // Filter things like for ( ...; ...; next = node->next)
+
+        Expr *rhs = binary->getRHS();
+        if (isa<MemberExpr>(rhs) || (isa<ImplicitCastExpr>(rhs) && dyn_cast_or_null<MemberExpr>(Utils::getFirstChildAtDepth(rhs, 1))))
+            return true;
+    }
+
     // llvm::errs() << expr->getStmtClassName() << "\n";
     return false;
 }
