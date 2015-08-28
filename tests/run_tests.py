@@ -34,9 +34,6 @@ def print_usage():
     print
     run_command(_help_command)
 
-def run_command2(cmd):
-    return os.popen(cmd).readlines()
-
 def files_are_equal(file1, file2):
     try:
         f = open(file1, 'r')
@@ -57,6 +54,15 @@ def get_check_list():
 def print_differences(file1, file2):
     return run_command("diff -Naur test.expected test.output")
 
+def extract_word(word, in_file, out_file):
+    in_f = open(in_file, 'r')
+    out_f = open(out_file, 'w')
+    for line in in_f:
+        if word in line:
+            out_f.write(line)
+    in_f.close()
+    out_f.close()
+
 def run_check_unit_tests(check):
     cmd = _compiler_comand + check
 
@@ -67,7 +73,8 @@ def run_check_unit_tests(check):
         print "[FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
         print
         return False
-    os.system("grep \"warning:\" compile.output &> test.output")
+
+    extract_word("warning:", "compile.output", "test.output")
 
     if files_are_equal("test.expected", "test.output"):
         print "[OK]   " + check
