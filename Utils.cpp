@@ -81,9 +81,7 @@ bool Utils::isChildOf(CXXRecordDecl *childDecl, CXXRecordDecl *parentDecl)
     if (childDecl == parentDecl)
         return false;
 
-    for (CXXRecordDecl::base_class_iterator it = childDecl->bases_begin();
-         it != childDecl->bases_end();  ++it) {
-
+    for (auto it = childDecl->bases_begin(), e = childDecl->bases_end(); it != e; ++it) {
         CXXBaseSpecifier *base = it;
         const Type *type = base->getType().getTypePtrOrNull();
         if (!type) continue;
@@ -103,7 +101,7 @@ bool Utils::isChildOf(CXXRecordDecl *childDecl, CXXRecordDecl *parentDecl)
 
 bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 {
-    for (CXXRecordDecl::ctor_iterator it = decl->ctor_begin(); it != decl->ctor_end(); ++it) {
+    for (auto it = decl->ctor_begin(), e = decl->ctor_end(); it != e; ++it) {
         CXXConstructorDecl *ctor = *it;
         if (ctor->isConstexpr())
             return true;
