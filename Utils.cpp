@@ -368,7 +368,7 @@ bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
         return false;
 
     DeclContext *context = valueDecl->getDeclContext();
-    return context != nullptr && dyn_cast<FunctionDecl>(context);
+    return context != nullptr && isa<FunctionDecl>(context);
 }
 
 bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
@@ -376,7 +376,7 @@ bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, clang::CompilerInstance &ci,
     if (stmt == nullptr)
         return false;
 
-    if (dyn_cast<ReturnStmt>(stmt) != nullptr || dyn_cast<BreakStmt>(stmt) != nullptr || dyn_cast<ContinueStmt>(stmt) != nullptr) {
+    if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
         if (onlyBeforeThisLoc.isValid()) {
             FullSourceLoc sourceLoc(stmt->getLocStart(), ci.getSourceManager());
             FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, ci.getSourceManager());
@@ -608,11 +608,11 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
             continue;
         }
 
-        if (dyn_cast<StringLiteral>(*it))
+        if (isa<StringLiteral>(*it))
             continue;
 
         auto arrayToPointerDecay = dyn_cast<ImplicitCastExpr>(*it);
-        if (!arrayToPointerDecay || !dyn_cast<StringLiteral>(*(arrayToPointerDecay->child_begin())))
+        if (!arrayToPointerDecay || !isa<StringLiteral>(*(arrayToPointerDecay->child_begin())))
             return false;
     }
 

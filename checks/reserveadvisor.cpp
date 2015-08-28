@@ -152,7 +152,7 @@ bool ReserveAdvisor::acceptsValueDecl(ValueDecl *valueDecl) const
 
     // 2. If we found at least one reserve call, lets not warn about it.
 
-    return valueDecl && dyn_cast<ParmVarDecl>(valueDecl) == nullptr && Utils::isValueDeclInFunctionContext(valueDecl) && !containerWasReserved(valueDecl);
+    return valueDecl && !isa<ParmVarDecl>(valueDecl) && Utils::isValueDeclInFunctionContext(valueDecl) && !containerWasReserved(valueDecl);
 }
 
 void ReserveAdvisor::printWarning(const SourceLocation &loc)
