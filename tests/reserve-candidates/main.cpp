@@ -116,3 +116,40 @@ void test_misc()
         v2 << i; // OK
     }
 }
+
+
+class B
+{
+public:
+    QVector<int> v;
+};
+
+
+class A
+{
+    A()
+    {
+        for (int i = 0; i < 10; ++i)
+            v << i; // Warning
+
+        for (int i = 0; i < 10; ++i)
+            b.v << i; // OK
+    }
+
+    ~A()
+    {
+        for (int i = 0; i < 10; ++i)
+            v << i; // Warning
+    }
+
+    void foo()
+    {
+        for (int i = 0; i < 10; ++i)
+            v << i; // OK
+    }
+
+public:
+    QVector<int> v;
+    B b;
+};
+

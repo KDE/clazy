@@ -106,6 +106,10 @@ namespace Utils {
     /// as struct Foo { QList<int> l; }
     bool isValueDeclInFunctionContext(clang::ValueDecl *);
 
+    // Returns true of this value decl is a member variable of a class or struct
+    // returns null if not
+    clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);
+
     /// Recursively goes through stmt's children and returns true if it finds a "break", "continue" or a "return" stmt
     /// All child statements that are on a source code line <
     /// If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before

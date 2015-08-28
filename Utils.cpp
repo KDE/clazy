@@ -718,3 +718,8 @@ bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::Pr
            l1.getLine()   == l2.getLine()   &&
             string(l1.getFilename()) == string(l2.getFilename());
 }
+
+CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
+{
+    return decl ? dyn_cast<CXXRecordDecl>(decl->getDeclContext()) : nullptr;
+}

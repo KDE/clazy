@@ -152,7 +152,25 @@ bool ReserveAdvisor::acceptsValueDecl(ValueDecl *valueDecl) const
 
     // 2. If we found at least one reserve call, lets not warn about it.
 
-    return valueDecl && !isa<ParmVarDecl>(valueDecl) && Utils::isValueDeclInFunctionContext(valueDecl) && !containerWasReserved(valueDecl);
+    if (!valueDecl || isa<ParmVarDecl>(valueDecl) || containerWasReserved(valueDecl))
+        return false;
+
+    if (Utils::isValueDeclInFunctionContext(valueDecl))
+        return true;
+
+    // Actually, lets allow for some member variables containers if they are being used inside CTORs or DTORs
+    // Those functions are only called once, so it's OK. For other member functions it's dangerous and needs
+    // human inspection, if such member function would be called in a loop we would be constantly calling reserve
+    // and in that case the built-in exponential growth is better.
+
+    if (!m_lastMethodDecl || !(isa<CXXConstructorDecl>(m_lastMethodDecl) || isa<CXXDestructorDecl>(m_lastMethodDecl)))
+        return false;
+
+    CXXRecordDecl *record = Utils::isMemberVariable(valueDecl);
+    if (record && m_lastMethodDecl->getParent() == record)
+        return true;
+
+    return false;
 }
 
 void ReserveAdvisor::printWarning(const SourceLocation &loc)
@@ -198,7 +216,7 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
             continue;
 
         // We only want containers defined outside of the loop we're examining
-        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
+        if (!Utils::isMemberVariable(valueDecl) && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
             return;
 
         if (isInComplexLoop(callExpr, valueDecl->getLocStart()))
@@ -219,7 +237,7 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
             continue;
 
         // We only want containers defined outside of the loop we're examining
-        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
+        if (!Utils::isMemberVariable(valueDecl) && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
             return;
 
         if (isInComplexLoop(callExpr, valueDecl->getLocStart()))
