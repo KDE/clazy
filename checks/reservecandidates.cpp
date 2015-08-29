@@ -192,8 +192,18 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     checkIfReserveStatement(stm);
 
     auto body = Utils::bodyFromLoop(stm);
+    if (!body)
+        return;
 
-    if (!body || isa<IfStmt>(body) || isa<DoStmt>(body) || isa<WhileStmt>(body))
+    auto macro = Lexer::getImmediateMacroName(stm->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
+    const bool isForeach = macro == "Q_FOREACH";
+
+    // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
+    if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body)))
+        return;
+
+    // TODO: Search in both branches of the if statement
+    if (isa<IfStmt>(body))
         return;
 
     vector<CXXMemberCallExpr*> callExprs;
