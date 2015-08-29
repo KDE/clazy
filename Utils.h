@@ -138,11 +138,11 @@ namespace Utils {
     template <typename T>
     void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
     {
-        if (stmt == nullptr)
+        if (!stmt)
             return;
 
         auto cexpr = llvm::dyn_cast<T>(stmt);
-        if (cexpr != nullptr)
+        if (cexpr)
             result_list.push_back(cexpr);
 
         auto it = stmt->child_begin();
@@ -179,7 +179,7 @@ namespace Utils {
     template <typename T>
     void getChilds(clang::Stmt *stm, std::vector<T*> &result_list)
     {
-        if (stm == nullptr)
+        if (!stm)
             return;
 
         auto expr = clang::dyn_cast<T>(stm);
@@ -188,9 +188,7 @@ namespace Utils {
             return;
         }
 
-        auto it = stm->child_begin();
-        auto e = stm->child_end();
-        for (; it != e; ++it) {
+        for (auto it = stm->child_begin(), e = stm->child_end(); it != e; ++it) {
             if (*it == nullptr) // Can happen
                 continue;
 
