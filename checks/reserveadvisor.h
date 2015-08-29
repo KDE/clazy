@@ -35,6 +35,7 @@
 namespace clang {
 class ValueDecl;
 class Expr;
+class CallExpr;
 }
 
 /**
@@ -59,6 +60,7 @@ private:
     bool expressionIsTooComplex(clang::Expr *) const;
     bool loopIsTooComplex(clang::Stmt *, bool &isLoop) const;
     bool isInComplexLoop(clang::Stmt *, clang::SourceLocation declLocation, bool isMemberVariable) const;
+    bool isReserveCandidate(clang::ValueDecl *valueDecl, clang::Stmt *loopBody, clang::CallExpr *callExpr) const;
 
     std::vector<clang::ValueDecl*> m_foundReserves;
 };

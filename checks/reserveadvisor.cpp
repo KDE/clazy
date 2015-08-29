@@ -178,6 +178,25 @@ void ReserveAdvisor::printWarning(const SourceLocation &loc)
     emitWarning(loc, "Reserve candidate");
 }
 
+bool ReserveAdvisor::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody, CallExpr *callExpr) const
+{
+    if (!acceptsValueDecl(valueDecl))
+        return false;
+
+    const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
+    // We only want containers defined outside of the loop we're examining
+    if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(loopBody->getLocStart(), valueDecl->getLocStart()))
+        return false;
+
+    if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
+        return false;
+
+    if (Utils::loopCanBeInterrupted(loopBody, m_ci, callExpr->getLocStart()))
+        return false;
+
+    return true;
+}
+
 void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
 {
     checkIfReserveStatement(stm);
@@ -212,21 +231,8 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
             continue;
 
         ValueDecl *valueDecl = Utils::valueDeclForMemberCall(callExpr);
-        if (!acceptsValueDecl(valueDecl))
-            continue;
-
-        const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
-        // We only want containers defined outside of the loop we're examining
-        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
-            return;
-
-        if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
-            return;
-
-        if (Utils::loopCanBeInterrupted(body, m_ci, callExpr->getLocStart()))
-            continue;
-
-        printWarning(callExpr->getLocStart());
+        if (isReserveCandidate(valueDecl, body, callExpr))
+            printWarning(callExpr->getLocStart());
     }
 
     for (CXXOperatorCallExpr *callExpr : operatorCalls) {
@@ -234,21 +240,8 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
             continue;
 
         ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(callExpr);
-        if (!acceptsValueDecl(valueDecl))
-            continue;
-
-        const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
-        // We only want containers defined outside of the loop we're examining
-        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
-            return;
-
-        if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
-            return;
-
-        if (Utils::loopCanBeInterrupted(body, m_ci, callExpr->getLocStart()))
-            continue;
-
-        printWarning(callExpr->getLocStart());
+        if (isReserveCandidate(valueDecl, body, callExpr))
+            printWarning(callExpr->getLocStart());
     }
 }
 
