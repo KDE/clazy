@@ -189,7 +189,8 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
 
 void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 {
-    checkIfReserveStatement(stm);
+    if (registerReserveStatement(stm))
+        return;
 
     auto body = Utils::bodyFromLoop(stm);
     if (!body)
@@ -234,27 +235,29 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 }
 
 // Catch existing reserves
-void ReserveCandidates::checkIfReserveStatement(Stmt *stm)
+bool ReserveCandidates::registerReserveStatement(Stmt *stm)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(stm);
     if (!memberCall)
-        return;
+        return false;
 
     CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
     if (!methodDecl || methodDecl->getNameAsString() != "reserve")
-        return;
+        return false;
 
     CXXRecordDecl *decl = methodDecl->getParent();
     if (!isAReserveClass(decl))
-        return;
+        return false;
 
     ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
     if (!valueDecl)
-        return;
+        return false;
 
     if (std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) == m_foundReserves.cend()) {
         m_foundReserves.push_back(valueDecl);
     }
+
+    return true;
 }
 
 bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const

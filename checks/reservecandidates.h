@@ -53,7 +53,7 @@ public:
     void VisitStmt(clang::Stmt *stm) override;
 
 private:
-    void checkIfReserveStatement(clang::Stmt *stmt);
+    bool registerReserveStatement(clang::Stmt *stmt);
     bool containerWasReserved(clang::ValueDecl*) const;
     bool acceptsValueDecl(clang::ValueDecl *valueDecl) const;
     void printWarning(const clang::SourceLocation &);
