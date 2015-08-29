@@ -50,14 +50,12 @@ ReserveAdvisor::ReserveAdvisor(const std::string &name)
 
 static bool isAReserveClass(CXXRecordDecl *recordDecl)
 {
-    if (recordDecl == nullptr)
+    if (!recordDecl)
         return false;
 
     static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet", "QVarLengthArray"};
 
-    auto it = classes.cbegin();
-    auto end = classes.cend();
-    for (; it != end; ++it) {
+    for (auto it = classes.cbegin(), end = classes.cend(); it != end; ++it) {
         if (Utils::descendsFrom(recordDecl, *it))
             return true;
     }
@@ -67,10 +65,10 @@ static bool isAReserveClass(CXXRecordDecl *recordDecl)
 
 static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)
 {
-    if (paramType == nullptr)
+    if (!paramType || !classDecl)
         return false;
 
-    if (paramType->getAsCXXRecordDecl() && paramType->getAsCXXRecordDecl() == classDecl)
+    if (paramType->getAsCXXRecordDecl() == classDecl)
         return true;
 
     const CXXRecordDecl *paramClassDecl = paramType->getPointeeCXXRecordDecl();
@@ -79,11 +77,11 @@ static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)
 
 static bool isCandidateMethod(CXXMethodDecl *methodDecl)
 {
-    if (methodDecl == nullptr)
+    if (!methodDecl)
         return false;
 
     CXXRecordDecl *classDecl = methodDecl->getParent();
-    if (classDecl == nullptr)
+    if (!classDecl)
         return false;
 
     auto methodName = methodDecl->getNameAsString();
@@ -104,26 +102,18 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
 
 static bool isCandidateOperator(CXXOperatorCallExpr *oper)
 {
-    if (oper == nullptr)
+    if (!oper)
         return false;
 
-    if (oper->getDirectCallee() == nullptr)
+    auto calleeDecl = dyn_cast_or_null<CXXMethodDecl>(oper->getDirectCallee());
+    if (!calleeDecl)
         return false;
 
-    std::string operatorName = "";
-
-    auto calleeDecl = dyn_cast<CXXMethodDecl>(oper->getDirectCallee());
-    if (calleeDecl == nullptr)
-        return false;
-
-    operatorName = calleeDecl->getNameAsString();
+    const std::string operatorName = calleeDecl->getNameAsString();
     if (operatorName != "operator<<" && operatorName != "operator+=")
         return false;
 
     CXXRecordDecl *recordDecl = calleeDecl->getParent();
-    if (recordDecl == nullptr)
-        return false;
-
     if (!isAReserveClass(recordDecl))
         return false;
 
@@ -138,7 +128,7 @@ static bool isCandidateOperator(CXXOperatorCallExpr *oper)
 
 bool ReserveAdvisor::containerWasReserved(clang::ValueDecl *valueDecl) const
 {
-    if (valueDecl == nullptr)
+    if (!valueDecl)
         return false;
 
     return std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) != m_foundReserves.cend();
@@ -215,7 +205,7 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
                        : whilestm ? whilestm->getBody()
                                   : dostm->getBody();
 
-    if (body == nullptr || isa<IfStmt>(body) || isa<DoStmt>(body) || isa<WhileStmt>(body))
+    if (!body || isa<IfStmt>(body) || isa<DoStmt>(body) || isa<WhileStmt>(body))
         return;
 
     vector<CXXMemberCallExpr*> callExprs;
@@ -249,19 +239,19 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
 void ReserveAdvisor::checkIfReserveStatement(Stmt *stm)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(stm);
-    if (memberCall == nullptr)
+    if (!memberCall)
         return;
 
     CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
-    if (methodDecl == nullptr || methodDecl->getNameAsString() != "reserve")
+    if (!methodDecl || methodDecl->getNameAsString() != "reserve")
         return;
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (decl == nullptr || !isAReserveClass(decl))
+    if (!isAReserveClass(decl))
         return;
 
     ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
-    if (valueDecl == nullptr)
+    if (!valueDecl)
         return;
 
     if (std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) == m_foundReserves.cend()) {
@@ -327,7 +317,7 @@ bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
 
 bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation, bool isMemberVariable) const
 {
-    if (s == nullptr || declLocation.isInvalid())
+    if (!s || declLocation.isInvalid())
         return false;
 
     int loopCount = 0;
