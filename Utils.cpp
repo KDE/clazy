@@ -723,3 +723,23 @@ CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
 {
     return decl ? dyn_cast<CXXRecordDecl>(decl->getDeclContext()) : nullptr;
 }
+
+Stmt *Utils::bodyFromLoop(Stmt *loop)
+{
+    if (!loop)
+        return nullptr;
+
+    if (auto forstm = dyn_cast<ForStmt>(loop)) {
+        return forstm->getBody();
+    }
+
+    if (auto whilestm = dyn_cast<WhileStmt>(loop)) {
+        return whilestm->getBody();
+    }
+
+    if (auto dostm = dyn_cast<DoStmt>(loop)) {
+        return dostm->getBody();
+    }
+
+    return nullptr;
+}

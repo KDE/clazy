@@ -223,6 +223,9 @@ namespace Utils {
     clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, uint depth);
 
     bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
+
+    // Returns the body of a for, while or do loop
+    clang::Stmt *bodyFromLoop(clang::Stmt*);
 }
 
 #endif

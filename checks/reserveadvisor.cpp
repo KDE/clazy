@@ -191,19 +191,7 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
 {
     checkIfReserveStatement(stm);
 
-    auto forstm = dyn_cast<ForStmt>(stm);
-    auto whilestm = dyn_cast<WhileStmt>(stm);
-    auto dostm = dyn_cast<DoStmt>(stm);
-
-    if (!forstm && !whilestm && !dostm)
-        return;
-
-    if (!forstm)
-        return;
-
-    auto body = forstm ? forstm->getBody()
-                       : whilestm ? whilestm->getBody()
-                                  : dostm->getBody();
+    auto body = Utils::bodyFromLoop(stm);
 
     if (!body || isa<IfStmt>(body) || isa<DoStmt>(body) || isa<WhileStmt>(body))
         return;
