@@ -25,8 +25,8 @@
   without including the source code for Qt in the source distribution.
 */
 
-#ifndef RESERVE_ADVISOR
-#define RESERVE_ADVISOR
+#ifndef CLAZY_RESERVE_CANDIDATES
+#define CLAZY_RESERVE_CANDIDATES
 
 #include "checkbase.h"
 
@@ -46,10 +46,10 @@ class CallExpr;
  *
  * There some chance of false-positives.
  */
-class ReserveAdvisor : public CheckBase
+class ReserveCandidates : public CheckBase
 {
 public:
-    ReserveAdvisor(const std::string &name);
+    ReserveCandidates(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

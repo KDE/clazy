@@ -25,7 +25,7 @@
   without including the source code for Qt in the source distribution.
 */
 
-#include "reserveadvisor.h"
+#include "reservecandidates.h"
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
@@ -43,7 +43,7 @@
 using namespace clang;
 using namespace std;
 
-ReserveAdvisor::ReserveAdvisor(const std::string &name)
+ReserveCandidates::ReserveCandidates(const std::string &name)
     : CheckBase(name)
 {
 }
@@ -126,7 +126,7 @@ static bool isCandidateOperator(CXXOperatorCallExpr *oper)
     return true;
 }
 
-bool ReserveAdvisor::containerWasReserved(clang::ValueDecl *valueDecl) const
+bool ReserveCandidates::containerWasReserved(clang::ValueDecl *valueDecl) const
 {
     if (!valueDecl)
         return false;
@@ -134,7 +134,7 @@ bool ReserveAdvisor::containerWasReserved(clang::ValueDecl *valueDecl) const
     return std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) != m_foundReserves.cend();
 }
 
-bool ReserveAdvisor::acceptsValueDecl(ValueDecl *valueDecl) const
+bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
 {
     // Rules:
     // 1. The container variable must have been defined inside a function. Too many false positives otherwise.
@@ -163,12 +163,12 @@ bool ReserveAdvisor::acceptsValueDecl(ValueDecl *valueDecl) const
     return false;
 }
 
-void ReserveAdvisor::printWarning(const SourceLocation &loc)
+void ReserveCandidates::printWarning(const SourceLocation &loc)
 {
     emitWarning(loc, "Reserve candidate");
 }
 
-bool ReserveAdvisor::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody, CallExpr *callExpr) const
+bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody, CallExpr *callExpr) const
 {
     if (!acceptsValueDecl(valueDecl))
         return false;
@@ -187,7 +187,7 @@ bool ReserveAdvisor::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody, Ca
     return true;
 }
 
-void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
+void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 {
     checkIfReserveStatement(stm);
 
@@ -224,7 +224,7 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
 }
 
 // Catch existing reserves
-void ReserveAdvisor::checkIfReserveStatement(Stmt *stm)
+void ReserveCandidates::checkIfReserveStatement(Stmt *stm)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(stm);
     if (!memberCall)
@@ -247,7 +247,7 @@ void ReserveAdvisor::checkIfReserveStatement(Stmt *stm)
     }
 }
 
-bool ReserveAdvisor::expressionIsTooComplex(clang::Expr *expr) const
+bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
 {
     if (!expr)
         return false;
@@ -279,7 +279,7 @@ bool ReserveAdvisor::expressionIsTooComplex(clang::Expr *expr) const
     return false;
 }
 
-bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
+bool ReserveCandidates::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
 {
     isLoop = false;
     auto forstm = dyn_cast<ForStmt>(stm);
@@ -303,7 +303,7 @@ bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
     return false;
 }
 
-bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation, bool isMemberVariable) const
+bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation, bool isMemberVariable) const
 {
     if (!s || declLocation.isInvalid())
         return false;
@@ -369,4 +369,4 @@ bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation
     return false;
 }
 
-REGISTER_CHECK("reserve-candidates", ReserveAdvisor)
+REGISTER_CHECK("reserve-candidates", ReserveCandidates)

@@ -111,7 +111,7 @@ add_clang_plugin(ClangLazy
                  checks/nonpodstatic.cpp
                  checks/nrvoenabler.cpp
                  checks/requiredresults.cpp
-                 checks/reserveadvisor.cpp
+                 checks/reservecandidates.cpp
                  checks/variantsanitizer.cpp
                  checks/virtualcallsfromctor.cpp
                  Lazy.cpp
