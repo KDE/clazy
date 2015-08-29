@@ -204,3 +204,11 @@ struct testCTOR
 
     QVector<int> m_v;
 };
+
+
+void moreStuff()
+{
+    QVector<int> v;
+    for (int i = 0; ; ++i)
+        v.push_back(1);
+}

@@ -298,7 +298,7 @@ bool ReserveCandidates::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
     auto forstm = dyn_cast<ForStmt>(stm);
     if (forstm) {
         isLoop = true;
-        return forstm->getInc() == nullptr || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
+        return forstm->getCond() == nullptr || forstm->getInc() == nullptr || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
     }
 
     auto whilestm = dyn_cast<WhileStmt>(stm);
