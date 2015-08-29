@@ -215,11 +215,12 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
         if (!acceptsValueDecl(valueDecl))
             continue;
 
+        const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
         // We only want containers defined outside of the loop we're examining
-        if (!Utils::isMemberVariable(valueDecl) && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
+        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
             return;
 
-        if (isInComplexLoop(callExpr, valueDecl->getLocStart()))
+        if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
             return;
 
         if (Utils::loopCanBeInterrupted(body, m_ci, callExpr->getLocStart()))
@@ -236,11 +237,12 @@ void ReserveAdvisor::VisitStmt(clang::Stmt *stm)
         if (!acceptsValueDecl(valueDecl))
             continue;
 
+        const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
         // We only want containers defined outside of the loop we're examining
-        if (!Utils::isMemberVariable(valueDecl) && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
+        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(body->getLocStart(), valueDecl->getLocStart()))
             return;
 
-        if (isInComplexLoop(callExpr, valueDecl->getLocStart()))
+        if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
             return;
 
         if (Utils::loopCanBeInterrupted(body, m_ci, callExpr->getLocStart()))
@@ -330,7 +332,7 @@ bool ReserveAdvisor::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
     return false;
 }
 
-bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation) const
+bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation, bool isMemberVariable) const
 {
     if (s == nullptr || declLocation.isInvalid())
         return false;
@@ -354,7 +356,7 @@ bool ReserveAdvisor::isInComplexLoop(clang::Stmt *s, SourceLocation declLocation
     Stmt *it = s;
     PresumedLoc lastForeachForStm;
     while (Stmt *parent = Utils::parent(m_parentMap, it)) {
-        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation)) {
+        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
             return false;
         }

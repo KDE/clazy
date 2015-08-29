@@ -58,7 +58,7 @@ private:
     void printWarning(const clang::SourceLocation &);
     bool expressionIsTooComplex(clang::Expr *) const;
     bool loopIsTooComplex(clang::Stmt *, bool &isLoop) const;
-    bool isInComplexLoop(clang::Stmt *, clang::SourceLocation declLocation) const;
+    bool isInComplexLoop(clang::Stmt *, clang::SourceLocation declLocation, bool isMemberVariable) const;
 
     std::vector<clang::ValueDecl*> m_foundReserves;
 };

@@ -176,4 +176,31 @@ void testNode()
 
     for (int i = 0; i < 10; i = node->next2)
         v << i; // OK
+
+
+    for (int i = 0; i < 10; ++i) {
+        v << 1;  // Warning
+        v2 << 1; // Warning
+    }
+
+    for (int i = 0; i < 10; i = node->next2) {
+        v.push_back(1);  // OK
+        v.push_back(1);  // OK
+        v2.push_back(1); // OK
+        v2.push_back(1); // OK
+    }
 }
+
+
+struct testCTOR
+{
+    testCTOR()
+    {
+        Node *node;
+        for (int i = 0; i < 10; i = node->next2) {
+            m_v << 1; // OK
+        }
+    }
+
+    QVector<int> m_v;
+};
