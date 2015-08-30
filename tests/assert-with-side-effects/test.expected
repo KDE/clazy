@@ -1,0 +1,2 @@
+main.cpp:29:14: warning: Code inside Q_ASSERT has side-effects but won't be built in release mode [-Wclazy-assert-with-side-effects]
+main.cpp:49:18: warning: Code inside Q_ASSERT has side-effects but won't be built in release mode [-Wclazy-assert-with-side-effects]
