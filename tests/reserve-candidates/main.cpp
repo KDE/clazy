@@ -214,7 +214,7 @@ void moreStuff()
 
     QHash<int,int> h;
     QHashIterator<int,int> it(h);
-    while (it.hasNext()) { // TODO: Should be warning
+    while (it.hasNext()) { // Warning
         v.push_back(1);
     }
 }
