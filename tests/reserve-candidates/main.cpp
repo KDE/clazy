@@ -1,5 +1,5 @@
 #include <QtCore/QVector>
-
+#include <QtCore/QHash>
 void local_vector()
 {
     QVector<int> vec;
@@ -211,4 +211,10 @@ void moreStuff()
     QVector<int> v;
     for (int i = 0; ; ++i)
         v.push_back(1);
+
+    QHash<int,int> h;
+    QHashIterator<int,int> it(h);
+    while (it.hasNext()) { // TODO: Should be warning
+        v.push_back(1);
+    }
 }
