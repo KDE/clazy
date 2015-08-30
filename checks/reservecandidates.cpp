@@ -260,6 +260,19 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
     return true;
 }
 
+static bool isJavaIterator(CXXMemberCallExpr *call)
+{
+    if (!call)
+        return false;
+
+    static const vector<string> names = {"QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
+                                         "QVectorIterator", "QDirIterator", "QLinkedListIterator",
+                                         "QStringListIterator"};
+    CXXRecordDecl *record = call->getRecordDecl();
+    string name = record == nullptr ? "" : record->getNameAsString();
+    return find(names.cbegin(), names.cend(), name) != names.cend();
+}
+
 bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
 {
     if (!expr)
@@ -269,6 +282,9 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
     Utils::getChilds2<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
+        if (isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr)))
+            continue;
+
         QualType qt = callExpr->getType();
         const Type *t = qt.getTypePtrOrNull();
         if (t && (!t->isIntegerType() || t->isBooleanType()))
