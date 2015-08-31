@@ -489,7 +489,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
             DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
             if (refExpr == nullptr)  {
 
-                if ((*arg)->children().begin() != (*arg)->children().end()) {
+                if ((*arg)->child_begin() != (*arg)->child_end()) {
                     refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
                     if (refExpr == nullptr)
                         continue;

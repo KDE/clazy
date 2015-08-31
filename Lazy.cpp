@@ -67,6 +67,10 @@ public:
         fd = -1;
         return InPlace ? filename : filename + "_fixed";
     }
+
+#if __clang_major__ == 3 && __clang_minor__ <= 6
+    bool InPlace;
+#endif
 };
 
 static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
