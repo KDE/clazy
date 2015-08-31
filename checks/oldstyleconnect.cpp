@@ -89,4 +89,4 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     emitWarning(s->getLocStart(), "Old Style Connect");
 }
 
-REGISTER_CHECK_WITH_FLAGS("old-style-connect", OldStyleConnect, HiddenFlag)
+REGISTER_CHECK_WITH_FLAGS("old-style-connect", OldStyleConnect, NoFlag)
