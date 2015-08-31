@@ -1,6 +1,10 @@
 cmake_minimum_required (VERSION 2.6)
 project (ClangLazy)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+find_package(Clang 3.6 MODULE REQUIRED)
+include_directories(${CLANG_INCLUDE_DIRS})
+
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
@@ -8,7 +12,7 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 add_definitions (-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions (-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
-set (LLVM_INSTALL_PREFIX /data/prefix/)
+set (LLVM_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -fno-common -Woverloaded-virtual -Wcast-qual -fno-strict-aliasing -pedantic -Wno-long-long -Wall -W -Wno-unused-parameter -Wwrite-strings -fno-exceptions -fno-rtti")
 set (CMAKE_MODULE_LINKER_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
