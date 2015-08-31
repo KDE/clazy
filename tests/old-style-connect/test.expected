@@ -1,0 +1,6 @@
+main.cpp:21:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+main.cpp:22:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+main.cpp:23:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+main.cpp:24:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+main.cpp:25:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+main.cpp:31:5: warning: Old Style Connect [-Wclazy-old-style-connect]

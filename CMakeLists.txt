@@ -107,6 +107,7 @@ add_clang_plugin(ClangLazy
                  checks/globalconstcharpointer.cpp
                  checks/inefficientqlist.cpp
                  checks/implicitcasts.cpp
+                 checks/oldstyleconnect.cpp
                  checks/qlistint.cpp
                  checks/qstringuneededheapallocations.cpp
                  checks/functionargsbyref.cpp
