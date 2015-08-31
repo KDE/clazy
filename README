@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 BUILD INSTRUCTIONS
 
-* Build and install llvm/clang trunk if your distro doesn't provide it (tested with clang 3.7)
+* Build and install clang >= 3.6 if your distro doesn't provide it
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   $ mkdir <some_directory>/build && cd <some_directory>/build
   $ ../configure --enable-optimized --prefix=<prefix> && make && make install
