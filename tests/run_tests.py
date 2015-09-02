@@ -104,6 +104,7 @@ if _dump_ast:
 
 all_checks = get_check_list()
 requested_checks = filter(lambda x: x not in switches, args)
+requested_checks = map(lambda x: x.strip("/"), args)
 
 for check in requested_checks:
     if check not in all_checks:
