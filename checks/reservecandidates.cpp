@@ -266,8 +266,7 @@ static bool isJavaIterator(CXXMemberCallExpr *call)
         return false;
 
     static const vector<string> names = {"QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
-                                         "QVectorIterator", "QDirIterator", "QLinkedListIterator",
-                                         "QStringListIterator"};
+                                         "QVectorIterator", "QLinkedListIterator", "QStringListIterator"};
     CXXRecordDecl *record = call->getRecordDecl();
     string name = record == nullptr ? "" : record->getNameAsString();
     return find(names.cbegin(), names.cend(), name) != names.cend();
