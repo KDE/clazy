@@ -9,7 +9,7 @@ QT_FLAGS = "-I /usr/include/qt/ -fPIC"
 #-------------------------------------------------------------------------------
 # Global variables
 
-_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -c " + QT_FLAGS + " -Xclang -plugin-arg-clang-lazy"
+_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -c " + QT_FLAGS
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _help_command = "clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c empty.cpp"
 _dump_ast = "--dump-ast" in sys.argv
@@ -53,7 +53,7 @@ def get_check_list():
 
 # Returns all files with .cpp_fixed extension. These were rewritten by clang.
 def get_fixed_files():
-    return filter(lambda entry: entry.endswith('.cpp_fixed'), os.listdir("."))
+    return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
 
 def print_differences(file1, file2):
     return run_command("diff -Naur test.expected test.output")
@@ -67,11 +67,18 @@ def extract_word(word, in_file, out_file):
     in_f.close()
     out_f.close()
 
+def cleanup_fixed_files():
+    fixed_files = get_fixed_files()
+    for fixed_file in fixed_files:
+        os.remove(fixed_file)
+
 def run_check_unit_tests(check):
-    cmd = _compiler_comand + " -Xclang " + check + " *.cpp "
+    cmd = _compiler_comand + " -Xclang -plugin-arg-clang-lazy -Xclang " + check + " *.cpp "
 
     if _verbose:
         print "Running: " + cmd
+
+    cleanup_fixed_files()
 
     if not run_command(cmd + " &> compile.output"):
         print "[FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
@@ -93,7 +100,7 @@ def run_check_unit_tests(check):
         if run_command(_compiler_comand + " " + fixed_file + " &> compile_fixed.output"):
             print "   [OK]   " + fixed_file
         else:
-            print "   [FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
+            print "   [FAIL] " + check + " (Failed to build test. Check " + check + "/compile_fixed.output for details)"
             print
             return False
 

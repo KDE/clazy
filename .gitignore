@@ -10,7 +10,7 @@ Makefile
 *.o
 ast_dump.output
 install_manifest.txt
-*_fixed
+*_fixed.cpp
 empty.o*
 compile_fixed.output
 *.o-*
