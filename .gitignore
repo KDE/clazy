@@ -12,3 +12,5 @@ ast_dump.output
 install_manifest.txt
 *_fixed
 empty.o*
+compile_fixed.output
+*.o-*

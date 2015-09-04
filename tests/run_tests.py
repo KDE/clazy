@@ -9,7 +9,7 @@ QT_FLAGS = "-I /usr/include/qt/ -fPIC"
 #-------------------------------------------------------------------------------
 # Global variables
 
-_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -c *.cpp " + QT_FLAGS + " -Xclang -plugin-arg-clang-lazy -Xclang "
+_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -c " + QT_FLAGS + " -Xclang -plugin-arg-clang-lazy"
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _help_command = "clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c empty.cpp"
 _dump_ast = "--dump-ast" in sys.argv
@@ -51,6 +51,10 @@ def files_are_equal(file1, file2):
 def get_check_list():
     return filter(lambda entry: os.path.isdir(entry), os.listdir("."))
 
+# Returns all files with .cpp_fixed extension. These were rewritten by clang.
+def get_fixed_files():
+    return filter(lambda entry: entry.endswith('.cpp_fixed'), os.listdir("."))
+
 def print_differences(file1, file2):
     return run_command("diff -Naur test.expected test.output")
 
@@ -64,7 +68,7 @@ def extract_word(word, in_file, out_file):
     out_f.close()
 
 def run_check_unit_tests(check):
-    cmd = _compiler_comand + check
+    cmd = _compiler_comand + " -Xclang " + check + " *.cpp "
 
     if _verbose:
         print "Running: " + cmd
@@ -81,6 +85,16 @@ def run_check_unit_tests(check):
     else:
         print "[FAIL] " + check
         if not print_differences("test.expected", "test.output"):
+            return False
+
+    # If fixits were applied, test they were correctly applied
+    fixed_files = get_fixed_files()
+    for fixed_file in fixed_files:
+        if run_command(_compiler_comand + " " + fixed_file + " &> compile_fixed.output"):
+            print "   [OK]   " + fixed_file
+        else:
+            print "   [FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
+            print
             return False
 
     return True
