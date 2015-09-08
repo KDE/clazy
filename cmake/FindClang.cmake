@@ -45,11 +45,6 @@ find_package(LLVM CONFIG ${LLVM_FIND_TYPE} QUIET)
 
 set(Clang_FOUND FALSE)
 
-if(NOT TARGET llvm-config)
-  message(STATUS "LLVM was not found -> cannot find clang")
-  return()
-endif()
-
 set(CLANG_LIBRARY_DIR ${LLVM_LIBRARY_DIRS})
 set(CLANG_INCLUDE_DIR ${LLVM_INCLUDE_DIRS})
 
