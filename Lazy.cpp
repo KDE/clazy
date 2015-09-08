@@ -68,7 +68,7 @@ public:
         return InPlace ? filename : filename + "_fixed";
     }
 
-#if __clang_major__ == 3 && __clang_minor__ <= 6
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 6
     bool InPlace;
 #endif
 };
