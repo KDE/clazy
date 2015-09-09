@@ -1,11 +1,36 @@
 #!/usr/bin/python2
 
-import sys, os
+import sys, os, subprocess
 
 #-------------------------------------------------------------------------------
-# Change here, if needed
+# utility functions #1
 
-QT_FLAGS = "-I /usr/include/qt/ -fPIC"
+def get_command_output(cmd):
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    if p.wait() != 0:
+        return ""
+    return p.communicate()[0];
+
+#-------------------------------------------------------------------------------
+# Detect Qt include path
+# We try in order:
+#   qmake
+#   QT_SELECT=5 qmake
+#   qmake-qt5
+QMAKE_HEADERS = ""
+qmakes = ["qmake", "QT_SELECT=5 qmake", "qmake-qt5"]
+for qmake in qmakes:
+    QMAKE_VERSION = get_command_output(qmake + " -query QT_VERSION")
+    if QMAKE_VERSION.startswith("5."):
+        QMAKE_HEADERS = get_command_output(qmake + " -query QT_INSTALL_HEADERS").strip()
+        break
+
+if not QMAKE_HEADERS:
+    # Change here if can't find with qmake
+    QMAKE_HEADERS = "/usr/include/qt/"
+
+QT_FLAGS = "-I " + QMAKE_HEADERS + " -fPIC"
+
 #-------------------------------------------------------------------------------
 # Global variables
 
@@ -17,7 +42,7 @@ _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
 
 #-------------------------------------------------------------------------------
-# utility functions
+# utility functions #2
 
 def run_command(cmd):
     if os.system(cmd) != 0:
@@ -80,7 +105,7 @@ def run_check_unit_tests(check):
 
     cleanup_fixed_files()
 
-    if not run_command(cmd + " &> compile.output"):
+    if not run_command(cmd + " > compile.output 2> compile.output"):
         print "[FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
         print
         return False
@@ -97,7 +122,7 @@ def run_check_unit_tests(check):
     # If fixits were applied, test they were correctly applied
     fixed_files = get_fixed_files()
     for fixed_file in fixed_files:
-        if run_command(_compiler_comand + " " + fixed_file + " &> compile_fixed.output"):
+        if run_command(_compiler_comand + " " + fixed_file + " > compile.output 2> compile.output"):
             print "   [OK]   " + fixed_file
         else:
             print "   [FAIL] " + check + " (Failed to build test. Check " + check + "/compile_fixed.output for details)"
