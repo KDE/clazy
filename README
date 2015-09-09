@@ -28,9 +28,11 @@ Edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++
 Then run qmake -spec linux-clang
 
 
-Finally, you need to choose which checks to enable. This is done through CLAZY_CHECKS env variable.
-For example:
-export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor"
+Finally, you need to choose which checks to enable.
+This is done through CLAZY_CHECKS env variable, for example:
+    export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor"
+or to enable all checks
+    export CLAZY_CHECKS=all_checks
 
 Instead of using the env variable, you can also pass an argument to the compiler:
 -Xclang -plugin-arg-clang-lazy -Xclang bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor
@@ -48,6 +50,15 @@ non-pod-global-static
 reserve-candidates
 variant-sanitizer
 virtual-call-ctor
+nrvo
+missing-typeinfo
+implicit-casts
+unused-result
+old-style-connect
+detaching-temporary
+qlist-of-int
+assert-with-side-effects
+
 --------------------------------------------------------------------------------
 ENABLING FIXITS
 
