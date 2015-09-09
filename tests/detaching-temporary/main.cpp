@@ -1,5 +1,6 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QMap>
 #include <QtCore/QFile>
 
