@@ -50,14 +50,18 @@ non-pod-global-static
 reserve-candidates
 variant-sanitizer
 virtual-call-ctor
-nrvo
 missing-typeinfo
 implicit-casts
-unused-result
 old-style-connect
 detaching-temporary
-qlist-of-int
 assert-with-side-effects
+
+Disabled at the moment:
+nrvo
+unused-result
+qlist-of-int
+duplicate-expensive-statement
+
 
 --------------------------------------------------------------------------------
 ENABLING FIXITS
