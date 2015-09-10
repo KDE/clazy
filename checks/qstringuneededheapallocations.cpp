@@ -66,8 +66,8 @@ void QStringUneededHeapAllocations::VisitStmt(clang::Stmt *stm)
 
 static bool betterTakeQLatin1String(CXXMethodDecl *method)
 {
-    // contains() is slower, don't include it
-    static const vector<string> methods = {"append", "compare", "endsWith", "startsWith", "indexOf", "insert", "lastIndexOf", "prepend", "replace" };
+    // indexOf() and contains() are slower, don't include it. They internally call qt_from_latin1() making them 30% slower than QStringLiteral
+    static const vector<string> methods = {"append", "compare", "endsWith", "startsWith", "insert", "lastIndexOf", "prepend", "replace" };
 
     if (!isOfClass(method, "QString"))
         return false;
