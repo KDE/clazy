@@ -170,6 +170,23 @@ namespace Utils {
     // etc.
     clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, uint depth = 1);
 
+    // Returns the first parent of type T, with max depth depth
+    template <typename T>
+    T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, uint depth = -1)
+    {
+        if (!s)
+            return nullptr;
+
+        if (auto t = clang::dyn_cast<T>(s))
+            return t;
+
+        if (depth == 0)
+            return nullptr;
+
+        --depth;
+        return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
+    }
+
     bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
     bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
 
