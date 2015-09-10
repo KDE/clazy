@@ -55,10 +55,10 @@ void test()
     QString s14 = QString(""); // Warning
     QString s15 = ""; // Warning
     s15.startsWith(QLatin1String("ff")); // OK
+    s15.startsWith("ff"); // Warning, should be QLatin1String
+    s15.contains("ff"); // Warning, should be QStringLiteral
+    s15.indexOf("ff"); // Warning, should be QStringLiteral
 }
-
-
-
 
 
 
