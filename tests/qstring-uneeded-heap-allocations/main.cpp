@@ -54,8 +54,8 @@ void test()
     QString s13 = QString("foo"); // Warning
     QString s14 = QString(""); // Warning
     QString s15 = ""; // Warning
+    s15.startsWith(QLatin1String("ff")); // OK
 }
-
 
 
 
