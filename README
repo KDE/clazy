@@ -56,13 +56,6 @@ old-style-connect
 detaching-temporary
 assert-with-side-effects
 
-Disabled at the moment:
-nrvo
-unused-result
-qlist-of-int
-duplicate-expensive-statement
-
-
 --------------------------------------------------------------------------------
 ENABLING FIXITS
 
