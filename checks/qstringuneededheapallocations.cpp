@@ -220,7 +220,21 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                             queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations);
                     } else {
                         //llvm::errs() << "case2\n";
-                        fixits = fixItRawLiteral(lt, "QStringLiteral");
+
+                        auto parentMemberCallExpr = Utils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
+
+                        string replacement = "QStringLiteral";
+                        if (parentMemberCallExpr) {
+                            FunctionDecl *fDecl = parentMemberCallExpr->getDirectCallee();
+                            if (fDecl) {
+                                CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(fDecl);
+                                if (method && betterTakeQLatin1String(method)) {
+                                    replacement = "QLatin1String";
+                                }
+                            }
+                        }
+
+                        fixits = fixItRawLiteral(lt, replacement);
                     }
                 }
             }

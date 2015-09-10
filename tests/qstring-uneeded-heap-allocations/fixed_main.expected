@@ -54,11 +54,11 @@ void test()
     QString s13 = QStringLiteral("foo"); // Warning
     QString s14 = QLatin1String(""); // Warning
     QString s15 = QLatin1String(""); // Warning
+    s15.startsWith(QLatin1String("ff")); // OK
+    s15.startsWith(QLatin1String("ff")); // Warning, should be QLatin1String
+    s15.contains(QStringLiteral("ff")); // Warning, should be QStringLiteral
+    s15.indexOf(QStringLiteral("ff")); // Warning, should be QStringLiteral
 }
-
-
-
-
 
 
 
@@ -111,4 +111,11 @@ void exceptionTest() // Just to test a crash
     }
 }
 
+QStringList returns_stringlist(QString) { return {}; }
 
+void test_foreach()
+{
+    foreach (const QString &s, returns_stringlist(QLatin1String("bar"))) // Warning
+    {
+    }
+}
