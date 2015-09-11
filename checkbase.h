@@ -67,7 +67,7 @@ protected:
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
-    void queueManualFixitWarning(clang::SourceLocation loc, int fixitType);
+    void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
 
     clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
@@ -82,7 +82,7 @@ protected:
     clang::Decl *m_lastDecl;
 private:
     std::vector<uint> m_emittedWarningsInMacro;
-    std::vector<clang::SourceLocation> m_queuedManualInterventionWarnings;
+    std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits;
 };
 

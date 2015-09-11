@@ -135,7 +135,11 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
     reallyEmitWarning(loc, error, fixits);
 
     for (auto l : m_queuedManualInterventionWarnings) {
-        reallyEmitWarning(l, string("FixIt failed, requires manual intervention") + tag, {});
+        string msg = string("FixIt failed, requires manual intervention: ");
+        if (!l.second.empty())
+            msg += " " + l.second;
+
+        reallyEmitWarning(l.first, msg + tag, {});
     }
 
     m_queuedManualInterventionWarnings.clear();
@@ -152,10 +156,10 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
     }
 }
 
-void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, int fixitType)
+void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const string &message)
 {
     if (isFixitEnabled(fixitType))
-        m_queuedManualInterventionWarnings.push_back(loc);
+        m_queuedManualInterventionWarnings.push_back({loc, message});
 }
 
 bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
