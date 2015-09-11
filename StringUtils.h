@@ -120,6 +120,22 @@ inline void printParents(clang::ParentMap *map, clang::Stmt *s)
     }
 }
 
+inline std::string accessString(clang::AccessSpecifier s)
+{
+    switch (s)
+    {
+    case clang::AccessSpecifier::AS_public:
+        return "public";
+    case clang::AccessSpecifier::AS_private:
+        return "private";
+    case clang::AccessSpecifier::AS_protected:
+        return "protected";
+    case clang::AccessSpecifier::AS_none:
+        return {};
+    }
+    return {};
+}
+
 }
 
 #endif
