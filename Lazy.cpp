@@ -65,7 +65,7 @@ public:
     std::string RewriteFilename(const std::string &filename, int &fd) override
     {
         fd = -1;
-        return InPlace ? filename : filename + "_fixed";
+        return InPlace ? filename : filename + "_fixed.cpp";
     }
 
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 6
