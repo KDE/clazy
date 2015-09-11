@@ -125,7 +125,7 @@ def run_check_unit_tests(check):
         if run_command(_compiler_comand + " " + fixed_file + " > compile_fixed.output 2> compile_fixed.output"):
             print "   [OK]   " + fixed_file
         else:
-            print "   [FAIL] " + check + " (Failed to build test. Check " + check + "/compile_fixed.output for details)"
+            print "   [FAIL] " + fixed_file + " (Failed to build test. Check " + check + "/compile_fixed.output for details)"
             print
             return False
 
