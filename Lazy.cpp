@@ -185,8 +185,8 @@ protected:
             return false;
         }
 
-        auto it = std::find(args.cbegin(), args.cend(), "no-inplace-fixits");
-        if (it != args.cend()) {
+        auto it = std::find(args.begin(), args.end(), "no-inplace-fixits");
+        if (it != args.end()) {
             m_inplaceFixits = false; // Unit-tests don't use inplace fixits
             args.erase(it, it + 1);
         }
