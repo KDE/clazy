@@ -52,6 +52,7 @@ namespace clang {
     class ExprWithCleanups;
     class ValueDecl;
     class ConditionalOperator;
+    class CXXMethodDecl;
 }
 
 namespace Utils {
@@ -241,6 +242,30 @@ namespace Utils {
 
     // Returns the body of a for, while or do loop
     clang::Stmt *bodyFromLoop(clang::Stmt*);
+
+    // Returns the list of methods with name methodName that the class/struct record contains
+    std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record, const std::string &methodName);
+
+    // Returns the most derived class. (CXXMemberCallExpr::getRecordDecl() return the first base class with the method)
+    // The returned callee is the name of the variable on which the member call was made:
+    // o1->foo() => "o1"
+    // foo() => "this"
+    const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call, std::string &implicitCallee);
+
+
+    // The list of namespaces, classes, inner classes. The inner ones are at the beginning of the list
+    std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
+
+    // Returns fully/smi-fully qualified name for a method
+    // but doesn't overqualify with namespaces which we're already in.
+    // if currentScope == nullptr will return a fully qualified name
+    std::string getMostNeededQualifiedName(clang::CXXMethodDecl *method, clang::DeclContext *currentScope);
+
+    // Returns true, if in a specific context, we can take the address of a method
+    // for example doing &ClassName::SomePrivateMember might not be possible if the member is private
+    // but might be possible if we're in a context which is friend of ClassName
+    // Or it might be protected but context is a derived class
+    bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context);
 }
 
 #endif

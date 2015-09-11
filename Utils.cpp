@@ -31,6 +31,7 @@
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
+#include <clang/AST/DeclFriend.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Frontend/CompilerInstance.h>
@@ -742,4 +743,202 @@ Stmt *Utils::bodyFromLoop(Stmt *loop)
     }
 
     return nullptr;
+}
+
+std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *record, const string &methodName)
+{
+    if (!record)
+        return {};
+
+    vector<CXXMethodDecl *> methods;
+
+    for (auto it = record->method_begin(), e = record->method_end(); it != e; ++it) {
+        CXXMethodDecl *method = *it;
+        if (method->getNameAsString() == methodName)
+            methods.push_back(method);
+    }
+
+    // Also include the base classes
+    for (auto it = record->bases_begin(), e = record->bases_end(); it != e; ++it) {
+
+        const Type *t = (*it).getType().getTypePtrOrNull();
+        if (t) {
+            auto baseMethods = methodsFromString(t->getAsCXXRecordDecl(), methodName);
+            if (!baseMethods.empty())
+                std::copy(baseMethods.begin(), baseMethods.end(), std::back_inserter(methods));
+        }
+    }
+
+    return methods;
+}
+
+const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, string &implicitCallee)
+{
+    implicitCallee = {};
+    Expr *implicitArgument= call->getImplicitObjectArgument();
+    if (!implicitArgument)
+        return nullptr;
+
+    vector<CXXThisExpr*> thisExprs;
+    Utils::getChilds2<CXXThisExpr>(implicitArgument, thisExprs, 3);
+    if (thisExprs.size() == 1) {
+        implicitCallee = "this";
+        return thisExprs[0]->getType()->getPointeeCXXRecordDecl();
+    }
+
+    vector<DeclRefExpr*> declRefs;
+    Utils::getChilds2<DeclRefExpr>(implicitArgument, declRefs);
+    if (declRefs.size() == 1) {
+        auto declRef = declRefs[0];
+        if (declRef && declRef->getDecl()) {
+            implicitCallee = declRef->getDecl()->getNameAsString();
+            QualType qt = declRef->getDecl()->getType();
+            return qt->getPointeeCXXRecordDecl();
+        }
+    }
+
+    return nullptr;
+}
+
+static string nameForContext(DeclContext *context)
+{
+    if (auto  *ns = dyn_cast<NamespaceDecl>(context)) {
+        return ns->getNameAsString();
+    } else if (auto rec = dyn_cast<CXXRecordDecl>(context)) {
+        return rec->getNameAsString();
+    } else if (auto *method = dyn_cast<CXXMethodDecl>(context)) {
+        return method->getNameAsString();
+    } else if (dyn_cast<TranslationUnitDecl>(context)){
+        return {};
+    } else {
+        llvm::errs() << "Unhandled kind: " << context->getDeclKindName() << "\n";
+    }
+
+    return {};
+}
+
+string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *currentScope)
+{
+    if (!currentScope)
+        return method->getQualifiedNameAsString();
+
+    // All namespaces, classes, inner class qualifications
+    auto methodContexts = contextsForDecl(method->getDeclContext());
+
+    // Visible scopes in current scope
+    auto visibleContexts = contextsForDecl(currentScope);
+
+    // Collect using directives
+    vector<UsingDirectiveDecl*> usings;
+    for (DeclContext *context : visibleContexts) {
+        auto range = context->using_directives();
+        for (auto it = range.begin(), end = range.end(); it != end; ++it) {
+            usings.push_back(*it);
+        }
+    }
+
+    for (UsingDirectiveDecl *u : usings) {
+        NamespaceDecl *ns = u->getNominatedNamespace();
+        if (ns) {
+            visibleContexts.push_back(ns->getOriginalNamespace());
+        }
+    }
+
+    for (DeclContext *context : visibleContexts) {
+
+        if (context != method->getParent()) { // Don't remove the most immediate
+            auto it = find_if(methodContexts.cbegin(), methodContexts.cend(), [context](DeclContext *c) {
+                    if (c == context)
+                        return true;
+                    auto ns1 = dyn_cast<NamespaceDecl>(c);
+                    auto ns2 = dyn_cast<NamespaceDecl>(context);
+                    return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
+
+                });
+            if (it != methodContexts.cend()) {
+                methodContexts.erase(it, it + 1);
+            }
+        }
+    }
+
+    string neededContexts;
+    for (DeclContext *context : methodContexts) {
+        neededContexts = nameForContext(context) + "::" + neededContexts;
+    }
+
+    const string result = neededContexts + method->getNameAsString();
+    return result;
+}
+
+std::vector<DeclContext *> Utils::contextsForDecl(DeclContext *currentScope)
+{
+    std::vector<DeclContext *> decls;
+    while (currentScope) {
+        decls.push_back(currentScope);
+        currentScope = currentScope->getParent();
+    }
+
+    return decls;
+}
+
+bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context)
+{
+    if (!method || !method->getParent())
+        return false;
+
+    if (method->getAccess() == clang::AccessSpecifier::AS_public)
+        return true;
+
+    if (!context)
+        return false;
+
+    CXXRecordDecl *contextRecord = nullptr;
+
+    do {
+        contextRecord = dyn_cast<CXXRecordDecl>(context);
+        context = context->getParent();
+    } while (contextRecord == nullptr && context);
+
+    if (!contextRecord) // If we're not inside a class method we can't take the address of a private/protected method
+        return false;
+
+    CXXRecordDecl *record = method->getParent();
+    if (record == contextRecord)
+        return true;
+
+    // We're inside a method belonging to a class (contextRecord).
+    // Is contextRecord a friend of record ? Lets check:
+
+    for (auto it = record->friend_begin(), e = record->friend_end(); it != e; ++it) {
+        FriendDecl *fr = *it;
+        TypeSourceInfo *si = fr->getFriendType();
+        if (si) {
+            const Type *t = si->getType().getTypePtrOrNull();
+            CXXRecordDecl *friendClass = t ? t->getAsCXXRecordDecl() : nullptr;
+            if (friendClass == contextRecord) {
+                return true;
+            }
+        }
+    }
+
+    // There's still hope, lets see if the context is nested inside the class we're trying to access
+    // Inner classes can access private members of outter classes.
+    DeclContext *it = contextRecord;
+    do {
+        it = it->getParent();
+        if (it == record)
+            return true;
+    } while (it);
+
+    if (method->getAccess() == clang::AccessSpecifier::AS_private)
+        return false;
+
+    if (method->getAccess() != clang::AccessSpecifier::AS_protected) // shouldnt happen, must be protected at this point.
+        return false;
+
+    // For protected there's still hope, since record might be a derived or base class
+    if (isChildOf(record, contextRecord) || isChildOf(contextRecord, record))
+        return true;
+
+    return false;
 }
