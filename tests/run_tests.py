@@ -124,10 +124,11 @@ def run_check_unit_tests(check):
     # If fixits were applied, test they were correctly applied
     fixed_files = get_fixed_files()
     for fixed_file in fixed_files:
-        if run_command(_compiler_comand + " " + fixed_file + " > compile_fixed.output 2> compile_fixed.output"):
+        output_file = fixed_file + ".compile_output"
+        if run_command(_compiler_comand + " " + fixed_file + " > " + output_file + " 2> " + output_file):
             print "   [OK]   " + fixed_file
         else:
-            print "   [FAIL] " + fixed_file + " (Failed to build test. Check " + check + "/compile_fixed.output for details)"
+            print "   [FAIL] " + fixed_file + " (Failed to build test. Check " + check + "/" + output_file + " for details)"
             print
             result = False
 
