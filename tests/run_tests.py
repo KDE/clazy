@@ -81,7 +81,7 @@ def get_fixed_files():
     return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
 
 def print_differences(file1, file2):
-    return run_command("diff -Naur test.expected test.output")
+    return run_command("diff -Naur {} {}".format(file1, file2))
 
 def extract_word(word, in_file, out_file):
     in_f = open(in_file, 'r')
