@@ -27,3 +27,4 @@ main.cpp:98:11: warning: QString::fromLatin1() being passed a literal [-Wclazy-q
 main.cpp:100:16: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
 main.cpp:101:36: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
 main.cpp:118:51: warning: QString(QLatin1String) being called [-Wclazy-qstring-uneeded-heap-allocations]
+main.cpp:118:51: warning: FixIt failed, requires manual intervention:  [-Wclazy-qstring-uneeded-heap-allocations]

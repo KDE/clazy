@@ -194,6 +194,11 @@ bool CheckManager::fixitsEnabled() const
     return !m_requestedFixitName.empty() || m_enableAllFixits;
 }
 
+void CheckManager::enableAllFixIts()
+{
+    m_enableAllFixits = true;
+}
+
 bool CheckManager::allFixitsEnabled() const
 {
     return m_enableAllFixits;

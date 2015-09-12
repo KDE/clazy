@@ -168,6 +168,17 @@ public:
 
 //------------------------------------------------------------------------------
 
+static bool parseArgument(const string &arg, vector<string> &args)
+{
+    auto it = std::find(args.begin(), args.end(), arg);
+    if (it != args.end()) {
+        args.erase(it, it + 1);
+        return true;
+    }
+
+    return false;
+}
+
 class LazyASTAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
@@ -179,16 +190,20 @@ protected:
     {
         std::vector<std::string> args = args_;
 
-        if (std::find(args.cbegin(), args.cend(), "help") != args.cend()) {
+        if (parseArgument("help", args)) {
             llvm::errs() << "Help:\n";
             PrintHelp(llvm::errs());
             return false;
         }
 
-        auto it = std::find(args.begin(), args.end(), "no-inplace-fixits");
-        if (it != args.end()) {
-            m_inplaceFixits = false; // Unit-tests don't use inplace fixits
-            args.erase(it, it + 1);
+        if (parseArgument("no-inplace-fixits", args)) {
+            // Unit-tests don't use inplace fixits
+            m_inplaceFixits = false;
+        }
+
+        if (parseArgument("enable-all-fixits", args)) {
+            // This is useful for unit-tests, where we also want to run fixits
+            CheckManager::instance()->enableAllFixIts();
         }
 
         if (args.empty()) {

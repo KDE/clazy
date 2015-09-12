@@ -68,6 +68,7 @@ public:
     void createChecks(std::vector<std::string> requestedChecks);
     const CheckBase::List &createdChecks() const;
     bool fixitsEnabled() const;
+    void enableAllFixIts();
 
     // Public for convinence
     clang::CompilerInstance *m_ci;
