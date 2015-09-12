@@ -93,3 +93,13 @@ void func(QString text)
 {
     QTextStream a(&text); // OK, by-pointer to a CTOR
 }
+
+struct StringConstPtr
+{
+    StringConstPtr(const QString *s) {}
+};
+
+void func2(QString text)
+{
+    StringConstPtr s(&text); // Warning, it's a const ptr
+}
