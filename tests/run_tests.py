@@ -135,7 +135,7 @@ def run_check_unit_tests(check):
     return result
 
 def dump_ast(check):
-    run_command(_dump_ast_command + " > ast_dump.output")
+    run_command(_dump_ast_command + " > dump.ast")
 #-------------------------------------------------------------------------------
 # main
 
