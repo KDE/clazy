@@ -105,12 +105,12 @@ def run_check_unit_tests(check):
 
     cleanup_fixed_files()
 
-    if not run_command(cmd + " > compile.output 2> compile.output"):
-        print "[FAIL] " + check + " (Failed to build test. Check " + check + "/compile.output for details)"
+    if not run_command(cmd + " > all_files.compile_output 2> all_files.compile_output"):
+        print "[FAIL] " + check + " (Failed to build test. Check " + check + "/all_files.compile_output for details)"
         print
         return False
 
-    extract_word("warning:", "compile.output", "test.output")
+    extract_word("warning:", "all_files.compile_output", "test.output")
 
     result = True
 
