@@ -112,12 +112,14 @@ def run_check_unit_tests(check):
 
     extract_word("warning:", "compile.output", "test.output")
 
+    result = True
+
     if files_are_equal("test.expected", "test.output"):
         print "[OK]   " + check
     else:
         print "[FAIL] " + check
         if not print_differences("test.expected", "test.output"):
-            return False
+            result = False
 
     # If fixits were applied, test they were correctly applied
     fixed_files = get_fixed_files()
@@ -127,9 +129,9 @@ def run_check_unit_tests(check):
         else:
             print "   [FAIL] " + fixed_file + " (Failed to build test. Check " + check + "/compile_fixed.output for details)"
             print
-            return False
+            result = False
 
-    return True
+    return result
 
 def dump_ast(check):
     run_command(_dump_ast_command + " > ast_dump.output")
