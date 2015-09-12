@@ -474,6 +474,47 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
     return false;
 }
 
+template<class T>
+static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
+{
+    uint param = 0;
+    for (auto arg = expr->arg_begin(), arg_end = expr->arg_end(); arg != arg_end; ++arg) {
+        DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
+        if (refExpr == nullptr)  {
+
+            if ((*arg)->child_begin() != (*arg)->child_end()) {
+                refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
+                if (refExpr == nullptr)
+                    continue;
+            } else {
+                continue;
+            }
+        }
+
+        if (refExpr->getDecl() != varDecl) // It's our variable ?
+            continue;
+
+        // It is, lets see if the callee takes our variable by const-ref
+        if (param >= fDecl->param_size())
+            continue;
+
+        ParmVarDecl *paramDecl = fDecl->getParamDecl(param);
+        if (paramDecl == nullptr)
+            continue;
+
+        QualType qt = paramDecl->getType();
+        const Type *t = qt.getTypePtrOrNull();
+        if (t == nullptr)
+            continue;
+
+        if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified())
+            return true; // function receives non-const ref, so our foreach variable cant be const-ref
+
+        ++param;
+    }
+
+    return false;
+}
 
 bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
 {
@@ -485,41 +526,18 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
         if (fDecl == nullptr)
             continue;
 
-        uint param = 0;
-        for (auto arg = callexpr->arg_begin(), arg_end = callexpr->arg_end(); arg != arg_end; ++arg) {
-            DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
-            if (refExpr == nullptr)  {
+        if (argByRef(callexpr, fDecl, varDecl))
+            return true;
+    }
 
-                if ((*arg)->child_begin() != (*arg)->child_end()) {
-                    refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
-                    if (refExpr == nullptr)
-                        continue;
-                } else {
-                    continue;
-                }
-            }
+    std::vector<CXXConstructExpr*> constructExprs;
+    Utils::getChilds2<CXXConstructExpr>(body, constructExprs);
+    for (auto it = constructExprs.cbegin(), end = constructExprs.cend(); it != end; ++it) {
+        CXXConstructExpr *constructExpr = *it;
+        FunctionDecl *fDecl = constructExpr->getConstructor();
 
-            if (refExpr->getDecl() != varDecl) // It's our variable ?
-                continue;
-
-            // It is, lets see if the callee takes our variable by const-ref
-            if (param >= fDecl->param_size())
-                continue;
-
-            ParmVarDecl *paramDecl = fDecl->getParamDecl(param);
-            if (paramDecl == nullptr)
-                continue;
-
-            QualType qt = paramDecl->getType();
-            const Type *t = qt.getTypePtrOrNull();
-            if (t == nullptr)
-                continue;
-
-            if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified())
-                return true; // function receives non-const ref, so our foreach variable cant be const-ref
-
-            ++param;
-        }
+        if (argByRef(constructExpr, fDecl, varDecl))
+            return true;
     }
 
     return false;
