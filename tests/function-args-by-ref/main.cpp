@@ -88,3 +88,8 @@ int foo12(NonTrivial nt) // Test #12: No warning
     nt = NonTrivial();
     return 1;
 }
+
+void func(QString text)
+{
+    QTextStream a(&text); // OK, by-pointer to a CTOR
+}
