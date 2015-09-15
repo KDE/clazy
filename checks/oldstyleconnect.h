@@ -30,6 +30,11 @@
 
 #include "checkbase.h"
 
+namespace clang {
+class CallExpr;
+class CXXMemberCallExpr;
+}
+
 /**
  * Finds usages odl style Qt connect statements.
  */
@@ -38,6 +43,11 @@ class OldStyleConnect : public CheckBase
 public:
     OldStyleConnect(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
+private:
+    std::string signalOrSlotNameFromMacro(clang::SourceLocation macroLoc);
+    std::vector<clang::FixItHint> fixits(int classification, clang::CallExpr *);
+    bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
+    int classifyConnect(clang::FunctionDecl *connectFunc, clang::CallExpr *connectCall);
 };
 
 #endif

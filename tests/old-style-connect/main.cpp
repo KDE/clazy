@@ -1,6 +1,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
-
+#include <QtCore/QState>
 class MyObj : public QObject
 {
     Q_OBJECT
@@ -110,8 +110,50 @@ signals:
 void testNested()
 {
      WithNesting::Private *p;
-     QObject::connect(p, SIGNAL(signal1()), p, SLOT(privateSlot1()));
+     QObject::connect(p, SIGNAL(signal1()), p, SLOT(privateSlot1())); // Warning, but can't fix, can't take address of private
 
      // QObject::connect(p, &WithNesting::Private::signal1, p, &WithNesting::Private::privateSlot1);
 }
 
+void testCharVariables(const char *methodName)
+{
+    QObject *o;
+    QTimer::singleShot(0, o, methodName); // OK
+    QObject::connect(o, methodName, 0, methodName); // OK
+    o->connect(o, methodName, 0, methodName); // OK
+    o->connect(o, SIGNAL(destroyed()), 0, methodName); // OK
+}
+
+void testQState()
+{
+    QState *s;
+    QObject *o;
+    s->addTransition(o, SIGNAL(destroyed()), s); // Warning
+    s->addTransition(o, &QObject::destroyed, s); // OK
+
+    WithNesting *wn;
+    s->addTransition(wn, SLOT(privSlot()), s); // Warning, but can't fix
+}
+
+class TestingArgumentCounts : public QObject
+{
+    Q_OBJECT
+public:
+    TestingArgumentCounts()
+    {
+        connect(this, SIGNAL(si0()), SLOT(sl0())); // Warning and fixit
+        connect(this, SIGNAL(si0()), SLOT(sl1(QString))); // Warning and can't fix
+        connect(this, SIGNAL(si1(QString)), SLOT(sl0())); // Warning and can fix
+        connect(this, SIGNAL(si2(QString)), SLOT(sl2())); // Warning and can't fix
+    }
+public Q_SLOTS:
+    void sl0();
+    void sl1(QString);
+    void sl2(QString,QString,QString = QString());
+
+signals:
+    void si0();
+    void si1(QString);
+    void si2(QString,QString);
+    void si3(QString,QString,QString);
+};
