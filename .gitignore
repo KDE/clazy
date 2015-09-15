@@ -8,7 +8,7 @@ compile.output
 test.output
 Makefile
 *.o
-ast_dump.output
+dump.ast
 install_manifest.txt
 *_fixed.cpp
 empty.o*
