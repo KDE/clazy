@@ -794,25 +794,35 @@ const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, string 
 {
     implicitCallee = {};
     Expr *implicitArgument= call->getImplicitObjectArgument();
-    if (!implicitArgument)
+    if (!implicitArgument) {
         return nullptr;
-
-    vector<CXXThisExpr*> thisExprs;
-    Utils::getChilds2<CXXThisExpr>(implicitArgument, thisExprs, 3);
-    if (thisExprs.size() == 1) {
-        implicitCallee = "this";
-        return thisExprs[0]->getType()->getPointeeCXXRecordDecl();
     }
 
-    vector<DeclRefExpr*> declRefs;
-    Utils::getChilds2<DeclRefExpr>(implicitArgument, declRefs);
-    if (declRefs.size() == 1) {
-        auto declRef = declRefs[0];
-        if (declRef && declRef->getDecl()) {
-            implicitCallee = declRef->getDecl()->getNameAsString();
-            QualType qt = declRef->getDecl()->getType();
-            return qt->getPointeeCXXRecordDecl();
+    Stmt *s = implicitArgument;
+    while (s) {
+        if (auto declRef = dyn_cast<DeclRefExpr>(s)) {
+            if (declRef->getDecl()) {
+                implicitCallee = declRef->getDecl()->getNameAsString();
+                QualType qt = declRef->getDecl()->getType();
+                return qt->getPointeeCXXRecordDecl();
+            } else {
+                return nullptr;
+            }
+        } else if (auto thisExpr = dyn_cast<CXXThisExpr>(s)) {
+            implicitCallee = "this";
+            return thisExpr->getType()->getPointeeCXXRecordDecl();
+        } else if (auto memberExpr = dyn_cast<MemberExpr>(s)) {
+            auto decl = memberExpr->getMemberDecl();
+            if (decl) {
+                implicitCallee = decl->getNameAsString();
+                QualType qt = decl->getType();
+                return qt->getPointeeCXXRecordDecl();
+            } else {
+                return nullptr;
+            }
         }
+
+        s = s->child_begin() == s->child_end() ? nullptr : *(s->child_begin());
     }
 
     return nullptr;
