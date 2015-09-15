@@ -157,3 +157,20 @@ signals:
     void si2(QString,QString);
     void si3(QString,QString,QString);
 };
+
+
+class TestingProtected : public QObject
+{
+    Q_OBJECT
+protected Q_SLOT:
+    void protec();
+};
+
+
+class DerivedTestingProtected : public TestingProtected
+{
+    void test()
+    {
+        connect(this, SIGNAL(destroyed()), this, SLOT(protec()));
+    }
+};
