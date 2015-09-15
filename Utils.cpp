@@ -865,7 +865,7 @@ string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *cur
     for (DeclContext *context : visibleContexts) {
 
         if (context != method->getParent()) { // Don't remove the most immediate
-            auto it = find_if(methodContexts.cbegin(), methodContexts.cend(), [context](DeclContext *c) {
+            auto it = find_if(methodContexts.begin(), methodContexts.end(), [context](DeclContext *c) {
                     if (c == context)
                         return true;
                     auto ns1 = dyn_cast<NamespaceDecl>(c);
@@ -873,7 +873,7 @@ string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *cur
                     return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
 
                 });
-            if (it != methodContexts.cend()) {
+            if (it != methodContexts.end()) {
                 methodContexts.erase(it, it + 1);
             }
         }
