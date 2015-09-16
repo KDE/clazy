@@ -1,6 +1,17 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 #include <QtCore/QState>
+
+
+
+
+
+
+
+
+
+
+
 class MyObj : public QObject
 {
     Q_OBJECT
