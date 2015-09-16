@@ -327,13 +327,22 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             DeclContext *context = m_lastDecl->getDeclContext();
 
-            if (!Utils::canTakeAddressOf(methodDecl, context)) {
+            bool isSpecialProtectedCase = false;
+            if (!Utils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
                 string msg = "Can't fix " + StringUtils::accessString(methodDecl->getAccess()) + " " + macroName + " " + methodDecl->getQualifiedNameAsString();
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
             }
 
-            const string qualifiedName = Utils::getMostNeededQualifiedName(methodDecl, context);
+            string qualifiedName;
+            if (isSpecialProtectedCase && isa<CXXRecordDecl>(context)) {
+                // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
+                CXXRecordDecl *rec = dyn_cast<CXXRecordDecl>(context);
+                qualifiedName = rec->getNameAsString() + "::" + methodDecl->getNameAsString() ;
+            } else {
+                qualifiedName = Utils::getMostNeededQualifiedName(methodDecl, context);
+            }
+
             auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(s);
             SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
 

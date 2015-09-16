@@ -265,7 +265,12 @@ namespace Utils {
     // for example doing &ClassName::SomePrivateMember might not be possible if the member is private
     // but might be possible if we're in a context which is friend of ClassName
     // Or it might be protected but context is a derived class
-    bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context);
+    //
+    // When inside a derived class scope it's possible to take the address of a protected base method
+    // but only if you qualify it with the derived class name, so &Derived::baseMethod, instead of &Base::baseMethod
+    // If this was the case then isSpecialProtectedCase will be true
+
+    bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context, bool &isSpecialProtectedCase);
 }
 
 #endif

@@ -909,8 +909,9 @@ std::vector<DeclContext *> Utils::contextsForDecl(DeclContext *currentScope)
     return decls;
 }
 
-bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context)
+bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &isSpecialProtectedCase)
 {
+    isSpecialProtectedCase = false;
     if (!method || !method->getParent())
         return false;
 
@@ -965,8 +966,13 @@ bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context)
         return false;
 
     // For protected there's still hope, since record might be a derived or base class
-    if (isChildOf(record, contextRecord) || isChildOf(contextRecord, record))
+    if (isChildOf(record, contextRecord))
         return true;
+
+    if (isChildOf(contextRecord, record)) {
+        isSpecialProtectedCase = true;
+        return true;
+    }
 
     return false;
 }
