@@ -1,7 +1,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 #include <QtCore/QState>
-
+#include <QtCore/QPointer>
 
 
 
@@ -185,3 +185,11 @@ class DerivedTestingProtected : public TestingProtected
         connect(this, SIGNAL(destroyed()), this, SLOT(protec()));
     }
 };
+
+
+void testQPointer()
+{
+    QPointer<WithNesting> p = new WithNesting();
+    QObject::connect(p, SIGNAL(destroyed()), p, SLOT(deleteLater())); // Warning, and when fixed should have .data() due to gcc bug
+    QObject::connect(p, &WithNesting::destroyed, p, &WithNesting::deleteLater);
+}
