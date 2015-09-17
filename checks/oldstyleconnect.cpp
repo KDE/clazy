@@ -176,6 +176,38 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     return classification;
 }
 
+bool OldStyleConnect::isQPointer(Expr *expr) const
+{
+    vector<DeclRefExpr*> declRefs;
+    Utils::getChilds2<DeclRefExpr>(expr, declRefs);
+    if (declRefs.size() != 1)
+        return false;
+
+    auto declRef = declRefs.at(0);
+    if (declRef->child_begin() != declRef->child_end())
+        return false;
+
+    ValueDecl *valueDecl = declRef->getDecl();
+    if (!valueDecl)
+        return false;
+
+    CXXRecordDecl *record = valueDecl->getType()->getAsCXXRecordDecl();
+    if (!record)
+        return false;
+
+    CXXMemberCallExpr *callExpr = Utils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, declRef, 3);
+    if (!callExpr || !callExpr->getDirectCallee())
+        return false;
+
+    CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
+    if (!method)
+        return false;
+
+    // Any better way to detect it's an operator ?
+    static regex rx("operator .* \\*");
+    return regex_match(method->getNameAsString(), rx);
+}
+
 void OldStyleConnect::VisitStmt(Stmt *s)
 {
     CallExpr *call = dyn_cast<CallExpr>(s);
@@ -357,8 +389,13 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
         } else {
             Expr *expr = *it;
             const auto record = expr ? expr->getBestDynamicClassType() : nullptr;
-            if (record)
+            if (record) {
                 lastRecordDecl = record;
+                if (isQPointer(expr)) {
+                    auto loc = Lexer::getLocForEndOfToken(expr->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
+                    fixits.push_back(FixItHint::CreateInsertion(loc, ".data()"));
+                }
+            }
         }
     }
 

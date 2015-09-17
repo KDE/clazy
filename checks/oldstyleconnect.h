@@ -33,6 +33,7 @@
 namespace clang {
 class CallExpr;
 class CXXMemberCallExpr;
+class Expr;
 }
 
 /**
@@ -48,6 +49,7 @@ private:
     std::vector<clang::FixItHint> fixits(int classification, clang::CallExpr *);
     bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
     int classifyConnect(clang::FunctionDecl *connectFunc, clang::CallExpr *connectCall);
+    bool isQPointer(clang::Expr *expr) const;
 };
 
 #endif
