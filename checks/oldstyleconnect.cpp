@@ -178,25 +178,14 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
 
 bool OldStyleConnect::isQPointer(Expr *expr) const
 {
-    vector<DeclRefExpr*> declRefs;
-    Utils::getChilds2<DeclRefExpr>(expr, declRefs);
-    if (declRefs.size() != 1)
+    vector<CXXMemberCallExpr*> memberCalls;
+    Utils::getChilds2<CXXMemberCallExpr>(expr, memberCalls);
+    if (memberCalls.size() != 1)
         return false;
 
-    auto declRef = declRefs.at(0);
-    if (declRef->child_begin() != declRef->child_end())
-        return false;
+    CXXMemberCallExpr *callExpr = memberCalls[0];
 
-    ValueDecl *valueDecl = declRef->getDecl();
-    if (!valueDecl)
-        return false;
-
-    CXXRecordDecl *record = valueDecl->getType()->getAsCXXRecordDecl();
-    if (!record)
-        return false;
-
-    CXXMemberCallExpr *callExpr = Utils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, declRef, 3);
-    if (!callExpr || !callExpr->getDirectCallee())
+    if (!callExpr->getDirectCallee())
         return false;
 
     CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
@@ -237,7 +226,7 @@ void OldStyleConnect::VisitStmt(Stmt *s)
         return;
     }
 
-    emitWarning(s->getLocStart(), "Old Style Connect");
+    emitWarning(s->getLocStart(), "Old Style Connect", fixits(classification, call));
 }
 
 // SIGNAL(foo()) -> foo
@@ -299,7 +288,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     int macroNum = 0;
     string implicitCallee;
     string macroName;
-    uint numParamsOfMacro1 = -1;
+    CXXMethodDecl *senderMethod = nullptr;
     for (auto it = call->arg_begin(), end = call->arg_end(); it != end; ++it) {
         auto s = (*it)->getLocStart();
         static const CXXRecordDecl *lastRecordDecl = nullptr;
@@ -342,12 +331,23 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             if (macroNum == 1) {
                 // Save the number of parameters of the signal. The slot should not have more arguments.
-                numParamsOfMacro1 = methodDecl->getNumParams();
+                senderMethod = methodDecl;
             } else if (macroNum == 2) {
-                if (methodDecl->getNumParams() > numParamsOfMacro1) {
-                    string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(numParamsOfMacro1) + ")";
+                const uint numReceiverParams = methodDecl->getNumParams();
+                if (numReceiverParams > senderMethod->getNumParams()) {
+                    string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(senderMethod->getNumParams()) + ")";
                     queueManualFixitWarning(s, FixItConnects, msg);
                     return {};
+                }
+
+                for (uint i = 0; i < numReceiverParams; ++i) {
+                    ParmVarDecl *receiverParm = methodDecl->getParamDecl(i);
+                    ParmVarDecl *senderParm = senderMethod->getParamDecl(i);
+                    if (!Utils::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
+                        string msg = string("Sender's parameters are incompatible with the receiver's");
+                        queueManualFixitWarning(s, FixItConnects, msg);
+                        return {};
+                    }
                 }
             }
 
@@ -367,12 +367,14 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             }
 
             string qualifiedName;
-            if (isSpecialProtectedCase && isa<CXXRecordDecl>(context)) {
+            CXXRecordDecl *contextRecord = Utils::firstMethodOrClassContext(m_lastDecl->getDeclContext());
+            const bool isInInclude = m_ci.getSourceManager().getMainFileID() != m_ci.getSourceManager().getFileID(call->getLocStart());
+
+            if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
-                CXXRecordDecl *rec = dyn_cast<CXXRecordDecl>(context);
-                qualifiedName = rec->getNameAsString() + "::" + methodDecl->getNameAsString() ;
+                qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = Utils::getMostNeededQualifiedName(methodDecl, context);
+                qualifiedName = Utils::getMostNeededQualifiedName(methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
             auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(s);
@@ -392,8 +394,13 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto loc = Lexer::getLocForEndOfToken(expr->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
-                    fixits.push_back(FixItHint::CreateInsertion(loc, ".data()"));
+                    auto endLoc = Utils::locForNextToken((*it)->getLocStart(), tok::comma);
+                    if (endLoc.isValid()) {
+                        fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
+                    } else {
+                        queueManualFixitWarning(s, FixItConnects, "Can't fix this QPointer case");
+                        return {};
+                    }
                 }
             }
         }
@@ -404,3 +411,4 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
 const char *const s_checkName = "old-style-connect";
 REGISTER_CHECK_WITH_FLAGS(s_checkName, OldStyleConnect, NoFlag)
+REGISTER_FIXIT(FixItConnects, "fix-old-style-connects", s_checkName)

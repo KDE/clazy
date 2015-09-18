@@ -136,6 +136,20 @@ inline std::string accessString(clang::AccessSpecifier s)
     return {};
 }
 
+inline void dump(clang::Stmt *s)
+{
+    if (!s)
+        return;
+
+    llvm::errs() << "Start=" << s->getLocStart().printToString(*CheckManager::instance()->m_sm)
+                 << "; end=" << s->getLocStart().printToString(*CheckManager::instance()->m_sm)
+                 << "\n";
+
+    for (auto it = s->child_begin(), e = s->child_end(); it != e; ++it)
+        dump(*it);
+
+}
+
 }
 
 #endif

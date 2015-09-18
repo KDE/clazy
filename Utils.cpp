@@ -36,6 +36,7 @@
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ParentMap.h>
+#include <clang/Lex/Lexer.h>
 
 #include <sstream>
 
@@ -845,7 +846,7 @@ static string nameForContext(DeclContext *context)
     return {};
 }
 
-string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *currentScope)
+string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *currentScope, SourceLocation usageLoc, bool honourUsingDirectives)
 {
     if (!currentScope)
         return method->getQualifiedNameAsString();
@@ -858,16 +859,21 @@ string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *cur
 
     // Collect using directives
     vector<UsingDirectiveDecl*> usings;
-    for (DeclContext *context : visibleContexts) {
-        auto range = context->using_directives();
-        for (auto it = range.begin(), end = range.end(); it != end; ++it) {
-            usings.push_back(*it);
+    if (honourUsingDirectives) {
+        for (DeclContext *context : visibleContexts) {
+            auto range = context->using_directives();
+            for (auto it = range.begin(), end = range.end(); it != end; ++it) {
+                usings.push_back(*it);
+            }
         }
     }
 
     for (UsingDirectiveDecl *u : usings) {
         NamespaceDecl *ns = u->getNominatedNamespace();
         if (ns) {
+            if (CheckManager::instance()->m_sm->isBeforeInSLocAddrSpace(usageLoc, u->getLocStart()))
+                continue;
+
             visibleContexts.push_back(ns->getOriginalNamespace());
         }
     }
@@ -975,4 +981,57 @@ bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
     }
 
     return false;
+}
+
+bool Utils::isConvertibleTo(const Type *source, const Type *target)
+{
+    if (!source || !target)
+        return false;
+
+    if (source->isPointerType() ^ target->isPointerType())
+        return false;
+
+    if (source == target)
+        return true;
+
+    if (source->getPointeeCXXRecordDecl() && source->getPointeeCXXRecordDecl() == target->getPointeeCXXRecordDecl())
+        return true;
+
+    if (source->isIntegerType() && target->isIntegerType())
+        return true;
+
+    if (source->isFloatingType() && target->isFloatingType())
+        return true;
+
+    return false;
+}
+
+CXXRecordDecl* Utils::firstMethodOrClassContext(DeclContext *context)
+{
+    if (!context)
+        return nullptr;
+
+    if (isa<CXXRecordDecl>(context))
+        return dyn_cast<CXXRecordDecl>(context);
+
+    return firstMethodOrClassContext(context->getParent());
+}
+
+SourceLocation Utils::locForNextToken(SourceLocation start, tok::TokenKind kind)
+{
+    if (!start.isValid())
+        return {};
+
+    Token result;
+    Lexer::getRawToken(start, result, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
+
+    if (result.getKind() == kind)
+        return start;
+
+
+    auto nextStart = Lexer::getLocForEndOfToken(start, 0, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
+    if (nextStart.getRawEncoding() == start.getRawEncoding())
+        return {};
+
+    return locForNextToken(nextStart, kind);
 }

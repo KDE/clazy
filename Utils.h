@@ -256,10 +256,12 @@ namespace Utils {
     // The list of namespaces, classes, inner classes. The inner ones are at the beginning of the list
     std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
 
+    clang::CXXRecordDecl *firstMethodOrClassContext(clang::DeclContext *);
+
     // Returns fully/smi-fully qualified name for a method
     // but doesn't overqualify with namespaces which we're already in.
     // if currentScope == nullptr will return a fully qualified name
-    std::string getMostNeededQualifiedName(clang::CXXMethodDecl *method, clang::DeclContext *currentScope);
+    std::string getMostNeededQualifiedName(clang::CXXMethodDecl *method, clang::DeclContext *currentScope, clang::SourceLocation usageLoc, bool honourUsingDirectives);
 
     // Returns true, if in a specific context, we can take the address of a method
     // for example doing &ClassName::SomePrivateMember might not be possible if the member is private
@@ -271,6 +273,12 @@ namespace Utils {
     // If this was the case then isSpecialProtectedCase will be true
 
     bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context, bool &isSpecialProtectedCase);
+
+    // Convertible means that a signal with of type source can connect to a signal/slot of type target
+    bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
+
+    clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
+
 }
 
 #endif

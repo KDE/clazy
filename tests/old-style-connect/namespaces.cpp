@@ -1,4 +1,5 @@
 #include <QtCore/QObject>
+#include "namespaces.h" // Test that we use the most qualified name in headers
 
 namespace Foo
 {
@@ -32,5 +33,15 @@ void foo()
     QObject::connect(o1, SIGNAL(signal1()), o2, SLOT(separateNSSlot())); // Warning
 }
 
-
 }
+
+void foo2()
+{
+    Foo::MyObj *o1;
+    Foo::MyObj2 *o2;
+    QObject::connect(o1, SIGNAL(signal1()), o1, SLOT(slot1())); // Warning
+    QObject::connect(o1, SIGNAL(signal1()), o2, SLOT(separateNSSlot())); // Warning
+}
+
+
+using namespace Foo; // Comes after, so shouldn't have influence
