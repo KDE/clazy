@@ -64,33 +64,48 @@ enum ConnectFlag {
     ConnectFlag_Bogus = 1024
 };
 
-/*
-class MyCallBack : public clang::PPCallbacks
+
+class PreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
-    void MacroExpands (const Token &MacroNameTok, const MacroDefinition &MD, SourceRange Range, const MacroArgs *Args) override
+
+    PreprocessorCallbacks(OldStyleConnect *q, SourceManager *sm, const LangOptions &lo)
+        : clang::PPCallbacks()
+        , q(q)
+        , m_sm(sm)
+        , m_langOpts(lo)
+
+    {
+    }
+
+    void MacroExpands (const Token &MacroNameTok, const MacroDefinition &MD, SourceRange range, const MacroArgs *Args) override
     {
         IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (ii && ii->getName() == "Q_PRIVATE_SLOT" && Args->getNumArguments() > 0) {
-            for (int i = 0; i < Args->getNumArguments(); ++i) {
-                const auto t =  Args->getUnexpArgument(i);
-                if (!t) {
-                    llvm::errs() << "null token\n";
-                    continue;
-                }
-                auto ii = t->isAnyIdentifier() ? t->getIdentifierInfo() : nullptr;
-            }
+        if (!ii || ii->getName() != "Q_PRIVATE_SLOT")
+            return;
 
-        }
+        auto charRange = Lexer::getAsCharRange(range, *m_sm, m_langOpts);
+        const string text = Lexer::getSourceText(charRange, *m_sm, m_langOpts);
 
+        static regex rx(R"(Q_PRIVATE_SLOT\s*\((.*)\s*,\s*.*\s+(.*)\(.*)");
+        smatch match;
+        if (!regex_match(text, match, rx) || match.size() != 3)
+            return;
+
+        q->addPrivateSlot({match[1], match[2]});
     }
-}; */
+
+    OldStyleConnect *const q;
+    SourceManager *m_sm;
+    LangOptions m_langOpts;
+};
 
 OldStyleConnect::OldStyleConnect(const std::string &name)
     : CheckBase(name)
 {
-    // Preprocessor &pi = m_ci.getPreprocessor();
-    //pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(new MyCallBack()));
+    m_preprocessorCallbacks = new PreprocessorCallbacks(this, &m_ci.getSourceManager(), m_ci.getLangOpts());
+    Preprocessor &pi = m_ci.getPreprocessor();
+    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 }
 
 int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connectCall)
@@ -192,10 +207,15 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
         static regex rx("operator .* \\*");
         if (regex_match(method->getNameAsString(), rx))
             return true;
-
     }
 
     return false;
+}
+
+bool OldStyleConnect::isPrivateSlot(const string &name) const
+{
+    return std::find_if(m_privateSlots.cbegin(), m_privateSlots.cend(),
+                        [&name](const PrivateSlot &slot){ return slot.name == name; }) != m_privateSlots.cend();
 }
 
 void OldStyleConnect::VisitStmt(Stmt *s)
@@ -228,6 +248,11 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     }
 
     emitWarning(s->getLocStart(), "Old Style Connect", fixits(classification, call));
+}
+
+void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
+{
+    m_privateSlots.push_back(slot);
 }
 
 // SIGNAL(foo()) -> foo
@@ -317,8 +342,14 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             const string methodName = signalOrSlotNameFromMacro(s);
 
             auto methods = Utils::methodsFromString(lastRecordDecl, methodName);
-            if (methods.size() == 0) {
-                string msg = "No such method " + methodName + " in class " + lastRecordDecl->getNameAsString();
+            if (methods.empty()) {
+                string msg;
+                if (isPrivateSlot(methodName)) {
+                    msg = "Converting Q_PRIVATE_SLOTS not implemented yet\n";
+                } else {
+                    msg = "No such method " + methodName + " in class " + lastRecordDecl->getNameAsString();
+                }
+
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
             } else if (methods.size() != 1) {

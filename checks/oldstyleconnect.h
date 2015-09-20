@@ -36,6 +36,15 @@ class CXXMemberCallExpr;
 class Expr;
 }
 
+struct PrivateSlot
+{
+    typedef std::vector<PrivateSlot> List;
+    std::string objName;
+    std::string name;
+};
+
+class PreprocessorCallbacks;
+
 /**
  * Finds usages odl style Qt connect statements.
  */
@@ -44,12 +53,16 @@ class OldStyleConnect : public CheckBase
 public:
     OldStyleConnect(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
+    void addPrivateSlot(const PrivateSlot &);
 private:
     std::string signalOrSlotNameFromMacro(clang::SourceLocation macroLoc);
     std::vector<clang::FixItHint> fixits(int classification, clang::CallExpr *);
     bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
     int classifyConnect(clang::FunctionDecl *connectFunc, clang::CallExpr *connectCall);
     bool isQPointer(clang::Expr *expr) const;
+    bool isPrivateSlot(const std::string &name) const;
+    PreprocessorCallbacks *m_preprocessorCallbacks;
+    PrivateSlot::List m_privateSlots;
 };
 
 #endif

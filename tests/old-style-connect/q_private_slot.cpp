@@ -37,4 +37,5 @@ void MyObj::Private::somePrivFunction()
 {
     QObject *other;
     q->connect(other, SIGNAL(destroyed()), SLOT(privSlot()));
+    q->connect(other, SIGNAL(doesnt_exist()), SLOT(privSlot()));
 }
