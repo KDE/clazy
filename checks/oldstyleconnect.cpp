@@ -204,7 +204,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
             continue;
 
         // Any better way to detect it's an operator ?
-        static regex rx("operator .* \\*");
+        static regex rx(R"(operator .* \*)");
         if (regex_match(method->getNameAsString(), rx))
             return true;
     }
@@ -266,7 +266,7 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     auto charRange = Lexer::getAsCharRange(range, m_ci.getSourceManager(), m_ci.getLangOpts());
     const string text = Lexer::getSourceText(charRange, m_ci.getSourceManager(), m_ci.getLangOpts());
 
-    static regex rx("\\s*(SIGNAL|SLOT)\\s*\\(\\s*(.+)\\s*\\(.*");
+    static regex rx(R"(\s*(SIGNAL|SLOT)\s*\(\s*(.+)\s*\(.*)");
 
     smatch match;
     if (regex_match(text, match, rx)) {
