@@ -180,21 +180,22 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 {
     vector<CXXMemberCallExpr*> memberCalls;
     Utils::getChilds2<CXXMemberCallExpr>(expr, memberCalls);
-    if (memberCalls.size() != 1)
-        return false;
 
-    CXXMemberCallExpr *callExpr = memberCalls[0];
+    for (auto callExpr : memberCalls) {
+        if (!callExpr->getDirectCallee())
+            continue;
+        CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
+        if (!method)
+            continue;
 
-    if (!callExpr->getDirectCallee())
-        return false;
+        // Any better way to detect it's an operator ?
+        static regex rx("operator .* \\*");
+        if (regex_match(method->getNameAsString(), rx))
+            return true;
 
-    CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
-    if (!method)
-        return false;
+    }
 
-    // Any better way to detect it's an operator ?
-    static regex rx("operator .* \\*");
-    return regex_match(method->getNameAsString(), rx);
+    return false;
 }
 
 void OldStyleConnect::VisitStmt(Stmt *s)

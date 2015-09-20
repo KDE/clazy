@@ -317,7 +317,11 @@ public:
         connect(ptr, SIGNAL(signal1()), SLOT(slot1()));
         connect(ptr, SIGNAL(signal1()), ptr, SLOT(slot1()));
         connect(p->ptr, SIGNAL(signal1()), p->ptr.data(), SLOT(slot1()));
+        connect(d_func()->ptr, SIGNAL(signal1()), d_func()->ptr.data(), SLOT(slot1()));
     }
+
+    P* d_func() { return p; };
+
 public Q_SLOTS:
     void slot1();
 
