@@ -19,8 +19,8 @@ public:
 
 public Q_SLOTS:
     void slot1();
-    void slot2();
-    void slotWithArg(int i = 0);
+    void slot2() {};
+    void slotWithArg(int i = 0) {};
 Q_SIGNALS:
     void signal1();
 };
@@ -77,7 +77,7 @@ class OtherObj : public QObject
     Q_OBJECT
 public:
 public Q_SLOTS:
-    void otherSlot();
+    void otherSlot() {}
 };
 
 void testOther()
@@ -91,9 +91,9 @@ class WithNesting : public QObject
 {
     Q_OBJECT
 public Q_SLOTS:
-    void slot1();
+    void slot1() {}
 signals: void signal1();
-private Q_SLOTS: void privSlot();
+private Q_SLOTS: void privSlot() {}
 public:
     class Private;
     friend class Private;
@@ -111,9 +111,9 @@ public:
         QTimer::singleShot(0, this, SLOT(privateSlot1())); // Testing if private slot gets fixed, it should due to "this"
     }
 public Q_SLOTS:
-    void pSlot1();
+    void pSlot1() {}
 private Q_SLOT:
-    void privateSlot1();
+    void privateSlot1() {}
 signals:
     void signal1();
 };
@@ -158,9 +158,9 @@ public:
         connect(this, SIGNAL(si2(QString)), SLOT(sl2())); // Warning and can't fix
     }
 public Q_SLOTS:
-    void sl0();
-    void sl1(QString);
-    void sl2(QString,QString,QString = QString());
+    void sl0() {}
+    void sl1(QString) {}
+    void sl2(QString,QString,QString = QString()) {}
 
 signals:
     void si0();
@@ -307,8 +307,8 @@ struct P {
 
 class TestQPointerMember : public QObject
 {
+    Q_OBJECT
 public:
-
     TestQPointerMember()
     {
         QPointer<MyObj> ptr;
@@ -323,8 +323,13 @@ public:
     P* d_func() { return p; };
 
 public Q_SLOTS:
-    void slot1();
+    void slot1() {}
 
+private:
     QPointer<MyObj> m_ptr;
     P *p;
 };
+
+int main() { return 0; }
+
+#include "main.moc"

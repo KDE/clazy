@@ -1,0 +1,1631 @@
+/****************************************************************************
+** Meta object code from reading C++ file 'main.cpp'
+**
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.0)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qmetatype.h>
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'main.cpp' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 67
+#error "This file was generated using the moc from 5.5.0. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+QT_BEGIN_MOC_NAMESPACE
+struct qt_meta_stringdata_MyObj_t {
+    QByteArrayData data[7];
+    char stringdata0[41];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_MyObj_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_MyObj_t qt_meta_stringdata_MyObj = {
+    {
+QT_MOC_LITERAL(0, 0, 5), // "MyObj"
+QT_MOC_LITERAL(1, 6, 7), // "signal1"
+QT_MOC_LITERAL(2, 14, 0), // ""
+QT_MOC_LITERAL(3, 15, 5), // "slot1"
+QT_MOC_LITERAL(4, 21, 5), // "slot2"
+QT_MOC_LITERAL(5, 27, 11), // "slotWithArg"
+QT_MOC_LITERAL(6, 39, 1) // "i"
+
+    },
+    "MyObj\0signal1\0\0slot1\0slot2\0slotWithArg\0"
+    "i"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_MyObj[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       5,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   39,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       3,    0,   40,    2, 0x0a /* Public */,
+       4,    0,   41,    2, 0x0a /* Public */,
+       5,    1,   42,    2, 0x0a /* Public */,
+       5,    0,   45,    2, 0x2a /* Public | MethodCloned */,
+
+ // signals: parameters
+    QMetaType::Void,
+
+ // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    6,
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void MyObj::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        MyObj *_t = static_cast<MyObj *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->signal1(); break;
+        case 1: _t->slot1(); break;
+        case 2: _t->slot2(); break;
+        case 3: _t->slotWithArg((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 4: _t->slotWithArg(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (MyObj::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MyObj::signal1)) {
+                *result = 0;
+            }
+        }
+    }
+}
+
+const QMetaObject MyObj::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_MyObj.data,
+      qt_meta_data_MyObj,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *MyObj::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *MyObj::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_MyObj.stringdata0))
+        return static_cast<void*>(const_cast< MyObj*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int MyObj::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 5)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 5;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 5)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 5;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void MyObj::signal1()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+}
+struct qt_meta_stringdata_MyObjDerived_t {
+    QByteArrayData data[1];
+    char stringdata0[13];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_MyObjDerived_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_MyObjDerived_t qt_meta_stringdata_MyObjDerived = {
+    {
+QT_MOC_LITERAL(0, 0, 12) // "MyObjDerived"
+
+    },
+    "MyObjDerived"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_MyObjDerived[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+
+void MyObjDerived::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObject MyObjDerived::staticMetaObject = {
+    { &MyObj::staticMetaObject, qt_meta_stringdata_MyObjDerived.data,
+      qt_meta_data_MyObjDerived,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *MyObjDerived::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *MyObjDerived::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_MyObjDerived.stringdata0))
+        return static_cast<void*>(const_cast< MyObjDerived*>(this));
+    return MyObj::qt_metacast(_clname);
+}
+
+int MyObjDerived::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = MyObj::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    return _id;
+}
+struct qt_meta_stringdata_OtherObj_t {
+    QByteArrayData data[3];
+    char stringdata0[20];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_OtherObj_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_OtherObj_t qt_meta_stringdata_OtherObj = {
+    {
+QT_MOC_LITERAL(0, 0, 8), // "OtherObj"
+QT_MOC_LITERAL(1, 9, 9), // "otherSlot"
+QT_MOC_LITERAL(2, 19, 0) // ""
+
+    },
+    "OtherObj\0otherSlot\0"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_OtherObj[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       1,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+ // slots: name, argc, parameters, tag, flags
+       1,    0,   19,    2, 0x0a /* Public */,
+
+ // slots: parameters
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void OtherObj::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        OtherObj *_t = static_cast<OtherObj *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->otherSlot(); break;
+        default: ;
+        }
+    }
+    Q_UNUSED(_a);
+}
+
+const QMetaObject OtherObj::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_OtherObj.data,
+      qt_meta_data_OtherObj,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *OtherObj::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *OtherObj::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_OtherObj.stringdata0))
+        return static_cast<void*>(const_cast< OtherObj*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int OtherObj::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
+    return _id;
+}
+struct qt_meta_stringdata_WithNesting_t {
+    QByteArrayData data[5];
+    char stringdata0[36];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_WithNesting_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_WithNesting_t qt_meta_stringdata_WithNesting = {
+    {
+QT_MOC_LITERAL(0, 0, 11), // "WithNesting"
+QT_MOC_LITERAL(1, 12, 7), // "signal1"
+QT_MOC_LITERAL(2, 20, 0), // ""
+QT_MOC_LITERAL(3, 21, 5), // "slot1"
+QT_MOC_LITERAL(4, 27, 8) // "privSlot"
+
+    },
+    "WithNesting\0signal1\0\0slot1\0privSlot"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_WithNesting[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       3,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   29,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       3,    0,   30,    2, 0x0a /* Public */,
+       4,    0,   31,    2, 0x08 /* Private */,
+
+ // signals: parameters
+    QMetaType::Void,
+
+ // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void WithNesting::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        WithNesting *_t = static_cast<WithNesting *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->signal1(); break;
+        case 1: _t->slot1(); break;
+        case 2: _t->privSlot(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (WithNesting::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&WithNesting::signal1)) {
+                *result = 0;
+            }
+        }
+    }
+    Q_UNUSED(_a);
+}
+
+const QMetaObject WithNesting::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_WithNesting.data,
+      qt_meta_data_WithNesting,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *WithNesting::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *WithNesting::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_WithNesting.stringdata0))
+        return static_cast<void*>(const_cast< WithNesting*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int WithNesting::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 3)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 3;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 3)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 3;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void WithNesting::signal1()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+}
+struct qt_meta_stringdata_WithNesting__Private_t {
+    QByteArrayData data[4];
+    char stringdata0[37];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_WithNesting__Private_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_WithNesting__Private_t qt_meta_stringdata_WithNesting__Private = {
+    {
+QT_MOC_LITERAL(0, 0, 20), // "WithNesting::Private"
+QT_MOC_LITERAL(1, 21, 7), // "signal1"
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 6) // "pSlot1"
+
+    },
+    "WithNesting::Private\0signal1\0\0pSlot1"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_WithNesting__Private[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       2,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   24,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       3,    0,   25,    2, 0x0a /* Public */,
+
+ // signals: parameters
+    QMetaType::Void,
+
+ // slots: parameters
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void WithNesting::Private::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Private *_t = static_cast<Private *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->signal1(); break;
+        case 1: _t->pSlot1(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (Private::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Private::signal1)) {
+                *result = 0;
+            }
+        }
+    }
+    Q_UNUSED(_a);
+}
+
+const QMetaObject WithNesting::Private::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_WithNesting__Private.data,
+      qt_meta_data_WithNesting__Private,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *WithNesting::Private::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *WithNesting::Private::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_WithNesting__Private.stringdata0))
+        return static_cast<void*>(const_cast< Private*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int WithNesting::Private::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 2)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 2;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void WithNesting::Private::signal1()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+}
+struct qt_meta_stringdata_TestingArgumentCounts_t {
+    QByteArrayData data[9];
+    char stringdata0[51];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_TestingArgumentCounts_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_TestingArgumentCounts_t qt_meta_stringdata_TestingArgumentCounts = {
+    {
+QT_MOC_LITERAL(0, 0, 21), // "TestingArgumentCounts"
+QT_MOC_LITERAL(1, 22, 3), // "si0"
+QT_MOC_LITERAL(2, 26, 0), // ""
+QT_MOC_LITERAL(3, 27, 3), // "si1"
+QT_MOC_LITERAL(4, 31, 3), // "si2"
+QT_MOC_LITERAL(5, 35, 3), // "si3"
+QT_MOC_LITERAL(6, 39, 3), // "sl0"
+QT_MOC_LITERAL(7, 43, 3), // "sl1"
+QT_MOC_LITERAL(8, 47, 3) // "sl2"
+
+    },
+    "TestingArgumentCounts\0si0\0\0si1\0si2\0"
+    "si3\0sl0\0sl1\0sl2"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_TestingArgumentCounts[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       8,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       4,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   54,    2, 0x06 /* Public */,
+       3,    1,   55,    2, 0x06 /* Public */,
+       4,    2,   58,    2, 0x06 /* Public */,
+       5,    3,   63,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       6,    0,   70,    2, 0x0a /* Public */,
+       7,    1,   71,    2, 0x0a /* Public */,
+       8,    3,   74,    2, 0x0a /* Public */,
+       8,    2,   81,    2, 0x2a /* Public | MethodCloned */,
+
+ // signals: parameters
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString,    2,    2,    2,
+
+ // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString,    2,    2,    2,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
+
+       0        // eod
+};
+
+void TestingArgumentCounts::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        TestingArgumentCounts *_t = static_cast<TestingArgumentCounts *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->si0(); break;
+        case 1: _t->si1((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 2: _t->si2((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 3: _t->si3((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3]))); break;
+        case 4: _t->sl0(); break;
+        case 5: _t->sl1((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 6: _t->sl2((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3]))); break;
+        case 7: _t->sl2((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (TestingArgumentCounts::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestingArgumentCounts::si0)) {
+                *result = 0;
+            }
+        }
+        {
+            typedef void (TestingArgumentCounts::*_t)(QString );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestingArgumentCounts::si1)) {
+                *result = 1;
+            }
+        }
+        {
+            typedef void (TestingArgumentCounts::*_t)(QString , QString );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestingArgumentCounts::si2)) {
+                *result = 2;
+            }
+        }
+        {
+            typedef void (TestingArgumentCounts::*_t)(QString , QString , QString );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestingArgumentCounts::si3)) {
+                *result = 3;
+            }
+        }
+    }
+}
+
+const QMetaObject TestingArgumentCounts::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_TestingArgumentCounts.data,
+      qt_meta_data_TestingArgumentCounts,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *TestingArgumentCounts::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *TestingArgumentCounts::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_TestingArgumentCounts.stringdata0))
+        return static_cast<void*>(const_cast< TestingArgumentCounts*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int TestingArgumentCounts::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 8)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 8;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 8)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 8;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void TestingArgumentCounts::si0()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+}
+
+// SIGNAL 1
+void TestingArgumentCounts::si1(QString _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void TestingArgumentCounts::si2(QString _t1, QString _t2)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
+}
+
+// SIGNAL 3
+void TestingArgumentCounts::si3(QString _t1, QString _t2, QString _t3)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+struct qt_meta_stringdata_TestingProtected_t {
+    QByteArrayData data[1];
+    char stringdata0[17];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_TestingProtected_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_TestingProtected_t qt_meta_stringdata_TestingProtected = {
+    {
+QT_MOC_LITERAL(0, 0, 16) // "TestingProtected"
+
+    },
+    "TestingProtected"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_TestingProtected[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+
+void TestingProtected::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObject TestingProtected::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_TestingProtected.data,
+      qt_meta_data_TestingProtected,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *TestingProtected::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *TestingProtected::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_TestingProtected.stringdata0))
+        return static_cast<void*>(const_cast< TestingProtected*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int TestingProtected::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    return _id;
+}
+struct qt_meta_stringdata_TestTypes_t {
+    QByteArrayData data[57];
+    char stringdata0[270];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_TestTypes_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_TestTypes_t qt_meta_stringdata_TestTypes = {
+    {
+QT_MOC_LITERAL(0, 0, 9), // "TestTypes"
+QT_MOC_LITERAL(1, 10, 2), // "s1"
+QT_MOC_LITERAL(2, 13, 0), // ""
+QT_MOC_LITERAL(3, 14, 2), // "s2"
+QT_MOC_LITERAL(4, 17, 2), // "s3"
+QT_MOC_LITERAL(5, 20, 4), // "int*"
+QT_MOC_LITERAL(6, 25, 2), // "s4"
+QT_MOC_LITERAL(7, 28, 5), // "bool*"
+QT_MOC_LITERAL(8, 34, 2), // "s5"
+QT_MOC_LITERAL(9, 37, 6), // "float*"
+QT_MOC_LITERAL(10, 44, 2), // "s6"
+QT_MOC_LITERAL(11, 47, 2), // "s7"
+QT_MOC_LITERAL(12, 50, 2), // "s8"
+QT_MOC_LITERAL(13, 53, 5), // "char*"
+QT_MOC_LITERAL(14, 59, 2), // "s9"
+QT_MOC_LITERAL(15, 62, 3), // "s10"
+QT_MOC_LITERAL(16, 66, 3), // "s11"
+QT_MOC_LITERAL(17, 70, 2), // "S1"
+QT_MOC_LITERAL(18, 73, 3), // "s12"
+QT_MOC_LITERAL(19, 77, 2), // "S2"
+QT_MOC_LITERAL(20, 80, 3), // "s13"
+QT_MOC_LITERAL(21, 84, 2), // "S3"
+QT_MOC_LITERAL(22, 87, 3), // "s14"
+QT_MOC_LITERAL(23, 91, 3), // "S1a"
+QT_MOC_LITERAL(24, 95, 3), // "s15"
+QT_MOC_LITERAL(25, 99, 3), // "S1*"
+QT_MOC_LITERAL(26, 103, 3), // "s16"
+QT_MOC_LITERAL(27, 107, 3), // "S2*"
+QT_MOC_LITERAL(28, 111, 3), // "s17"
+QT_MOC_LITERAL(29, 115, 3), // "S3*"
+QT_MOC_LITERAL(30, 119, 3), // "s18"
+QT_MOC_LITERAL(31, 123, 4), // "S1a*"
+QT_MOC_LITERAL(32, 128, 3), // "s19"
+QT_MOC_LITERAL(33, 132, 3), // "S1&"
+QT_MOC_LITERAL(34, 136, 3), // "s20"
+QT_MOC_LITERAL(35, 140, 3), // "S2&"
+QT_MOC_LITERAL(36, 144, 3), // "s21"
+QT_MOC_LITERAL(37, 148, 3), // "S3&"
+QT_MOC_LITERAL(38, 152, 3), // "s22"
+QT_MOC_LITERAL(39, 156, 4), // "S1a&"
+QT_MOC_LITERAL(40, 161, 3), // "s23"
+QT_MOC_LITERAL(41, 165, 3), // "s24"
+QT_MOC_LITERAL(42, 169, 3), // "s25"
+QT_MOC_LITERAL(43, 173, 3), // "s26"
+QT_MOC_LITERAL(44, 177, 3), // "s27"
+QT_MOC_LITERAL(45, 181, 9), // "const S1*"
+QT_MOC_LITERAL(46, 191, 3), // "s28"
+QT_MOC_LITERAL(47, 195, 9), // "const S2*"
+QT_MOC_LITERAL(48, 205, 3), // "s29"
+QT_MOC_LITERAL(49, 209, 9), // "const S3*"
+QT_MOC_LITERAL(50, 219, 3), // "s30"
+QT_MOC_LITERAL(51, 223, 10), // "const S1a*"
+QT_MOC_LITERAL(52, 234, 3), // "s31"
+QT_MOC_LITERAL(53, 238, 3), // "s32"
+QT_MOC_LITERAL(54, 242, 13), // "doubleClicked"
+QT_MOC_LITERAL(55, 256, 9), // "triggered"
+QT_MOC_LITERAL(56, 266, 3) // "yes"
+
+    },
+    "TestTypes\0s1\0\0s2\0s3\0int*\0s4\0bool*\0s5\0"
+    "float*\0s6\0s7\0s8\0char*\0s9\0s10\0s11\0S1\0"
+    "s12\0S2\0s13\0S3\0s14\0S1a\0s15\0S1*\0s16\0S2*\0"
+    "s17\0S3*\0s18\0S1a*\0s19\0S1&\0s20\0S2&\0s21\0"
+    "S3&\0s22\0S1a&\0s23\0s24\0s25\0s26\0s27\0"
+    "const S1*\0s28\0const S2*\0s29\0const S3*\0"
+    "s30\0const S1a*\0s31\0s32\0doubleClicked\0"
+    "triggered\0yes"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_TestTypes[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+      35,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+      35,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,  189,    2, 0x06 /* Public */,
+       3,    1,  192,    2, 0x06 /* Public */,
+       4,    1,  195,    2, 0x06 /* Public */,
+       6,    1,  198,    2, 0x06 /* Public */,
+       8,    1,  201,    2, 0x06 /* Public */,
+      10,    1,  204,    2, 0x06 /* Public */,
+      11,    1,  207,    2, 0x06 /* Public */,
+      12,    1,  210,    2, 0x06 /* Public */,
+      14,    1,  213,    2, 0x06 /* Public */,
+      15,    1,  216,    2, 0x06 /* Public */,
+      16,    1,  219,    2, 0x06 /* Public */,
+      18,    1,  222,    2, 0x06 /* Public */,
+      20,    1,  225,    2, 0x06 /* Public */,
+      22,    1,  228,    2, 0x06 /* Public */,
+      24,    1,  231,    2, 0x06 /* Public */,
+      26,    1,  234,    2, 0x06 /* Public */,
+      28,    1,  237,    2, 0x06 /* Public */,
+      30,    1,  240,    2, 0x06 /* Public */,
+      32,    1,  243,    2, 0x06 /* Public */,
+      34,    1,  246,    2, 0x06 /* Public */,
+      36,    1,  249,    2, 0x06 /* Public */,
+      38,    1,  252,    2, 0x06 /* Public */,
+      40,    1,  255,    2, 0x06 /* Public */,
+      41,    1,  258,    2, 0x06 /* Public */,
+      42,    1,  261,    2, 0x06 /* Public */,
+      43,    1,  264,    2, 0x06 /* Public */,
+      44,    1,  267,    2, 0x06 /* Public */,
+      46,    1,  270,    2, 0x06 /* Public */,
+      48,    1,  273,    2, 0x06 /* Public */,
+      50,    1,  276,    2, 0x06 /* Public */,
+      52,    1,  279,    2, 0x06 /* Public */,
+      53,    1,  282,    2, 0x06 /* Public */,
+      54,    1,  285,    2, 0x06 /* Public */,
+      55,    1,  288,    2, 0x06 /* Public */,
+      55,    0,  291,    2, 0x26 /* Public | MethodCloned */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::Bool,    2,
+    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
+    QMetaType::Void, 0x80000000 | 9,    2,
+    QMetaType::Void, 0x80000000 | 9,    2,
+    QMetaType::Void, QMetaType::Char,    2,
+    QMetaType::Void, 0x80000000 | 13,    2,
+    QMetaType::Void, QMetaType::Float,    2,
+    QMetaType::Void, QMetaType::Double,    2,
+    QMetaType::Void, 0x80000000 | 17,    2,
+    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void, 0x80000000 | 21,    2,
+    QMetaType::Void, 0x80000000 | 23,    2,
+    QMetaType::Void, 0x80000000 | 25,    2,
+    QMetaType::Void, 0x80000000 | 27,    2,
+    QMetaType::Void, 0x80000000 | 29,    2,
+    QMetaType::Void, 0x80000000 | 31,    2,
+    QMetaType::Void, 0x80000000 | 33,    2,
+    QMetaType::Void, 0x80000000 | 35,    2,
+    QMetaType::Void, 0x80000000 | 37,    2,
+    QMetaType::Void, 0x80000000 | 39,    2,
+    QMetaType::Void, 0x80000000 | 17,    2,
+    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void, 0x80000000 | 21,    2,
+    QMetaType::Void, 0x80000000 | 23,    2,
+    QMetaType::Void, 0x80000000 | 45,    2,
+    QMetaType::Void, 0x80000000 | 47,    2,
+    QMetaType::Void, 0x80000000 | 49,    2,
+    QMetaType::Void, 0x80000000 | 51,    2,
+    QMetaType::Void, 0x80000000 | 17,    2,
+    QMetaType::Void, 0x80000000 | 33,    2,
+    QMetaType::Void, QMetaType::QModelIndex,    2,
+    QMetaType::Void, QMetaType::Bool,   56,
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void TestTypes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        TestTypes *_t = static_cast<TestTypes *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->s1((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 1: _t->s2((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->s3((*reinterpret_cast< int*(*)>(_a[1]))); break;
+        case 3: _t->s4((*reinterpret_cast< bool*(*)>(_a[1]))); break;
+        case 4: _t->s5((*reinterpret_cast< float*(*)>(_a[1]))); break;
+        case 5: _t->s6((*reinterpret_cast< float*(*)>(_a[1]))); break;
+        case 6: _t->s7((*reinterpret_cast< char(*)>(_a[1]))); break;
+        case 7: _t->s8((*reinterpret_cast< char*(*)>(_a[1]))); break;
+        case 8: _t->s9((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 9: _t->s10((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 10: _t->s11((*reinterpret_cast< S1(*)>(_a[1]))); break;
+        case 11: _t->s12((*reinterpret_cast< S2(*)>(_a[1]))); break;
+        case 12: _t->s13((*reinterpret_cast< S3(*)>(_a[1]))); break;
+        case 13: _t->s14((*reinterpret_cast< S1a(*)>(_a[1]))); break;
+        case 14: _t->s15((*reinterpret_cast< S1*(*)>(_a[1]))); break;
+        case 15: _t->s16((*reinterpret_cast< S2*(*)>(_a[1]))); break;
+        case 16: _t->s17((*reinterpret_cast< S3*(*)>(_a[1]))); break;
+        case 17: _t->s18((*reinterpret_cast< S1a*(*)>(_a[1]))); break;
+        case 18: _t->s19((*reinterpret_cast< S1(*)>(_a[1]))); break;
+        case 19: _t->s20((*reinterpret_cast< S2(*)>(_a[1]))); break;
+        case 20: _t->s21((*reinterpret_cast< S3(*)>(_a[1]))); break;
+        case 21: _t->s22((*reinterpret_cast< S1a(*)>(_a[1]))); break;
+        case 22: _t->s23((*reinterpret_cast< const S1(*)>(_a[1]))); break;
+        case 23: _t->s24((*reinterpret_cast< const S2(*)>(_a[1]))); break;
+        case 24: _t->s25((*reinterpret_cast< const S3(*)>(_a[1]))); break;
+        case 25: _t->s26((*reinterpret_cast< const S1a(*)>(_a[1]))); break;
+        case 26: _t->s27((*reinterpret_cast< const S1*(*)>(_a[1]))); break;
+        case 27: _t->s28((*reinterpret_cast< const S2*(*)>(_a[1]))); break;
+        case 28: _t->s29((*reinterpret_cast< const S3*(*)>(_a[1]))); break;
+        case 29: _t->s30((*reinterpret_cast< const S1a*(*)>(_a[1]))); break;
+        case 30: _t->s31((*reinterpret_cast< const S1(*)>(_a[1]))); break;
+        case 31: _t->s32((*reinterpret_cast< S1(*)>(_a[1]))); break;
+        case 32: _t->doubleClicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 33: _t->triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 34: _t->triggered(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (TestTypes::*_t)(bool );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s1)) {
+                *result = 0;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s2)) {
+                *result = 1;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(int * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s3)) {
+                *result = 2;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(bool * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s4)) {
+                *result = 3;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(float * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s5)) {
+                *result = 4;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(float * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s6)) {
+                *result = 5;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(char );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s7)) {
+                *result = 6;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(char * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s8)) {
+                *result = 7;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(float );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s9)) {
+                *result = 8;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(double );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s10)) {
+                *result = 9;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1 );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s11)) {
+                *result = 10;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S2 );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s12)) {
+                *result = 11;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S3 );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s13)) {
+                *result = 12;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1a );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s14)) {
+                *result = 13;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1 * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s15)) {
+                *result = 14;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S2 * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s16)) {
+                *result = 15;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S3 * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s17)) {
+                *result = 16;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1a * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s18)) {
+                *result = 17;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1 & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s19)) {
+                *result = 18;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S2 & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s20)) {
+                *result = 19;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S3 & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s21)) {
+                *result = 20;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1a & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s22)) {
+                *result = 21;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S1 );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s23)) {
+                *result = 22;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S2 );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s24)) {
+                *result = 23;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S3 );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s25)) {
+                *result = 24;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S1a );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s26)) {
+                *result = 25;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S1 * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s27)) {
+                *result = 26;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S2 * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s28)) {
+                *result = 27;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S3 * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s29)) {
+                *result = 28;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S1a * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s30)) {
+                *result = 29;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const S1 & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s31)) {
+                *result = 30;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(S1 & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::s32)) {
+                *result = 31;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(const QModelIndex & );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::doubleClicked)) {
+                *result = 32;
+            }
+        }
+        {
+            typedef void (TestTypes::*_t)(bool );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&TestTypes::triggered)) {
+                *result = 33;
+            }
+        }
+    }
+}
+
+const QMetaObject TestTypes::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_TestTypes.data,
+      qt_meta_data_TestTypes,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *TestTypes::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *TestTypes::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_TestTypes.stringdata0))
+        return static_cast<void*>(const_cast< TestTypes*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int TestTypes::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 35)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 35;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 35)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 35;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void TestTypes::s1(bool _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void TestTypes::s2(int _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void TestTypes::s3(int * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
+}
+
+// SIGNAL 3
+void TestTypes::s4(bool * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void TestTypes::s5(float * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
+}
+
+// SIGNAL 5
+void TestTypes::s6(float * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void TestTypes::s7(char _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
+void TestTypes::s8(char * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 7, _a);
+}
+
+// SIGNAL 8
+void TestTypes::s9(float _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 8, _a);
+}
+
+// SIGNAL 9
+void TestTypes::s10(double _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 9, _a);
+}
+
+// SIGNAL 10
+void TestTypes::s11(S1 _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 10, _a);
+}
+
+// SIGNAL 11
+void TestTypes::s12(S2 _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 11, _a);
+}
+
+// SIGNAL 12
+void TestTypes::s13(S3 _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 12, _a);
+}
+
+// SIGNAL 13
+void TestTypes::s14(S1a _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 13, _a);
+}
+
+// SIGNAL 14
+void TestTypes::s15(S1 * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 14, _a);
+}
+
+// SIGNAL 15
+void TestTypes::s16(S2 * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 15, _a);
+}
+
+// SIGNAL 16
+void TestTypes::s17(S3 * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 16, _a);
+}
+
+// SIGNAL 17
+void TestTypes::s18(S1a * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 17, _a);
+}
+
+// SIGNAL 18
+void TestTypes::s19(S1 & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 18, _a);
+}
+
+// SIGNAL 19
+void TestTypes::s20(S2 & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 19, _a);
+}
+
+// SIGNAL 20
+void TestTypes::s21(S3 & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 20, _a);
+}
+
+// SIGNAL 21
+void TestTypes::s22(S1a & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 21, _a);
+}
+
+// SIGNAL 22
+void TestTypes::s23(const S1 _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 22, _a);
+}
+
+// SIGNAL 23
+void TestTypes::s24(const S2 _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 23, _a);
+}
+
+// SIGNAL 24
+void TestTypes::s25(const S3 _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 24, _a);
+}
+
+// SIGNAL 25
+void TestTypes::s26(const S1a _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 25, _a);
+}
+
+// SIGNAL 26
+void TestTypes::s27(const S1 * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 26, _a);
+}
+
+// SIGNAL 27
+void TestTypes::s28(const S2 * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 27, _a);
+}
+
+// SIGNAL 28
+void TestTypes::s29(const S3 * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 28, _a);
+}
+
+// SIGNAL 29
+void TestTypes::s30(const S1a * _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 29, _a);
+}
+
+// SIGNAL 30
+void TestTypes::s31(const S1 & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 30, _a);
+}
+
+// SIGNAL 31
+void TestTypes::s32(S1 & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 31, _a);
+}
+
+// SIGNAL 32
+void TestTypes::doubleClicked(const QModelIndex & _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 32, _a);
+}
+
+// SIGNAL 33
+void TestTypes::triggered(bool _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 33, _a);
+}
+struct qt_meta_stringdata_Kleo__ProgressDialog_t {
+    QByteArrayData data[1];
+    char stringdata0[21];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_Kleo__ProgressDialog_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_Kleo__ProgressDialog_t qt_meta_stringdata_Kleo__ProgressDialog = {
+    {
+QT_MOC_LITERAL(0, 0, 20) // "Kleo::ProgressDialog"
+
+    },
+    "Kleo::ProgressDialog"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_Kleo__ProgressDialog[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+
+void Kleo::ProgressDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObject Kleo::ProgressDialog::staticMetaObject = {
+    { &QProgressDialog::staticMetaObject, qt_meta_stringdata_Kleo__ProgressDialog.data,
+      qt_meta_data_Kleo__ProgressDialog,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *Kleo::ProgressDialog::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *Kleo::ProgressDialog::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_Kleo__ProgressDialog.stringdata0))
+        return static_cast<void*>(const_cast< ProgressDialog*>(this));
+    return QProgressDialog::qt_metacast(_clname);
+}
+
+int Kleo::ProgressDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QProgressDialog::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    return _id;
+}
+struct qt_meta_stringdata_TestQPointerMember_t {
+    QByteArrayData data[3];
+    char stringdata0[26];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_TestQPointerMember_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_TestQPointerMember_t qt_meta_stringdata_TestQPointerMember = {
+    {
+QT_MOC_LITERAL(0, 0, 18), // "TestQPointerMember"
+QT_MOC_LITERAL(1, 19, 5), // "slot1"
+QT_MOC_LITERAL(2, 25, 0) // ""
+
+    },
+    "TestQPointerMember\0slot1\0"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_TestQPointerMember[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       1,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+ // slots: name, argc, parameters, tag, flags
+       1,    0,   19,    2, 0x0a /* Public */,
+
+ // slots: parameters
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void TestQPointerMember::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        TestQPointerMember *_t = static_cast<TestQPointerMember *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->slot1(); break;
+        default: ;
+        }
+    }
+    Q_UNUSED(_a);
+}
+
+const QMetaObject TestQPointerMember::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_TestQPointerMember.data,
+      qt_meta_data_TestQPointerMember,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
+};
+
+
+const QMetaObject *TestQPointerMember::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *TestQPointerMember::qt_metacast(const char *_clname)
+{
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_TestQPointerMember.stringdata0))
+        return static_cast<void*>(const_cast< TestQPointerMember*>(this));
+    return QObject::qt_metacast(_clname);
+}
+
+int TestQPointerMember::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
+    return _id;
+}
+QT_END_MOC_NAMESPACE

@@ -15,3 +15,4 @@ empty.o*
 compile_fixed.output
 *.o-*
 *.compile_output
+a.out

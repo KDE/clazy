@@ -7,7 +7,7 @@ namespace Foo
     {
         Q_OBJECT
     public Q_SLOTS:
-        void separateNSSlot();
+        void separateNSSlot() {};
     };
 }
 
@@ -18,8 +18,8 @@ class MyObj : public QObject
 public:
 
 public Q_SLOTS:
-    void slot1();
-    void slot2();
+    void slot1() {};
+    void slot2() {};
 Q_SIGNALS:
     void signal1();
 };
@@ -45,3 +45,5 @@ void foo2()
 
 
 using namespace Foo; // Comes after, so shouldn't have influence
+
+#include "namespaces.moc"

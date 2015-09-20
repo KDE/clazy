@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-import sys, os, subprocess
+import sys, os, subprocess, string
 
 #-------------------------------------------------------------------------------
 # utility functions #1
@@ -34,7 +34,8 @@ QT_FLAGS = "-I " + QMAKE_HEADERS + " -fPIC"
 #-------------------------------------------------------------------------------
 # Global variables
 
-_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits -c " + QT_FLAGS
+_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits " + QT_FLAGS
+_link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _help_command = "clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c empty.cpp"
 _dump_ast = "--dump-ast" in sys.argv
@@ -98,14 +99,21 @@ def cleanup_fixed_files():
         os.remove(fixed_file)
 
 def run_check_unit_tests(check):
-    cmd = _compiler_comand + " -Xclang -plugin-arg-clang-lazy -Xclang " + check + " *.cpp "
+    cmd = ""
+    do_link_step = check in ['old-style-connect'] # Hardcoded for now
 
+    if do_link_step:
+        cmd += _compiler_comand + " " + _link_flags
+    else:
+        cmd += _compiler_comand + " -c "
+
+    clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check + " *.cpp"
     if _verbose:
-        print "Running: " + cmd
+        print "Running: " + clazy_cmd
 
     cleanup_fixed_files()
 
-    if not run_command(cmd + " > all_files.compile_output 2> all_files.compile_output"):
+    if not run_command(clazy_cmd + " > all_files.compile_output 2> all_files.compile_output"):
         print "[FAIL] " + check + " (Failed to build test. Check " + check + "/all_files.compile_output for details)"
         print
         return False
@@ -122,13 +130,13 @@ def run_check_unit_tests(check):
             result = False
 
     # If fixits were applied, test they were correctly applied
-    fixed_files = get_fixed_files()
-    for fixed_file in fixed_files:
-        output_file = fixed_file + ".compile_output"
-        if run_command(_compiler_comand + " " + fixed_file + " > " + output_file + " 2> " + output_file):
-            print "   [OK]   " + fixed_file
+    fixed_files = string.join(get_fixed_files(), ' ')
+    if fixed_files:
+        output_file = "all_files_fixed.compile_output"
+        if run_command(cmd + " " + fixed_files + " > " + output_file + " 2> " + output_file):
+            print "   [OK]   fixed file  "
         else:
-            print "   [FAIL] " + fixed_file + " (Failed to build test. Check " + check + "/" + output_file + " for details)"
+            print "   [FAIL] fixed file (Failed to build test. Check " + check + "/" + output_file + " for details) Files were: " + fixed_files
             print
             result = False
 
@@ -153,7 +161,7 @@ if _dump_ast:
 
 all_checks = get_check_list()
 requested_checks = filter(lambda x: x not in switches, args)
-requested_checks = map(lambda x: x.strip("/"), args)
+requested_checks = map(lambda x: x.strip("/"), requested_checks)
 
 for check in requested_checks:
     if check not in all_checks:
