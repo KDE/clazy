@@ -65,6 +65,7 @@ enum ConnectFlag {
 };
 
 
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
 class PreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
@@ -99,13 +100,16 @@ public:
     SourceManager *m_sm;
     LangOptions m_langOpts;
 };
+#endif
 
 OldStyleConnect::OldStyleConnect(const std::string &name)
     : CheckBase(name)
 {
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
     m_preprocessorCallbacks = new PreprocessorCallbacks(this, &m_ci.getSourceManager(), m_ci.getLangOpts());
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+#endif
 }
 
 int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connectCall)
