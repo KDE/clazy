@@ -64,7 +64,7 @@ void QStringUneededHeapAllocations::VisitStmt(clang::Stmt *stm)
     VisitAssignOperatorQLatin1String(stm);
 }
 
-static bool betterTakeQLatin1String(CXXMethodDecl *method)
+static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 {
     // indexOf() and contains() are slower, don't include it. They internally call qt_from_latin1() making them 30% slower than QStringLiteral
     static const vector<string> methods = {"append", "compare", "endsWith", "startsWith", "insert", "lastIndexOf", "prepend", "replace" };
@@ -72,7 +72,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method)
     if (!isOfClass(method, "QString"))
         return false;
 
-    return std::find(methods.cbegin(), methods.cend(), method->getNameAsString()) != methods.cend();
+    return Utils::isAscii(lt) && std::find(methods.cbegin(), methods.cend(), method->getNameAsString()) != methods.cend();
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
@@ -228,7 +228,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                             FunctionDecl *fDecl = parentMemberCallExpr->getDirectCallee();
                             if (fDecl) {
                                 CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(fDecl);
-                                if (method && betterTakeQLatin1String(method)) {
+                                if (method && betterTakeQLatin1String(method, lt)) {
                                     replacement = "QLatin1String";
                                 }
                             }
@@ -295,7 +295,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTerna
 // false for: s += QString::fromLatin1("foo"), etc.
 static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall = 0)
 {
-    if (s == nullptr)
+    if (!s)
         return false;
 
     MemberExpr *memberExpr = dyn_cast<MemberExpr>(s);
@@ -313,15 +313,19 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
     if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "class QString &&"))
         return true;
 
+    CallExpr *callExpr = dyn_cast<CallExpr>(s);
+    StringLiteral *literal = stringLiteralForCall(callExpr);
+
+    if (literal && !Utils::isAscii(literal))
+        return true;
+
     CXXOperatorCallExpr *op = dyn_cast<CXXOperatorCallExpr>(s);
     if (op)
         return false;
 
-    CallExpr *callExpr = dyn_cast<CallExpr>(s);
     if (currentCall > 0 && callExpr) {
-
         auto fDecl = callExpr->getDirectCallee();
-        if (fDecl && betterTakeQLatin1String(dyn_cast<CXXMethodDecl>(fDecl)))
+        if (fDecl && betterTakeQLatin1String(dyn_cast<CXXMethodDecl>(fDecl), literal))
             return false;
 
         return true;
@@ -441,7 +445,8 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
         if (literals.empty()) {
             queueManualFixitWarning(stm->getLocStart(), CharPtrAllocations, "Couldn't find literal");
         } else {
-            fixits = fixItRawLiteral(literals[0], "QLatin1String");
+            const string replacement = Utils::isAscii(literals[0]) ? "QLatin1String" : "QStringLiteral";
+            fixits = fixItRawLiteral(literals[0], replacement);
         }
     }
 

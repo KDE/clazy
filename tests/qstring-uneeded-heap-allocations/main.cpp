@@ -119,3 +119,35 @@ void test_foreach()
     {
     }
 }
+
+void testCharsets()
+{
+    QString s = "é";
+    s += "é";
+    s += "e";
+    s.compare("é", "e");
+    s.startsWith("é");
+    s.startsWith("e");
+    foreach (const QString &s, returns_stringlist(QLatin1String("éÈ"))) { }
+    QString s11 = QString(QLatin1String("é"));
+
+    if (s == QString::fromLatin1("foó"))
+        return;
+    if (s == QString::fromLatin1("foó %1").arg(1))
+        return;
+    s.contains(QString::fromLatin1("é"));
+    s += QString::fromLatin1(
+        "fóó" );
+    QString s123 = QString::fromLatin1(some_char_pointer_indirection("fóó"));
+    QString s9 = QLatin1String("stringéééé");
+}
+
+struct TestCharsets
+{
+    TestCharsets() : member(QStringLiteral("é"))
+         , member2(QString(QLatin1String("é"))) {} // Warning
+    void  test(const QString &calendarType = QLatin1String("éééé´e") );
+    QString member;
+    QString member2;
+};
+
