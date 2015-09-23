@@ -279,6 +279,7 @@ namespace Utils {
 
     clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
 
+    bool isAscii(clang::StringLiteral *lt);
 }
 
 #endif

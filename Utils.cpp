@@ -1035,3 +1035,9 @@ SourceLocation Utils::locForNextToken(SourceLocation start, tok::TokenKind kind)
 
     return locForNextToken(nextStart, kind);
 }
+
+bool Utils::isAscii(StringLiteral *lt)
+{
+    // "é" for some reason has isAscii() == true, so also call containsNonAsciiOrNull
+    return lt && lt->isAscii() && !lt->containsNonAsciiOrNull();
+}
