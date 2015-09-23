@@ -193,7 +193,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                     fixits = fixItReplaceWordWithWordInTernary(ternary);
                 }
             } else {
-                queueManualFixitWarning(qlatin1Ctor->getLocStart(), QLatin1StringAllocations);
+                queueManualFixitWarning(qlatin1Ctor->getLocStart(), QLatin1StringAllocations, "Can't use QStringLiteral in macro");
             }
         }
 
@@ -217,7 +217,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                         else if (!ctorExpr->getLocStart().isMacroID())
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString", CharPtrAllocations);
                         else
-                            queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations);
+                            queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro.");
                     } else {
                         //llvm::errs() << "case2\n";
 
@@ -341,7 +341,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
                                                                                      : "QLatin1String";
 
     if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {
-        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations);
+        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations, "Can't use QStringLiteral in macro!");
         return {};
     }
 
@@ -354,7 +354,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
         SourceRange range(callExpr->getLocStart(), methodNameLoc);
         fixits.push_back(FixItHint::CreateReplacement(range, replacement));
     } else {
-        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations);
+        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations, "Internal error: literal is null");
     }
 
     return fixits;
@@ -369,12 +369,12 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
 
     SourceLocation start = lt->getLocStart();
     if (start.isMacroID()) {
-        queueManualFixitWarning(start, CharPtrAllocations);
+        queueManualFixitWarning(start, CharPtrAllocations, "Can't use QStringLiteral in macro..");
     } else {
         string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
 
         if (revisedReplacement == "QStringLiteral" && lt->getLocStart().isMacroID()) {
-            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations);
+            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro...");
             return {};
         }
 
@@ -402,7 +402,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItRemoveToken(Stmt *stmt, bo
         }
 
     } else {
-        queueManualFixitWarning(start, QLatin1StringAllocations);
+        queueManualFixitWarning(start, QLatin1StringAllocations, "Internal error: invalid start or end location");
     }
 
     return fixits;
@@ -439,7 +439,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
 
     if (isFixitEnabled(CharPtrAllocations)) {
         if (literals.empty()) {
-            queueManualFixitWarning(stm->getLocStart(), CharPtrAllocations);
+            queueManualFixitWarning(stm->getLocStart(), CharPtrAllocations, "Couldn't find literal");
         } else {
             fixits = fixItRawLiteral(literals[0], "QLatin1String");
         }
