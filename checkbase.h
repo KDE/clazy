@@ -69,6 +69,7 @@ protected:
 
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
+    bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
 
     clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
     clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
@@ -82,6 +83,7 @@ protected:
     clang::Decl *m_lastDecl;
 private:
     std::vector<uint> m_emittedWarningsInMacro;
+    std::vector<uint> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits;
 };

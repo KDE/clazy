@@ -158,8 +158,10 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
 
 void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const string &message)
 {
-    if (isFixitEnabled(fixitType))
+    if (isFixitEnabled(fixitType) && !manualFixitAlreadyQueued(loc)) {
         m_queuedManualInterventionWarnings.push_back({loc, message});
+        m_emittedManualFixItsWarningsInMacro.push_back(loc.getRawEncoding());
+    }
 }
 
 bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
@@ -167,6 +169,19 @@ bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
     PresumedLoc ploc = m_ci.getSourceManager().getPresumedLoc(loc);
     for (auto rawLoc : m_emittedWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
+        PresumedLoc p = m_ci.getSourceManager().getPresumedLoc(l);
+        if (Utils::presumedLocationsEqual(p, ploc))
+            return true;
+    }
+
+    return false;
+}
+
+bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
+{
+    PresumedLoc ploc = m_ci.getSourceManager().getPresumedLoc(loc);
+    for (auto loc : m_emittedManualFixItsWarningsInMacro) {
+        SourceLocation l = SourceLocation::getFromRawEncoding(loc);
         PresumedLoc p = m_ci.getSourceManager().getPresumedLoc(l);
         if (Utils::presumedLocationsEqual(p, ploc))
             return true;
