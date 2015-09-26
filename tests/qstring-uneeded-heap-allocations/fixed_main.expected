@@ -151,3 +151,13 @@ struct TestCharsets
     QString member2;
 };
 
+
+void testMultiPartStringLiterals()
+{
+
+    QString s = QStringLiteral("foo""bar");
+    s += QStringLiteral("foo""bár");
+    s += QLatin1String("foo"
+         "bar"
+         "Test");
+}
