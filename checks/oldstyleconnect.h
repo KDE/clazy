@@ -61,7 +61,9 @@ private:
     int classifyConnect(clang::FunctionDecl *connectFunc, clang::CallExpr *connectCall);
     bool isQPointer(clang::Expr *expr) const;
     bool isPrivateSlot(const std::string &name) const;
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
     PreprocessorCallbacks *m_preprocessorCallbacks;
+#endif
     PrivateSlot::List m_privateSlots;
 };
 
