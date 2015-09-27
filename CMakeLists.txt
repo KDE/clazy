@@ -115,7 +115,6 @@ add_clang_plugin(ClangLazy
                  checks/qmapkey.cpp
                  checks/missingtypeinfo.cpp
                  checks/nonpodstatic.cpp
-                 checks/nrvoenabler.cpp
                  checks/requiredresults.cpp
                  checks/reservecandidates.cpp
                  checks/variantsanitizer.cpp
