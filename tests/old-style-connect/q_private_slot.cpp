@@ -25,6 +25,10 @@ public:
         q->connect(other, SIGNAL(destroyed()), SLOT(privSlot()));
     }
 
+
+
+
+
     void somePrivFunction();
 
 public Q_SLOTS:
