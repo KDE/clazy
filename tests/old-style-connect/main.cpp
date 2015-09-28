@@ -5,7 +5,7 @@
 #include <QtCore/QModelIndex>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QProgressDialog>
-
+#include <QtDBus/QDBusInterface>
 
 
 
@@ -329,6 +329,14 @@ private:
     QPointer<MyObj> m_ptr;
     P *p;
 };
+
+
+void testWhitelist()
+{
+    QDBusInterface *i;
+    QObject *o;
+    o->connect(o, SIGNAL(destroyed()), i, SLOT(foo()));
+}
 
 int main() { return 0; }
 

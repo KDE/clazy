@@ -64,6 +64,12 @@ enum ConnectFlag {
     ConnectFlag_Bogus = 1024
 };
 
+static bool classIsOk(const string &className)
+{
+    // List of classes we usually use Qt4 syntax
+    static const vector<string> okClasses = { "QDBusInterface" };
+    return std::find(okClasses.cbegin(), okClasses.cend(), className) != okClasses.cend();
+}
 
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
 class PreprocessorCallbacks : public clang::PPCallbacks
@@ -351,7 +357,12 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 if (isPrivateSlot(methodName)) {
                     msg = "Converting Q_PRIVATE_SLOTS not implemented yet\n";
                 } else {
-                    msg = "No such method " + methodName + " in class " + lastRecordDecl->getNameAsString();
+                    if (classIsOk(lastRecordDecl->getNameAsString())) {
+                        // This is OK
+                        return {};
+                    } else {
+                        msg = "No such method " + methodName + " in class " + lastRecordDecl->getNameAsString();
+                    }
                 }
 
                 queueManualFixitWarning(s, FixItConnects, msg);
