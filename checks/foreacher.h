@@ -34,11 +34,15 @@ namespace clang {
 class ForStmt;
 class ValueDecl;
 class Stmt;
+class CXXForRangeStmt;
 }
 
 /**
- * Finds places where you're detaching the foreach container and finds places where big or
- * non-trivial types are passed by value instead of const-ref.
+ * - Foreach:
+ *   - Finds places where you're detaching the foreach container.
+ *   - Finds places where big or non-trivial types are passed by value instead of const-ref.
+ * - For Range Loops:
+ *   - Finds places where you're using C++11 for range loops with Qt containers. (potential detach)
  */
 class Foreacher : public CheckBase
 {
@@ -46,6 +50,7 @@ public:
     Foreacher(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    void processForRangeLoop(clang::CXXForRangeStmt *rangeLoop);
     void checkBigTypeMissingRef();
     bool containsDetachments(clang::Stmt *stmt, clang::ValueDecl *containerValueDecl);
     clang::ForStmt *m_lastForStmt = nullptr;
