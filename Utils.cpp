@@ -1041,3 +1041,19 @@ bool Utils::isAscii(StringLiteral *lt)
     // "é" for some reason has isAscii() == true, so also call containsNonAsciiOrNull
     return lt && lt->isAscii() && !lt->containsNonAsciiOrNull();
 }
+
+bool Utils::isChildOf(Stmt *child, Stmt *parent)
+{
+    if (!child || !parent)
+        return false;
+
+
+    for (auto c = parent->child_begin(), end = parent->child_end(); c != end; ++c) {
+        if (*c == child)
+            return true;
+        if (isChildOf(child, *c))
+            return true;
+    }
+
+    return false;
+}

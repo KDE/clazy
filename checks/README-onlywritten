@@ -1,0 +1,13 @@
+only-written
+
+Finds variables that are only written, not read, for example:
+    int i = 0;
+    ++i;
+
+The variable must be a built-in type or a common Qt type. We don't enable it for
+all types because lots of classes have const methods with side-effects, so we assume
+calling a const-method wouldn't be a legitimate use.
+
+This check is expensive and finds very few bugs, therefore it's hidden by default.
+You have to explicitly enable it.
+

@@ -1,0 +1,6 @@
+main.cpp:14:5: warning: Variable only written, not read (a) [-Wclazy-only-written]
+main.cpp:26:5: warning: Variable only written, not read (a) [-Wclazy-only-written]
+main.cpp:38:5: warning: Variable only written, not read (a) [-Wclazy-only-written]
+main.cpp:54:9: warning: Variable only written, not read (a) [-Wclazy-only-written]
+main.cpp:75:12: warning: Variable only written, not read (a) [-Wclazy-only-written]
+main.cpp:175:5: warning: Variable only written, not read (a) [-Wclazy-only-written]

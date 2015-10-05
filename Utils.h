@@ -65,6 +65,8 @@ namespace Utils {
     /// Returns true if childDecl is a descent from parentDecl
     bool isChildOf(clang::CXXRecordDecl *childDecl, clang::CXXRecordDecl *parentDecl);
 
+    bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
+
     /// Returns true if the class has at least one constexpr ctor
     bool hasConstexprCtor(clang::CXXRecordDecl *decl);
 
