@@ -161,3 +161,12 @@ void testMultiPartStringLiterals()
          "bar"
          "Test");
 }
+
+void moreShouldBeQLatin1String()
+{
+    QString s;
+    bool b = (s == QLatin1String("="));
+    if (s.startsWith(QLatin1String("Version=5"))) {
+    }
+    QString result = QLatin1String("Enum") + s;
+}
