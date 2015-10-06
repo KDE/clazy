@@ -163,11 +163,6 @@ bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
     return false;
 }
 
-void ReserveCandidates::printWarning(const SourceLocation &loc)
-{
-    emitWarning(loc, "Reserve candidate");
-}
-
 bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody, CallExpr *callExpr) const
 {
     if (!acceptsValueDecl(valueDecl))
@@ -221,7 +216,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
         ValueDecl *valueDecl = Utils::valueDeclForMemberCall(callExpr);
         if (isReserveCandidate(valueDecl, body, callExpr))
-            printWarning(callExpr->getLocStart());
+            emitWarning(callExpr->getLocStart(), "Reserve candidate");
     }
 
     for (CXXOperatorCallExpr *callExpr : operatorCalls) {
@@ -230,7 +225,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
         ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(callExpr);
         if (isReserveCandidate(valueDecl, body, callExpr))
-            printWarning(callExpr->getLocStart());
+            emitWarning(callExpr->getLocStart(), "Reserve candidate");
     }
 }
 
