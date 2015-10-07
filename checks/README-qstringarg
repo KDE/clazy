@@ -1,0 +1,30 @@
+qstring-arg
+
+Detects when you're using one of these QString::arg() overloads:
+
+    QString arg(qlonglong a, int fieldwidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(qulonglong a, int fieldwidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(long a, int fieldwidth = 0, int base=10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(ulong a, int fieldwidth = 0, int base=10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(int a, int fieldWidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(uint a, int fieldWidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(short a, int fieldWidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(ushort a, int fieldWidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(double a, int fieldWidth = 0, char fmt = 'g', int prec = -1, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(char a, int fieldWidth = 0, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(QChar a, int fieldWidth = 0, QChar fillChar = QLatin1Char(' ')) const
+    QString arg(const QString &a, int fieldWidth = 0, QChar fillChar = QLatin1Char(' ')) const
+
+because they are commonly misused, for example:
+    int hours = ...;
+    int minutes = ...;
+    QString s("The time is %1:%2").arg(hours, minutes); // This won't do what you think it would at first glance.
+
+To reduce false positives, some cases won't be warned about:
+    * str.arg(hours, 2); // User explicitly used a integer literal, it's probably fine
+    * str.arg(foo); // We're only after cases where the second argument (or further) is specified, this is safe.
+    * str.arg(foo, width); // Second argument is named width, or contains the name "width", it's safe. Same for third argument and "base".
+
+
+Using QString::arg() is perfectly valid, therefore this check is hidden by default
+You have to explicitly enable it.
