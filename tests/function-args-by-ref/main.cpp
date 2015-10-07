@@ -103,3 +103,11 @@ void func2(QString text)
 {
     StringConstPtr s(&text); // Warning, it's a const ptr
 }
+
+enum Option {
+    FooOption,
+    FooOption2
+};
+
+Q_DECLARE_FLAGS(Options, Option)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Options)
