@@ -44,6 +44,7 @@ foreacher
 global-const-char-pointer
 inefficient-qlist
 qstring-uneeded-heap-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+qstring-arg
 function-args-by-ref
 qmap-with-key-pointer
 non-pod-global-static

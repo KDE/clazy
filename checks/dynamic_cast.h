@@ -35,7 +35,7 @@
 #include <string>
 
 /**
- * Finds places where you're using dynamic_cast instead of qobject_cast.
+ * Finds redundant dynamic casts.
  */
 class BogusDynamicCast : public CheckBase
 {
