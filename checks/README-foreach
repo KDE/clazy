@@ -1,0 +1,6 @@
+foreach
+
+- Finds places where you're detaching the foreach container.
+- Finds places where big or non-trivial types are passed by value instead of const-ref.
+- Finds places where you're using foreach on STL containers. It causes deep-copy. Use C++11 range-loop instead.
+- Finds places where you're using C++11 range-loops with Qt containers. (potential detach)
