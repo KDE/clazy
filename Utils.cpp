@@ -1057,3 +1057,20 @@ bool Utils::isChildOf(Stmt *child, Stmt *parent)
 
     return false;
 }
+
+bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
+{
+    if (!s)
+        return false;
+
+    Stmt *p = s;
+    do {
+        p = Utils::parent(map, p);
+        CXXOperatorCallExpr *op = p ? dyn_cast<CXXOperatorCallExpr>(p) : nullptr;
+        if (op && op->getDirectCallee() && op->getDirectCallee()->getNameAsString() == "operator*") {
+            return op;
+        }
+    } while (p);
+
+    return false;
+}

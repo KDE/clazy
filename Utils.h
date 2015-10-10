@@ -53,6 +53,7 @@ namespace clang {
     class ValueDecl;
     class ConditionalOperator;
     class CXXMethodDecl;
+    class BinaryOperator;
 }
 
 namespace Utils {
@@ -302,6 +303,9 @@ namespace Utils {
     clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
 
     bool isAscii(clang::StringLiteral *lt);
+
+    // Checks if Statement s inside an operator* call
+    bool isInDerefExpression(clang::Stmt *s, clang::ParentMap *map);
 }
 
 #endif

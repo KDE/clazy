@@ -88,10 +88,14 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     // Catch variant.toList().cbegin(), which is ok
     CXXMemberCallExpr *chainedMemberCall = Utils::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
     if (chainedMemberCall) {
-
         if (isBlacklistedFunction(StringUtils::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
             return;
     }
+
+
+    // If we deref it within the expression, then we'll copy the value before the iterator becomes invalid, so it's safe
+    if (Utils::isInDerefExpression(memberExpr, m_parentMap))
+        return;
 
     Expr *expr = memberExpr->getImplicitObjectArgument();
 

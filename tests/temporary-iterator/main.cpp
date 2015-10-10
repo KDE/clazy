@@ -31,6 +31,13 @@ void test()
     s_list->cbegin(); // OK
     QVariant variant;
     variant.toList().cbegin(); // OK
+}
 
+void acceptsInt(int) {}
 
+void testDereference()
+{
+    int value = *getList().cbegin(); // OK
+    value = *(getList().cbegin()); // OK
+    acceptsInt(*getList().cbegin());
 }
