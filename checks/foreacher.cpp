@@ -200,9 +200,7 @@ bool Foreacher::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueD
         }
     }
 
-    auto it = stm->child_begin();
-    auto end = stm->child_end();
-    for (; it != end; ++it) {
+    for (auto it = stm->child_begin(), end = stm->child_end(); it != end; ++it) {
         if (containsDetachments(*it, containerValueDecl))
             return true;
     }
