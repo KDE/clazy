@@ -44,10 +44,10 @@ class CXXForRangeStmt;
  * - For Range Loops:
  *   - Finds places where you're using C++11 for range loops with Qt containers. (potential detach)
  */
-class Foreacher : public CheckBase
+class Foreach : public CheckBase
 {
 public:
-    Foreacher(const std::string &name);
+    Foreach(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void processForRangeLoop(clang::CXXForRangeStmt *rangeLoop);

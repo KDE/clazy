@@ -25,7 +25,7 @@
   without including the source code for Qt in the source distribution.
 */
 
-#include "foreacher.h"
+#include "foreach.h"
 #include "Utils.h"
 #include "checkmanager.h"
 
@@ -56,13 +56,13 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
     return methodsMap;
 }
 
-Foreacher::Foreacher(const std::string &name)
+Foreach::Foreach(const std::string &name)
     : CheckBase(name)
 {
 
 }
 
-void Foreacher::VisitStmt(clang::Stmt *stmt)
+void Foreach::VisitStmt(clang::Stmt *stmt)
 {
     if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
         processForRangeLoop(rangeLoop);
@@ -121,7 +121,7 @@ void Foreacher::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-void Foreacher::checkBigTypeMissingRef()
+void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
     vector<ForStmt*> forStatements;
@@ -183,7 +183,7 @@ void Foreacher::checkBigTypeMissingRef()
     emitWarning(varDecl->getLocStart(), error.c_str());
 }
 
-bool Foreacher::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)
+bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)
 {
     if (stm == nullptr)
         return false;
@@ -220,7 +220,7 @@ bool Foreacher::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueD
     return false;
 }
 
-void Foreacher::processForRangeLoop(CXXForRangeStmt *rangeLoop)
+void Foreach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 {
     Expr *containerExpr = rangeLoop->getRangeInit();
     if (!containerExpr)
@@ -242,4 +242,4 @@ void Foreacher::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     }
 }
 
-REGISTER_CHECK("foreacher", Foreacher)
+REGISTER_CHECK("foreach", Foreach)

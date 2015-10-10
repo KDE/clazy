@@ -104,7 +104,7 @@ add_clang_plugin(ClangLazy
                  checks/detachingtemporaries.cpp
                  checks/duplicateexpensivestatement.cpp
                  checks/dynamic_cast.cpp
-                 checks/foreacher.cpp
+                 checks/foreach.cpp
                  checks/globalconstcharpointer.cpp
                  checks/inefficientqlist.cpp
                  checks/implicitcasts.cpp
