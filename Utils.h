@@ -190,6 +190,26 @@ namespace Utils {
         return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
     }
 
+    template <typename T>
+    T* getFirstChildOfType(clang::Stmt *stm)
+    {
+        if (!stm)
+            return nullptr;
+
+        for (auto it = stm->child_begin(), end = stm->child_end(); it != end; ++it) {
+            if (*it == nullptr) // Can happen
+                continue;
+
+            if (auto s = clang::dyn_cast<T>(*it))
+                return s;
+
+            if (auto s = getFirstChildOfType<T>(*it))
+                return s;
+        }
+
+        return nullptr;
+    }
+
     bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
     bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
 

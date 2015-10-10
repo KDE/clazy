@@ -1,6 +1,6 @@
 #include <QtCore/QList>
+#include <QtCore/QVariant>
 #include <vector>
-
 
 Q_GLOBAL_STATIC(QList<int>, s_list);
 
@@ -29,5 +29,8 @@ void test()
     getList().cbegin(); // Warning
 
     s_list->cbegin(); // OK
+    QVariant variant;
+    variant.toList().cbegin(); // OK
+
 
 }

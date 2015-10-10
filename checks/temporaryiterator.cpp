@@ -54,6 +54,13 @@ TemporaryIterator::TemporaryIterator(const std::string &name)
     m_methodsByType["QMultiHash"] = m_methodsByType["QHash"];
 }
 
+static bool isBlacklistedFunction(const string &name)
+{
+    // These are fine
+    static const vector<string> list = {"QVariant::toList"};
+    return std::find(list.cbegin(), list.cend(), name) != list.cend();
+}
+
 void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 {
     CXXMemberCallExpr *memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
@@ -76,6 +83,15 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     const auto &allowedFunctions = it->second;
     if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) == allowedFunctions.cend())
         return;
+
+
+    // Catch variant.toList().cbegin(), which is ok
+    CXXMemberCallExpr *chainedMemberCall = Utils::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
+    if (chainedMemberCall) {
+
+        if (isBlacklistedFunction(StringUtils::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
+            return;
+    }
 
     Expr *expr = memberExpr->getImplicitObjectArgument();
 
