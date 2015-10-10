@@ -97,6 +97,18 @@ void Foreacher::VisitStmt(clang::Stmt *stmt)
     if (valueDecl == nullptr)
         return;
 
+    QualType containerQualType  = valueDecl->getType();
+    const Type *containerType = containerQualType.getTypePtrOrNull();
+    if (!containerType || !containerType->isRecordType())
+        return; // shouldn't happen
+
+    CXXRecordDecl *containerRecord = containerType->getAsCXXRecordDecl();
+    const bool isQtContainer = detachingMethodsMap().count(containerRecord->getNameAsString());
+    if (!isQtContainer) {
+        emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy");
+        return;
+    }
+
     checkBigTypeMissingRef();
 
     // const containers are fine

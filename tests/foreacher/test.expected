@@ -3,5 +3,6 @@ main.cpp:50:14: warning: Missing reference in foreach with sizeof(T) = 20 bytes 
 main.cpp:55:14: warning: Missing reference in foreach with non trivial type [-Wclazy-foreacher]
 main.cpp:60:14: warning: Missing reference in foreach with sizeof(T) = 20 bytes [-Wclazy-foreacher]
 main.cpp:82:14: warning: Missing reference in foreach with sizeof(T) = 20 bytes [-Wclazy-foreacher]
+main.cpp:95:5: warning: foreach with STL container causes deep-copy [-Wclazy-foreacher]
 range-loop.cpp:25:5: warning: c++11 range-loop might detach Qt container [-Wclazy-foreacher]
 range-loop.cpp:32:5: warning: c++11 range-loop might detach Qt container [-Wclazy-foreacher]

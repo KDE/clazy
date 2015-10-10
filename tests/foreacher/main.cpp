@@ -1,5 +1,5 @@
 // clang+++ test.cpp -I /usr/include/qt/ -fPIC -lQt5Core -c
-
+#include <vector>
 #include <QtCore/QList>
 
 void test_detachment()
@@ -86,5 +86,12 @@ void test_missing_ref()
     // Test #9: No warning
     foreach (BigTrivial t, bigTrivials) {
         nop4(&t);
+    }
+}
+
+void testSTLForeach()
+{
+    std::vector<int> v = {1, 2, 3, 4};
+    foreach (int i, v) { // Warning
     }
 }
