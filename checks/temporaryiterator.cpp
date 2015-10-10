@@ -5,6 +5,7 @@
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015 Nyall Dawson <nyall.dawson@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -40,12 +41,13 @@ using namespace std;
 TemporaryIterator::TemporaryIterator(const std::string &name)
     : CheckBase(name)
 {
-    m_methodsByType["QList"] = { "begin","end","constBegin","constEnd"};
-    m_methodsByType["QVector"] = { "begin","end","constBegin","constEnd" };
-    m_methodsByType["QMap"] = {"begin", "end","constBegin","constEnd","find","lowerBound","upperBound" };
-    m_methodsByType["QHash"] = {"begin", "end","constBegin","constEnd" };
-    m_methodsByType["QLinkedList"] = {"begin", "end","constBegin","constEnd"};
-    m_methodsByType["QSet"] = {"begin", "end","constBegin","constEnd","find"};
+    m_methodsByType["vector"] = {"begin", "end", "cbegin", "cend" }; // TODO: More stl support
+    m_methodsByType["QList"] = { "begin", "end", "constBegin", "constEnd", "cbegin", "cend" };
+    m_methodsByType["QVector"] = { "begin", "end","constBegin","constEnd", "cbegin", "cend", "insert" };
+    m_methodsByType["QMap"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "lowerBound","upperBound", "cbegin", "cend", "equal_range" };
+    m_methodsByType["QHash"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend", "find", "constFind", "insert", "insertMulti" };
+    m_methodsByType["QLinkedList"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend"};
+    m_methodsByType["QSet"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "cbegin", "cend"};
     m_methodsByType["QStack"] = m_methodsByType["QVector"];
     m_methodsByType["QQueue"] = m_methodsByType["QList"];
     m_methodsByType["QMultiMap"] = m_methodsByType["QMap"];
@@ -63,13 +65,13 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     if (!classDecl || !methodDecl)
         return;
 
-    // Check if it's one of the implicit shared classes
+    // Check if it's a container
     const std::string className = classDecl->getNameAsString();
     auto it = m_methodsByType.find(className);
     if (it == m_methodsByType.end())
         return;
 
-    // Check if it's one of the detaching methods
+    // Check if it's a method returning an iterator
     const std::string functionName = methodDecl->getNameAsString();
     const auto &allowedFunctions = it->second;
     if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) == allowedFunctions.cend())
@@ -77,7 +79,11 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 
     Expr *expr = memberExpr->getImplicitObjectArgument();
 
-    if (!expr || (!expr->isRValue())) // This check is about detaching temporaries, so check for r value
+    if (!expr || !expr->isRValue()) // This check is about detaching temporaries, so check for r value
+        return;
+
+    const Type *containerType = expr->getType().getTypePtrOrNull();
+    if (!containerType || containerType->isPointerType())
         return;
 
     {
@@ -93,11 +99,11 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     }
 
     CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(Utils::getFirstChildAtDepth(expr, 2));
-    if (possibleCtorCall != nullptr)
+    if (possibleCtorCall)
         return;
 
     CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(Utils::getFirstChildAtDepth(expr, 1));
-    if (possibleThisCall != nullptr)
+    if (possibleThisCall)
         return;
 
     // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";

@@ -37,8 +37,8 @@
 /**
  * Finds places where you're using iterators on temporary containers.
  *
- * For example getList().constBegin(), getList().constEnd()
- *
+ * For example getList().constBegin(), getList().constEnd() would provoke a crash when dereferencing
+ * the iterator.
  */
 class TemporaryIterator : public CheckBase
 {
