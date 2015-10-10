@@ -57,7 +57,7 @@ TemporaryIterator::TemporaryIterator(const std::string &name)
 static bool isBlacklistedFunction(const string &name)
 {
     // These are fine
-    static const vector<string> list = {"QVariant::toList"};
+    static const vector<string> list = {"QVariant::toList", "QHash::operator[]", "QMap::operator[]", "QSet::operator[]"};
     return std::find(list.cbegin(), list.cend(), name) != list.cend();
 }
 
@@ -84,7 +84,6 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) == allowedFunctions.cend())
         return;
 
-
     // Catch variant.toList().cbegin(), which is ok
     CXXMemberCallExpr *chainedMemberCall = Utils::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
     if (chainedMemberCall) {
@@ -92,6 +91,17 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
             return;
     }
 
+    // catch map[foo].cbegin()
+    CXXOperatorCallExpr *chainedOperatorCall = Utils::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
+    if (chainedOperatorCall) {
+        FunctionDecl *func = chainedOperatorCall->getDirectCallee();
+        if (func) {
+            CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(func);
+            if (method) {
+                if (isBlacklistedFunction(StringUtils::qualifiedMethodName(method)))
+                    return;            }
+        }
+    }
 
     // If we deref it within the expression, then we'll copy the value before the iterator becomes invalid, so it's safe
     if (Utils::isInDerefExpression(memberExpr, m_parentMap))

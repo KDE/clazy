@@ -1,7 +1,7 @@
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 #include <vector>
-
+#include <QtCore/QHash>
 Q_GLOBAL_STATIC(QList<int>, s_list);
 
 QList<int> getList()
@@ -39,5 +39,9 @@ void testDereference()
 {
     int value = *getList().cbegin(); // OK
     value = *(getList().cbegin()); // OK
-    acceptsInt(*getList().cbegin());
+    acceptsInt(*getList().cbegin()); //OK
+    const QHash<int, QList<int> > listOfLists;
+    int ns = 1;
+    for (auto it = listOfLists[ns].constBegin(); it != listOfLists[ns].constEnd(); ++it) {} // OK
+
 }
