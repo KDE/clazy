@@ -57,18 +57,30 @@ static string variableNameFromArg(Expr *arg)
     return {};
 }
 
+static CXXMethodDecl* isArgMethod(FunctionDecl *func)
+{
+    if (!func)
+        return nullptr;
+
+    CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(func);
+    if (!method || method->getNameAsString() != "arg")
+        return nullptr;
+
+    CXXRecordDecl *record = method->getParent();
+    if (!record || record->getNameAsString() != "QString")
+        return nullptr;
+
+    return method;
+}
+
 void StringArg::VisitStmt(clang::Stmt *stmt)
 {
     CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!memberCall)
         return;
 
-    CXXMethodDecl *method = memberCall->getMethodDecl();
-    if (!method || method->getNameAsString() != "arg")
-        return;
-
-    CXXRecordDecl *record = memberCall->getRecordDecl();
-    if (!record || record->getNameAsString() != "QString")
+    CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee());
+    if (!method)
         return;
 
     ParmVarDecl *lastParam = method->getParamDecl(method->getNumParams() - 1);
