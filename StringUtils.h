@@ -59,6 +59,26 @@ inline std::string classNameFor(clang::CXXConstructExpr *expr)
     return classNameFor(expr->getConstructor());
 }
 
+template <>
+inline std::string classNameFor(clang::ParmVarDecl *param)
+{
+    if (!param)
+        return {};
+
+    clang::QualType qt = param->getType();
+    const clang::Type *t = qt.getTypePtrOrNull();
+    if (!t)
+        return {};
+
+    const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl()
+                                                           : t->getPointeeCXXRecordDecl();
+
+    if (record)
+        return record->getNameAsString();
+
+    return {};
+}
+
 template <typename T>
 inline bool isOfClass(T *node, const std::string &className)
 {

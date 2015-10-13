@@ -25,6 +25,7 @@
 #include "qstringarg.h"
 #include "Utils.h"
 #include "checkmanager.h"
+#include "StringUtils.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -73,11 +74,70 @@ static CXXMethodDecl* isArgMethod(FunctionDecl *func)
     return method;
 }
 
+static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
+{
+    if (!callExpr)
+        return false;
+
+    CXXMethodDecl *method = isArgMethod(callExpr->getDirectCallee());
+    if (!method)
+        return false;
+
+    ParmVarDecl *secondParam = method->getParamDecl(1);
+    if (classNameFor(secondParam) == "QString")
+        return true;
+
+    ParmVarDecl *firstParam = method->getParamDecl(0);
+    if (classNameFor(firstParam) != "QString")
+        return false;
+
+    // This is a arg(QString, int, QChar) call, it's good if the second parameter is a default param
+    return isa<CXXDefaultArgExpr>(callExpr->getArg(1));
+}
+
+bool StringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls)
+{
+    const int size = calls.size();
+    for (int i = 1; i < size; ++i) {
+        auto call = calls.at(i);
+        if (calls.at(i - 1)->getNumArgs() + call->getNumArgs() <= 9) {
+            emitWarning(call->getLocEnd(), "Use multi-arg instead");
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void StringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
+{
+    if (!isArgFuncWithOnlyQString(memberCall))
+        return;
+
+    vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
+    vector<clang::CallExpr *> argCalls;
+    for (auto call : callExprs) {
+        if (std::find(m_alreadyProcessedChainedCalls.cbegin(), m_alreadyProcessedChainedCalls.cend(), call) == m_alreadyProcessedChainedCalls.cend()
+                && isArgFuncWithOnlyQString(call)) {
+            argCalls.push_back(call);
+            m_alreadyProcessedChainedCalls.push_back(call);
+        } else {
+            if (checkMultiArgWarningCase(argCalls))
+                return;
+            argCalls.clear();
+        }
+    }
+
+    checkMultiArgWarningCase(argCalls);
+}
+
 void StringArg::VisitStmt(clang::Stmt *stmt)
 {
     CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!memberCall)
         return;
+
+    checkForMultiArgOpportunities(memberCall);
 
     CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee());
     if (!method)

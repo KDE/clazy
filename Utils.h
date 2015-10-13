@@ -306,6 +306,16 @@ namespace Utils {
 
     // Checks if Statement s inside an operator* call
     bool isInDerefExpression(clang::Stmt *s, clang::ParentMap *map);
+
+    // For a a chain called expression like foo().bar().baz() returns a list of calls
+    // {baz(), bar(), foo()}
+
+    // the parameter lastCallExpr to pass would be baz()
+    // No need to specify the other callexprs, they are children of the first one, since the AST looks like:
+    // - baz
+    // -- bar
+    // --- foo
+    std::vector<clang::CallExpr *> callListForChain(clang::CallExpr *lastCallExpr);
 }
 
 #endif

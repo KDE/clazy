@@ -29,6 +29,8 @@
 
 namespace clang {
 class Stmt;
+class CXXMemberCallExpr;
+class CallExpr;
 }
 
 /**
@@ -39,8 +41,12 @@ class StringArg : public CheckBase
 public:
     StringArg(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
+    void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 protected:
     std::vector<std::string> filesToIgnore() const override;
+private:
+    bool checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls);
+    std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
 };
 
 #endif

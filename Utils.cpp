@@ -1074,3 +1074,23 @@ bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
 
     return false;
 }
+
+std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
+{
+    if (!lastCallExpr)
+        return {};
+
+    vector<CallExpr *> callexprs = { lastCallExpr };
+    Stmt *s = lastCallExpr;
+    do {
+        s = s->child_begin() == s->child_end() ? nullptr : *(s->child_begin());
+        if (s) {
+            CallExpr *callExpr = dyn_cast<CallExpr>(s);
+            if (callExpr && callExpr->getCalleeDecl()) {
+                callexprs.push_back(callExpr);
+            }
+        }
+    } while (s);
+
+    return callexprs;
+}
