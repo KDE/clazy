@@ -79,6 +79,11 @@ inline std::string classNameFor(clang::ParmVarDecl *param)
     return {};
 }
 
+inline bool stringStartsWith(const std::string &target, const std::string &maybeBeginning)
+{
+    return target.compare(0, maybeBeginning.length(), maybeBeginning) == 0;
+}
+
 template <typename T>
 inline bool isOfClass(T *node, const std::string &className)
 {

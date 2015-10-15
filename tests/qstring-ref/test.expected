@@ -1,0 +1,1 @@
+main.cpp:8:15: warning: Use midRef() instead [-Wclazy-qstring-ref]
