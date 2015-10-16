@@ -112,6 +112,7 @@ add_clang_plugin(ClangLazy
                  checks/onlywritten.cpp
                  checks/qlistint.cpp
                  checks/functionargsbyref.cpp
+                 checks/qdeleteall.cpp
                  checks/qmapkey.cpp
                  checks/qstringarg.cpp
                  checks/qstringref.cpp
