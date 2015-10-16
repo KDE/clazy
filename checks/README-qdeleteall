@@ -2,7 +2,7 @@ qdeleteall
 
 Finds places where a call to qDeleteAll has a redundant values() call, for example:
     QSet<QString *> s;
-    qDeleteAll(s.values());
+    qDeleteAll(s.values()); // Unneeded full container iteration and memory allocation to construct list of values
 instead of
     QSet<QString *> s;
     qDeleteAll(s);
