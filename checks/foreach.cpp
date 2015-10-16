@@ -39,6 +39,7 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
     static std::map<std::string, std::vector<std::string> > methodsMap;
     if (methodsMap.empty()) {
         methodsMap["QList"] = {"first", "last", "begin", "end", "front", "back"};
+        methodsMap["QStringList"] = {"first", "last", "begin", "end", "front", "back"};
         methodsMap["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "fill"};
         methodsMap["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound"};
         methodsMap["QHash"] = {"begin", "end", "find"};

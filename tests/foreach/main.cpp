@@ -1,6 +1,13 @@
 // clang+++ test.cpp -I /usr/include/qt/ -fPIC -lQt5Core -c
 #include <vector>
 #include <QtCore/QList>
+#include <QtCore/QStringList>
+
+
+
+
+
+
 
 void test_detachment()
 {
@@ -93,5 +100,13 @@ void testSTLForeach()
 {
     std::vector<int> v = {1, 2, 3, 4};
     foreach (int i, v) { // Warning
+    }
+}
+
+void testQStringList()
+{
+    QStringList sl;
+    sl << "A" << "B";
+    foreach (const QString &s, sl) { // no warning
     }
 }
