@@ -195,6 +195,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
             classification |= ConnectFlag_OldStyleButNonLiteral;
         } else if ((classification & ConnectFlag_QStateAddTransition) && numLiterals != 1) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
+        } else if ((classification & ConnectFlag_Disconnect) && numLiterals == 0) {
+            classification |= ConnectFlag_OldStyleButNonLiteral;
         }
     }
 
