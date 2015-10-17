@@ -26,7 +26,7 @@
 */
 
 #include "checkmanager.h"
-#include "detachingtemporaries.h"
+#include "detachingtemporary.h"
 #include "Utils.h"
 #include "StringUtils.h"
 
@@ -37,7 +37,7 @@
 using namespace clang;
 using namespace std;
 
-DetachingTemporaries::DetachingTemporaries(const std::string &name)
+DetachingTemporary::DetachingTemporary(const std::string &name)
     : CheckBase(name)
 {
     m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back", "takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
@@ -72,7 +72,7 @@ bool isAllowedChainedMethod(const std::string &methodName)
     return find(allowed.cbegin(), allowed.cend(), methodName) != allowed.cend();
 }
 
-void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
+void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 {
     CXXMemberCallExpr *memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
     if (!memberExpr)
@@ -167,4 +167,4 @@ void DetachingTemporaries::VisitStmt(clang::Stmt *stm)
     emitWarning(stm->getLocStart(), error.c_str());
 }
 
-REGISTER_CHECK("detaching-temporary", DetachingTemporaries)
+REGISTER_CHECK("detaching-temporary", DetachingTemporary)

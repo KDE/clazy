@@ -40,10 +40,10 @@
  * For example getList().first(), which would detach if the container is shared.
  * See README-deatching-temporary for more information
  */
-class DetachingTemporaries : public CheckBase
+class DetachingTemporary : public CheckBase
 {
 public:
-    DetachingTemporaries(const std::string &name);
+    DetachingTemporary(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 private:
     std::map<std::string, std::vector<std::string>> m_methodsByType;
