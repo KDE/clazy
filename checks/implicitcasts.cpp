@@ -46,7 +46,7 @@ ImplicitCasts::ImplicitCasts(const std::string &name)
 void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
 {
     auto implicitCast = dyn_cast<ImplicitCastExpr>(stmt);
-    if (implicitCast == nullptr)
+    if (!implicitCast)
         return;
 
     if (implicitCast->getCastKind() == clang::CK_LValueToRValue)
@@ -74,10 +74,9 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     if (Utils::insideCTORCall(m_parentMap, stmt, {"QAtomicInt", "QBasicAtomicInt"}))
         return;
 
-    if (Utils::parent(m_parentMap, implicitCast) == nullptr)
+    if (!Utils::parent(m_parentMap, implicitCast))
         return;
 
-    StringUtils::printLocation(stmt->getLocStart());
 
     EnumConstantDecl *enumerator = m_lastDecl ? dyn_cast<EnumConstantDecl>(m_lastDecl) : nullptr;
     if (enumerator) {
