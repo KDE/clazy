@@ -211,6 +211,25 @@ namespace Utils {
         return nullptr;
     }
 
+    // Like getFirstChildOfType() but only looks at first child, so basically first branch of the tree
+    template <typename T>
+    T* getFirstChildOfType2(clang::Stmt *stm)
+    {
+        if (!stm)
+            return nullptr;
+
+        if (stm->child_begin() != stm->child_end()) {
+            auto child = *(stm->child_begin());
+            if (auto s = clang::dyn_cast<T>(child))
+                return s;
+
+            if (auto s = getFirstChildOfType<T>(child))
+                return s;
+        }
+
+        return nullptr;
+    }
+
     bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
     bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
 

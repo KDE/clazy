@@ -84,23 +84,36 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method)
     return true;
 }
 
+static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
+{
+    static const vector<string> list = { "append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth", "operator+=" };
+
+    if (!method || method->getParent()->getNameAsString() != "QString")
+        return false;
+
+    return find(list.cbegin(), list.cend(), method->getNameAsString()) != list.cend();
+}
+
 void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
 {
     // Here we look for code like str.firstMethod().secondMethod(), where firstMethod() is for example mid() and secondMethod is for example, toInt()
 
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall)
+    CallExpr *call = dyn_cast<CallExpr>(stmt);
+    if (!call)
         return;
 
-    if (processCase1(memberCall))
+    if (processCase1(dyn_cast<CXXMemberCallExpr>(call)))
         return;
 
-    processCase2(memberCall);
+    processCase2(call);
 }
 
 // Catches cases like: int i = s.mid(1, 1).toInt()
 bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 {
+    if (!memberCall)
+        return false;
+
     // In the AST secondMethod() is parent of firstMethod() call, and will be visited first (because at runtime firstMethod() is resolved first().
     // So check for interesting second method first
     CXXMethodDecl *method = memberCall->getMethodDecl();
@@ -127,9 +140,46 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 }
 
 // Catches cases like: s.append(s2.mid(1.1));
-bool StringRefCandidates::processCase2(CXXMemberCallExpr *)
+bool StringRefCandidates::processCase2(CallExpr *call)
 {
-    return false;
+    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(call);
+    CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(call);
+
+    CXXMethodDecl *method = nullptr;
+    if (memberCall) {
+        method = memberCall->getMethodDecl();
+    } else if (operatorCall && operatorCall->getCalleeDecl()) {
+        Decl *decl = operatorCall->getCalleeDecl();
+        method = dyn_cast<CXXMethodDecl>(decl);
+    }
+
+    if (!isMethodReceivingQStringRef(method))
+        return false;
+
+    Expr *firstArgument = call->getNumArgs() > 0 ? call->getArg(0) : nullptr;
+    MaterializeTemporaryExpr *temp = firstArgument ? dyn_cast<MaterializeTemporaryExpr>(firstArgument) : nullptr;
+    if (!temp) {
+        Expr *secondArgument = call->getNumArgs() > 1 ? call->getArg(1) : nullptr;
+        temp = secondArgument ? dyn_cast<MaterializeTemporaryExpr>(secondArgument) : nullptr;
+        if (!temp) // For the CXXOperatorCallExpr it's in the second argument
+            return false;
+    }
+
+    CXXMemberCallExpr *innerCall = Utils::getFirstChildOfType2<CXXMemberCallExpr>(temp);
+    if (!innerCall)
+        return false;
+
+    CXXMethodDecl *innerMethod = innerCall->getMethodDecl();
+    if (!isInterestingFirstMethod(innerMethod))
+        return false;
+
+    std::vector<FixItHint> fixits;
+    if (isFixitEnabled(FixitUseQStringRef)) {
+        fixits = fixit(innerCall);
+    }
+
+    emitWarning(call->getLocStart(), "Use " + innerMethod->getNameAsString() + "Ref() instead", fixits);
+    return true;
 }
 
 std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)

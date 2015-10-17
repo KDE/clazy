@@ -45,7 +45,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     bool processCase1(clang::CXXMemberCallExpr*);
-    bool processCase2(clang::CXXMemberCallExpr*);
+    bool processCase2(clang::CallExpr *call);
 
     std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
     std::vector<clang::FixItHint> fixit(clang::CXXMemberCallExpr*);
