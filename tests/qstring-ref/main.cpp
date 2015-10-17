@@ -1,5 +1,5 @@
 #include <QtCore/QString>
-
+#include <QtCore/QRegExp>
 
 void test()
 {
@@ -11,4 +11,8 @@ void test()
     s.midRef(1, 1).toInt(&ok); // OK
     s.mid(s.lastIndexOf(QLatin1Char('#')) + 1).toUpper(); // OK
     s.mid(s.lastIndexOf(QLatin1Char('#')) + 1).trimmed(); // OK
+    const QRegExp r;
+    QRegExp r2;
+    s.mid(1, 1).indexOf(r); // OK
+    s.mid(1, 1).indexOf(r2); // OK
 }

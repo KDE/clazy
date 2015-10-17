@@ -29,9 +29,15 @@
 
 #include <clang/AST/AST.h>
 #include <vector>
+#include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
+
+enum Fixit {
+    FixitNone = 0,
+    FixitUseQStringRef = 0x1,
+};
 
 StringRefCandidates::StringRefCandidates(const std::string &name)
     : CheckBase(name)
@@ -61,7 +67,21 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method)
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
                                          "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toInt",
                                          "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4"};
-    return std::find(list.cbegin(), list.cend(), method->getNameAsString()) != list.cend();
+    const bool isInList = std::find(list.cbegin(), list.cend(), method->getNameAsString()) != list.cend();
+    if (!isInList)
+        return false;
+
+    if (method->getNumParams() > 0) {
+        // Check any argument is a QRegExp or QRegularExpression
+        ParmVarDecl *firstParam = method->getParamDecl(0);
+        if (firstParam) {
+            const string paramSig = firstParam->getType().getAsString();
+            if (paramSig == "const class QRegExp &" || paramSig == "class QRegExp &" || paramSig == "const class QRegularExpression &")
+                return false;
+        }
+    }
+
+    return true;
 }
 
 void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
@@ -89,8 +109,35 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
         return;
     const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
 
-    emitWarning(firstMemberCall->getLocEnd(), "Use " + firstMethodName + "Ref() instead");
+    std::vector<FixItHint> fixits;
+    if (isFixitEnabled(FixitUseQStringRef)) {
+        fixits = fixit(firstMemberCall);
+    }
+    emitWarning(firstMemberCall->getLocEnd(), "Use " + firstMethodName + "Ref() instead", fixits);
+
 }
 
+std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
+{
+    MemberExpr *memberExpr = Utils::getFirstChildOfType<MemberExpr>(call);
+    if (!memberExpr) {
+        queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 1");
+        return {};
+    }
 
-REGISTER_CHECK("qstring-ref", StringRefCandidates)
+    auto insertionLoc = Lexer::getLocForEndOfToken(memberExpr->getLocEnd(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
+    // llvm::errs() << insertionLoc.printToString(m_ci.getSourceManager()) << "\n";
+    if (!insertionLoc.isValid()) {
+        queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 2");
+        return {};
+    }
+
+    std::vector<FixItHint> fixits;
+    fixits.push_back(createInsertion(insertionLoc, "Ref"));
+    return fixits;
+
+}
+
+const char *const s_checkName = "qstring-ref";
+REGISTER_CHECK(s_checkName, StringRefCandidates)
+REGISTER_FIXIT(FixitUseQStringRef, "fix-missing-qstringref", s_checkName)

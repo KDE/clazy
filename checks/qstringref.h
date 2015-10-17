@@ -30,6 +30,7 @@
 namespace clang {
 class Stmt;
 class CallExpr;
+class CXXMemberCallExpr;
 }
 
 /**
@@ -44,6 +45,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
+    std::vector<clang::FixItHint> fixit(clang::CXXMemberCallExpr*);
 };
 
 #endif
