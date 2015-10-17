@@ -38,10 +38,7 @@
  * Finds places where you're calling non-const member functions on temporaries.
  *
  * For example getList().first(), which would detach if the container is shared.
- *
- * TODO: Missing operator[]
- * Probability of False-Positives: yes, for example someHash.values().first() doesn't detach
- * because refcount is 1. But should be constFirst() anyway.
+ * See README-deatching-temporary for more information
  */
 class DetachingTemporaries : public CheckBase
 {
