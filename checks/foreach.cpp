@@ -38,17 +38,17 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
 {
     static std::map<std::string, std::vector<std::string> > methodsMap;
     if (methodsMap.empty()) {
-        methodsMap["QList"] = {"first", "last", "begin", "end", "front", "back"};
-        methodsMap["QStringList"] = {"first", "last", "begin", "end", "front", "back"};
+        methodsMap["QListSpecialMethods"] = {"first", "last", "begin", "end", "front", "back"};
+        methodsMap["QList"] = methodsMap["QListSpecialMethods"];
         methodsMap["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "fill"};
         methodsMap["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound"};
         methodsMap["QHash"] = {"begin", "end", "find"};
         methodsMap["QLinkedList"] = {"first", "last", "begin", "end", "front", "back"};
         methodsMap["QSet"] = {"begin", "end", "find"};
-        methodsMap["QStack"] = {"top"};
-        methodsMap["QQueue"] = {"head"};
-        methodsMap["QMultiMap"] = methodsMap["QMap"];
-        methodsMap["QMultiHash"] = methodsMap["QHash"];
+        methodsMap["QStack"] = methodsMap["QVector"];
+        methodsMap["QStack"].push_back({"top"});
+        methodsMap["QQueue"] = methodsMap["QVector"];
+        methodsMap["QQueue"].push_back({"head"});
         methodsMap["QString"] = {"begin", "end", "data"};
         methodsMap["QByteArray"] = {"data"};
         methodsMap["QImage"] = {"bits", "scanLine"};
@@ -60,8 +60,8 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
 Foreach::Foreach(const std::string &name)
     : CheckBase(name)
 {
-
 }
+
 
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
@@ -104,7 +104,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return; // shouldn't happen
 
     CXXRecordDecl *containerRecord = containerType->getAsCXXRecordDecl();
-    const bool isQtContainer = detachingMethodsMap().count(containerRecord->getNameAsString());
+    const bool isQtContainer = detachingMethodsMap().count(Utils::rootBaseClass(containerRecord)->getNameAsString());
     if (!isQtContainer) {
         emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy");
         return;
@@ -196,15 +196,23 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
             DeclContext *declContext = valDecl->getDeclContext();
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
             if (recordDecl != nullptr) {
-                const std::string className = recordDecl->getQualifiedNameAsString();
+                const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
                 if (detachingMethodsMap().find(className) != detachingMethodsMap().end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap().at(className);
                     if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) != allowedFunctions.cend()) {
                         Expr *expr = memberExpr->getBase();
-                        if (expr && llvm::isa<DeclRefExpr>(expr)) {
-                            if (dyn_cast<DeclRefExpr>(expr)->getDecl() == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating
-                                return true;
+
+                        if (expr) {
+                            DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(expr);
+                            if (!refExpr) {
+                                auto s = Utils::getFirstChildAtDepth(expr, 1);
+                                refExpr = dyn_cast<DeclRefExpr>(s);
+                                if (refExpr) {
+                                    if (refExpr->getDecl() == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating
+                                        return true;
+                                    }
+                                }
                             }
                         }
                     }
@@ -236,7 +244,7 @@ void Foreach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    const string containerClassName = record->getQualifiedNameAsString();
+    const string containerClassName = Utils::rootBaseClass(record)->getQualifiedNameAsString();
 
     if (detachingMethodsMap().find(containerClassName) != detachingMethodsMap().end()) {
         emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container");

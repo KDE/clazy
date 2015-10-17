@@ -1094,3 +1094,18 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
 
     return callexprs;
 }
+
+CXXRecordDecl *Utils::rootBaseClass(CXXRecordDecl *derived)
+{
+    if (!derived || derived->getNumBases() == 0)
+        return derived;
+
+    llvm::errs() << "derived " << derived->getNameAsString() << " " << derived->getNumBases() <<  "\n";
+
+    CXXBaseSpecifier *base = derived->bases_begin();
+    CXXRecordDecl *record = base->getType()->getAsCXXRecordDecl();
+    if (record)
+        llvm::errs() << " foo " << derived->getNameAsString() << " " << record->getNameAsString() << "\n";
+
+    return record == nullptr ? derived : rootBaseClass(record);
+}

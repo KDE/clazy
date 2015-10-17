@@ -316,6 +316,9 @@ namespace Utils {
     // -- bar
     // --- foo
     std::vector<clang::CallExpr *> callListForChain(clang::CallExpr *lastCallExpr);
+
+    // Returns the first base class
+    clang::CXXRecordDecl * rootBaseClass(clang::CXXRecordDecl *derived);
 }
 
 #endif

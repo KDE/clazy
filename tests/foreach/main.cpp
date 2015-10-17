@@ -2,7 +2,7 @@
 #include <vector>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
-
+#include <QtCore/QMap>
 
 
 
@@ -108,5 +108,17 @@ void testQStringList()
     QStringList sl;
     sl << "A" << "B";
     foreach (const QString &s, sl) { // no warning
+    }
+}
+
+
+void testQMultiMapDetach()
+{
+    QMultiMap<int,int> m;
+    for (int i : m) {
+    }
+
+    foreach (int i, m) {
+        m.first();
     }
 }
