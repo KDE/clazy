@@ -92,21 +92,30 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
     if (!memberCall)
         return;
 
+    if (processCase1(memberCall))
+        return;
+
+    processCase2(memberCall);
+}
+
+// Catches cases like: int i = s.mid(1, 1).toInt()
+bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
+{
     // In the AST secondMethod() is parent of firstMethod() call, and will be visited first (because at runtime firstMethod() is resolved first().
     // So check for interesting second method first
     CXXMethodDecl *method = memberCall->getMethodDecl();
     if (!isInterestingSecondMethod(method))
-        return;
+        return false;
 
     vector<CallExpr *> callExprs = Utils::callListForChain(memberCall);
     if (callExprs.size() < 2)
-        return;
+        return false;
 
     // The list now contains {secondMethod(), firstMethod() }
     CXXMemberCallExpr *firstMemberCall = dyn_cast<CXXMemberCallExpr>(callExprs.at(1));
 
     if (!firstMemberCall || !isInterestingFirstMethod(firstMemberCall->getMethodDecl()))
-        return;
+        return false;
     const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
 
     std::vector<FixItHint> fixits;
@@ -114,7 +123,13 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
         fixits = fixit(firstMemberCall);
     }
     emitWarning(firstMemberCall->getLocEnd(), "Use " + firstMethodName + "Ref() instead", fixits);
+    return true;
+}
 
+// Catches cases like: s.append(s2.mid(1.1));
+bool StringRefCandidates::processCase2(CXXMemberCallExpr *)
+{
+    return false;
 }
 
 std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
