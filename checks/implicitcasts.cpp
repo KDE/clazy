@@ -49,47 +49,9 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     if (!implicitCast)
         return;
 
-    if (implicitCast->getCastKind() == clang::CK_LValueToRValue)
+    if (checkFromBoolImplicitCast(implicitCast))
         return;
 
-    if (implicitCast->getType().getTypePtrOrNull()->isBooleanType())
-        return;
-
-    Expr *expr = implicitCast->getSubExpr();
-    QualType qt = expr->getType();
-
-    if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
-        return;
-
-    Stmt *p = Utils::parent(m_parentMap, stmt);
-    if (p && isa<BinaryOperator>(p))
-        return;
-
-    if (p && (isa<CStyleCastExpr>(p) || isa<CXXFunctionalCastExpr>(p)))
-        return;
-
-    if (Utils::isInsideOperatorCall(m_parentMap, stmt, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))
-        return;
-
-    if (Utils::insideCTORCall(m_parentMap, stmt, {"QAtomicInt", "QBasicAtomicInt"}))
-        return;
-
-    if (!Utils::parent(m_parentMap, implicitCast))
-        return;
-
-
-    EnumConstantDecl *enumerator = m_lastDecl ? dyn_cast<EnumConstantDecl>(m_lastDecl) : nullptr;
-    if (enumerator) {
-        // False positive in Qt headers which generates a lot of noise
-        return;
-    }
-
-    auto macro = Lexer::getImmediateMacroName(stmt->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
-    if (macro == "Q_UNLIKELY" || macro == "Q_LIKELY") {
-        return;
-    }
-
-    emitWarning(stmt->getLocStart(), "Implicit cast from bool");
 }
 
 std::vector<string> ImplicitCasts::filesToIgnore() const
@@ -97,6 +59,53 @@ std::vector<string> ImplicitCasts::filesToIgnore() const
     static vector<string> files = {"/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
                                    "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp"};
     return files;
+}
+
+bool ImplicitCasts::checkFromBoolImplicitCast(ImplicitCastExpr *implicitCast)
+{
+    if (implicitCast->getCastKind() == clang::CK_LValueToRValue)
+        return false;
+
+    if (implicitCast->getType().getTypePtrOrNull()->isBooleanType())
+        return false;
+
+    Expr *expr = implicitCast->getSubExpr();
+    QualType qt = expr->getType();
+
+    if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
+        return false;
+
+    Stmt *p = Utils::parent(m_parentMap, implicitCast);
+    if (p && isa<BinaryOperator>(p))
+        return false;
+
+    if (p && (isa<CStyleCastExpr>(p) || isa<CXXFunctionalCastExpr>(p)))
+        return false;
+
+    if (Utils::isInsideOperatorCall(m_parentMap, implicitCast, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))
+        return false;
+
+    if (Utils::insideCTORCall(m_parentMap, implicitCast, {"QAtomicInt", "QBasicAtomicInt"}))
+        return false;
+
+    if (!Utils::parent(m_parentMap, implicitCast))
+        return false;
+
+
+    EnumConstantDecl *enumerator = m_lastDecl ? dyn_cast<EnumConstantDecl>(m_lastDecl) : nullptr;
+    if (enumerator) {
+        // False positive in Qt headers which generates a lot of noise
+        return false;
+    }
+
+    auto macro = Lexer::getImmediateMacroName(implicitCast->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
+    if (macro == "Q_UNLIKELY" || macro == "Q_LIKELY") {
+        return false;
+    }
+
+    emitWarning(implicitCast->getLocStart(), "Implicit cast from bool");
+
+    return true;
 }
 
 REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, HiddenFlag)

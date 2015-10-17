@@ -31,8 +31,7 @@
 #include "checkbase.h"
 
 namespace clang {
-class ForStmt;
-class ValueDecl;
+class ImplicitCastExpr;
 class Stmt;
 }
 
@@ -46,6 +45,8 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
+private:
+    bool checkFromBoolImplicitCast(clang::ImplicitCastExpr *implicitCast);
 };
 
 #endif
