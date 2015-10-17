@@ -44,7 +44,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
         valuesCall->getDirectCallee()->getNameAsString() == "values")
     {
         const std::string valuesClassName = valuesCall->getMethodDecl()->getParent()->getNameAsString();
-        if (valuesClassName == "QMap" || valuesClassName == "QSet" || valuesClassName == "QHash") {
+        if (valuesClassName == "QMap" || valuesClassName == "QSet" || valuesClassName == "QHash") { // QMultiHash and QMultiMap automatically supported
             // Once found see if the first parent call is qDeleteAll
             int i = 1;
             Stmt *p = Utils::parent(m_parentMap, stmt, i);
