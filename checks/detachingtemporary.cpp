@@ -103,14 +103,10 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     if (!firstFuncReturnType)
         return;
 
-    if (firstFuncReturnType->isReferenceType())
+    if (firstFuncReturnType->isReferenceType() || firstFuncReturnType->isPointerType())
         return;
 
-    if (firstFuncReturnType->isPointerType()) {
-        QualType qt = firstFuncReturnType->getPointeeType();
-        if (qt.isConstQualified())
-            return;
-    } else if (qt.isConstQualified()) {
+    if (qt.isConstQualified()) {
         return; // const doesn't detach
     }
 

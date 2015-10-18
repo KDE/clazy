@@ -45,7 +45,7 @@ void qstrings()
 
     test_string().first(); // Warning
     test_string_ref().first(); // Warning
-    test_string_ptr()->first(); // Warning
+    test_string_ptr()->first(); // OK
 }
 
 

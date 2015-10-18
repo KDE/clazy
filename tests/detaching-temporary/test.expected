@@ -1,5 +1,4 @@
 main.cpp:16:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]
 main.cpp:41:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]
 main.cpp:46:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]
-main.cpp:48:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]
 main.cpp:113:5: warning: Modifying temporary container is pointless and it also detaches [-Wclazy-detaching-temporary]
