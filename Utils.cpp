@@ -1088,6 +1088,9 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
             CallExpr *callExpr = dyn_cast<CallExpr>(s);
             if (callExpr && callExpr->getCalleeDecl()) {
                 callexprs.push_back(callExpr);
+            } else if (MemberExpr *memberExpr = dyn_cast<MemberExpr>(s)) {
+                if (isa<FieldDecl>(memberExpr->getMemberDecl()))
+                    break; // accessing a public member via . or -> breaks the chain
             }
         }
     } while (s);
