@@ -77,6 +77,8 @@ static bool isInterestingFunction(FunctionDecl *func)
 
 static bool isInterestingFunction2(FunctionDecl *func)
 {
+    return false; // Disabled for now, too many false-positives when interacting with C code
+
     if (!func)
         return false;
 
@@ -181,4 +183,4 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, HiddenFlag)
+REGISTER_CHECK("implicit-casts", ImplicitCasts)
