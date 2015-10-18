@@ -74,96 +74,70 @@ bool isAllowedChainedMethod(const std::string &methodName)
 
 void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 {
-    CXXMemberCallExpr *memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
-    if (!memberExpr)
+    CallExpr *callExpr = dyn_cast<CallExpr>(stm);
+    if (!callExpr)
         return;
 
-    CXXRecordDecl *classDecl = memberExpr->getRecordDecl();
-    CXXMethodDecl *methodDecl = memberExpr->getMethodDecl();
-    if (!classDecl || !methodDecl)
+
+    // For a chain like getList().first(), returns {first(), getList()}
+    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr);
+    if (callExprs.size() < 2)
         return;
 
-    // Check if it's one of the implicit shared classes
-    const std::string className = classDecl->getNameAsString();
-    auto it = m_methodsByType.find(className);
-    if (it == m_methodsByType.end())
+    CallExpr *firstCallToBeEvaluated = callExprs.at(callExprs.size() - 1); // This is the call to getList()
+    FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
+    if (!firstFunc)
+        return;
+    QualType qt = firstFunc->getReturnType();
+    const Type *firstFuncReturnType = qt.getTypePtrOrNull();
+    if (!firstFuncReturnType)
         return;
 
-    // Check if it's one of the detaching methods
-    const std::string functionName = methodDecl->getNameAsString();
-    const auto &allowedFunctions = it->second;
-    if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) == allowedFunctions.cend())
+    if (firstFuncReturnType->isReferenceType())
         return;
 
-    Expr *expr = memberExpr->getImplicitObjectArgument();
-
-    if (!expr || (!expr->isRValue())) // This check is about detaching temporaries, so check for r value
-        return;
-
-    {
-        // *really* check for rvalue
-        ImplicitCastExpr *impl = dyn_cast<ImplicitCastExpr>(expr);
-        if (impl) {
-            if (impl->getCastKind() == CK_LValueToRValue)
-                return;
-            auto childs = Utils::childs(impl);
-            if (!childs.empty() && isa<ImplicitCastExpr>(childs[0]) && dyn_cast<ImplicitCastExpr>(childs[0])->getCastKind() == CK_LValueToRValue)
-                return;
-        }
-    }
-
-    QualType qt = expr->getType();
-    const Type *exprType = qt.getTypePtrOrNull();
-    if (exprType->isPointerType()) {
-        QualType qt = exprType->getPointeeType();
+    if (firstFuncReturnType->isPointerType()) {
+        QualType qt = firstFuncReturnType->getPointeeType();
         if (qt.isConstQualified())
             return;
     } else if (qt.isConstQualified()) {
         return; // const doesn't detach
     }
 
-    if (isa<CXXBindTemporaryExpr>(expr)) {
-        Expr *subExpr = dyn_cast<CXXBindTemporaryExpr>(expr)->getSubExpr();
-        if (subExpr) {
-            CXXMemberCallExpr *chainedMemberCall = dyn_cast<CXXMemberCallExpr>(subExpr);
-            if (chainedMemberCall) {
-                auto record = chainedMemberCall->getRecordDecl();
-                if ((record && isAllowedChainedClass(record->getNameAsString())) || isAllowedChainedMethod(StringUtils::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
-                    return;
-            } else {
-                // This is a static member call, such as QFile::encodeName()
-                CallExpr *callExpr = dyn_cast<CallExpr>(subExpr);
-                if (callExpr) {
-                    FunctionDecl *fDecl = callExpr->getDirectCallee();
-                    if (fDecl) {
-                        auto name = isa<CXXMethodDecl>(fDecl) ? StringUtils::qualifiedMethodName(dyn_cast<CXXMethodDecl>(fDecl)) : fDecl->getNameAsString();
-                        if (isAllowedChainedMethod(name))
-                            return;
-                    }
-                }
-            }
-        }
+    CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    if (isAllowedChainedMethod(StringUtils::qualifiedMethodName(firstFunc))) {
+        return;
+    }
+
+    if (firstMethod && isAllowedChainedClass(firstMethod->getParent()->getNameAsString())) {
+        return;
     }
 
     // Check if this is a QGlobalStatic
-    if (auto operatorExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
-        auto method = dyn_cast_or_null<CXXMethodDecl>(operatorExpr->getDirectCallee());
-        if (method && method->getParent()->getNameAsString() == "QGlobalStatic") {
-            return;
-        }
+    if (firstMethod && firstMethod->getParent()->getNameAsString() == "QGlobalStatic") {
+        return;
     }
 
-    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(Utils::getFirstChildAtDepth(expr, 2));
-    if (possibleCtorCall != nullptr)
+    CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to first()
+    FunctionDecl *detachingFunc = secondCallToBeEvaluated->getDirectCallee();
+    CXXMethodDecl *detachingMethod = dyn_cast<CXXMethodDecl>(detachingFunc);
+    if (!detachingMethod)
         return;
 
-    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(Utils::getFirstChildAtDepth(expr, 1));
-    if (possibleThisCall != nullptr)
+    // Check if it's one of the implicit shared classes
+    CXXRecordDecl *classDecl = detachingMethod->getParent();
+    const std::string className = classDecl->getNameAsString();
+    auto it = m_methodsByType.find(className);
+    if (it == m_methodsByType.end())
         return;
 
-    // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
+    // Check if it's one of the detaching methods
+    const std::string functionName = detachingMethod->getNameAsString();
+    const auto &allowedFunctions = it->second;
+    if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) == allowedFunctions.cend())
+        return;
 
-    std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(methodDecl) + std::string("() on temporary");
+    std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
     emitWarning(stm->getLocStart(), error.c_str());
 }
 

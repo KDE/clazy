@@ -89,3 +89,20 @@ struct TestThis : public QList<int>
         begin();
     }
 };
+
+class Foo
+{
+public:
+    QStringList list;
+};
+
+Foo * getFoo() { return new Foo(); }
+Foo getFoo2() { return Foo(); }
+
+void testThroughPointer()
+{
+    Foo *f;
+    f->list.first(); // OK
+    getFoo()->list.first(); // OK
+    getFoo2().list.first(); // OK
+}
