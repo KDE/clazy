@@ -37,7 +37,9 @@ class CallExpr;
 }
 
 /**
- * Finds places with unwanted implicit casts
+ * Finds places with unwanted implicit casts.
+ *
+ * See README-implicit-casts for more information
  */
 class ImplicitCasts : public CheckBase
 {
