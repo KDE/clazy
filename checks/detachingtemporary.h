@@ -47,6 +47,7 @@ public:
     void VisitStmt(clang::Stmt *stm) override;
 private:
     std::map<std::string, std::vector<std::string>> m_methodsByType;
+    std::map<std::string, std::vector<std::string>> m_writeMethodsByType;
 };
 
 #endif

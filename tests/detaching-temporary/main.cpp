@@ -106,3 +106,9 @@ void testThroughPointer()
     getFoo()->list.first(); // OK
     getFoo2().list.first(); // OK
 }
+
+QMap<int,int> getMap() { return {}; };
+void testWriteMethod()
+{
+    getMap().insert(1,1);
+}

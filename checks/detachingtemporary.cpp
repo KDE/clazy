@@ -40,19 +40,28 @@ using namespace std;
 DetachingTemporary::DetachingTemporary(const std::string &name)
     : CheckBase(name)
 {
-    m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back", "takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "fill", "insert" };
-    m_methodsByType["QMap"] = {"begin", "end", "erase", "first", "find", "insert", "insertMulti", "last", "lowerBound", "remove", "take", "upperBound", "unite" };
-    m_methodsByType["QHash"] = {"begin", "end", "erase", "find", "insert", "insertMulti", "remove", "take", "unite" };
-    m_methodsByType["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_methodsByType["QSet"] = {"begin", "end", "erase", "find", "insert", "intersect", "unite", "subtract"};
-    m_methodsByType["QStack"] = {"push", "swap", "top"};
-    m_methodsByType["QQueue"] = {"head", "enqueue", "swap"};
+    m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back"};
+    m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data" };
+    m_methodsByType["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound" };
+    m_methodsByType["QHash"] = {"begin", "end", "find" };
+    m_methodsByType["QLinkedList"] = {"first", "last", "begin", "end", "front", "back" };
+    m_methodsByType["QSet"] = {"begin", "end", "find" };
+    m_methodsByType["QStack"] = {"top"};
+    m_methodsByType["QQueue"] = {"head"};
     m_methodsByType["QMultiMap"] = m_methodsByType["QMap"];
     m_methodsByType["QMultiHash"] = m_methodsByType["QHash"];
     m_methodsByType["QString"] = {"begin", "end", "data"};
     m_methodsByType["QByteArray"] = {"data"};
     m_methodsByType["QImage"] = {"bits", "scanLine"};
+
+    m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
+    m_writeMethodsByType["QVector"] = { "fill", "insert" };
+    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite" };
+    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite" };
+    m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
+    m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract"};
+    m_writeMethodsByType["QStack"] = {"push", "swap"};
+    m_writeMethodsByType["QQueue"] = {"enqueue", "swap"};
 }
 
 bool isAllowedChainedClass(const std::string &className)
@@ -68,7 +77,8 @@ bool isAllowedChainedMethod(const std::string &methodName)
                                            "QListWidget::selectedItems", "QFile::encodeName", "QFile::decodeName",
                                            "QItemSelectionModel::selectedRows", "QTreeWidget::selectedItems",
                                            "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList",
-                                           "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes"};
+                                           "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes",
+                                           "QMimeData::formats", "i18n"};
     return find(allowed.cbegin(), allowed.cend(), methodName) != allowed.cend();
 }
 
@@ -127,18 +137,32 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     // Check if it's one of the implicit shared classes
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     const std::string className = classDecl->getNameAsString();
+
     auto it = m_methodsByType.find(className);
-    if (it == m_methodsByType.end())
-        return;
+    auto it2 = m_writeMethodsByType.find(className);
+
+    std::vector<std::string> allowedFunctions;
+    std::vector<std::string> allowedWriteFunctions;
+    if (it != m_methodsByType.end()) {
+        allowedFunctions = it->second;
+    }
+
+    if (it2 != m_writeMethodsByType.end()) {
+        allowedWriteFunctions = it2->second;
+    }
 
     // Check if it's one of the detaching methods
     const std::string functionName = detachingMethod->getNameAsString();
-    const auto &allowedFunctions = it->second;
-    if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) == allowedFunctions.cend())
-        return;
 
-    std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
-    emitWarning(stm->getLocStart(), error.c_str());
+    string error;
+    if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) != allowedFunctions.cend()) {
+        error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
+    } else if (std::find(allowedWriteFunctions.cbegin(), allowedWriteFunctions.cend(), functionName) != allowedWriteFunctions.cend()) {
+        error = std::string("Modifying temporary container is pointless and it also detaches");
+    }
+
+    if (!error.empty())
+        emitWarning(stm->getLocStart(), error.c_str());
 }
 
 REGISTER_CHECK("detaching-temporary", DetachingTemporary)
