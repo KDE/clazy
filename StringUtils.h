@@ -124,8 +124,12 @@ inline void printLocation(clang::PresumedLoc loc, bool newLine = true)
         llvm::errs() << "\n";
 }
 
-inline std::string qualifiedMethodName(clang::CXXMethodDecl *method)
+inline std::string qualifiedMethodName(clang::FunctionDecl *func)
 {
+    clang::CXXMethodDecl *method = clang::dyn_cast<clang::CXXMethodDecl>(func);
+    if (!method)
+        return func->getQualifiedNameAsString();
+
     // method->getQualifiedNameAsString() returns the name with template arguments, so do a little hack here
     if (!method || !method->getParent())
         return "";
