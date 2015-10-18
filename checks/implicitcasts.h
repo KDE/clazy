@@ -33,6 +33,7 @@
 namespace clang {
 class ImplicitCastExpr;
 class Stmt;
+class CallExpr;
 }
 
 /**
@@ -45,8 +46,6 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
-private:
-    bool checkFromBoolImplicitCast(clang::ImplicitCastExpr *implicitCast);
 };
 
 #endif

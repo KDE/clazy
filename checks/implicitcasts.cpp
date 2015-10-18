@@ -43,17 +43,6 @@ ImplicitCasts::ImplicitCasts(const std::string &name)
 
 }
 
-void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
-{
-    auto implicitCast = dyn_cast<ImplicitCastExpr>(stmt);
-    if (!implicitCast)
-        return;
-
-    if (checkFromBoolImplicitCast(implicitCast))
-        return;
-
-}
-
 std::vector<string> ImplicitCasts::filesToIgnore() const
 {
     static vector<string> files = {"/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
@@ -61,51 +50,135 @@ std::vector<string> ImplicitCasts::filesToIgnore() const
     return files;
 }
 
-bool ImplicitCasts::checkFromBoolImplicitCast(ImplicitCastExpr *implicitCast)
+static bool isInterestingFunction(FunctionDecl *func)
 {
-    if (implicitCast->getCastKind() == clang::CK_LValueToRValue)
+    if (!func)
         return false;
 
-    if (implicitCast->getType().getTypePtrOrNull()->isBooleanType())
-        return false;
+    // The interesting function calls for the pointertoBool check are those having bool and also pointer arguments,
+    // which might get mixed
 
-    Expr *expr = implicitCast->getSubExpr();
-    QualType qt = expr->getType();
+    bool hasBoolArgument = false;
+    bool hasPointerArgument = false;
 
-    if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
-        return false;
+    for (auto it = func->param_begin(), end = func->param_end(); it != end; ++it) {
 
-    Stmt *p = Utils::parent(m_parentMap, implicitCast);
-    if (p && isa<BinaryOperator>(p))
-        return false;
+        ParmVarDecl *param = *it;
+        const Type *t = param->getType().getTypePtrOrNull();
+        hasBoolArgument |= (t && t->isBooleanType());
+        hasPointerArgument |= (t && t->isPointerType());
 
-    if (p && (isa<CStyleCastExpr>(p) || isa<CXXFunctionalCastExpr>(p)))
-        return false;
-
-    if (Utils::isInsideOperatorCall(m_parentMap, implicitCast, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))
-        return false;
-
-    if (Utils::insideCTORCall(m_parentMap, implicitCast, {"QAtomicInt", "QBasicAtomicInt"}))
-        return false;
-
-    if (!Utils::parent(m_parentMap, implicitCast))
-        return false;
-
-
-    EnumConstantDecl *enumerator = m_lastDecl ? dyn_cast<EnumConstantDecl>(m_lastDecl) : nullptr;
-    if (enumerator) {
-        // False positive in Qt headers which generates a lot of noise
-        return false;
+        if (hasBoolArgument && hasPointerArgument)
+            return true;
     }
 
-    auto macro = Lexer::getImmediateMacroName(implicitCast->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
+    return false;
+}
+
+static bool isInterestingFunction2(FunctionDecl *func)
+{
+    if (!func)
+        return false;
+
+    static const vector<string> functions = {"QString::arg"};
+    return find(functions.cbegin(), functions.cend(), func->getQualifiedNameAsString()) == functions.cend();
+}
+
+// Checks for pointer->bool implicit casts
+template <typename T>
+static bool iterateCallExpr(T* callExpr, CheckBase *check)
+{
+    if (!callExpr)
+        return false;
+
+    bool result = false;
+
+    int i = 0;
+    for (auto it = callExpr->arg_begin(), end = callExpr->arg_end(); it != end; ++it) {
+        ++i;
+        auto implicitCast = dyn_cast<ImplicitCastExpr>(*it);
+        if (!implicitCast || implicitCast->getCastKind() != clang::CK_PointerToBoolean)
+            continue;
+
+        check->emitWarning(implicitCast->getLocStart(), "Implicit pointer to bool cast (argument " + std::to_string(i) + ")");
+        result = true;
+    }
+
+    return result;
+}
+
+// Checks for bool->int implicit casts
+template <typename T>
+static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap)
+{
+    if (!callExpr)
+        return false;
+
+    auto macro = Lexer::getImmediateMacroName(callExpr->getLocStart(), CheckManager::instance()->m_ci->getSourceManager(), CheckManager::instance()->m_ci->getLangOpts());
     if (macro == "Q_UNLIKELY" || macro == "Q_LIKELY") {
         return false;
     }
 
-    emitWarning(implicitCast->getLocStart(), "Implicit cast from bool");
+    bool result = false;
 
-    return true;
+    int i = 0;
+    for (auto it = callExpr->arg_begin(), end = callExpr->arg_end(); it != end; ++it) {
+        ++i;
+        auto implicitCast = dyn_cast<ImplicitCastExpr>(*it);
+        if (!implicitCast || implicitCast->getCastKind() != clang::CK_IntegralCast)
+            continue;
+
+        if (implicitCast->getType().getTypePtrOrNull()->isBooleanType())
+            continue;
+
+        Expr *expr = implicitCast->getSubExpr();
+        QualType qt = expr->getType();
+
+        if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
+            continue;
+
+        if (Utils::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
+            continue;
+
+        if (Utils::getFirstChildOfType<CStyleCastExpr>(implicitCast))
+            continue;
+
+        if (Utils::isInsideOperatorCall(parentMap, implicitCast, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))
+            continue;
+
+        if (Utils::insideCTORCall(parentMap, implicitCast, {"QAtomicInt", "QBasicAtomicInt"}))
+            continue;
+
+        check->emitWarning(implicitCast->getLocStart(), "Implicit bool to int cast (argument " + std::to_string(i) + ")");
+        result = true;
+    }
+
+    return result;
+}
+
+void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
+{
+    // Lets check only in function calls. Otherwise there are too many false positives, it's common
+    // to implicit cast to bool when checking pointers for validity, like if (ptr)
+
+    CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
+    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
+    if (!callExpr && !ctorExpr)
+        return;
+
+    FunctionDecl *func = callExpr ? callExpr->getDirectCallee()
+                                  : ctorExpr->getConstructor();
+
+
+    if (isInterestingFunction(func)) {
+        // Check pointer->bool implicit casts
+        iterateCallExpr<CallExpr>(callExpr, this);
+        iterateCallExpr<CXXConstructExpr>(ctorExpr, this);
+    } else if (isInterestingFunction2(func)) {
+        // Check bool->int implicit casts
+        iterateCallExpr2<CallExpr>(callExpr, this, m_parentMap);
+        iterateCallExpr2<CXXConstructExpr>(ctorExpr, this, m_parentMap);
+    }
 }
 
 REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, HiddenFlag)

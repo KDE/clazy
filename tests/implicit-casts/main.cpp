@@ -10,8 +10,8 @@ bool someBool() { return true; }
 void foo1()
 {
     bool b;
-    foo(b);
-    foo(someBool());
+    foo(b); // Warning
+    foo(someBool()); // Warning
     foo('a');
     enum  A { Defined = true };
     bool b2;
@@ -48,3 +48,29 @@ struct A
         foo(qint8(b));
     }
 };
+
+void takesBool(bool, A*) {}
+void setEnabled(bool) {}
+
+struct B
+{
+    B(bool, A*)
+    {
+    }
+
+};
+
+void testPointerToInt()
+{
+    A *a;
+    takesBool(a, a); // Warning
+    setEnabled(a);
+    B b(a, a); // Warning
+    bool boo1;
+}
+
+void testQStringArgOK()
+{
+    bool b;
+    QString().arg(b);
+}

@@ -58,13 +58,13 @@ public:
     void setEnabledFixits(int);
     bool isFixitEnabled(int fixit) const;
 
+    void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true);
+    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
     bool shouldIgnoreFile(clang::SourceLocation) const;
     virtual std::vector<std::string> filesToIgnore() const;
-    void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true);
-    void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
