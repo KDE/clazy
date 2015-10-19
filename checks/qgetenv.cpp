@@ -77,7 +77,9 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (methodname == "isEmpty") {
         errorMsg = "qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsEmpty() instead";
     } else if (methodname == "isNull") {
-        errorMsg = "qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsSet() instead";
+        errorMsg = "qgetenv().isNull() allocates. Use qEnvironmentVariableIsSet() instead";
+    } else if (methodname == "toInt") {
+        errorMsg = "qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead";
     }
 
     if (!errorMsg.empty()) {

@@ -5,7 +5,8 @@ int test()
 {
 
     qgetenv("Foo").isEmpty();
-    qgetenv("Foo").isNull();
-    QByteArray b = qgetenv("Foo");
+    bool b = qgetenv("Foo").isNull();
+    QByteArray ba = qgetenv("Foo");
+    int a = qgetenv("Foo").toInt(&b);
     return 0;
 }

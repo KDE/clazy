@@ -1,2 +1,3 @@
 main.cpp:7:5: warning: qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsEmpty() instead [-Wclazy-qgetenv]
-main.cpp:8:5: warning: qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsSet() instead [-Wclazy-qgetenv]
+main.cpp:8:14: warning: qgetenv().isNull() allocates. Use qEnvironmentVariableIsSet() instead [-Wclazy-qgetenv]
+main.cpp:10:13: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead [-Wclazy-qgetenv]
