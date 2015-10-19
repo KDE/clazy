@@ -1080,10 +1080,19 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
     if (!lastCallExpr)
         return {};
 
+    const bool isOperator = isa<CXXOperatorCallExpr>(lastCallExpr);
+
     vector<CallExpr *> callexprs = { lastCallExpr };
     Stmt *s = lastCallExpr;
     do {
-        s = s->child_begin() == s->child_end() ? nullptr : *(s->child_begin());
+        const int childCount = std::distance(s->child_begin(), s->child_end());
+        if (isOperator && childCount > 1) {
+            // for operator case, the chained call childs are in the second child
+            s = *(++s->child_begin());
+        } else {
+            s = childCount > 0 ? *s->child_begin() : nullptr;
+        }
+
         if (s) {
             CallExpr *callExpr = dyn_cast<CallExpr>(s);
             if (callExpr && callExpr->getCalleeDecl()) {

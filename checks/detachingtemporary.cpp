@@ -54,14 +54,14 @@ DetachingTemporary::DetachingTemporary(const std::string &name)
     m_methodsByType["QByteArray"] = {"data"};
     m_methodsByType["QImage"] = {"bits", "scanLine"};
 
-    m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_writeMethodsByType["QVector"] = { "fill", "insert" };
-    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite" };
-    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite" };
-    m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract"};
-    m_writeMethodsByType["QStack"] = {"push", "swap"};
-    m_writeMethodsByType["QQueue"] = {"enqueue", "swap"};
+    m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase", "operator[]"};
+    m_writeMethodsByType["QVector"] = { "fill", "insert", "operator[]" };
+    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite", "operator[]" };
+    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite", "operator[]" };
+    m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase", "operator[]"};
+    m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract", "operator[]"};
+    m_writeMethodsByType["QStack"] = {"push", "swap", "operator[]"};
+    m_writeMethodsByType["QQueue"] = {"enqueue", "swap", "operator[]"};
 }
 
 bool isAllowedChainedClass(const std::string &className)
@@ -98,6 +98,8 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
     if (!firstFunc)
         return;
+
+
     QualType qt = firstFunc->getReturnType();
     const Type *firstFuncReturnType = qt.getTypePtrOrNull();
     if (!firstFuncReturnType)

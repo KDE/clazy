@@ -113,3 +113,12 @@ void testWriteMethod()
     getMap().insert(1,1); // Warning
     int a = getMap().take(1); // Warning
 }
+
+void testSubscriptOperator()
+{
+    getList()[0]; // Warning
+    if (test_string()[0].isEmpty()) {} // Warning
+    getMap()[0]; // Warning
+    auto m = getMap();
+    m[0];
+}

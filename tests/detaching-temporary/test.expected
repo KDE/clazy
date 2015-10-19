@@ -3,3 +3,6 @@ main.cpp:41:5: warning: Don't call QList::first() on temporary [-Wclazy-detachin
 main.cpp:46:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]
 main.cpp:113:5: warning: Modifying temporary container is pointless and it also detaches [-Wclazy-detaching-temporary]
 main.cpp:114:13: warning: Don't call QMap::take() on temporary [-Wclazy-detaching-temporary]
+main.cpp:119:5: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
+main.cpp:120:9: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
+main.cpp:121:5: warning: Don't call QMap::operator[]() on temporary [-Wclazy-detaching-temporary]
