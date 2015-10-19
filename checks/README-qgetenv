@@ -1,0 +1,4 @@
+qgetenv
+
+Warns on innefficient usages of qgetenv() which usually allocate memory.
+Suggests usages of qEnvironmentVariableIsSet(), qEnvironmentVariableIsEmpty() and qEnvironmentVariableIntValue()
