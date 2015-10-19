@@ -111,4 +111,5 @@ QMap<int,int> getMap() { return {}; };
 void testWriteMethod()
 {
     getMap().insert(1,1);
+    int a = getMap().take(1);
 }

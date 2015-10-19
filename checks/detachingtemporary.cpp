@@ -126,8 +126,9 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to first()
     FunctionDecl *detachingFunc = secondCallToBeEvaluated->getDirectCallee();
-    CXXMethodDecl *detachingMethod = dyn_cast<CXXMethodDecl>(detachingFunc);
-    if (!detachingMethod)
+    CXXMethodDecl *detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
+    const Type *detachingMethodReturnType = detachingMethod ? detachingMethod->getReturnType().getTypePtrOrNull() : nullptr;
+    if (!detachingMethod || !detachingMethodReturnType)
         return;
 
     // Check if it's one of the implicit shared classes
@@ -151,11 +152,26 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     const std::string functionName = detachingMethod->getNameAsString();
 
     string error;
-    if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) != allowedFunctions.cend()) {
-        error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
-    } else if (std::find(allowedWriteFunctions.cbegin(), allowedWriteFunctions.cend(), functionName) != allowedWriteFunctions.cend()) {
-        error = std::string("Modifying temporary container is pointless and it also detaches");
+
+    const bool isReadFunction = std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) != allowedFunctions.cend();
+    const bool isWriteFunction = std::find(allowedWriteFunctions.cbegin(), allowedWriteFunctions.cend(), functionName) != allowedWriteFunctions.cend();
+
+    if (isReadFunction || isWriteFunction) {
+
+
+        bool returnTypeIsIterator = false;
+        CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
+        if (returnRecord) {
+            returnTypeIsIterator = returnRecord->getNameAsString() == "iterator";
+        }
+
+        if (isWriteFunction && (detachingMethodReturnType->isVoidType() || returnTypeIsIterator)) {
+            error = std::string("Modifying temporary container is pointless and it also detaches");
+        } else {
+            error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
+        }
     }
+
 
     if (!error.empty())
         emitWarning(stm->getLocStart(), error.c_str());
