@@ -57,6 +57,7 @@ implicit-casts
 old-style-connect
 detaching-temporary
 assert-with-side-effects
+qgetenv
 
 --------------------------------------------------------------------------------
 ENABLING FIXITS
