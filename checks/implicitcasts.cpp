@@ -50,6 +50,14 @@ std::vector<string> ImplicitCasts::filesToIgnore() const
     return files;
 }
 
+
+static bool isMacroToIgnore(SourceLocation loc)
+{
+    static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
+    auto macro = Lexer::getImmediateMacroName(loc, CheckManager::instance()->m_ci->getSourceManager(), CheckManager::instance()->m_ci->getLangOpts());
+    return find(macros.cbegin(), macros.cend(), macro) != macros.cend();
+}
+
 static bool isInterestingFunction(FunctionDecl *func)
 {
     if (!func)
@@ -116,11 +124,6 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
     if (!callExpr)
         return false;
 
-    auto macro = Lexer::getImmediateMacroName(callExpr->getLocStart(), CheckManager::instance()->m_ci->getSourceManager(), CheckManager::instance()->m_ci->getLangOpts());
-    if (macro == "Q_UNLIKELY" || macro == "Q_LIKELY") {
-        return false;
-    }
-
     bool result = false;
 
     int i = 0;
@@ -160,6 +163,9 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
 
 void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
 {
+    if (isMacroToIgnore(stmt->getLocStart()))
+        return;
+
     // Lets check only in function calls. Otherwise there are too many false positives, it's common
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 

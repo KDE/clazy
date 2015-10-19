@@ -1,7 +1,7 @@
 #include <QtCore/qmetatype.h>
 #include <QtCore/qhash.h>
 #include <QtCore/QTextStream>
-
+#include <QtTest/QTest>
 
 
 const char *cstring = "foo";
@@ -73,4 +73,12 @@ void testQStringArgOK()
 {
     bool b;
     QString().arg(b);
+}
+
+
+void testQVERIFY() // Bug 354064
+{
+    A *a;
+    QVERIFY(a); // OK
+    QVERIFY2(a, "msg"); // OK
 }
