@@ -122,3 +122,10 @@ void testSubscriptOperator()
     auto m = getMap();
     m[0];
 }
+
+typedef QList<int> IntList;
+IntList getIntList() { return {}; }
+void testTypedef()
+{
+    getIntList()[0];
+}
