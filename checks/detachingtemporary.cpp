@@ -64,6 +64,8 @@ DetachingTemporary::DetachingTemporary(const std::string &name)
     m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract", "operator[]"};
     m_writeMethodsByType["QStack"] = {"push", "swap", "operator[]"};
     m_writeMethodsByType["QQueue"] = {"enqueue", "swap", "operator[]"};
+    m_writeMethodsByType["QListSpecialMethods"] = {"sort", "replaceInStrings", "removeDuplicates"};
+    m_writeMethodsByType["QStringList"] = m_writeMethodsByType["QListSpecialMethods"];
 }
 
 bool isAllowedChainedClass(const std::string &className)

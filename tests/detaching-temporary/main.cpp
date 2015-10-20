@@ -139,3 +139,8 @@ void testDerivedClass()
     getMultiMap().begin(); // Warning
     getMultiMap().insert(1, 1); // Warning
 }
+
+void testQStringListSpecificMethods()
+{
+    getStringList().removeDuplicates();
+}
