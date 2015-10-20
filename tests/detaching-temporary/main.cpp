@@ -127,5 +127,14 @@ typedef QList<int> IntList;
 IntList getIntList() { return {}; }
 void testTypedef()
 {
-    getIntList()[0];
+    getIntList()[0]; // Warning
+}
+
+QStringList getStringList() { return {}; }
+QMultiMap<int,int> getMultiMap() { return {}; }
+void testDerivedClass()
+{
+    getStringList().first(); // Warning
+    getStringList()[0]; // Warning
+    getMultiMap().begin(); // Warning
 }
