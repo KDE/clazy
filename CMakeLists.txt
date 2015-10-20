@@ -102,7 +102,7 @@ add_clang_plugin(ClangLazy
                  checkmanager.cpp
                  checks/assertwithsideeffects.cpp
                  checks/detachingtemporary.cpp
-                 checks/duplicateexpensivestatement.cpp
+                 # checks/duplicateexpensivestatement.cpp
                  checks/dynamic_cast.cpp
                  checks/foreach.cpp
                  checks/globalconstcharpointer.cpp
