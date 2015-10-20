@@ -144,3 +144,10 @@ void testQStringListSpecificMethods()
 {
     getStringList().removeDuplicates();
 }
+
+QString getString() { return ""; }
+void testQString()
+{
+    getString().begin(); // Warning
+    getString()[1]; // Warning
+}

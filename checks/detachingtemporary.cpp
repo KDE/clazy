@@ -50,7 +50,7 @@ DetachingTemporary::DetachingTemporary(const std::string &name)
     m_methodsByType["QQueue"] = {"head"};
     m_methodsByType["QMultiMap"] = m_methodsByType["QMap"];
     m_methodsByType["QMultiHash"] = m_methodsByType["QHash"];
-    m_methodsByType["QString"] = {"begin", "end", "data"};
+    m_methodsByType["QString"] = {"begin", "end", "data", "operator[]", "push_back", "push_front", "clear", "chop"};
     m_methodsByType["QByteArray"] = {"data"};
     m_methodsByType["QImage"] = {"bits", "scanLine"};
 

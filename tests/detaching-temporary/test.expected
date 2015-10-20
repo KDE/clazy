@@ -11,3 +11,6 @@ main.cpp:137:5: warning: Don't call QList::first() on temporary [-Wclazy-detachi
 main.cpp:138:5: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
 main.cpp:139:5: warning: Don't call QMap::begin() on temporary [-Wclazy-detaching-temporary]
 main.cpp:140:5: warning: Modifying temporary container is pointless and it also detaches [-Wclazy-detaching-temporary]
+main.cpp:145:5: warning: Don't call QListSpecialMethods::removeDuplicates() on temporary [-Wclazy-detaching-temporary]
+main.cpp:151:5: warning: Don't call QString::begin() on temporary [-Wclazy-detaching-temporary]
+main.cpp:152:5: warning: Don't call QString::operator[]() on temporary [-Wclazy-detaching-temporary]
