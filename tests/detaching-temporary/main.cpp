@@ -137,4 +137,5 @@ void testDerivedClass()
     getStringList().first(); // Warning
     getStringList()[0]; // Warning
     getMultiMap().begin(); // Warning
+    getMultiMap().insert(1, 1); // Warning
 }

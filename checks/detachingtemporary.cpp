@@ -58,6 +58,8 @@ DetachingTemporary::DetachingTemporary(const std::string &name)
     m_writeMethodsByType["QVector"] = { "fill", "insert", "operator[]" };
     m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite", "operator[]" };
     m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite", "operator[]" };
+    m_writeMethodsByType["QMultiHash"] = m_writeMethodsByType["QHash"];
+    m_writeMethodsByType["QMultiMap"] = m_writeMethodsByType["QMap"];
     m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase", "operator[]"};
     m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract", "operator[]"};
     m_writeMethodsByType["QStack"] = {"push", "swap", "operator[]"};
