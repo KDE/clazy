@@ -25,22 +25,25 @@
   without including the source code for Qt in the source distribution.
 */
 
-#ifndef DETACHING_TEMPORARIES_H
-#define DETACHING_TEMPORARIES_H
+#ifndef DETACHING_BASE_H
+#define DETACHING_BASE_H
 
-#include "detachingbase.h"
+#include "checkbase.h"
+
+#include <map>
+#include <vector>
+#include <string>
 
 /**
- * Finds places where you're calling non-const member functions on temporaries.
- *
- * For example getList().first(), which would detach if the container is shared.
- * See README-deatching-temporary for more information
+ * Base class for checks that look for detachments.
  */
-class DetachingTemporary : public DetachingBase
+class DetachingBase : public CheckBase
 {
 public:
-    DetachingTemporary(const std::string &name);
-    void VisitStmt(clang::Stmt *stm) override;
+    explicit DetachingBase(const std::string &name);
+protected:
+    std::map<std::string, std::vector<std::string>> m_methodsByType;
+    std::map<std::string, std::vector<std::string>> m_writeMethodsByType;
 };
 
 #endif

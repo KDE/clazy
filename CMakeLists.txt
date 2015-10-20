@@ -101,6 +101,7 @@ add_clang_plugin(ClangLazy
                  checkbase.cpp
                  checkmanager.cpp
                  checks/assertwithsideeffects.cpp
+                 checks/detachingbase.cpp
                  checks/detachingtemporary.cpp
                  # checks/duplicateexpensivestatement.cpp
                  checks/dynamic_cast.cpp

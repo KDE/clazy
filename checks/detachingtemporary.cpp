@@ -38,34 +38,8 @@ using namespace clang;
 using namespace std;
 
 DetachingTemporary::DetachingTemporary(const std::string &name)
-    : CheckBase(name)
+    : DetachingBase(name)
 {
-    m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back"};
-    m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data" };
-    m_methodsByType["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound" };
-    m_methodsByType["QHash"] = {"begin", "end", "find" };
-    m_methodsByType["QLinkedList"] = {"first", "last", "begin", "end", "front", "back" };
-    m_methodsByType["QSet"] = {"begin", "end", "find" };
-    m_methodsByType["QStack"] = {"top"};
-    m_methodsByType["QQueue"] = {"head"};
-    m_methodsByType["QMultiMap"] = m_methodsByType["QMap"];
-    m_methodsByType["QMultiHash"] = m_methodsByType["QHash"];
-    m_methodsByType["QString"] = {"begin", "end", "data", "operator[]", "push_back", "push_front", "clear", "chop"};
-    m_methodsByType["QByteArray"] = {"data"};
-    m_methodsByType["QImage"] = {"bits", "scanLine"};
-
-    m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase", "operator[]"};
-    m_writeMethodsByType["QVector"] = { "fill", "insert", "operator[]" };
-    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite", "operator[]" };
-    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite", "operator[]" };
-    m_writeMethodsByType["QMultiHash"] = m_writeMethodsByType["QHash"];
-    m_writeMethodsByType["QMultiMap"] = m_writeMethodsByType["QMap"];
-    m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase", "operator[]"};
-    m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract", "operator[]"};
-    m_writeMethodsByType["QStack"] = {"push", "swap", "operator[]"};
-    m_writeMethodsByType["QQueue"] = {"enqueue", "swap", "operator[]"};
-    m_writeMethodsByType["QListSpecialMethods"] = {"sort", "replaceInStrings", "removeDuplicates"};
-    m_writeMethodsByType["QStringList"] = m_writeMethodsByType["QListSpecialMethods"];
 }
 
 bool isAllowedChainedClass(const std::string &className)
