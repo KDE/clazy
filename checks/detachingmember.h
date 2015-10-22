@@ -25,30 +25,23 @@
   without including the source code for Qt in the source distribution.
 */
 
-#ifndef DETACHING_BASE_H
-#define DETACHING_BASE_H
+#ifndef DETACHING_MEMBER_H
+#define DETACHING_MEMBER_H
 
-#include "checkbase.h"
-
-#include <map>
-#include <vector>
-#include <string>
-
-namespace clang {
-class CXXMethodDecl;
-}
+#include "detachingbase.h"
 
 /**
- * Base class for checks that look for detachments.
+ * Finds places where you're calling non-const member functions on member containers.
+ *
+ * For example m_list.first(), which would detach if the container is shared.
+ * See README-deatching-member for more information
  */
-class DetachingBase : public CheckBase
+class DetachingMember : public DetachingBase
 {
 public:
-    explicit DetachingBase(const std::string &name);
-protected:
-    std::map<std::string, std::vector<std::string>> m_methodsByType;
-    std::map<std::string, std::vector<std::string>> m_writeMethodsByType;
-    bool isDetachingMethod(clang::CXXMethodDecl *) const;
+    explicit DetachingMember(const std::string &name);
+    void VisitStmt(clang::Stmt *stm) override;
+    std::vector<std::string> filesToIgnore() const override;
 };
 
 #endif

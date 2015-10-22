@@ -67,3 +67,33 @@ DetachingBase::DetachingBase(const std::string &name)
     m_writeMethodsByType["QListSpecialMethods"] = {"sort", "replaceInStrings", "removeDuplicates"};
     m_writeMethodsByType["QStringList"] = m_writeMethodsByType["QListSpecialMethods"];
 }
+
+bool DetachingBase::isDetachingMethod(CXXMethodDecl *method) const
+{
+    if (!method)
+        return false;
+
+    CXXRecordDecl *record = method->getParent();
+    if (!record)
+        return false;
+
+    const string className = record->getNameAsString();
+
+    auto it = m_methodsByType.find(className);
+    if (it != m_methodsByType.cend()) {
+        const auto &methods = it->second;
+        auto it2 = find(methods.cbegin(), methods.cend(), method->getNameAsString());
+        if (it2 != methods.cend())
+            return true;
+    }
+
+    it = m_writeMethodsByType.find(className);
+    if (it != m_writeMethodsByType.cend()) {
+        const auto &methods = it->second;
+        auto it2 = find(methods.cbegin(), methods.cend(), method->getNameAsString());
+        if (it2 != methods.cend())
+            return true;
+    }
+
+    return false;
+}
