@@ -40,6 +40,20 @@ using namespace std;
 DetachingTemporary::DetachingTemporary(const std::string &name)
     : DetachingBase(name)
 {
+    // Extra stuff that isn't really related to detachments but doesn't make sense to call on temporaries
+    m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};
+    m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
+    m_writeMethodsByType["QVector"] = { "fill", "insert"};
+    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite" };
+    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite"};
+    m_writeMethodsByType["QMultiHash"] = m_writeMethodsByType["QHash"];
+    m_writeMethodsByType["QMultiMap"] = m_writeMethodsByType["QMap"];
+    m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
+    m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract"};
+    m_writeMethodsByType["QStack"] = {"push", "swap"};
+    m_writeMethodsByType["QQueue"] = {"enqueue", "swap"};
+    m_writeMethodsByType["QListSpecialMethods"] = {"sort", "replaceInStrings", "removeDuplicates"};
+    m_writeMethodsByType["QStringList"] = m_writeMethodsByType["QListSpecialMethods"];
 }
 
 bool isAllowedChainedClass(const std::string &className)
@@ -155,6 +169,31 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     if (!error.empty())
         emitWarning(stm->getLocStart(), error.c_str());
+}
+
+bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
+{
+    if (!method)
+        return false;
+
+    CXXRecordDecl *record = method->getParent();
+    if (!record)
+        return false;
+
+    if (DetachingBase::isDetachingMethod(method))
+        return true;
+
+    const string className = record->getNameAsString();
+
+    auto it = m_writeMethodsByType.find(className);
+    if (it != m_writeMethodsByType.cend()) {
+        const auto &methods = it->second;
+        auto it2 = find(methods.cbegin(), methods.cend(), method->getNameAsString());
+        if (it2 != methods.cend())
+            return true;
+    }
+
+    return false;
 }
 
 REGISTER_CHECK("detaching-temporary", DetachingTemporary)

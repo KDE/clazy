@@ -47,7 +47,6 @@ public:
     explicit DetachingBase(const std::string &name);
 protected:
     std::map<std::string, std::vector<std::string>> m_methodsByType;
-    std::map<std::string, std::vector<std::string>> m_writeMethodsByType;
     bool isDetachingMethod(clang::CXXMethodDecl *) const;
 };
 
