@@ -111,7 +111,6 @@ add_clang_plugin(ClangLazy
                  checks/inefficientqlist.cpp
                  checks/implicitcasts.cpp
                  checks/oldstyleconnect.cpp
-                 checks/onlywritten.cpp
                  checks/qlistint.cpp
                  checks/qdatetimeutc.cpp
                  checks/qgetenv.cpp
