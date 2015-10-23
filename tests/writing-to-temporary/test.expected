@@ -1,0 +1,1 @@
+main.cpp:17:5: warning: Call to temporary is a no-op: Foo::setM [-Wclazy-writing-to-temporary]

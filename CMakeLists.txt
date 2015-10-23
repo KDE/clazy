@@ -126,6 +126,7 @@ add_clang_plugin(ClangLazy
                  checks/reservecandidates.cpp
                  checks/temporaryiterator.cpp
                  checks/variantsanitizer.cpp
+                 checks/writingtotemporary.cpp
                  checks/virtualcallsfromctor.cpp
                  Lazy.cpp
                  Utils.cpp

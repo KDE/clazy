@@ -1,0 +1,13 @@
+writing-to-temporary
+
+Catches when calling setters on temporaries, for example:
+widget->sizePolicy().setHorizontalStretch(1);
+
+Which should instead be:
+QSizePolicy sp = widget->sizePolicy();
+sp.setHorizontalStretch(1);
+widget->setSizePolicy(sp);
+
+Requirements:
+- The method must be of void return type
+- It's name must start with "set"
