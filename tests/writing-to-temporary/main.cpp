@@ -24,3 +24,12 @@ void test()
     Foo f;
     f.setM(1); // OK
 }
+
+#include <QtCore/QSize>
+
+QSize getSize() { return QSize(); }
+
+void testKnownTypes()
+{
+    getSize().transpose(); // Warning
+}

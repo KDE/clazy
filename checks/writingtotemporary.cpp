@@ -48,10 +48,20 @@ std::vector<string> WritingToTemporary::filesToIgnore() const
     return files;
 }
 
-static bool isAllowedClass(const string &className)
+static bool isDisallowedClass(const string &className)
 {
     static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement", "QScriptValue", "QTextLine", "QTextBlock" };
-    return find(disallowed.cbegin(), disallowed.cend(), className) == disallowed.cend();
+    return find(disallowed.cbegin(), disallowed.cend(), className) != disallowed.cend();
+}
+
+static bool isKnownType(const string &className)
+{
+    static const vector<string> types = { "QList", "QVector", "QMap", "QHash", "QString", "QSet",
+                                          "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
+                                          "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D"
+                                          , "QVector4D", "QSize", "QSizeF", "QSizePolicy" };
+
+    return find(types.cbegin(), types.cend(), className) != types.cend();
 }
 
 void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
@@ -83,7 +93,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!record)
         return;
 
-    if (!isAllowedClass(record->getNameAsString()))
+    if (isDisallowedClass(record->getNameAsString()))
         return;
 
     QualType qt = firstFunc->getReturnType();
@@ -96,7 +106,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!secondFuncReturnType || !secondFuncReturnType->isVoidType())
         return;
 
-    if (!stringStartsWith(secondFunc->getNameAsString(), "set"))
+    if (!isKnownType(record->getNameAsString()) && !stringStartsWith(secondFunc->getNameAsString(), "set"))
         return;
 
     emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + secondFunc->getQualifiedNameAsString());
