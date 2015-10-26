@@ -25,6 +25,8 @@ for qmake in qmakes:
         QMAKE_HEADERS = get_command_output(qmake + " -query QT_INSTALL_HEADERS").strip()
         break
 
+QMAKE_INT_VERSION = int(QMAKE_VERSION.replace(".", ""))
+
 if not QMAKE_HEADERS:
     # Change here if can't find with qmake
     QMAKE_HEADERS = "/usr/include/qt/"
@@ -41,7 +43,7 @@ _help_command = "clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin 
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
-
+_qtVersionLowerThan55 = QMAKE_INT_VERSION < 550
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -171,6 +173,9 @@ for check in requested_checks:
 
 if not requested_checks:
     requested_checks = all_checks
+    if _qtVersionLowerThan55:
+        # These checks don't pass on Qt 5.4 due to missing API
+        requested_checks = filter(lambda x: x not in ["old-style-connect", "detaching-temporary"] , requested_checks)
 
 for check in requested_checks:
     os.chdir(check)
