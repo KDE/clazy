@@ -33,3 +33,14 @@ void testKnownTypes()
 {
     getSize().transpose(); // Warning
 }
+
+#include <QtXml/QDomNode>
+
+QDomNode getNode() { return {}; }
+
+void testDisallowedType() // bug #354363
+{
+    getNode().firstChild(); // OK
+    QDomNode node;
+    node.firstChild().setPrefix(""); // OK
+}
