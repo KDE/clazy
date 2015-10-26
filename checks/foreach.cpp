@@ -80,7 +80,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stmt);
-    if (constructExpr == nullptr)
+    if (!constructExpr || constructExpr->getNumArgs() < 1)
         return;
 
     CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
@@ -98,12 +98,22 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     if (valueDecl == nullptr)
         return;
 
-    QualType containerQualType  = valueDecl->getType();
-    const Type *containerType = containerQualType.getTypePtrOrNull();
-    if (!containerType || !containerType->isRecordType())
-        return; // shouldn't happen
 
-    CXXRecordDecl *containerRecord = containerType->getAsCXXRecordDecl();
+    CXXRecordDecl *containerRecord = nullptr;
+    MaterializeTemporaryExpr *temporaryExpr = dyn_cast<MaterializeTemporaryExpr>(constructExpr->getArg(0));
+    if (temporaryExpr) {
+        QualType containerQualType = constructExpr->getArg(0)->getType();
+        const Type *containerType = containerQualType.getTypePtrOrNull();
+        containerRecord = containerType ? containerType->getAsCXXRecordDecl() : nullptr;
+    } else {
+        QualType containerQualType = valueDecl->getType();
+        const Type *containerType = containerQualType.getTypePtrOrNull();
+        containerRecord = containerType ? containerType->getAsCXXRecordDecl() : nullptr;
+    }
+
+    if (!containerRecord)
+        return;
+
     const bool isQtContainer = detachingMethodsMap().count(Utils::rootBaseClass(containerRecord)->getNameAsString());
     if (!isQtContainer) {
         emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy");
@@ -111,6 +121,9 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     }
 
     checkBigTypeMissingRef();
+
+    if (temporaryExpr) // Nothing else to check
+        return;
 
     // const containers are fine
     if (valueDecl->getType().isConstQualified())

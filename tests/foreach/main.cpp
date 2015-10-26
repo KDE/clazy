@@ -3,8 +3,8 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
-
-
+#include <QtGui/QRegion>
+#include <QtCore/QVector>
 
 
 
@@ -121,4 +121,10 @@ void testQMultiMapDetach()
     foreach (int i, m) {
         m.first();
     }
+}
+
+void testQRegionRects()
+{
+    QRegion r;
+    foreach (const QRect &rect, r.rects()) {}
 }
