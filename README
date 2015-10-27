@@ -59,7 +59,7 @@ variant-sanitizer
 virtual-call-ctor
 missing-typeinfo
 implicit-casts
-old-style-connect
+old-style-connect (fix-old-style-connects)
 detaching-temporary
 assert-with-side-effects
 qgetenv
