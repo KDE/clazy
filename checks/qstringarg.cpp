@@ -190,4 +190,4 @@ std::vector<std::string> StringArg::filesToIgnore() const
 }
 
 
-REGISTER_CHECK("qstring-arg", StringArg)
+REGISTER_CHECK_WITH_FLAGS("qstring-arg", StringArg, CheckLevel0)

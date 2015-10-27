@@ -81,4 +81,4 @@ std::vector<std::string> DetachingMember::filesToIgnore() const
     return files;
 }
 
-REGISTER_CHECK_WITH_FLAGS("detaching-member", DetachingMember, HiddenFlag)
+REGISTER_CHECK_WITH_FLAGS("detaching-member", DetachingMember, CheckLevel3)

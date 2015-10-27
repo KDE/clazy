@@ -58,4 +58,4 @@ void QMapKeyChecker::VisitDecl(clang::Decl *decl)
     }
 }
 
-REGISTER_CHECK("qmap-with-key-pointer", QMapKeyChecker)
+REGISTER_CHECK_WITH_FLAGS("qmap-with-key-pointer", QMapKeyChecker, CheckLevel0)

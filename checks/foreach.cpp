@@ -264,4 +264,4 @@ void Foreach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     }
 }
 
-REGISTER_CHECK("foreach", Foreach)
+REGISTER_CHECK_WITH_FLAGS("foreach", Foreach, CheckLevel1)

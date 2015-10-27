@@ -76,4 +76,4 @@ std::vector<string> NonPodStatic::filesToIgnore() const
     return {"main.cpp"};
 }
 
-REGISTER_CHECK("non-pod-global-static", NonPodStatic)
+REGISTER_CHECK_WITH_FLAGS("non-pod-global-static", NonPodStatic, CheckLevel1)

@@ -63,4 +63,4 @@ std::vector<std::string> GlobalConstCharPointer::filesToIgnore() const
     return files;
 }
 
-REGISTER_CHECK("global-const-char-pointer", GlobalConstCharPointer)
+REGISTER_CHECK_WITH_FLAGS("global-const-char-pointer", GlobalConstCharPointer, CheckLevel2)

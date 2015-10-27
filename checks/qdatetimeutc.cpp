@@ -72,4 +72,4 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         emitWarning(stmt->getLocStart(), "Use QDateTime::currentDateTimeUtc() instead");
 }
 
-REGISTER_CHECK("qdatetime-utc", QDateTimeUtc)
+REGISTER_CHECK_WITH_FLAGS("qdatetime-utc", QDateTimeUtc, CheckLevel0)

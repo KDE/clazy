@@ -34,7 +34,7 @@ using namespace std;
 
 struct RegisteredCheck {
     std::string name;
-    int flags;
+    CheckLevel level;
     FactoryFunction factory;
 };
 
@@ -44,7 +44,9 @@ CheckManager *CheckManager::instance()
     return s_instance;
 }
 
-CheckManager::CheckManager() : m_enableAllFixits(false)
+CheckManager::CheckManager()
+    : m_enableAllFixits(false)
+    , m_requestedLevel(DefaultCheckLevel)
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
@@ -56,11 +58,11 @@ CheckManager::CheckManager() : m_enableAllFixits(false)
     }
 }
 
-int CheckManager::registerCheck(const std::string &name, int checkFlags, FactoryFunction factory)
+int CheckManager::registerCheck(const std::string &name, CheckLevel level, FactoryFunction factory)
 {
     assert(factory != nullptr);
     assert(!name.empty());
-    m_registeredChecks.push_back({name, checkFlags, factory});
+    m_registeredChecks.push_back({name, level, factory});
 
     return 0;
 }
@@ -129,7 +131,7 @@ vector<string> CheckManager::availableCheckNames(bool includeHidden) const
     vector<string> names;
     names.reserve(m_registeredChecks.size());
     for (auto rc : m_registeredChecks) {
-        if (includeHidden || !(rc.flags & HiddenFlag))
+        if (includeHidden || !(rc.level == MaxCheckLevel))
             names.push_back(rc.name);
     }
     return names;
@@ -220,4 +222,9 @@ std::vector<string> CheckManager::checkNamesForCommaSeparatedString(const string
     }
 
     return result;
+}
+
+void CheckManager::setRequestedLevel(int level)
+{
+    m_requestedLevel = level;
 }

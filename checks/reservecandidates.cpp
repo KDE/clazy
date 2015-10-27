@@ -392,4 +392,4 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     return false;
 }
 
-REGISTER_CHECK("reserve-candidates", ReserveCandidates)
+REGISTER_CHECK_WITH_FLAGS("reserve-candidates", ReserveCandidates, CheckLevel2)

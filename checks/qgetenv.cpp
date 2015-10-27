@@ -90,4 +90,4 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
 
 
 
-REGISTER_CHECK("qgetenv", QGetEnv)
+REGISTER_CHECK_WITH_FLAGS("qgetenv", QGetEnv, CheckLevel0)

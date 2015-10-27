@@ -116,4 +116,4 @@ bool MissingTypeinfo::ignoreTypeInfo(const std::string &className) const
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("missing-typeinfo", MissingTypeinfo, HiddenFlag)
+REGISTER_CHECK_WITH_FLAGS("missing-typeinfo", MissingTypeinfo, CheckLevel3)

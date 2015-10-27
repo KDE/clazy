@@ -48,16 +48,11 @@ struct RegisteredFixIt {
 
 using FactoryFunction = std::function<CheckBase*()>;
 
-enum CheckFlag {
-    NoFlag = 0,
-    HiddenFlag = 1 // Check won't be printed in help, or in "all" mode, but can be used if explicitely specified
-};
-
 class CheckManager
 {
 public:
     static CheckManager *instance();
-    int registerCheck(const std::string &name, int checkFlags, FactoryFunction);
+    int registerCheck(const std::string &name, CheckLevel level, FactoryFunction);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     void setCompilerInstance(clang::CompilerInstance *);
@@ -78,6 +73,13 @@ public:
 
     std::vector<std::string> checkNamesForCommaSeparatedString(const std::string &str) const;
 
+    /**
+     * Enables all checks with level <= @p level.
+     * A high level will enable checks known to have false positives, while a low level is more
+     * conservative and emits less warnings.
+     */
+    void setRequestedLevel(int level);
+
 private:
     CheckManager();
     std::unique_ptr<CheckBase> createCheck(const std::string &name);
@@ -88,13 +90,11 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
+    uint m_requestedLevel;
 };
 
-#define REGISTER_CHECK(CHECK_NAME, CLASS_NAME) \
-    REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, NoFlag)
-
-#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, FLAGS) \
-    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, (int)FLAGS, [](){ return new CLASS_NAME(CHECK_NAME); }); \
+#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
+    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](){ return new CLASS_NAME(CHECK_NAME); }); \
     inline void silence_warning() { (void)dummy; }
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \

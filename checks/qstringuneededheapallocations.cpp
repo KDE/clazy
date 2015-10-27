@@ -532,7 +532,7 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 }
 
 const char *const s_checkName = "qstring-uneeded-heap-allocations";
-REGISTER_CHECK(s_checkName, QStringUneededHeapAllocations)
+REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringUneededHeapAllocations, CheckLevel1)
 REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)
 REGISTER_FIXIT(FromLatin1_FromUtf8Allocations, "fix-fromLatin1_fromUtf8-allocations", s_checkName)
 REGISTER_FIXIT(CharPtrAllocations, "fix-fromCharPtrAllocations", s_checkName)

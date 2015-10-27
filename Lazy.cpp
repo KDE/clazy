@@ -179,6 +179,19 @@ static bool parseArgument(const string &arg, vector<string> &args)
     return false;
 }
 
+static int parseLevel(vector<std::string> &args)
+{
+    static const vector<string> levels = { "level0", "level1", "level2", "level3", "level4" };
+    const int numLevels = levels.size();
+    for (int i = 0; i < numLevels; ++i) {
+        if (parseArgument(levels.at(i), args)) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 class LazyASTAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
@@ -201,20 +214,18 @@ protected:
             m_inplaceFixits = false;
         }
 
+        auto checkManager = CheckManager::instance();
+        const int requestedLevel = parseLevel(/*by-ref*/args);
+        if (requestedLevel != -1) {
+            checkManager->setRequestedLevel(requestedLevel);
+        }
+
         if (parseArgument("enable-all-fixits", args)) {
-            // This is useful for unit-tests, where we also want to run fixits
+            // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
             CheckManager::instance()->enableAllFixIts();
         }
 
-        if (args.empty()) {
-            // No check specified, check the env variable
-            m_checks = CheckManager::instance()->requestedCheckNamesThroughEnv();
-            if (m_checks.empty()) {
-                llvm::errs() << "No requested checks! Set CLAZY_CHECKS env variable\n";
-                //PrintHelp(llvm::errs());
-                return true;
-            }
-        } else if (args.size() > 1) {
+        if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
             for (const std::string &a : args)
@@ -226,7 +237,7 @@ protected:
         } else if (args.size() == 1) {
             m_checks = CheckManager::instance()->checkNamesForCommaSeparatedString(args[0]);
             if (m_checks.empty()) {
-                llvm::errs() << "No requested checks! Set CLAZY_CHECKS env variable\n";
+                llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
                 PrintHelp(llvm::errs());
                 return false;
             }

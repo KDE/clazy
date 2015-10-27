@@ -63,4 +63,4 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-REGISTER_CHECK("qdeleteall", QDeleteAll)
+REGISTER_CHECK_WITH_FLAGS("qdeleteall", QDeleteAll, CheckLevel1)

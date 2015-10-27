@@ -189,4 +189,4 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-REGISTER_CHECK("implicit-casts", ImplicitCasts)
+REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, CheckLevel2)

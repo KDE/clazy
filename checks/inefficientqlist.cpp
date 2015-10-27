@@ -109,4 +109,4 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("inefficient-qlist", InefficientQList, HiddenFlag)
+REGISTER_CHECK_WITH_FLAGS("inefficient-qlist", InefficientQList, CheckLevel3)

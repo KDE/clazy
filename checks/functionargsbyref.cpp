@@ -131,4 +131,4 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
     }
 }
 
-REGISTER_CHECK("function-args-by-ref", FunctionArgsByRef)
+REGISTER_CHECK_WITH_FLAGS("function-args-by-ref", FunctionArgsByRef, CheckLevel2)

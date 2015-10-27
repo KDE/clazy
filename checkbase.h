@@ -42,6 +42,15 @@ class PresumedLoc;
 class SourceLocation;
 }
 
+enum CheckLevel {
+    CheckLevel0 = 0, // 100% safe, no false-positives, very useful
+    CheckLevel1,     // Similar to CheckLevel0, but sometimes (rarely) there might be some false positive
+    CheckLevel2,     // Sometimes has false-positives (20-30%)
+    CheckLevel3 = 3, // Not always correct, possibly very noisy, requires a knowledgeable developer to review, might have a very big rate of false-positives
+    MaxCheckLevel = CheckLevel3,
+    DefaultCheckLevel = CheckLevel1
+};
+
 class CheckBase
 {
 public:

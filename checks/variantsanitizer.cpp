@@ -87,4 +87,4 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
     }
 }
 
-REGISTER_CHECK("variant-sanitizer", VariantSanitizer)
+REGISTER_CHECK_WITH_FLAGS("variant-sanitizer", VariantSanitizer, CheckLevel0)

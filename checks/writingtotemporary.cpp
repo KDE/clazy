@@ -113,4 +113,4 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + secondFunc->getQualifiedNameAsString());
 }
 
-REGISTER_CHECK("writing-to-temporary", WritingToTemporary)
+REGISTER_CHECK_WITH_FLAGS("writing-to-temporary", WritingToTemporary, CheckLevel0)

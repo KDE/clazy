@@ -69,4 +69,4 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     }
 }
 
-REGISTER_CHECK("bogus-dynamic-cast", BogusDynamicCast)
+REGISTER_CHECK_WITH_FLAGS("bogus-dynamic-cast", BogusDynamicCast, CheckLevel3)
