@@ -182,6 +182,7 @@ for check in requested_checks:
     if _dump_ast:
         dump_ast(check)
     else:
-        run_check_unit_tests(check)
+        if not run_check_unit_tests(check):
+            exit(-1)
 
     os.chdir("..")
