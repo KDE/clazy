@@ -128,3 +128,9 @@ void testQRegionRects()
     QRegion r;
     foreach (const QRect &rect, r.rects()) {}
 }
+
+void varLengthArray()
+{
+    QVarLengthArray<int, 1> varray;
+    foreach (auto i, varray) {}
+}
