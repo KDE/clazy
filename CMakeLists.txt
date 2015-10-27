@@ -104,14 +104,12 @@ add_clang_plugin(ClangLazy
                  checks/detachingbase.cpp
                  checks/detachingmember.cpp
                  checks/detachingtemporary.cpp
-                 # checks/duplicateexpensivestatement.cpp
                  checks/dynamic_cast.cpp
                  checks/foreach.cpp
                  checks/globalconstcharpointer.cpp
                  checks/inefficientqlist.cpp
                  checks/implicitcasts.cpp
                  checks/oldstyleconnect.cpp
-                 checks/qlistint.cpp
                  checks/qdatetimeutc.cpp
                  checks/qgetenv.cpp
                  checks/functionargsbyref.cpp
