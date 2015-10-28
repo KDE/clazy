@@ -65,9 +65,10 @@ public:
     void setCompilerInstance(clang::CompilerInstance *);
     RegisteredCheck::List availableChecks(bool includeHidden) const;
     RegisteredCheck::List requestedChecksThroughEnv() const;
-    RegisteredCheck checkForName(const std::string &name) const;
-
+    RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
+    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
+
     void createChecks(RegisteredCheck::List requestedChecks);
     const CheckBase::List &createdChecks() const;
     bool fixitsEnabled() const;
@@ -78,8 +79,6 @@ public:
     clang::SourceManager *m_sm;
 
     bool allFixitsEnabled() const;
-
-    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
 
     /**
      * Enables all checks with level <= @p level.

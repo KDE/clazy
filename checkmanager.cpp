@@ -142,17 +142,19 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv() const
         }
 
         const string checkName = checkNameForFixIt(m_requestedFixitName);
-        if (!checkName.empty() && find_if(requestedChecksThroughEnv.cbegin(), requestedChecksThroughEnv.cend(), [checkName](const RegisteredCheck &r) {return r.name == checkName;}) == requestedChecksThroughEnv.cend())
-            requestedChecksThroughEnv.push_back(checkForName(checkName));
+        if (!checkName.empty() && checkForName(requestedChecksThroughEnv, checkName) == requestedChecksThroughEnv.cend()) {
+            requestedChecksThroughEnv.push_back(*checkForName(m_registeredChecks, checkName));
+        }
     }
 
     return requestedChecksThroughEnv;
 }
 
-RegisteredCheck CheckManager::checkForName(const string &name) const
+RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks,
+                                                           const string &name) const
 {
-    auto it = find_if(m_registeredChecks.cbegin(), m_registeredChecks.cend(), [name](const RegisteredCheck &r) { return r.name == name;} );
-    return it == m_registeredChecks.cend() ? RegisteredCheck() : *it;
+    return find_if(checks.cbegin(), checks.cend(),
+                   [name](const RegisteredCheck &r) { return r.name == name; } );
 }
 
 RegisteredFixIt::List CheckManager::availableFixIts(const string &checkName) const
@@ -178,8 +180,7 @@ void CheckManager::createChecks(RegisteredCheck::List requestedChecks)
     if (!m_requestedFixitName.empty()) {
         // We have one fixit enabled, we better have the check instance too.
         if (!fixitCheckName.empty()) {
-            auto it = std::find_if(requestedChecks.cbegin(), requestedChecks.cend(), [fixitCheckName](const RegisteredCheck &r) { return fixitCheckName == r.name; });
-            if (it == requestedChecks.cend()) {
+            if (checkForName(requestedChecks, fixitCheckName) == requestedChecks.cend()) {
                 m_createdChecks.push_back(createCheck(fixitCheckName));
                 m_createdChecks.back()->setEnabledFixits(fixit.id);
             }
@@ -214,11 +215,11 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
 
     for (const string &name : checkNames) {
 
-        if (find_if(result.cbegin(), result.cend(), [name](const RegisteredCheck &r) { return r.name == name; }) != result.cend())
+        if (checkForName(result, name) != result.cend())
             continue; // Already added. Duplicate check specified. continue.
 
-        RegisteredCheck check = checkForName(name);
-        if (check.name.empty()) {
+        auto it = checkForName(m_registeredChecks, name);
+        if (it == m_registeredChecks.cend()) {
             llvm::errs() << "Invalid check: " << name << "\n";
             continue;
         } else {
