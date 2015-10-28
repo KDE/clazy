@@ -90,7 +90,7 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 class LazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<LazyASTConsumer>
 {
 public:
-    LazyASTConsumer(CompilerInstance &ci, const vector<string> &requestedChecks, bool inplaceFixits)
+    LazyASTConsumer(CompilerInstance &ci, const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
@@ -226,7 +226,7 @@ protected:
         }
 
         if (args.empty()) {
-            m_checks = CheckManager::instance()->requestedCheckNamesThroughEnv();
+            m_checks = CheckManager::instance()->requestedChecksThroughEnv();
         } if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
@@ -237,7 +237,7 @@ protected:
             PrintHelp(llvm::errs());
             return false;
         } else if (args.size() == 1) {
-            m_checks = checkManager->checkNamesForCommaSeparatedString(args[0]);
+            m_checks = checkManager->checksForCommaSeparatedString(args[0]);
             if (m_checks.empty()) {
                 llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
                 PrintHelp(llvm::errs());
@@ -250,7 +250,7 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros)
     {
-        const vector<string> &names = CheckManager::instance()->availableCheckNames(false);
+        const RegisteredCheck::List checks = CheckManager::instance()->availableChecks(false);
 
         ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
         ros << "export CLAZY_CHECKS=\"reserve-candidates,qstring-uneeded-heap-allocations\"\n\n";
@@ -262,11 +262,13 @@ protected:
         ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\n\n";
 
         ros << "Available checks and FixIts:\n\n";
-        for (uint i = 1; i < names.size(); ++i) {
-            auto padded = names[i];
+        const auto numChecks = checks.size();
+        for (uint i = 0; i < numChecks; ++i) {
+            const RegisteredCheck &check = checks[i];
+            auto padded = check.name;
             padded.insert(padded.end(), 39 - padded.size(), ' ');
-            ros << names[i];
-            auto fixits = CheckManager::instance()->availableFixIts(names[i]);
+            ros << check.name;
+            auto fixits = CheckManager::instance()->availableFixIts(check.name);
             if (!fixits.empty()) {
                 ros << "    (";
                 bool isFirst = true;
@@ -288,7 +290,7 @@ protected:
     }
 
 private:
-    vector<string> m_checks;
+    RegisteredCheck::List m_checks;
     bool m_inplaceFixits = true;
 };
 

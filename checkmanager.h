@@ -49,6 +49,7 @@ struct RegisteredFixIt {
 using FactoryFunction = std::function<CheckBase*()>;
 
 struct RegisteredCheck {
+    typedef std::vector<RegisteredCheck> List;
     std::string name;
     CheckLevel level;
     FactoryFunction factory;
@@ -62,11 +63,12 @@ public:
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     void setCompilerInstance(clang::CompilerInstance *);
-    std::vector<std::string> availableCheckNames(bool includeHidden) const;
-    std::vector<std::string> requestedCheckNamesThroughEnv() const;
+    RegisteredCheck::List availableChecks(bool includeHidden) const;
+    RegisteredCheck::List requestedChecksThroughEnv() const;
+    RegisteredCheck checkForName(const std::string &name) const;
 
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
-    void createChecks(std::vector<std::string> requestedChecks);
+    void createChecks(RegisteredCheck::List requestedChecks);
     const CheckBase::List &createdChecks() const;
     bool fixitsEnabled() const;
     void enableAllFixIts();
@@ -77,7 +79,7 @@ public:
 
     bool allFixitsEnabled() const;
 
-    std::vector<std::string> checkNamesForCommaSeparatedString(const std::string &str) const;
+    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
 
     /**
      * Enables all checks with level <= @p level.
@@ -90,7 +92,7 @@ private:
     CheckManager();
     std::unique_ptr<CheckBase> createCheck(const std::string &name);
     std::string checkNameForFixIt(const std::string &) const;
-    std::vector<RegisteredCheck> m_registeredChecks;
+    RegisteredCheck::List m_registeredChecks;
     CheckBase::List m_createdChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
