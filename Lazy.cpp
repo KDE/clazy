@@ -214,6 +214,9 @@ protected:
             m_inplaceFixits = false;
         }
 
+        // This argument is for debugging purposes
+        const bool printRequestedChecks = parseArgument("print-requested-checks", args);
+
         auto checkManager = CheckManager::instance();
         const int requestedLevel = parseLevel(/*by-ref*/args);
         if (requestedLevel != -1) {
@@ -243,6 +246,20 @@ protected:
                 PrintHelp(llvm::errs());
                 return false;
             }
+        }
+
+        if (printRequestedChecks) {
+            llvm::errs() << "Requested checks: ";
+            const uint numChecks = m_checks.size();
+            for (uint i = 0; i < numChecks; ++i) {
+                llvm::errs() << m_checks.at(i).name;
+                const bool isLast = i == numChecks - 1;
+                if (!isLast) {
+                    llvm::errs() << ", ";
+                }
+            }
+
+            llvm::errs() << "\n";
         }
 
         return true;
