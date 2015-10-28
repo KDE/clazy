@@ -83,6 +83,9 @@ def get_check_list():
 def get_fixed_files():
     return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
 
+def get_sh_files():
+    return filter(lambda entry: entry.endswith('.sh'), os.listdir("."))
+
 def print_differences(file1, file2):
     return run_command("diff -Naur {} {}".format(file1, file2))
 
@@ -144,6 +147,23 @@ def run_check_unit_tests(check):
 
     return result
 
+def run_core_tests():
+    scripts = get_sh_files()
+    for script in scripts:
+        expected_file = script + ".expected"
+        output_file = script + ".output"
+        if not  run_command("./" + script + " &> " + output_file):
+            return False
+        if files_are_equal(expected_file, output_file):
+            print "[OK]   clazy"
+            return True
+        else:
+            print "[FAIL] clazy"
+            print_differences(expected_file, output_file)
+            return False
+
+    return True
+
 def dump_ast(check):
     run_command(_dump_ast_command + " > dump.ast")
 #-------------------------------------------------------------------------------
@@ -182,7 +202,10 @@ for check in requested_checks:
     if _dump_ast:
         dump_ast(check)
     else:
-        if not run_check_unit_tests(check):
+        if check == "clazy":
+            if not run_core_tests():
+                exit(-1)
+        elif not run_check_unit_tests(check):
             exit(-1)
 
     os.chdir("..")
