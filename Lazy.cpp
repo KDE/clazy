@@ -222,7 +222,7 @@ protected:
 
         if (parseArgument("enable-all-fixits", args)) {
             // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
-            CheckManager::instance()->enableAllFixIts();
+            checkManager->enableAllFixIts();
         }
 
         if (args.empty()) {
@@ -237,7 +237,7 @@ protected:
             PrintHelp(llvm::errs());
             return false;
         } else if (args.size() == 1) {
-            m_checks = CheckManager::instance()->checkNamesForCommaSeparatedString(args[0]);
+            m_checks = checkManager->checkNamesForCommaSeparatedString(args[0]);
             if (m_checks.empty()) {
                 llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
                 PrintHelp(llvm::errs());
