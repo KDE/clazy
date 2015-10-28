@@ -225,7 +225,9 @@ protected:
             CheckManager::instance()->enableAllFixIts();
         }
 
-        if (args.size() > 1) {
+        if (args.empty()) {
+            m_checks = CheckManager::instance()->requestedCheckNamesThroughEnv();
+        } if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
             for (const std::string &a : args)
