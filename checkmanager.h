@@ -35,7 +35,7 @@
 #include <vector>
 #include <unordered_map>
 
-struct RegisteredCheck;
+
 
 struct RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
@@ -47,6 +47,12 @@ struct RegisteredFixIt {
 };
 
 using FactoryFunction = std::function<CheckBase*()>;
+
+struct RegisteredCheck {
+    std::string name;
+    CheckLevel level;
+    FactoryFunction factory;
+};
 
 class CheckManager
 {

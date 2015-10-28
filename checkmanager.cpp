@@ -32,12 +32,6 @@
 
 using namespace std;
 
-struct RegisteredCheck {
-    std::string name;
-    CheckLevel level;
-    FactoryFunction factory;
-};
-
 CheckManager *CheckManager::instance()
 {
     static CheckManager *s_instance = new CheckManager();
