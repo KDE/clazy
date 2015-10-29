@@ -151,7 +151,7 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv() const
 }
 
 RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks,
-                                                           const string &name) const
+                                                                 const string &name) const
 {
     return find_if(checks.cbegin(), checks.cend(),
                    [name](const RegisteredCheck &r) { return r.name == name; } );
