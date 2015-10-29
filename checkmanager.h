@@ -95,6 +95,7 @@ public:
 
 private:
     CheckManager();
+    RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;
     std::unique_ptr<CheckBase> createCheck(const std::string &name);
     std::string checkNameForFixIt(const std::string &) const;

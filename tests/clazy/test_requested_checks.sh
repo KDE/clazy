@@ -6,7 +6,6 @@ CLAZY_COMMAND_STDIN=$CLAZY_COMMAND"-"
 # Test without checks:
 echo | $CLAZY_COMMAND_STDIN
 
-
 # Test with invalid check:
 export CLAZY_CHECKS="foo"
 echo | $CLAZY_COMMAND_STDIN
@@ -66,3 +65,15 @@ echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidat
 
 # Pass level0 + another check that's already in level0
 echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang qdatetime-utc -Xclang -plugin-arg-clang-lazy -Xclang level0 -")
+
+# Use a level argument in the checks list
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach,level0 -")
+
+# Use a level in env-variable
+export CLAZY_CHECKS="level1"
+echo | $CLAZY_COMMAND_STDIN
+
+
+# Use a level in env-variable + another check
+export CLAZY_CHECKS="level0,reserve-candidates"
+echo | $CLAZY_COMMAND_STDIN

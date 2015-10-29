@@ -197,11 +197,16 @@ RegisteredFixIt::List CheckManager::availableFixIts(const string &checkName) con
 
 RegisteredCheck::List CheckManager::checksFromRequestedLevel() const
 {
+   return checksForLevel(m_requestedLevel);
+}
+
+RegisteredCheck::List CheckManager::checksForLevel(int level) const
+{
     RegisteredCheck::List result;
-    if (m_requestedLevel > CheckLevelUndefined && m_requestedLevel <= MaxCheckLevel) {
+    if (level > CheckLevelUndefined && level <= MaxCheckLevel) {
         copy_if(m_registeredChecks.cbegin(), m_registeredChecks.cend(), back_inserter(result),
-                [this](const RegisteredCheck &r) {
-            return r.level <= m_requestedLevel;
+                [level](const RegisteredCheck &r) {
+            return r.level <= level;
         });
     }
 
@@ -268,7 +273,18 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
             const string checkName = checkNameForFixIt(name);
             auto it = checkForName(m_registeredChecks, checkName);
             if (it == m_registeredChecks.cend()) {
-                llvm::errs() << "Invalid check: " << name << "\n";
+                if (stringStartsWith(name, s_levelPrefix) && name.size() == strlen(s_levelPrefix) + 1) {
+                    auto lastChar = name.back();
+                    const int digit = lastChar - '0';
+                    if (digit > CheckLevelUndefined && digit <= MaxCheckLevel) {
+                        RegisteredCheck::List levelChecks = checksForLevel(digit);
+                        copy(levelChecks.cbegin(), levelChecks.cend(), back_inserter(result));
+                    } else {
+                        llvm::errs() << "Invalid check: " << name << "\n";
+                    }
+                } else {
+                    llvm::errs() << "Invalid check: " << name << "\n";
+                }
             } else {
                 result.push_back(*it);
             }
