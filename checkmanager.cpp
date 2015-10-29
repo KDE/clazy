@@ -214,13 +214,19 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
     RegisteredCheck::List result;
 
     for (const string &name : checkNames) {
-
         if (checkForName(result, name) != result.cend())
             continue; // Already added. Duplicate check specified. continue.
 
         auto it = checkForName(m_registeredChecks, name);
         if (it == m_registeredChecks.cend()) {
-            llvm::errs() << "Invalid check: " << name << "\n";
+            // Unknown, but might be a fixit name
+            const string checkName = checkNameForFixIt(name);
+            auto it = checkForName(m_registeredChecks, checkName);
+            if (it == m_registeredChecks.cend()) {
+                llvm::errs() << "Invalid check: " << name << "\n";
+            } else {
+                result.push_back(*it);
+            }
             continue;
         } else {
             result.push_back(*it);

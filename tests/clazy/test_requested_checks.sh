@@ -51,3 +51,6 @@ echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts -
 
 # Pass two checks in command line
 echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach -")
+
+# Pass fixits through the command-line
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang fix-old-style-connects -")

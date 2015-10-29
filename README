@@ -40,7 +40,7 @@ or to enable all checks
     export CLAZY_CHECKS=all_checks
 
 Instead of using the env variable, you can also pass an argument to the compiler:
--Xclang -plugin-arg-clang-lazy -Xclang bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor
+-Xclang -plugin-arg-clang-lazy -Xclang bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor,fix-missing-qstringref
 
 Available checks:
 

@@ -11,3 +11,4 @@ Requested checks: old-style-connect, foreach
 Requested checks: detaching-temporary, foreach, global-const-char-pointer, implicit-casts, old-style-connect, qdatetime-utc, qgetenv, function-args-by-ref, qdeleteall, qmap-with-key-pointer, qstring-arg, qstring-ref, qstring-uneeded-heap-allocations, non-pod-global-static, reserve-candidates, temporary-iterator, variant-sanitizer, writing-to-temporary, virtual-call-ctor
 Requested checks: implicit-casts
 Requested checks: implicit-casts, foreach
+Requested checks: old-style-connect
