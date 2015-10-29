@@ -54,3 +54,15 @@ echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,f
 
 # Pass fixits through the command-line
 echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang fix-old-style-connects -")
+
+# Pass level0
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang level0 -")
+
+# Pass level1
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang level1 -")
+
+# Pass level0 + another check
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates -Xclang -plugin-arg-clang-lazy -Xclang level0 -")
+
+# Pass level0 + another check that's already in level0
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang qdatetime-utc -Xclang -plugin-arg-clang-lazy -Xclang level0 -")

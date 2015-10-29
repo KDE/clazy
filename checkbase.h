@@ -43,6 +43,7 @@ class SourceLocation;
 }
 
 enum CheckLevel {
+    CheckLevelUndefined = -1,
     CheckLevel0 = 0, // 100% safe, no false-positives, very useful
     CheckLevel1,     // Similar to CheckLevel0, but sometimes (rarely) there might be some false positive
     CheckLevel2,     // Sometimes has false-positives (20-30%)

@@ -53,6 +53,7 @@ struct RegisteredCheck {
     std::string name;
     CheckLevel level;
     FactoryFunction factory;
+    bool operator==(const RegisteredCheck &other) const { return name == other.name; }
 };
 
 class CheckManager
@@ -68,6 +69,11 @@ public:
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
+
+    /**
+     * Returns all checks with level <= requested level.
+     */
+    RegisteredCheck::List checksFromRequestedLevel() const;
 
     void createChecks(RegisteredCheck::List requestedChecks);
     const CheckBase::List &createdChecks() const;
@@ -97,7 +103,7 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
-    uint m_requestedLevel;
+    int m_requestedLevel;
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \

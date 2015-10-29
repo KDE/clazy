@@ -40,7 +40,7 @@ CheckManager *CheckManager::instance()
 
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
-    , m_requestedLevel(DefaultCheckLevel)
+    , m_requestedLevel(CheckLevelUndefined)
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
@@ -161,6 +161,19 @@ RegisteredFixIt::List CheckManager::availableFixIts(const string &checkName) con
 {
     auto it = m_fixitsByCheckName.find(checkName);
     return it == m_fixitsByCheckName.end() ? RegisteredFixIt::List() : (*it).second;
+}
+
+RegisteredCheck::List CheckManager::checksFromRequestedLevel() const
+{
+    RegisteredCheck::List result;
+    if (m_requestedLevel > CheckLevelUndefined && m_requestedLevel <= MaxCheckLevel) {
+        copy_if(m_registeredChecks.cbegin(), m_registeredChecks.cend(), back_inserter(result),
+                [this](const RegisteredCheck &r) {
+            return r.level <= m_requestedLevel;
+        });
+    }
+
+    return result;
 }
 
 void CheckManager::createChecks(RegisteredCheck::List requestedChecks)

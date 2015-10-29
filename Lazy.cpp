@@ -192,6 +192,11 @@ static int parseLevel(vector<std::string> &args)
     return -1;
 }
 
+static bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
+{
+    return c1.name < c2.name;
+}
+
 class LazyASTAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
@@ -219,7 +224,7 @@ protected:
 
         auto checkManager = CheckManager::instance();
         const int requestedLevel = parseLevel(/*by-ref*/args);
-        if (requestedLevel != -1) {
+        if (requestedLevel != CheckLevelUndefined) {
             checkManager->setRequestedLevel(requestedLevel);
         }
 
@@ -247,6 +252,19 @@ protected:
                 return false;
             }
         }
+
+        if (m_checks.empty() && requestedLevel == CheckLevelUndefined) {
+            // No check or level specified, lets use the default level
+            checkManager->setRequestedLevel(DefaultCheckLevel);
+        }
+
+        // Add checks from requested level
+        auto checksFromRequestedLevel = checkManager->checksFromRequestedLevel();
+        copy(checksFromRequestedLevel.cbegin(), checksFromRequestedLevel.cend(), back_inserter(m_checks));
+
+        // Remove dups
+        sort(m_checks.begin(), m_checks.end(), checkLessThan);
+        m_checks.erase(unique(m_checks.begin(), m_checks.end()), m_checks.end());
 
         if (printRequestedChecks) {
             llvm::errs() << "Requested checks: ";
