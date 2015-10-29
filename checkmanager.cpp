@@ -27,10 +27,14 @@
 
 #include "checkmanager.h"
 #include "Utils.h"
+#include "StringUtils.h"
 
 #include <stdlib.h>
 
 using namespace std;
+
+static const char * s_fixitNamePrefix = "fix-";
+static const char * s_levelPrefix = "level";
 
 CheckManager *CheckManager::instance()
 {
@@ -52,11 +56,34 @@ CheckManager::CheckManager()
     }
 }
 
+bool CheckManager::isReservedCheckName(const string &name) const
+{
+    static const vector<string> names = { "clazy" };
+    if (find(names.cbegin(), names.cend(), name) != names.cend())
+        return true;
+
+    // level0, level1, etc are not allowed
+    if (stringStartsWith(name, s_levelPrefix))
+        return true;
+
+    // These are fixit names
+    if (stringStartsWith(name, s_fixitNamePrefix))
+        return true;
+
+    return false;
+}
+
 int CheckManager::registerCheck(const std::string &name, CheckLevel level, FactoryFunction factory)
 {
     assert(factory != nullptr);
     assert(!name.empty());
-    m_registeredChecks.push_back({name, level, factory});
+
+    if (isReservedCheckName(name)) {
+        llvm::errs() << "Check name not allowed" << name;
+        assert(false);
+    } else {
+        m_registeredChecks.push_back({name, level, factory});
+    }
 
     return 0;
 }
@@ -64,6 +91,11 @@ int CheckManager::registerCheck(const std::string &name, CheckLevel level, Facto
 int CheckManager::registerFixIt(int id, const string &fixitName, const string &checkName)
 {
     if (fixitName.empty() || checkName.empty()) {
+        assert(false);
+        return 0;
+    }
+
+    if (!stringStartsWith(fixitName, s_fixitNamePrefix)) {
         assert(false);
         return 0;
     }
