@@ -152,7 +152,7 @@ def run_core_tests():
     for script in scripts:
         expected_file = script + ".expected"
         output_file = script + ".output"
-        if not  run_command("./" + script + " &> " + output_file):
+        if not  run_command("./" + script + " > " + output_file + " 2>&1"):
             return False
         if files_are_equal(expected_file, output_file):
             print "[OK]   clazy"
