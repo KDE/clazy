@@ -215,7 +215,6 @@ protected:
         std::vector<std::string> args = args_;
 
         if (parseArgument("help", args)) {
-            llvm::errs() << "Help:\n";
             PrintHelp(llvm::errs(), 0);
             return false;
         }
@@ -294,14 +293,6 @@ protected:
         RegisteredCheck::List checks = CheckManager::instance()->availableChecks(true);
         sort(checks.begin(), checks.end(), checkLessThanByLevel);
 
-        ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
-        ros << "export CLAZY_CHECKS=\"reserve-candidates,qstring-uneeded-heap-allocations\"\n\n";
-        ros << "or pass as compiler arguments, for example:\n";
-        ros << "-Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-uneeded-heap-allocations\n";
-        ros << "\n";
-        ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
-        ros << "export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
-        ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\n\n";
         ros << "Available checks and FixIts:\n\n";
 
         int lastPrintedLevel = -1;
@@ -337,6 +328,17 @@ protected:
             }
             ros << "\n";
         }
+        ros << "\nIf nothing is specified, all checks from level0 and level1 will be run.\n\n";
+        ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
+        ros << "    export CLAZY_CHECKS=\"level0\"\n";
+        ros << "    export CLAZY_CHECKS=\"level0,reserve-candidates,qstring-uneeded-heap-allocations\"\n";
+        ros << "    export CLAZY_CHECKS=\"reserve-candidates\"\n\n";
+        ros << "or pass as compiler arguments, for example:\n";
+        ros << "    -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-uneeded-heap-allocations\n";
+        ros << "\n";
+        ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
+        ros << "    export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
+        ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
 
         exit(exitCode);
     }
