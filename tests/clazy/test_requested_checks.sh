@@ -73,7 +73,10 @@ echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,f
 export CLAZY_CHECKS="level1"
 echo | $CLAZY_COMMAND_STDIN
 
-
 # Use a level in env-variable + another check
 export CLAZY_CHECKS="level0,reserve-candidates"
 echo | $CLAZY_COMMAND_STDIN
+
+# Use both env variable and compiler argument
+export CLAZY_CHECKS="level0,reserve-candidates"
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,level0 -")

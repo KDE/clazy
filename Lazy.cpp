@@ -238,9 +238,7 @@ protected:
             checkManager->enableAllFixIts();
         }
 
-        if (args.empty()) {
-            m_checks = CheckManager::instance()->requestedChecksThroughEnv();
-        } if (args.size() > 1) {
+        if (args.size() > 1) {
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
             for (const std::string &a : args)
@@ -257,6 +255,10 @@ protected:
                 return false;
             }
         }
+
+        // Append checks specified from env variable
+        RegisteredCheck::List checksFromEnv = CheckManager::instance()->requestedChecksThroughEnv();
+        copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(m_checks));
 
         if (m_checks.empty() && requestedLevel == CheckLevelUndefined) {
             // No check or level specified, lets use the default level

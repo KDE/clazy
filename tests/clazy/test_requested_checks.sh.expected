@@ -19,3 +19,4 @@ Requested checks: qdatetime-utc, qgetenv, qmap-with-key-pointer, qstring-arg, qs
 Requested checks: foreach, implicit-casts, qdatetime-utc, qgetenv, qmap-with-key-pointer, qstring-arg, qstring-ref, temporary-iterator, variant-sanitizer, writing-to-temporary
 Requested checks: detaching-temporary, foreach, non-pod-global-static, old-style-connect, qdatetime-utc, qdeleteall, qgetenv, qmap-with-key-pointer, qstring-arg, qstring-ref, qstring-uneeded-heap-allocations, temporary-iterator, variant-sanitizer, writing-to-temporary
 Requested checks: qdatetime-utc, qgetenv, qmap-with-key-pointer, qstring-arg, qstring-ref, reserve-candidates, temporary-iterator, variant-sanitizer, writing-to-temporary
+Requested checks: implicit-casts, qdatetime-utc, qgetenv, qmap-with-key-pointer, qstring-arg, qstring-ref, reserve-candidates, temporary-iterator, variant-sanitizer, writing-to-temporary
