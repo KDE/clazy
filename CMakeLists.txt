@@ -100,6 +100,7 @@ set (USER_LIBS
 add_clang_plugin(ClangLazy
                  checkbase.cpp
                  checkmanager.cpp
+                 checks/autounexpectedqstringbuilder.cpp
                  checks/assertwithsideeffects.cpp
                  checks/detachingbase.cpp
                  checks/detachingmember.cpp

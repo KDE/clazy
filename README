@@ -57,6 +57,7 @@ Checks from level0:
     qstring-ref    (fix-missing-qstringref)
 
 Checks from level1:
+    auto-unexpected-qstringbuilder
     detaching-temporary
     foreach
     non-pod-global-static
