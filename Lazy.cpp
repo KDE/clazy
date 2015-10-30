@@ -197,6 +197,12 @@ static bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
     return c1.name < c2.name;
 }
 
+
+static bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredCheck &c2)
+{
+    return c1.level < c2.level;
+}
+
 class LazyASTAction : public PluginASTAction {
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
@@ -285,7 +291,8 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros, int exitCode = -1)
     {
-        const RegisteredCheck::List checks = CheckManager::instance()->availableChecks(false);
+        RegisteredCheck::List checks = CheckManager::instance()->availableChecks(true);
+        sort(checks.begin(), checks.end(), checkLessThanByLevel);
 
         ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
         ros << "export CLAZY_CHECKS=\"reserve-candidates,qstring-uneeded-heap-allocations\"\n\n";
@@ -295,14 +302,24 @@ protected:
         ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
         ros << "export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
         ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\n\n";
-
         ros << "Available checks and FixIts:\n\n";
+
+        int lastPrintedLevel = -1;
         const auto numChecks = checks.size();
         for (uint i = 0; i < numChecks; ++i) {
             const RegisteredCheck &check = checks[i];
+            if (lastPrintedLevel < check.level) {
+                lastPrintedLevel = check.level;
+
+                if (check.level > 0)
+                    ros << "\n";
+
+                ros << "Checks from level" << to_string(check.level) << ":\n";
+            }
+
             auto padded = check.name;
             padded.insert(padded.end(), 39 - padded.size(), ' ');
-            ros << check.name;
+            ros << "    " << check.name;
             auto fixits = CheckManager::instance()->availableFixIts(check.name);
             if (!fixits.empty()) {
                 ros << "    (";
