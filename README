@@ -16,7 +16,7 @@ BUILD INSTRUCTIONS
   $ make && make install
 
 --------------------------------------------------------------------------------
-USAGE INSTRUCTIONS
+SETTING UP YOUR PROJECT TO BUILD WITH CLAZY
 
 You should now have the clazy command available to you, in <prefix>/bin/.
 Compile your programs with it instead of clang++/g++.
@@ -29,40 +29,73 @@ export CXX="clazy"
 Don't forget to clean and re-run cmake
 
 To make it the default compiler for qmake projects, just run qmake like:
+qmake -spec linux-clang QMAKE_CXX="clazy"
+
+Alternatively, if you want to use clang directly, without the wrapper:
 qmake -spec linux-clang QMAKE_CXXFLAGS="-Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy"
 
-or edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++ and run qmake -spec linux-clang
+You can also edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++ and run qmake -spec linux-clang
 
-Finally, you need to choose which checks to enable.
-This is done through CLAZY_CHECKS env variable, for example:
-    export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor"
-or to enable all checks
-    export CLAZY_CHECKS=all_checks
 
-Instead of using the env variable, you can also pass an argument to the compiler:
--Xclang -plugin-arg-clang-lazy -Xclang bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor,fix-missing-qstringref
+You're all set, clazy will now run some checks on your project, but not all of them.
+Read on if you want to enable/disable which checks are run.
 
-Available checks:
+--------------------------------------------------------------------------------
+SELECTING WHICH CHECKS TO ENABLE
 
-bogus-dynamic-cast
-foreacher
-global-const-char-pointer
-inefficient-qlist
-qstring-uneeded-heap-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
-qstring-arg
-qstring-ref (fix-missing-qstringref)
-function-args-by-ref
-qmap-with-key-pointer
-non-pod-global-static
-reserve-candidates
-variant-sanitizer
-virtual-call-ctor
-missing-typeinfo
-implicit-casts
-old-style-connect (fix-old-style-connects)
-detaching-temporary
-assert-with-side-effects
-qgetenv
+You may want to choose which checks to enable before starting to compile.
+There are many checks and they are divided in levels:
+
+Checks from level0:
+    writing-to-temporary
+    variant-sanitizer
+    temporary-iterator
+    qdatetime-utc
+    qgetenv
+    qmap-with-key-pointer
+    qstring-arg
+    qstring-ref    (fix-missing-qstringref)
+
+Checks from level1:
+    detaching-temporary
+    foreach
+    non-pod-global-static
+    old-style-connect    (fix-old-style-connects)
+    qstring-uneeded-heap-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+    qdeleteall
+
+Checks from level2:
+    virtual-call-ctor
+    reserve-candidates
+    function-args-by-ref
+    implicit-casts
+    global-const-char-pointer
+
+Checks from level3:
+    missing-typeinfo
+    inefficient-qlist
+    bogus-dynamic-cast
+    detaching-member
+    assert-with-side-effects
+
+Description of each level:
+level0: Very stable checks, 100% safe, no false-positives
+level1: Similar to level0, but sometimes (rarely) there might be some false-positives
+level2: Sometimes has false-positives (20-30%).
+level3: Not always correct, possibly very noisy, might require a knowledgeable developer to review, might have a very big rate of false-positives,
+        might have bugs.
+
+If you don't specify anything all checks from level0 and level1 will run.
+To specify a list of checks to run, or to choose a level, you can use the CLAZY_CHECKS env variable or pass arguments to the compiler.
+
+Example via env variable:
+    export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor" # Enables only these 3 checks
+    export CLAZY_CHECKS="level0"                                                     # Enables all checks from level0
+    export CLAZY_CHECKS="level0,detaching-temporary"                                 # Enables all from level0 and also detaching-temporary
+
+Example via compiler argument:
+clazy -Xclang -plugin-arg-clang-lazy -Xclang level0,detaching-temporary
+Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.
 
 --------------------------------------------------------------------------------
 ENABLING FIXITS
@@ -74,4 +107,12 @@ export CLAZY_FIXIT="fix-qlatin1string-allocations"
 Only one fixit can be enabled each time.
 WARNING: Backup your code, don't blame me if a fixit is not applied correctly.
 For better results don't use parallel builds, otherwise a fixit being applied in an header file might be done twice.
+
+--------------------------------------------------------------------------------
+REPORTING BUGS AND WISHES
+
+bug tracker: https://bugs.kde.org/enter_bug.cgi?product=clazy
+IRC: #kde-clazy (freenode)
+E-mail: smartins@kde.org
+
 --------------------------------------------------------------------------------
