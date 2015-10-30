@@ -210,7 +210,7 @@ protected:
 
         if (parseArgument("help", args)) {
             llvm::errs() << "Help:\n";
-            PrintHelp(llvm::errs());
+            PrintHelp(llvm::errs(), 0);
             return false;
         }
 
@@ -283,7 +283,7 @@ protected:
         return true;
     }
 
-    void PrintHelp(llvm::raw_ostream &ros)
+    void PrintHelp(llvm::raw_ostream &ros, int exitCode = -1)
     {
         const RegisteredCheck::List checks = CheckManager::instance()->availableChecks(false);
 
@@ -321,7 +321,7 @@ protected:
             ros << "\n";
         }
 
-        exit(-2);
+        exit(exitCode);
     }
 
 private:
