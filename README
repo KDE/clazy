@@ -28,10 +28,10 @@ To make it the default compiler for cmake projects just:
 export CXX="clazy"
 Don't forget to clean and re-run cmake
 
-To make it the default compiler for qmake projects hack the mkspec:
-Edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++
-Then run qmake -spec linux-clang
+To make it the default compiler for qmake projects, just run qmake like:
+qmake -spec linux-clang QMAKE_CXXFLAGS="-Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy"
 
+or edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++ and run qmake -spec linux-clang
 
 Finally, you need to choose which checks to enable.
 This is done through CLAZY_CHECKS env variable, for example:
