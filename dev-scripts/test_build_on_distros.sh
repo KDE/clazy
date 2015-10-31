@@ -7,6 +7,7 @@ then
     BRANCH="master"
 fi
 
+docker run -i -t iamsergio/clazy-ubuntu-14.04 sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
 docker run -i -t iamsergio/clazy-ubuntu-15.10 sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
 docker run -i -t iamsergio/clazy-opensuse-tumbleweed sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
 docker run -i -t iamsergio/clazy-archlinux sh $BUILD_SCRIPT $BRANCH $J_FLAG
