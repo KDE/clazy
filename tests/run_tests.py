@@ -39,7 +39,7 @@ QT_FLAGS = "-I " + QMAKE_HEADERS + " -fPIC"
 _compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits " + QT_FLAGS
 _link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
-_help_command = "clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c empty.cpp"
+_help_command = "echo | clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
