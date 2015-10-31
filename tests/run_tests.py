@@ -43,6 +43,7 @@ _help_command = "clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin 
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
+_only_checks = "--only-checks" in sys.argv # If set, the tests for the compiler itself aren't run
 _qtVersionLowerThan55 = QMAKE_INT_VERSION < 550
 #-------------------------------------------------------------------------------
 # utility functions #2
@@ -54,7 +55,7 @@ def run_command(cmd):
 
 def print_usage():
     print "Usage for " + sys.argv[0].strip("./") + ":\n"
-    print "    " + sys.argv[0] + " [--help] [--dump-ast] [check1,check2,check3]"
+    print "    " + sys.argv[0] + " [--help] [--dump-ast] [--only-checks] [check1,check2,check3]"
     print
     print "    Without any check supplied, all checks will be run."
     print "    --dump-ast is provided for debugging purposes.\n"
@@ -175,7 +176,7 @@ if _help:
 
 args = sys.argv[1:]
 
-switches = ["--verbose", "--dump-ast", "--help"]
+switches = ["--verbose", "--dump-ast", "--help", "--only-checks"]
 
 if _dump_ast:
     del(args[args.index("--dump-ast")])
@@ -203,7 +204,7 @@ for check in requested_checks:
         dump_ast(check)
     else:
         if check == "clazy":
-            if not run_core_tests():
+            if not _only_checks and not run_core_tests():
                 exit(-1)
         elif not run_check_unit_tests(check):
             exit(-1)
