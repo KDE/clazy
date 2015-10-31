@@ -18,29 +18,6 @@ set (LLVM_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -fno-common -Woverloaded-virtual -Wcast-qual -fno-strict-aliasing -pedantic -Wno-long-long -Wall -W -Wno-unused-parameter -Wwrite-strings -fno-exceptions -fno-rtti")
 set (CMAKE_MODULE_LINKER_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
 
-set (LLVM_LIBS
-    #LLVMJIT
-    #LLVMX86CodeGen
-    #LLVMX86AsmParser
-    #LLVMX86Disassembler
-    #LLVMExecutionEngine
-    #LLVMAsmPrinter
-    #LLVMSelectionDAG
-    #LLVMX86AsmPrinter
-    #LLVMX86Info
-    #LLVMMCParser
-    #LLVMCodeGen
-    #LLVMX86Utils
-    #LLVMScalarOpts
-    #LLVMInstCombine
-    #LLVMTransformUtils
-    #LLVMipa
-    #LLVMAnalysis
-    #LLVMTarget
-    #LLVMCore
-    #LLVMMC
-    #LLVMSupport
-)
 
 macro(add_clang_plugin name)
     set (srcs ${ARGN})
@@ -72,30 +49,6 @@ endmacro(add_clang_plugin)
 
 
 set(SYMBOL_FILE Lazy.exports)
-
-set (CLANG_LIBS
-    #clang
-    #clangFrontend
-    #clangAST
-    #clangAnalysis
-    #clangBasic
-    #clangCodeGen
-    #clangDriver
-    #clangFrontendTool
-    #clangIndex
-    #clangLex
-    #clangParse
-    #clangRewrite
-    #clangSema
-    #clangSerialization
-    #clangStaticAnalyzerCheckers
-    #clangStaticAnalyzerCore
-    #clangStaticAnalyzerFrontend
-)
-
-set (USER_LIBS
-    #pthread
-)
 
 add_clang_plugin(ClangLazy
                  checkbase.cpp
