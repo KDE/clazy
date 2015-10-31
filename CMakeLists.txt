@@ -18,6 +18,15 @@ set (LLVM_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -fno-common -Woverloaded-virtual -Wcast-qual -fno-strict-aliasing -pedantic -Wno-long-long -Wall -W -Wno-unused-parameter -Wwrite-strings -fno-exceptions -fno-rtti")
 set (CMAKE_MODULE_LINKER_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
 
+# Look for std::regex support
+message("Looking for std::regex support...")
+try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake_has_regex_test.cpp)
+
+if (${RUN_RESULT} EQUAL "0")
+    set(HAS_STD_REGEX TRUE)
+else()
+    set(HAS_STD_REGEX FALSE)
+endif()
 
 macro(add_clang_plugin name)
     set (srcs ${ARGN})
@@ -50,39 +59,45 @@ endmacro(add_clang_plugin)
 
 set(SYMBOL_FILE Lazy.exports)
 
-add_clang_plugin(ClangLazy
-                 checkbase.cpp
-                 checkmanager.cpp
-                 checks/autounexpectedqstringbuilder.cpp
-                 checks/assertwithsideeffects.cpp
-                 checks/detachingbase.cpp
-                 checks/detachingmember.cpp
-                 checks/detachingtemporary.cpp
-                 checks/dynamic_cast.cpp
-                 checks/foreach.cpp
-                 checks/globalconstcharpointer.cpp
-                 checks/inefficientqlist.cpp
-                 checks/implicitcasts.cpp
-                 checks/oldstyleconnect.cpp
-                 checks/qdatetimeutc.cpp
-                 checks/qgetenv.cpp
-                 checks/functionargsbyref.cpp
-                 checks/qdeleteall.cpp
-                 checks/qmapkey.cpp
-                 checks/qstringarg.cpp
-                 checks/qstringref.cpp
-                 checks/qstringuneededheapallocations.cpp
-                 checks/missingtypeinfo.cpp
-                 checks/nonpodstatic.cpp
-                 checks/requiredresults.cpp
-                 checks/reservecandidates.cpp
-                 checks/temporaryiterator.cpp
-                 checks/variantsanitizer.cpp
-                 checks/writingtotemporary.cpp
-                 checks/virtualcallsfromctor.cpp
-                 Lazy.cpp
-                 Utils.cpp
-                 )
+set(SRC_FILES
+    checkbase.cpp
+    checkmanager.cpp
+    checks/autounexpectedqstringbuilder.cpp
+    checks/assertwithsideeffects.cpp
+    checks/detachingbase.cpp
+    checks/detachingmember.cpp
+    checks/detachingtemporary.cpp
+    checks/dynamic_cast.cpp
+    checks/foreach.cpp
+    checks/globalconstcharpointer.cpp
+    checks/inefficientqlist.cpp
+    checks/implicitcasts.cpp
+    checks/qdatetimeutc.cpp
+    checks/qgetenv.cpp
+    checks/functionargsbyref.cpp
+    checks/qdeleteall.cpp
+    checks/qmapkey.cpp
+    checks/qstringarg.cpp
+    checks/qstringref.cpp
+    checks/qstringuneededheapallocations.cpp
+    checks/missingtypeinfo.cpp
+    checks/nonpodstatic.cpp
+    checks/requiredresults.cpp
+    checks/reservecandidates.cpp
+    checks/temporaryiterator.cpp
+    checks/variantsanitizer.cpp
+    checks/writingtotemporary.cpp
+    checks/virtualcallsfromctor.cpp
+    Lazy.cpp
+    Utils.cpp)
+
+if (HAS_STD_REGEX)
+    set(SRC_FILES ${SRC_FILES} checks/oldstyleconnect.cpp)
+else()
+    message("old-style-connect check is disabled due to missing std::regex support")
+endif()
+
+add_clang_plugin(ClangLazy ${SRC_FILES})
 
 set_target_properties(ClangLazy PROPERTIES
     LINKER_LANGUAGE CXX
