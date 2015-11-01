@@ -42,3 +42,13 @@ void testQtContainer()
     for (int i : stl_container) { // OK
     }
 }
+
+class A {
+public:
+    void foo()
+    {
+        for (int a : m_stlVec) {} // OK
+    }
+
+    std::vector<int> m_stlVec;
+};
