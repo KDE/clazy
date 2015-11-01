@@ -2,3 +2,4 @@ main.cpp:7:9: warning: Potential detachment due to calling QList<int>::begin() [
 main.cpp:17:9: warning: Potential detachment due to calling QList<int>::begin() [-Wclazy-detaching-member]
 main.cpp:28:9: warning: Potential detachment due to calling QString::begin() [-Wclazy-detaching-member]
 main.cpp:29:9: warning: Potential detachment due to calling QString::operator[]() [-Wclazy-detaching-member]
+main.cpp:38:22: warning: Potential detachment due to calling QList<int>::operator[]() [-Wclazy-detaching-member]

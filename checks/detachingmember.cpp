@@ -68,9 +68,34 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         memberDecl = Utils::valueDeclForMemberCall(memberCall);
     }
 
-    if (!method || !Utils::isMemberVariable(memberDecl) || !isDetachingMethod(method) || method->isConst())
+    if (!method || !memberDecl || !Utils::isMemberVariable(memberDecl) || !isDetachingMethod(method) || method->isConst())
         return;
 
+    // Catch cases like m_foo[0] = .. , which is fine
+
+    auto parentUnaryOp = Utils::getFirstParentOfType<UnaryOperator>(m_parentMap, callExpr);
+    if (parentUnaryOp) {
+        // m_foo[0]++ is OK
+        return;
+    }
+
+    auto parentOp = Utils::getFirstParentOfType<CXXOperatorCallExpr>(m_parentMap, Utils::parent(m_parentMap, callExpr));
+    llvm::errs() << parentOp << "\n";
+    if (parentOp) {
+        FunctionDecl *parentFunc = parentOp->getDirectCallee();
+        if (parentFunc && parentFunc->getNameAsString() == "operator=") {
+            // m_foo[0] = ... is OK
+            return;
+        }
+    }
+
+    auto parentBinaryOp = Utils::getFirstParentOfType<BinaryOperator>(m_parentMap, callExpr);
+    if (parentBinaryOp && parentBinaryOp->isAssignmentOp()) {
+        // m_foo[0] += .. is OK
+        Expr *lhs = parentBinaryOp->getLHS();
+        if (callExpr == lhs || Utils::isChildOf(callExpr, lhs))
+            return;
+    }
 
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
