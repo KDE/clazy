@@ -8,8 +8,11 @@ BUILD INSTRUCTIONS
 
 * Build and install clang >= 3.6 if your distro doesn't provide it
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
+  $ cd <some_directory>/tools/ && git clone https://github.com/llvm-mirror/clang.git
+  $ cd <some_directory>/projects && git clone https://github.com/llvm-mirror/compiler-rt.git
   $ mkdir <some_directory>/build && cd <some_directory>/build
-  $ ../configure --enable-optimized --prefix=<prefix> && make && make install
+  $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DLLVM_TARGETS_TO_BUILD=X86 -DCMAKE_BUILD_TYPE=Release ..
+  $ make -jX && make install
 
 * Build the clang-lazy plugin
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
@@ -115,5 +118,10 @@ REPORTING BUGS AND WISHES
 bug tracker: https://bugs.kde.org/enter_bug.cgi?product=clazy
 IRC: #kde-clazy (freenode)
 E-mail: smartins@kde.org
+
+--------------------------------------------------------------------------------
+CONTRIBUTING PATCHES
+
+https://git.reviewboard.kde.org
 
 --------------------------------------------------------------------------------
