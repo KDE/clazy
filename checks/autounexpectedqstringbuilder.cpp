@@ -2,6 +2,7 @@
    This file is part of the clang-lazy static checker.
 
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015 Mathias Hasselmann <mathias.hasselmann@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -34,6 +35,11 @@ using namespace clang;
 using namespace std;
 
 
+enum Fixit {
+    FixitNone = 0,
+    FixitUseQString = 0x1,
+};
+
 AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name)
     : CheckBase(name)
 {
@@ -52,8 +58,23 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 
     CXXRecordDecl *record = type->getAsCXXRecordDecl();
     if (record && record->getNameAsString() == "QStringBuilder") {
-        emitWarning(decl->getLocStart(), "auto deduced to be QStringBuilder instead of QString. Possible crash.");
+        std::vector<FixItHint> fixits;
+
+        if (isFixitEnabled(FixitUseQString)) {
+            std::string replacement = "QString " + varDecl->getName().str();
+
+            if (varDecl->getType().isConstQualified())
+                replacement = "const " + replacement;
+
+            SourceLocation start = varDecl->getLocStart();
+            SourceLocation end = varDecl->getLocation();
+            fixits.push_back(createReplacement({ start, end }, replacement));
+        }
+
+        emitWarning(decl->getLocStart(), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("auto-unexpected-qstringbuilder", AutoUnexpectedQStringBuilder, CheckLevel1)
+const char *const s_checkName = "auto-unexpected-qstringbuilder";
+REGISTER_CHECK_WITH_FLAGS(s_checkName, AutoUnexpectedQStringBuilder, CheckLevel1)
+REGISTER_FIXIT(FixitUseQString, "fix-auto-unexpected-qstringbuilder", s_checkName)
