@@ -80,7 +80,6 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     }
 
     auto parentOp = Utils::getFirstParentOfType<CXXOperatorCallExpr>(m_parentMap, Utils::parent(m_parentMap, callExpr));
-    llvm::errs() << parentOp << "\n";
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
         if (parentFunc && parentFunc->getNameAsString() == "operator=") {
