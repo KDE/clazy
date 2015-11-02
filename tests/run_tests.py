@@ -18,7 +18,7 @@ def get_command_output(cmd):
 #   QT_SELECT=5 qmake
 #   qmake-qt5
 QMAKE_HEADERS = ""
-qmakes = ["qmake", "QT_SELECT=5 qmake", "qmake-qt5"]
+qmakes = ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"]
 for qmake in qmakes:
     QMAKE_VERSION = get_command_output(qmake + " -query QT_VERSION")
     if QMAKE_VERSION.startswith("5."):
