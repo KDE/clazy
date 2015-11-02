@@ -10,3 +10,7 @@ For example:
     (...)
     const auto path = "hello " +  QString::fromLatin1("world");
     qDebug() << path; // CRASH
+
+
+FIXITS:
+export CLAZY_FIXIT="fix-auto-unexpected-qstringbuilder"

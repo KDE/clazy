@@ -80,7 +80,7 @@ Checks from level3:
     inefficient-qlist
     bogus-dynamic-cast
     detaching-member
-    assert-with-side-effects
+    assert-with-side-effects    (fix-auto-unexpected-qstringbuilder)
 
 Description of each level:
 level0: Very stable checks, 100% safe, no false-positives
