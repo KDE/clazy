@@ -1,4 +1,13 @@
 --------------------------------------------------------------------------------
+SOURCE CODE
+
+You can get clazy from:
+
+https://github.com/KDE/clazy
+git@git.kde.org:clazy
+http://anongit.kde.org/clazy
+
+--------------------------------------------------------------------------------
 BUILD INSTRUCTIONS
 
 * Install needed dependencies:
