@@ -14,9 +14,9 @@ def get_command_output(cmd):
 #-------------------------------------------------------------------------------
 # Detect Qt include path
 # We try in order:
-#   qmake
 #   QT_SELECT=5 qmake
 #   qmake-qt5
+#   qmake
 QMAKE_HEADERS = ""
 qmakes = ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"]
 for qmake in qmakes:
