@@ -26,6 +26,10 @@
 
 #=============================================================================
 
+
+# WARNING: This file was copied from kdevelop/languages/clang/cmake/FindClang.cmake
+# submit any patches there instead
+
 if(${Clang_FIND_REQUIRED})
   set(LLVM_FIND_TYPE REQUIRED)
 else()
