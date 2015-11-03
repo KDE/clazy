@@ -179,17 +179,17 @@ static bool parseArgument(const string &arg, vector<string> &args)
     return false;
 }
 
-static int parseLevel(vector<std::string> &args)
+static CheckLevel parseLevel(vector<std::string> &args)
 {
     static const vector<string> levels = { "level0", "level1", "level2", "level3", "level4" };
     const int numLevels = levels.size();
     for (int i = 0; i < numLevels; ++i) {
         if (parseArgument(levels.at(i), args)) {
-            return i;
+            return static_cast<CheckLevel>(i);
         }
     }
 
-    return -1;
+    return CheckLevelUndefined;
 }
 
 static bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
@@ -228,7 +228,7 @@ protected:
         const bool printRequestedChecks = parseArgument("print-requested-checks", args);
 
         auto checkManager = CheckManager::instance();
-        const int requestedLevel = parseLevel(/*by-ref*/args);
+        const CheckLevel requestedLevel = parseLevel(/*by-ref*/args);
         if (requestedLevel != CheckLevelUndefined) {
             checkManager->setRequestedLevel(requestedLevel);
         }

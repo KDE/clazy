@@ -297,7 +297,12 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
     return result;
 }
 
-void CheckManager::setRequestedLevel(int level)
+void CheckManager::setRequestedLevel(CheckLevel level)
 {
     m_requestedLevel = level;
+}
+
+CheckLevel CheckManager::requestedLevel() const
+{
+    return m_requestedLevel;
 }

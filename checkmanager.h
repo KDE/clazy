@@ -91,7 +91,8 @@ public:
      * A high level will enable checks known to have false positives, while a low level is more
      * conservative and emits less warnings.
      */
-    void setRequestedLevel(int level);
+    void setRequestedLevel(CheckLevel level);
+    CheckLevel requestedLevel() const;
 
 private:
     CheckManager();
@@ -105,7 +106,7 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
-    int m_requestedLevel;
+    CheckLevel m_requestedLevel;
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
