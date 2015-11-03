@@ -84,6 +84,7 @@ set(SRC_FILES
     checks/nonpodstatic.cpp
     checks/requiredresults.cpp
     checks/reservecandidates.cpp
+    checks/ruleoftwosoft.cpp
     checks/temporaryiterator.cpp
     checks/variantsanitizer.cpp
     checks/writingtotemporary.cpp
