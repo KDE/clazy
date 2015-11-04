@@ -39,6 +39,7 @@ using namespace std;
 
 WritingToTemporary::WritingToTemporary(const std::string &name)
     : CheckBase(name)
+    , m_widenCriteria(isOptionSet("widen-criteria"))
 {
 }
 
@@ -46,6 +47,12 @@ std::vector<string> WritingToTemporary::filesToIgnore() const
 {
     static const vector<string> files = { "qstring.h" };
     return files;
+}
+
+vector<string> WritingToTemporary::supportedOptions() const
+{
+    static const vector<string> options = { "widen-criteria" };
+    return options;
 }
 
 static bool isDisallowedClass(const string &className)
@@ -107,7 +114,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!secondFuncReturnType || !secondFuncReturnType->isVoidType())
         return;
 
-    if (!isKnownType(record->getNameAsString()) && !stringStartsWith(secondFunc->getNameAsString(), "set"))
+    if (!isKnownType(record->getNameAsString()) && (!stringStartsWith(secondFunc->getNameAsString(), "set") || !m_widenCriteria))
         return;
 
     emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + secondFunc->getQualifiedNameAsString());
