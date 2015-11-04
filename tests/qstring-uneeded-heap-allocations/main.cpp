@@ -147,10 +147,10 @@ struct TestCharsets
     TestCharsets() : member(QStringLiteral("é"))
          , member2(QString(QLatin1String("é"))) {} // Warning
     void  test(const QString &calendarType = QLatin1String("éééé´e") );
+    void test2();
     QString member;
     QString member2;
 };
-
 
 void testMultiPartStringLiterals()
 {
@@ -169,4 +169,12 @@ void moreShouldBeQLatin1String()
     if (s.startsWith("Version=5")) {
     }
     QString result = QString::fromLatin1("Enum") + s;
+}
+
+void TestCharsets::test2()
+{
+    QString s = QString::fromLatin1("é"); // Can't fix this weird one
+    QString s2 = QString::fromUtf8("é");
+    s2 += QString::fromLatin1("é");
+    s2 += QString::fromUtf8("é");
 }

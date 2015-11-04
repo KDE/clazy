@@ -51,3 +51,7 @@ main.cpp:160:5: warning: QString(const char*) being called [-Wclazy-qstring-unee
 main.cpp:168:20: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
 main.cpp:169:22: warning: QString(const char*) being called [-Wclazy-qstring-uneeded-heap-allocations]
 main.cpp:171:22: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
+main.cpp:176:17: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
+main.cpp:177:18: warning: QString::fromUtf8() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
+main.cpp:178:11: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]
+main.cpp:179:11: warning: QString::fromUtf8() being passed a literal [-Wclazy-qstring-uneeded-heap-allocations]

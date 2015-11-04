@@ -290,7 +290,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTerna
 
 
 // true for: QString::fromLatin1().arg()
-// false for: QString::fromLatin1()
+// false for: QString::fromLatin1("")
 // true for: QString s = QString::fromLatin1("foo")
 // false for: s += QString::fromLatin1("foo"), etc.
 static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall = 0)
@@ -315,10 +315,6 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
 
     CallExpr *callExpr = dyn_cast<CallExpr>(s);
     StringLiteral *literal = stringLiteralForCall(callExpr);
-
-    if (literal && !Utils::isAscii(literal))
-        return true;
-
     CXXOperatorCallExpr *op = dyn_cast<CXXOperatorCallExpr>(s);
     if (op)
         return false;
@@ -337,12 +333,12 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
     return false;
 }
 
-std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFromUtf8(CallExpr *callExpr)
+std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFromUtf8(CallExpr *callExpr, FromFunction fromFunction)
 {
     vector<FixItHint> fixits;
 
-    const std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap) ? "QStringLiteral"
-                                                                                     : "QLatin1String";
+    std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap) ? "QStringLiteral"
+                                                                               : "QLatin1String";
 
     if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {
         queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations, "Can't use QStringLiteral in macro!");
@@ -351,10 +347,20 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
 
     StringLiteral *literal = stringLiteralForCall(callExpr);
     if (literal) {
+        if (!Utils::isAscii(literal)) {
+            // QString::fromLatin1() to QLatin1String() is fine
+            // QString::fromUtf8() to QStringLiteral() is fine
+            // all other combinations are not
+            if (replacement == "QStringLiteral" && fromFunction == FromLatin1) {
+                return {};
+            } else if (replacement == "QLatin1String" && fromFunction == FromUtf8) {
+                replacement = "QStringLiteral";
+            }
+        }
+
         auto classNameLoc = Lexer::getLocForEndOfToken(callExpr->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
         auto scopeOperatorLoc = Lexer::getLocForEndOfToken(classNameLoc, 0, m_ci.getSourceManager(), m_ci.getLangOpts());
         auto methodNameLoc = Lexer::getLocForEndOfToken(scopeOperatorLoc, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
-
         SourceRange range(callExpr->getLocStart(), methodNameLoc);
         fixits.push_back(FixItHint::CreateReplacement(range, replacement));
     } else {
@@ -495,7 +501,8 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     std::vector<FixItHint> fixits;
 
     if (isFixitEnabled(FromLatin1_FromUtf8Allocations)) {
-        fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr);
+        const FromFunction fromFunction = functionDecl->getNameAsString() == "fromLatin1" ? FromLatin1 : FromUtf8;
+        fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr, fromFunction);
     }
 
     if (functionDecl->getNameAsString() == "fromLatin1") {

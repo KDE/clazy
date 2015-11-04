@@ -41,6 +41,12 @@ class CallExpr;
 class StringLiteral;
 }
 
+enum FromFunction {
+    FromLatin1,
+    FromUtf8
+};
+
+
 /**
  * Finds places where there are uneeded memory allocations due to temporary QStrings.
  *
@@ -61,7 +67,7 @@ private:
 
     std::vector<clang::FixItHint> fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee, int fixitType);
     std::vector<clang::FixItHint> fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *);
-    std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr);
+    std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr, FromFunction);
     std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt, const std::string &replacement);
     std::vector<clang::FixItHint> fixItRemoveToken(clang::Stmt *stmt, bool removeParenthesis);
 };

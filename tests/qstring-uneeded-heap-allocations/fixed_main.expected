@@ -131,12 +131,12 @@ void testCharsets()
     foreach (const QString &s, returns_stringlist(QLatin1String("éÈ"))) { }
     QString s11 = QStringLiteral("é");
 
-    if (s == QStringLiteral("foó"))
+    if (s == QLatin1String("foó"))
         return;
-    if (s == QStringLiteral("foó %1").arg(1))
+    if (s == QString::fromLatin1("foó %1").arg(1))
         return;
-    s.contains(QStringLiteral("é"));
-    s += QStringLiteral(
+    s.contains(QString::fromLatin1("é"));
+    s += QLatin1String(
         "fóó" );
     QString s123 = QString::fromLatin1(some_char_pointer_indirection("fóó"));
     QString s9 = QStringLiteral("stringéééé");
@@ -147,10 +147,10 @@ struct TestCharsets
     TestCharsets() : member(QStringLiteral("é"))
          , member2(QStringLiteral("é")) {} // Warning
     void  test(const QString &calendarType = QStringLiteral("éééé´e") );
+    void test2();
     QString member;
     QString member2;
 };
-
 
 void testMultiPartStringLiterals()
 {
@@ -169,4 +169,12 @@ void moreShouldBeQLatin1String()
     if (s.startsWith(QLatin1String("Version=5"))) {
     }
     QString result = QLatin1String("Enum") + s;
+}
+
+void TestCharsets::test2()
+{
+    QString s = QString::fromLatin1("é"); // Can't fix this weird one
+    QString s2 = QStringLiteral("é");
+    s2 += QLatin1String("é");
+    s2 += QStringLiteral("é");
 }
