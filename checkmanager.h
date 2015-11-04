@@ -85,6 +85,7 @@ public:
     clang::SourceManager *m_sm;
 
     bool allFixitsEnabled() const;
+    bool isOptionSet(const std::string &optionName) const;
 
     /**
      * Enables all checks with level <= @p level.
@@ -107,6 +108,7 @@ private:
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
     CheckLevel m_requestedLevel;
+    const std::vector<std::string> m_extraOptions;
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \

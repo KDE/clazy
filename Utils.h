@@ -137,6 +137,7 @@ namespace Utils {
     // By ref or pointer
     bool containsCallByRef(clang::Stmt *body, const clang::VarDecl *varDecl);
 
+    std::vector<std::string> splitString(const char *str, char separator);
     std::vector<std::string> splitString(const std::string &str, char separator);
 
     template <typename T>

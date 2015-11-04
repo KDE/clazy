@@ -45,6 +45,7 @@ CheckManager *CheckManager::instance()
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
     , m_requestedLevel(CheckLevelUndefined)
+    , m_extraOptions(Utils::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
@@ -256,6 +257,11 @@ void CheckManager::enableAllFixIts()
 bool CheckManager::allFixitsEnabled() const
 {
     return m_enableAllFixits;
+}
+
+bool CheckManager::isOptionSet(const string &optionName) const
+{
+    return std::find(m_extraOptions.cbegin(), m_extraOptions.cend(), optionName) != m_extraOptions.cend();
 }
 
 RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str) const

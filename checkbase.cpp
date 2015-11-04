@@ -190,6 +190,17 @@ bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
     return false;
 }
 
+std::vector<string> CheckBase::supportedOptions() const
+{
+    return {};
+}
+
+bool CheckBase::isOptionSet(const std::string &optionName) const
+{
+    const string qualifiedName = name() + "-" + optionName;
+    return CheckManager::instance()->isOptionSet(qualifiedName);
+}
+
 clang::FixItHint CheckBase::createReplacement(const SourceRange &range, const string &replacement)
 {
     if (range.getBegin().isInvalid()) {

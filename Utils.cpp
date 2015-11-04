@@ -569,6 +569,14 @@ bool Utils::containsAssignment(Stmt *body, const VarDecl *varDecl)
     return false;
 }
 
+std::vector<std::string> Utils::splitString(const char *str, char separator)
+{
+    if (!str)
+        return {};
+
+    return splitString(string(str), separator);
+}
+
 std::vector<std::string> Utils::splitString(const string &str, char separator)
 {
     std::string token;

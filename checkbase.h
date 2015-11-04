@@ -80,6 +80,8 @@ protected:
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
+    virtual std::vector<std::string> supportedOptions() const;
+    bool isOptionSet(const std::string &optionName) const;
 
     clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
     clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
