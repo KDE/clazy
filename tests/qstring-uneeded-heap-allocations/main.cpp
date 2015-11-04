@@ -177,4 +177,9 @@ void TestCharsets::test2()
     QString s2 = QString::fromUtf8("é");
     s2 += QString::fromLatin1("é");
     s2 += QString::fromUtf8("é");
+    s = "á";
+    s += "á";
+    QString("á");
+    QStringList slist;
+    slist << "á" << "a";
 }

@@ -177,4 +177,10 @@ void TestCharsets::test2()
     QString s2 = QStringLiteral("é");
     s2 += QLatin1String("é");
     s2 += QStringLiteral("é");
+    s = QStringLiteral("á");
+    s += QStringLiteral("á");
+    QStringLiteral("á");
+    QStringList slist;
+    slist << QStringLiteral("á") << QStringLiteral("a");
+    s += true ? "á" : "á";
 }
