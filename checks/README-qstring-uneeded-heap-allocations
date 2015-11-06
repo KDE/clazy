@@ -1,0 +1,41 @@
+qstring-uneeded-heap-allocations
+
+Finds places where there are uneeded memory allocations due to temporary QStrings.
+
+Here's a summary of stuff that allocates:
+
+    1. QString s = "foo"; // Allocates, use QStringLiteral("foo") instead
+
+    2. QString s = QLatin1String("foo"); // Allocates, use QStringLiteral("foo") instead
+    2.1) QString s = QLatin1String(""); // No allocation. QString is optimized for this case, so it's safe for empty literals
+
+    3. QString s = QStringLiteral("foo"); // No allocation
+
+    4. QString s = QString::fromLatin1("foo"); // Allocates, use QStringLiteral
+
+    5. QString s = QString::fromUtf8("foo"); // Allocates, use QStringLiteral
+
+    6. s == "foo" // Allocates, use QLatin1String
+
+    7. s == QLatin1String("foo) // No allocation
+
+    8. s == QStringLiteral("foo") // No allocation
+
+    9. QString {"append", "compare", "endsWith", "startsWith", "indexOf", "insert",
+                "lastIndexOf", "prepend", "replace", "contains" } // They all have QLatin1String overloads, so passing a QLatin1String is ok.
+
+    10. QString::fromLatin1("foo %1").arg(bar) // Allocates twice, replacing with QStringLiteral makes it allocate only one.
+
+Fixits:
+    fix-qlatin1string-allocations        // To replace QLatin1String with QStringLiteral only where it was allocating before
+    fix-fromLatin1_fromUtf8-allocations  // To replace fromLatin1() and fromUtf8() so it doesn't allocate
+    fix-fromCharPtrAllocations           // To replace raw string literals so it doesn't allocate
+
+    Example:
+        export CLAZY_FIXIT="fix-fromCharPtrAllocations"
+
+Warnings:
+    Note that QStringLiteral might make your app crash at exit if plugins are involved.
+    See:
+        https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
+        http://lists.qt-project.org/pipermail/development/2015-November/023681.html

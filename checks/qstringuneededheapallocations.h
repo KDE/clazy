@@ -53,6 +53,8 @@ enum FromFunction {
  * For example:
  * QString s = QLatin1String("foo"); // should be QStringLiteral
  * QString::fromLatin1("foo") and QString::fromUtf8("foo") // should be QStringLiteral, or QLatin1String if being passed to an overload taking QLatin1String
+ *
+ * See README-qstring-uneeded-heap-allocations for more information.
  */
 class QStringUneededHeapAllocations : public CheckBase
 {
