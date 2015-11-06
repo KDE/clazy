@@ -156,6 +156,12 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (!isOfClass(ctorDecl, "QString"))
         return;
 
+    if (isOptionSet("msvc-compat")) {
+        InitListExpr *initializerList = Utils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
+        if (initializerList != nullptr)
+            return; // Nothing to do here
+    }
+
     bool isQLatin1String = false;
     string paramType;
     if (hasCharPtrArgument(ctorDecl, 1)) {
@@ -536,6 +542,14 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     }
 
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
+}
+
+vector<string> QStringUneededHeapAllocations::supportedOptions() const
+{
+    // msvc-compat - don't use QStringLiteral inside arrays, crashes compiler
+
+    static const vector<string> options = { "msvc-compat" };
+    return options;
 }
 
 const char *const s_checkName = "qstring-uneeded-heap-allocations";

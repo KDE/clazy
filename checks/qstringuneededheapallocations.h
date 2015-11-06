@@ -61,6 +61,10 @@ class QStringUneededHeapAllocations : public CheckBase
 public:
     QStringUneededHeapAllocations(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
+
+protected:
+    std::vector<std::string> supportedOptions() const override;
+
 private:
     void VisitCtor(clang::Stmt *);
     void VisitOperatorCall(clang::Stmt *);

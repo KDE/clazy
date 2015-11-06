@@ -183,3 +183,7 @@ void TestCharsets::test2()
     QStringList slist;
     slist << "á" << "a";
 }
+
+
+static QStringList fooStaticList  = {QLatin1String("foo")}; // if msvc-compat is on, no change is done
+static QStringList fooStaticList2 = {"foo"}; // same

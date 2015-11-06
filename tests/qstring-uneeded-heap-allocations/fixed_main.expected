@@ -182,5 +182,8 @@ void TestCharsets::test2()
     QStringLiteral("á");
     QStringList slist;
     slist << QStringLiteral("á") << QStringLiteral("a");
-    s += true ? "á" : "á";
 }
+
+
+static QStringList fooStaticList  = {QStringLiteral("foo")}; // if msvc-compat is on, no change is done
+static QStringList fooStaticList2 = {QStringLiteral("foo")}; // same
