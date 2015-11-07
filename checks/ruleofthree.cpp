@@ -50,7 +50,7 @@ static bool isBlacklisted(CXXRecordDecl *record)
                                                 "QtPrivate::ConverterMemberFunctionOk", "QtPrivate::ConverterFunctor",
                                                 "QtMetaTypePrivate::VariantData", "QScopedArrayPointer",
                                                 "QtPrivate::AlignOfHelper", "QColor", "QCharRef", "QByteRef",
-                                                "QObjectPrivate::Connection"};
+                                                "QObjectPrivate::Connection", "QMutableListIterator", "QStringList"};
     return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
 }
 
