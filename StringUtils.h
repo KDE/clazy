@@ -84,6 +84,12 @@ inline bool stringStartsWith(const std::string &target, const std::string &maybe
     return target.compare(0, maybeBeginning.length(), maybeBeginning) == 0;
 }
 
+inline bool stringEndsWith(const std::string &target, const std::string &maybeEnding)
+{
+    return target.size() >= maybeEnding.size() &&
+            target.compare(target.size() - maybeEnding.size(), maybeEnding.size(), maybeEnding) == 0;
+}
+
 template <typename T>
 inline bool isOfClass(T *node, const std::string &className)
 {

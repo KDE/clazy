@@ -339,6 +339,15 @@ namespace Utils {
 
     // Returns the first base class
     clang::CXXRecordDecl * rootBaseClass(clang::CXXRecordDecl *derived);
+
+    // Returns the copy ctor for this class
+    clang::CXXConstructorDecl *copyCtor(clang::CXXRecordDecl *);
+
+    // Returns the copy-assignment operator for this class
+    clang::CXXMethodDecl *copyAssign(clang::CXXRecordDecl *);
+
+    bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
+
 }
 
 #endif

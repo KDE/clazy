@@ -1,0 +1,3 @@
+./main.h:5:1: warning: HasDtor has dtor but not copy-ctor, copy-assignment [-Wclazy-rule-of-three]
+./main.h:10:1: warning: HasDtorAndCopyCtor has dtor, copy-ctor but not copy-assignment [-Wclazy-rule-of-three]
+./main.h:27:1: warning: HasCopyCtor has copy-ctor but not dtor, copy-assignment [-Wclazy-rule-of-three]

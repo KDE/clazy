@@ -85,6 +85,7 @@ set(SRC_FILES
     checks/requiredresults.cpp
     checks/reservecandidates.cpp
     checks/ruleoftwosoft.cpp
+    checks/ruleofthree.cpp
     checks/temporaryiterator.cpp
     checks/variantsanitizer.cpp
     checks/writingtotemporary.cpp

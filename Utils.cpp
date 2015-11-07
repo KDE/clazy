@@ -1125,3 +1125,45 @@ CXXRecordDecl *Utils::rootBaseClass(CXXRecordDecl *derived)
 
     return record == nullptr ? derived : rootBaseClass(record);
 }
+
+CXXConstructorDecl *Utils::copyCtor(CXXRecordDecl *record)
+{
+    for (auto it = record->ctor_begin(), end = record->ctor_end(); it != end; ++it) {
+        CXXConstructorDecl *ctor = *it;
+        if (ctor->isCopyConstructor())
+            return ctor;
+    }
+
+    return nullptr;
+}
+
+CXXMethodDecl *Utils::copyAssign(CXXRecordDecl *record)
+{
+    for (auto it = record->method_begin(), end = record->method_end(); it != end; ++it) {
+        CXXMethodDecl *copyAssign = *it;
+        if (copyAssign->isCopyAssignmentOperator())
+            return copyAssign;
+    }
+
+    return nullptr;
+}
+
+bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
+{
+    if (!record)
+        return false;
+
+    for (auto it = record->field_begin(), end = record->field_end(); it != end; ++it) {
+        FieldDecl *field = *it;
+        field->getParent()->getNameAsString();
+        QualType qt = field->getType();
+        const Type *t = qt.getTypePtrOrNull();
+        if (t && t->getAsCXXRecordDecl()) {
+            CXXRecordDecl *rec = t->getAsCXXRecordDecl();
+            if (rec->getNameAsString() == memberTypeName)
+                return true;
+        }
+    }
+
+    return false;
+}
