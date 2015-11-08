@@ -156,6 +156,12 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (!isOfClass(ctorDecl, "QString"))
         return;
 
+    static const vector<string> blacklistedParentCtors = { "QRegExp" };
+    if (Utils::insideCTORCall(m_parentMap, stm, blacklistedParentCtors)) {
+        // https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
+        return;
+    }
+
     if (isOptionSet("msvc-compat")) {
         InitListExpr *initializerList = Utils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
         if (initializerList != nullptr)

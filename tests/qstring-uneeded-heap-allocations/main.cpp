@@ -187,3 +187,10 @@ void TestCharsets::test2()
 
 static QStringList fooStaticList  = {QLatin1String("foo")}; // if msvc-compat is on, no change is done
 static QStringList fooStaticList2 = {"foo"}; // same
+
+#include <QtCore/QRegExp>
+void testBlacklistedQRegExp()
+{
+    QRegExp exp1("literal");
+    QRegExp exp2(QLatin1String("literal"));
+}
