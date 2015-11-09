@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-import sys, os, subprocess, string
+import sys, os, subprocess, string, re
 
 #-------------------------------------------------------------------------------
 # utility functions #1
@@ -34,6 +34,15 @@ if not QMAKE_HEADERS:
 QT_FLAGS = "-I " + QMAKE_HEADERS + " -fPIC"
 
 #-------------------------------------------------------------------------------
+# Get clang version
+version = get_command_output('clang --version')
+
+match = re.search('clang version (.*? )', version)
+version = match.group(1)
+
+CLANG_VERSION = int(version.replace('.', ''))
+
+#-------------------------------------------------------------------------------
 # Global variables
 
 _compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits " + QT_FLAGS
@@ -46,6 +55,7 @@ _help = "--help" in sys.argv
 _only_checks = "--only-checks" in sys.argv # If set, the tests for the compiler itself aren't run
 _qtVersionLowerThan55 = QMAKE_INT_VERSION < 550
 _qtVersionLowerThan53 = QMAKE_INT_VERSION < 530
+_clangVersionLowerThan37 = CLANG_VERSION < 370
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -201,6 +211,9 @@ if not requested_checks:
     if _qtVersionLowerThan53:
         # 1% os reserve-candidates tests don't pass on 5.2.1, not worth wasting time on
         requested_checks = filter(lambda x: x not in ["reserve-candidates"] , requested_checks)
+
+    if _clangVersionLowerThan37:
+        requested_checks = filter(lambda x: x not in ["qstring-uneeded-heap-allocations"] , requested_checks)
 
 for check in requested_checks:
     os.chdir(check)
