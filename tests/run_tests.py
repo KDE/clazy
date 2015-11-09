@@ -37,7 +37,7 @@ QT_FLAGS = "-I " + QMAKE_HEADERS + " -fPIC"
 # Get clang version
 version = get_command_output('clang --version')
 
-match = re.search('clang version (.*? )', version)
+match = re.search('clang version (.*?)[ -]', version)
 version = match.group(1)
 
 CLANG_VERSION = int(version.replace('.', ''))
