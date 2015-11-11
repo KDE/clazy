@@ -5,7 +5,7 @@
 #include <QtCore/QMap>
 #include <QtGui/QRegion>
 #include <QtCore/QVector>
-
+#include <QtCore/QSequentialIterable>
 
 
 
@@ -133,4 +133,11 @@ void varLengthArray()
 {
     QVarLengthArray<int, 1> varray;
     foreach (auto i, varray) {}
+}
+
+void testQSequentialIterable()
+{
+    QVariant vlist;
+    QSequentialIterable iterable = vlist.value<QSequentialIterable>();
+    foreach (const QVariant &v, iterable) {}
 }

@@ -53,6 +53,8 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
         methodsMap["QString"] = {"begin", "end", "data"};
         methodsMap["QByteArray"] = {"data"};
         methodsMap["QImage"] = {"bits", "scanLine"};
+        methodsMap["QSequentialIterable"] = {};
+        methodsMap["QAssociativeIterable"] = {};
     }
 
     return methodsMap;
