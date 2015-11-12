@@ -50,6 +50,10 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
                                                 "QtPrivate::ConverterMemberFunctionOk", "QtPrivate::ConverterFunctor",
                                                 "QtMetaTypePrivate::VariantData", "QScopedArrayPointer",
                                                 "QtPrivate::AlignOfHelper", "QColor", "QCharRef", "QByteRef",
-                                                "QObjectPrivate::Connection", "QMutableListIterator", "QStringList"};
+                                                "QObjectPrivate::Connection", "QMutableListIterator",
+                                                "QStringList", "QVariant::Private",
+                                                "QModelIndex", // Qt4
+                                                "QPair" // Qt4
+                                              };
     return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
 }
