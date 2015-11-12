@@ -33,30 +33,8 @@
 using namespace clang;
 using namespace std;
 
-static bool isBlacklisted(CXXRecordDecl *record)
-{
-    if (!record)
-        return true;
-
-    auto qualifiedName = record->getQualifiedNameAsString();
-    if (record->getNameAsString() == "iterator" || record->getNameAsString() == "const_iterator") {
-        if (stringStartsWith(qualifiedName, "QList<")) // Fixed in Qt6
-            return true;
-    }
-
-    static const vector<string> blacklisted = { "QAtomicInt", "QBasicAtomicInteger", "QAtomicInteger", "QBasicAtomicPointer",
-                                                "QList::iterator", "QList::const_iterator", "QTextBlock::iterator",
-                                                "QAtomicPointer", "QtPrivate::ConverterMemberFunction",
-                                                "QtPrivate::ConverterMemberFunctionOk", "QtPrivate::ConverterFunctor",
-                                                "QtMetaTypePrivate::VariantData", "QScopedArrayPointer",
-                                                "QtPrivate::AlignOfHelper", "QColor", "QCharRef", "QByteRef",
-                                                "QObjectPrivate::Connection", "QMutableListIterator", "QStringList"};
-    return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
-}
-
-
 RuleOfThree::RuleOfThree(const std::string &name)
-    : CheckBase(name)
+    : RuleOfBase(name)
 {
 }
 

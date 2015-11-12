@@ -25,7 +25,7 @@
 #ifndef CLANG_LAZY_RULE_OF_THREE_H
 #define CLANG_LAZY_RULE_OF_THREE_H
 
-#include "checkbase.h"
+#include "ruleofbase.h"
 
 namespace clang {
 class Decl;
@@ -37,7 +37,7 @@ class Decl;
  *
  * See README-rule-of-three for more information
  */
-class RuleOfThree : public CheckBase
+class RuleOfThree : public RuleOfBase
 {
 public:
     explicit RuleOfThree(const std::string &name);

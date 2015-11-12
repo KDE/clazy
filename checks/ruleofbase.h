@@ -22,26 +22,24 @@
   without including the source code for Qt in the source distribution.
 */
 
-#ifndef CLANG_LAZY_RULE_OF_TWO_SOFT_H
-#define CLANG_LAZY_RULE_OF_TWO_SOFT_H
+#ifndef CLANG_LAZY_RULE_OF_BASE_H
+#define CLANG_LAZY_RULE_OF_BASE_H
 
-#include "ruleofbase.h"
+#include "checkbase.h"
 
 namespace clang {
-class Stmt;
+class CXXRecordDecl;
 }
 
 /**
- * Finds classes or structs which violate the rule of two.
- * If a class has a copy-ctor it should have copy-assignment operator too, and vice-versa.
- *
- * See README-rule-of-two-soft for more information
+ * Base class for RuleOfTwo and RuleOfThree
  */
-class RuleOfTwoSoft : public RuleOfBase
+class RuleOfBase : public CheckBase
 {
 public:
-    explicit RuleOfTwoSoft(const std::string &name);
-    void VisitStmt(clang::Stmt *s) override;
+    explicit RuleOfBase(const std::string &name);
+protected:
+    bool isBlacklisted(clang::CXXRecordDecl *record) const;
 };
 
 #endif

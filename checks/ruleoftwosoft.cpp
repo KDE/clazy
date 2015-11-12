@@ -35,24 +35,8 @@ using namespace std;
 
 
 RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name)
-    : CheckBase(name)
+    : RuleOfBase(name)
 {
-}
-
-
-static bool isBlacklisted(CXXRecordDecl *record)
-{
-    if (!record)
-        return true;
-
-    auto qualifiedName = record->getQualifiedNameAsString();
-    if (record->getNameAsString() == "iterator" || record->getNameAsString() == "const_iterator") {
-        if (stringStartsWith(qualifiedName, "QList<")) // Fixed in Qt6
-            return true;
-    }
-
-    static const vector<string> blacklisted = { "QTextBlock::iterator" }; // Fixed in Qt6
-    return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
 }
 
 void RuleOfTwoSoft::VisitStmt(Stmt *s)
