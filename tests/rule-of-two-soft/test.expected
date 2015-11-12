@@ -1,2 +1,2 @@
-main.cpp:36:5: warning: Using assign operator but class HasCopyCtor has copy-ctor but no assign operator [-Wclazy-rule-of-two-soft]
-main.cpp:39:28: warning: Using copy-ctor but class HasAssign has a trivial copy-ctor but non trivial assign operator [-Wclazy-rule-of-two-soft]
+main.cpp:51:5: warning: Using assign operator but class HasCopyCtor has copy-ctor but no assign operator [-Wclazy-rule-of-two-soft]
+main.cpp:54:28: warning: Using copy-ctor but class HasAssign has a trivial copy-ctor but non trivial assign operator [-Wclazy-rule-of-two-soft]
