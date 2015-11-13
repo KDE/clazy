@@ -348,6 +348,24 @@ namespace Utils {
 
     bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
 
+    /**
+     * Classifies a QualType, for example:
+     *
+     * This function is useful to know if a type should be passed by value or const-ref.
+     * The optional parameter body is in order to advise non-const-ref -> value, since the body
+     * needs to be inspected to see if we that would compile.
+     */
+    bool classifyQualType(const clang::VarDecl *varDecl,
+                          bool &isConst,
+                          bool &isReference,
+                          bool &isBig,
+                          bool &isNonTriviallyCopyable,
+                          bool &passBigTypeByConstRef,
+                          bool &passNonTriviallyCopyableTypeByConstRef,
+                          bool &passSmallTrivialByValue,
+                          int &size_of_T,
+                          clang::Stmt *body = nullptr);
+
 }
 
 #endif

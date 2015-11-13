@@ -29,6 +29,7 @@
 #include "MethodSignatureUtils.h"
 #include "StringUtils.h"
 
+#include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
 #include <clang/AST/DeclFriend.h>
@@ -1166,4 +1167,54 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
     }
 
     return false;
+}
+
+bool Utils::classifyQualType(const VarDecl *varDecl,
+                             bool &isConst,
+                             bool &isReference,
+                             bool &isBig,
+                             bool &isNonTriviallyCopyable,
+                             bool &passBigTypeByConstRef,
+                             bool &passNonTriviallyCopyableByConstRef,
+                             bool &passSmallTrivialByValue,
+                             int &size_of_T,
+                             clang::Stmt *body)
+
+{
+    if (!varDecl)
+        return false;
+
+    QualType qualType = varDecl->getType();
+    const Type *paramType = qualType.getTypePtrOrNull();
+    if (!paramType)
+        return false;
+
+    size_of_T = CheckManager::instance()->m_ci->getASTContext().getTypeSize(qualType) / 8;
+    isBig = size_of_T > 16;
+    CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
+    isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
+    isReference = paramType->isLValueReferenceType();
+    isConst = qualType.isConstQualified();
+    passBigTypeByConstRef = false;
+    passNonTriviallyCopyableByConstRef = false;
+    passSmallTrivialByValue = false;
+
+    if (isConst && !isReference) {
+        passNonTriviallyCopyableByConstRef = isNonTriviallyCopyable;
+        if (isBig) {
+            passBigTypeByConstRef = true;
+        }
+    } else if (isConst && isReference && !isNonTriviallyCopyable && !isBig) {
+        passSmallTrivialByValue = true;
+    } else if (!isConst && !isReference && (isBig || isNonTriviallyCopyable)) {
+        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::containsCallByRef(body, varDecl)))
+            return true;
+        passNonTriviallyCopyableByConstRef = isNonTriviallyCopyable;
+        if (isBig) {
+            passBigTypeByConstRef = true;
+        }
+    }
+
+
+    return true;
 }

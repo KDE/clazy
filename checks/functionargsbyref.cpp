@@ -97,35 +97,40 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         if (!paramType || paramType->isDependentType())
             continue;
 
-        const int size_of_T = m_ci.getASTContext().getTypeSize(paramQt) / 8;
-        const bool isSmall = size_of_T <= 16; // TODO: What about arm ?
         CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-        const bool isNonTrivialCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
-        const bool isReference = paramType->isLValueReferenceType();
-        const bool isConst = paramQt.isConstQualified();
         if (recordDecl && shouldIgnoreClass(recordDecl->getQualifiedNameAsString()))
             continue;
 
-        std::string error;
-        if (isConst && !isReference) {
-            if (!isSmall) {
-                error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
-            } else if (isNonTrivialCopyable) {
-                error += "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
-            }
-        } else if (isConst && isReference && !isNonTrivialCopyable && isSmall) {
-            //error += "Don't use by-ref on small trivial type";
-        } else if (!isConst && !isReference && (!isSmall || isNonTrivialCopyable)) {
-            if (Utils::containsNonConstMemberCall(body, param) || Utils::containsCallByRef(body, param))
-                continue;
-            if (!isSmall) {
-                error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
-            } else if (isNonTrivialCopyable) {
-                error += "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
-            }
-        }
+        bool isConst;
+        bool isReference;
+        bool isBig;
+        bool isNonTriviallyCopyable;
+        bool passBigTypeByConstRef;
+        bool passNonTriviallyCopyableByConstRef;
+        bool passSmallTrivialByValue;
+        int size_of_T;
 
-        if (!error.empty()) {
+        bool success = Utils::classifyQualType(param,
+                                               isConst,
+                                               isReference,
+                                               isBig,
+                                               isNonTriviallyCopyable,
+                                               passBigTypeByConstRef,
+                                               passNonTriviallyCopyableByConstRef,
+                                               passSmallTrivialByValue,
+                                               size_of_T,
+                                               body);
+        if (!success)
+            continue;
+
+        if (passBigTypeByConstRef || passNonTriviallyCopyableByConstRef) {
+            string error;
+            if (passBigTypeByConstRef) {
+                error = warningMsgForSmallType(size_of_T, paramQt.getAsString());
+            } else if (passNonTriviallyCopyableByConstRef) {
+                error = "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
+            }
+
             emitWarning(param->getLocStart(), error.c_str());
         }
     }
