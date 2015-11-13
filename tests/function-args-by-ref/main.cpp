@@ -109,5 +109,16 @@ enum Option {
     FooOption2
 };
 
+
 Q_DECLARE_FLAGS(Options, Option)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Options)
+
+struct NoUserCtorsButNotTrivial
+{
+    NonTrivial t;
+};
+
+void testNoUserCtorsButNotTrivial(NoUserCtorsButNotTrivial)
+{
+
+}

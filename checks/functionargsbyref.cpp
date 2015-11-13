@@ -100,7 +100,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         const int size_of_T = m_ci.getASTContext().getTypeSize(paramQt) / 8;
         const bool isSmall = size_of_T <= 16; // TODO: What about arm ?
         CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-        const bool isUserNonTrivial = recordDecl && (recordDecl->hasUserDeclaredCopyConstructor() || recordDecl->hasUserDeclaredDestructor());
+        const bool isNonTrivialCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
         const bool isReference = paramType->isLValueReferenceType();
         const bool isConst = paramQt.isConstQualified();
         if (recordDecl && shouldIgnoreClass(recordDecl->getQualifiedNameAsString()))
@@ -110,17 +110,17 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         if (isConst && !isReference) {
             if (!isSmall) {
                 error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
-            } else if (isUserNonTrivial) {
+            } else if (isNonTrivialCopyable) {
                 error += "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
             }
-        } else if (isConst && isReference && !isUserNonTrivial && isSmall) {
+        } else if (isConst && isReference && !isNonTrivialCopyable && isSmall) {
             //error += "Don't use by-ref on small trivial type";
-        } else if (!isConst && !isReference && (!isSmall || isUserNonTrivial)) {
+        } else if (!isConst && !isReference && (!isSmall || isNonTrivialCopyable)) {
             if (Utils::containsNonConstMemberCall(body, param) || Utils::containsCallByRef(body, param))
                 continue;
             if (!isSmall) {
                 error += warningMsgForSmallType(size_of_T, paramQt.getAsString());
-            } else if (isUserNonTrivial) {
+            } else if (isNonTrivialCopyable) {
                 error += "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
             }
         }
