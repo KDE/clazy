@@ -68,8 +68,8 @@ std::vector<string> FunctionArgsByRef::filesToIgnore() const
         "qimage.cpp", // TODO: Uncomment in Qt6
         "qimage.h",    // TODO: Uncomment in Qt6
         "qevent.h", // TODO: Uncomment in Qt6
-        "avxintrin.h", // Some clang internal
-        "avx2intrin.h", // Some clang internal
+        "avxintrin.h",
+        "avx2intrin.h",
         "qnoncontiguousbytedevice.cpp",
         "qlocale_unix.cpp",
         "/clang/"
@@ -85,7 +85,7 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
 void FunctionArgsByRef::VisitDecl(Decl *decl)
 {
     FunctionDecl *functionDecl = dyn_cast<FunctionDecl>(decl);
-    if (functionDecl == nullptr || !functionDecl->hasBody() || shouldIgnoreFunction(functionDecl->getNameAsString())
+    if (!functionDecl || !functionDecl->hasBody() || shouldIgnoreFunction(functionDecl->getNameAsString())
             || !functionDecl->isThisDeclarationADefinition()) return;
 
     Stmt *body = functionDecl->getBody();
@@ -94,7 +94,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         const ParmVarDecl *param = *it;
         QualType paramQt = param->getType();
         const Type *paramType = paramQt.getTypePtrOrNull();
-        if (paramType == nullptr || paramType->isDependentType())
+        if (!paramType || paramType->isDependentType())
             continue;
 
         const int size_of_T = m_ci.getASTContext().getTypeSize(paramQt) / 8;
