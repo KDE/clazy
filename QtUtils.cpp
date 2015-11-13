@@ -26,7 +26,6 @@
 #include "Utils.h"
 
 #include <vector>
-#include <string>
 
 using namespace std;
 
@@ -35,10 +34,14 @@ bool QtUtils::isQtIterableClass(clang::CXXRecordDecl *record)
     if (!record)
         return false;
 
+    return isQtIterableClass(record->getQualifiedNameAsString());
+}
+
+bool QtUtils::isQtIterableClass(const string &className)
+{
     static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
                                             "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString",
                                             "QByteArray", "QSequentialIterable", "QAssociativeIterable" };
 
-    const string name = record->getQualifiedNameAsString();
-    return find(classes.cbegin(), classes.cend(), name) != classes.cend();
+    return find(classes.cbegin(), classes.cend(), className) != classes.cend();
 }

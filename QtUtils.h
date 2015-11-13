@@ -25,6 +25,8 @@
 #ifndef CLAZY_QT_UTILS_H
 #define CLAZY_QT_UTILS_H
 
+#include <string>
+
 namespace clang {
 class CXXRecordDecl;
 }
@@ -37,6 +39,11 @@ namespace QtUtils
  * Which means all containers and also stuff like QAssociativeIterable.
  */
 bool isQtIterableClass(clang::CXXRecordDecl *record);
+
+/**
+ * Overload.
+ */
+bool isQtIterableClass(const std::string &className);
 
 }
 

@@ -27,6 +27,7 @@
 
 #include "foreach.h"
 #include "Utils.h"
+#include "QtUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -36,6 +37,7 @@ using namespace std;
 
 const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
 {
+    // List of methods causing detach
     static std::map<std::string, std::vector<std::string> > methodsMap;
     if (methodsMap.empty()) {
         methodsMap["QListSpecialMethods"] = {"first", "last", "begin", "end", "front", "back"};
@@ -53,8 +55,6 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
         methodsMap["QString"] = {"begin", "end", "data"};
         methodsMap["QByteArray"] = {"data"};
         methodsMap["QImage"] = {"bits", "scanLine"};
-        methodsMap["QSequentialIterable"] = {};
-        methodsMap["QAssociativeIterable"] = {};
     }
 
     return methodsMap;
@@ -106,7 +106,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     const string containerClassName = Utils::rootBaseClass(containerRecord)->getNameAsString();
-    const bool isQtContainer = detachingMethodsMap().count(containerClassName);
+    const bool isQtContainer = QtUtils::isQtIterableClass(Utils::rootBaseClass(containerRecord));
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
         return;
