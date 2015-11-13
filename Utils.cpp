@@ -1169,17 +1169,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
     return false;
 }
 
-bool Utils::classifyQualType(const VarDecl *varDecl,
-                             bool &isConst,
-                             bool &isReference,
-                             bool &isBig,
-                             bool &isNonTriviallyCopyable,
-                             bool &passBigTypeByConstRef,
-                             bool &passNonTriviallyCopyableByConstRef,
-                             bool &passSmallTrivialByValue,
-                             int &size_of_T,
-                             clang::Stmt *body)
-
+bool Utils::classifyQualType(const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     if (!varDecl)
         return false;
@@ -1189,32 +1179,28 @@ bool Utils::classifyQualType(const VarDecl *varDecl,
     if (!paramType)
         return false;
 
-    size_of_T = CheckManager::instance()->m_ci->getASTContext().getTypeSize(qualType) / 8;
-    isBig = size_of_T > 16;
+    classif.size_of_T = CheckManager::instance()->m_ci->getASTContext().getTypeSize(qualType) / 8;
+    classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-    isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
-    isReference = paramType->isLValueReferenceType();
-    isConst = qualType.isConstQualified();
-    passBigTypeByConstRef = false;
-    passNonTriviallyCopyableByConstRef = false;
-    passSmallTrivialByValue = false;
+    classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
+    classif.isReference = paramType->isLValueReferenceType();
+    classif.isConst = qualType.isConstQualified();
 
-    if (isConst && !isReference) {
-        passNonTriviallyCopyableByConstRef = isNonTriviallyCopyable;
-        if (isBig) {
-            passBigTypeByConstRef = true;
+    if (classif.isConst && !classif.isReference) {
+        classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
+        if (classif.isBig) {
+            classif.passBigTypeByConstRef = true;
         }
-    } else if (isConst && isReference && !isNonTriviallyCopyable && !isBig) {
-        passSmallTrivialByValue = true;
-    } else if (!isConst && !isReference && (isBig || isNonTriviallyCopyable)) {
+    } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
+        classif.passSmallTrivialByValue = true;
+    } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
         if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::containsCallByRef(body, varDecl)))
             return true;
-        passNonTriviallyCopyableByConstRef = isNonTriviallyCopyable;
-        if (isBig) {
-            passBigTypeByConstRef = true;
+        classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
+        if (classif.isBig) {
+            classif.passBigTypeByConstRef = true;
         }
     }
-
 
     return true;
 }

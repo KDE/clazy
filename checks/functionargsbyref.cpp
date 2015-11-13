@@ -101,33 +101,17 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         if (recordDecl && shouldIgnoreClass(recordDecl->getQualifiedNameAsString()))
             continue;
 
-        bool isConst;
-        bool isReference;
-        bool isBig;
-        bool isNonTriviallyCopyable;
-        bool passBigTypeByConstRef;
-        bool passNonTriviallyCopyableByConstRef;
-        bool passSmallTrivialByValue;
-        int size_of_T;
+        Utils::QualTypeClassification classif;
 
-        bool success = Utils::classifyQualType(param,
-                                               isConst,
-                                               isReference,
-                                               isBig,
-                                               isNonTriviallyCopyable,
-                                               passBigTypeByConstRef,
-                                               passNonTriviallyCopyableByConstRef,
-                                               passSmallTrivialByValue,
-                                               size_of_T,
-                                               body);
+        bool success = Utils::classifyQualType(param, classif, body);
         if (!success)
             continue;
 
-        if (passBigTypeByConstRef || passNonTriviallyCopyableByConstRef) {
+        if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
             string error;
-            if (passBigTypeByConstRef) {
-                error = warningMsgForSmallType(size_of_T, paramQt.getAsString());
-            } else if (passNonTriviallyCopyableByConstRef) {
+            if (classif.passBigTypeByConstRef) {
+                error = warningMsgForSmallType(classif.size_of_T, paramQt.getAsString());
+            } else if (classif.passNonTriviallyCopyableByConstRef) {
                 error = "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
             }
 

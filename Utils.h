@@ -348,6 +348,17 @@ namespace Utils {
 
     bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
 
+    struct QualTypeClassification {
+        bool isConst = false;
+        bool isReference = false;
+        bool isBig = false;
+        bool isNonTriviallyCopyable = false;
+        bool passBigTypeByConstRef = false;
+        bool passNonTriviallyCopyableByConstRef = false;
+        bool passSmallTrivialByValue = false;
+        int size_of_T = 0;
+    };
+
     /**
      * Classifies a QualType, for example:
      *
@@ -356,14 +367,7 @@ namespace Utils {
      * needs to be inspected to see if we that would compile.
      */
     bool classifyQualType(const clang::VarDecl *varDecl,
-                          bool &isConst,
-                          bool &isReference,
-                          bool &isBig,
-                          bool &isNonTriviallyCopyable,
-                          bool &passBigTypeByConstRef,
-                          bool &passNonTriviallyCopyableTypeByConstRef,
-                          bool &passSmallTrivialByValue,
-                          int &size_of_T,
+                          QualTypeClassification &classification,
                           clang::Stmt *body = nullptr);
 
 }
