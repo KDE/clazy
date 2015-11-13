@@ -122,3 +122,15 @@ void testNoUserCtorsButNotTrivial(NoUserCtorsButNotTrivial)
 {
 
 }
+
+struct TrivialWithDefaultCopyCtorAndDtor
+{
+    TrivialWithDefaultCopyCtorAndDtor(const TrivialWithDefaultCopyCtorAndDtor &) = default;
+    ~TrivialWithDefaultCopyCtorAndDtor() = default;
+    int m;
+};
+
+void testTrivialWithDefaultCopyCtorAndDtor(TrivialWithDefaultCopyCtorAndDtor)
+{
+
+}
