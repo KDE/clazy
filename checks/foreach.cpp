@@ -74,12 +74,12 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     }
 
     auto forStm = dyn_cast<ForStmt>(stmt);
-    if (forStm != nullptr) {
+    if (forStm) {
         m_lastForStmt = forStm;
         return;
     }
 
-    if (m_lastForStmt == nullptr)
+    if (!m_lastForStmt)
         return;
 
     CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stmt);
@@ -87,7 +87,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-    if (constructorDecl == nullptr || constructorDecl->getNameAsString() != "QForeachContainer")
+    if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
         return;
 
     vector<DeclRefExpr*> declRefExprs;
@@ -98,7 +98,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     // Get the container value declaration
     DeclRefExpr *declRefExpr = declRefExprs.front();
     ValueDecl *valueDecl = dyn_cast<ValueDecl>(declRefExpr->getDecl());
-    if (valueDecl == nullptr)
+    if (!valueDecl)
         return;
 
 
@@ -152,15 +152,15 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     Decl *decl = varDecls.at(0)->getSingleDecl();
-    if (decl == nullptr)
+    if (!decl)
         return;
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (varDecl == nullptr)
+    if (!varDecl)
         return;
 
     QualType qt = varDecl->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (t == nullptr || t->isLValueReferenceType()) // it's a reference, we're good
+    if (!t || t->isLValueReferenceType()) // it's a reference, we're good
         return;
 
     const int size_of_T = m_ci.getASTContext().getTypeSize(varDecl->getType()) / 8;
@@ -201,16 +201,16 @@ void Foreach::checkBigTypeMissingRef()
 
 bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)
 {
-    if (stm == nullptr)
+    if (!stm)
         return false;
 
     auto memberExpr = dyn_cast<MemberExpr>(stm);
-    if (memberExpr != nullptr) {
+    if (memberExpr) {
         ValueDecl *valDecl = memberExpr->getMemberDecl();
-        if (valDecl != nullptr && valDecl->isCXXClassMember()) {
+        if (valDecl && valDecl->isCXXClassMember()) {
             DeclContext *declContext = valDecl->getDeclContext();
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
-            if (recordDecl != nullptr) {
+            if (recordDecl) {
                 const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
                 if (detachingMethodsMap().find(className) != detachingMethodsMap().end()) {
                     const std::string functionName = valDecl->getNameAsString();
