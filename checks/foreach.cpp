@@ -102,17 +102,10 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
 
-    CXXRecordDecl *containerRecord = nullptr;
-    MaterializeTemporaryExpr *temporaryExpr = dyn_cast<MaterializeTemporaryExpr>(constructExpr->getArg(0));
-    if (temporaryExpr) {
-        QualType containerQualType = constructExpr->getArg(0)->getType();
-        const Type *containerType = containerQualType.getTypePtrOrNull();
-        containerRecord = containerType ? containerType->getAsCXXRecordDecl() : nullptr;
-    } else {
-        QualType containerQualType = valueDecl->getType();
-        const Type *containerType = containerQualType.getTypePtrOrNull();
-        containerRecord = containerType ? containerType->getAsCXXRecordDecl() : nullptr;
-    }
+    QualType containerQualType = constructExpr->getArg(0)->getType();
+    const Type *containerType = containerQualType.getTypePtrOrNull();
+    CXXRecordDecl *const containerRecord = containerType ? containerType->getAsCXXRecordDecl() : nullptr;
+
 
     if (!containerRecord)
         return;
@@ -121,6 +114,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     const bool isQtContainer = detachingMethodsMap().count(containerClassName);
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
+        return;
     } else {
         if (!isQtContainer) {
             emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy");
@@ -130,7 +124,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 
     checkBigTypeMissingRef();
 
-    if (temporaryExpr) // Nothing else to check
+    if (isa<MaterializeTemporaryExpr>(constructExpr->getArg(0))) // Nothing else to check
         return;
 
     // const containers are fine

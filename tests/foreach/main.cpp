@@ -141,3 +141,9 @@ void testQSequentialIterable()
     QSequentialIterable iterable = vlist.value<QSequentialIterable>();
     foreach (const QVariant &v, iterable) {}
 }
+
+void testMemberQList()
+{
+    struct { QStringList list; } data;
+    foreach (const QString &s, data.list) {};
+}
