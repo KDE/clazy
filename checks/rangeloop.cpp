@@ -25,35 +25,46 @@
   without including the source code for Qt in the source distribution.
 */
 
-#ifndef FOREACH_DETACHMENTS_H
-#define FOREACH_DETACHMENTS_H
+#include "rangeloop.h"
+#include "Utils.h"
+#include "QtUtils.h"
+#include "checkmanager.h"
 
-#include "checkbase.h"
+#include <clang/AST/AST.h>
 
-namespace clang {
-class ForStmt;
-class ValueDecl;
-class Stmt;
-class CXXForRangeStmt;
+using namespace clang;
+using namespace std;
+
+RangeLoop::RangeLoop(const std::string &name)
+    : CheckBase(name)
+{
 }
 
-/**
- * - Foreach:
- *   - Finds places where you're detaching the foreach container.
- *   - Finds places where big or non-trivial types are passed by value instead of const-ref.
- *   - Finds places where you're using foreach on STL containers. It causes deep-copy.
- * - For Range Loops:
- *   - Finds places where you're using C++11 for range loops with Qt containers. (potential detach)
- */
-class Foreach : public CheckBase
+void RangeLoop::VisitStmt(clang::Stmt *stmt)
 {
-public:
-    Foreach(const std::string &name);
-    void VisitStmt(clang::Stmt *stmt) override;
-private:
-    void checkBigTypeMissingRef();
-    bool containsDetachments(clang::Stmt *stmt, clang::ValueDecl *containerValueDecl);
-    clang::ForStmt *m_lastForStmt = nullptr;
-};
+    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
+        processForRangeLoop(rangeLoop);
+    }
+}
 
-#endif
+void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
+{
+    Expr *containerExpr = rangeLoop->getRangeInit();
+    if (!containerExpr)
+        return;
+
+    QualType qt = containerExpr->getType();
+    if (qt.isConstQualified()) // const won't detach
+        return;
+
+    const Type *t = qt.getTypePtrOrNull();
+    if (!t || !t->isRecordType())
+        return;
+
+    CXXRecordDecl *record = t->getAsCXXRecordDecl();
+    if (QtUtils::isQtIterableClass(Utils::rootBaseClass(record))) {
+        emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container");
+    }
+}
+
+REGISTER_CHECK_WITH_FLAGS("range-loop", RangeLoop, CheckLevel1)

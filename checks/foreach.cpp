@@ -68,11 +68,6 @@ Foreach::Foreach(const std::string &name)
 
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
-        processForRangeLoop(rangeLoop);
-        return;
-    }
-
     auto forStm = dyn_cast<ForStmt>(stmt);
     if (forStm) {
         m_lastForStmt = forStm;
@@ -242,28 +237,6 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
     }
 
     return false;
-}
-
-void Foreach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
-{
-    Expr *containerExpr = rangeLoop->getRangeInit();
-    if (!containerExpr)
-        return;
-
-    QualType qt = containerExpr->getType();
-    if (qt.isConstQualified()) // const won't detach
-        return;
-
-    const Type *t = qt.getTypePtrOrNull();
-    if (!t || !t->isRecordType())
-        return;
-
-    CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    const string containerClassName = Utils::rootBaseClass(record)->getQualifiedNameAsString();
-
-    if (detachingMethodsMap().find(containerClassName) != detachingMethodsMap().end()) {
-        emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container");
-    }
 }
 
 REGISTER_CHECK_WITH_FLAGS("foreach", Foreach, CheckLevel1)

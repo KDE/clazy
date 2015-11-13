@@ -1,0 +1,3 @@
+range-loop
+
+Finds places where you're using C++11 range-loops with non-const Qt containers. (potential detach)

@@ -82,6 +82,7 @@ set(SRC_FILES
     checks/qstringuneededheapallocations.cpp
     checks/missingtypeinfo.cpp
     checks/nonpodstatic.cpp
+    checks/rangeloop.cpp
     checks/requiredresults.cpp
     checks/reservecandidates.cpp
     checks/ruleofbase.cpp

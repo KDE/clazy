@@ -1,6 +1,6 @@
 #include <QtCore/QList>
 #include <vector>
-
+#include <QtCore/QMap>
 using namespace std;
 
 QList<int> getQtList()
@@ -52,3 +52,10 @@ public:
 
     std::vector<int> m_stlVec;
 };
+
+void testQMultiMapDetach()
+{
+    QMultiMap<int,int> m;
+    for (int i : m) {
+    }
+}

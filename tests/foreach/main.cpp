@@ -115,8 +115,8 @@ void testQStringList()
 void testQMultiMapDetach()
 {
     QMultiMap<int,int> m;
-    for (int i : m) {
-    }
+
+
 
     foreach (int i, m) {
         m.first();
