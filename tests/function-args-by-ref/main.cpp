@@ -134,3 +134,15 @@ void testTrivialWithDefaultCopyCtorAndDtor(TrivialWithDefaultCopyCtorAndDtor)
 {
 
 }
+
+struct DefaultButNotTrivialCopyable
+{
+    DefaultButNotTrivialCopyable(const DefaultButNotTrivialCopyable & ) = default;
+    ~DefaultButNotTrivialCopyable() = default;
+    NonTrivial t;
+};
+
+void testDefaultButNotTrivialCopyable(DefaultButNotTrivialCopyable)
+{
+
+}

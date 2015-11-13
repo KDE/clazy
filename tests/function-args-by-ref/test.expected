@@ -6,3 +6,4 @@ main.cpp:69:10: warning: Missing reference on non-trivial type NonTrivial [-Wcla
 main.cpp:75:11: warning: Missing reference on non-trivial type NonTrivial [-Wclazy-function-args-by-ref]
 main.cpp:102:12: warning: Missing reference on non-trivial type QString [-Wclazy-function-args-by-ref]
 main.cpp:121:35: warning: Missing reference on non-trivial type NoUserCtorsButNotTrivial [-Wclazy-function-args-by-ref]
+main.cpp:145:39: warning: Missing reference on non-trivial type DefaultButNotTrivialCopyable [-Wclazy-function-args-by-ref]
