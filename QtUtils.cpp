@@ -41,7 +41,7 @@ bool QtUtils::isQtIterableClass(const string &className)
 {
     static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
                                             "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString",
-                                            "QByteArray", "QSequentialIterable", "QAssociativeIterable" };
+                                            "QByteArray", "QSequentialIterable", "QAssociativeIterable", "QJsonArray" };
 
     return find(classes.cbegin(), classes.cend(), className) != classes.cend();
 }
