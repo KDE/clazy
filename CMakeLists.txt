@@ -92,6 +92,7 @@ set(SRC_FILES
     checks/writingtotemporary.cpp
     checks/virtualcallsfromctor.cpp
     Lazy.cpp
+    QtUtils.cpp
     Utils.cpp)
 
 if (HAS_STD_REGEX)
