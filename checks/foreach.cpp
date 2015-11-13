@@ -147,51 +147,26 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     Decl *decl = varDecls.at(0)->getSingleDecl();
-    if (!decl)
-        return;
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    VarDecl *varDecl = decl ? dyn_cast<VarDecl>(decl) : nullptr;
     if (!varDecl)
         return;
 
-    QualType qt = varDecl->getType();
-    const Type *t = qt.getTypePtrOrNull();
-    if (!t || t->isLValueReferenceType()) // it's a reference, we're good
+    Utils::QualTypeClassification classif;
+    bool success = Utils::classifyQualType(varDecl, /*by-ref*/classif, forStatements.at(0));
+    if (!success)
         return;
 
-    const int size_of_T = m_ci.getASTContext().getTypeSize(varDecl->getType()) / 8;
-    const bool isLarge = size_of_T > 16;
-    CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
+    if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
+        string error;
+        if (classif.passBigTypeByConstRef) {
+            error = "Missing reference in foreach with sizeof(T) = ";
+            error += std::to_string(classif.size_of_T) + " bytes";
+        } else if (classif.passNonTriviallyCopyableByConstRef) {
+            error = "Missing reference in foreach with non trivial type";
+        }
 
-    // other ctors are fine, just check copy ctor and dtor
-    const bool isUserNonTrivial = recordDecl && (recordDecl->hasUserDeclaredCopyConstructor() || recordDecl->hasUserDeclaredDestructor());
-    // const bool isLiteral = t->isLiteralType(m_ci.getASTContext());
-
-    std::string error;
-    if (isLarge) {
-        error = "Missing reference in foreach with sizeof(T) = ";
-        error += std::to_string(size_of_T) + " bytes";
-    } else if (isUserNonTrivial) {
-        error = "Missing reference in foreach with non trivial type";
-    }
-
-    if (error.empty()) // No warning
-        return;
-
-    // If it's const, then it's definitely missing &. But if it's not const, there might be a non-const member call, which we should allow
-    if (qt.isConstQualified()) {
         emitWarning(varDecl->getLocStart(), error.c_str());
-        return;
     }
-
-
-    if (Utils::containsNonConstMemberCall(forStatements.at(0), varDecl))
-        return;
-
-    // Look for a method call that takes our variable by non-const reference
-    if (Utils::containsCallByRef(forStatements.at(0), varDecl))
-        return;
-
-    emitWarning(varDecl->getLocStart(), error.c_str());
 }
 
 bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDecl)
