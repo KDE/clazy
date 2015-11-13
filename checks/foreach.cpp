@@ -106,7 +106,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     const string containerClassName = Utils::rootBaseClass(containerRecord)->getNameAsString();
-    const bool isQtContainer = QtUtils::isQtIterableClass(Utils::rootBaseClass(containerRecord));
+    const bool isQtContainer = QtUtils::isQtIterableClass(containerClassName);
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
         return;
