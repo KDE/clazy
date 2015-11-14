@@ -146,3 +146,13 @@ void testDefaultButNotTrivialCopyable(DefaultButNotTrivialCopyable)
 {
 
 }
+
+void shouldBeByValue(const Trivial &nt)
+{
+
+}
+
+
+void isOK(const NonTrivial &&)
+{
+}

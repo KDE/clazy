@@ -44,8 +44,9 @@ static bool shouldIgnoreClass(const std::string &qualifiedClassName)
                                               "QJsonArray::const_iterator", // TODO: Remove in Qt6
                                               "QList<QString>::const_iterator",  // TODO: Remove in Qt6
                                               "QtMetaTypePrivate::QSequentialIterableImpl",
-                                              "QtMetaTypePrivate::QAssociativeIterableImpl"
-
+                                              "QtMetaTypePrivate::QAssociativeIterableImpl",
+                                              "QVariantComparisonHelper",
+                                              "QHashDummyValue", "QCharRef", "QString::Null"
                                              };
     return std::find(ignoreList.cbegin(), ignoreList.cend(), qualifiedClassName) != ignoreList.cend();
 }
@@ -72,7 +73,9 @@ std::vector<string> FunctionArgsByRef::filesToIgnore() const
         "avx2intrin.h",
         "qnoncontiguousbytedevice.cpp",
         "qlocale_unix.cpp",
-        "/clang/"
+        "/clang/",
+        "qmetatype.h", // TODO: fix in Qt
+        "qbytearray.h" // TODO: fix in Qt
     };
 }
 
@@ -92,9 +95,9 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 
     for (auto it = functionDecl->param_begin(), end = functionDecl->param_end(); it != end; ++it) {
         const ParmVarDecl *param = *it;
-        QualType paramQt = param->getType();
+        QualType paramQt = Utils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
-        if (!paramType || paramType->isDependentType())
+        if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
             continue;
 
         CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
@@ -107,12 +110,15 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         if (!success)
             continue;
 
-        if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
+        if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef || classif.passSmallTrivialByValue) {
             string error;
+            const string paramStr = param->getType().getAsString();
             if (classif.passBigTypeByConstRef) {
-                error = warningMsgForSmallType(classif.size_of_T, paramQt.getAsString());
+                error = warningMsgForSmallType(classif.size_of_T, paramStr);
             } else if (classif.passNonTriviallyCopyableByConstRef) {
-                error = "Missing reference on non-trivial type " + recordDecl->getQualifiedNameAsString();
+                error = "Missing reference on non-trivial type (" + paramStr + ")";
+            } else if (classif.passSmallTrivialByValue) {
+                error = "Pass small and trivially-copyable type by value (" + paramStr + ")";
             }
 
             emitWarning(param->getLocStart(), error.c_str());

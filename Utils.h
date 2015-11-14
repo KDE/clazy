@@ -370,6 +370,16 @@ namespace Utils {
                           QualTypeClassification &classification,
                           clang::Stmt *body = nullptr);
 
+
+    /**
+     * If qt is a reference, return it without a reference.
+     * If qt is nor a reference, return qt.
+     *
+     * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
+     * returns false. Must go through qualType->getPointeeType().isConstQualified().
+     */
+    clang::QualType unrefQualType(const clang::QualType &qt);
+
 }
 
 #endif

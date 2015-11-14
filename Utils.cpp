@@ -1174,17 +1174,20 @@ bool Utils::classifyQualType(const VarDecl *varDecl, QualTypeClassification &cla
     if (!varDecl)
         return false;
 
-    QualType qualType = varDecl->getType();
+    QualType qualType = unrefQualType(varDecl->getType());
     const Type *paramType = qualType.getTypePtrOrNull();
-    if (!paramType)
+    if (!paramType || paramType->isIncompleteType())
         return false;
 
     classif.size_of_T = CheckManager::instance()->m_ci->getASTContext().getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
-    classif.isReference = paramType->isLValueReferenceType();
+    classif.isReference = varDecl->getType()->isLValueReferenceType();
     classif.isConst = qualType.isConstQualified();
+
+    if (varDecl->getType()->isRValueReferenceType()) // && ref, nothing to do here
+        return true;
 
     if (classif.isConst && !classif.isReference) {
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
@@ -1203,4 +1206,10 @@ bool Utils::classifyQualType(const VarDecl *varDecl, QualTypeClassification &cla
     }
 
     return true;
+}
+
+QualType Utils::unrefQualType(const QualType &qualType)
+{
+    const Type *t = qualType.getTypePtrOrNull();
+    return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
 }
