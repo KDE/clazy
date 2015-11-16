@@ -27,22 +27,32 @@
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
+#include <array>
 
 using namespace clang;
+using namespace std;
 
 QDeleteAll::QDeleteAll(const std::string &name)
     : CheckBase(name)
 {
 }
 
+static bool isInterestingMethod(const string &name)
+{
+    static const vector<string> names = { {"values"} };
+    return find(names.cbegin(), names.cend(), name) != names.cend();
+}
+
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values
     CXXMemberCallExpr *valuesCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (valuesCall &&
-        valuesCall->getDirectCallee() &&
-        valuesCall->getDirectCallee()->getNameAsString() == "values")
-    {
+    FunctionDecl *func = valuesCall ? valuesCall->getDirectCallee() : nullptr;
+    if (!func)
+        return;
+
+    const string funcName = func->getNameAsString();
+    if (isInterestingMethod(funcName)) {
         const std::string valuesClassName = valuesCall->getMethodDecl()->getParent()->getNameAsString();
         if (valuesClassName == "QMap" || valuesClassName == "QSet" || valuesClassName == "QHash") { // QMultiHash and QMultiMap automatically supported
             // Once found see if the first parent call is qDeleteAll
@@ -52,7 +62,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                 CallExpr *pc = dyn_cast<CallExpr>(p);
                 if (pc) {
                     if (pc->getDirectCallee() && pc->getDirectCallee()->getNameAsString() == "qDeleteAll") {
-                        emitWarning(p->getLocStart(), "Calling qDeleteAll with " + valuesClassName + "::values, call qDeleteAll on the container itself");
+                        emitWarning(p->getLocStart(), "Calling qDeleteAll with " + valuesClassName + "::" + funcName + ", call qDeleteAll on the container itself");
                     }
                     break;
                 }
