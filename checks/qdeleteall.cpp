@@ -24,6 +24,7 @@
 
 #include "qdeleteall.h"
 #include "Utils.h"
+#include "QtUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -54,7 +55,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
     const string funcName = func->getNameAsString();
     if (isInterestingMethod(funcName)) {
         const std::string valuesClassName = valuesCall->getMethodDecl()->getParent()->getNameAsString();
-        if (valuesClassName == "QMap" || valuesClassName == "QSet" || valuesClassName == "QHash") { // QMultiHash and QMultiMap automatically supported
+        if (QtUtils::isQtAssociativeContainer(valuesClassName)) {
             // Once found see if the first parent call is qDeleteAll
             int i = 1;
             Stmt *p = Utils::parent(m_parentMap, stmt, i);

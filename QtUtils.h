@@ -45,6 +45,16 @@ bool isQtIterableClass(clang::CXXRecordDecl *record);
  */
 bool isQtIterableClass(const std::string &className);
 
+/**
+ * Returns true if the class is a Qt class which is an associative container (QHash, QMap, QSet)
+ */
+bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
+
+/**
+ * Overload.
+ */
+bool isQtAssociativeContainer(const std::string &className);
+
 }
 
 #endif

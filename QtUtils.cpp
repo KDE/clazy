@@ -45,3 +45,17 @@ bool QtUtils::isQtIterableClass(const string &className)
 
     return find(classes.cbegin(), classes.cend(), className) != classes.cend();
 }
+
+bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
+{
+    if (!record)
+        return false;
+
+    return isQtAssociativeContainer(record->getNameAsString());
+}
+
+bool QtUtils::isQtAssociativeContainer(const string &className)
+{
+    static const vector<string> classes = { "QSet", "QMap", "QHash" };
+    return find(classes.cbegin(), classes.cend(), className) != classes.cend();
+}
