@@ -27,7 +27,7 @@
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
-#include <array>
+#include <vector>
 
 using namespace clang;
 using namespace std;
@@ -39,13 +39,13 @@ QDeleteAll::QDeleteAll(const std::string &name)
 
 static bool isInterestingMethod(const string &name)
 {
-    static const vector<string> names = { {"values"} };
+    static const vector<string> names = { "values", "keys" };
     return find(names.cbegin(), names.cend(), name) != names.cend();
 }
 
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
-    // Find a call to QMap/QSet/QHash::values
+    // Find a call to QMap/QSet/QHash::values/keys
     CXXMemberCallExpr *valuesCall = dyn_cast<CXXMemberCallExpr>(stmt);
     FunctionDecl *func = valuesCall ? valuesCall->getDirectCallee() : nullptr;
     if (!func)

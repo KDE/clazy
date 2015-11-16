@@ -29,8 +29,9 @@
 
 /**
  * - QDeleteAll:
- *   - Finds places where you call qDeleteAll(set/map/hash.values())
- *  // TODO Add a check for qDeleteAll(foo.keys()) -> qDeleteAll(foo.keyBegin(), foo.keyEnd()); since Qt 5.6
+ *   - Finds places where you call qDeleteAll(set/map/hash.values()/keys())
+ *
+ *  See README-qdeleteall for more information
  */
 class QDeleteAll : public CheckBase
 {

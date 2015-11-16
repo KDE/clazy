@@ -11,6 +11,12 @@ QSet<QString *> values()
     return s;
 }
 
+QSet<QString *> keys()
+{
+    QSet<QString *> s;
+    return s;
+}
+
 struct Foo {
     QSet<QString *> values()
     {
@@ -37,7 +43,7 @@ int main()
     qDeleteAll(h.begin(), h.end());
     qDeleteAll(h.values()); // warning
 
-    QMap<int, QString *> m;
+    QMap<int*, QString *> m;
     qDeleteAll(m);
     qDeleteAll(m.begin(), m.end());
     qDeleteAll(m.values()); // warning
@@ -57,4 +63,8 @@ int main()
     Foo foo;
     qDeleteAll(foo.values());  // ok
     qDeleteAll(foo.doSomethingWithValues(h.values()));  // ok
+
+    qDeleteAll(m.keys()); // warning
+    qDeleteAll(keys()); // ok
+
 }
