@@ -47,15 +47,15 @@ static bool isInterestingMethod(const string &name)
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values/keys
-    CXXMemberCallExpr *valuesCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    FunctionDecl *func = valuesCall ? valuesCall->getDirectCallee() : nullptr;
+    CXXMemberCallExpr *offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    FunctionDecl *func = offendingCall ? offendingCall->getDirectCallee() : nullptr;
     if (!func)
         return;
 
     const string funcName = func->getNameAsString();
     if (isInterestingMethod(funcName)) {
-        const std::string valuesClassName = valuesCall->getMethodDecl()->getParent()->getNameAsString();
-        if (QtUtils::isQtAssociativeContainer(valuesClassName)) {
+        const std::string offendingClassName = offendingCall->getMethodDecl()->getParent()->getNameAsString();
+        if (QtUtils::isQtAssociativeContainer(offendingClassName)) {
             // Once found see if the first parent call is qDeleteAll
             int i = 1;
             Stmt *p = Utils::parent(m_parentMap, stmt, i);
@@ -63,7 +63,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                 CallExpr *pc = dyn_cast<CallExpr>(p);
                 if (pc) {
                     if (pc->getDirectCallee() && pc->getDirectCallee()->getNameAsString() == "qDeleteAll") {
-                        emitWarning(p->getLocStart(), "Calling qDeleteAll with " + valuesClassName + "::" + funcName + ", call qDeleteAll on the container itself");
+                        emitWarning(p->getLocStart(), "Calling qDeleteAll with " + offendingClassName + "::" + funcName + ", call qDeleteAll on the container itself");
                     }
                     break;
                 }
