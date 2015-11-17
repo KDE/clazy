@@ -111,7 +111,7 @@ void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 
 bool MissingTypeinfo::ignoreTypeInfo(const std::string &className) const
 {
-    std::vector<std::string> primitives {"QPair"};
+    std::vector<std::string> primitives {"QPair", "QTime"}; // clazy bug
     return std::find(primitives.begin(), primitives.end(), className) != primitives.end();
 }
 
