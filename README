@@ -73,7 +73,7 @@ Checks from level1:
     detaching-temporary
     foreach
     non-pod-global-static
-    old-style-connect    (fix-old-style-connects)
+    old-style-connect    (fix-old-style-connect)
     qstring-uneeded-heap-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     qdeleteall
 

@@ -24,17 +24,17 @@ echo | $CLAZY_COMMAND_STDIN
 
 # Test that fixit enables the check
 unset CLAZY_CHECKS
-export CLAZY_FIXIT="fix-old-style-connects"
+export CLAZY_FIXIT="fix-old-style-connect"
 echo | $CLAZY_COMMAND_STDIN
 
 # Test both check and fixit
 export CLAZY_CHECKS="old-style-connect"
-export CLAZY_FIXIT="fix-old-style-connects"
+export CLAZY_FIXIT="fix-old-style-connect"
 echo | $CLAZY_COMMAND_STDIN
 
 # Test fixit+check + unrelated check
 export CLAZY_CHECKS="old-style-connect,foreach"
-export CLAZY_FIXIT="fix-old-style-connects"
+export CLAZY_FIXIT="fix-old-style-connect"
 echo | $CLAZY_COMMAND_STDIN
 
 # test all_checks
@@ -52,7 +52,7 @@ echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts -
 echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach -")
 
 # Pass fixits through the command-line
-echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang fix-old-style-connects -")
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang fix-old-style-connect -")
 
 # Pass level0
 echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang level0 -")
