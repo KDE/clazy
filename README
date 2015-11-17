@@ -27,6 +27,8 @@ BUILD INSTRUCTIONS
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
   $ make && make install
 
+See troubleshooting section if you have problems.
+
 --------------------------------------------------------------------------------
 SETTING UP YOUR PROJECT TO BUILD WITH CLAZY
 
@@ -120,6 +122,17 @@ export CLAZY_FIXIT="fix-qlatin1string-allocations"
 Only one fixit can be enabled each time.
 WARNING: Backup your code, don't blame me if a fixit is not applied correctly.
 For better results don't use parallel builds, otherwise a fixit being applied in an header file might be done twice.
+
+--------------------------------------------------------------------------------
+TROUBLESHOOTING
+
+- clang: symbol lookup error: /usr/lib/x86_64-linux-gnu/ClangLazy.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv
+  This is due to mixing ABIs. Your clang/llvm was compiled with the new gcc c++ ABI [1] but you compiled the clazy plugin with clang (which uses old ABI [2]).
+
+  The solution is to build the clazy plugin with gcc or use a distro which hasn't migrated to gcc5 ABI yet, such as archlinux.
+
+  [1] https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
+  [2] https://llvm.org/bugs/show_bug.cgi?id=23529
 
 --------------------------------------------------------------------------------
 REPORTING BUGS AND WISHES
