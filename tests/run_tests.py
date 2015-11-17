@@ -31,7 +31,7 @@ if not QMAKE_HEADERS:
     # Change here if can't find with qmake
     QMAKE_HEADERS = "/usr/include/qt/"
 
-QT_FLAGS = "-I " + QMAKE_HEADERS + " -fPIC"
+QT_FLAGS = "-isystem " + QMAKE_HEADERS + " -fPIC"
 
 #-------------------------------------------------------------------------------
 # Get clang version
