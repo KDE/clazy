@@ -53,7 +53,8 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
                                                 "QObjectPrivate::Connection", "QMutableListIterator",
                                                 "QStringList", "QVariant::Private",
                                                 "QModelIndex", // Qt4
-                                                "QPair" // Qt4
+                                                "QPair", // Qt4
+                                                "QSet", // Fixed for Qt 5.7
                                               };
     return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
 }
