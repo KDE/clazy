@@ -139,6 +139,9 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
 
     checkForMultiArgOpportunities(memberCall);
 
+    if (!isOptionSet("fillChar-overloads"))
+        return;
+
     CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee());
     if (!method)
         return;
@@ -187,6 +190,12 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
 std::vector<std::string> StringArg::filesToIgnore() const
 {
     return { "qstring.h" };
+}
+
+std::vector<string> StringArg::supportedOptions() const
+{
+    static const vector<string> options = { "fillChar-overloads" };
+    return options;
 }
 
 

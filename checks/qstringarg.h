@@ -45,6 +45,7 @@ public:
 protected:
     std::vector<std::string> filesToIgnore() const override;
 private:
+    std::vector<std::string> supportedOptions() const override;
     bool checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls);
     std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
 };

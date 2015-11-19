@@ -2,6 +2,9 @@
 
 import sys, os, subprocess, string, re
 
+# Remove when we refactor unit-tests and allow to pass custom options
+os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
+
 #-------------------------------------------------------------------------------
 # utility functions #1
 
