@@ -8,3 +8,6 @@ main.cpp:102:12: warning: Missing reference on non-trivial type (class QString) 
 main.cpp:121:35: warning: Missing reference on non-trivial type (struct NoUserCtorsButNotTrivial) [-Wclazy-function-args-by-ref]
 main.cpp:145:39: warning: Missing reference on non-trivial type (struct DefaultButNotTrivialCopyable) [-Wclazy-function-args-by-ref]
 main.cpp:150:22: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-ref]
+main.cpp:166:11: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-ref]
+main.cpp:170:11: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-ref]
+main.cpp:174:11: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-ref]

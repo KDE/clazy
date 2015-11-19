@@ -30,9 +30,15 @@
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
+#include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
+
+enum Fixit {
+    FixitNone = 0,
+    FixitAll = 0x1 // More granularity isn't needed I guess
+};
 
 static bool shouldIgnoreClass(const std::string &qualifiedClassName)
 {
@@ -93,7 +99,9 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 
     Stmt *body = functionDecl->getBody();
 
+    int i = -1;
     for (auto it = functionDecl->param_begin(), end = functionDecl->param_end(); it != end; ++it) {
+        i++;
         const ParmVarDecl *param = *it;
         QualType paramQt = Utils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
@@ -112,6 +120,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 
         if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef || classif.passSmallTrivialByValue) {
             string error;
+            std::vector<FixItHint> fixits;
             const string paramStr = param->getType().getAsString();
             if (classif.passBigTypeByConstRef) {
                 error = warningMsgForSmallType(classif.size_of_T, paramStr);
@@ -119,11 +128,53 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
                 error = "Missing reference on non-trivial type (" + paramStr + ")";
             } else if (classif.passSmallTrivialByValue) {
                 error = "Pass small and trivially-copyable type by value (" + paramStr + ")";
+                if (isFixitEnabled(FixitAll) && false) {
+                    for (auto it = functionDecl->redecls_begin(), end = functionDecl->redecls_end(); it != end; ++it) { // Fix in both header and .cpp
+                        FunctionDecl *fdecl = dyn_cast<FunctionDecl>(*it);
+                        const ParmVarDecl *param = fdecl->getParamDecl(i);
+                        fixits.push_back(fixitByValue(fdecl, param, classif));
+                    }
+                }
             }
 
-            emitWarning(param->getLocStart(), error.c_str());
+            emitWarning(param->getLocStart(), error.c_str(), fixits);
         }
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("function-args-by-ref", FunctionArgsByRef, CheckLevel2)
+FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl *param, const Utils::QualTypeClassification &)
+{
+    QualType qt = Utils::unrefQualType(param->getType());
+    qt.removeLocalConst();
+    const string typeName = qt.getAsString(PrintingPolicy(m_ci.getLangOpts()));
+    string replacement = typeName + " " + string(param->getName());
+    SourceLocation startLoc = param->getLocStart();
+    SourceLocation endLoc = param->getLocEnd();
+
+    const int numRedeclarations = std::distance(func->redecls_begin(), func->redecls_end());
+    const bool definitionIsAlsoDeclaration = numRedeclarations == 1;
+    const bool isDeclarationButNotDefinition = !func->doesThisDeclarationHaveABody();
+
+    if (param->hasDefaultArg() && (isDeclarationButNotDefinition || definitionIsAlsoDeclaration)) {
+        endLoc = param->getDefaultArg()->getLocStart().getLocWithOffset(-1);
+        replacement += " =";
+    }
+
+    if (!startLoc.isValid() || !endLoc.isValid()) {
+        llvm::errs() << "Internal error could not apply fixit " << startLoc.printToString(m_ci.getSourceManager())
+                     << ";" << endLoc.printToString(m_ci.getSourceManager()) << "\n";
+        return {};
+    }
+
+    return createReplacement({ startLoc, endLoc }, replacement);
+}
+
+clang::FixItHint FunctionArgsByRef::fixitByConstRef(const ParmVarDecl *, const Utils::QualTypeClassification &)
+{
+    FixItHint fixit;
+    return fixit;
+}
+
+const char *const s_checkName = "function-args-by-ref";
+REGISTER_CHECK_WITH_FLAGS(s_checkName, FunctionArgsByRef, CheckLevel2)
+// REGISTER_FIXIT(FixitAll, "fix-func-args", s_checkName)

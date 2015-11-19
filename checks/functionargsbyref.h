@@ -32,6 +32,13 @@
 
 namespace clang {
 class Decl;
+class VarDecl;
+class FixItHint;
+class ParmVarDecl;
+}
+
+namespace Utils {
+struct QualTypeClassification;
 }
 
 /**
@@ -45,6 +52,9 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
+private:
+    clang::FixItHint fixitByValue(clang::FunctionDecl *func, const clang::ParmVarDecl *param, const Utils::QualTypeClassification &);
+    clang::FixItHint fixitByConstRef(const clang::ParmVarDecl *, const Utils::QualTypeClassification &);
 };
 
 #endif

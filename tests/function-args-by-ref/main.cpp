@@ -156,3 +156,21 @@ void shouldBeByValue(const Trivial &nt)
 void isOK(const NonTrivial &&)
 {
 }
+
+void foo(const Trivial &t = Trivial());
+void foo1(const Trivial & = Trivial());
+void foo2(const Trivial &t);
+void foo3(const Trivial&);
+
+void foo4(const Trivial &t);
+void foo4(const Trivial &t)
+{
+}
+
+void foo5(const Trivial &t)
+{
+}
+
+void foo6(const Trivial &t = {})
+{
+}
