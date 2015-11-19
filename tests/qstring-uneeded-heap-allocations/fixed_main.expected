@@ -129,7 +129,7 @@ void testCharsets()
     s.startsWith(QStringLiteral("é"));
     s.startsWith(QLatin1String("e"));
     foreach (const QString &s, returns_stringlist(QLatin1String("éÈ"))) { }
-    QString s11 = QStringLiteral("é");
+    QString s11 = QLatin1String("é");
 
     if (s == QLatin1String("foó"))
         return;
@@ -139,14 +139,14 @@ void testCharsets()
     s += QLatin1String(
         "fóó" );
     QString s123 = QString::fromLatin1(some_char_pointer_indirection("fóó"));
-    QString s9 = QStringLiteral("stringéééé");
+    QString s9 = QLatin1String("stringéééé");
 }
 
 struct TestCharsets
 {
     TestCharsets() : member(QStringLiteral("é"))
-         , member2(QStringLiteral("é")) {} // Warning
-    void  test(const QString &calendarType = QStringLiteral("éééé´e") );
+         , member2(QLatin1String("é")) {} // Warning
+    void  test(const QString &calendarType = QLatin1String("éééé´e") );
     void test2();
     QString member;
     QString member2;
@@ -187,3 +187,16 @@ void TestCharsets::test2()
 
 static QStringList fooStaticList  = {QStringLiteral("foo")}; // if msvc-compat is on, no change is done
 static QStringList fooStaticList2 = {QStringLiteral("foo")}; // same
+
+#include <QtCore/QRegExp>
+void testBlacklistedQRegExp()
+{
+    QRegExp exp1("literal");
+    QRegExp exp2(QLatin1String("literal"));
+}
+
+
+void charsetEdgeCase()
+{
+    test4(QLatin1String("ááá"));
+}

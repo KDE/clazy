@@ -136,7 +136,7 @@ static bool containsStringLiteralNoCallExpr(Stmt *stmt)
 }
 
 // For QString::fromLatin1("foo") returns "foo"
-static StringLiteral* stringLiteralForCall(CallExpr *call)
+static StringLiteral* stringLiteralForCall(Stmt *call)
 {
     if (!call)
         return nullptr;
@@ -258,6 +258,14 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
 
 vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee, int fixitType)
 {
+    if (replacee == "QLatin1String") {
+        StringLiteral *lt = stringLiteralForCall(begin);
+        if (lt && !Utils::isAscii(lt)) {
+            emitWarning(lt->getLocStart(), "Don't use QLatin1String with non-latin1 literals");
+            return {};
+        }
+    }
+
     vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());

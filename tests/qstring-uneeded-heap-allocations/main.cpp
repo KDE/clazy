@@ -194,3 +194,9 @@ void testBlacklistedQRegExp()
     QRegExp exp1("literal");
     QRegExp exp2(QLatin1String("literal"));
 }
+
+
+void charsetEdgeCase()
+{
+    test4(QLatin1String("ááá"));
+}
