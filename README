@@ -134,8 +134,11 @@ TROUBLESHOOTING
   [1] https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
   [2] https://llvm.org/bugs/show_bug.cgi?id=23529
 
-- [Fedora 23] cmake can't find LLVM
+- [Fedora 23] cmake can't find LLVM ?
   Looks like /usr/share/llvm/cmake/LLVM-Config.cmake is buggy. Better build your own llvm/clang.
+
+- Some checks are misteriously not producing warnings or not applying fixits ?
+  Check if you have ccache interfering and turn it off
 
 --------------------------------------------------------------------------------
 REDUCING WARNING NOISE
