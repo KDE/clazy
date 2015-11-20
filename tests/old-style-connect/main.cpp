@@ -341,4 +341,27 @@ void testWhitelist()
 
 int main() { return 0; }
 
+
+
+
+class TestStatic : public QObject
+{
+public:
+    TestStatic(QObject *parent = nullptr) : QObject(parent)
+    {
+    }
+
+public slots:
+    static void test(QObject *)
+    {
+    }
+};
+
+void testStatic()
+{
+    auto test = new TestStatic;
+    TestStatic::connect(test, SIGNAL(destroyed(QObject*)), test, SLOT(test(QObject*)));
+    TestStatic::disconnect(test, SIGNAL(destroyed(QObject*)), test, SLOT(test(QObject*)));
+}
+
 #include "main.moc"

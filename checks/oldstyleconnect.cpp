@@ -377,6 +377,9 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             }
 
             auto methodDecl = methods[0];
+            if (methodDecl->isStatic()) {
+                return {};
+            }
 
             if (macroNum == 1) {
                 // Save the number of parameters of the signal. The slot should not have more arguments.
