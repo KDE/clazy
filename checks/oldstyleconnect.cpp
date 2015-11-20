@@ -459,5 +459,5 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 }
 
 const char *const s_checkName = "old-style-connect";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, OldStyleConnect, CheckLevel1)
+REGISTER_CHECK_WITH_FLAGS(s_checkName, OldStyleConnect, CheckLevel2)
 REGISTER_FIXIT(FixItConnects, "fix-old-style-connect", s_checkName)
