@@ -46,7 +46,9 @@ struct PrivateSlot
 class PreprocessorCallbacks;
 
 /**
- * Finds usages odl style Qt connect statements.
+ * Finds usages of old-style Qt connect statements.
+ *
+ * See README-old-style-connect for more information.
  */
 class OldStyleConnect : public CheckBase
 {
