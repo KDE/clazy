@@ -69,6 +69,8 @@ public:
     }
 
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 6
+    // Clang >= 3.7 already has this member.
+    We define it for clang <= 3.6 so it builds.
     bool InPlace;
 #endif
 };
