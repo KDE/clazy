@@ -216,7 +216,7 @@ if not requested_checks:
         requested_checks = filter(lambda x: x not in ["reserve-candidates"] , requested_checks)
 
     if _clangVersionLowerThan37:
-        requested_checks = filter(lambda x: x not in ["qstring-uneeded-heap-allocations", "clazy"] , requested_checks)
+        requested_checks = filter(lambda x: x not in ["qstring-uneeded-heap-allocations", "clazy", "missing-qobject"] , requested_checks)
 
 for check in requested_checks:
     os.chdir(check)
