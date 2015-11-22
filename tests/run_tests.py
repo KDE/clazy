@@ -1,10 +1,14 @@
 #!/usr/bin/python2
 
-import sys, os, subprocess, string, re
+import sys, os, subprocess, string, re, json
 
 # Remove when we refactor unit-tests and allow to pass custom options
 os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
 
+class Check:
+    def __init__(self, name):
+        self.name = name
+        self.link = False # If true we also call the linker
 #-------------------------------------------------------------------------------
 # utility functions #1
 
@@ -13,6 +17,22 @@ def get_command_output(cmd):
     if p.wait() != 0:
         return ""
     return p.communicate()[0];
+
+def load_json(check_name):
+    check = Check(check_name)
+    filename = check_name + "/config.json"
+    if not os.path.exists(filename):
+        return check
+
+    f = open(filename, 'r')
+    contents = f.read()
+    f.close()
+    decoded = json.loads(contents)
+
+    if 'link' in decoded:
+        check.link = decoded['link']
+
+    return check
 
 #-------------------------------------------------------------------------------
 # Detect Qt include path
@@ -91,7 +111,7 @@ def files_are_equal(file1, file2):
     except:
         return False
 
-def get_check_list():
+def get_check_names():
     return filter(lambda entry: os.path.isdir(entry), os.listdir("."))
 
 # Returns all files with .cpp_fixed extension. These were rewritten by clang.
@@ -120,21 +140,20 @@ def cleanup_fixed_files():
 
 def run_check_unit_tests(check):
     cmd = ""
-    do_link_step = check in ['old-style-connect'] # Hardcoded for now
 
-    if do_link_step:
+    if check.link:
         cmd += _compiler_comand + " " + _link_flags
     else:
         cmd += _compiler_comand + " -c "
 
-    clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check + " *.cpp"
+    clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " *.cpp"
     if _verbose:
         print "Running: " + clazy_cmd
 
     cleanup_fixed_files()
 
     if not run_command(clazy_cmd + " > all_files.compile_output 2> all_files.compile_output"):
-        print "[FAIL] " + check + " (Failed to build test. Check " + check + "/all_files.compile_output for details)"
+        print "[FAIL] " + check.name + " (Failed to build test. Check " + check.name + "/all_files.compile_output for details)"
         print
         return False
 
@@ -143,9 +162,9 @@ def run_check_unit_tests(check):
     result = True
 
     if files_are_equal("test.expected", "test.output"):
-        print "[OK]   " + check
+        print "[OK]   " + check.name
     else:
-        print "[FAIL] " + check
+        print "[FAIL] " + check.name
         if not print_differences("test.expected", "test.output"):
             result = False
 
@@ -156,7 +175,7 @@ def run_check_unit_tests(check):
         if run_command(cmd + " " + fixed_files + " > " + output_file + " 2> " + output_file):
             print "   [OK]   fixed file  "
         else:
-            print "   [FAIL] fixed file (Failed to build test. Check " + check + "/" + output_file + " for details) Files were: " + fixed_files
+            print "   [FAIL] fixed file (Failed to build test. Check " + check.name + "/" + output_file + " for details) Files were: " + fixed_files
             print
             result = False
 
@@ -182,6 +201,12 @@ def run_core_tests():
 def dump_ast(check):
     run_command(_dump_ast_command + " > dump.ast")
 #-------------------------------------------------------------------------------
+def load_checks(all_check_names):
+    checks = []
+    for name in all_check_names:
+        checks.append(load_json(name))
+    return checks
+#-------------------------------------------------------------------------------
 # main
 
 if _help:
@@ -195,35 +220,37 @@ switches = ["--verbose", "--dump-ast", "--help", "--only-checks"]
 if _dump_ast:
     del(args[args.index("--dump-ast")])
 
+all_check_names = get_check_names()
+all_checks = load_checks(all_check_names)
+requested_check_names = filter(lambda x: x not in switches, args)
+requested_check_names = map(lambda x: x.strip("/"), requested_check_names)
 
-all_checks = get_check_list()
-requested_checks = filter(lambda x: x not in switches, args)
-requested_checks = map(lambda x: x.strip("/"), requested_checks)
-
-for check in requested_checks:
-    if check not in all_checks:
-        print "Unknown check: " + check
+for check_name in requested_check_names:
+    if check_name not in all_check_names:
+        print "Unknown check: " + check_name
         print
         sys.exit(-1)
 
-if not requested_checks:
-    requested_checks = all_checks
+if not requested_check_names:
+    requested_check_names = all_check_names
     if _qtVersionLowerThan55:
         # These checks don't pass on Qt 5.4 due to missing API
-        requested_checks = filter(lambda x: x not in ["old-style-connect", "detaching-temporary"] , requested_checks)
+        requested_check_names = filter(lambda x: x not in ["old-style-connect", "detaching-temporary"] , requested_check_names)
     if _qtVersionLowerThan53:
         # 1% os reserve-candidates tests don't pass on 5.2.1, not worth wasting time on
-        requested_checks = filter(lambda x: x not in ["reserve-candidates"] , requested_checks)
+        requested_check_names = filter(lambda x: x not in ["reserve-candidates"] , requested_check_names)
 
     if _clangVersionLowerThan37:
-        requested_checks = filter(lambda x: x not in ["qstring-uneeded-heap-allocations", "clazy", "missing-qobject"] , requested_checks)
+        requested_check_names = filter(lambda x: x not in ["qstring-uneeded-heap-allocations", "clazy", "missing-qobject"] , requested_check_names)
+
+requested_checks = filter(lambda check: check.name in requested_check_names, all_checks)
 
 for check in requested_checks:
-    os.chdir(check)
+    os.chdir(check.name)
     if _dump_ast:
         dump_ast(check)
     else:
-        if check == "clazy":
+        if check.name == "clazy":
             if not _only_checks and not run_core_tests():
                 exit(-1)
         elif not run_check_unit_tests(check):
