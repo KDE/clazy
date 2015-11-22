@@ -9,6 +9,7 @@ class Check:
     def __init__(self, name):
         self.name = name
         self.link = False # If true we also call the linker
+        self.minimum_qt_version = 500
 #-------------------------------------------------------------------------------
 # utility functions #1
 
@@ -31,6 +32,9 @@ def load_json(check_name):
 
     if 'link' in decoded:
         check.link = decoded['link']
+
+    if 'minimum_qt_version' in decoded:
+        check.minimum_qt_version = decoded['minimum_qt_version']
 
     return check
 
@@ -76,8 +80,6 @@ _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
 _only_checks = "--only-checks" in sys.argv # If set, the tests for the compiler itself aren't run
-_qtVersionLowerThan55 = QMAKE_INT_VERSION < 550
-_qtVersionLowerThan53 = QMAKE_INT_VERSION < 530
 _clangVersionLowerThan37 = CLANG_VERSION < 370
 #-------------------------------------------------------------------------------
 # utility functions #2
@@ -233,17 +235,11 @@ for check_name in requested_check_names:
 
 if not requested_check_names:
     requested_check_names = all_check_names
-    if _qtVersionLowerThan55:
-        # These checks don't pass on Qt 5.4 due to missing API
-        requested_check_names = filter(lambda x: x not in ["old-style-connect", "detaching-temporary"] , requested_check_names)
-    if _qtVersionLowerThan53:
-        # 1% os reserve-candidates tests don't pass on 5.2.1, not worth wasting time on
-        requested_check_names = filter(lambda x: x not in ["reserve-candidates"] , requested_check_names)
-
     if _clangVersionLowerThan37:
         requested_check_names = filter(lambda x: x not in ["qstring-uneeded-heap-allocations", "clazy", "missing-qobject"] , requested_check_names)
 
 requested_checks = filter(lambda check: check.name in requested_check_names, all_checks)
+requested_checks = filter(lambda check: check.minimum_qt_version <= QMAKE_INT_VERSION, requested_checks)
 
 for check in requested_checks:
     os.chdir(check.name)
