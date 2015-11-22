@@ -26,3 +26,8 @@ public: // Warning
 
 class QFile;
 class FwdDecl;
+
+template <typename T> class DerivedTemplate : public Derived1
+{ // OK, moc doesn't accept Q_OBJECT in template classes
+    public:
+};

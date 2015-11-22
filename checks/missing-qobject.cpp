@@ -71,6 +71,9 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
     if (!record || !record->hasDefinition() || record->getDefinition() != record || !Utils::isQObject(record))
         return;
 
+    if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates
+        return;
+
     const SourceLocation startLoc = decl->getLocStart();
 
     for (auto it = m_qobjectMacroLocations.cbegin(), end = m_qobjectMacroLocations.cend(); it != end; ++it) {
