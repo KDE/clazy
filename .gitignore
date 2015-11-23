@@ -15,5 +15,6 @@ empty.o*
 compile_fixed.output
 *.o-*
 *.compile_output
-a.out
+*.out
+*.result
 /tests/clazy/test_requested_checks.sh.output

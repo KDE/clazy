@@ -5,12 +5,18 @@ import sys, os, subprocess, string, re, json
 # Remove when we refactor unit-tests and allow to pass custom options
 os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
 
+class Test:
+    def __init__(self):
+        self.filename = ""
+        self.expected_warnings = ""
+
 class Check:
     def __init__(self, name):
         self.name = name
         self.link = False # If true we also call the linker
         self.minimum_qt_version = 500 # Qt 5.0.0
         self.minimum_clang_version = 360 # clang 3.6.0
+        self.tests = []
 #-------------------------------------------------------------------------------
 # utility functions #1
 
@@ -39,6 +45,13 @@ def load_json(check_name):
 
     if 'minimum_clang_version' in decoded:
         check.minimum_clang_version = decoded['minimum_clang_version']
+
+    if 'tests' in decoded:
+        for t in decoded['tests']:
+            test = Test()
+            test.filename = t['filename']
+            test.expected_warnings = t['expected_warnings']
+            check.tests.append(test)
 
     return check
 
@@ -143,8 +156,45 @@ def cleanup_fixed_files():
     for fixed_file in fixed_files:
         os.remove(fixed_file)
 
+
 def run_check_unit_tests(check):
     cmd = ""
+    if check.link:
+        cmd += _compiler_comand + " " + _link_flags
+    else:
+        cmd += _compiler_comand + " -c "
+
+
+    for test in check.tests:
+        clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
+        if _verbose:
+            print "Running: " + clazy_cmd
+
+        output_file = test.filename + ".out"
+        if not run_command(clazy_cmd + " > " + output_file + " 2> " + output_file):
+            print "[FAIL] " + check.name + " (Failed to build test. Check " + check.name + "/" + output_file + " for details)"
+            print
+            return False
+
+        result_file = test.filename + ".result"
+        expected_file = test.filename + ".expected"
+        extract_word("warning:", output_file, result_file)
+
+        if files_are_equal(expected_file, result_file):
+            print "[OK]   " + check.name
+        else:
+            print "[FAIL] " + check.name
+            if not print_differences(expected_file, result_file):
+                return False
+
+    return True
+
+def run_check_unit_tests_deprecated(check):
+    cmd = ""
+
+    is_new_style_test = len(check.tests) > 0 # The others haven't been ported yet
+    if is_new_style_test:
+        return run_check_unit_tests(check)
 
     if check.link:
         cmd += _compiler_comand + " " + _link_flags
@@ -251,7 +301,7 @@ for check in requested_checks:
         if check.name == "clazy":
             if not _only_checks and not run_core_tests():
                 exit(-1)
-        elif not run_check_unit_tests(check):
+        elif not run_check_unit_tests_deprecated(check):
             exit(-1)
 
     os.chdir("..")
