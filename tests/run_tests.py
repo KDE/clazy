@@ -8,7 +8,7 @@ os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
 class Test:
     def __init__(self):
         self.filename = ""
-        self.expected_warnings = ""
+        self.minimum_qt_version = 500
 
 class Check:
     def __init__(self, name):
@@ -50,7 +50,8 @@ def load_json(check_name):
         for t in decoded['tests']:
             test = Test()
             test.filename = t['filename']
-            test.expected_warnings = t['expected_warnings']
+            if 'minimum_qt_version' in t:
+                test.minimum_qt_version = t['minimum_qt_version']
             check.tests.append(test)
 
     return check
@@ -164,8 +165,10 @@ def run_check_unit_tests(check):
     else:
         cmd += _compiler_comand + " -c "
 
-
     for test in check.tests:
+        if QMAKE_INT_VERSION < test.minimum_qt_version:
+            continue
+
         clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
         if _verbose:
             print "Running: " + clazy_cmd
