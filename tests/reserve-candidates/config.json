@@ -1,3 +1,11 @@
 {
-    "minimum_qt_version" : 530
+    "tests" : [
+        {
+            "filename" : "main.cpp"
+        },
+        {
+            "filename" : "main2.cpp",
+            "minimum_qt_version" : 530
+        }
+    ]
 }

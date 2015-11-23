@@ -105,8 +105,8 @@ void test_nesting()
         foreach (int i2, b)
                 c << 1; // OK
 
-    foreach (int i2, d)
-        e << 1; // Warning
+
+
 }
 
 void test_misc()
