@@ -1,8 +1,7 @@
 {
     "tests" : [
         {
-            "filename"          : "main.cpp",
-            "expected_warnings" : "main.cpp.expected"
+            "filename" : "main.cpp"
         }
     ]
 }
