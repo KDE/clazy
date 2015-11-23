@@ -165,6 +165,7 @@ def run_check_unit_tests(check):
     else:
         cmd += _compiler_comand + " -c "
 
+    hasSingleTest = len(check.tests) == 1
     for test in check.tests:
         if QMAKE_INT_VERSION < test.minimum_qt_version:
             continue
@@ -183,10 +184,14 @@ def run_check_unit_tests(check):
         expected_file = test.filename + ".expected"
         extract_word("warning:", output_file, result_file)
 
+        printableName = check.name
+        if not hasSingleTest:
+            printableName += "/" + test.filename
+
         if files_are_equal(expected_file, result_file):
-            print "[OK]   " + check.name
+            print "[OK]   " + printableName
         else:
-            print "[FAIL] " + check.name
+            print "[FAIL] " + printableName
             if not print_differences(expected_file, result_file):
                 return False
 
