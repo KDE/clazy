@@ -34,7 +34,7 @@ class Decl;
 class SourceLocation;
 }
 
-class PreprocessorCallbacks;
+class MissingQ_OBJECTPreprocessorCallbacks;
 
 /**
  * Finds QObject derived classes that don't have a Q_OBJECT macro
@@ -48,8 +48,8 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQ_OBJECT(clang::SourceLocation);
-    friend class PreprocessorCallbacks;
-    PreprocessorCallbacks *const m_preprocessorCallbacks;
+    friend class MissingQ_OBJECTPreprocessorCallbacks;
+    MissingQ_OBJECTPreprocessorCallbacks *const m_preprocessorCallbacks;
 
     std::vector<clang::SourceLocation> m_qobjectMacroLocations;
 

@@ -38,10 +38,10 @@
 using namespace clang;
 using namespace std;
 
-class PreprocessorCallbacks : public clang::PPCallbacks
+class MissingQ_OBJECTPreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
-    PreprocessorCallbacks(MissingQ_OBJECT *q)
+    MissingQ_OBJECTPreprocessorCallbacks(MissingQ_OBJECT *q)
         : clang::PPCallbacks()
         , q(q)
     {
@@ -59,7 +59,7 @@ public:
 
 MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name)
     : CheckBase(name)
-    , m_preprocessorCallbacks(new PreprocessorCallbacks(this))
+    , m_preprocessorCallbacks(new MissingQ_OBJECTPreprocessorCallbacks(this))
 {
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
