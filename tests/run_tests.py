@@ -9,6 +9,7 @@ class Test:
     def __init__(self):
         self.filename = ""
         self.minimum_qt_version = 500
+        self.minimum_clang_version = 360
 
 class Check:
     def __init__(self, name):
@@ -52,6 +53,8 @@ def load_json(check_name):
             test.filename = t['filename']
             if 'minimum_qt_version' in t:
                 test.minimum_qt_version = t['minimum_qt_version']
+            if 'minimum_clang_version' in t:
+                test.minimum_qt_version = t['minimum_clang_version']
             check.tests.append(test)
 
     return check
@@ -167,7 +170,7 @@ def run_check_unit_tests(check):
 
     hasSingleTest = len(check.tests) == 1
     for test in check.tests:
-        if QMAKE_INT_VERSION < test.minimum_qt_version:
+        if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
             continue
 
         clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
