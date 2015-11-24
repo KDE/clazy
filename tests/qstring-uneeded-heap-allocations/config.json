@@ -1,3 +1,8 @@
 {
-    "minimum_clang_version" : 370
+    "minimum_clang_version" : 370,
+    "tests" : [
+        {
+            "filename" : "main.cpp"
+        }
+    ]
 }
