@@ -10,6 +10,7 @@ class Test:
         self.filename = ""
         self.minimum_qt_version = 500
         self.minimum_clang_version = 360
+        self.compare_everything = False
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -58,6 +59,8 @@ def load_json(check_name):
                 test.minimum_qt_version = t['minimum_qt_version']
             if 'minimum_clang_version' in t:
                 test.minimum_qt_version = t['minimum_clang_version']
+            if 'compare_everything' in t:
+                test.compare_everything = t['compare_everything']
             check.tests.append(test)
 
     return check
@@ -179,9 +182,11 @@ def run_check_unit_tests(check):
 
         if test.isScript():
             clazy_cmd = "./" + test.filename
-            result_file = output_file
         else:
             clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
+
+        if test.compare_everything:
+            result_file = output_file
 
         if _verbose:
             print "Running: " + clazy_cmd
@@ -191,7 +196,7 @@ def run_check_unit_tests(check):
             print
             return False
 
-        if not test.isScript():
+        if not test.compare_everything:
             extract_word("warning:", output_file, result_file)
 
         printableName = check.name
