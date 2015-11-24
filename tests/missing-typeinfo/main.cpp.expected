@@ -1,4 +1,4 @@
-main.cpp:27:5: warning: Missing Q_DECLARE_TYPEINFO: B [-Wclazy-missing-typeinfo]
-main.cpp:14:1: warning: Type declared here:
-main.cpp:29:5: warning: Missing Q_DECLARE_TYPEINFO: B [-Wclazy-missing-typeinfo]
-main.cpp:14:1: warning: Type declared here:
+missing-typeinfo/main.cpp:27:5: warning: Missing Q_DECLARE_TYPEINFO: B [-Wclazy-missing-typeinfo]
+missing-typeinfo/main.cpp:14:1: warning: Type declared here:
+missing-typeinfo/main.cpp:29:5: warning: Missing Q_DECLARE_TYPEINFO: B [-Wclazy-missing-typeinfo]
+missing-typeinfo/main.cpp:14:1: warning: Type declared here:

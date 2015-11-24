@@ -1,1 +1,1 @@
-foo.cpp:23:1: warning: non-POD static [-Wclazy-non-pod-global-static]
+non-pod-global-static/foo.cpp:23:1: warning: non-POD static [-Wclazy-non-pod-global-static]

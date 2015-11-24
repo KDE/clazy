@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 
 import sys, os, subprocess, string, re, json
+from threading import Thread
 
 # Remove when we refactor unit-tests and allow to pass custom options
 os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
@@ -67,6 +68,9 @@ def load_json(check_name):
 
     return check
 
+def chunkify(lst, n):
+    # Splits a list into N sub-lists
+    return [ lst[i::n] for i in xrange(n) ]
 #-------------------------------------------------------------------------------
 # Detect Qt include path
 # We try in order:
@@ -110,6 +114,7 @@ _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
 _only_checks = "--only-checks" in sys.argv # If set, the tests for the compiler itself aren't run
+_num_threads = 4
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -175,9 +180,11 @@ def run_check_unit_tests(check):
         if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
             continue
 
-        output_file = test.filename + ".out"
-        result_file = test.filename + ".result"
-        expected_file = test.filename + ".expected"
+        filename = check.name + "/" + test.filename
+
+        output_file = filename + ".out"
+        result_file = filename + ".result"
+        expected_file = filename + ".expected"
 
         if test.link:
             cmd = _compiler_comand + " " + _link_flags
@@ -185,18 +192,18 @@ def run_check_unit_tests(check):
             cmd = _compiler_comand + " -c "
 
         if test.isScript():
-            clazy_cmd = "./" + test.filename
+            clazy_cmd = "./" + filename
         else:
             clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " "
             if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
                 clazy_cmd += _enable_fixits_argument + " "
-            clazy_cmd += test.filename
+            clazy_cmd += filename
 
         if test.compare_everything:
             result_file = output_file
 
         if test.isFixedFile:
-            result_file = test.filename
+            result_file = filename
 
         if _verbose:
             print "Running: " + clazy_cmd
@@ -221,6 +228,10 @@ def run_check_unit_tests(check):
                 return False
 
     return True
+
+def run_checks_unit_tests(checks):
+    for check in checks:
+        run_check_unit_tests(check)
 
 def dump_ast(check):
     run_command(_dump_ast_command + " > dump.ast")
@@ -262,12 +273,19 @@ requested_checks = filter(lambda check: check.name in requested_check_names, all
 requested_checks = filter(lambda check: check.minimum_qt_version <= QMAKE_INT_VERSION, requested_checks)
 requested_checks = filter(lambda check: check.minimum_clang_version <= CLANG_VERSION, requested_checks)
 
-for check in requested_checks:
-    os.chdir(check.name)
-    if _dump_ast:
-        dump_ast(check)
-    else:
-        if not run_check_unit_tests(check):
-            exit(-1)
+threads = []
 
-    os.chdir("..")
+if _dump_ast:
+    for check in requested_checks:
+        os.chdir(check.name)
+        dump_ast(check)
+        os.chdir("..")
+else:
+    chunks = chunkify(requested_checks, _num_threads)
+    for check_list in chunks:
+        t = Thread(target=run_checks_unit_tests, args=(check_list,))
+        t.start()
+        threads.append(t)
+
+for thread in threads:
+    thread.join()

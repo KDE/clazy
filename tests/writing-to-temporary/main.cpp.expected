@@ -1,1 +1,1 @@
-main.cpp:34:5: warning: Call to temporary is a no-op: QSize::transpose [-Wclazy-writing-to-temporary]
+writing-to-temporary/main.cpp:34:5: warning: Call to temporary is a no-op: QSize::transpose [-Wclazy-writing-to-temporary]

@@ -1,2 +1,2 @@
-main.cpp:66:15: warning: Implicit pointer to bool cast (argument 1) [-Wclazy-implicit-casts]
-main.cpp:68:9: warning: Implicit pointer to bool cast (argument 1) [-Wclazy-implicit-casts]
+implicit-casts/main.cpp:66:15: warning: Implicit pointer to bool cast (argument 1) [-Wclazy-implicit-casts]
+implicit-casts/main.cpp:68:9: warning: Implicit pointer to bool cast (argument 1) [-Wclazy-implicit-casts]

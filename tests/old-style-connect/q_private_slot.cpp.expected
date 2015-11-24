@@ -1,14 +1,14 @@
-q_private_slot.cpp:8:9: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:8:44: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
-q_private_slot.cpp:9:9: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:9:50: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
-q_private_slot.cpp:22:9: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:22:44: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
-q_private_slot.cpp:23:9: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:23:47: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
-q_private_slot.cpp:25:9: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:25:48: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
-q_private_slot.cpp:43:5: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:43:44: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
-q_private_slot.cpp:44:5: warning: Old Style Connect [-Wclazy-old-style-connect]
-q_private_slot.cpp:44:23: warning: FixIt failed, requires manual intervention:  No such method doesnt_exist in class QObject [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:8:9: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:8:44: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
+old-style-connect/q_private_slot.cpp:9:9: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:9:50: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
+old-style-connect/q_private_slot.cpp:22:9: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:22:44: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
+old-style-connect/q_private_slot.cpp:23:9: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:23:47: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
+old-style-connect/q_private_slot.cpp:25:9: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:25:48: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
+old-style-connect/q_private_slot.cpp:43:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:43:44: warning: FixIt failed, requires manual intervention:  Converting Q_PRIVATE_SLOTS not implemented yet
+old-style-connect/q_private_slot.cpp:44:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/q_private_slot.cpp:44:23: warning: FixIt failed, requires manual intervention:  No such method doesnt_exist in class QObject [-Wclazy-old-style-connect]

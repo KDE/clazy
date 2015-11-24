@@ -1,2 +1,2 @@
-main.cpp:21:5: warning: Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wclazy-variant-sanitizer]
-main.cpp:22:5: warning: Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wclazy-variant-sanitizer]
+variant-sanitizer/main.cpp:21:5: warning: Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wclazy-variant-sanitizer]
+variant-sanitizer/main.cpp:22:5: warning: Use QVariant::toFoo() instead of QVariant::value<Foo>() [-Wclazy-variant-sanitizer]

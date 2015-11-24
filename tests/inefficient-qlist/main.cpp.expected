@@ -1,2 +1,2 @@
-main.cpp:24:5: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist]
-main.cpp:38:11: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist]
+inefficient-qlist/main.cpp:24:5: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist]
+inefficient-qlist/main.cpp:38:11: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist]
