@@ -45,5 +45,5 @@ void foo2()
 
 
 using namespace Foo; // Comes after, so shouldn't have influence
-
+int main() { return 0; }
 #include "namespaces.moc"

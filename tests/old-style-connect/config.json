@@ -1,4 +1,18 @@
 {
     "link" : true,
-    "minimum_qt_version" : 550
+    "minimum_qt_version" : 550,
+    "tests" : [
+        {
+            "filename" : "main.cpp"
+        },
+        {
+            "filename" : "usingnamespace.cpp"
+        },
+        {
+            "filename" : "namespaces.cpp"
+        },
+        {
+            "filename" : "q_private_slot.cpp"
+        }
+    ]
 }

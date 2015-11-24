@@ -43,3 +43,5 @@ void MyObj::Private::somePrivFunction()
     q->connect(other, SIGNAL(destroyed()), SLOT(privSlot()));
     q->connect(other, SIGNAL(doesnt_exist()), SLOT(privSlot()));
 }
+
+int main() { return 0; }

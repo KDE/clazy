@@ -23,4 +23,6 @@ void foo1()
     QObject::connect(o1, SIGNAL(signal1()), o1, SLOT(slot1())); // Warning
 }
 
+int main() { return 0; }
+
 #include "usingnamespace.moc"
