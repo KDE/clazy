@@ -11,6 +11,9 @@ class Test:
         self.minimum_qt_version = 500
         self.minimum_clang_version = 360
 
+    def isScript(self):
+        return self.filename.endswith(".sh")
+
 class Check:
     def __init__(self, name):
         self.name = name
@@ -140,9 +143,6 @@ def get_check_names():
 def get_fixed_files():
     return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
 
-def get_sh_files():
-    return filter(lambda entry: entry.endswith('.sh'), os.listdir("."))
-
 def print_differences(file1, file2):
     return run_command("diff -Naur {} {}".format(file1, file2))
 
@@ -173,19 +173,26 @@ def run_check_unit_tests(check):
         if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
             continue
 
-        clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
+        output_file = test.filename + ".out"
+        result_file = test.filename + ".result"
+        expected_file = test.filename + ".expected"
+
+        if test.isScript():
+            clazy_cmd = "./" + test.filename
+            result_file = output_file
+        else:
+            clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
+
         if _verbose:
             print "Running: " + clazy_cmd
 
-        output_file = test.filename + ".out"
         if not run_command(clazy_cmd + " > " + output_file + " 2> " + output_file):
             print "[FAIL] " + check.name + " (Failed to build test. Check " + check.name + "/" + output_file + " for details)"
             print
             return False
 
-        result_file = test.filename + ".result"
-        expected_file = test.filename + ".expected"
-        extract_word("warning:", output_file, result_file)
+        if not test.isScript():
+            extract_word("warning:", output_file, result_file)
 
         printableName = check.name
         if not hasSingleTest:
@@ -197,23 +204,6 @@ def run_check_unit_tests(check):
             print "[FAIL] " + printableName
             if not print_differences(expected_file, result_file):
                 return False
-
-    return True
-
-def run_core_tests():
-    scripts = get_sh_files()
-    for script in scripts:
-        expected_file = script + ".expected"
-        output_file = script + ".output"
-        if not  run_command("./" + script + " > " + output_file + " 2>&1"):
-            return False
-        if files_are_equal(expected_file, output_file):
-            print "[OK]   clazy"
-            return True
-        else:
-            print "[FAIL] clazy"
-            print_differences(expected_file, output_file)
-            return False
 
     return True
 
@@ -262,10 +252,7 @@ for check in requested_checks:
     if _dump_ast:
         dump_ast(check)
     else:
-        if check.name == "clazy":
-            if not _only_checks and not run_core_tests():
-                exit(-1)
-        elif not run_check_unit_tests(check):
+        if not run_check_unit_tests(check):
             exit(-1)
 
     os.chdir("..")
