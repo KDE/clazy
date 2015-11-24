@@ -200,53 +200,6 @@ def run_check_unit_tests(check):
 
     return True
 
-def run_check_unit_tests_deprecated(check):
-    cmd = ""
-
-    is_new_style_test = len(check.tests) > 0 # The others haven't been ported yet
-    if is_new_style_test:
-        return run_check_unit_tests(check)
-
-    if check.link:
-        cmd += _compiler_comand + " " + _link_flags
-    else:
-        cmd += _compiler_comand + " -c "
-
-    clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " *.cpp"
-    if _verbose:
-        print "Running: " + clazy_cmd
-
-    cleanup_fixed_files()
-
-    if not run_command(clazy_cmd + " > all_files.compile_output 2> all_files.compile_output"):
-        print "[FAIL] " + check.name + " (Failed to build test. Check " + check.name + "/all_files.compile_output for details)"
-        print
-        return False
-
-    extract_word("warning:", "all_files.compile_output", "test.output")
-
-    result = True
-
-    if files_are_equal("test.expected", "test.output"):
-        print "[OK]   " + check.name
-    else:
-        print "[FAIL] " + check.name
-        if not print_differences("test.expected", "test.output"):
-            result = False
-
-    # If fixits were applied, test they were correctly applied
-    fixed_files = string.join(get_fixed_files(), ' ')
-    if fixed_files:
-        output_file = "all_files_fixed.compile_output"
-        if run_command(cmd + " " + fixed_files + " > " + output_file + " 2> " + output_file):
-            print "   [OK]   fixed file  "
-        else:
-            print "   [FAIL] fixed file (Failed to build test. Check " + check.name + "/" + output_file + " for details) Files were: " + fixed_files
-            print
-            result = False
-
-    return result
-
 def run_core_tests():
     scripts = get_sh_files()
     for script in scripts:
@@ -312,7 +265,7 @@ for check in requested_checks:
         if check.name == "clazy":
             if not _only_checks and not run_core_tests():
                 exit(-1)
-        elif not run_check_unit_tests_deprecated(check):
+        elif not run_check_unit_tests(check):
             exit(-1)
 
     os.chdir("..")
