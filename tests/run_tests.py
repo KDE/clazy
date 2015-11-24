@@ -11,6 +11,8 @@ class Test:
         self.minimum_qt_version = 500
         self.minimum_clang_version = 360
         self.compare_everything = False
+        self.isFixedFile = False
+        self.link = False # If true we also call the linker
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -18,7 +20,6 @@ class Test:
 class Check:
     def __init__(self, name):
         self.name = name
-        self.link = False # If true we also call the linker
         self.minimum_qt_version = 500 # Qt 5.0.0
         self.minimum_clang_version = 360 # clang 3.6.0
         self.tests = []
@@ -42,9 +43,6 @@ def load_json(check_name):
     f.close()
     decoded = json.loads(contents)
 
-    if 'link' in decoded:
-        check.link = decoded['link']
-
     if 'minimum_qt_version' in decoded:
         check.minimum_qt_version = decoded['minimum_qt_version']
 
@@ -61,6 +59,10 @@ def load_json(check_name):
                 test.minimum_qt_version = t['minimum_clang_version']
             if 'compare_everything' in t:
                 test.compare_everything = t['compare_everything']
+            if 'isFixedFile' in t:
+                test.isFixedFile = t['isFixedFile']
+            if 'link' in t:
+                test.link = t['link']
             check.tests.append(test)
 
     return check
@@ -99,7 +101,8 @@ CLANG_VERSION = int(version.replace('.', ''))
 #-------------------------------------------------------------------------------
 # Global variables
 
-_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits " + QT_FLAGS
+_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + QT_FLAGS
+_enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
 _link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
 _dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _help_command = "echo | clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
@@ -166,10 +169,6 @@ def cleanup_fixed_files():
 
 def run_check_unit_tests(check):
     cmd = ""
-    if check.link:
-        cmd += _compiler_comand + " " + _link_flags
-    else:
-        cmd += _compiler_comand + " -c "
 
     hasSingleTest = len(check.tests) == 1
     for test in check.tests:
@@ -180,13 +179,24 @@ def run_check_unit_tests(check):
         result_file = test.filename + ".result"
         expected_file = test.filename + ".expected"
 
+        if test.link:
+            cmd = _compiler_comand + " " + _link_flags
+        else:
+            cmd = _compiler_comand + " -c "
+
         if test.isScript():
             clazy_cmd = "./" + test.filename
         else:
-            clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " " + test.filename
+            clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " "
+            if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
+                clazy_cmd += _enable_fixits_argument + " "
+            clazy_cmd += test.filename
 
         if test.compare_everything:
             result_file = output_file
+
+        if test.isFixedFile:
+            result_file = test.filename
 
         if _verbose:
             print "Running: " + clazy_cmd
@@ -196,7 +206,7 @@ def run_check_unit_tests(check):
             print
             return False
 
-        if not test.compare_everything:
+        if not test.compare_everything and not test.isFixedFile:
             extract_word("warning:", output_file, result_file)
 
         printableName = check.name

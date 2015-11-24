@@ -1,18 +1,41 @@
 {
-    "link" : true,
     "minimum_qt_version" : 550,
     "tests" : [
         {
-            "filename" : "main.cpp"
+            "filename" : "main.cpp",
+            "link" : true
         },
         {
-            "filename" : "usingnamespace.cpp"
+            "filename" : "usingnamespace.cpp",
+            "link" : true
         },
         {
-            "filename" : "namespaces.cpp"
+            "filename" : "namespaces.cpp",
+            "link" : true
         },
         {
-            "filename" : "q_private_slot.cpp"
+            "filename" : "q_private_slot.cpp",
+            "link" : true
+        },
+        {
+            "filename" : "main.cpp_fixed.cpp",
+            "isFixedFile" : true,
+            "link" : true
+        },
+        {
+            "filename" : "usingnamespace.cpp_fixed.cpp",
+            "isFixedFile" : true,
+            "link" : true
+        },
+        {
+            "filename" : "namespaces.cpp_fixed.cpp",
+            "isFixedFile" : true,
+            "link" : true
+        },
+        {
+            "filename" : "namespaces.h_fixed.cpp",
+            "isFixedFile" : true,
+            "link" : false
         }
     ]
 }
