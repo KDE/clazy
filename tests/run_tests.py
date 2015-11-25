@@ -209,7 +209,7 @@ def run_check_unit_tests(check):
             print "Running: " + clazy_cmd
 
         if not run_command(clazy_cmd + " > " + output_file + " 2> " + output_file):
-            print "[FAIL] " + check.name + " (Failed to build test. Check " + check.name + "/" + output_file + " for details)"
+            print "[FAIL] " + check.name + " (Failed to build test. Check " + output_file + " for details)"
             print
             return False
 
