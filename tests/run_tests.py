@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-import sys, os, subprocess, string, re, json
+import sys, os, subprocess, string, re, json, threading
 from threading import Thread
 
 # Remove when we refactor unit-tests and allow to pass custom options
@@ -115,6 +115,8 @@ _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
 _only_checks = "--only-checks" in sys.argv # If set, the tests for the compiler itself aren't run
 _num_threads = 4
+_lock = threading.Lock()
+_was_successful = True
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -230,8 +232,13 @@ def run_check_unit_tests(check):
     return True
 
 def run_checks_unit_tests(checks):
+    result = True
     for check in checks:
-        run_check_unit_tests(check)
+        result = result and run_check_unit_tests(check)
+
+    global _was_successful, _lock
+    with _lock:
+        _was_successful = _was_successful and result
 
 def dump_ast(check):
     run_command(_dump_ast_command + " > dump.ast")
@@ -289,3 +296,5 @@ else:
 
 for thread in threads:
     thread.join()
+
+sys.exit(0 if _was_successful else -1)
