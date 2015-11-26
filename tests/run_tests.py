@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-import sys, os, subprocess, string, re, json, threading
+import sys, os, subprocess, string, re, json, threading, multiprocessing
 from threading import Thread
 
 # Remove when we refactor unit-tests and allow to pass custom options
@@ -111,7 +111,7 @@ _help_command = "echo | clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
-_num_threads = 4
+_num_threads = multiprocessing.cpu_count()
 _lock = threading.Lock()
 _was_successful = True
 #-------------------------------------------------------------------------------
