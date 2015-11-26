@@ -7,13 +7,14 @@ from threading import Thread
 os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
 
 class Test:
-    def __init__(self):
+    def __init__(self, check):
         self.filename = ""
         self.minimum_qt_version = 500
         self.minimum_clang_version = 360
         self.compare_everything = False
         self.isFixedFile = False
         self.link = False # If true we also call the linker
+        self.check = check
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -52,7 +53,7 @@ def load_json(check_name):
 
     if 'tests' in decoded:
         for t in decoded['tests']:
-            test = Test()
+            test = Test(check)
             test.filename = t['filename']
             if 'minimum_qt_version' in t:
                 test.minimum_qt_version = t['minimum_qt_version']
@@ -175,9 +176,6 @@ def cleanup_fixed_files():
 
 
 def run_check_unit_tests(check):
-    cmd = ""
-
-    hasSingleTest = len(check.tests) == 1
     for test in check.tests:
         if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
             continue
@@ -219,7 +217,7 @@ def run_check_unit_tests(check):
             extract_word("warning:", output_file, result_file)
 
         printableName = check.name
-        if not hasSingleTest:
+        if len(test.check.tests) > 1:
             printableName += "/" + test.filename
 
         if files_are_equal(expected_file, result_file):
