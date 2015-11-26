@@ -217,8 +217,8 @@ protected:
         std::vector<std::string> args = args_;
 
         if (parseArgument("help", args)) {
-            PrintHelp(llvm::errs(), 0);
-            return false;
+            PrintHelp(llvm::errs());
+            return true;
         }
 
         if (parseArgument("no-inplace-fixits", args)) {
@@ -292,7 +292,7 @@ protected:
         return true;
     }
 
-    void PrintHelp(llvm::raw_ostream &ros, int exitCode = -1)
+    void PrintHelp(llvm::raw_ostream &ros)
     {
         RegisteredCheck::List checks = CheckManager::instance()->availableChecks(true);
         sort(checks.begin(), checks.end(), checkLessThanByLevel);
@@ -343,8 +343,6 @@ protected:
         ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
         ros << "    export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
         ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
-
-        exit(exitCode);
     }
 
 private:
