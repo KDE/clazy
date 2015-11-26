@@ -174,3 +174,22 @@ void foo5(const Trivial &t)
 void foo6(const Trivial &t = {})
 {
 }
+
+
+struct Base // Test that fixits fix both Base and Derived
+{
+    void foo(const Trivial &);
+};
+
+void Base::foo(const Trivial &)
+{
+}
+
+struct Derived : public Base
+{
+    void foo(const Trivial &);
+};
+
+void Derived::foo(const Trivial &)
+{
+}
