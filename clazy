@@ -1,2 +1,3 @@
-clang++ -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy $@
+#!/usr/bin/env sh
 
+clang++ -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy $@
