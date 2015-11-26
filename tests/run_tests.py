@@ -69,9 +69,6 @@ def load_json(check_name):
 
     return check
 
-def chunkify(lst, n):
-    # Splits a list into N sub-lists
-    return [ lst[i::n] for i in xrange(n) ]
 #-------------------------------------------------------------------------------
 # Detect Qt include path
 # We try in order:
@@ -174,64 +171,64 @@ def cleanup_fixed_files():
         os.remove(fixed_file)
 
 
-def run_check_unit_tests(check):
-    for test in check.tests:
-        if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
-            continue
+def run_unit_test(test):
+    if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
+        return True
 
-        filename = check.name + "/" + test.filename
+    checkname = test.check.name
+    filename = checkname + "/" + test.filename
 
-        output_file = filename + ".out"
-        result_file = filename + ".result"
-        expected_file = filename + ".expected"
+    output_file = filename + ".out"
+    result_file = filename + ".result"
+    expected_file = filename + ".expected"
 
-        if test.link:
-            cmd = _compiler_comand + " " + _link_flags
-        else:
-            cmd = _compiler_comand + " -c "
+    if test.link:
+        cmd = _compiler_comand + " " + _link_flags
+    else:
+        cmd = _compiler_comand + " -c "
 
-        if test.isScript():
-            clazy_cmd = "./" + filename
-        else:
-            clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + check.name + " "
-            if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
-                clazy_cmd += _enable_fixits_argument + " "
-            clazy_cmd += filename
+    if test.isScript():
+        clazy_cmd = "./" + filename
+    else:
+        clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + checkname + " "
+        if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
+            clazy_cmd += _enable_fixits_argument + " "
+        clazy_cmd += filename
 
-        if test.compare_everything:
-            result_file = output_file
+    if test.compare_everything:
+        result_file = output_file
 
-        if test.isFixedFile:
-            result_file = filename
+    if test.isFixedFile:
+        result_file = filename
 
-        if _verbose:
-            print "Running: " + clazy_cmd
+    if _verbose:
+        print "Running: " + clazy_cmd
 
-        if not run_command(clazy_cmd + " > " + output_file + " 2> " + output_file):
-            print "[FAIL] " + check.name + " (Failed to build test. Check " + output_file + " for details)"
-            print
+    if not run_command(clazy_cmd + " > " + output_file + " 2> " + output_file):
+        print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
+        print
+        return False
+
+    if not test.compare_everything and not test.isFixedFile:
+        extract_word("warning:", output_file, result_file)
+
+    printableName = checkname
+    if len(test.check.tests) > 1:
+        printableName += "/" + test.filename
+
+    if files_are_equal(expected_file, result_file):
+        print "[OK]   " + printableName
+    else:
+        print "[FAIL] " + printableName
+        if not print_differences(expected_file, result_file):
             return False
-
-        if not test.compare_everything and not test.isFixedFile:
-            extract_word("warning:", output_file, result_file)
-
-        printableName = check.name
-        if len(test.check.tests) > 1:
-            printableName += "/" + test.filename
-
-        if files_are_equal(expected_file, result_file):
-            print "[OK]   " + printableName
-        else:
-            print "[FAIL] " + printableName
-            if not print_differences(expected_file, result_file):
-                return False
 
     return True
 
-def run_checks_unit_tests(checks):
+def run_unit_tests(tests):
     result = True
-    for check in checks:
-        result = result and run_check_unit_tests(check)
+    for test in tests:
+        result = result and run_unit_test(test)
 
     global _was_successful, _lock
     with _lock:
@@ -285,9 +282,18 @@ if _dump_ast:
         dump_ast(check)
         os.chdir("..")
 else:
-    chunks = chunkify(requested_checks, _num_threads)
-    for check_list in chunks:
-        t = Thread(target=run_checks_unit_tests, args=(check_list,))
+    list_of_chunks = [[] for x in range(_num_threads)]  # Each list is a list of Test to be worked on by a thread
+    i = 0
+    for check in requested_checks:
+        for test in check.tests:
+            list_of_chunks[i].append(test)
+            i = (i + 1) % _num_threads
+
+    for tests in list_of_chunks:
+        if not tests:
+            break;
+
+        t = Thread(target=run_unit_tests, args=(tests,))
         t.start()
         threads.append(t)
 
