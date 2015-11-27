@@ -6,25 +6,21 @@
             "link" : true
         },
         {
-            "filename" : "usingnamespace.cpp",
-            "link" : true
-        },
-        {
-            "filename" : "namespaces.cpp",
-            "link" : true
-        },
-        {
-            "filename" : "q_private_slot.cpp",
-            "link" : true
-        },
-        {
             "filename" : "main.cpp_fixed.cpp",
             "isFixedFile" : true,
             "link" : true
         },
         {
+            "filename" : "usingnamespace.cpp",
+            "link" : true
+        },
+        {
             "filename" : "usingnamespace.cpp_fixed.cpp",
             "isFixedFile" : true,
+            "link" : true
+        },
+        {
+            "filename" : "namespaces.cpp",
             "link" : true
         },
         {
@@ -36,6 +32,10 @@
             "filename" : "namespaces.h_fixed.cpp",
             "isFixedFile" : true,
             "link" : false
+        },
+        {
+            "filename" : "q_private_slot.cpp",
+            "link" : true
         }
     ]
 }

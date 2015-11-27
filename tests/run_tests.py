@@ -283,11 +283,13 @@ if _dump_ast:
         os.chdir("..")
 else:
     list_of_chunks = [[] for x in range(_num_threads)]  # Each list is a list of Test to be worked on by a thread
-    i = 0
+    i = _num_threads
     for check in requested_checks:
         for test in check.tests:
+            if not test.isFixedFile:
+                i = (i + 1) % _num_threads
+
             list_of_chunks[i].append(test)
-            i = (i + 1) % _num_threads
 
     for tests in list_of_chunks:
         if not tests:
