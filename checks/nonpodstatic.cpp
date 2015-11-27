@@ -71,8 +71,9 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
     if (stringStartsWith(macroName, "Q_CONSTRUCTOR_FUNCTION")) // Don't warn on these
         return;
 
-    if (!shouldIgnoreType(t->getAsCXXRecordDecl()->getName())) {
-        std::string error = "non-POD static";
+    const string className = t->getAsCXXRecordDecl()->getName();
+    if (!shouldIgnoreType(className)) {
+        std::string error = "non-POD static \(" + className + ")";
         emitWarning(decl->getLocStart(), error.c_str());
     }
 }
