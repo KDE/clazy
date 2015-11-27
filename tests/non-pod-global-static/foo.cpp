@@ -1,4 +1,4 @@
-
+#include <QtCore/QCoreApplication>
 
 
 
@@ -24,3 +24,5 @@ static NonPod p2;
 static NonPod* p3;
 static int p4;
 
+void foo() {}
+Q_COREAPP_STARTUP_FUNCTION(foo) // OK, it's blacklisted

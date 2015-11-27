@@ -27,9 +27,11 @@
 
 #include "nonpodstatic.h"
 #include "Utils.h"
+#include "StringUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
+#include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
@@ -63,6 +65,10 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
 
     const Type *t = qt.getTypePtrOrNull();
     if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->isLiteral())
+        return;
+
+    auto macroName = Lexer::getImmediateMacroName(decl->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
+    if (stringStartsWith(macroName, "Q_CONSTRUCTOR_FUNCTION")) // Don't warn on these
         return;
 
     if (!shouldIgnoreType(t->getAsCXXRecordDecl()->getName())) {
