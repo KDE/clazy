@@ -128,7 +128,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
                 error = "Missing reference on non-trivial type (" + paramStr + ")";
             } else if (classif.passSmallTrivialByValue) {
                 error = "Pass small and trivially-copyable type by value (" + paramStr + ")";
-                if (isFixitEnabled(FixitAll) && false) {
+                if (isFixitEnabled(FixitAll)) {
                     for (auto it = functionDecl->redecls_begin(), end = functionDecl->redecls_end(); it != end; ++it) { // Fix in both header and .cpp
                         FunctionDecl *fdecl = dyn_cast<FunctionDecl>(*it);
                         const ParmVarDecl *param = fdecl->getParamDecl(i);
