@@ -293,7 +293,7 @@ else:
 
     for tests in list_of_chunks:
         if not tests:
-            break;
+            continue;
 
         t = Thread(target=run_unit_tests, args=(tests,))
         t.start()
