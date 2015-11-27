@@ -64,7 +64,7 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
         return;
 
     const Type *t = qt.getTypePtrOrNull();
-    if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->isLiteral())
+    if (!t || !t->getAsCXXRecordDecl() || t->getAsCXXRecordDecl()->isLiteral())
         return;
 
     auto macroName = Lexer::getImmediateMacroName(decl->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
