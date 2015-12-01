@@ -277,8 +277,8 @@ protected:
 
         if (printRequestedChecks) {
             llvm::errs() << "Requested checks: ";
-            const uint numChecks = m_checks.size();
-            for (uint i = 0; i < numChecks; ++i) {
+            const unsigned int numChecks = m_checks.size();
+            for (unsigned int i = 0; i < numChecks; ++i) {
                 llvm::errs() << m_checks.at(i).name;
                 const bool isLast = i == numChecks - 1;
                 if (!isLast) {
@@ -301,7 +301,7 @@ protected:
 
         int lastPrintedLevel = -1;
         const auto numChecks = checks.size();
-        for (uint i = 0; i < numChecks; ++i) {
+        for (unsigned int i = 0; i < numChecks; ++i) {
             const RegisteredCheck &check = checks[i];
             if (lastPrintedLevel < check.level) {
                 lastPrintedLevel = check.level;

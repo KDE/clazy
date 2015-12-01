@@ -334,8 +334,8 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     int loopCount = 0;
     int foreachCount = 0;
 
-    static vector<uint> nonComplexOnesCache;
-    static vector<uint> complexOnesCache;
+    static vector<unsigned int> nonComplexOnesCache;
+    static vector<unsigned int> complexOnesCache;
     auto rawLoc = s->getLocStart().getRawEncoding();
 
 

@@ -479,7 +479,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 template<class T>
 static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
 {
-    uint param = 0;
+    unsigned int param = 0;
     for (auto arg = expr->arg_begin(), arg_end = expr->arg_end(); arg != arg_end; ++arg) {
         DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
         if (refExpr == nullptr)  {
@@ -617,7 +617,7 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
     return false;
 }
 
-Stmt *Utils::parent(ParentMap *map, Stmt *s, uint depth)
+Stmt *Utils::parent(ParentMap *map, Stmt *s, unsigned int depth)
 {
     if (s == nullptr)
         return nullptr;
@@ -733,7 +733,7 @@ vector<Stmt*> Utils::childs(clang::Stmt *parent)
     return children;
 }
 
-clang::Stmt * Utils::getFirstChildAtDepth(clang::Stmt *s, uint depth)
+clang::Stmt * Utils::getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
 {
     if (depth == 0 || s == nullptr)
         return s;

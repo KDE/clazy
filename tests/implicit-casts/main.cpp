@@ -41,7 +41,7 @@ struct A
 {
     A() : f(false), f2(false) {}
     QAtomicInt f;
-    uint f2;
+    unsigned int f2;
     void a()
     {
         bool b;

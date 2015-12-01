@@ -173,11 +173,11 @@ namespace Utils {
     // If depth = 0, return s
     // If depth = 1, returns parent of s
     // etc.
-    clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, uint depth = 1);
+    clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, unsigned int depth = 1);
 
     // Returns the first parent of type T, with max depth depth
     template <typename T>
-    T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, uint depth = -1)
+    T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int depth = -1)
     {
         if (!s)
             return nullptr;
@@ -279,7 +279,7 @@ namespace Utils {
 
     std::vector<clang::Stmt*> childs(clang::Stmt *parent);
 
-    clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, uint depth);
+    clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
 
     bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 

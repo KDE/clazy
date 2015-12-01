@@ -94,8 +94,8 @@ protected:
 
     clang::Decl *m_lastDecl;
 private:
-    std::vector<uint> m_emittedWarningsInMacro;
-    std::vector<uint> m_emittedManualFixItsWarningsInMacro;
+    std::vector<unsigned int> m_emittedWarningsInMacro;
+    std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits;
 };

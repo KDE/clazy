@@ -42,7 +42,7 @@ bool returns_bool()
     return true;
 }
 
-uint returns_uint() { return 0; }
+unsigned int returns_uint() { return 0; }
 int returns_int() { return 0; }
 long long returns_long() { return 0; }
 

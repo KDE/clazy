@@ -385,14 +385,14 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 // Save the number of parameters of the signal. The slot should not have more arguments.
                 senderMethod = methodDecl;
             } else if (macroNum == 2) {
-                const uint numReceiverParams = methodDecl->getNumParams();
+                const unsigned int numReceiverParams = methodDecl->getNumParams();
                 if (numReceiverParams > senderMethod->getNumParams()) {
                     string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(senderMethod->getNumParams()) + ")";
                     queueManualFixitWarning(s, FixItConnects, msg);
                     return {};
                 }
 
-                for (uint i = 0; i < numReceiverParams; ++i) {
+                for (unsigned int i = 0; i < numReceiverParams; ++i) {
                     ParmVarDecl *receiverParm = methodDecl->getParamDecl(i);
                     ParmVarDecl *senderParm = senderMethod->getParamDecl(i);
                     if (!Utils::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {

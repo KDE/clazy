@@ -22,7 +22,7 @@ set (CMAKE_MODULE_LINKER_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress"
 message("Looking for std::regex support...")
 try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake_has_regex_test.cpp)
 
-if (${RUN_RESULT} EQUAL "0")
+if (RUN_RESULT EQUAL 0)
     set(HAS_STD_REGEX TRUE)
 else()
     set(HAS_STD_REGEX FALSE)
