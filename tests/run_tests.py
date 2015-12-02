@@ -6,6 +6,14 @@ from threading import Thread
 # Remove when we refactor unit-tests and allow to pass custom options
 os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
 
+class QtInstallation:
+    def __init__(self):
+        self.int_version = 000
+        self.qmake_header_path = "/usr/include/qt/"
+
+    def compiler_flags(self):
+        return "-isystem " + self.qmake_header_path + " -fPIC"
+
 class Test:
     def __init__(self, check):
         self.filename = ""
@@ -15,14 +23,20 @@ class Test:
         self.isFixedFile = False
         self.link = False # If true we also call the linker
         self.check = check
+        self.qt_major_version = 5 # Tests use Qt 5 by default
 
     def isScript(self):
         return self.filename.endswith(".sh")
 
+    def setQtMajorVersion(self, major_version):
+        if major_version == 4:
+            self.qt_major_version = 4
+            if self.minimum_qt_version >= 500:
+                self.minimum_qt_version = 400
+
 class Check:
     def __init__(self, name):
         self.name = name
-        self.minimum_qt_version = 500 # Qt 5.0.0
         self.minimum_clang_version = 360 # clang 3.6.0
         self.tests = []
 #-------------------------------------------------------------------------------
@@ -45,9 +59,6 @@ def load_json(check_name):
     f.close()
     decoded = json.loads(contents)
 
-    if 'minimum_qt_version' in decoded:
-        check.minimum_qt_version = decoded['minimum_qt_version']
-
     if 'minimum_clang_version' in decoded:
         check.minimum_clang_version = decoded['minimum_clang_version']
 
@@ -65,31 +76,31 @@ def load_json(check_name):
                 test.isFixedFile = t['isFixedFile']
             if 'link' in t:
                 test.link = t['link']
+            if 'qt_major_version' in t:
+                test.setQtMajorVersion(t['qt_major_version'])
             check.tests.append(test)
 
     return check
 
-#-------------------------------------------------------------------------------
-# Detect Qt include path
-# We try in order:
-#   QT_SELECT=5 qmake
-#   qmake-qt5
-#   qmake
-QMAKE_HEADERS = ""
-qmakes = ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"]
-for qmake in qmakes:
-    QMAKE_VERSION = get_command_output(qmake + " -query QT_VERSION")
-    if QMAKE_VERSION.startswith("5."):
-        QMAKE_HEADERS = get_command_output(qmake + " -query QT_INSTALL_HEADERS").strip()
-        break
+def find_qt_installation(major_version, qmakes):
+    installation = QtInstallation()
 
-QMAKE_INT_VERSION = int(QMAKE_VERSION.replace(".", ""))
+    for qmake in qmakes:
+        qmake_version_str = get_command_output(qmake + " -query QT_VERSION")
+        if qmake_version_str.startswith(str(major_version) + "."):
+            qmake_header_path = get_command_output(qmake + " -query QT_INSTALL_HEADERS").strip()
+            if qmake_header_path:
+                installation.qmake_header_path = qmake_header_path
+                installation.int_version = int(qmake_version_str.replace(".", ""))
+            break
 
-if not QMAKE_HEADERS:
-    # Change here if can't find with qmake
-    QMAKE_HEADERS = "/usr/include/qt/"
+    return installation
 
-QT_FLAGS = "-isystem " + QMAKE_HEADERS + " -fPIC"
+def compiler_command(qt):
+    return "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
+
+def dump_ast_command(test):
+    return "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
 
 #-------------------------------------------------------------------------------
 # Get clang version
@@ -103,10 +114,8 @@ CLANG_VERSION = int(version.replace('.', ''))
 #-------------------------------------------------------------------------------
 # Global variables
 
-_compiler_comand = "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + QT_FLAGS
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
 _link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
-_dump_ast_command = "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c *.cpp " + QT_FLAGS
 _help_command = "echo | clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
@@ -114,8 +123,18 @@ _help = "--help" in sys.argv
 _num_threads = multiprocessing.cpu_count()
 _lock = threading.Lock()
 _was_successful = True
+_qt5_installation = find_qt_installation(5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"])
+_qt4_installation = find_qt_installation(4, ["QT_SELECT=4 qmake", "qmake-qt4", "qmake"])
 #-------------------------------------------------------------------------------
 # utility functions #2
+
+def qt_installation(major_version):
+    if major_version == 5:
+        return _qt5_installation
+    elif major_version == 4:
+        return _qt4_installation
+
+    return None
 
 def run_command(cmd):
     if os.system(cmd) != 0:
@@ -172,7 +191,9 @@ def cleanup_fixed_files():
 
 
 def run_unit_test(test):
-    if QMAKE_INT_VERSION < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
+    qt = qt_installation(test.qt_major_version)
+
+    if qt.int_version < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         return True
 
     checkname = test.check.name
@@ -182,10 +203,12 @@ def run_unit_test(test):
     result_file = filename + ".result"
     expected_file = filename + ".expected"
 
+    compiler_cmd = compiler_command(qt)
+
     if test.link:
-        cmd = _compiler_comand + " " + _link_flags
+        cmd = compiler_cmd + " " + _link_flags
     else:
-        cmd = _compiler_comand + " -c "
+        cmd = compiler_cmd + " -c "
 
     if test.isScript():
         clazy_cmd = "./" + filename
@@ -235,12 +258,18 @@ def run_unit_tests(tests):
         _was_successful = _was_successful and result
 
 def dump_ast(check):
-    run_command(_dump_ast_command + " > dump.ast")
+    for test in check.tests:
+        run_command(dump_ast_command(test) + " > " + test.filename + ".ast")
 #-------------------------------------------------------------------------------
 def load_checks(all_check_names):
     checks = []
     for name in all_check_names:
-        checks.append(load_json(name))
+        try:
+            checks.append(load_json(name))
+        except:
+            print "Error while loading " + name
+            raise
+            sys.exit(-1)
     return checks
 #-------------------------------------------------------------------------------
 # main
@@ -271,7 +300,6 @@ if not requested_check_names:
     requested_check_names = all_check_names
 
 requested_checks = filter(lambda check: check.name in requested_check_names, all_checks)
-requested_checks = filter(lambda check: check.minimum_qt_version <= QMAKE_INT_VERSION, requested_checks)
 requested_checks = filter(lambda check: check.minimum_clang_version <= CLANG_VERSION, requested_checks)
 
 threads = []
