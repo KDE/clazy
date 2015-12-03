@@ -215,7 +215,6 @@ clang::FixItHint CheckBase::createInsertion(const SourceLocation &start, const s
     if (start.isInvalid()) {
         return {};
     } else {
-        StringUtils::printLocation(start);
         return FixItHint::CreateInsertion(start, insertion);
     }
 }
