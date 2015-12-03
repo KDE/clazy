@@ -28,6 +28,7 @@
 #include "qstringuneededheapallocations.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "FixItUtils.h"
 #include "MethodSignatureUtils.h"
 #include "checkmanager.h"
 
@@ -416,8 +417,8 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
         }
 
         SourceLocation end = Lexer::getLocForEndOfToken(lastTokenLoc, 0, m_ci.getSourceManager(), m_ci.getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
-        fixits.push_back(createInsertion(end, ")"));
-        fixits.push_back(createInsertion(start, revisedReplacement + std::string("(")));
+        fixits.push_back(FixItUtils::createInsertion(end, ")"));
+        fixits.push_back(FixItUtils::createInsertion(start, revisedReplacement + std::string("(")));
     }
 
     return fixits;

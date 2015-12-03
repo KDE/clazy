@@ -26,6 +26,7 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "FixItUtils.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -198,7 +199,7 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
     }
 
     std::vector<FixItHint> fixits;
-    fixits.push_back(createInsertion(insertionLoc, "Ref"));
+    fixits.push_back(FixItUtils::createInsertion(insertionLoc, "Ref"));
     return fixits;
 
 }

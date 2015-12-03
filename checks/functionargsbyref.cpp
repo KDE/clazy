@@ -27,6 +27,7 @@
 
 #include "functionargsbyref.h"
 #include "Utils.h"
+#include "FixItUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -166,7 +167,7 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
         return {};
     }
 
-    return createReplacement({ startLoc, endLoc }, replacement);
+    return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
 }
 
 clang::FixItHint FunctionArgsByRef::fixitByConstRef(const ParmVarDecl *, const Utils::QualTypeClassification &)

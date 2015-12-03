@@ -83,9 +83,6 @@ protected:
     virtual std::vector<std::string> supportedOptions() const;
     bool isOptionSet(const std::string &optionName) const;
 
-    clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
-    clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
-
     clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;
     clang::ParentMap *m_parentMap;

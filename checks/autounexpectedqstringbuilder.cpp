@@ -27,6 +27,7 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "FixItUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -68,7 +69,7 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 
             SourceLocation start = varDecl->getLocStart();
             SourceLocation end = varDecl->getLocation();
-            fixits.push_back(createReplacement({ start, end }, replacement));
+            fixits.push_back(FixItUtils::createReplacement({ start, end }, replacement));
         }
 
         emitWarning(decl->getLocStart(), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);

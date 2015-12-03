@@ -201,24 +201,6 @@ bool CheckBase::isOptionSet(const std::string &optionName) const
     return CheckManager::instance()->isOptionSet(qualifiedName);
 }
 
-clang::FixItHint CheckBase::createReplacement(const SourceRange &range, const string &replacement)
-{
-    if (range.getBegin().isInvalid()) {
-        return {};
-    } else {
-        return FixItHint::CreateReplacement(range, replacement);
-    }
-}
-
-clang::FixItHint CheckBase::createInsertion(const SourceLocation &start, const string &insertion)
-{
-    if (start.isInvalid()) {
-        return {};
-    } else {
-        return FixItHint::CreateInsertion(start, insertion);
-    }
-}
-
 void CheckBase::setEnabledFixits(int fixits)
 {
     m_enabledFixits = fixits;

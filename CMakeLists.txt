@@ -97,6 +97,7 @@ set(SRC_FILES
     checks/variantsanitizer.cpp
     checks/writingtotemporary.cpp
     checks/virtualcallsfromctor.cpp
+    FixItUtils.cpp
     Lazy.cpp
     QtUtils.cpp
     Utils.cpp)
