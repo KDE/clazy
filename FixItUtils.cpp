@@ -24,7 +24,11 @@
 */
 
 #include "FixItUtils.h"
+#include "checkmanager.h"
+
+#include <clang/AST/Expr.h>
 #include <clang/Basic/Diagnostic.h>
+#include <clang/Lex/Lexer.h>
 
 using namespace FixItUtils;
 using namespace clang;
@@ -45,4 +49,30 @@ clang::FixItHint FixItUtils::createInsertion(const clang::SourceLocation &start,
     } else {
         return FixItHint::CreateInsertion(start, insertion);
     }
+}
+
+SourceRange FixItUtils::rangeForLiteral(StringLiteral *lt)
+{
+    if (!lt)
+        return {};
+
+    const int numTokens = lt->getNumConcatenated();
+    const SourceLocation lastTokenLoc = lt->getStrTokenLoc(numTokens - 1);
+    if (lastTokenLoc.isInvalid()) {
+        return {};
+    }
+
+    SourceRange range;
+    range.setBegin(lt->getLocStart());
+
+    SourceLocation end = Lexer::getLocForEndOfToken(lastTokenLoc, 0,
+                                                    CheckManager::instance()->m_ci->getSourceManager(),
+                                                    CheckManager::instance()->m_ci->getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
+
+    if (!end.isValid()) {
+        return {};
+    }
+
+    range.setEnd(end);
+    return range;
 }

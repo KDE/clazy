@@ -395,10 +395,13 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
 {
     vector<FixItHint> fixits;
 
-    if (!lt)
-        return fixits;
-
-    const int numTokens = lt->getNumConcatenated(); // "foo""bar" -> 2 tokens
+    SourceRange range = FixItUtils::rangeForLiteral(lt);
+    if (range.isInvalid()) {
+        if (lt) {
+            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Internal error: Can't calculate source location");
+        }
+        return {};
+    }
 
     SourceLocation start = lt->getLocStart();
     if (start.isMacroID()) {
@@ -410,15 +413,8 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
             return {};
         }
 
-        SourceLocation lastTokenLoc = lt->getStrTokenLoc(numTokens - 1);
-        if (lastTokenLoc.isInvalid()) {
-            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Internal error: Can't calculate source location");
-            return {};
-        }
-
-        SourceLocation end = Lexer::getLocForEndOfToken(lastTokenLoc, 0, m_ci.getSourceManager(), m_ci.getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
-        fixits.push_back(FixItUtils::createInsertion(end, ")"));
-        fixits.push_back(FixItUtils::createInsertion(start, revisedReplacement + std::string("(")));
+        fixits.push_back(FixItUtils::createInsertion(range.getEnd(), ")"));
+        fixits.push_back(FixItUtils::createInsertion(range.getBegin(), revisedReplacement + std::string("(")));
     }
 
     return fixits;

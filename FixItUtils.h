@@ -32,12 +32,15 @@ namespace clang {
 class FixItHint;
 class SourceRange;
 class SourceLocation;
+class StringLiteral;
 }
 
 namespace FixItUtils {
 
 clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
 clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
+
+clang::SourceRange rangeForLiteral(clang::StringLiteral *);
 
 }
 
