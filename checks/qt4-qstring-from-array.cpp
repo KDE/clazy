@@ -255,7 +255,12 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixitInsertFromLatin1(CXXConstructE
 
     Expr *arg = *(ctorExpr->arg_begin());
     range.setBegin(arg->getLocStart());
-    range.setEnd(ctorExpr->getLocEnd());
+    range.setEnd(Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(ctorExpr), 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
+    if (range.isInvalid()) {
+        emitWarning(ctorExpr->getLocStart(), "Internal error");
+        return {};
+    }
+
     FixItUtils::insertParentMethodCall("QString::fromLatin1", range, fixits);
 
     return fixits;

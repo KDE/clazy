@@ -18,3 +18,4 @@ qt4-qstring-from-array/main.cpp:40:5: warning: QString::prepend(QByteArray) bein
 qt4-qstring-from-array/main.cpp:41:5: warning: QString::operator=(const char *) being called [-Wclazy-qt4-qstring-from-array]
 qt4-qstring-from-array/main.cpp:43:13: warning: QString(QByteArray) ctor being called [-Wclazy-qt4-qstring-from-array]
 qt4-qstring-from-array/main.cpp:44:5: warning: QString::append(QByteArray) being called [-Wclazy-qt4-qstring-from-array]
+qt4-qstring-from-array/main.cpp:46:21: warning: QString(const char *) ctor being called [-Wclazy-qt4-qstring-from-array]

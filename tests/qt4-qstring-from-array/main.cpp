@@ -5,7 +5,7 @@
 
 
 QByteArray returns_byte_array() { return {}; }
-
+void receivesQString(const QString &) {}
 
 
 
@@ -42,4 +42,6 @@ void test()
 
     QString s9(returns_byte_array() + bytearray);
     s1.append(returns_byte_array());
+
+    receivesQString("test");
 }
