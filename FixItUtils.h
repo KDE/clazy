@@ -38,12 +38,26 @@ class StringLiteral;
 
 namespace FixItUtils {
 
+/**
+ * Replaces whatever is in range, with replacement
+ */
 clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
+
+/**
+ * Inserts insertion at start
+ */
 clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
+
+/**
+ * Transforms foo into method(foo), by inserting "method(" at the beginning, and ')' at the end
+ */
 void insertParentMethodCall(const std::string &method, const clang::SourceRange &range, std::vector<clang::FixItHint> &fixits);
 
-clang::SourceRange rangeForLiteral(clang::StringLiteral *);
 
+/**
+ * Returns the range this literal spans. Takes into account multi token literals, such as "foo""bar"
+ */
+clang::SourceRange rangeForLiteral(clang::StringLiteral *);
 }
 
 #endif
