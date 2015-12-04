@@ -95,3 +95,22 @@ bool FixItUtils::insertParentMethodCallAroundStringLiteral(const std::string &me
     insertParentMethodCall(method, range, /*by-ref*/fixits);
     return true;
 }
+
+SourceLocation FixItUtils::locForNextToken(SourceLocation start, tok::TokenKind kind)
+{
+    if (!start.isValid())
+        return {};
+
+    Token result;
+    Lexer::getRawToken(start, result, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
+
+    if (result.getKind() == kind)
+        return start;
+
+
+    auto nextStart = Lexer::getLocForEndOfToken(start, 0, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
+    if (nextStart.getRawEncoding() == start.getRawEncoding())
+        return {};
+
+    return locForNextToken(nextStart, kind);
+}

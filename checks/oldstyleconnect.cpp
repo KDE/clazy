@@ -29,6 +29,7 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "FixItUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -446,7 +447,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = Utils::locForNextToken((*it)->getLocStart(), tok::comma);
+                    auto endLoc = FixItUtils::locForNextToken((*it)->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

@@ -320,8 +320,6 @@ namespace Utils {
     // Convertible means that a signal with of type source can connect to a signal/slot of type target
     bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
 
-    clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
-
     bool isAscii(clang::StringLiteral *lt);
 
     // Checks if Statement s inside an operator* call

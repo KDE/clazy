@@ -26,6 +26,8 @@
 #ifndef CLAZY_FIXIT_UTILS_H
 #define CLAZY_FIXIT_UTILS_H
 
+#include <clang/Parse/Parser.h>
+
 #include <string>
 #include <vector>
 
@@ -53,18 +55,19 @@ clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::
  */
 void insertParentMethodCall(const std::string &method, const clang::SourceRange &range, std::vector<clang::FixItHint> &fixits);
 
-
 /**
  * Transforms foo into method("literal"), by inserting "method(" at the beginning, and ')' at the end
  * Takes into account multi-token literals such as "foo""bar"
  */
 bool insertParentMethodCallAroundStringLiteral(const std::string &method, clang::StringLiteral *lt, std::vector<clang::FixItHint> &fixits);
 
-
 /**
  * Returns the range this literal spans. Takes into account multi token literals, such as "foo""bar"
  */
 clang::SourceRange rangeForLiteral(clang::StringLiteral *);
+
+clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
+
 }
 
 #endif

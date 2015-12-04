@@ -1026,25 +1026,6 @@ CXXRecordDecl* Utils::firstMethodOrClassContext(DeclContext *context)
     return firstMethodOrClassContext(context->getParent());
 }
 
-SourceLocation Utils::locForNextToken(SourceLocation start, tok::TokenKind kind)
-{
-    if (!start.isValid())
-        return {};
-
-    Token result;
-    Lexer::getRawToken(start, result, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
-
-    if (result.getKind() == kind)
-        return start;
-
-
-    auto nextStart = Lexer::getLocForEndOfToken(start, 0, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
-    if (nextStart.getRawEncoding() == start.getRawEncoding())
-        return {};
-
-    return locForNextToken(nextStart, kind);
-}
-
 bool Utils::isAscii(StringLiteral *lt)
 {
     // "é" for some reason has isAscii() == true, so also call containsNonAsciiOrNull
