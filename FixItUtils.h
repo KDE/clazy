@@ -55,6 +55,13 @@ void insertParentMethodCall(const std::string &method, const clang::SourceRange 
 
 
 /**
+ * Transforms foo into method("literal"), by inserting "method(" at the beginning, and ')' at the end
+ * Takes into account multi-token literals such as "foo""bar"
+ */
+bool insertParentMethodCallAroundStringLiteral(const std::string &method, clang::StringLiteral *lt, std::vector<clang::FixItHint> &fixits);
+
+
+/**
  * Returns the range this literal spans. Takes into account multi token literals, such as "foo""bar"
  */
 clang::SourceRange rangeForLiteral(clang::StringLiteral *);

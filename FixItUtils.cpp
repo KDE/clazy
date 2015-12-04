@@ -82,3 +82,16 @@ void FixItUtils::insertParentMethodCall(const std::string &method, const SourceR
     fixits.push_back(FixItUtils::createInsertion(range.getEnd(), ")"));
     fixits.push_back(FixItUtils::createInsertion(range.getBegin(), method + std::string("(")));
 }
+
+bool FixItUtils::insertParentMethodCallAroundStringLiteral(const std::string &method, StringLiteral *lt, std::vector<FixItHint> &fixits)
+{
+    if (!lt)
+        return false;
+
+    const SourceRange range = rangeForLiteral(lt);
+    if (range.isInvalid())
+        return false;
+
+    insertParentMethodCall(method, range, /*by-ref*/fixits);
+    return true;
+}
