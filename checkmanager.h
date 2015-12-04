@@ -64,7 +64,7 @@ public:
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     void setCompilerInstance(clang::CompilerInstance *);
-    RegisteredCheck::List availableChecks(bool includeHidden) const;
+    RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv() const;
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;

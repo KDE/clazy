@@ -153,13 +153,13 @@ string CheckManager::checkNameForFixIt(const string &fixitName) const
     return {};
 }
 
-RegisteredCheck::List CheckManager::availableChecks(bool includeHidden) const
+RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
 {
     RegisteredCheck::List checks = m_registeredChecks;
-    if (!includeHidden) {
-        checks.erase(remove_if(checks.begin(), checks.end(),
-                               [](const RegisteredCheck &r) { return r.level == MaxCheckLevel; }), checks.end());
-    }
+
+    checks.erase(remove_if(checks.begin(), checks.end(),
+                           [maxLevel](const RegisteredCheck &r) { return r.level > maxLevel; }), checks.end());
+
 
     return checks;
 }
@@ -170,7 +170,7 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv() const
     if (requestedChecksThroughEnv.empty()) {
         const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv) {
-            requestedChecksThroughEnv = string(checksEnv) == "all_checks" ? availableChecks(false)
+            requestedChecksThroughEnv = string(checksEnv) == "all_checks" ? availableChecks(CheckLevel2)
                                                                           : checksForCommaSeparatedString(checksEnv);
         }
 

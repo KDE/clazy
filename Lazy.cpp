@@ -294,7 +294,7 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros)
     {
-        RegisteredCheck::List checks = CheckManager::instance()->availableChecks(true);
+        RegisteredCheck::List checks = CheckManager::instance()->availableChecks(MaxCheckLevel);
         sort(checks.begin(), checks.end(), checkLessThanByLevel);
 
         ros << "Available checks and FixIts:\n\n";
