@@ -114,3 +114,21 @@ SourceLocation FixItUtils::locForNextToken(SourceLocation start, tok::TokenKind 
 
     return locForNextToken(nextStart, kind);
 }
+
+SourceLocation FixItUtils::biggestSourceLocationInStmt(Stmt *stmt)
+{
+    if (!stmt)
+        return {};
+
+    SourceLocation biggestLoc = stmt->getLocEnd();
+
+    const SourceManager *sm = CheckManager::instance()->m_sm;
+
+    for (auto it = stmt->child_begin(), end = stmt->child_end(); it != end; ++it) {
+        SourceLocation candidateLoc = biggestSourceLocationInStmt(*it);
+        if (candidateLoc.isValid() && sm->isBeforeInSLocAddrSpace(biggestLoc, candidateLoc))
+            biggestLoc = candidateLoc;
+    }
+
+    return biggestLoc;
+}

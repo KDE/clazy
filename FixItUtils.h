@@ -66,6 +66,11 @@ bool insertParentMethodCallAroundStringLiteral(const std::string &method, clang:
  */
 clang::SourceRange rangeForLiteral(clang::StringLiteral *);
 
+/**
+ * Goes through all children of stmt and finds the biggests source location.
+ */
+clang::SourceLocation biggestSourceLocationInStmt(clang::Stmt *stmt);
+
 clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
 
 }
