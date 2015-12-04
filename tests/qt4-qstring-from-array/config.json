@@ -1,0 +1,12 @@
+{
+    "tests" : [
+        {
+            "filename" : "main.cpp",
+            "qt_major_version": 4
+        },
+        {
+            "filename" : "main.cpp_fixed.cpp",
+            "isFixedFile" : true
+        }
+    ]
+}

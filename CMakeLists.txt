@@ -84,6 +84,7 @@ set(SRC_FILES
     checks/qstringarg.cpp
     checks/qstringref.cpp
     checks/qstringuneededheapallocations.cpp
+    checks/qt4-qstring-from-array.cpp
     checks/missingtypeinfo.cpp
     checks/missing-qobject.cpp
     checks/nonpodstatic.cpp
