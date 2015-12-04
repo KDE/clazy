@@ -76,3 +76,9 @@ SourceRange FixItUtils::rangeForLiteral(StringLiteral *lt)
     range.setEnd(end);
     return range;
 }
+
+void FixItUtils::insertParentMethodCall(const std::string &method, const SourceRange &range, std::vector<FixItHint> &fixits)
+{
+    fixits.push_back(FixItUtils::createInsertion(range.getEnd(), ")"));
+    fixits.push_back(FixItUtils::createInsertion(range.getBegin(), method + std::string("(")));
+}

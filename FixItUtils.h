@@ -27,6 +27,7 @@
 #define CLAZY_FIXIT_UTILS_H
 
 #include <string>
+#include <vector>
 
 namespace clang {
 class FixItHint;
@@ -39,6 +40,7 @@ namespace FixItUtils {
 
 clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
 clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
+void insertParentMethodCall(const std::string &method, const clang::SourceRange &range, std::vector<clang::FixItHint> &fixits);
 
 clang::SourceRange rangeForLiteral(clang::StringLiteral *);
 

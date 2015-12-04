@@ -413,8 +413,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
             return {};
         }
 
-        fixits.push_back(FixItUtils::createInsertion(range.getEnd(), ")"));
-        fixits.push_back(FixItUtils::createInsertion(range.getBegin(), revisedReplacement + std::string("(")));
+        FixItUtils::insertParentMethodCall(revisedReplacement, range, /**by-ref*/fixits);
     }
 
     return fixits;
