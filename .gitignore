@@ -18,3 +18,4 @@ compile_fixed.output
 *.out
 *.result
 /tests/clazy/test_requested_checks.sh.output
+*.ast
