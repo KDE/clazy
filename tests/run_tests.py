@@ -50,6 +50,7 @@ def load_json(check_name):
     check = Check(check_name)
     filename = check_name + "/config.json"
     if not os.path.exists(filename):
+        print "Error: " + filename + " not found"
         return check
 
     f = open(filename, 'r')
