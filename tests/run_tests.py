@@ -186,11 +186,6 @@ def extract_word(word, in_file, out_file):
     in_f.close()
     out_f.close()
 
-def cleanup_fixed_files():
-    fixed_files = get_fixed_files()
-    for fixed_file in fixed_files:
-        os.remove(fixed_file)
-
 def set_environment_variables(env):
     for key in env:
         os.environ[key] = env[key]
