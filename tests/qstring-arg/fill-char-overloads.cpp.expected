@@ -1,0 +1,3 @@
+qstring-arg/fill-char-overloads.cpp:6:17: warning: Using QString::arg() with fillChar overload [-Wclazy-qstring-arg]
+qstring-arg/fill-char-overloads.cpp:7:9: warning: Using QString::arg() with fillChar overload [-Wclazy-qstring-arg]
+qstring-arg/fill-char-overloads.cpp:8:9: warning: Using QString::arg() with fillChar overload [-Wclazy-qstring-arg]
