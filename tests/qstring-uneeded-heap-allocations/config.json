@@ -7,6 +7,19 @@
         {
             "filename" : "main.cpp_fixed.cpp",
             "isFixedFile" : true
+        },
+        {
+            "filename" : "msvc-compat.cpp",
+            "env" : {
+                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-msvc-compat"
+            }
+        },
+        {
+            "filename" : "msvc-compat.cpp_fixed.cpp",
+            "isFixedFile" : true,
+            "env" : {
+                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-msvc-compat"
+            }
         }
     ]
 }
