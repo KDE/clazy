@@ -35,6 +35,7 @@ class Decl;
 class VarDecl;
 class FixItHint;
 class ParmVarDecl;
+class FunctionDecl;
 }
 
 namespace Utils {
@@ -50,9 +51,11 @@ class FunctionArgsByRef : public CheckBase
 public:
     FunctionArgsByRef(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
+    void VisitStmt(clang::Stmt *stmt) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
 private:
+    void processFunction(clang::FunctionDecl *);
     clang::FixItHint fixitByValue(clang::FunctionDecl *func, const clang::ParmVarDecl *param, const Utils::QualTypeClassification &);
     clang::FixItHint fixitByConstRef(const clang::ParmVarDecl *, const Utils::QualTypeClassification &);
 };

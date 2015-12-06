@@ -6,6 +6,9 @@
         {
             "filename" : "main.cpp_fixed.cpp",
             "isFixedFile" : true
+        },
+        {
+            "filename" : "lambdas.cpp"
         }
     ]
 }

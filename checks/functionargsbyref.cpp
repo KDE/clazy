@@ -92,10 +92,9 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
     return "Missing reference on large type sizeof " + typeName + " is " + sizeStr + " bytes)";
 }
 
-void FunctionArgsByRef::VisitDecl(Decl *decl)
+void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
 {
-    FunctionDecl *functionDecl = dyn_cast<FunctionDecl>(decl);
-    if (!functionDecl || !functionDecl->hasBody() || shouldIgnoreFunction(functionDecl->getNameAsString())
+    if (!functionDecl || shouldIgnoreFunction(functionDecl->getNameAsString())
             || !functionDecl->isThisDeclarationADefinition()) return;
 
     Stmt *body = functionDecl->getBody();
@@ -112,7 +111,6 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
         CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
         if (recordDecl && shouldIgnoreClass(recordDecl->getQualifiedNameAsString()))
             continue;
-
         Utils::QualTypeClassification classif;
 
         bool success = Utils::classifyQualType(param, classif, body);
@@ -140,6 +138,18 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 
             emitWarning(param->getLocStart(), error.c_str(), fixits);
         }
+    }
+}
+
+void FunctionArgsByRef::VisitDecl(Decl *decl)
+{
+    processFunction(dyn_cast<FunctionDecl>(decl));
+}
+
+void FunctionArgsByRef::VisitStmt(Stmt *stmt)
+{
+    if (LambdaExpr *lambda = dyn_cast<LambdaExpr>(stmt)) {
+        processFunction(lambda->getCallOperator());
     }
 }
 
