@@ -24,6 +24,7 @@ class Test:
         self.link = False # If true we also call the linker
         self.check = check
         self.qt_major_version = 5 # Tests use Qt 5 by default
+        self.env = {}
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -78,6 +79,9 @@ def load_json(check_name):
                 test.link = t['link']
             if 'qt_major_version' in t:
                 test.setQtMajorVersion(t['qt_major_version'])
+            if 'env' in t:
+                test.env = t['env']
+
             check.tests.append(test)
 
     return check
@@ -125,6 +129,7 @@ _lock = threading.Lock()
 _was_successful = True
 _qt5_installation = find_qt_installation(5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"])
 _qt4_installation = find_qt_installation(4, ["QT_SELECT=4 qmake", "qmake-qt4", "qmake"])
+_original_env = os.environ
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -189,12 +194,17 @@ def cleanup_fixed_files():
     for fixed_file in fixed_files:
         os.remove(fixed_file)
 
+def set_environment_variables(env):
+    for key in env:
+        os.environ[key] = env[key]
 
 def run_unit_test(test):
     qt = qt_installation(test.qt_major_version)
 
     if qt.int_version < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         return True
+
+    set_environment_variables(test.env)
 
     checkname = test.check.name
     filename = checkname + "/" + test.filename
@@ -227,7 +237,11 @@ def run_unit_test(test):
     if _verbose:
         print "Running: " + clazy_cmd
 
-    if not run_command(clazy_cmd + " > " + output_file + " 2> " + output_file):
+    cmd_success = run_command(clazy_cmd + " > " + output_file + " 2> " + output_file)
+
+    os.environ = _original_env
+
+    if not cmd_success:
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
         print
         return False
