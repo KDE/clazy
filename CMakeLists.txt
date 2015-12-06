@@ -81,6 +81,7 @@ set(SRC_FILES
     checks/functionargsbyref.cpp
     checks/qdeleteall.cpp
     checks/qmapkey.cpp
+    checks/qset-intersects.cpp
     checks/qstringarg.cpp
     checks/qstringref.cpp
     checks/qstringuneededheapallocations.cpp

@@ -1,0 +1,8 @@
+{
+    "tests" : [
+        {
+            "filename" : "main.cpp",
+            "minimum_qt_version" : 560
+        }
+    ]
+}
