@@ -1,0 +1,1 @@
+writing-to-temporary/widen-criteria.cpp:10:5: warning: Call to temporary is a no-op: Foo::move [-Wclazy-writing-to-temporary]
