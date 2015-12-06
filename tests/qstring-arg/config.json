@@ -4,7 +4,11 @@
             "filename" : "main.cpp"
         },
         {
-            "filename" : "fill-char-overloads.cpp"
+            "filename" : "fill-char-overloads.cpp",
+            "env" :
+                {
+                    "CLAZY_EXTRA_OPTIONS" : "qstring-arg-fillChar-overloads"
+                }
         }
     ]
 }

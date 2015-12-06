@@ -3,9 +3,6 @@
 import sys, os, subprocess, string, re, json, threading, multiprocessing
 from threading import Thread
 
-# Remove when we refactor unit-tests and allow to pass custom options
-os.environ["CLAZY_EXTRA_OPTIONS"] = "qstring-arg-fillChar-overloads"
-
 class QtInstallation:
     def __init__(self):
         self.int_version = 000
