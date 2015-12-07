@@ -26,6 +26,7 @@
 #define CLAZY_QT_UTILS_H
 
 #include <string>
+#include <vector>
 
 namespace clang {
 class CXXRecordDecl;
@@ -54,6 +55,11 @@ bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
  * Overload.
  */
 bool isQtAssociativeContainer(const std::string &className);
+
+/**
+ * Returns a list of Qt containers.
+ */
+const std::vector<std::string> & qtContainers();
 
 }
 
