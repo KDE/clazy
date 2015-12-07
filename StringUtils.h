@@ -103,6 +103,11 @@ inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::st
     return func && std::find(functionNames.cbegin(), functionNames.cend(), func->getNameAsString()) != functionNames.cend();
 }
 
+inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<std::string> &classNames)
+{
+    return record && std::find(classNames.cbegin(), classNames.cend(), record->getNameAsString()) != classNames.cend();
+}
+
 inline void printLocation(const clang::SourceLocation &loc, bool newLine = true)
 {
     llvm::errs() << loc.printToString(*(CheckManager::instance()->m_sm));
@@ -132,6 +137,9 @@ inline void printLocation(clang::PresumedLoc loc, bool newLine = true)
 
 inline std::string qualifiedMethodName(clang::FunctionDecl *func)
 {
+    if (!func)
+        return {};
+
     clang::CXXMethodDecl *method = clang::dyn_cast<clang::CXXMethodDecl>(func);
     if (!method)
         return func->getQualifiedNameAsString();
