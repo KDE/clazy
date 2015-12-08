@@ -6,7 +6,8 @@
         },
         {
             "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true
+            "isFixedFile" : true,
+            "qt_major_version": 4
         }
     ]
 }
