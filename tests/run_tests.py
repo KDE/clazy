@@ -32,6 +32,12 @@ class Test:
             if self.minimum_qt_version >= 500:
                 self.minimum_qt_version = 400
 
+    def envString(self):
+        result = ""
+        for key in self.env:
+            result += key + '="' + self.env[key] + '" '
+        return result
+
 class Check:
     def __init__(self, name):
         self.name = name
@@ -129,7 +135,6 @@ _lock = threading.Lock()
 _was_successful = True
 _qt5_installation = find_qt_installation(5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"])
 _qt4_installation = find_qt_installation(4, ["QT_SELECT=4 qmake", "qmake-qt4", "qmake"])
-_original_env = os.environ
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -189,10 +194,6 @@ def extract_word(word, in_file, out_file):
     in_f.close()
     out_f.close()
 
-def set_environment_variables(env):
-    for key in env:
-        os.environ[key] = env[key]
-
 def run_unit_test(test):
     qt = qt_installation(test.qt_major_version)
 
@@ -204,8 +205,6 @@ def run_unit_test(test):
     if qt.int_version < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         return True
 
-    set_environment_variables(test.env)
-
     checkname = test.check.name
     filename = checkname + "/" + test.filename
 
@@ -213,7 +212,7 @@ def run_unit_test(test):
     result_file = filename + ".result"
     expected_file = filename + ".expected"
 
-    compiler_cmd = compiler_command(qt)
+    compiler_cmd = test.envString() + compiler_command(qt)
 
     if test.link:
         cmd = compiler_cmd + " " + _link_flags
@@ -238,8 +237,6 @@ def run_unit_test(test):
         print "Running: " + clazy_cmd
 
     cmd_success = run_command(clazy_cmd + " > " + output_file + " 2> " + output_file)
-
-    os.environ = _original_env
 
     if not cmd_success:
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
