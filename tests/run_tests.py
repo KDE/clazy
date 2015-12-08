@@ -94,6 +94,8 @@ def find_qt_installation(major_version, qmakes):
             if qmake_header_path:
                 installation.qmake_header_path = qmake_header_path
                 installation.int_version = int(qmake_version_str.replace(".", ""))
+                if _verbose:
+                    print "Found Qt " + str(installation.int_version) + " using qmake " + qmake
             break
 
     return installation
@@ -193,6 +195,11 @@ def set_environment_variables(env):
 
 def run_unit_test(test):
     qt = qt_installation(test.qt_major_version)
+
+    if _verbose:
+        print
+        print "Qt version: " + str(qt.int_version)
+        print "Qt headers: " + qt.qmake_header_path
 
     if qt.int_version < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         return True
