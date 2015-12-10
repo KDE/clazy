@@ -36,7 +36,7 @@ macro(add_clang_plugin name)
 
     include_directories("${LLVM_INSTALL_PREFIX}/include" ${CMAKE_SOURCE_DIR})
 
-    link_directories("${LLVM_INSTALL_PREFIX}/lib")
+    link_directories("${LLVM_INSTALL_PREFIX}/lib ${LLVM_LIBRARY_DIR}")
 
     add_library( ${name} SHARED ${srcs} )
 
