@@ -65,7 +65,7 @@ Checks from level0:
     variant-sanitizer
     temporary-iterator
     qdatetime-utc
-    qgetenv
+    qgetenv    (fix-qgetenv)
     qmap-with-key-pointer
     qstring-arg
     qstring-ref    (fix-missing-qstringref)
