@@ -67,25 +67,31 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (calls.size() != 2)
         return;
 
-    FunctionDecl *func = calls.back()->getDirectCallee();
+    CallExpr *qgetEnvCall = calls.back();
+
+    FunctionDecl *func = qgetEnvCall->getDirectCallee();
 
     if (!func || func->getNameAsString() != "qgetenv")
         return;
 
     string methodname = method->getNameAsString();
     string errorMsg;
+    std::string replacement;
     if (methodname == "isEmpty") {
-        errorMsg = "qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsEmpty() instead";
+        errorMsg = "qgetenv().isEmpty() allocates.";
+        replacement = "qEnvironmentVariableIsEmpty";
     } else if (methodname == "isNull") {
-        errorMsg = "qgetenv().isNull() allocates. Use qEnvironmentVariableIsSet() instead";
+        errorMsg = "qgetenv().isNull() allocates.";
+        replacement = "qEnvironmentVariableIsSet";
     } else if (methodname == "toInt") {
-        errorMsg = "qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead";
+        errorMsg = "qgetenv().toInt() is slow.";
+        replacement = "qEnvironmentVariableIntValue";
     }
 
     if (!errorMsg.empty()) {
+        errorMsg += " Use " + replacement + "() instead";
         emitWarning(memberCall->getLocStart(), errorMsg.c_str());
     }
-
 }
 
 
