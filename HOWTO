@@ -29,7 +29,7 @@ Tips
 
 - llvm::errs() is useful to print to stderr
   llvm::errs() << record->getNameAsString() << "\n";
-  llvm::errs() << stmt->getLocStart().print(m_ci.getSourceManager()) << "\n";
+  llvm::errs() << stmt->getLocStart().printToString(m_ci.getSourceManager()) << "\n";
 
 - Look in Utils.h, StringUtils.h, QtUtils.h and FixitUtils.h for helper functions you might need.
 
@@ -49,6 +49,17 @@ Tips for fixits
 
   The expected result is the main.cpp_fixed.cpp itself, so, if the file looks correctly fixed:
       cp main.cpp_fixed.cpp main.cpp_fixed.cpp.expected
+
+- Usually you'll have to poke around and debug print getLocStart and getLocEnd of statements until
+  you find the locations you want, otherwise you'll have to manipulate the locations with Lexer,
+  see FixItUtils.cpp.
+
+- Learn from existing fixits:
+    qgetenv.cpp
+    functionargsbyref.cpp
+    autounexpectedqstringbuilder.cpp
+    qstringref.cpp
+    qt4-qstring-from-array.cpp
 
 --------------------------------------------------------------------------------
 Running tests
