@@ -132,3 +132,8 @@ SourceLocation FixItUtils::biggestSourceLocationInStmt(Stmt *stmt)
 
     return biggestLoc;
 }
+
+SourceLocation FixItUtils::locForEndOfToken(SourceLocation start, int offset)
+{
+    return Lexer::getLocForEndOfToken(start, offset, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
+}

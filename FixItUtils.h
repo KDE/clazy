@@ -73,6 +73,18 @@ clang::SourceLocation biggestSourceLocationInStmt(clang::Stmt *stmt);
 
 clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
 
+/**
+ * Returns the end location of the token that starts at start.
+ *
+ * For example, having this expr:
+ * getenv("FOO")
+ *
+ * ^              // expr->getLocStart()
+ *             ^  // expr->getLocEnd()
+ *      ^         // FixItUtils::locForEndOfToken(expr->getLocStart())
+ */
+clang::SourceLocation locForEndOfToken(clang::SourceLocation start, int offset = 0);
+
 }
 
 #endif
