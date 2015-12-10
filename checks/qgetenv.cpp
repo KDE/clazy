@@ -29,13 +29,17 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
-
+#include "FixItUtils.h"
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
 
+enum Fixit {
+    FixitNone = 0,
+    FixitAll = 0x1 // More granularity isn't needed I guess
+};
 
 QGetEnv::QGetEnv(const std::string &name)
     : CheckBase(name)
@@ -89,11 +93,40 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     }
 
     if (!errorMsg.empty()) {
+        std::vector<FixItHint> fixits;
+        Expr *implicitArgument = memberCall->getImplicitObjectArgument();
+        if (isFixitEnabled(FixitAll) && implicitArgument) {
+            const SourceLocation start1 = stmt->getLocStart();
+            const SourceLocation end1 = FixItUtils::locForEndOfToken(start1, -1); // -1 of offset, so we don't need to insert '('
+            if (end1.isValid()) {
+                const SourceLocation start2 = implicitArgument->getLocEnd();
+                const SourceLocation end2 = memberCall->getLocEnd();
+                if (start2.isValid() && end2.isValid()) {
+
+                    // qgetenv("foo").isEmpty()
+                    // ^                         start1
+                    //       ^                   end1
+                    //              ^            start2
+                    //                        ^  end2
+
+                    fixits.push_back(FixItUtils::createReplacement({ start1, end1 }, replacement));
+                    fixits.push_back(FixItUtils::createReplacement({ start2, end2 }, ")"));
+                } else {
+                    // This shouldn't happen
+                    queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
+                }
+            } else {
+                // This shouldn't happen
+                queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
+            }
+        }
+
         errorMsg += " Use " + replacement + "() instead";
-        emitWarning(memberCall->getLocStart(), errorMsg.c_str());
+        emitWarning(memberCall->getLocStart(), errorMsg.c_str(), fixits);
     }
 }
 
 
-
-REGISTER_CHECK_WITH_FLAGS("qgetenv", QGetEnv, CheckLevel0)
+const char *const s_checkName = "qgetenv";
+REGISTER_CHECK_WITH_FLAGS(s_checkName, QGetEnv, CheckLevel0)
+REGISTER_FIXIT(FixitAll, "fix-qgetenv", s_checkName)

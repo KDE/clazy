@@ -1,0 +1,12 @@
+#include <QtCore/qglobal.h>
+#include <QtCore/qbytearray.h>
+
+int test()
+{
+
+    qEnvironmentVariableIsEmpty("Foo");
+    bool b = qEnvironmentVariableIsSet("Foo");
+    QByteArray ba = qgetenv("Foo");
+    int a = qEnvironmentVariableIntValue("Foo");
+    return 0;
+}
