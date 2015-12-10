@@ -1,0 +1,59 @@
+Help on how to create a new check or a fixit
+
+--------------------------------------------------------------------------------
+Files to create or modify
+
+checks/my-check.cpp
+checks/my-check.h
+checks/README-my-check
+tests/my-check/config.json
+tests/my-check/main.cpp
+CMakeLists.txt
+--------------------------------------------------------------------------------
+Tips
+
+- Write the unit-test before the check
+
+- Dump the abstract syntax tree (AST) of your unit-test:
+
+  ./run_tests.py my-test --dump-ast
+
+  This creates a main.cpp.ast file, if you include Qt headers, the AST will be
+  very big, your stuff will be at the end of the file. Use the AST to check which
+  nodes you have to visit.
+
+- You can also dump the AST of a statement in C++:
+  stmt->dump()
+
+  This dumps the sub-AST to stdout, having stmt as it's root
+
+- llvm::errs() is useful to print to stderr
+  llvm::errs() << record->getNameAsString() << "\n";
+  llvm::errs() << stmt->getLocStart().print(m_ci.getSourceManager()) << "\n";
+
+- Look in Utils.h, StringUtils.h, QtUtils.h and FixitUtils.h for helper functions you might need.
+
+--------------------------------------------------------------------------------
+Tips for fixits
+
+- Don't forget to register your fixit with:
+  REGISTER_FIXIT(MyFixEnumerator, "fix-my-check", "my-check")
+  Where the 1st argument is some enum value, which your create, mostly useful if you have more than one fixit type.
+
+- When testing main.cpp, the unit-test framework will automatically have fixits enabled, and a main.cpp_fixed.cpp is created.
+  You should add this to config.json, so that main.cpp_fixed.cpp is also compiled:
+        {
+            "filename" : "main.cpp_fixed.cpp",
+            "isFixedFile" : true
+        }
+
+  The expected result is the main.cpp_fixed.cpp itself, so, if the file looks correctly fixed:
+      cp main.cpp_fixed.cpp main.cpp_fixed.cpp.expected
+
+--------------------------------------------------------------------------------
+Running tests
+    ./run-tests.py # This runs all tests
+    ./run-tests.py my-check # This runs one tests
+    ./run-tests.py my-check --verbose # Prints the compiler invocation command
+    ./run-tests.py my-check --dump-ast # dumps the AST into a file with .ast extension
+--------------------------------------------------------------------------------
