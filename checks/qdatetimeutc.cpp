@@ -71,6 +71,11 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime")
         return;
 
+    std::string replacement = "::currentDateTimeUtc()";
+    if (isTimeT) {
+        replacement += ".toTime_t()";
+    }
+
     std::vector<FixItHint> fixits;
     Expr *implicitArgument = secondCall->getImplicitObjectArgument();
     if (isFixitEnabled(FixitAll) && implicitArgument) {
@@ -78,10 +83,6 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         start = FixItUtils::locForEndOfToken(start, 0);
         const SourceLocation end = secondCall->getLocEnd();
         if (start.isValid() && end.isValid()) {
-            std::string replacement = "::currentDateTimeUtc()";
-            if (isTimeT) {
-                replacement += ".toTime_t()";
-            }
             fixits.push_back(FixItUtils::createReplacement({ start, end }, replacement));
         } else {
             // This shouldn't happen
@@ -89,10 +90,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    if (isTimeT)
-        emitWarning(stmt->getLocStart(), "Use QDateTime::currentDateTimeUtc().toTime_t() instead", fixits);
-    else
-        emitWarning(stmt->getLocStart(), "Use QDateTime::currentDateTimeUtc() instead", fixits);
+    emitWarning(stmt->getLocStart(), "Use QDateTime" + replacement + " instead", fixits);
 }
 
 const char *const s_checkName = "qdatetime-utc";
