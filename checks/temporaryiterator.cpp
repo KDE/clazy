@@ -29,6 +29,7 @@
 #include "checkmanager.h"
 #include "temporaryiterator.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 #include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -85,14 +86,14 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         return;
 
     // Catch variant.toList().cbegin(), which is ok
-    CXXMemberCallExpr *chainedMemberCall = Utils::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
+    CXXMemberCallExpr *chainedMemberCall = HierarchyUtils::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
     if (chainedMemberCall) {
         if (isBlacklistedFunction(StringUtils::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
             return;
     }
 
     // catch map[foo].cbegin()
-    CXXOperatorCallExpr *chainedOperatorCall = Utils::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
+    CXXOperatorCallExpr *chainedOperatorCall = HierarchyUtils::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
     if (chainedOperatorCall) {
         FunctionDecl *func = chainedOperatorCall->getDirectCallee();
         if (func) {

@@ -24,6 +24,7 @@
 
 #include "qstringref.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
@@ -166,7 +167,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
             return false;
     }
 
-    CXXMemberCallExpr *innerCall = Utils::getFirstChildOfType2<CXXMemberCallExpr>(temp);
+    CXXMemberCallExpr *innerCall = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(temp);
     if (!innerCall)
         return false;
 
@@ -185,7 +186,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
 
 std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
-    MemberExpr *memberExpr = Utils::getFirstChildOfType<MemberExpr>(call);
+    MemberExpr *memberExpr = HierarchyUtils::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
         queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 1");
         return {};

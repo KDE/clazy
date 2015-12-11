@@ -27,6 +27,7 @@
 
 #include "implicitcasts.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
 
@@ -142,10 +143,10 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
         if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
             continue;
 
-        if (Utils::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
+        if (HierarchyUtils::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
             continue;
 
-        if (Utils::getFirstChildOfType<CStyleCastExpr>(implicitCast))
+        if (HierarchyUtils::getFirstChildOfType<CStyleCastExpr>(implicitCast))
             continue;
 
         if (Utils::isInsideOperatorCall(parentMap, implicitCast, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))
