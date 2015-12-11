@@ -93,6 +93,13 @@ clang::SourceLocation locForEndOfToken(clang::SourceLocation start, int offset =
 bool transformTwoCallsIntoOne(clang::CallExpr *foo, clang::CXXMemberCallExpr *bar,
                               const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
+
+/**
+ * Transforms a call such as: foo("hello").bar() into baz()
+ * This version basically replaces everything from start to end with baz.
+ */
+bool transformTwoCallsIntoOneV2(clang::CXXMemberCallExpr *bar, const std::string &baz, std::vector<clang::FixItHint> &fixits);
+
 }
 
 #endif

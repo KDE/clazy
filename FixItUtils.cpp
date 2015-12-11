@@ -167,3 +167,19 @@ bool FixItUtils::transformTwoCallsIntoOne(CallExpr *call1, CXXMemberCallExpr *ca
 
     return true;
 }
+
+bool FixItUtils::transformTwoCallsIntoOneV2(CXXMemberCallExpr *call2, const string &replacement, std::vector<FixItHint> &fixits)
+{
+    Expr *implicitArgument = call2->getImplicitObjectArgument();
+    if (!implicitArgument)
+        return false;
+
+    SourceLocation start = implicitArgument->getLocStart();
+    start = FixItUtils::locForEndOfToken(start, 0);
+    const SourceLocation end = call2->getLocEnd();
+    if (start.isInvalid() || end.isInvalid())
+        return false;
+
+    fixits.push_back(FixItUtils::createReplacement({ start, end }, replacement));
+    return true;
+}

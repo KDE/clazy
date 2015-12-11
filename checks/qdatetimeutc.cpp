@@ -77,15 +77,9 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<FixItHint> fixits;
-    Expr *implicitArgument = secondCall->getImplicitObjectArgument();
-    if (isFixitEnabled(FixitAll) && implicitArgument) {
-        SourceLocation start = implicitArgument->getLocStart();
-        start = FixItUtils::locForEndOfToken(start, 0);
-        const SourceLocation end = secondCall->getLocEnd();
-        if (start.isValid() && end.isValid()) {
-            fixits.push_back(FixItUtils::createReplacement({ start, end }, replacement));
-        } else {
-            // This shouldn't happen
+    if (isFixitEnabled(FixitAll)) {
+        const bool success = FixItUtils::transformTwoCallsIntoOneV2(secondCall, replacement, fixits);
+        if (!success) {
             queueManualFixitWarning(secondCall->getLocStart(), FixitAll);
         }
     }
