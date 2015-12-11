@@ -36,6 +36,8 @@ class FixItHint;
 class SourceRange;
 class SourceLocation;
 class StringLiteral;
+class CallExpr;
+class CXXMemberCallExpr;
 }
 
 namespace FixItUtils {
@@ -84,6 +86,12 @@ clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::T
  *      ^         // FixItUtils::locForEndOfToken(expr->getLocStart())
  */
 clang::SourceLocation locForEndOfToken(clang::SourceLocation start, int offset = 0);
+
+/**
+ * Transforms a call such as: foo("hello").bar() into baz("hello")
+ */
+bool transformTwoCallsIntoOne(clang::CallExpr *foo, clang::CXXMemberCallExpr *bar,
+                              const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
 }
 

@@ -27,11 +27,13 @@
 #include "checkmanager.h"
 
 #include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Lex/Lexer.h>
 
 using namespace FixItUtils;
 using namespace clang;
+using namespace std;
 
 clang::FixItHint FixItUtils::createReplacement(const clang::SourceRange &range, const std::string &replacement)
 {
@@ -136,4 +138,32 @@ SourceLocation FixItUtils::biggestSourceLocationInStmt(Stmt *stmt)
 SourceLocation FixItUtils::locForEndOfToken(SourceLocation start, int offset)
 {
     return Lexer::getLocForEndOfToken(start, offset, *CheckManager::instance()->m_sm, CheckManager::instance()->m_ci->getLangOpts());
+}
+
+bool FixItUtils::transformTwoCallsIntoOne(CallExpr *call1, CXXMemberCallExpr *call2,
+                                          const string &replacement, vector<FixItHint> &fixits)
+{
+    Expr *implicitArgument = call2->getImplicitObjectArgument();
+    if (!implicitArgument)
+        return false;
+
+    const SourceLocation start1 = call1->getLocStart();
+    const SourceLocation end1 = FixItUtils::locForEndOfToken(start1, -1); // -1 of offset, so we don't need to insert '('
+    if (end1.isInvalid())
+        return false;
+
+    const SourceLocation start2 = implicitArgument->getLocEnd();
+    const SourceLocation end2 = call2->getLocEnd();
+    if (start2.isInvalid() || end2.isInvalid())
+        return false;
+
+    // qgetenv("foo").isEmpty()
+    // ^                         start1
+    //       ^                   end1
+    //              ^            start2
+    //                        ^  end2
+    fixits.push_back(FixItUtils::createReplacement({ start1, end1 }, replacement));
+    fixits.push_back(FixItUtils::createReplacement({ start2, end2 }, ")"));
+
+    return true;
 }

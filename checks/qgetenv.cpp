@@ -94,29 +94,9 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
 
     if (!errorMsg.empty()) {
         std::vector<FixItHint> fixits;
-        Expr *implicitArgument = memberCall->getImplicitObjectArgument();
-        if (isFixitEnabled(FixitAll) && implicitArgument) {
-            const SourceLocation start1 = stmt->getLocStart();
-            const SourceLocation end1 = FixItUtils::locForEndOfToken(start1, -1); // -1 of offset, so we don't need to insert '('
-            if (end1.isValid()) {
-                const SourceLocation start2 = implicitArgument->getLocEnd();
-                const SourceLocation end2 = memberCall->getLocEnd();
-                if (start2.isValid() && end2.isValid()) {
-
-                    // qgetenv("foo").isEmpty()
-                    // ^                         start1
-                    //       ^                   end1
-                    //              ^            start2
-                    //                        ^  end2
-
-                    fixits.push_back(FixItUtils::createReplacement({ start1, end1 }, replacement));
-                    fixits.push_back(FixItUtils::createReplacement({ start2, end2 }, ")"));
-                } else {
-                    // This shouldn't happen
-                    queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
-                }
-            } else {
-                // This shouldn't happen
+        if (isFixitEnabled(FixitAll)) {
+            const bool success = FixItUtils::transformTwoCallsIntoOne(qgetEnvCall, memberCall, replacement, fixits);
+            if (!success) {
                 queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
             }
         }
