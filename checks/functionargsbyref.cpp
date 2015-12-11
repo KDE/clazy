@@ -41,8 +41,11 @@ enum Fixit {
     FixitAll = 0x1 // More granularity isn't needed I guess
 };
 
-static bool shouldIgnoreClass(const std::string &qualifiedClassName)
+static bool shouldIgnoreClass(CXXRecordDecl *record)
 {
+    if (!record)
+        return false;
+
     static const vector<string> ignoreList = {"QDebug", // Too many warnings
                                               "QGenericReturnArgument",
                                               "QColor", // TODO: Remove in Qt6
@@ -55,7 +58,7 @@ static bool shouldIgnoreClass(const std::string &qualifiedClassName)
                                               "QVariantComparisonHelper",
                                               "QHashDummyValue", "QCharRef", "QString::Null"
                                              };
-    return std::find(ignoreList.cbegin(), ignoreList.cend(), qualifiedClassName) != ignoreList.cend();
+    return std::find(ignoreList.cbegin(), ignoreList.cend(), record->getQualifiedNameAsString()) != ignoreList.cend();
 }
 
 static bool shouldIgnoreFunction(const std::string &methodName)
@@ -108,11 +111,10 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
             continue;
 
-        CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-        if (recordDecl && shouldIgnoreClass(recordDecl->getQualifiedNameAsString()))
+        if (shouldIgnoreClass(paramType->getAsCXXRecordDecl()))
             continue;
-        Utils::QualTypeClassification classif;
 
+        Utils::QualTypeClassification classif;
         bool success = Utils::classifyQualType(param, classif, body);
         if (!success)
             continue;
