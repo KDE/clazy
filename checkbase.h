@@ -29,6 +29,7 @@
 #define CHECK_BASE_H
 
 #include <clang/Frontend/CompilerInstance.h>
+#include <llvm/Config/llvm-config.h>
 #include <string>
 
 namespace clang {

@@ -22,6 +22,8 @@
   without including the source code for Qt in the source distribution.
 */
 
+#include <llvm/Config/llvm-config.h>
+
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
 
 #include "missing-qobject.h"

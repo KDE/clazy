@@ -40,6 +40,7 @@
 #include "clang/Lex/Lexer.h"
 #include "clang/Rewrite/Frontend/FixItRewriter.h"
 #include "clang/AST/ParentMap.h"
+#include <llvm/Config/llvm-config.h>
 
 #include <stdio.h>
 #include <sstream>
