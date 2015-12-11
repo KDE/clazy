@@ -63,8 +63,8 @@ Tips for fixits
 
 --------------------------------------------------------------------------------
 Running tests
-    ./run-tests.py # This runs all tests
-    ./run-tests.py my-check # This runs one tests
-    ./run-tests.py my-check --verbose # Prints the compiler invocation command
-    ./run-tests.py my-check --dump-ast # dumps the AST into a file with .ast extension
+    ./run_tests.py # This runs all tests
+    ./run_tests.py my-check # This runs one tests
+    ./run_tests.py my-check --verbose # Prints the compiler invocation command
+    ./run_tests.py my-check --dump-ast # dumps the AST into a file with .ast extension
 --------------------------------------------------------------------------------
