@@ -5,7 +5,8 @@
         },
         {
             "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true
+            "isFixedFile" : true,
+            "minimum_qt_version" : 550
         }
     ]
 }
