@@ -30,6 +30,13 @@
 
 // Contains utility classes to retrieve parents and childs from AST Nodes
 
+#include <clang/AST/Stmt.h>
+#include <clang/AST/ExprCXX.h>
+
+namespace clang {
+class ParentMap;
+}
+
 namespace HierarchyUtils {
 
 template <typename T>
@@ -69,6 +76,86 @@ T* getFirstChildOfType2(clang::Stmt *stm)
     }
 
     return nullptr;
+}
+
+// If depth = 0, return s
+// If depth = 1, returns parent of s
+// etc.
+clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, unsigned int depth = 1);
+
+// Returns the first parent of type T, with max depth depth
+template <typename T>
+T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int depth = -1)
+{
+    if (!s)
+        return nullptr;
+
+    if (auto t = clang::dyn_cast<T>(s))
+        return t;
+
+    if (depth == 0)
+        return nullptr;
+
+    --depth;
+    return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
+}
+
+clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
+
+std::vector<clang::Stmt*> childs(clang::Stmt *parent);
+
+/// Goes into a statement and returns it's childs of type T
+/// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
+
+template <typename T>
+void getChilds(clang::Stmt *stm, std::vector<T*> &result_list)
+{
+    if (!stm)
+        return;
+
+    auto expr = clang::dyn_cast<T>(stm);
+    if (expr) {
+        result_list.push_back(expr);
+        return;
+    }
+
+    for (auto it = stm->child_begin(), e = stm->child_end(); it != e; ++it) {
+        if (*it == nullptr) // Can happen
+            continue;
+
+        auto expr = clang::dyn_cast<T>(*it);
+        if (expr) {
+            result_list.push_back(expr);
+            continue;
+        }
+
+        auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(*it);
+        if (cleanups) {
+            getChilds<T>(cleanups, result_list);
+        }
+    }
+}
+
+template <typename T>
+void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
+{
+    if (!stmt)
+        return;
+
+    auto cexpr = llvm::dyn_cast<T>(stmt);
+    if (cexpr)
+        result_list.push_back(cexpr);
+
+    auto it = stmt->child_begin();
+    auto end = stmt->child_end();
+
+    if (depth > 0 || depth == -1) {
+        if (depth > 0)
+            --depth;
+        for (; it != end; ++it) {
+            getChilds2(*it, result_list, depth);
+        }
+    }
 }
 
 }

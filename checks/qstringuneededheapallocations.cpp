@@ -143,7 +143,7 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
         return nullptr;
 
     vector<StringLiteral*> literals;
-    Utils::getChilds2(call, literals, 2);
+    HierarchyUtils::getChilds2(call, literals, 2);
     return literals.empty() ? nullptr : literals[0];
 }
 
@@ -164,7 +164,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     }
 
     if (isOptionSet("msvc-compat")) {
-        InitListExpr *initializerList = Utils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
+        InitListExpr *initializerList = HierarchyUtils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
         if (initializerList != nullptr)
             return; // Nothing to do here
     }
@@ -194,7 +194,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
             if (!qlatin1Ctor->getLocStart().isMacroID()) {
                 if (ternary == nullptr) {
                     fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String", QLatin1StringAllocations);
-                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(Utils::parent(m_parentMap, ctorExpr));
+                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
                         auto removalFixits = fixItRemoveToken(ctorExpr, true);
@@ -218,9 +218,9 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
             if (pointerDecay && pointerDecay->child_begin() != pointerDecay->child_end()) {
                 StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt && isFixitEnabled(CharPtrAllocations)) {
-                    Stmt *grandParent = Utils::parent(m_parentMap, lt, 2);
-                    Stmt *grandGrandParent = Utils::parent(m_parentMap, lt, 3);
-                    Stmt *grandGrandGrandParent = Utils::parent(m_parentMap, lt, 4);
+                    Stmt *grandParent = HierarchyUtils::parent(m_parentMap, lt, 2);
+                    Stmt *grandGrandParent = HierarchyUtils::parent(m_parentMap, lt, 3);
+                    Stmt *grandGrandGrandParent = HierarchyUtils::parent(m_parentMap, lt, 4);
                     if (grandParent == ctorExpr && grandGrandParent && isa<CXXBindTemporaryExpr>(grandGrandParent) && grandGrandGrandParent && isa<CXXFunctionalCastExpr>(grandGrandGrandParent)) {
                         // This is the case of QString("foo"), replace QString
                         //llvm::errs() << "case1\n";
@@ -234,7 +234,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                     } else {
                         //llvm::errs() << "case2\n";
 
-                        auto parentMemberCallExpr = Utils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
+                        auto parentMemberCallExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
 
                         string replacement = "QStringLiteral";
                         if (parentMemberCallExpr) {
@@ -291,7 +291,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
 vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
 {
     vector<CXXConstructExpr*> constructExprs;
-    Utils::getChilds2<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
+    HierarchyUtils::getChilds2<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
 
     vector<FixItHint> fixits;
     fixits.reserve(2);
@@ -349,7 +349,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
     }
 
     if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) // skip this cruft
-        return isQStringLiteralCandidate(Utils::parent(map, s), map, currentCall + 1);
+        return isQStringLiteralCandidate(HierarchyUtils::parent(map, s), map, currentCall + 1);
 
     return false;
 }
@@ -448,7 +448,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
         return;
 
     std::vector<StringLiteral*> stringLiterals;
-    Utils::getChilds2<StringLiteral>(operatorCall, stringLiterals);
+    HierarchyUtils::getChilds2<StringLiteral>(operatorCall, stringLiterals);
 
     //  We're only after string literals, str.contains(some_method_returning_const_char_is_fine())
     if (stringLiterals.empty())
@@ -468,7 +468,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     vector<FixItHint> fixits;
 
     vector<StringLiteral*> literals;
-    Utils::getChilds2<StringLiteral>(stm, literals, 2);
+    HierarchyUtils::getChilds2<StringLiteral>(stm, literals, 2);
 
     if (isFixitEnabled(CharPtrAllocations)) {
         if (literals.empty()) {
@@ -504,7 +504,7 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
 
     vector<ConditionalOperator*> ternaries;
-    Utils::getChilds2(callExpr, ternaries, 2);
+    HierarchyUtils::getChilds2(callExpr, ternaries, 2);
     if (!ternaries.empty()) {
         auto ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {

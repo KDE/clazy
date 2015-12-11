@@ -28,6 +28,7 @@
 #include "Utils.h"
 #include "MethodSignatureUtils.h"
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
@@ -327,8 +328,8 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
     // Maybe there's an implicit cast in between..
     vector<MemberExpr*> memberExprs;
     vector<DeclRefExpr*> declRefs;
-    getChilds<MemberExpr>(implicitObject, memberExprs);
-    getChilds<DeclRefExpr>(implicitObject, declRefs);
+    HierarchyUtils::getChilds<MemberExpr>(implicitObject, memberExprs);
+    HierarchyUtils::getChilds<DeclRefExpr>(implicitObject, declRefs);
 
     if (!memberExprs.empty()) {
         return memberExprs.at(0)->getMemberDecl();
@@ -437,7 +438,7 @@ bool Utils::descendsFrom(clang::CXXRecordDecl *derived, const std::string &paren
 bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 {
     std::vector<CXXMemberCallExpr*> memberCalls;
-    Utils::getChilds2<CXXMemberCallExpr>(body, memberCalls);
+    HierarchyUtils::getChilds2<CXXMemberCallExpr>(body, memberCalls);
 
     for (auto it = memberCalls.cbegin(), end = memberCalls.cend(); it != end; ++it) {
         CXXMemberCallExpr *memberCall = *it;
@@ -455,7 +456,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 
     // Check for operator calls:
     std::vector<CXXOperatorCallExpr*> operatorCalls;
-    Utils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
+    HierarchyUtils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
         CXXOperatorCallExpr *operatorExpr = *it;
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
@@ -521,7 +522,7 @@ static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
 bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
 {
     std::vector<CallExpr*> callExprs;
-    Utils::getChilds2<CallExpr>(body, callExprs);
+    HierarchyUtils::getChilds2<CallExpr>(body, callExprs);
     for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
         CallExpr *callexpr = *it;
         FunctionDecl *fDecl = callexpr->getDirectCallee();
@@ -533,7 +534,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
     }
 
     std::vector<CXXConstructExpr*> constructExprs;
-    Utils::getChilds2<CXXConstructExpr>(body, constructExprs);
+    HierarchyUtils::getChilds2<CXXConstructExpr>(body, constructExprs);
     for (auto it = constructExprs.cbegin(), end = constructExprs.cend(); it != end; ++it) {
         CXXConstructExpr *constructExpr = *it;
         FunctionDecl *fDecl = constructExpr->getConstructor();
@@ -550,7 +551,7 @@ bool Utils::containsAssignment(Stmt *body, const VarDecl *varDecl)
 {
     // Check for operator calls:
     std::vector<CXXOperatorCallExpr*> operatorCalls;
-    Utils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
+    HierarchyUtils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
         CXXOperatorCallExpr *operatorExpr = *it;
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
@@ -593,7 +594,7 @@ std::vector<std::string> Utils::splitString(const string &str, char separator)
 bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 {
     std::vector<clang::CXXDefaultArgExpr*> exprs;
-    getChilds2<clang::CXXDefaultArgExpr>(expr, exprs, 1);
+    HierarchyUtils::getChilds2<clang::CXXDefaultArgExpr>(expr, exprs, 1);
     return !exprs.empty();
 }
 
@@ -604,7 +605,7 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
         return false;
 
     std::vector<StringLiteral*> stringLiterals;
-    Utils::getChilds2<StringLiteral>(stm, stringLiterals, depth);
+    HierarchyUtils::getChilds2<StringLiteral>(stm, stringLiterals, depth);
 
     if (allowEmpty)
         return !stringLiterals.empty();
@@ -615,15 +616,6 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
     }
 
     return false;
-}
-
-Stmt *Utils::parent(ParentMap *map, Stmt *s, unsigned int depth)
-{
-    if (s == nullptr)
-        return nullptr;
-
-    return depth == 0 ? s
-                      : parent(map, map->getParent(s), depth - 1);
 }
 
 bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
@@ -702,7 +694,7 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
         }
     }
 
-    return isInsideOperatorCall(map, Utils::parent(map, s), anyOf);
+    return isInsideOperatorCall(map, HierarchyUtils::parent(map, s), anyOf);
 }
 
 
@@ -717,28 +709,7 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
             return true;
     }
 
-    return insideCTORCall(map, Utils::parent(map, s), anyOf);
-}
-
-vector<Stmt*> Utils::childs(clang::Stmt *parent)
-{
-    vector<Stmt*> children;
-
-    if (!parent)
-        return children;
-
-    for (auto it = parent->child_begin(), end = parent->child_end(); it != end; ++it)
-        children.push_back(*it);
-
-    return children;
-}
-
-clang::Stmt * Utils::getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
-{
-    if (depth == 0 || s == nullptr)
-        return s;
-
-    return s->child_begin() == s->child_end() ? nullptr : getFirstChildAtDepth(*s->child_begin(), --depth);
+    return insideCTORCall(map, HierarchyUtils::parent(map, s), anyOf);
 }
 
 bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2)
@@ -1055,7 +1026,7 @@ bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
 
     Stmt *p = s;
     do {
-        p = Utils::parent(map, p);
+        p = HierarchyUtils::parent(map, p);
         CXXOperatorCallExpr *op = p ? dyn_cast<CXXOperatorCallExpr>(p) : nullptr;
         if (op && op->getDirectCallee() && op->getDirectCallee()->getNameAsString() == "operator*") {
             return op;

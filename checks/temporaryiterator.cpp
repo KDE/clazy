@@ -123,17 +123,17 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         if (impl) {
             if (impl->getCastKind() == CK_LValueToRValue)
                 return;
-            auto childs = Utils::childs(impl);
+            auto childs = HierarchyUtils::childs(impl);
             if (!childs.empty() && isa<ImplicitCastExpr>(childs[0]) && dyn_cast<ImplicitCastExpr>(childs[0])->getCastKind() == CK_LValueToRValue)
                 return;
         }
     }
 
-    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(Utils::getFirstChildAtDepth(expr, 2));
+    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(HierarchyUtils::getFirstChildAtDepth(expr, 2));
     if (possibleCtorCall)
         return;
 
-    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(Utils::getFirstChildAtDepth(expr, 1));
+    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(HierarchyUtils::getFirstChildAtDepth(expr, 1));
     if (possibleThisCall)
         return;
 

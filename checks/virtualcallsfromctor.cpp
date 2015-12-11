@@ -27,6 +27,7 @@
 
 #include "virtualcallsfromctor.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
@@ -83,7 +84,7 @@ SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *c
     processedStmts.push_back(stmt);
 
     std::vector<CXXMemberCallExpr*> memberCalls;
-    Utils::getChilds2<CXXMemberCallExpr>(stmt, memberCalls);
+    HierarchyUtils::getChilds2<CXXMemberCallExpr>(stmt, memberCalls);
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {
         CXXMethodDecl *memberDecl = callExpr->getMethodDecl();

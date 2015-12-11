@@ -29,6 +29,7 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -207,8 +208,8 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
-    Utils::getChilds<CXXMemberCallExpr>(body, callExprs);
-    Utils::getChilds<CXXOperatorCallExpr>(body, operatorCalls); // For operator<<
+    HierarchyUtils::getChilds<CXXMemberCallExpr>(body, callExprs);
+    HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls); // For operator<<
 
     for (CXXMemberCallExpr *callExpr : callExprs) {
         if (!isCandidateMethod(callExpr->getMethodDecl()))
@@ -273,7 +274,7 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
         return false;
 
     vector<CallExpr*> callExprs;
-    Utils::getChilds2<CallExpr>(expr, callExprs);
+    HierarchyUtils::getChilds2<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
         if (isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr)))
@@ -286,7 +287,7 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
     }
 
     vector<ArraySubscriptExpr*> subscriptExprs;
-    Utils::getChilds2<ArraySubscriptExpr>(expr, subscriptExprs);
+    HierarchyUtils::getChilds2<ArraySubscriptExpr>(expr, subscriptExprs);
     if (!subscriptExprs.empty())
         return true;
 
@@ -294,7 +295,7 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
     if (binary && binary->isAssignmentOp()) { // Filter things like for ( ...; ...; next = node->next)
 
         Expr *rhs = binary->getRHS();
-        if (isa<MemberExpr>(rhs) || (isa<ImplicitCastExpr>(rhs) && dyn_cast_or_null<MemberExpr>(Utils::getFirstChildAtDepth(rhs, 1))))
+        if (isa<MemberExpr>(rhs) || (isa<ImplicitCastExpr>(rhs) && dyn_cast_or_null<MemberExpr>(HierarchyUtils::getFirstChildAtDepth(rhs, 1))))
             return true;
     }
 
@@ -349,7 +350,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     Stmt *it = s;
     PresumedLoc lastForeachForStm;
-    while (Stmt *parent = Utils::parent(m_parentMap, it)) {
+    while (Stmt *parent = HierarchyUtils::parent(m_parentMap, it)) {
         if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
             return false;

@@ -27,6 +27,7 @@
 
 #include "foreach.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "checkmanager.h"
 
@@ -86,7 +87,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     vector<DeclRefExpr*> declRefExprs;
-    Utils::getChilds2<DeclRefExpr>(constructExpr, declRefExprs);
+    HierarchyUtils::getChilds2<DeclRefExpr>(constructExpr, declRefExprs);
     if (declRefExprs.empty())
         return;
 
@@ -136,13 +137,13 @@ void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
     vector<ForStmt*> forStatements;
-    Utils::getChilds2<ForStmt>(m_lastForStmt->getBody(), forStatements);
+    HierarchyUtils::getChilds2<ForStmt>(m_lastForStmt->getBody(), forStatements);
     if (forStatements.empty())
         return;
 
     // Get the variable declaration (lhs of foreach)
     vector<DeclStmt*> varDecls;
-    Utils::getChilds2<DeclStmt>(forStatements.at(0), varDecls);
+    HierarchyUtils::getChilds2<DeclStmt>(forStatements.at(0), varDecls);
     if (varDecls.empty())
         return;
 
@@ -194,7 +195,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
                         if (expr) {
                             DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(expr);
                             if (!refExpr) {
-                                auto s = Utils::getFirstChildAtDepth(expr, 1);
+                                auto s = HierarchyUtils::getFirstChildAtDepth(expr, 1);
                                 refExpr = dyn_cast<DeclRefExpr>(s);
                                 if (refExpr) {
                                     if (refExpr->getDecl() == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating

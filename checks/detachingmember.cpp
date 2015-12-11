@@ -28,6 +28,7 @@
 #include "checkmanager.h"
 #include "detachingmember.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 #include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -73,13 +74,13 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
 
     // Catch cases like m_foo[0] = .. , which is fine
 
-    auto parentUnaryOp = Utils::getFirstParentOfType<UnaryOperator>(m_parentMap, callExpr);
+    auto parentUnaryOp = HierarchyUtils::getFirstParentOfType<UnaryOperator>(m_parentMap, callExpr);
     if (parentUnaryOp) {
         // m_foo[0]++ is OK
         return;
     }
 
-    auto parentOp = Utils::getFirstParentOfType<CXXOperatorCallExpr>(m_parentMap, Utils::parent(m_parentMap, callExpr));
+    auto parentOp = HierarchyUtils::getFirstParentOfType<CXXOperatorCallExpr>(m_parentMap, HierarchyUtils::parent(m_parentMap, callExpr));
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
         if (parentFunc && parentFunc->getNameAsString() == "operator=") {
@@ -88,7 +89,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    auto parentBinaryOp = Utils::getFirstParentOfType<BinaryOperator>(m_parentMap, callExpr);
+    auto parentBinaryOp = HierarchyUtils::getFirstParentOfType<BinaryOperator>(m_parentMap, callExpr);
     if (parentBinaryOp && parentBinaryOp->isAssignmentOp()) {
         // m_foo[0] += .. is OK
         Expr *lhs = parentBinaryOp->getLHS();

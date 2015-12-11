@@ -30,6 +30,7 @@
 
 #include "checkmanager.h"
 #include "Utils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
@@ -156,7 +157,7 @@ inline void printParents(clang::ParentMap *map, clang::Stmt *s)
     int level = 0;
     llvm::errs() << (s ? s->getStmtClassName() : nullptr) << "\n";
 
-    while (clang::Stmt *parent = Utils::parent(map, s)) {
+    while (clang::Stmt *parent = HierarchyUtils::parent(map, s)) {
         ++level;
         llvm::errs() << std::string(level, ' ') << parent->getStmtClassName() << "\n";
         s = parent;

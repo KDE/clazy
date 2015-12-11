@@ -140,28 +140,6 @@ namespace Utils {
     std::vector<std::string> splitString(const char *str, char separator);
     std::vector<std::string> splitString(const std::string &str, char separator);
 
-    template <typename T>
-    void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
-    {
-        if (!stmt)
-            return;
-
-        auto cexpr = llvm::dyn_cast<T>(stmt);
-        if (cexpr)
-            result_list.push_back(cexpr);
-
-        auto it = stmt->child_begin();
-        auto end = stmt->child_end();
-
-        if (depth > 0 || depth == -1) {
-            if (depth > 0)
-                --depth;
-            for (; it != end; ++it) {
-                getChilds2(*it, result_list, depth);
-            }
-        }
-    }
-
     // QString::fromLatin1("foo")    -> true
     // QString::fromLatin1("foo", 1) -> false
     bool callHasDefaultArguments(clang::CallExpr *expr);
@@ -170,67 +148,12 @@ namespace Utils {
     // if allowEmpty is false, "" will be ignored
     bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
-    // If depth = 0, return s
-    // If depth = 1, returns parent of s
-    // etc.
-    clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, unsigned int depth = 1);
-
-    // Returns the first parent of type T, with max depth depth
-    template <typename T>
-    T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int depth = -1)
-    {
-        if (!s)
-            return nullptr;
-
-        if (auto t = clang::dyn_cast<T>(s))
-            return t;
-
-        if (depth == 0)
-            return nullptr;
-
-        --depth;
-        return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
-    }
-
     bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
     bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
-
-    /// Goes into a statement and returns it's childs of type T
-    /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
-
-    template <typename T>
-    void getChilds(clang::Stmt *stm, std::vector<T*> &result_list)
-    {
-        if (!stm)
-            return;
-
-        auto expr = clang::dyn_cast<T>(stm);
-        if (expr) {
-            result_list.push_back(expr);
-            return;
-        }
-
-        for (auto it = stm->child_begin(), e = stm->child_end(); it != e; ++it) {
-            if (*it == nullptr) // Can happen
-                continue;
-
-            auto expr = clang::dyn_cast<T>(*it);
-            if (expr) {
-                result_list.push_back(expr);
-                continue;
-            }
-
-            auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(*it);
-            if (cleanups) {
-                getChilds<T>(cleanups, result_list);
-            }
-        }
-    }
 
     // returns true if the ternary operator has two string literal arguments, such as:
     // foo ? "bar" : "baz"
     bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
-
 
     bool isAssignOperator(clang::CXXOperatorCallExpr *op, const std::string &className, const std::string &argumentType);
 
@@ -238,9 +161,6 @@ namespace Utils {
 
     clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
 
-    std::vector<clang::Stmt*> childs(clang::Stmt *parent);
-
-    clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
 
     bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 

@@ -104,6 +104,7 @@ set(SRC_FILES
     checks/writingtotemporary.cpp
     checks/virtualcallsfromctor.cpp
     FixItUtils.cpp
+    HierarchyUtils.cpp
     Lazy.cpp
     QtUtils.cpp
     Utils.cpp)
