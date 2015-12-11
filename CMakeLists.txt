@@ -30,6 +30,10 @@ else()
     set(HAS_STD_REGEX FALSE)
 endif()
 
+# Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
+STRING(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
+LIST(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
+
 macro(add_clang_plugin name)
     set (srcs ${ARGN})
 
@@ -48,7 +52,7 @@ macro(add_clang_plugin name)
         target_link_libraries( ${name} ${clang_lib} )
     endforeach()
 
-    foreach (llvm_lib ${LLVM_LIBS})
+    foreach (llvm_lib ${LLVM_LIBS_LIST})
         target_link_libraries( ${name} ${llvm_lib} )
     endforeach()
 
