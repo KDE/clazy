@@ -64,11 +64,16 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
     return std::find(ignoreList.cbegin(), ignoreList.cend(), record->getQualifiedNameAsString()) != ignoreList.cend();
 }
 
-static bool shouldIgnoreFunction(const std::string &methodName)
+static bool shouldIgnoreFunction(clang::FunctionDecl *function)
 {
     // Too many warnings in operator<<
     static const vector<string> ignoreList = {"operator<<"};
-    return std::find(ignoreList.cbegin(), ignoreList.cend(), methodName) != ignoreList.cend();
+    static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply" // Fixed in Qt6
+                                                      };
+    if (std::find(ignoreList.cbegin(), ignoreList.cend(), function->getNameAsString()) != ignoreList.cend())
+        return true;
+
+    return std::find(qualifiedIgnoreList.cbegin(), qualifiedIgnoreList.cend(), function->getQualifiedNameAsString()) != qualifiedIgnoreList.cend();
 }
 
 FunctionArgsByRef::FunctionArgsByRef(const std::string &name)
@@ -100,7 +105,7 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
 
 void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
 {
-    if (!functionDecl || shouldIgnoreFunction(functionDecl->getNameAsString())
+    if (!functionDecl || shouldIgnoreFunction(functionDecl)
             || !functionDecl->isThisDeclarationADefinition()) return;
 
     Stmt *body = functionDecl->getBody();

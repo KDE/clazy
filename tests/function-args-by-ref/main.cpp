@@ -193,3 +193,8 @@ struct Derived : public Base
 void Derived::foo(const Trivial &)
 {
 }
+
+struct QDBusMessage
+{
+    void createErrorReply(QString) {}
+};
