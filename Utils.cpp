@@ -1165,3 +1165,10 @@ QualType Utils::unrefQualType(const QualType &qualType)
     const Type *t = qualType.getTypePtrOrNull();
     return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
 }
+
+bool Utils::isSharedPointer(CXXRecordDecl *record)
+{
+    static const vector<string> names = { "std::shared_ptr", "QSharedPointer", "boost::shared_ptr" };
+    return record ? find(names.cbegin(), names.cend(), record->getQualifiedNameAsString()) != names.cend()
+                  : false;
+}

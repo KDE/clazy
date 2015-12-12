@@ -259,6 +259,10 @@ namespace Utils {
      */
     clang::QualType unrefQualType(const clang::QualType &qt);
 
+    /**
+     * Returns true if record is a shared pointer (boost, Qt or stl only).
+     */
+    bool isSharedPointer(clang::CXXRecordDecl *record);
 }
 
 #endif
