@@ -32,7 +32,6 @@
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
-#include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
@@ -71,8 +70,8 @@ static bool methodIsOK(const string &name)
 
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
-    auto macro = Lexer::getImmediateMacroName(stm->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
-    if (macro != "Q_ASSERT")
+    const SourceLocation stmStart = stm->getLocStart();
+    if (!Utils::isInMacro(stmStart, "Q_ASSERT"))
         return;
 
     bool warn = false;
@@ -108,7 +107,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
         if (op->isAssignmentOp()) {
             if (DeclRefExpr *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
                 ValueDecl *valueDecl = declRef->getDecl();
-                if (valueDecl && m_ci.getSourceManager().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stm->getLocStart())) {
+                if (valueDecl && m_ci.getSourceManager().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stmStart)) {
                     // llvm::errs() << "reason3\n";
                     warn = true;
                 }
@@ -119,7 +118,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
             ValueDecl *valueDecl = declRef->getDecl();
             auto type = op->getOpcode();
             if (type != UnaryOperatorKind::UO_Deref && type != UnaryOperatorKind::UO_AddrOf) {
-                if (valueDecl && m_ci.getSourceManager().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stm->getLocStart())) {
+                if (valueDecl && m_ci.getSourceManager().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stmStart)) {
                     // llvm::errs() << "reason5 " << op->getOpcodeStr() << "\n";
                     warn = true;
                 }
@@ -128,7 +127,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
     }
 
     if (warn) {
-        emitWarning(stm->getLocStart(), "Code inside Q_ASSERT has side-effects but won't be built in release mode");
+        emitWarning(stmStart, "Code inside Q_ASSERT has side-effects but won't be built in release mode");
     }
 }
 

@@ -67,14 +67,16 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
     if (!t || !t->getAsCXXRecordDecl() || t->getAsCXXRecordDecl()->isLiteral())
         return;
 
-    auto macroName = Lexer::getImmediateMacroName(decl->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
+    const SourceLocation declStart = decl->getLocStart();
+
+    auto macroName = Lexer::getImmediateMacroName(declStart, m_ci.getSourceManager(), m_ci.getLangOpts());
     if (stringStartsWith(macroName, "Q_CONSTRUCTOR_FUNCTION")) // Don't warn on these
         return;
 
     const string className = t->getAsCXXRecordDecl()->getName();
     if (!shouldIgnoreType(className)) {
         std::string error = "non-POD static (" + className + ")";
-        emitWarning(decl->getLocStart(), error.c_str());
+        emitWarning(declStart, error.c_str());
     }
 }
 

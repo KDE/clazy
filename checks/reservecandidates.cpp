@@ -37,7 +37,6 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/DeclTemplate.h>
-#include <clang/Lex/Lexer.h>
 
 #include <vector>
 
@@ -192,8 +191,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (!body)
         return;
 
-    auto macro = Lexer::getImmediateMacroName(stm->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
-    const bool isForeach = macro == "Q_FOREACH";
+    const bool isForeach = Utils::isInMacro(stm->getLocStart(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body)))
@@ -351,7 +349,8 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     Stmt *it = s;
     PresumedLoc lastForeachForStm;
     while (Stmt *parent = HierarchyUtils::parent(m_parentMap, it)) {
-        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(parent->getLocStart(), declLocation)) {
+        const SourceLocation parentStart = parent->getLocStart();
+        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
             return false;
         }
@@ -365,9 +364,8 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
         if (isLoop)
             loopCount++;
 
-        auto macro = Lexer::getImmediateMacroName(parent->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts());
-        if (macro == string("Q_FOREACH")) {
-            auto ploc = m_ci.getSourceManager().getPresumedLoc(parent->getLocStart());
+        if (Utils::isInMacro(parentStart, "Q_FOREACH")) {
+            auto ploc = m_ci.getSourceManager().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting
             } else {

@@ -28,7 +28,6 @@
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
@@ -48,8 +47,9 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (record != record->getDefinition())
         return;
 
-    if (record->getLocStart().isMacroID()) {
-        if (Lexer::getImmediateMacroName(record->getLocStart(), m_ci.getSourceManager(), m_ci.getLangOpts()) == "Q_GLOBAL_STATIC_INTERNAL") {
+    const SourceLocation recordStart = record->getLocStart();
+    if (recordStart.isMacroID()) {
+        if (Utils::isInMacro(recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
             return;
         }
     }
@@ -114,7 +114,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (Utils::hasMember(record, "QSharedDataPointer"))
         return; // These need boiler-plate copy ctor and dtor
 
-    const string filename = m_ci.getSourceManager().getFilename(record->getLocStart());
+    const string filename = m_ci.getSourceManager().getFilename(recordStart);
     if (stringEndsWith(className, "Private") && (stringEndsWith(filename, ".cpp") || stringEndsWith(filename, ".cxx") || stringEndsWith(filename, "_p.h")))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 
