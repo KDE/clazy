@@ -70,7 +70,14 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
     static const vector<string> ignoreList = {"operator<<"};
     static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
                                                        "QMenu::exec", // Fixed in Qt6
-                                                       "QTextFrame::iterator" // Fixed in Qt6
+                                                       "QTextFrame::iterator", // Fixed in Qt6
+                                                       "QGraphicsWidget::addActions", // Fixed in Qt6
+                                                       "QListWidget::mimeData", // Fixed in Qt6
+                                                       "QTableWidget::mimeData", // Fixed in Qt6
+                                                       "QTreeWidget::mimeData", // Fixed in Qt6
+                                                       "QWidget::addActions", // Fixed in Qt6
+                                                       "QSslCertificate::verify", // Fixed in Qt6
+                                                       "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
                                                       };
     if (std::find(ignoreList.cbegin(), ignoreList.cend(), function->getNameAsString()) != ignoreList.cend())
         return true;
