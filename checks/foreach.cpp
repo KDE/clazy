@@ -106,14 +106,15 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     if (!containerRecord)
         return;
 
-    const string containerClassName = Utils::rootBaseClass(containerRecord)->getNameAsString();
+    auto rootBaseClass = Utils::rootBaseClass(containerRecord);
+    const string containerClassName = rootBaseClass->getNameAsString();
     const bool isQtContainer = QtUtils::isQtIterableClass(containerClassName);
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
         return;
     } else {
         if (!isQtContainer) {
-            emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy");
+            emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy (" + rootBaseClass->getQualifiedNameAsString() + ")");
             return;
         }
     }
