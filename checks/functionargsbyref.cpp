@@ -46,6 +46,9 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
     if (!record)
         return false;
 
+    if (Utils::isSharedPointer(record))
+        return true;
+
     static const vector<string> ignoreList = {"QDebug", // Too many warnings
                                               "QGenericReturnArgument",
                                               "QColor", // TODO: Remove in Qt6

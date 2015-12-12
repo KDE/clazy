@@ -9,6 +9,9 @@
         },
         {
             "filename" : "lambdas.cpp"
+        },
+        {
+            "filename" : "sharedptrs.cpp"
         }
     ]
 }
