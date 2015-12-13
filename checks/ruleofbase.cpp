@@ -55,6 +55,16 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
                                                 "QModelIndex", // Qt4
                                                 "QPair", // Qt4
                                                 "QSet", // Fixed for Qt 5.7
+                                                "QSet::iterator",
+                                                "QSet::const_iterator",
+                                                "QLinkedList::iterator",
+                                                "QLinkedList::const_iterator",
+                                                "QJsonArray::const_iterator",
+                                                "QJsonArray::iterator",
+                                                "QTextFrame::iterator",
+                                                "QFuture::const_iterator",
+                                                "QFuture::iterator",
+                                                "QMatrix"
                                               };
     return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
 }

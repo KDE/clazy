@@ -1,7 +1,7 @@
 #include "main.h"
 #include <QtGui/QColor>
 #include <QtCore/QSharedDataPointer>
-
+#include <QtCore/QSet>
 struct Private
 {
     ~Private() {};
