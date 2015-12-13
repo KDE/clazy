@@ -70,7 +70,7 @@ bool isAllowedChainedMethod(const std::string &methodName)
                                            "QItemSelectionModel::selectedRows", "QTreeWidget::selectedItems",
                                            "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList",
                                            "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes",
-                                           "QMimeData::formats", "i18n"};
+                                           "QMimeData::formats", "i18n", "QAbstractTransition::targetStates"};
     return find(allowed.cbegin(), allowed.cend(), methodName) != allowed.cend();
 }
 
