@@ -1,6 +1,6 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
-
+#include <QtCore/QMap>
 
 
 
@@ -57,3 +57,23 @@ struct A
     mutable QString m_mutableString;
     const QList<int> m_constList;
 };
+
+class Static
+{
+public:
+    static Static *instance()
+    {
+        return new Static();
+    }
+
+    QMap<int,int> getMap() const { return {}; }
+    QMap<QString,QString> map;
+};
+
+void test(const QString &prefix, const QString &path)
+{
+    Static::instance()->getMap()[0] = 0;
+    Static::instance()->getMap()[0] += 0;
+    Static::instance()->map[prefix] = path;
+    Static::instance()->map[prefix] += path;
+}

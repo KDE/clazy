@@ -83,7 +83,8 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     auto parentOp = HierarchyUtils::getFirstParentOfType<CXXOperatorCallExpr>(m_parentMap, HierarchyUtils::parent(m_parentMap, callExpr));
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
-        if (parentFunc && parentFunc->getNameAsString() == "operator=") {
+        const string parentFuncName = parentFunc ? parentFunc->getNameAsString() : "";
+        if (stringStartsWith(parentFuncName, "operator")) {
             // m_foo[0] = ... is OK
             return;
         }
