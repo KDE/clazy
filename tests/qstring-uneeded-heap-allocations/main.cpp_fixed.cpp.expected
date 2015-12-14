@@ -1,11 +1,11 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QDebug>
 
 const char * some_char_pointer_indirection(const char *)
 {
     return nullptr;
 }
-
 
 const char * some_char_pointer()
 {
@@ -199,4 +199,9 @@ void testBlacklistedQRegExp()
 void charsetEdgeCase()
 {
     test4(QLatin1String("ááá"));
+}
+
+void testQDebug()
+{
+    qDebug() << "test"; // OK
 }
