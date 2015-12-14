@@ -77,3 +77,24 @@ void test(const QString &prefix, const QString &path)
     Static::instance()->map[prefix] = path;
     Static::instance()->map[prefix] += path;
 }
+
+// Bug 356699
+struct T {
+    void nonConstMethod() {}
+    void constMethod() const { }
+};
+
+struct S
+{
+    QList<T> m_listOfValues;
+    QList<T*> m_listOfPointers;
+};
+
+void test356699()
+{
+    S s;
+    // s.m_listOfValues[0].nonConstMethod(); // OK FIXME
+    s.m_listOfPointers[0]->nonConstMethod(); // Warning
+    s.m_listOfValues.at(0).constMethod(); // OK
+    s.m_listOfPointers.at(0)->nonConstMethod(); // OK
+}
