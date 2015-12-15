@@ -62,8 +62,18 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         if (!method || method->getNameAsString() != "operator[]")
             return;
 
-        memberDecl = Utils::valueDeclForOperatorCall(operatorExpr);
+        auto memberExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, operatorExpr);
+        CXXMethodDecl *parentMemberDecl = memberExpr ? memberExpr->getMethodDecl() : nullptr;
+        if (parentMemberDecl && !parentMemberDecl->isConst()) {
+            // Don't warn for s.m_listOfValues[0].nonConstMethod();
+            // However do warn for: s.m_listOfPointers[0]->nonConstMethod(); because it compiles with .at()
+            QualType qt = operatorExpr->getType();
+            const Type *t = qt.getTypePtrOrNull();
+            if (t && !t->isPointerType())
+                return;
+        }
 
+        memberDecl = Utils::valueDeclForOperatorCall(operatorExpr);
     } else {
         method = memberCall->getMethodDecl();
         memberDecl = Utils::valueDeclForMemberCall(memberCall);
