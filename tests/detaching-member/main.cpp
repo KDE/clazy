@@ -98,3 +98,9 @@ void test356699()
     s.m_listOfValues.at(0).constMethod(); // OK
     s.m_listOfPointers.at(0)->nonConstMethod(); // OK
 }
+
+void test356755()
+{
+    S s;
+    qSort(s.m_listOfPointers.begin(), s.m_listOfPointers.end());
+}

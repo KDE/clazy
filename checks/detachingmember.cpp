@@ -108,6 +108,33 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
             return;
     }
 
+
+    const bool returnsNonConstIterator = stringEndsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
+    if (returnsNonConstIterator) {
+        // If we're calling begin()/end() as arguments to a function taking non-const iterators it's fine
+        // Such as qSort(list.begin(), list.end());
+        auto parentCall = HierarchyUtils::getFirstParentOfType<CallExpr>(m_parentMap, HierarchyUtils::parent(m_parentMap, memberCall));
+        FunctionDecl *parentFunc = parentCall ? parentCall->getDirectCallee() : nullptr;
+        if (parentFunc && parentFunc->getNumParams() == parentCall->getNumArgs()) {
+            int i = 0;
+            for (auto it = parentCall->arg_begin(), end = parentCall->arg_end(); it != end; ++it) {
+                Expr *argExpr = *it;
+                if (CXXMemberCallExpr *expr2 = HierarchyUtils::getFirstChildOfType<CXXMemberCallExpr>(argExpr)) {
+                    if (expr2 == memberCall) {
+                        // Success, we found which arg
+                        ParmVarDecl *parm = parentFunc->getParamDecl(i);
+                        if (parm->getType().getAsString() == memberCall->getType().getAsString()) {
+                            return;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                ++i;
+            }
+        }
+    }
+
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
 
