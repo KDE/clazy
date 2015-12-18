@@ -64,7 +64,8 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
                                                 "QTextFrame::iterator",
                                                 "QFuture::const_iterator",
                                                 "QFuture::iterator",
-                                                "QMatrix"
+                                                "QMatrix",
+                                                "QBitRef", "QJsonValueRef"
                                               };
     return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
 }
