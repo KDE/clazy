@@ -59,7 +59,7 @@ class CheckBase
 public:
     typedef std::vector<std::unique_ptr<CheckBase> > List;
     explicit CheckBase(const std::string &name);
-    ~CheckBase();
+    virtual ~CheckBase();
 
     void VisitStatement(clang::Stmt *stm);
     void VisitDeclaration(clang::Decl *stm);

@@ -111,6 +111,8 @@ public:
             m_rewriter->WriteFixedFiles();
             delete m_rewriter;
         }
+
+        delete m_checkManager;
     }
 
     void setParentMap(ParentMap *map)
