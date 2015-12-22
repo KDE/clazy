@@ -52,8 +52,8 @@ enum Fixit {
     CharPtrAllocations = 0x4,
 };
 
-QStringUneededHeapAllocations::QStringUneededHeapAllocations(const std::string &name)
-    : CheckBase(name)
+QStringUneededHeapAllocations::QStringUneededHeapAllocations(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 
@@ -271,13 +271,14 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
     SourceLocation rangeStart = begin->getLocStart();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
 
+    const auto &sm = m_ci.getSourceManager();
     if (rangeEnd.isInvalid()) {
         // Fallback. Have seen a case in the wild where the above would fail, it's very rare
         rangeEnd = rangeStart.getLocWithOffset(replacee.size() - 2);
         if (rangeEnd.isInvalid()) {
-            StringUtils::printLocation(rangeStart);
-            StringUtils::printLocation(rangeEnd);
-            StringUtils::printLocation(Lexer::getLocForEndOfToken(rangeStart, 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
+            StringUtils::printLocation(sm, rangeStart);
+            StringUtils::printLocation(sm, rangeEnd);
+            StringUtils::printLocation(sm, Lexer::getLocForEndOfToken(rangeStart, 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
             queueManualFixitWarning(begin->getLocStart(), fixitType);
             return {};
         }
@@ -395,7 +396,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
 {
     vector<FixItHint> fixits;
 
-    SourceRange range = FixItUtils::rangeForLiteral(lt);
+    SourceRange range = FixItUtils::rangeForLiteral(m_ci, lt);
     if (range.isInvalid()) {
         if (lt) {
             queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Internal error: Can't calculate source location");

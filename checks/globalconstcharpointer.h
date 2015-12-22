@@ -39,7 +39,7 @@
 class GlobalConstCharPointer : public CheckBase
 {
 public:
-    GlobalConstCharPointer(const std::string &name);
+    GlobalConstCharPointer(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
     std::vector<std::string> filesToIgnore() const override;
 };

@@ -58,7 +58,8 @@ class CheckBase
 {
 public:
     typedef std::vector<std::unique_ptr<CheckBase> > List;
-    explicit CheckBase(const std::string &name);
+    explicit CheckBase(const std::string &name, const clang::CompilerInstance &ci);
+
     virtual ~CheckBase();
 
     void VisitStatement(clang::Stmt *stm);
@@ -72,6 +73,7 @@ public:
 
     void emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
+
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
@@ -85,7 +87,7 @@ protected:
     virtual std::vector<std::string> supportedOptions() const;
     bool isOptionSet(const std::string &optionName) const;
 
-    clang::CompilerInstance &m_ci;
+    const clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;
     clang::ParentMap *m_parentMap;
     clang::CXXMethodDecl *m_lastMethodDecl;

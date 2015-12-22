@@ -59,7 +59,7 @@ enum FromFunction {
 class QStringUneededHeapAllocations : public CheckBase
 {
 public:
-    QStringUneededHeapAllocations(const std::string &name);
+    QStringUneededHeapAllocations(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
 
 protected:

@@ -59,8 +59,8 @@ public:
     MissingQ_OBJECT *const q;
 };
 
-MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name)
-    : CheckBase(name)
+MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
     , m_preprocessorCallbacks(new MissingQ_OBJECTPreprocessorCallbacks(this))
 {
     Preprocessor &pi = m_ci.getPreprocessor();

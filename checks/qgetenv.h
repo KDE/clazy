@@ -42,7 +42,7 @@ class Stmt;
 class QGetEnv : public CheckBase
 {
 public:
-    explicit QGetEnv(const std::string &name);
+    explicit QGetEnv(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

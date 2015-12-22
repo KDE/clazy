@@ -40,7 +40,7 @@ class Decl;
 class RuleOfThree : public RuleOfBase
 {
 public:
-    explicit RuleOfThree(const std::string &name);
+    explicit RuleOfThree(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *d) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;

@@ -33,8 +33,8 @@
 using namespace clang;
 using namespace std;
 
-StringArg::StringArg(const std::string &name)
-    : CheckBase(name)
+StringArg::StringArg(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 
 }

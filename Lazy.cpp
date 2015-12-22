@@ -97,11 +97,9 @@ public:
         : m_ci(ci)
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
-        , m_checkManager(CheckManager::instance())
     {
-        m_checkManager->setCompilerInstance(&m_ci);
-        m_checkManager->createChecks(requestedChecks);
-        if (m_checkManager->fixitsEnabled())
+        m_createdChecks = CheckManager::instance()->createChecks(requestedChecks, ci);
+        if (CheckManager::instance()->fixitsEnabled())
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
     }
 
@@ -112,22 +110,20 @@ public:
             delete m_rewriter;
         }
 
-        delete m_checkManager;
+        delete m_parentMap;
     }
 
     void setParentMap(ParentMap *map)
     {
         delete m_parentMap;
         m_parentMap = map;
-        auto &createdChecks = m_checkManager->createdChecks();
-        for (auto &check : createdChecks)
+        for (auto &check : m_createdChecks)
             check->setParentMap(map);
     }
 
     bool VisitDecl(Decl *decl)
     {
-        auto &createdChecks = m_checkManager->createdChecks();
-        for (auto it = createdChecks.cbegin(), end = createdChecks.cend(); it != end; ++it) {
+        for (auto it = m_createdChecks.cbegin(), end = m_createdChecks.cend(); it != end; ++it) {
             (*it)->VisitDeclaration(decl);
         }
 
@@ -136,7 +132,6 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
-        static Stmt *lastStm = nullptr;
         // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
         if (lastStm && isa<CXXCatchStmt>(lastStm) && m_parentMap && !m_parentMap->hasParent(stm)) {
             m_parentMap->setParent(stm, lastStm);
@@ -152,8 +147,7 @@ public:
             setParentMap(new ParentMap(stm));
         }
 
-        auto &createdChecks = m_checkManager->createdChecks();
-        for (auto it = createdChecks.cbegin(), end = createdChecks.cend(); it != end; ++it) {
+        for (auto it = m_createdChecks.cbegin(), end = m_createdChecks.cend(); it != end; ++it) {
             (*it)->VisitStatement(stm);
         }
 
@@ -165,10 +159,11 @@ public:
         TraverseDecl(ctx.getTranslationUnitDecl());
     }
 
+    Stmt *lastStm = nullptr;
     CompilerInstance &m_ci;
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
-    CheckManager *m_checkManager;
+    CheckBase::List m_createdChecks;
 };
 
 //------------------------------------------------------------------------------

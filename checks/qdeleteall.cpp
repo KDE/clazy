@@ -34,8 +34,8 @@
 using namespace clang;
 using namespace std;
 
-QDeleteAll::QDeleteAll(const std::string &name)
-    : CheckBase(name)
+QDeleteAll::QDeleteAll(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

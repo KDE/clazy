@@ -32,13 +32,13 @@
 using namespace std;
 using namespace clang;
 
-VariantSanitizer::VariantSanitizer(const std::string &name)
-    : CheckBase(name)
+VariantSanitizer::VariantSanitizer(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 
 }
 
-static bool isMatchingClass(const std::string &name)
+static bool isMatchingClass(const std::string &name, const clang::CompilerInstance &ci)
 {
     static const vector<string> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
                                            "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
@@ -78,7 +78,7 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
         matches = true;
     } else {
         CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-        matches = t->isClassType() && recordDecl && isMatchingClass(recordDecl->getNameAsString());
+        matches = t->isClassType() && recordDecl && isMatchingClass(recordDecl->getNameAsString(), m_ci);
     }
 
     if (matches) {

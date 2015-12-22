@@ -40,7 +40,7 @@ class Stmt;
 class QSetIntersects : public CheckBase
 {
 public:
-    explicit QSetIntersects(const std::string &name);
+    explicit QSetIntersects(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

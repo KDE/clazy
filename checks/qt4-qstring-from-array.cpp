@@ -40,8 +40,8 @@ enum FixIt {
     FixItToFromLatin1
 };
 
-Qt4_QStringFromArray::Qt4_QStringFromArray(const std::string &name)
-    : CheckBase(name)
+Qt4_QStringFromArray::Qt4_QStringFromArray(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 
@@ -182,7 +182,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixOperatorCall(CXXOperatorCallExpr
     if (op->getNumArgs() == 2) {
         Expr *e = op->getArg(1);
         SourceLocation start = e->getLocStart();
-        SourceLocation end = Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(e), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
+        SourceLocation end = Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(m_ci.getSourceManager(), e), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
 
         SourceRange range = { start, end };
         if (range.isInvalid()) {
@@ -207,7 +207,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixMethodCallCall(clang::CXXMemberC
     if (memberExpr->getNumArgs() == 1) {
         Expr *e = *(memberExpr->arg_begin());
         SourceLocation start = e->getLocStart();
-        SourceLocation end = Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(e), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
+        SourceLocation end = Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(m_ci.getSourceManager(), e), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
 
         SourceRange range = { start, end };
         if (range.isInvalid()) {
@@ -229,16 +229,18 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixitReplaceWithFromLatin1(CXXConst
     const string replacement = "QString::fromLatin1";
     const string replacee = "QString";
     vector<FixItHint> fixits;
+
+    const auto &sm = m_ci.getSourceManager();
     SourceLocation rangeStart = ctorExpr->getLocStart();
-    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm, m_ci.getLangOpts());
 
     if (rangeEnd.isInvalid()) {
         // Fallback. Have seen a case in the wild where the above would fail, it's very rare
         rangeEnd = rangeStart.getLocWithOffset(replacee.size() - 2);
         if (rangeEnd.isInvalid()) {
-            StringUtils::printLocation(rangeStart);
-            StringUtils::printLocation(rangeEnd);
-            StringUtils::printLocation(Lexer::getLocForEndOfToken(rangeStart, 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
+            StringUtils::printLocation(sm, rangeStart);
+            StringUtils::printLocation(sm, rangeEnd);
+            StringUtils::printLocation(sm, Lexer::getLocForEndOfToken(rangeStart, 0, sm, m_ci.getLangOpts()));
             queueManualFixitWarning(ctorExpr->getLocStart(), FixItToFromLatin1);
             return {};
         }
@@ -255,7 +257,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixitInsertFromLatin1(CXXConstructE
 
     Expr *arg = *(ctorExpr->arg_begin());
     range.setBegin(arg->getLocStart());
-    range.setEnd(Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(ctorExpr), 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
+    range.setEnd(Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(m_ci.getSourceManager(), ctorExpr), 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
     if (range.isInvalid()) {
         emitWarning(ctorExpr->getLocStart(), "Internal error");
         return {};

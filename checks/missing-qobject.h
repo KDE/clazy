@@ -44,7 +44,7 @@ class MissingQ_OBJECTPreprocessorCallbacks;
 class MissingQ_OBJECT : public CheckBase
 {
 public:
-    explicit MissingQ_OBJECT(const std::string &name);
+    explicit MissingQ_OBJECT(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQ_OBJECT(clang::SourceLocation);

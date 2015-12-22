@@ -77,7 +77,7 @@ class PreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
 
-    PreprocessorCallbacks(OldStyleConnect *q, SourceManager *sm, const LangOptions &lo)
+    PreprocessorCallbacks(OldStyleConnect *q, const SourceManager &sm, const LangOptions &lo)
         : clang::PPCallbacks()
         , q(q)
         , m_sm(sm)
@@ -92,8 +92,8 @@ public:
         if (!ii || ii->getName() != "Q_PRIVATE_SLOT")
             return;
 
-        auto charRange = Lexer::getAsCharRange(range, *m_sm, m_langOpts);
-        const string text = Lexer::getSourceText(charRange, *m_sm, m_langOpts);
+        auto charRange = Lexer::getAsCharRange(range, m_sm, m_langOpts);
+        const string text = Lexer::getSourceText(charRange, m_sm, m_langOpts);
 
         static regex rx(R"(Q_PRIVATE_SLOT\s*\((.*)\s*,\s*.*\s+(.*)\(.*)");
         smatch match;
@@ -104,16 +104,16 @@ public:
     }
 
     OldStyleConnect *const q;
-    SourceManager *m_sm;
+    const SourceManager& m_sm;
     LangOptions m_langOpts;
 };
 #endif
 
-OldStyleConnect::OldStyleConnect(const std::string &name)
-    : CheckBase(name)
+OldStyleConnect::OldStyleConnect(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    m_preprocessorCallbacks = new PreprocessorCallbacks(this, &m_ci.getSourceManager(), m_ci.getLangOpts());
+    m_preprocessorCallbacks = new PreprocessorCallbacks(this, m_ci.getSourceManager(), m_ci.getLangOpts());
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 #endif
@@ -427,7 +427,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = Utils::getMostNeededQualifiedName(methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = Utils::getMostNeededQualifiedName(m_ci.getSourceManager(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
             auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(s);
@@ -447,7 +447,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = FixItUtils::locForNextToken((*it)->getLocStart(), tok::comma);
+                    auto endLoc = FixItUtils::locForNextToken(m_ci, (*it)->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

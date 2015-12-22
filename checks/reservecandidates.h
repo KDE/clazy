@@ -49,7 +49,7 @@ class CallExpr;
 class ReserveCandidates : public CheckBase
 {
 public:
-    ReserveCandidates(const std::string &name);
+    ReserveCandidates(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

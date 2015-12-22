@@ -61,8 +61,8 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
     return methodsMap;
 }
 
-Foreach::Foreach(const std::string &name)
-    : CheckBase(name)
+Foreach::Foreach(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 
@@ -154,7 +154,7 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     Utils::QualTypeClassification classif;
-    bool success = Utils::classifyQualType(varDecl, /*by-ref*/classif, forStatements.at(0));
+    bool success = Utils::classifyQualType(m_ci, varDecl, /*by-ref*/classif, forStatements.at(0));
     if (!success)
         return;
 

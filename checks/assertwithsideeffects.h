@@ -33,7 +33,7 @@
 class AssertWithSideEffects : public CheckBase
 {
 public:
-    AssertWithSideEffects(const std::string &name);
+    AssertWithSideEffects(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *) override;
 private:
     int m_aggressiveness;

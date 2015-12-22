@@ -36,8 +36,8 @@
 using namespace std;
 using namespace clang;
 
-VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name)
-    : CheckBase(name)
+VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 
 }

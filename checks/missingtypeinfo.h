@@ -41,7 +41,7 @@ class ClassTemplateSpecializationDecl;
 class MissingTypeinfo : public CheckBase
 {
 public:
-    MissingTypeinfo(const std::string &name);
+    MissingTypeinfo(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);

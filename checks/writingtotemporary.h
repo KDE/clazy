@@ -44,7 +44,7 @@ class CallExpr;
 class WritingToTemporary : public CheckBase
 {
 public:
-    explicit WritingToTemporary(const std::string &name);
+    explicit WritingToTemporary(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;

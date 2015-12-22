@@ -35,7 +35,7 @@
  */
 class QMapKeyChecker : public CheckBase {
 public:
-    QMapKeyChecker(const std::string &name);
+    QMapKeyChecker(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
 };
 

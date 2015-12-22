@@ -32,6 +32,7 @@
 
 namespace clang {
 class ImplicitCastExpr;
+class SourceLocation;
 class Stmt;
 class CallExpr;
 }
@@ -44,10 +45,12 @@ class CallExpr;
 class ImplicitCasts : public CheckBase
 {
 public:
-    ImplicitCasts(const std::string &name);
+    ImplicitCasts(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
+private:
+    bool isMacroToIgnore(clang::SourceLocation loc) const;
 };
 
 #endif

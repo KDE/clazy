@@ -31,6 +31,7 @@
 
 #include <stdlib.h>
 
+using namespace clang;
 using namespace std;
 
 static const char * s_fixitNamePrefix = "fix-";
@@ -38,8 +39,8 @@ static const char * s_levelPrefix = "level";
 
 CheckManager *CheckManager::instance()
 {
-    static CheckManager *s_instance = new CheckManager();
-    return s_instance;
+    static CheckManager s_instance;
+    return &s_instance;
 }
 
 CheckManager::CheckManager()
@@ -116,17 +117,11 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
     return 0;
 }
 
-void CheckManager::setCompilerInstance(clang::CompilerInstance *ci)
-{
-    m_ci = ci;
-    m_sm = &ci->getSourceManager();
-}
-
-unique_ptr<CheckBase> CheckManager::createCheck(const string &name)
+unique_ptr<CheckBase> CheckManager::createCheck(const string &name, const CompilerInstance &ci)
 {
     for (auto rc : m_registeredChecks) {
         if (rc.name == name) {
-            return unique_ptr<CheckBase>(rc.factory());
+            return unique_ptr<CheckBase>(rc.factory(ci));
         }
     }
 
@@ -214,17 +209,18 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
     return result;
 }
 
-void CheckManager::createChecks(RegisteredCheck::List requestedChecks)
+CheckBase::List CheckManager::createChecks(RegisteredCheck::List requestedChecks,
+                                           const CompilerInstance &ci)
 {
     const string fixitCheckName = checkNameForFixIt(m_requestedFixitName);
     RegisteredFixIt fixit = m_fixitByName[m_requestedFixitName];
 
-    m_createdChecks.clear();
-    m_createdChecks.reserve(requestedChecks.size() + 1);
+    CheckBase::List checks;
+    checks.reserve(requestedChecks.size() + 1);
     for (auto check : requestedChecks) {
-        m_createdChecks.push_back(createCheck(check.name));
+        checks.push_back(createCheck(check.name, ci));
         if (check.name == fixitCheckName) {
-            m_createdChecks.back()->setEnabledFixits(fixit.id);
+            checks.back()->setEnabledFixits(fixit.id);
         }
     }
 
@@ -232,16 +228,13 @@ void CheckManager::createChecks(RegisteredCheck::List requestedChecks)
         // We have one fixit enabled, we better have the check instance too.
         if (!fixitCheckName.empty()) {
             if (checkForName(requestedChecks, fixitCheckName) == requestedChecks.cend()) {
-                m_createdChecks.push_back(createCheck(fixitCheckName));
-                m_createdChecks.back()->setEnabledFixits(fixit.id);
+                checks.push_back(createCheck(fixitCheckName, ci));
+                checks.back()->setEnabledFixits(fixit.id);
             }
         }
     }
-}
 
-const CheckBase::List &CheckManager::createdChecks() const
-{
-    return m_createdChecks;
+    return checks;
 }
 
 bool CheckManager::fixitsEnabled() const

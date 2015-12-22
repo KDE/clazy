@@ -37,8 +37,8 @@
 using namespace std;
 using namespace clang;
 
-MissingTypeinfo::MissingTypeinfo(const std::string &name)
-    : CheckBase(name)
+MissingTypeinfo::MissingTypeinfo(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

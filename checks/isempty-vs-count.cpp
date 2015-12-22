@@ -35,8 +35,8 @@ using namespace clang;
 using namespace std;
 
 
-IsEmptyVSCount::IsEmptyVSCount(const std::string &name)
-    : CheckBase(name)
+IsEmptyVSCount::IsEmptyVSCount(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

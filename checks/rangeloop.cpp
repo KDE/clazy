@@ -35,8 +35,8 @@
 using namespace clang;
 using namespace std;
 
-RangeLoop::RangeLoop(const std::string &name)
-    : CheckBase(name)
+RangeLoop::RangeLoop(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

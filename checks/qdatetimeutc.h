@@ -42,7 +42,7 @@ class Stmt;
 class QDateTimeUtc : public CheckBase
 {
 public:
-    QDateTimeUtc(const std::string &name);
+    QDateTimeUtc(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

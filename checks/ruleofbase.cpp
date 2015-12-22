@@ -28,8 +28,8 @@
 using namespace clang;
 using namespace std;
 
-RuleOfBase::RuleOfBase(const std::string &name)
-    : CheckBase(name)
+RuleOfBase::RuleOfBase(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

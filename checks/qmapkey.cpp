@@ -36,8 +36,8 @@
 using namespace clang;
 using namespace std;
 
-QMapKeyChecker::QMapKeyChecker(const std::string &name)
-    : CheckBase(name)
+QMapKeyChecker::QMapKeyChecker(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

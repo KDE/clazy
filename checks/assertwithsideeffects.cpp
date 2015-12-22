@@ -43,8 +43,8 @@ enum Aggressiveness
     AlsoCheckFunctionCallsAggressiveness = 1 // too many false positives
 };
 
-AssertWithSideEffects::AssertWithSideEffects(const std::string &name)
-    : CheckBase(name)
+AssertWithSideEffects::AssertWithSideEffects(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
     , m_aggressiveness(NormalAggressiveness)
 {
 }
@@ -71,7 +71,7 @@ static bool methodIsOK(const string &name)
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = stm->getLocStart();
-    if (!Utils::isInMacro(stmStart, "Q_ASSERT"))
+    if (!Utils::isInMacro(m_ci, stmStart, "Q_ASSERT"))
         return;
 
     bool warn = false;

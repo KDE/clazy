@@ -85,8 +85,8 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
     return std::find(qualifiedIgnoreList.cbegin(), qualifiedIgnoreList.cend(), function->getQualifiedNameAsString()) != qualifiedIgnoreList.cend();
 }
 
-FunctionArgsByRef::FunctionArgsByRef(const std::string &name)
-    : CheckBase(name)
+FunctionArgsByRef::FunctionArgsByRef(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 
@@ -132,7 +132,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
             continue;
 
         Utils::QualTypeClassification classif;
-        bool success = Utils::classifyQualType(param, classif, body);
+        bool success = Utils::classifyQualType(m_ci, param, classif, body);
         if (!success)
             continue;
 

@@ -373,7 +373,7 @@ bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
     return context != nullptr && isa<FunctionDecl>(context);
 }
 
-bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
+bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
 {
     if (stmt == nullptr)
         return false;
@@ -826,7 +826,7 @@ static string nameForContext(DeclContext *context)
     return {};
 }
 
-string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *currentScope, SourceLocation usageLoc, bool honourUsingDirectives)
+string Utils::getMostNeededQualifiedName(const SourceManager &sourceManager, CXXMethodDecl *method, DeclContext *currentScope, SourceLocation usageLoc, bool honourUsingDirectives)
 {
     if (!currentScope)
         return method->getQualifiedNameAsString();
@@ -851,7 +851,7 @@ string Utils::getMostNeededQualifiedName(CXXMethodDecl *method, DeclContext *cur
     for (UsingDirectiveDecl *u : usings) {
         NamespaceDecl *ns = u->getNominatedNamespace();
         if (ns) {
-            if (CheckManager::instance()->m_sm->isBeforeInSLocAddrSpace(usageLoc, u->getLocStart()))
+            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, u->getLocStart()))
                 continue;
 
             visibleContexts.push_back(ns->getOriginalNamespace());
@@ -1121,7 +1121,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
     return false;
 }
 
-bool Utils::classifyQualType(const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
+bool Utils::classifyQualType(const CompilerInstance &ci, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     if (!varDecl)
         return false;
@@ -1131,7 +1131,7 @@ bool Utils::classifyQualType(const VarDecl *varDecl, QualTypeClassification &cla
     if (!paramType || paramType->isIncompleteType())
         return false;
 
-    classif.size_of_T = CheckManager::instance()->m_ci->getASTContext().getTypeSize(qualType) / 8;
+    classif.size_of_T = ci.getASTContext().getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
@@ -1173,10 +1173,10 @@ bool Utils::isSharedPointer(CXXRecordDecl *record)
                   : false;
 }
 
-bool Utils::isInMacro(SourceLocation loc, const string &macroName)
+bool Utils::isInMacro(const CompilerInstance &ci, SourceLocation loc, const string &macroName)
 {
     if (loc.isValid() && loc.isMacroID()) {
-        auto macro = Lexer::getImmediateMacroName(loc, CheckManager::instance()->m_ci->getSourceManager(), CheckManager::instance()->m_ci->getLangOpts());
+        auto macro = Lexer::getImmediateMacroName(loc, ci.getSourceManager(), ci.getLangOpts());
         return macro == macroName;
     }
 

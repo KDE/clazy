@@ -46,7 +46,7 @@ class CXXMemberCallExpr;
 class Qt4_QStringFromArray : public CheckBase
 {
 public:
-    explicit Qt4_QStringFromArray(const std::string &name);
+    explicit Qt4_QStringFromArray(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     std::vector<clang::FixItHint> fixCtorCall(clang::CXXConstructExpr *ctorExpr);

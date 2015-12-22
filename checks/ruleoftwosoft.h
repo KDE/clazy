@@ -40,7 +40,7 @@ class Stmt;
 class RuleOfTwoSoft : public RuleOfBase
 {
 public:
-    explicit RuleOfTwoSoft(const std::string &name);
+    explicit RuleOfTwoSoft(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *s) override;
 };
 

@@ -41,8 +41,8 @@ enum Fixit {
     FixitAll = 0x1 // More granularity isn't needed I guess
 };
 
-QGetEnv::QGetEnv(const std::string &name)
-    : CheckBase(name)
+QGetEnv::QGetEnv(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 
 }
@@ -95,7 +95,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (!errorMsg.empty()) {
         std::vector<FixItHint> fixits;
         if (isFixitEnabled(FixitAll)) {
-            const bool success = FixItUtils::transformTwoCallsIntoOne(qgetEnvCall, memberCall, replacement, fixits);
+            const bool success = FixItUtils::transformTwoCallsIntoOne(m_ci, qgetEnvCall, memberCall, replacement, fixits);
             if (!success) {
                 queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
             }

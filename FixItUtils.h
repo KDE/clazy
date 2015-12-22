@@ -32,7 +32,9 @@
 #include <vector>
 
 namespace clang {
+class CompilerInstance;
 class FixItHint;
+class SourceManager;
 class SourceRange;
 class SourceLocation;
 class StringLiteral;
@@ -61,19 +63,19 @@ void insertParentMethodCall(const std::string &method, const clang::SourceRange 
  * Transforms foo into method("literal"), by inserting "method(" at the beginning, and ')' at the end
  * Takes into account multi-token literals such as "foo""bar"
  */
-bool insertParentMethodCallAroundStringLiteral(const std::string &method, clang::StringLiteral *lt, std::vector<clang::FixItHint> &fixits);
+bool insertParentMethodCallAroundStringLiteral(const clang::CompilerInstance& ci, const std::string &method, clang::StringLiteral *lt, std::vector<clang::FixItHint> &fixits);
 
 /**
  * Returns the range this literal spans. Takes into account multi token literals, such as "foo""bar"
  */
-clang::SourceRange rangeForLiteral(clang::StringLiteral *);
+clang::SourceRange rangeForLiteral(const clang::CompilerInstance& ci, clang::StringLiteral *);
 
 /**
  * Goes through all children of stmt and finds the biggests source location.
  */
-clang::SourceLocation biggestSourceLocationInStmt(clang::Stmt *stmt);
+clang::SourceLocation biggestSourceLocationInStmt(const clang::SourceManager &sm, clang::Stmt *stmt);
 
-clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::TokenKind kind);
+clang::SourceLocation locForNextToken(const clang::CompilerInstance &ci, clang::SourceLocation start, clang::tok::TokenKind kind);
 
 /**
  * Returns the end location of the token that starts at start.
@@ -85,12 +87,12 @@ clang::SourceLocation locForNextToken(clang::SourceLocation start, clang::tok::T
  *             ^  // expr->getLocEnd()
  *      ^         // FixItUtils::locForEndOfToken(expr->getLocStart())
  */
-clang::SourceLocation locForEndOfToken(clang::SourceLocation start, int offset = 0);
+clang::SourceLocation locForEndOfToken(const clang::CompilerInstance &ci, clang::SourceLocation start, int offset = 0);
 
 /**
  * Transforms a call such as: foo("hello").bar() into baz("hello")
  */
-bool transformTwoCallsIntoOne(clang::CallExpr *foo, clang::CXXMemberCallExpr *bar,
+bool transformTwoCallsIntoOne(const clang::CompilerInstance &ci, clang::CallExpr *foo, clang::CXXMemberCallExpr *bar,
                               const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
 
@@ -98,7 +100,8 @@ bool transformTwoCallsIntoOne(clang::CallExpr *foo, clang::CXXMemberCallExpr *ba
  * Transforms a call such as: foo("hello").bar() into baz()
  * This version basically replaces everything from start to end with baz.
  */
-bool transformTwoCallsIntoOneV2(clang::CXXMemberCallExpr *bar, const std::string &baz, std::vector<clang::FixItHint> &fixits);
+bool transformTwoCallsIntoOneV2(const clang::CompilerInstance &ci, clang::CXXMemberCallExpr *bar,
+                                const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
 }
 

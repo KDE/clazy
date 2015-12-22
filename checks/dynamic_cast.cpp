@@ -34,8 +34,8 @@
 
 using namespace clang;
 
-BogusDynamicCast::BogusDynamicCast(const std::string &name)
-    : CheckBase(name)
+BogusDynamicCast::BogusDynamicCast(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

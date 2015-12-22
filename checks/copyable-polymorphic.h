@@ -39,7 +39,7 @@ class Stmt;
 class CopyablePolymorphic : public CheckBase
 {
 public:
-    explicit CopyablePolymorphic(const std::string &name);
+    explicit CopyablePolymorphic(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *) override;
 };
 

@@ -39,8 +39,8 @@
 using namespace clang;
 using namespace std;
 
-TemporaryIterator::TemporaryIterator(const std::string &name)
-    : CheckBase(name)
+TemporaryIterator::TemporaryIterator(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
     m_methodsByType["vector"] = {"begin", "end", "cbegin", "cend" }; // TODO: More stl support
     m_methodsByType["QList"] = { "begin", "end", "constBegin", "constEnd", "cbegin", "cend" };

@@ -38,8 +38,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingMember::DetachingMember(const std::string &name)
-    : DetachingBase(name)
+DetachingMember::DetachingMember(const std::string &name, const clang::CompilerInstance &ci)
+    : DetachingBase(name, ci)
 {
 }
 

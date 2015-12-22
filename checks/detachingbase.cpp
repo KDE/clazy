@@ -37,8 +37,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingBase::DetachingBase(const std::string &name)
-    : CheckBase(name)
+DetachingBase::DetachingBase(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
     m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
     m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };

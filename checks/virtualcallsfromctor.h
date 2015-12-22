@@ -49,7 +49,7 @@ class SourceLocation;
 class VirtualCallsFromCTOR : public CheckBase
 {
 public:
-    VirtualCallsFromCTOR(const std::string &name);
+    VirtualCallsFromCTOR(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
     void VisitDecl(clang::Decl *decl) override;
 

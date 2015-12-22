@@ -37,8 +37,8 @@ using namespace clang;
 using namespace std;
 
 
-WritingToTemporary::WritingToTemporary(const std::string &name)
-    : CheckBase(name)
+WritingToTemporary::WritingToTemporary(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
     , m_widenCriteria(isOptionSet("widen-criteria"))
 {
 }

@@ -26,7 +26,6 @@
 */
 
 #include "checkbase.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
@@ -40,8 +39,8 @@
 using namespace clang;
 using namespace std;
 
-CheckBase::CheckBase(const string &name)
-    : m_ci(*CheckManager::instance()->m_ci)
+CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
+    : m_ci(ci)
     , m_name(name)
     , m_lastDecl(nullptr)
     , m_enabledFixits(0)

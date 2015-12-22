@@ -34,8 +34,8 @@ using namespace clang;
 using namespace std;
 
 
-QSetIntersects::QSetIntersects(const std::string &name)
-    : CheckBase(name)
+QSetIntersects::QSetIntersects(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

@@ -32,8 +32,8 @@
 using namespace clang;
 using namespace std;
 
-RuleOfThree::RuleOfThree(const std::string &name)
-    : RuleOfBase(name)
+RuleOfThree::RuleOfThree(const std::string &name, const clang::CompilerInstance &ci)
+    : RuleOfBase(name, ci)
 {
 }
 
@@ -49,7 +49,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const SourceLocation recordStart = record->getLocStart();
     if (recordStart.isMacroID()) {
-        if (Utils::isInMacro(recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
+        if (Utils::isInMacro(m_ci, recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
             return;
         }
     }

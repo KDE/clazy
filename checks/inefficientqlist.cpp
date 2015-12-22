@@ -44,8 +44,8 @@ enum IgnoreMode {
     IsAssignedTooInFunction = 4
 };
 
-InefficientQList::InefficientQList(const std::string &name)
-    : CheckBase(name)
+InefficientQList::InefficientQList(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

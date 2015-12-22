@@ -109,24 +109,24 @@ inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<std::st
     return record && std::find(classNames.cbegin(), classNames.cend(), record->getNameAsString()) != classNames.cend();
 }
 
-inline void printLocation(const clang::SourceLocation &loc, bool newLine = true)
+inline void printLocation(const clang::SourceManager &sm, const clang::SourceLocation &loc, bool newLine = true)
 {
-    llvm::errs() << loc.printToString(*(CheckManager::instance()->m_sm));
+    llvm::errs() << loc.printToString(sm);
     if (newLine)
         llvm::errs() << "\n";
 }
 
-inline void printRange(const clang::SourceRange &range, bool newLine = true)
+inline void printRange(const clang::SourceManager &sm, const clang::SourceRange &range, bool newLine = true)
 {
-    printLocation(range.getBegin(), false);
+    printLocation(sm, range.getBegin(), false);
     llvm::errs() << "-";
-    printLocation(range.getEnd(), newLine);
+    printLocation(sm, range.getEnd(), newLine);
 }
 
-inline void printLocation(const clang::Stmt *s, bool newLine = true)
+inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, bool newLine = true)
 {
     if (s)
-        printLocation(s->getLocStart(), newLine);
+        printLocation(sm, s->getLocStart(), newLine);
 }
 
 inline void printLocation(clang::PresumedLoc loc, bool newLine = true)
@@ -180,17 +180,17 @@ inline std::string accessString(clang::AccessSpecifier s)
     return {};
 }
 
-inline void dump(clang::Stmt *s)
+inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {
     if (!s)
         return;
 
-    llvm::errs() << "Start=" << s->getLocStart().printToString(*CheckManager::instance()->m_sm)
-                 << "; end=" << s->getLocStart().printToString(*CheckManager::instance()->m_sm)
+    llvm::errs() << "Start=" << s->getLocStart().printToString(sm)
+                 << "; end=" << s->getLocStart().printToString(sm)
                  << "\n";
 
     for (auto it = s->child_begin(), e = s->child_end(); it != e; ++it)
-        dump(*it);
+        dump(sm, *it);
 
 }
 

@@ -47,6 +47,7 @@ namespace clang {
     class ClassTemplateSpecializationDecl;
     class Decl;
     class ParentMap;
+    class SourceManager;
     class Stmt;
     class SourceLocation;
     class ExprWithCleanups;
@@ -117,7 +118,8 @@ namespace Utils {
     /// Recursively goes through stmt's children and returns true if it finds a "break", "continue" or a "return" stmt
     /// All child statements that are on a source code line <
     /// If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before
-    bool loopCanBeInterrupted(clang::Stmt *loop, clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc);
+    bool loopCanBeInterrupted(clang::Stmt *loop, const clang::CompilerInstance &ci,
+                              const clang::SourceLocation &onlyBeforeThisLoc);
 
     // Returns true if the class derived is or descends from a class named parent
     bool descendsFrom(clang::CXXRecordDecl *derived, const std::string &parentName);
@@ -185,7 +187,7 @@ namespace Utils {
     // Returns fully/smi-fully qualified name for a method
     // but doesn't overqualify with namespaces which we're already in.
     // if currentScope == nullptr will return a fully qualified name
-    std::string getMostNeededQualifiedName(clang::CXXMethodDecl *method, clang::DeclContext *currentScope, clang::SourceLocation usageLoc, bool honourUsingDirectives);
+    std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager, clang::CXXMethodDecl *method, clang::DeclContext *currentScope, clang::SourceLocation usageLoc, bool honourUsingDirectives);
 
     // Returns true, if in a specific context, we can take the address of a method
     // for example doing &ClassName::SomePrivateMember might not be possible if the member is private
@@ -245,7 +247,7 @@ namespace Utils {
      * The optional parameter body is in order to advise non-const-ref -> value, since the body
      * needs to be inspected to see if we that would compile.
      */
-    bool classifyQualType(const clang::VarDecl *varDecl,
+    bool classifyQualType(const clang::CompilerInstance &ci, const clang::VarDecl *varDecl,
                           QualTypeClassification &classification,
                           clang::Stmt *body = nullptr);
 
@@ -268,7 +270,7 @@ namespace Utils {
     /**
      * Returns true if the source location loc is inside a macro named macroName.
      */
-    bool isInMacro(clang::SourceLocation loc, const std::string &macroName);
+    bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
 }
 
 #endif

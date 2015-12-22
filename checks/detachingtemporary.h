@@ -39,7 +39,7 @@
 class DetachingTemporary : public DetachingBase
 {
 public:
-    DetachingTemporary(const std::string &name);
+    DetachingTemporary(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
 private:
     bool isDetachingMethod(clang::CXXMethodDecl *method) const;

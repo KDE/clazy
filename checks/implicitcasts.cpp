@@ -38,8 +38,8 @@ using namespace clang;
 using namespace std;
 
 
-ImplicitCasts::ImplicitCasts(const std::string &name)
-    : CheckBase(name)
+ImplicitCasts::ImplicitCasts(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 
 }
@@ -49,14 +49,6 @@ std::vector<string> ImplicitCasts::filesToIgnore() const
     static vector<string> files = {"/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
                                    "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp"};
     return files;
-}
-
-
-static bool isMacroToIgnore(SourceLocation loc)
-{
-    static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
-    auto macro = Lexer::getImmediateMacroName(loc, CheckManager::instance()->m_ci->getSourceManager(), CheckManager::instance()->m_ci->getLangOpts());
-    return find(macros.cbegin(), macros.cend(), macro) != macros.cend();
 }
 
 static bool isInterestingFunction(FunctionDecl *func)
@@ -189,5 +181,13 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
         iterateCallExpr2<CXXConstructExpr>(ctorExpr, this, m_parentMap);
     }
 }
+
+bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
+{
+    static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
+    auto macro = Lexer::getImmediateMacroName(loc, m_ci.getSourceManager(), m_ci.getLangOpts());
+    return find(macros.cbegin(), macros.cend(), macro) != macros.cend();
+}
+
 
 REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, CheckLevel2)

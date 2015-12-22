@@ -39,7 +39,7 @@ class Stmt;
 class AutoUnexpectedQStringBuilder : public CheckBase
 {
 public:
-    explicit AutoUnexpectedQStringBuilder(const std::string &name);
+    explicit AutoUnexpectedQStringBuilder(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
 };
 

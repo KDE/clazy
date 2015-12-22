@@ -36,15 +36,15 @@
 using namespace clang;
 using namespace std;
 
-static bool shouldIgnoreType(const std::string &name)
+static bool shouldIgnoreType(const std::string &name, const clang::CompilerInstance &ci)
 {
     // Q_GLOBAL_STATIC and such
     static vector<string> blacklist = {"Holder", "AFUNC", "QLoggingCategory"};
     return find(blacklist.cbegin(), blacklist.cend(), name) != blacklist.cend();
 }
 
-NonPodStatic::NonPodStatic(const std::string &name)
-    : CheckBase(name)
+NonPodStatic::NonPodStatic(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 
@@ -74,7 +74,7 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
         return;
 
     const string className = t->getAsCXXRecordDecl()->getName();
-    if (!shouldIgnoreType(className)) {
+    if (!shouldIgnoreType(className, m_ci)) {
         std::string error = "non-POD static (" + className + ")";
         emitWarning(declStart, error.c_str());
     }

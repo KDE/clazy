@@ -33,8 +33,8 @@
 
 using namespace clang;
 
-GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name)
-    : CheckBase(name)
+GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

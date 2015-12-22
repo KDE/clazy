@@ -35,8 +35,6 @@
 #include <vector>
 #include <unordered_map>
 
-
-
 struct RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
     RegisteredFixIt() : id(-1) {}
@@ -46,7 +44,7 @@ struct RegisteredFixIt {
     bool operator==(const RegisteredFixIt &other) const { return id == other.id; }
 };
 
-using FactoryFunction = std::function<CheckBase*()>;
+using FactoryFunction = std::function<CheckBase*(const clang::CompilerInstance &ci)>;
 
 struct RegisteredCheck {
     typedef std::vector<RegisteredCheck> List;
@@ -60,12 +58,13 @@ class CheckManager
 {
 public:
     static CheckManager *instance();
+
     int registerCheck(const std::string &name, CheckLevel level, FactoryFunction);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
-    void setCompilerInstance(clang::CompilerInstance *);
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv() const;
+
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
@@ -75,14 +74,10 @@ public:
      */
     RegisteredCheck::List checksFromRequestedLevel() const;
 
-    void createChecks(RegisteredCheck::List requestedChecks);
-    const CheckBase::List &createdChecks() const;
+    CheckBase::List createChecks(RegisteredCheck::List requestedChecks, const clang::CompilerInstance &ci);
+
     bool fixitsEnabled() const;
     void enableAllFixIts();
-
-    // Public for convinence
-    clang::CompilerInstance *m_ci;
-    clang::SourceManager *m_sm;
 
     bool allFixitsEnabled() const;
     bool isOptionSet(const std::string &optionName) const;
@@ -97,12 +92,12 @@ public:
 
 private:
     CheckManager();
+
     RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;
-    std::unique_ptr<CheckBase> createCheck(const std::string &name);
+    std::unique_ptr<CheckBase> createCheck(const std::string &name, const clang::CompilerInstance &ci);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
-    CheckBase::List m_createdChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
@@ -112,7 +107,7 @@ private:
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
-    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](){ return new CLASS_NAME(CHECK_NAME); }); \
+    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](const clang::CompilerInstance &ci){ return new CLASS_NAME(CHECK_NAME, ci); }); \
     inline void silence_warning() { (void)dummy; }
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \

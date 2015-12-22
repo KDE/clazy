@@ -39,7 +39,7 @@ class CallExpr;
 class StringArg : public CheckBase
 {
 public:
-    StringArg(const std::string &name);
+    StringArg(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 protected:

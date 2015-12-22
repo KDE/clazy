@@ -34,8 +34,8 @@ using namespace clang;
 using namespace std;
 
 
-CopyablePolymorphic::CopyablePolymorphic(const std::string &name)
-    : CheckBase(name)
+CopyablePolymorphic::CopyablePolymorphic(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
 {
 }
 

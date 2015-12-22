@@ -34,8 +34,8 @@ using namespace clang;
 using namespace std;
 
 
-RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name)
-    : RuleOfBase(name)
+RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, const clang::CompilerInstance &ci)
+    : RuleOfBase(name, ci)
 {
 }
 
