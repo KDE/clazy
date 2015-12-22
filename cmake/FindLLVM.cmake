@@ -1,16 +1,17 @@
 # Find the native LLVM includes and libraries
 #
 # Defines the following variables
-#  LLVM_INCLUDE_DIR - where to find llvm include files
-#  LLVM_LIBRARY_DIR - where to find llvm libs
-#  LLVM_CFLAGS      - llvm compiler flags
-#  LLVM_LFLAGS      - llvm linker flags
-#  LLVM_MODULE_LIBS - list of llvm libs for working with modules.
-#  LLVM_FOUND       - True if llvm found.
-#  LLVM_VERSION     - Version string ("llvm-config --version")
+#  LLVM_INCLUDE_DIRS   - where to find llvm include files
+#  LLVM_LIBRARY_DIRS   - where to find llvm libs
+#  LLVM_CFLAGS         - llvm compiler flags
+#  LLVM_LFLAGS         - llvm linker flags
+#  LLVM_MODULE_LIBS    - list of llvm libs for working with modules.
+#  LLVM_INSTALL_PREFIX - LLVM installation prefix
+#  LLVM_FOUND          - True if llvm found.
+#  LLVM_VERSION        - Version string ("llvm-config --version")
 #
 # This module reads hints about search locations from variables
-#  LLVM_ROOT        - Preferred LLVM installation prefix (containing bin/, lib/, ...)
+#  LLVM_ROOT           - Preferred LLVM installation prefix (containing bin/, lib/, ...)
 #
 #  Note: One may specify these as environment variables if they are not specified as
 #   CMake variables or cache entries.
@@ -65,7 +66,6 @@ if (LLVM_CONFIG_EXECUTABLE)
   elseif (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
     set(_LLVM_ERROR_MESSAGE "LLVM version too old: ${LLVM_VERSION}")
   else()
-    message(STATUS "Found LLVM (version: ${LLVM_VERSION}): (using ${LLVM_CONFIG_EXECUTABLE})")
     set(LLVM_FOUND TRUE)
   endif()
 else()
@@ -75,13 +75,13 @@ endif()
 if (LLVM_FOUND)
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
-    OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+    OUTPUT_VARIABLE LLVM_INCLUDE_DIRS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --libdir
-    OUTPUT_VARIABLE LLVM_LIBRARY_DIR
+    OUTPUT_VARIABLE LLVM_LIBRARY_DIRS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
@@ -108,10 +108,33 @@ if (LLVM_FOUND)
     OUTPUT_VARIABLE LLVM_LIBS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
+
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --prefix
+    OUTPUT_VARIABLE LLVM_INSTALL_PREFIX
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  # potentially add include dir from binary dir for non-installed LLVM
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --src-root
+    OUTPUT_VARIABLE _llvmSourceRoot
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  string(FIND "${LLVM_INCLUDE_DIRS}" "${_llvmSourceRoot}" _llvmIsInstalled)
+  if (NOT _llvmIsInstalled)
+    list(APPEND LLVM_INCLUDE_DIRS "${LLVM_INSTALL_PREFIX}/include")
+  endif()
 endif()
 
 if (LLVM_FIND_REQUIRED AND NOT LLVM_FOUND)
   message(FATAL_ERROR "Could not find LLVM: ${_LLVM_ERROR_MESSAGE}")
 elseif(_LLVM_ERROR_MESSAGE)
   message(STATUS "Could not find LLVM: ${_LLVM_ERROR_MESSAGE}")
+endif()
+
+if (LLVM_FOUND)
+  message(STATUS "Found LLVM (version: ${LLVM_VERSION}): (using ${LLVM_CONFIG_EXECUTABLE})")
+  message(STATUS "  Include dirs:   ${LLVM_INCLUDE_DIRS}")
+  message(STATUS "  LLVM libraries: ${LLVM_LIBS}")
 endif()

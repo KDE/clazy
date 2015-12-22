@@ -2,8 +2,8 @@
 #
 # Defines the following variables:
 #  CLANG_FOUND                 - True if Clang was found
-#  CLANG_INCLUDE_DIR           - Where to find Clang includes
-#  CLANG_LIBRARY_DIR           - Where to find Clang libraries
+#  CLANG_INCLUDE_DIRS          - Where to find Clang includes
+#  CLANG_LIBRARY_DIRS          - Where to find Clang libraries
 #
 #  CLANG_LIBCLANG_LIB          - Libclang C library
 #
@@ -35,17 +35,17 @@ endif ()
 
 set(CLANG_FOUND FALSE)
 
-if (LLVM_FOUND AND LLVM_LIBRARY_DIR)
+if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   macro(FIND_AND_ADD_CLANG_LIB _libname_)
     string(TOUPPER ${_libname_} _prettylibname_)
-    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIR})
+    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS})
     if(CLANG_${_prettylibname_}_LIB)
       set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_prettylibname_}_LIB})
     endif()
   endmacro(FIND_AND_ADD_CLANG_LIB)
 
   # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
-  find_library(CLANG_LIBCLANG_LIB NAMES clang libclang HINTS ${LLVM_LIBRARY_DIR}) # LibClang: high-level C interface
+  find_library(CLANG_LIBCLANG_LIB NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
 
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
   FIND_AND_ADD_CLANG_LIB(clangDriver)
@@ -75,12 +75,12 @@ endif()
 if(CLANG_LIBS)
   set(CLANG_FOUND TRUE)
 else()
-  message(STATUS "Could not find any Clang libraries in ${LLVM_LIBRARY_DIR}")
+  message(STATUS "Could not find any Clang libraries in ${LLVM_LIBRARY_DIRS}")
 endif()
 
 if(CLANG_FOUND)
-  set(CLANG_LIBRARY_DIR ${LLVM_LIBRARY_DIR})
-  set(CLANG_INCLUDE_DIR ${LLVM_INCLUDE_DIR})
+  set(CLANG_LIBRARY_DIRS ${LLVM_LIBRARY_DIRS})
+  set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
 
   # check whether llvm-config comes from an install prefix
   execute_process(
@@ -88,14 +88,17 @@ if(CLANG_FOUND)
     OUTPUT_VARIABLE _llvmSourceRoot
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  string(FIND "${LLVM_INCLUDE_DIR}" "${_llvmSourceRoot}" _llvmIsInstalled)
+  string(FIND "${LLVM_INCLUDE_DIRS}" "${_llvmSourceRoot}" _llvmIsInstalled)
   if (NOT _llvmIsInstalled)
-    message(STATUS "Detected that llvm-config comes from a build-tree, adding includes from source dir")
-    list(APPEND CLANG_INCLUDE_DIR "${_llvmSourceRoot}/tools/clang/include")
+    message(STATUS "Detected that llvm-config comes from a build-tree, adding more include directories for Clang")
+    list(APPEND CLANG_INCLUDE_DIRS
+         "${LLVM_INSTALL_PREFIX}/tools/clang/include" # build dir
+         "${_llvmSourceRoot}/tools/clang/include"     # source dir
+    )
   endif()
 
   message(STATUS "Found Clang (LLVM version: ${LLVM_VERSION})")
-  message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIR}")
+  message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIRS}")
   message(STATUS "  Clang libraries:    ${CLANG_LIBS}")
   message(STATUS "  Libclang C library: ${CLANG_LIBCLANG_LIB}")
 else()
