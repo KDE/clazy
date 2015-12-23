@@ -47,6 +47,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void processForRangeLoop(clang::CXXForRangeStmt *rangeLoop);
+    void checkPassByConstRefCorrectness(clang::CXXForRangeStmt *rangeLoop);
 };
 
 #endif

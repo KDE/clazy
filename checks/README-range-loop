@@ -3,3 +3,6 @@ range-loop
 Finds places where you're using C++11 range-loops with non-const Qt containers. (potential detach)
 Fix it by marking the container const or by using a foreach, which is slightly less efficient, but
 better than a detach.
+
+Also warns if you're passing structs with non-trivial copy-ctor or non-trivial dtor by value, use
+const-ref so that the copy-ctor and dtor don't get called.

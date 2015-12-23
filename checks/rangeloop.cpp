@@ -54,16 +54,42 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     QualType qt = containerExpr->getType();
-    if (qt.isConstQualified()) // const won't detach
-        return;
-
     const Type *t = qt.getTypePtrOrNull();
     if (!t || !t->isRecordType())
+        return;
+
+    checkPassByConstRefCorrectness(rangeLoop);
+
+    if (qt.isConstQualified()) // const won't detach
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
     if (QtUtils::isQtIterableClass(Utils::rootBaseClass(record))) {
         emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ")");
+    }
+}
+
+void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
+{
+    Utils::QualTypeClassification classif;
+    auto varDecl = rangeLoop->getLoopVariable();
+    bool success = Utils::classifyQualType(m_ci, varDecl, /*by-ref*/classif, rangeLoop);
+    if (!success)
+        return;
+
+    if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
+        string error;
+        const string paramStr = varDecl->getType().getAsString();
+        if (classif.passBigTypeByConstRef) {
+            error = "Missing reference in foreach with sizeof(T) = ";
+            error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ")";
+        } else if (classif.passNonTriviallyCopyableByConstRef) {
+            error = "Missing reference in foreach with non trivial type (" + paramStr + ")";
+        }
+
+        // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
+        // to optimize it, generating the same assembly, regardless of pass by value.
+        emitWarning(varDecl->getLocStart(), error.c_str());
     }
 }
 
