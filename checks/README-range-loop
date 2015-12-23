@@ -1,3 +1,5 @@
 range-loop
 
 Finds places where you're using C++11 range-loops with non-const Qt containers. (potential detach)
+Fix it by marking the container const or by using a foreach, which is slightly less efficient, but
+better than a detach.
