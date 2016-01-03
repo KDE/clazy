@@ -167,17 +167,18 @@ bool StringRefCandidates::processCase2(CallExpr *call)
             return false;
     }
 
-    CXXMemberCallExpr *innerCall = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(temp);
-    if (!innerCall)
+    CallExpr *innerCall = HierarchyUtils::getFirstChildOfType2<CallExpr>(temp);
+    CXXMemberCallExpr *innerMemberCall = innerCall ? dyn_cast<CXXMemberCallExpr>(innerCall) : nullptr;
+    if (!innerMemberCall)
         return false;
 
-    CXXMethodDecl *innerMethod = innerCall->getMethodDecl();
+    CXXMethodDecl *innerMethod = innerMemberCall->getMethodDecl();
     if (!isInterestingFirstMethod(innerMethod))
         return false;
 
     std::vector<FixItHint> fixits;
     if (isFixitEnabled(FixitUseQStringRef)) {
-        fixits = fixit(innerCall);
+        fixits = fixit(innerMemberCall);
     }
 
     emitWarning(call->getLocStart(), "Use " + innerMethod->getNameAsString() + "Ref() instead", fixits);

@@ -24,3 +24,11 @@ void test()
     int start,end;
     int m = s.mid(start + 1, end - start - 1).toUInt(&ok); // Warning
 }
+
+QString i18n(const QString &) { return {}; }
+
+void test2()
+{
+    QString s;
+    s.append(i18n(s.mid(1, 1))); // OK
+}
