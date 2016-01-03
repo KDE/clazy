@@ -141,7 +141,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
     return true;
 }
 
-// Catches cases like: s.append(s2.mid(1.1));
+// Catches cases like: s.append(s2.mid(1, 1));
 bool StringRefCandidates::processCase2(CallExpr *call)
 {
     CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(call);
