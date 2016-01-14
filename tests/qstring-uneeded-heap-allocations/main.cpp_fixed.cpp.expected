@@ -205,3 +205,8 @@ void testQDebug()
 {
     qDebug() << "test"; // OK
 }
+
+void testEmpty()
+{
+    QStringList list = QStringList() << QStringLiteral("foo") << QLatin1String("");
+}
