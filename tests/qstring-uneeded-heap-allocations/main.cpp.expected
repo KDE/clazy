@@ -64,7 +64,5 @@ qstring-uneeded-heap-allocations/main.cpp:181:5: warning: QString(const char*) b
 qstring-uneeded-heap-allocations/main.cpp:182:5: warning: QString(const char*) being called [-Wclazy-qstring-uneeded-heap-allocations]
 qstring-uneeded-heap-allocations/main.cpp:184:14: warning: QString(const char*) being called [-Wclazy-qstring-uneeded-heap-allocations]
 qstring-uneeded-heap-allocations/main.cpp:184:22: warning: QString(const char*) being called [-Wclazy-qstring-uneeded-heap-allocations]
-qstring-uneeded-heap-allocations/main.cpp:188:38: warning: QString(QLatin1String) being called [-Wclazy-qstring-uneeded-heap-allocations]
-qstring-uneeded-heap-allocations/main.cpp:189:38: warning: QString(const char*) being called [-Wclazy-qstring-uneeded-heap-allocations]
 qstring-uneeded-heap-allocations/main.cpp:201:25: warning: Don't use QLatin1String with non-latin1 literals [-Wclazy-qstring-uneeded-heap-allocations]
 qstring-uneeded-heap-allocations/main.cpp:201:11: warning: QString(QLatin1String) being called [-Wclazy-qstring-uneeded-heap-allocations]

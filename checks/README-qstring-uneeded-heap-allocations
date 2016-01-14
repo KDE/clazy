@@ -40,6 +40,6 @@ Warnings:
         https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
         http://lists.qt-project.org/pipermail/development/2015-November/023681.html
 
-    Also note that MSVC crashes when QStringLiteral is used inside initializer lists.
-    You can disable this check for literals inside initializer lists by setting an env variable:
-        export CLAZY_EXTRA_OPTIONS="qstring-uneeded-heap-allocations-msvc-compat"
+    Also note that MSVC crashes when QStringLiteral is used inside initializer lists. For that reason
+    no warning or fixit is emitted for this case unless you set an env variable:
+        export CLAZY_EXTRA_OPTIONS="qstring-uneeded-heap-allocations-no-msvc-compat"

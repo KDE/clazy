@@ -9,16 +9,23 @@
             "isFixedFile" : true
         },
         {
-            "filename" : "msvc-compat.cpp",
-            "env" : {
-                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-msvc-compat"
-            }
+            "filename" : "msvc-compat.cpp"
         },
         {
             "filename" : "msvc-compat.cpp_fixed.cpp",
+            "isFixedFile" : true
+        },
+        {
+            "filename" : "no-msvc-compat.cpp",
+            "env" : {
+                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-no-msvc-compat"
+            }
+        },
+        {
+            "filename" : "no-msvc-compat.cpp_fixed.cpp",
             "isFixedFile" : true,
             "env" : {
-                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-msvc-compat"
+                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-no-msvc-compat"
             }
         }
     ]

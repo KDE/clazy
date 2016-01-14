@@ -185,8 +185,8 @@ void TestCharsets::test2()
 }
 
 
-static QStringList fooStaticList  = {QStringLiteral("foo")}; // if msvc-compat is on, no change is done
-static QStringList fooStaticList2 = {QStringLiteral("foo")}; // same
+
+
 
 #include <QtCore/QRegExp>
 void testBlacklistedQRegExp()

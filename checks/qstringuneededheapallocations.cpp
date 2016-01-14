@@ -163,7 +163,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         return;
     }
 
-    if (isOptionSet("msvc-compat")) {
+    if (!isOptionSet("no-msvc-compat")) {
         InitListExpr *initializerList = HierarchyUtils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
         if (initializerList != nullptr)
             return; // Nothing to do here
@@ -557,9 +557,9 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 
 vector<string> QStringUneededHeapAllocations::supportedOptions() const
 {
-    // msvc-compat - don't use QStringLiteral inside arrays, crashes compiler
+    // no-msvc-compat - use QStringLiteral inside arrays, which is fine if you don't use MSVC
 
-    static const vector<string> options = { "msvc-compat" };
+    static const vector<string> options = { "no-msvc-compat" };
     return options;
 }
 
