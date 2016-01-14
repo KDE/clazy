@@ -166,7 +166,12 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (!isOptionSet("no-msvc-compat")) {
         InitListExpr *initializerList = HierarchyUtils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
         if (initializerList != nullptr)
-            return; // Nothing to do here
+            return; // Nothing to do here, MSVC doesn't like it
+
+        StringLiteral *lt = stringLiteralForCall(stm);
+        if (lt && lt->getNumConcatenated() > 1) {
+            return; // Nothing to do here, MSVC doesn't like it
+        }
     }
 
     bool isQLatin1String = false;
@@ -471,6 +476,12 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     vector<StringLiteral*> literals;
     HierarchyUtils::getChilds2<StringLiteral>(stm, literals, 2);
 
+    if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
+        if (literals[0]->getNumConcatenated() > 1) {
+            return; // Nothing to do here, MSVC doesn't like it
+        }
+    }
+
     if (isFixitEnabled(CharPtrAllocations)) {
         if (literals.empty()) {
             queueManualFixitWarning(stm->getLocStart(), CharPtrAllocations, "Couldn't find literal");
@@ -504,6 +515,13 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (!containsStringLiteralNoCallExpr(callExpr))
         return;
 
+    if (!isOptionSet("no-msvc-compat")) {
+        StringLiteral *lt = stringLiteralForCall(callExpr);
+        if (lt && lt->getNumConcatenated() > 1) {
+            return; // Nothing to do here, MSVC doesn't like it
+        }
+    }
+
     vector<ConditionalOperator*> ternaries;
     HierarchyUtils::getChilds2(callExpr, ternaries, 2);
     if (!ternaries.empty()) {
@@ -534,7 +552,6 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     CXXOperatorCallExpr *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
     if (!Utils::isAssignOperator(callExpr, "QString", "class QLatin1String"))
         return;
-
 
     if (!containsStringLiteralNoCallExpr(stmt))
         return;

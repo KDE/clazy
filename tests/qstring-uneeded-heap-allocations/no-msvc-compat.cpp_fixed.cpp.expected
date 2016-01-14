@@ -7,3 +7,15 @@ void test()
 {
     QString s = QStringLiteral("foo");
 }
+
+void testMultiPartStringLiterals()
+{
+
+    QString s = QStringLiteral("foo""bar");
+    s += QStringLiteral("foo""bár");
+    s += QLatin1String("foo"
+         "bar"
+         "Test");
+    s = QStringLiteral("foo" "bar");
+    s += QLatin1String("foo" "bar");
+}

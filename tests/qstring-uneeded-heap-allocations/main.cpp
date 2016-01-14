@@ -152,15 +152,15 @@ struct TestCharsets
     QString member2;
 };
 
-void testMultiPartStringLiterals()
-{
 
-    QString s = "foo""bar";
-    s += "foo""bár";
-    s += "foo"
-         "bar"
-         "Test";
-}
+
+
+
+
+
+
+
+
 
 void moreShouldBeQLatin1String()
 {
