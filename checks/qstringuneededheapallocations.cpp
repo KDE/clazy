@@ -79,11 +79,11 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
 static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
 {
-    if (stm == nullptr)
+    if (!stm)
         return nullptr;
 
     CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stm);
-    if (constructExpr != nullptr) {
+    if (constructExpr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
         if (isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1)) {
             if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false, 2))
@@ -91,7 +91,7 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
         }
     }
 
-    if (ternary == nullptr) {
+    if (!ternary) {
         ternary = dyn_cast<ConditionalOperator>(stm);
     }
 
@@ -100,7 +100,7 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
 
     for (; it != end; ++it) {
         auto expr = qlatin1CtorExpr(*it, ternary);
-        if (expr != nullptr)
+        if (expr)
             return expr;
     }
 
@@ -112,11 +112,11 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
 //
 static bool containsStringLiteralNoCallExpr(Stmt *stmt)
 {
-    if (stmt == nullptr)
+    if (!stmt)
         return false;
 
     StringLiteral *sl = dyn_cast<StringLiteral>(stmt);
-    if (sl != nullptr)
+    if (sl)
         return true;
 
     auto it = stmt->child_begin();
@@ -190,7 +190,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
         CXXConstructExpr *qlatin1Ctor = qlatin1CtorExpr(stm, ternary);
-        if (qlatin1Ctor == nullptr) {
+        if (!qlatin1Ctor) {
             return;
         }
 
@@ -450,7 +450,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItRemoveToken(Stmt *stmt, bo
 void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
 {
     CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
-    if (operatorCall == nullptr)
+    if (!operatorCall)
         return;
 
     std::vector<StringLiteral*> stringLiterals;
@@ -461,7 +461,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
         return;
 
     FunctionDecl *funcDecl = operatorCall->getDirectCallee();
-    if (funcDecl == nullptr)
+    if (!funcDecl)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
@@ -498,7 +498,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
 void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 {
     CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
-    if (callExpr == nullptr)
+    if (!callExpr)
         return;
 
     FunctionDecl *functionDecl = callExpr->getDirectCallee();
@@ -559,7 +559,7 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     ConditionalOperator *ternary = nullptr;
     Stmt *begin = qlatin1CtorExpr(stmt, ternary);
 
-    if (begin == nullptr)
+    if (!begin)
         return;
 
     vector<FixItHint> fixits;
