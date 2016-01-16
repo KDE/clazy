@@ -313,13 +313,15 @@ bool ReserveCandidates::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
     auto whilestm = dyn_cast<WhileStmt>(stm);
     if (whilestm) {
         isLoop = true;
-        return expressionIsTooComplex(whilestm->getCond());
+        return true; // Too many false-positives with while statement. Ignore it.
+        //return expressionIsTooComplex(whilestm->getCond());
     }
 
     auto dostm = dyn_cast<DoStmt>(stm);
     if (dostm) {
         isLoop = true;
-        return expressionIsTooComplex(dostm->getCond());
+        return true; // Too many false-positives with do-while statement. Ignore it.
+        //return expressionIsTooComplex(dostm->getCond());
     }
 
     return false;

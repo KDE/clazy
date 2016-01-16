@@ -4,11 +4,10 @@ Recommends places that are missing reserve().
 Supported containers are: QVector, std::vector, QList, QSet and QVarLengthArray.
 
 Rate of false-positives is around 15%, so don't go blindly calling reserve() without proper review.
-In doubt don't use it, since all containers have a growth curve  so won't do N allocations when you append N items.
+In doubt don't use it, since all containers have a growth curve so won't do N allocations when you append N items.
 
 
 Trivial example missing reserve();
-
 
     QList<int> list;
     // list.reserve(list2.size());
