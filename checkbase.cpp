@@ -133,7 +133,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
 
     reallyEmitWarning(loc, error, fixits);
 
-    for (auto l : m_queuedManualInterventionWarnings) {
+    for (const auto& l : m_queuedManualInterventionWarnings) {
         string msg = string("FixIt failed, requires manual intervention: ");
         if (!l.second.empty())
             msg += " " + l.second;
@@ -149,7 +149,7 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
     FullSourceLoc full(loc, m_ci.getSourceManager());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
-    for (FixItHint fixit : fixits) {
+    for (const FixItHint& fixit : fixits) {
         if (!fixit.isNull())
             B.AddFixItHint(fixit);
     }
