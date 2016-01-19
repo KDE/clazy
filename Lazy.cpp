@@ -317,7 +317,7 @@ protected:
             if (!fixits.empty()) {
                 ros << "    (";
                 bool isFirst = true;
-                for (auto fixit : fixits) {
+                for (const auto& fixit : fixits) {
                     if (isFirst) {
                         isFirst = false;
                     } else {

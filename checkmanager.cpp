@@ -103,7 +103,7 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
     }
 
     auto &fixits = m_fixitsByCheckName[checkName];
-    for (auto fixit : fixits) {
+    for (const auto& fixit : fixits) {
         if (fixit.name == fixitName) {
             // It can't exist
             assert(false);
@@ -119,7 +119,7 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
 
 unique_ptr<CheckBase> CheckManager::createCheck(const string &name, const CompilerInstance &ci)
 {
-    for (auto rc : m_registeredChecks) {
+    for (const auto& rc : m_registeredChecks) {
         if (rc.name == name) {
             return unique_ptr<CheckBase>(rc.factory(ci));
         }
@@ -217,7 +217,7 @@ CheckBase::List CheckManager::createChecks(RegisteredCheck::List requestedChecks
 
     CheckBase::List checks;
     checks.reserve(requestedChecks.size() + 1);
-    for (auto check : requestedChecks) {
+    for (const auto& check : requestedChecks) {
         checks.push_back(createCheck(check.name, ci));
         if (check.name == fixitCheckName) {
             checks.back()->setEnabledFixits(fixit.id);
