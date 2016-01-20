@@ -82,7 +82,7 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
 
 std::vector<string> NonPodStatic::filesToIgnore() const
 {
-    return {"main.cpp", "qrc_"};
+    return {"main.cpp", "qrc_", "qdbusxml2cpp"};
 }
 
 REGISTER_CHECK_WITH_FLAGS("non-pod-global-static", NonPodStatic, CheckLevel1)
