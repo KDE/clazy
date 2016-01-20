@@ -19,4 +19,4 @@ void test()
     const char * foo6 = "6";
 }
 
-
+extern const char *externFoo;

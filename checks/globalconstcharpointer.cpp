@@ -41,7 +41,8 @@ GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, const cl
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 {
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (varDecl == nullptr || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() || !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace())
+    if (varDecl == nullptr || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() ||
+        !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace() || varDecl->hasExternalStorage())
         return;
 
     QualType qt = varDecl->getType();
