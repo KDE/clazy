@@ -103,7 +103,7 @@ static bool iterateCallExpr(T* callExpr, CheckBase *check)
         if (!implicitCast || implicitCast->getCastKind() != clang::CK_PointerToBoolean)
             continue;
 
-        check->emitWarning(implicitCast->getLocStart(), "Implicit pointer to bool cast (argument " + std::to_string(i) + ")");
+        check->emitWarning(implicitCast->getLocStart(), "Implicit pointer to bool cast (argument " + std::to_string(i) + ')');
         result = true;
     }
 
@@ -147,7 +147,7 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
         if (Utils::insideCTORCall(parentMap, implicitCast, {"QAtomicInt", "QBasicAtomicInt"}))
             continue;
 
-        check->emitWarning(implicitCast->getLocStart(), "Implicit bool to int cast (argument " + std::to_string(i) + ")");
+        check->emitWarning(implicitCast->getLocStart(), "Implicit bool to int cast (argument " + std::to_string(i) + ')');
         result = true;
     }
 

@@ -75,7 +75,7 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
 
     const string className = t->getAsCXXRecordDecl()->getName();
     if (!shouldIgnoreType(className, m_ci)) {
-        std::string error = "non-POD static (" + className + ")";
+        std::string error = "non-POD static (" + className + ')';
         emitWarning(declStart, error.c_str());
     }
 }

@@ -127,7 +127,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
-    const string tag = string(" [-Wclazy-") + name() + string("]");
+    const string tag = " [-Wclazy-" + name() + ']';
     if (printWarningTag)
         error += tag;
 
@@ -136,7 +136,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
     for (auto l : m_queuedManualInterventionWarnings) {
         string msg = string("FixIt failed, requires manual intervention: ");
         if (!l.second.empty())
-            msg += " " + l.second;
+            msg += ' ' + l.second;
 
         reallyEmitWarning(l.first, msg + tag, {});
     }
@@ -196,7 +196,7 @@ std::vector<string> CheckBase::supportedOptions() const
 
 bool CheckBase::isOptionSet(const std::string &optionName) const
 {
-    const string qualifiedName = name() + "-" + optionName;
+    const string qualifiedName = name() + '-' + optionName;
     return CheckManager::instance()->isOptionSet(qualifiedName);
 }
 

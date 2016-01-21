@@ -143,9 +143,9 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
             if (classif.passBigTypeByConstRef) {
                 error = warningMsgForSmallType(classif.size_of_T, paramStr);
             } else if (classif.passNonTriviallyCopyableByConstRef) {
-                error = "Missing reference on non-trivial type (" + paramStr + ")";
+                error = "Missing reference on non-trivial type (" + paramStr + ')';
             } else if (classif.passSmallTrivialByValue) {
-                error = "Pass small and trivially-copyable type by value (" + paramStr + ")";
+                error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
                 if (isFixitEnabled(FixitAll)) {
                     for (auto it = functionDecl->redecls_begin(), end = functionDecl->redecls_end(); it != end; ++it) { // Fix in both header and .cpp
                         FunctionDecl *fdecl = dyn_cast<FunctionDecl>(*it);
@@ -177,7 +177,7 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
     QualType qt = Utils::unrefQualType(param->getType());
     qt.removeLocalConst();
     const string typeName = qt.getAsString(PrintingPolicy(m_ci.getLangOpts()));
-    string replacement = typeName + " " + string(param->getName());
+    string replacement = typeName + ' ' + string(param->getName());
     SourceLocation startLoc = param->getLocStart();
     SourceLocation endLoc = param->getLocEnd();
 
@@ -192,7 +192,7 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
 
     if (!startLoc.isValid() || !endLoc.isValid()) {
         llvm::errs() << "Internal error could not apply fixit " << startLoc.printToString(m_ci.getSourceManager())
-                     << ";" << endLoc.printToString(m_ci.getSourceManager()) << "\n";
+                     << ';' << endLoc.printToString(m_ci.getSourceManager()) << "\n";
         return {};
     }
 

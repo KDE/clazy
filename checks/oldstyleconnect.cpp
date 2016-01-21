@@ -388,7 +388,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             } else if (macroNum == 2) {
                 const unsigned int numReceiverParams = methodDecl->getNumParams();
                 if (numReceiverParams > senderMethod->getNumParams()) {
-                    string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(senderMethod->getNumParams()) + ")";
+                    string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(senderMethod->getNumParams()) + ')';
                     queueManualFixitWarning(s, FixItConnects, msg);
                     return {};
                 }
@@ -414,7 +414,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             bool isSpecialProtectedCase = false;
             if (!Utils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
-                string msg = "Can't fix " + StringUtils::accessString(methodDecl->getAccess()) + " " + macroName + " " + methodDecl->getQualifiedNameAsString();
+                string msg = "Can't fix " + StringUtils::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
             }
@@ -433,7 +433,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(s);
             SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
 
-            const string functionPointer = "&" + qualifiedName;
+            const string functionPointer = '&' + qualifiedName;
             string replacement = functionPointer;
 
             if ((classification & ConnectFlag_4ArgsConnect) && macroNum == 2)

@@ -106,7 +106,7 @@ void testSTLForeach()
 void testQStringList()
 {
     QStringList sl;
-    sl << "A" << "B";
+    sl << QChar('A') << QChar('B');
     foreach (const QString &s, sl) { // no warning
     }
 }

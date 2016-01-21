@@ -158,11 +158,11 @@ void printLocation(const SourceLocation &start, const SourceLocation &end)
     clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, sm, lopt));
 
 
-    std::string resultText = " " + std::string(sm.getCharacterData(b), sm.getCharacterData(e)-sm.getCharacterData(b));
+    std::string resultText = ' ' + std::string(sm.getCharacterData(b), sm.getCharacterData(e)-sm.getCharacterData(b));
     std::string filename = sm.getFilename(start);
     int linenumber = sm.getSpellingLineNumber(start);
 
-    llvm::errs() << filename << ":" << linenumber << resultText << "\n";
+    llvm::errs() << filename << ':' << linenumber << resultText << "\n";
 //        Utils::emitWarning(m_ci, start, "Use qobject_cast rather than dynamic_cast");
 }
 */
@@ -999,7 +999,7 @@ CXXRecordDecl* Utils::firstMethodOrClassContext(DeclContext *context)
 
 bool Utils::isAscii(StringLiteral *lt)
 {
-    // "é" for some reason has isAscii() == true, so also call containsNonAsciiOrNull
+    // 'é' for some reason has isAscii() == true, so also call containsNonAsciiOrNull
     return lt && lt->isAscii() && !lt->containsNonAsciiOrNull();
 }
 

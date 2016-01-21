@@ -124,8 +124,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         msg += hasList[i];
         const bool isLast = i == numImplemented - 1;
         if (!isLast)
-            msg += ",";
-        msg += " ";
+            msg += ',';
+        msg += ' ';
     }
 
     msg += "but not ";
