@@ -33,8 +33,7 @@
 /**
  * Finds global static non-POD variables.
  *
- * Has some false-positives, like QBasicMutex.
- * You shouldn't fix the cases where they appear in apps instead of libraries.
+ * See README-non-pod-global-static.
  */
 class NonPodStatic : public CheckBase
 {

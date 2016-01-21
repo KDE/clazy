@@ -1,0 +1,15 @@
+non-pod-global-static
+
+Warns about non-trivial [1] global statics.
+CTORS from globals are run before main, on library load, slowing down startup.
+This is more a problem for libraries, since usually the app won't use every feature the library,
+so it's a waste of resources to initialize all CTORs from unused features.
+
+It's tolerated to have global statics in executables, however, clazy doesn't know if it's compiling
+an executable or library, so it's your job to run this check only on libraries. It doesn't harm, though,
+to also remove global statics from executables, because they're usually evil.
+
+The same goes for DTORs at library unload time.
+
+
+[1] http://www.cplusplus.com/reference/type_traits/is_trivial/
