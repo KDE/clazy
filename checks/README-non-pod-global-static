@@ -1,6 +1,6 @@
 non-pod-global-static
 
-Warns about non-trivial [1] global statics.
+Warns about non-POD [1] global statics.
 CTORS from globals are run before main, on library load, slowing down startup.
 This is more a problem for libraries, since usually the app won't use every feature the library,
 so it's a waste of resources to initialize all CTORs from unused features.
@@ -12,4 +12,5 @@ to also remove global statics from executables, because they're usually evil.
 The same goes for DTORs at library unload time.
 
 
-[1] http://www.cplusplus.com/reference/type_traits/is_trivial/
+[1] The term "POD" is too strict. The correct term is "types with a trivial dtor and trivial ctor",
+and that's how this check is implemented.

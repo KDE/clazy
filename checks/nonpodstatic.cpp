@@ -48,9 +48,9 @@ NonPodStatic::NonPodStatic(const std::string &name, const clang::CompilerInstanc
 {
 }
 
-void NonPodStatic::VisitDecl(clang::Decl *decl)
+void NonPodStatic::VisitStmt(clang::Stmt *stm)
 {
-    auto varDecl = dyn_cast<VarDecl>(decl);
+    VarDecl *varDecl = m_lastDecl ? dyn_cast<VarDecl>(m_lastDecl) : nullptr;
     if (!varDecl || varDecl->isConstexpr() || varDecl->isExternallyVisible() || !varDecl->isFileVarDecl())
         return;
 
@@ -58,26 +58,38 @@ void NonPodStatic::VisitDecl(clang::Decl *decl)
     if (sd != StorageDuration::SD_Static)
         return;
 
-    QualType qt = varDecl->getType();
-    const bool isTrivial = qt.isTrivialType(m_ci.getASTContext());
-    if (isTrivial)
-        return;
-
-    const Type *t = qt.getTypePtrOrNull();
-    if (!t || !t->getAsCXXRecordDecl() || t->getAsCXXRecordDecl()->isLiteral())
-        return;
-
-    const SourceLocation declStart = decl->getLocStart();
-
+    const SourceLocation declStart = varDecl->getLocStart();
     auto macroName = Lexer::getImmediateMacroName(declStart, m_ci.getSourceManager(), m_ci.getLangOpts());
     if (stringStartsWith(macroName, "Q_CONSTRUCTOR_FUNCTION")) // Don't warn on these
         return;
 
-    const string className = t->getAsCXXRecordDecl()->getName();
+    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
+    if (!ctorExpr)
+        return;
+
+    auto ctorDecl = ctorExpr->getConstructor();
+    auto recordDecl = ctorDecl ? ctorDecl->getParent() : nullptr;
+    if (!recordDecl)
+        return;
+
+    if (recordDecl->hasTrivialDestructor()) {
+        // Has a trivial dtor, but now lets check the ctors.
+
+        if (ctorDecl->isDefaultConstructor() && recordDecl->hasTrivialDefaultConstructor()) {
+            // both dtor and called ctor are trivial, no warning
+            return;
+        } else if (ctorDecl->isConstexpr()) {
+            // Used ctor is constexpr, it's fine
+            return;
+        }
+    }
+
+    const string className = recordDecl->getName();
     if (!shouldIgnoreType(className, m_ci)) {
         std::string error = "non-POD static (" + className + ')';
         emitWarning(declStart, error.c_str());
     }
+
 }
 
 std::vector<string> NonPodStatic::filesToIgnore() const

@@ -39,7 +39,7 @@ class NonPodStatic : public CheckBase
 {
 public:
     NonPodStatic(const std::string &name, const clang::CompilerInstance &ci);
-    void VisitDecl(clang::Decl *decl) override;
+    void VisitStmt(clang::Stmt *stm) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
 };
