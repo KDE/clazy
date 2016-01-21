@@ -114,7 +114,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
     } else {
         if (!isQtContainer) {
-            emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy (" + rootBaseClass->getQualifiedNameAsString() + ")");
+            emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy (" + rootBaseClass->getQualifiedNameAsString() + ')');
             return;
         }
     }
@@ -163,11 +163,11 @@ void Foreach::checkBigTypeMissingRef()
         const string paramStr = varDecl->getType().getAsString();
         if (classif.passBigTypeByConstRef) {
             error = "Missing reference in foreach with sizeof(T) = ";
-            error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ")";
+            error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ')';
         } else if (classif.passNonTriviallyCopyableByConstRef) {
-            error = "Missing reference in foreach with non trivial type (" + paramStr + ")";
+            error = "Missing reference in foreach with non trivial type (" + paramStr + ')';
         } else if (classif.passSmallTrivialByValue) {
-            error = "Pass small and trivially-copyable type by value (" + paramStr + ")";
+            error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
         }
 
         emitWarning(varDecl->getLocStart(), error.c_str());

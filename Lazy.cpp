@@ -242,7 +242,7 @@ protected:
             // Too many arguments.
             llvm::errs() << "Too many arguments: ";
             for (const std::string &a : args)
-                llvm::errs() << a << " ";
+                llvm::errs() << a << ' ';
             llvm::errs() << "\n";
 
             PrintHelp(llvm::errs());
@@ -321,12 +321,12 @@ protected:
                     if (isFirst) {
                         isFirst = false;
                     } else {
-                        ros << ",";
+                        ros << ',';
                     }
 
                     ros << fixit.name;
                 }
-                ros << ")";
+                ros << ')';
             }
             ros << "\n";
         }

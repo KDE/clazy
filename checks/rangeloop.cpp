@@ -65,7 +65,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
     if (QtUtils::isQtIterableClass(Utils::rootBaseClass(record))) {
-        emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ")");
+        emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
     }
 }
 
@@ -82,9 +82,9 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         const string paramStr = varDecl->getType().getAsString();
         if (classif.passBigTypeByConstRef) {
             error = "Missing reference in foreach with sizeof(T) = ";
-            error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ")";
+            error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ')';
         } else if (classif.passNonTriviallyCopyableByConstRef) {
-            error = "Missing reference in foreach with non trivial type (" + paramStr + ")";
+            error = "Missing reference in foreach with non trivial type (" + paramStr + ')';
         }
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able

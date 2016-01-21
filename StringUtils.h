@@ -39,7 +39,7 @@
 template <typename T>
 inline std::string classNameFor(T *ctorDecl)
 {
-    return "";
+    return std::string();
 }
 
 template <>
@@ -119,7 +119,7 @@ inline void printLocation(const clang::SourceManager &sm, const clang::SourceLoc
 inline void printRange(const clang::SourceManager &sm, const clang::SourceRange &range, bool newLine = true)
 {
     printLocation(sm, range.getBegin(), false);
-    llvm::errs() << "-";
+    llvm::errs() << '-';
     printLocation(sm, range.getEnd(), newLine);
 }
 
@@ -131,7 +131,7 @@ inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, 
 
 inline void printLocation(clang::PresumedLoc loc, bool newLine = true)
 {
-    llvm::errs() << loc.getFilename() << " " << loc.getLine() << ":" << loc.getColumn();
+    llvm::errs() << loc.getFilename() << ' ' << loc.getLine() << ':' << loc.getColumn();
     if (newLine)
         llvm::errs() << "\n";
 }
