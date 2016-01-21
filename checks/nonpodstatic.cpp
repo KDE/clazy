@@ -60,7 +60,8 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
 
     const SourceLocation declStart = varDecl->getLocStart();
     auto macroName = Lexer::getImmediateMacroName(declStart, m_ci.getSourceManager(), m_ci.getLangOpts());
-    if (stringStartsWith(macroName, "Q_CONSTRUCTOR_FUNCTION")) // Don't warn on these
+    if (stringStartsWith(macroName, "Q_CONSTRUCTOR_FUNCTION") ||
+        stringStartsWith(macroName, "Q_DESTRUCTOR_FUNCTION")) // Don't warn on these
         return;
 
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
