@@ -1,5 +1,5 @@
 /*
-   This file is part of the clang-lazy static checker.
+   This file is part of the clazy static checker.
 
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
