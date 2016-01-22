@@ -102,6 +102,7 @@ set(SRC_FILES
     FixItUtils.cpp
     HierarchyUtils.cpp
     Lazy.cpp
+    MacroUtils.cpp
     QtUtils.cpp
     Utils.cpp)
 

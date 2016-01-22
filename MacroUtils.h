@@ -1,7 +1,7 @@
 /*
    This file is part of the clang-lazy static checker.
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016 Sergio Martins <smartins@kde.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -22,50 +22,23 @@
   without including the source code for Qt in the source distribution.
 */
 
-#ifndef CLAZY_QT_UTILS_H
-#define CLAZY_QT_UTILS_H
+#ifndef CLAZY_MACRO_UTILS_H
+#define CLAZY_MACRO_UTILS_H
 
 #include <string>
-#include <vector>
 
 namespace clang {
-class CXXRecordDecl;
 class CompilerInstance;
 }
 
-namespace QtUtils
+namespace MacroUtils
 {
 
 /**
- * Returns true if the class is a Qt class which can be iterated with foreach.
- * Which means all containers and also stuff like QAssociativeIterable.
+ * Returns true is macroName was defined via compiler invocation argument.
+ * Like $ gcc -Dfoo main.cpp
  */
-bool isQtIterableClass(clang::CXXRecordDecl *record);
-
-/**
- * Overload.
- */
-bool isQtIterableClass(const std::string &className);
-
-/**
- * Returns true if the class is a Qt class which is an associative container (QHash, QMap, QSet)
- */
-bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
-
-/**
- * Overload.
- */
-bool isQtAssociativeContainer(const std::string &className);
-
-/**
- * Returns a list of Qt containers.
- */
-const std::vector<std::string> & qtContainers();
-
-/**
- * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler
- */
-bool isBootstrapping(const clang::CompilerInstance &);
+bool isPredefined(const clang::CompilerInstance &, const std::string &macroName);
 
 }
 

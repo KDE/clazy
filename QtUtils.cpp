@@ -24,6 +24,7 @@
 
 #include "QtUtils.h"
 #include "Utils.h"
+#include "MacroUtils.h"
 
 using namespace std;
 
@@ -61,4 +62,9 @@ bool QtUtils::isQtAssociativeContainer(const string &className)
 {
     static const vector<string> classes = { "QSet", "QMap", "QHash" };
     return find(classes.cbegin(), classes.cend(), className) != classes.cend();
+}
+
+bool QtUtils::isBootstrapping(const clang::CompilerInstance &ci)
+{
+    return MacroUtils::isPredefined(ci, "QT_BOOTSTRAPPED");
 }
