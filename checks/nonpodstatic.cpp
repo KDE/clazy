@@ -28,6 +28,8 @@
 #include "nonpodstatic.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "MacroUtils.h"
+#include "QtUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -84,6 +86,9 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
             return;
         }
     }
+
+    if (QtUtils::isBootstrapping(m_ci))
+        return;
 
     const string className = recordDecl->getName();
     if (!shouldIgnoreType(className, m_ci)) {
