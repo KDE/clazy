@@ -21,8 +21,11 @@
 
 #include "MacroUtils.h"
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/Lexer.h>
+#include <clang/Basic/SourceLocation.h>
 
 using namespace std;
+using namespace clang;
 
 bool MacroUtils::isPredefined(const clang::CompilerInstance &ci, const string &macroName)
 {
@@ -31,6 +34,17 @@ bool MacroUtils::isPredefined(const clang::CompilerInstance &ci, const string &m
     for (const auto &macro : macros) {
         if (macro.first == macroName)
             return true;
+    }
+
+    return false;
+}
+
+
+bool MacroUtils::isInMacro(const CompilerInstance &ci, SourceLocation loc, const string &macroName)
+{
+    if (loc.isValid() && loc.isMacroID()) {
+        auto macro = Lexer::getImmediateMacroName(loc, ci.getSourceManager(), ci.getLangOpts());
+        return macro == macroName;
     }
 
     return false;

@@ -24,6 +24,7 @@
 
 #include "assertwithsideeffects.h"
 #include "Utils.h"
+#include "MacroUtils.h"
 #include "StringUtils.h"
 #include "checkmanager.h"
 
@@ -68,7 +69,7 @@ static bool methodIsOK(const string &name)
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = stm->getLocStart();
-    if (!Utils::isInMacro(m_ci, stmStart, "Q_ASSERT"))
+    if (!MacroUtils::isInMacro(m_ci, stmStart, "Q_ASSERT"))
         return;
 
     bool warn = false;

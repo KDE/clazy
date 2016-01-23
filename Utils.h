@@ -262,12 +262,6 @@ namespace Utils {
      * Returns true if record is a shared pointer (boost, Qt or stl only).
      */
     bool isSharedPointer(clang::CXXRecordDecl *record);
-
-
-    /**
-     * Returns true if the source location loc is inside a macro named macroName.
-     */
-    bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
 }
 
 #endif

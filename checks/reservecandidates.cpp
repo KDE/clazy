@@ -24,6 +24,7 @@
 
 #include "reservecandidates.h"
 #include "Utils.h"
+#include "MacroUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
@@ -188,7 +189,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (!body)
         return;
 
-    const bool isForeach = Utils::isInMacro(m_ci, stm->getLocStart(), "Q_FOREACH");
+    const bool isForeach = MacroUtils::isInMacro(m_ci, stm->getLocStart(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body)))
@@ -363,7 +364,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
         if (isLoop)
             loopCount++;
 
-        if (Utils::isInMacro(m_ci, parentStart, "Q_FOREACH")) {
+        if (MacroUtils::isInMacro(m_ci, parentStart, "Q_FOREACH")) {
             auto ploc = m_ci.getSourceManager().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting

@@ -23,6 +23,7 @@
 #include "Utils.h"
 #include "TemplateUtils.h"
 #include "checkmanager.h"
+#include "MacroUtils.h"
 #include "StringUtils.h"
 #include "Utils.h"
 
@@ -49,7 +50,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     SourceLocation loc = stmt->getLocStart();
-    if (Utils::isInMacro(m_ci, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
+    if (MacroUtils::isInMacro(m_ci, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
         return;
 
     CXXRecordDecl *record = ctorDecl->getParent();

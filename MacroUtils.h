@@ -26,6 +26,7 @@
 
 namespace clang {
 class CompilerInstance;
+class SourceLocation;
 }
 
 namespace MacroUtils
@@ -36,6 +37,11 @@ namespace MacroUtils
  * Like $ gcc -Dfoo main.cpp
  */
 bool isPredefined(const clang::CompilerInstance &, const std::string &macroName);
+
+/**
+ * Returns true if the source location loc is inside a macro named macroName.
+ */
+bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
 
 }
 

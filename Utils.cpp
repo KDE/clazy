@@ -1169,13 +1169,3 @@ bool Utils::isSharedPointer(CXXRecordDecl *record)
     return record ? find(names.cbegin(), names.cend(), record->getQualifiedNameAsString()) != names.cend()
                   : false;
 }
-
-bool Utils::isInMacro(const CompilerInstance &ci, SourceLocation loc, const string &macroName)
-{
-    if (loc.isValid() && loc.isMacroID()) {
-        auto macro = Lexer::getImmediateMacroName(loc, ci.getSourceManager(), ci.getLangOpts());
-        return macro == macroName;
-    }
-
-    return false;
-}

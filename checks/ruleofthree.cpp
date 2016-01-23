@@ -21,6 +21,7 @@
 
 #include "ruleofthree.h"
 #include "Utils.h"
+#include "MacroUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
 
@@ -46,7 +47,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const SourceLocation recordStart = record->getLocStart();
     if (recordStart.isMacroID()) {
-        if (Utils::isInMacro(m_ci, recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
+        if (MacroUtils::isInMacro(m_ci, recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
             return;
         }
     }
