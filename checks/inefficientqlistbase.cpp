@@ -53,7 +53,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
         return true;
     }
 
-    if ((m_ignoreMode & IgnoreIsAssignedToInFunction) && fDecl && fDecl->getReturnType() == varDecl->getType()) {
+    if ((m_ignoreMode & IgnoreInFunctionWithSameReturnType) && fDecl && fDecl->getReturnType().getCanonicalType() == varDecl->getType().getCanonicalType()) {
         return true;
     }
 
