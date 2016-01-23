@@ -430,7 +430,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 }
 
 template<class T>
-static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
+static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, bool byRefOnly)
 {
     unsigned int param = 0;
     for (auto arg = expr->arg_begin(), arg_end = expr->arg_end(); arg != arg_end; ++arg) {
@@ -447,6 +447,11 @@ static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
 
         if (refExpr->getDecl() != varDecl) // It's our variable ?
             continue;
+
+        if (!byRefOnly) {
+            // We found it
+            return true;
+        }
 
         // It is, lets see if the callee takes our variable by const-ref
         if (param >= fDecl->param_size())
@@ -480,7 +485,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
         if (!fDecl)
             continue;
 
-        if (argByRef(callexpr, fDecl, varDecl))
+        if (isArgOfFunc(callexpr, fDecl, varDecl, /*byRefOnly=*/ true))
             return true;
     }
 
@@ -490,7 +495,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
         CXXConstructExpr *constructExpr = *it;
         FunctionDecl *fDecl = constructExpr->getConstructor();
 
-        if (argByRef(constructExpr, fDecl, varDecl))
+        if (isArgOfFunc(constructExpr, fDecl, varDecl, /*byRefOnly=*/ true))
             return true;
     }
 
