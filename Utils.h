@@ -126,6 +126,7 @@ namespace Utils {
     bool containsNonConstMemberCall(clang::Stmt *body, const clang::VarDecl *varDecl);
 
     // Returns true if there's an assignment to varDecl in body
+    // Example: our_var = something_else
     bool isAssignedTo(clang::Stmt *body, const clang::VarDecl *varDecl);
 
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)

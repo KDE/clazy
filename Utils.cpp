@@ -511,10 +511,8 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
     return false;
 }
 
-
 bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 {
-    // Check for operator calls:
     std::vector<CXXOperatorCallExpr*> operatorCalls;
     HierarchyUtils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
@@ -540,7 +538,6 @@ bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
     HierarchyUtils::getChilds2<clang::CXXDefaultArgExpr>(expr, exprs, 1);
     return !exprs.empty();
 }
-
 
 bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
 {
