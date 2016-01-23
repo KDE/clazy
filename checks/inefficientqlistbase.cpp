@@ -49,7 +49,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
     DeclContext *context = varDecl->getDeclContext();
     FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
 
-    if ((m_ignoreMode & IgnoreNonLocalVariable) && Utils::isValueDeclInFunctionContext(fDecl)) {
+    if ((m_ignoreMode & IgnoreNonLocalVariable) && !Utils::isValueDeclInFunctionContext(varDecl)) {
         return true;
     }
 

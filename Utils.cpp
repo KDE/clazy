@@ -333,9 +333,8 @@ bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
 {
     if (!valueDecl)
         return false;
-
     DeclContext *context = valueDecl->getDeclContext();
-    return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(context);
+    return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(valueDecl);
 }
 
 bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
