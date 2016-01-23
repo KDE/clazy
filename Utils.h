@@ -35,6 +35,8 @@
 #include <vector>
 #include <map>
 
+// TODO: this is a dumping ground, most of these functions should be moved to the other *Utils classes
+
 namespace clang {
     class CXXNamedCastExpr;
     class CXXRecordDecl;
