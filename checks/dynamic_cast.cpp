@@ -39,24 +39,19 @@ BogusDynamicCast::BogusDynamicCast(const std::string &name, const clang::Compile
 void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
 {
     auto dynExp = dyn_cast<CXXDynamicCastExpr>(stm);
-    if (dynExp == nullptr)
+    if (!dynExp)
         return;
 
     auto namedCast = dyn_cast<CXXNamedCastExpr>(stm);
     CXXRecordDecl *castFrom = Utils::namedCastInnerDecl(namedCast);
-    if (castFrom == nullptr)
+    if (!castFrom)
         return;
 
     //if (QtUtils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
         //emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
-    //if (dynExp->isAlwaysNull()) { // Crashing in Type.h  assert(isa<T>(CanonicalType))
-      //  emitWarning(dynExp->getLocStart(), "That dynamic_cast is always null");
-//        return;
-  //  }
-
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);
-    if (castTo == nullptr)
+    if (!castTo)
         return;
 
     if (castFrom == castTo) {
