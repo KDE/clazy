@@ -24,6 +24,7 @@
 
 #include "missingtypeinfo.h"
 #include "Utils.h"
+#include <TypeUtils.h>
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -66,11 +67,11 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     const Type *t = qt2.getTypePtrOrNull();
     if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->getDefinition() == nullptr) return; // Don't crash if we only have a fwd decl
 
-    const int size_of_void = 64; // TODO arm 32bit ?
+    const int size_of_ptr = TypeUtils::sizeOfPointer(m_ci, qt2); // in bits
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
-    const bool isTooBigForQList = size_of_T <= size_of_void;
+    const bool isTooBigForQList = size_of_T <= size_of_ptr;
 
     if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
 
