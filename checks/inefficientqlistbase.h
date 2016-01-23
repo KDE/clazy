@@ -39,10 +39,10 @@ class InefficientQListBase : public CheckBase
 {
 public:
     enum IgnoreMode {
-        None = 0,
-        NonLocalVariable = 1,
-        InFunctionWithSameReturnType = 2,
-        IsAssignedTooInFunction = 4
+        IgnoreNone = 0,
+        IgnoreNonLocalVariable = 1,
+        IgnoreInFunctionWithSameReturnType = 2,
+        IgnoreIsAssignedTooInFunction = 4
     };
 
     explicit InefficientQListBase(const std::string &name, const clang::CompilerInstance &ci, int ignoreMode);

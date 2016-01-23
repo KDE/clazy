@@ -21,8 +21,8 @@ struct BigType {
 
 void foo()
 {
-    QList<BigType> bigT;
-    QList<SmallType> smallT;
+    QList<BigType> bigT; // Warning
+    QList<SmallType> smallT; // OK
 }
 
 class A {
@@ -32,12 +32,12 @@ public:
         m_big.clear();
     }
 
-    QList<BigType> m_big;
+    QList<BigType> m_big; // Warning
 };
 
 void foo1(QList<BigType> big2)
 {
-    QList<BigType> bigt;
+    QList<BigType> bigt; // Warning
     bigt = big2;
 }
 

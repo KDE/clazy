@@ -37,7 +37,7 @@ using namespace clang;
 using namespace std;
 
 InefficientQList::InefficientQList(const std::string &name, const clang::CompilerInstance &ci)
-    : InefficientQListBase(name, ci, NonLocalVariable | InFunctionWithSameReturnType | IsAssignedTooInFunction)
+    : InefficientQListBase(name, ci, IgnoreNone)
 {
 }
 
