@@ -61,6 +61,10 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
         return true;
     }
 
+    if ((m_ignoreMode & IgnoreIsPassedToFunctions) && fDecl && Utils::isPassedToFunction(fDecl->getBody(), varDecl, /*by-ref=*/ false)) {
+        return true;
+    }
+
     return false;
 }
 
