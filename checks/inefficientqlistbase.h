@@ -22,20 +22,35 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef INEFFICIENT_QLIST_H
-#define INEFFICIENT_QLIST_H
+#ifndef INEFFICIENT_QLIST_BASE_H
+#define INEFFICIENT_QLIST_BASE_H
 
-#include "inefficientqlistbase.h"
+#include "checkbase.h"
+#include <string>
+
+namespace clang {
+class VarDecl;
+}
 
 /**
- * Finds usages of QList<T> where T is bigger than sizeof(void*), where QVector should be used instead.
- *
- * See README-inefficient-qlist.
+ * Base class for inefficient-qlist and inefficient-qlist-soft
  */
-class InefficientQList : public InefficientQListBase
+class InefficientQListBase : public CheckBase
 {
 public:
-    explicit InefficientQList(const std::string &name, const clang::CompilerInstance &ci);
+    enum IgnoreMode {
+        None = 0,
+        NonLocalVariable = 1,
+        InFunctionWithSameReturnType = 2,
+        IsAssignedTooInFunction = 4
+    };
+
+    explicit InefficientQListBase(const std::string &name, const clang::CompilerInstance &ci, int ignoreMode);
+    void VisitDecl(clang::Decl *decl) override;
+
+private:
+    bool shouldIgnoreVariable(clang::VarDecl *varDecl) const;
+    const int m_ignoreMode;
 };
 
 #endif

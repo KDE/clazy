@@ -36,75 +36,9 @@
 using namespace clang;
 using namespace std;
 
-enum IgnoreMode {
-    None = 0,
-    NonLocalVariable = 1,
-    InFunctionWithSameReturnType = 2,
-    IsAssignedTooInFunction = 4
-};
-
 InefficientQList::InefficientQList(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+    : InefficientQListBase(name, ci, NonLocalVariable | InFunctionWithSameReturnType | IsAssignedTooInFunction)
 {
-}
-
-static bool shouldIgnoreVariable(VarDecl *varDecl, int ignoreMode)
-{
-    DeclContext *context = varDecl->getDeclContext();
-    FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
-
-    if (ignoreMode & NonLocalVariable) {
-        if (!fDecl)
-            return true;
-    }
-
-    if (ignoreMode & IsAssignedTooInFunction) {
-        if (fDecl && fDecl->getReturnType() == varDecl->getType())
-            return true;
-    }
-
-    if (ignoreMode & IsAssignedTooInFunction) {
-        if (fDecl) {
-            if (Utils::containsAssignment(fDecl->getBody(), varDecl))
-                return true;
-        }
-    }
-
-    return false;
-}
-
-void InefficientQList::VisitDecl(clang::Decl *decl)
-{
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl)
-        return;
-
-    QualType type = varDecl->getType();
-    const Type *t = type.getTypePtrOrNull();
-    if (!t)
-        return;
-
-    if (shouldIgnoreVariable(varDecl, NonLocalVariable | InFunctionWithSameReturnType | IsAssignedTooInFunction))
-        return;
-
-    CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-    if (!recordDecl || recordDecl->getNameAsString() != "QList")
-        return;
-
-    const std::vector<clang::QualType> types = TemplateUtils::getTemplateArgumentsTypes(recordDecl);
-    if (types.empty())
-        return;
-    QualType qt2 = types[0];
-    if (!qt2.getTypePtrOrNull())
-        return;
-
-    const int size_of_ptr = TypeUtils::sizeOfPointer(m_ci, qt2); // in bits
-    const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
-
-    if (size_of_T > size_of_ptr) {
-        string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");
-        emitWarning(decl->getLocStart(), s.c_str());
-    }
 }
 
 REGISTER_CHECK_WITH_FLAGS("inefficient-qlist", InefficientQList, CheckLevel3)

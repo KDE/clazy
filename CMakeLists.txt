@@ -74,6 +74,7 @@ set(SRC_FILES
     checks/foreach.cpp
     checks/globalconstcharpointer.cpp
     checks/isempty-vs-count.cpp
+    checks/inefficientqlistbase.cpp
     checks/inefficientqlist.cpp
     checks/implicitcasts.cpp
     checks/qdatetimeutc.cpp
