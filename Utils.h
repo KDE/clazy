@@ -57,9 +57,6 @@ namespace clang {
 }
 
 namespace Utils {
-    /// Returns true if fullString ends in ending
-    bool hasEnding(const std::string &fullString, const std::string &ending);
-
     /// Returns true if childDecl is a descent from parentDecl
     bool isChildOf(clang::CXXRecordDecl *childDecl, clang::CXXRecordDecl *parentDecl);
 
