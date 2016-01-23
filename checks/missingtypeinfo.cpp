@@ -50,13 +50,13 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 
     // Catches QList<Foo>
     ClassTemplateSpecializationDecl *tstdecl = Utils::templateDecl(decl);
-    if (tstdecl == nullptr)
+    if (!tstdecl)
         return;
 
     const bool isQList = tstdecl->getName() == "QList";
     const bool isQVector = tstdecl->getName() == "QVector";
 
-    if (tstdecl == nullptr || (!isQList && !isQVector))
+    if (!tstdecl || (!isQList && !isQVector))
         return;
 
     const TemplateArgumentList &tal = tstdecl->getTemplateArgs();
@@ -65,7 +65,8 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     QualType qt2 = tal[0].getAsType();
 
     const Type *t = qt2.getTypePtrOrNull();
-    if (t == nullptr || t->getAsCXXRecordDecl() == nullptr || t->getAsCXXRecordDecl()->getDefinition() == nullptr) return; // Don't crash if we only have a fwd decl
+    if (!t || !t->getAsCXXRecordDecl() || !t->getAsCXXRecordDecl()->getDefinition())
+        return; // Don't crash if we only have a fwd decl
 
     const int size_of_ptr = TypeUtils::sizeOfPointer(m_ci, qt2); // in bits
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
@@ -100,8 +101,7 @@ void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
         QualType qt = args[0].getAsType();
         const Type *t = qt.getTypePtrOrNull();
         CXXRecordDecl *recordDecl =  t ? t->getAsCXXRecordDecl() : nullptr;
-        // llvm::errs() << qt.getAsString() << " foo\n";
-        if (recordDecl != nullptr) {
+        if (recordDecl) {
             m_typeInfos.insert(recordDecl->getQualifiedNameAsString());
         }
     }
