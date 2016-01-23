@@ -57,9 +57,6 @@ namespace clang {
 }
 
 namespace Utils {
-    /// Returns true if the class inherits from QObject
-    bool isQObject(clang::CXXRecordDecl *decl);
-
     /// Returns true if fullString ends in ending
     bool hasEnding(const std::string &fullString, const std::string &ending);
 

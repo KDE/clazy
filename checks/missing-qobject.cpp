@@ -26,6 +26,7 @@
 #include "missing-qobject.h"
 
 #include "Utils.h"
+#include "QtUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
 
@@ -67,7 +68,7 @@ MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name, const clang::CompilerI
 void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
 {
     CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !Utils::isQObject(record))
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !QtUtils::isQObject(record))
         return;
 
     if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates

@@ -42,28 +42,6 @@
 using namespace clang;
 using namespace std;
 
-bool Utils::isQObject(CXXRecordDecl *decl)
-{
-    if (!decl)
-        return false;
-
-    if (decl->getName() == "QObject")
-        return true;
-
-    for (CXXRecordDecl::base_class_iterator it = decl->bases_begin();
-         it != decl->bases_end();  ++it) {
-
-        CXXBaseSpecifier *base = it;
-        const Type *type = base->getType().getTypePtr();
-        CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
-        if (isQObject(baseDecl)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool Utils::hasEnding(const std::string &fullString, const std::string &ending)
 {
     if (fullString.length() >= ending.length()) {

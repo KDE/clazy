@@ -47,7 +47,7 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     if (castFrom == nullptr)
         return;
 
-    //if (Utils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
+    //if (QtUtils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
         //emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
     //if (dynExp->isAlwaysNull()) { // Crashing in Type.h  assert(isa<T>(CanonicalType))

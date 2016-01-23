@@ -64,6 +64,11 @@ const std::vector<std::string> & qtContainers();
  */
 bool isBootstrapping(const clang::CompilerInstance &);
 
+/**
+ * Returns if decl is or derives from QObject
+ */
+bool isQObject(clang::CXXRecordDecl *decl);
+
 }
 
 #endif

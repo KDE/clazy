@@ -24,6 +24,7 @@
 #include "MacroUtils.h"
 
 using namespace std;
+using namespace clang;
 
 bool QtUtils::isQtIterableClass(clang::CXXRecordDecl *record)
 {
@@ -64,4 +65,23 @@ bool QtUtils::isQtAssociativeContainer(const string &className)
 bool QtUtils::isBootstrapping(const clang::CompilerInstance &ci)
 {
     return MacroUtils::isPredefined(ci, "QT_BOOTSTRAPPED");
+}
+
+bool QtUtils::isQObject(CXXRecordDecl *decl)
+{
+    if (!decl)
+        return false;
+
+    if (decl->getName() == "QObject")
+        return true;
+
+    for (auto it = decl->bases_begin(), end = decl->bases_end(); it != end; ++it) {
+        CXXBaseSpecifier *base = it;
+        const Type *type = base->getType().getTypePtr();
+        CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
+        if (isQObject(baseDecl))
+            return true;
+    }
+
+    return false;
 }
