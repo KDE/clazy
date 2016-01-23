@@ -1,0 +1,6 @@
+inefficient-qlist
+
+When sizeof(T) > sizeof(void*) QList<T> is implemented as a list of pointers to the actual items,
+which is much slower than QVector.
+
+FIXME: sizeof(void*) is hardcoded to be 64-bits

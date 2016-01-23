@@ -28,7 +28,9 @@
 #include "checkbase.h"
 
 /**
- * Finds usages of QList<T> where T is bigger than sizeof(void*), so QVector should be used instead
+ * Finds usages of QList<T> where T is bigger than sizeof(void*), where QVector should be used instead.
+ *
+ * See README-inefficient-qlist.
  */
 class InefficientQList : public CheckBase
 {
