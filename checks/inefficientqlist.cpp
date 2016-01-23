@@ -24,6 +24,7 @@
 
 #include "inefficientqlist.h"
 #include "Utils.h"
+#include "TypeUtils.h"
 #include "TemplateUtils.h"
 #include "checkmanager.h"
 
@@ -94,10 +95,13 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
     if (types.empty())
         return;
     QualType qt2 = types[0];
-    const int size_of_void = 8 * 8; // 64 bits
+    if (!qt2.getTypePtrOrNull())
+        return;
+
+    const int size_of_ptr = TypeUtils::sizeOfPointer(m_ci, qt2); // in bits
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
 
-    if (size_of_T > size_of_void) {
+    if (size_of_T > size_of_ptr) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");
         emitWarning(decl->getLocStart(), s.c_str());
     }
