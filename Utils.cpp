@@ -475,7 +475,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
     return false;
 }
 
-bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
+bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnly)
 {
     std::vector<CallExpr*> callExprs;
     HierarchyUtils::getChilds2<CallExpr>(body, callExprs);
@@ -485,7 +485,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
         if (!fDecl)
             continue;
 
-        if (isArgOfFunc(callexpr, fDecl, varDecl, /*byRefOnly=*/ true))
+        if (isArgOfFunc(callexpr, fDecl, varDecl, byRefOnly))
             return true;
     }
 
@@ -495,7 +495,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
         CXXConstructExpr *constructExpr = *it;
         FunctionDecl *fDecl = constructExpr->getConstructor();
 
-        if (isArgOfFunc(constructExpr, fDecl, varDecl, /*byRefOnly=*/ true))
+        if (isArgOfFunc(constructExpr, fDecl, varDecl, byRefOnly))
             return true;
     }
 
@@ -1080,7 +1080,7 @@ bool Utils::classifyQualType(const CompilerInstance &ci, const VarDecl *varDecl,
     } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
         classif.passSmallTrivialByValue = true;
     } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
-        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::containsCallByRef(body, varDecl)))
+        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(body, varDecl, /*byrefonly=*/ true)))
             return true;
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
         if (classif.isBig) {

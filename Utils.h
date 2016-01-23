@@ -129,7 +129,7 @@ namespace Utils {
 
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)
     // By ref or pointer
-    bool containsCallByRef(clang::Stmt *body, const clang::VarDecl *varDecl);
+    bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl, bool byRefOnly);
 
     // QString::fromLatin1("foo")    -> true
     // QString::fromLatin1("foo", 1) -> false
