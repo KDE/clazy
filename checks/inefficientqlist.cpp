@@ -52,17 +52,17 @@ static bool shouldIgnoreVariable(VarDecl *varDecl, int ignoreMode)
     FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
 
     if (ignoreMode & NonLocalVariable) {
-        if (fDecl == nullptr)
+        if (!fDecl)
             return true;
     }
 
     if (ignoreMode & IsAssignedTooInFunction) {
-        if (fDecl != nullptr && fDecl->getReturnType() == varDecl->getType())
+        if (fDecl && fDecl->getReturnType() == varDecl->getType())
             return true;
     }
 
     if (ignoreMode & IsAssignedTooInFunction) {
-        if (fDecl != nullptr) {
+        if (fDecl) {
             if (Utils::containsAssignment(fDecl->getBody(), varDecl))
                 return true;
         }
@@ -74,23 +74,23 @@ static bool shouldIgnoreVariable(VarDecl *varDecl, int ignoreMode)
 void InefficientQList::VisitDecl(clang::Decl *decl)
 {
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (varDecl == nullptr)
+    if (!varDecl)
         return;
 
     QualType type = varDecl->getType();
     const Type *t = type.getTypePtrOrNull();
-    if (t == nullptr)
+    if (!t)
         return;
 
     if (shouldIgnoreVariable(varDecl, NonLocalVariable | InFunctionWithSameReturnType | IsAssignedTooInFunction))
         return;
 
     CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-    if (recordDecl == nullptr || recordDecl->getNameAsString() != "QList")
+    if (!recordDecl || recordDecl->getNameAsString() != "QList")
         return;
 
     ClassTemplateSpecializationDecl *tstdecl = dyn_cast<ClassTemplateSpecializationDecl>(recordDecl);
-    if (tstdecl == nullptr)
+    if (!tstdecl)
         return;
 
     const TemplateArgumentList &tal = tstdecl->getTemplateArgs();

@@ -34,6 +34,7 @@ class InefficientQList : public CheckBase
 {
 public:
     InefficientQList(const std::string &name, const clang::CompilerInstance &ci);
-    void VisitDecl(clang::Decl *decl) override;};
+    void VisitDecl(clang::Decl *decl) override;
+};
 
 #endif
