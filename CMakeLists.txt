@@ -98,11 +98,13 @@ set(SRC_FILES
     checks/temporaryiterator.cpp
     checks/variantsanitizer.cpp
     checks/writingtotemporary.cpp
+    checks/wrong-qglobalstatic.cpp
     checks/virtualcallsfromctor.cpp
     FixItUtils.cpp
     HierarchyUtils.cpp
     Lazy.cpp
     MacroUtils.cpp
+    TemplateUtils.cpp
     QtUtils.cpp
     Utils.cpp)
 

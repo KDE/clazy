@@ -1,0 +1,2 @@
+wrong-qglobalstatic/main.cpp:12:22: warning: Don't use Q_GLOBAL_STATIC with trivial type (Pod) [-Wclazy-wrong-qglobalstatic]
+wrong-qglobalstatic/main.cpp:14:22: warning: Don't use Q_GLOBAL_STATIC with non-class type (int) [-Wclazy-wrong-qglobalstatic]

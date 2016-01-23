@@ -24,6 +24,7 @@
 
 #include "variantsanitizer.h"
 #include "Utils.h"
+#include "TemplateUtils.h"
 #include "checkmanager.h"
 
 using namespace std;
@@ -60,14 +61,9 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
     if (decl == nullptr || decl->getNameAsString() != "QVariant")
         return;
 
-    FunctionTemplateSpecializationInfo *specializationInfo = methodDecl->getTemplateSpecializationInfo();
-    if (specializationInfo == nullptr || specializationInfo->TemplateArguments == nullptr || specializationInfo->TemplateArguments->size() != 1)
-        return;
-
-    const TemplateArgument &argument = specializationInfo->TemplateArguments->get(0);
-    QualType qt = argument.getAsType();
-    const Type *t = qt.getTypePtrOrNull();
-    if (t == nullptr)
+    vector<QualType> typeList = TemplateUtils::getTemplateArgumentsTypes(methodDecl);
+    const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
+    if (!t)
         return;
 
     bool matches = false;
