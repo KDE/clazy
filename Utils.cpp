@@ -534,26 +534,6 @@ bool Utils::containsAssignment(Stmt *body, const VarDecl *varDecl)
     return false;
 }
 
-std::vector<std::string> Utils::splitString(const char *str, char separator)
-{
-    if (!str)
-        return {};
-
-    return splitString(string(str), separator);
-}
-
-std::vector<std::string> Utils::splitString(const string &str, char separator)
-{
-    std::string token;
-    std::vector<std::string> result;
-    std::istringstream istream(str);
-    while (std::getline(istream, token, separator)) {
-        result.push_back(token);
-    }
-
-    return result;
-}
-
 bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 {
     std::vector<clang::CXXDefaultArgExpr*> exprs;

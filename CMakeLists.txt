@@ -106,6 +106,7 @@ set(SRC_FILES
     HierarchyUtils.cpp
     MacroUtils.cpp
     TemplateUtils.cpp
+    StringUtils.cpp
     TypeUtils.cpp
     QtUtils.cpp
     Utils.cpp)
