@@ -435,11 +435,10 @@ static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
     unsigned int param = 0;
     for (auto arg = expr->arg_begin(), arg_end = expr->arg_end(); arg != arg_end; ++arg) {
         DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
-        if (refExpr == nullptr)  {
-
+        if (!refExpr)  {
             if ((*arg)->child_begin() != (*arg)->child_end()) {
                 refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
-                if (refExpr == nullptr)
+                if (!refExpr)
                     continue;
             } else {
                 continue;
@@ -454,12 +453,12 @@ static bool argByRef(T expr, FunctionDecl *fDecl, const VarDecl *varDecl)
             continue;
 
         ParmVarDecl *paramDecl = fDecl->getParamDecl(param);
-        if (paramDecl == nullptr)
+        if (!paramDecl)
             continue;
 
         QualType qt = paramDecl->getType();
         const Type *t = qt.getTypePtrOrNull();
-        if (t == nullptr)
+        if (!t)
             continue;
 
         if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified())
@@ -478,7 +477,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
     for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
         CallExpr *callexpr = *it;
         FunctionDecl *fDecl = callexpr->getDirectCallee();
-        if (fDecl == nullptr)
+        if (!fDecl)
             continue;
 
         if (argByRef(callexpr, fDecl, varDecl))
