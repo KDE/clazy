@@ -117,8 +117,6 @@ namespace Utils {
     // Returns true if the class derived is or descends from a class named parent
     bool descendsFrom(clang::CXXRecordDecl *derived, const std::string &parentName);
 
-    std::string qualifiedNameForDeclarationOfMemberExr(clang::MemberExpr *memberExpr);
-
     // Returns true if a body of statements contains a non const member call on object declared by varDecl
     // For example:
     // Foo foo; // this is the varDecl

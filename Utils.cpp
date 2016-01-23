@@ -363,19 +363,6 @@ bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstanc
     return false;
 }
 
-
-std::string Utils::qualifiedNameForDeclarationOfMemberExr(MemberExpr *memberExpr)
-{
-    if (memberExpr == nullptr)
-        return {};
-
-    auto valueDecl = memberExpr->getMemberDecl();
-    if (valueDecl == nullptr)
-        return {};
-
-    return valueDecl->getQualifiedNameAsString();
-}
-
 bool Utils::descendsFrom(clang::CXXRecordDecl *derived, const std::string &parentName)
 {
     if (derived == nullptr)
