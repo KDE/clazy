@@ -42,7 +42,7 @@ public:
         IgnoreNone = 0,
         IgnoreNonLocalVariable = 1,
         IgnoreInFunctionWithSameReturnType = 2,
-        IgnoreIsAssignedTooInFunction = 4
+        IgnoreIsAssignedToInFunction = 4
     };
 
     explicit InefficientQListBase(const std::string &name, const clang::CompilerInstance &ci, int ignoreMode);
