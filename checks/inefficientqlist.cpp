@@ -24,6 +24,7 @@
 
 #include "inefficientqlist.h"
 #include "Utils.h"
+#include "TemplateUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
@@ -89,14 +90,10 @@ void InefficientQList::VisitDecl(clang::Decl *decl)
     if (!recordDecl || recordDecl->getNameAsString() != "QList")
         return;
 
-    ClassTemplateSpecializationDecl *tstdecl = dyn_cast<ClassTemplateSpecializationDecl>(recordDecl);
-    if (!tstdecl)
+    const std::vector<clang::QualType> types = TemplateUtils::getTemplateArgumentsTypes(recordDecl);
+    if (types.empty())
         return;
-
-    const TemplateArgumentList &tal = tstdecl->getTemplateArgs();
-
-    if (tal.size() != 1) return;
-    QualType qt2 = tal[0].getAsType();
+    QualType qt2 = types[0];
     const int size_of_void = 8 * 8; // 64 bits
     const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
 

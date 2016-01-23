@@ -29,7 +29,6 @@ namespace clang {
 
 namespace TemplateUtils
 {
-
     /**
      * Returns a list of QualTypes for the template arguments.
      * For example:
@@ -37,5 +36,10 @@ namespace TemplateUtils
      */
     std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXMethodDecl *);
 
+    /**
+     * Returns a list of QualTypes for the template arguments.
+     * For example:
+     *    If the class was QList<int>(), it would return {int}
+     */
     std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXRecordDecl *);
 }
