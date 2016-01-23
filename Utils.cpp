@@ -512,7 +512,7 @@ bool Utils::containsCallByRef(Stmt *body, const VarDecl *varDecl)
 }
 
 
-bool Utils::containsAssignment(Stmt *body, const VarDecl *varDecl)
+bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 {
     // Check for operator calls:
     std::vector<CXXOperatorCallExpr*> operatorCalls;
