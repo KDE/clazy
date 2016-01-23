@@ -331,11 +331,11 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
 
 bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
 {
-    if (valueDecl == nullptr)
+    if (!valueDecl)
         return false;
 
     DeclContext *context = valueDecl->getDeclContext();
-    return context != nullptr && isa<FunctionDecl>(context);
+    return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(context);
 }
 
 bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)

@@ -100,7 +100,7 @@ namespace Utils {
     clang::ValueDecl * valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
 
     /// Returns true if a decl is inside a function, instead of say a class field.
-    /// This returns true if "QList<int> l;" is a localvariable, instead of being a class field such
+    /// This returns true if "QList<int> l;" is a local variable, instead of being a class field such
     /// as struct Foo { QList<int> l; }
     bool isValueDeclInFunctionContext(clang::ValueDecl *);
 
