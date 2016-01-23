@@ -100,9 +100,9 @@ set(SRC_FILES
     checks/writingtotemporary.cpp
     checks/wrong-qglobalstatic.cpp
     checks/virtualcallsfromctor.cpp
+    Clazy.cpp
     FixItUtils.cpp
     HierarchyUtils.cpp
-    Lazy.cpp
     MacroUtils.cpp
     TemplateUtils.cpp
     QtUtils.cpp
