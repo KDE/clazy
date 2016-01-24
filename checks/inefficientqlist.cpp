@@ -41,4 +41,4 @@ InefficientQList::InefficientQList(const std::string &name, const clang::Compile
 {
 }
 
-REGISTER_CHECK_WITH_FLAGS("inefficient-qlist", InefficientQList, CheckLevel3)
+REGISTER_CHECK_WITH_FLAGS("inefficient-qlist", InefficientQList, HiddenCheckLevel)
