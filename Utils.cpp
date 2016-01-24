@@ -476,6 +476,9 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
 
 bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnly)
 {
+    if (!body)
+        return false;
+
     std::vector<CallExpr*> callExprs;
     HierarchyUtils::getChilds2<CallExpr>(body, callExprs);
     for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
@@ -503,6 +506,9 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
 
 bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 {
+    if (!body)
+        return false;
+
     std::vector<CXXOperatorCallExpr*> operatorCalls;
     HierarchyUtils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
