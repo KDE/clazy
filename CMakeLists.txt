@@ -76,6 +76,7 @@ set(SRC_FILES
     checks/isempty-vs-count.cpp
     checks/inefficientqlistbase.cpp
     checks/inefficientqlist.cpp
+    checks/inefficient-qlist-soft.cpp
     checks/implicitcasts.cpp
     checks/qdatetimeutc.cpp
     checks/qgetenv.cpp

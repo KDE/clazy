@@ -25,6 +25,7 @@
 #include "inefficientqlistbase.h"
 #include "Utils.h"
 #include "TypeUtils.h"
+#include "HierarchyUtils.h"
 #include "TemplateUtils.h"
 #include "checkmanager.h"
 
@@ -57,11 +58,16 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
         return true;
     }
 
-    if ((m_ignoreMode & IgnoreIsAssignedToInFunction) && fDecl && Utils::isAssignedTo(fDecl->getBody(), varDecl)) {
+    Stmt *body = fDecl ? fDecl->getBody() : nullptr;
+    if ((m_ignoreMode & IgnoreIsAssignedToInFunction) && Utils::isAssignedTo(body, varDecl)) {
         return true;
     }
 
-    if ((m_ignoreMode & IgnoreIsPassedToFunctions) && fDecl && Utils::isPassedToFunction(fDecl->getBody(), varDecl, /*by-ref=*/ false)) {
+    if ((m_ignoreMode & IgnoreIsPassedToFunctions) && Utils::isPassedToFunction(body, varDecl, /*by-ref=*/ false)) {
+        return true;
+    }
+
+    if ((m_ignoreMode & IgnoreIsInitializedByFunctionCall) && Utils::isInitializedExternally(varDecl)) {
         return true;
     }
 

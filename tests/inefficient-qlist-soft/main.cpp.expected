@@ -1,0 +1,3 @@
+inefficient-qlist-soft/main.cpp:24:5: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist-soft]
+inefficient-qlist-soft/main.cpp:64:5: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist-soft]
+inefficient-qlist-soft/main.cpp:68:5: warning: Use QVector instead of QList for type with size 9 bytes [-Wclazy-inefficient-qlist-soft]

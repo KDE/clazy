@@ -44,6 +44,7 @@ public:
         IgnoreInFunctionWithSameReturnType = 2,
         IgnoreIsAssignedToInFunction = 4,
         IgnoreIsPassedToFunctions = 8,
+        IgnoreIsInitializedByFunctionCall = 16
     };
 
     explicit InefficientQListBase(const std::string &name, const clang::CompilerInstance &ci, int ignoreMode);

@@ -1,0 +1,10 @@
+inefficient-qlist-soft
+
+A less aggressive version of inefficient-qlist.
+
+Finds QList<T> where sizeof(T) > sizeof(void*). QVector<T> should be used instead.
+Only warns if the container is a local variable and isn't passed to any method or returned,
+unlike inefficient-qlist.
+
+When there are source and binary compatibility concerns it's difficult to fix the warnings reported
+by inefficient-qlist. The warnings reported by inefficient-qlist-soft should be easy to fix.

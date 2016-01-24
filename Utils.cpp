@@ -1108,3 +1108,37 @@ bool Utils::isSharedPointer(CXXRecordDecl *record)
     return record ? find(names.cbegin(), names.cend(), record->getQualifiedNameAsString()) != names.cend()
                   : false;
 }
+
+bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
+{
+    if (!varDecl)
+        return false;
+
+    DeclContext *context = varDecl->getDeclContext();
+    FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
+    Stmt *body = fDecl ? fDecl->getBody() : nullptr;
+    if (!body)
+        return false;
+
+    vector<DeclStmt*> declStmts;
+    HierarchyUtils::getChilds2<DeclStmt>(body, declStmts);
+    for (auto it = declStmts.cbegin(), end = declStmts.cend(); it != end; ++it) {
+        DeclStmt *declStmt = *it;
+        if (declStmt->getSingleDecl() == varDecl) {
+            vector<DeclRefExpr*> declRefs;
+
+            HierarchyUtils::getChilds2<DeclRefExpr>(declStmt, declRefs);
+            if (!declRefs.empty()) {
+                return true;
+            }
+
+            vector<CallExpr*> callExprs;
+            HierarchyUtils::getChilds2<CallExpr>(declStmt, callExprs);
+            if (!callExprs.empty()) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
