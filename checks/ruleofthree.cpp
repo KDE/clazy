@@ -57,29 +57,29 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     CXXDestructorDecl *destructor = record->getDestructor();
     const bool dtorDefaultedByUser = destructor && destructor->isDefaulted() && !destructor->isImplicit();
 
-    const bool hasCopyCtor = copyCtor && copyCtor->isUserProvided();
-    const bool hasCopyAssign = copyAssign && copyAssign->isUserProvided();
-    const bool hasDtor = destructor && destructor->isUserProvided();
+    const bool hasUserCopyCtor = copyCtor && copyCtor->isUserProvided();
+    const bool hasUserCopyAssign = copyAssign && copyAssign->isUserProvided();
+    const bool hasUserDtor = destructor && destructor->isUserProvided();
     //const bool hasMoveCtor = record->hasNonTrivialMoveConstructor();
     //const bool hasTrivialMoveAssignment = record->hasNonTrivialMoveAssignment();
 
-    const int numImplemented = hasCopyCtor + hasCopyAssign + hasDtor;
+    const int numImplemented = hasUserCopyCtor + hasUserCopyAssign + hasUserDtor;
     if (numImplemented == 0 || numImplemented == 3) // Rule of 3 respected
         return;
 
     vector<string> hasList;
     vector<string> missingList;
-    if (hasDtor)
+    if (hasUserDtor)
         hasList.push_back("dtor");
     else
         missingList.push_back("dtor");
 
-    if (hasCopyCtor)
+    if (hasUserCopyCtor)
         hasList.push_back("copy-ctor");
     else
         missingList.push_back("copy-ctor");
 
-    if (hasCopyAssign)
+    if (hasUserCopyAssign)
         hasList.push_back("copy-assignment");
     else
         missingList.push_back("copy-assignment");
@@ -89,7 +89,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     const string className = record->getNameAsString();
     const string classQualifiedName = record->getQualifiedNameAsString();
 
-    if (hasDtor && numImplemented == 1) {
+    if (hasUserDtor && numImplemented == 1) {
         // Protected dtor is a way for a non-polymorphic base class avoid being deleted
         if (destructor->getAccess() == clang::AccessSpecifier::AS_protected)
             return;
@@ -101,7 +101,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
             return;
     }
 
-    if (!hasDtor) {
+    if (!hasUserDtor) {
         if (Utils::descendsFrom(record, "QSharedData"))
             return;
 
