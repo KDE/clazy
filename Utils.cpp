@@ -1142,3 +1142,24 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
 
     return false;
 }
+
+bool Utils::functionHasEmptyBody(clang::FunctionDecl *func)
+{
+    Stmt *body = func ? func->getBody() : nullptr;
+    if (!body)
+        return false;
+
+    auto it = body->child_begin();
+    if (it == body->child_end()) {
+        return true;
+    }
+
+    if (auto *compound = dyn_cast<CompoundStmt>(*it)) {
+        bool isEmpty = compound->child_begin() == compound->child_end();
+        if (isEmpty) {
+            return true;
+        }
+    }
+
+    return false;
+}

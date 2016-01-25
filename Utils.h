@@ -264,6 +264,12 @@ namespace Utils {
      *     QList<int> list;             // false
      */
     bool isInitializedExternally(clang::VarDecl *varDecl);
+
+    /**
+     * Returns true if the body of a function is empty.
+     * Returns false if either function or it's body are null.
+     */
+    bool functionHasEmptyBody(clang::FunctionDecl *func);
 }
 
 #endif
