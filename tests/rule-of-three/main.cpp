@@ -4,7 +4,7 @@
 #include <QtCore/QSet>
 struct Private
 {
-    ~Private() {};
+    ~Private() { int a; };
 };
 
 struct AnotherPrivate

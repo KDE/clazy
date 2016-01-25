@@ -99,6 +99,12 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
         if (copyCtorIsDeleted && copyAssignIsDeleted) // They were explicitely deleted, it's safe.
             return;
+
+        if (Utils::functionHasEmptyBody(destructor)) {
+            // Lets reduce noise and allow the empty dtor. In theory we could warn, but there's no
+            // hidden bug behind this dummy dtor.
+            return;
+        }
     }
 
     if (!hasUserDtor) {

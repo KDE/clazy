@@ -4,7 +4,7 @@
 
 struct HasDtor // Warning
 {
-    ~HasDtor() {}
+    ~HasDtor() { int a; }
 };
 
 struct HasDtorAndCopyCtor // Warning
@@ -65,4 +65,9 @@ struct Has3ButDtorDefault
     ~Has3ButDtorDefault() = default;
     Has3ButDtorDefault(const Has3ButDtorDefault &);
     Has3ButDtorDefault& operator=(const Has3ButDtorDefault &);
+};
+
+struct HasEmptyDtor
+{
+    ~HasEmptyDtor() {} // OK
 };
