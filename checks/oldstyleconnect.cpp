@@ -224,8 +224,9 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 
 bool OldStyleConnect::isPrivateSlot(const string &name) const
 {
-    return std::find_if(m_privateSlots.cbegin(), m_privateSlots.cend(),
-                        [&name](const PrivateSlot &slot){ return slot.name == name; }) != m_privateSlots.cend();
+    return clazy_std::contains_if(m_privateSlots, [name](PrivateSlot slot) {
+        return slot.name == name;
+    });
 }
 
 void OldStyleConnect::VisitStmt(Stmt *s)

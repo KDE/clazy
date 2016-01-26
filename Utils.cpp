@@ -624,7 +624,7 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
             auto method = dyn_cast<CXXMethodDecl>(func);
             if (method) {
                 auto record = method->getParent();
-                if (record && find(anyOf.cbegin(), anyOf.cend(), record->getNameAsString()) != anyOf.cend())
+                if (record && clazy_std::contains(anyOf, record->getNameAsString()))
                     return true;
             }
         }
@@ -640,9 +640,8 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
         return false;
 
     CXXConstructExpr *expr = dyn_cast<CXXConstructExpr>(s);
-    if (expr && expr->getConstructor()) {
-        if (find(anyOf.cbegin(), anyOf.cend(), expr->getConstructor()->getNameAsString()) != anyOf.cend())
-            return true;
+    if (expr && expr->getConstructor() && clazy_std::contains(anyOf, expr->getConstructor()->getNameAsString())) {
+        return true;
     }
 
     return insideCTORCall(map, HierarchyUtils::parent(map, s), anyOf);
@@ -797,7 +796,7 @@ string Utils::getMostNeededQualifiedName(const SourceManager &sourceManager, CXX
     for (DeclContext *context : visibleContexts) {
 
         if (context != method->getParent()) { // Don't remove the most immediate
-            auto it = find_if(methodContexts.begin(), methodContexts.end(), [context](DeclContext *c) {
+            auto it = clazy_std::find_if(methodContexts, [context](DeclContext *c) {
                     if (c == context)
                         return true;
                     auto ns1 = dyn_cast<NamespaceDecl>(c);

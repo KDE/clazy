@@ -167,7 +167,7 @@ public:
 
 static bool parseArgument(const string &arg, vector<string> &args)
 {
-    auto it = std::find(args.begin(), args.end(), arg);
+    auto it = clazy_std::find(args, arg);
     if (it != args.end()) {
         args.erase(it, it + 1);
         return true;

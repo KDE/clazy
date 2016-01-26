@@ -27,10 +27,40 @@
 
 namespace clazy_std {
 
-template<typename C, typename T>
-bool contains(const C &container, const T &value)
+template<typename C>
+bool contains(const C &container, const typename C::value_type &value)
 {
    return std::find(container.cbegin(), container.cend(), value) != container.cend();
+}
+
+template<typename C, typename Pred>
+bool contains_if(const C &container, Pred pred)
+{
+   return std::find_if(container.cbegin(), container.cend(), pred) != container.cend();
+}
+
+template<typename C>
+typename C::iterator find(C &container, const typename C::value_type &value)
+{
+    return std::find(container.begin(), container.end(), value);
+}
+
+template<typename C>
+typename C::const_iterator find(const C &container, const typename C::value_type &value)
+{
+    return std::find(container.cbegin(), container.cend(), value);
+}
+
+template<typename C, typename Pred>
+typename C::iterator find_if(C &container, Pred pred)
+{
+    return std::find_if(container.begin(), container.end(), pred);
+}
+
+template<typename C, typename Pred>
+typename C::const_iterator find_if(const C &container, Pred pred)
+{
+    return std::find_if(container.cbegin(), container.cend(), pred);
 }
 
 }

@@ -183,8 +183,7 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
     auto it = m_writeMethodsByType.find(className);
     if (it != m_writeMethodsByType.cend()) {
         const auto &methods = it->second;
-        auto it2 = find(methods.cbegin(), methods.cend(), method->getNameAsString());
-        if (it2 != methods.cend())
+        if (clazy_std::contains(methods, method->getNameAsString()))
             return true;
     }
 
