@@ -80,7 +80,7 @@ bool RequiredResults::shouldIgnoreMethod(const std::string &qualifiedName)
         files.push_back("ImapResourceBase::settings");
     }
 
-    return std::find(files.cbegin(), files.cend(), qualifiedName) != files.cend();
+    return clazy_std::contains(files, qualifiedName);
 }
 
 void RequiredResults::VisitStmt(clang::Stmt *stm)

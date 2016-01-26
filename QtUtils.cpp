@@ -19,6 +19,7 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include "clazy_stl.h"
 #include "QtUtils.h"
 #include "Utils.h"
 #include "MacroUtils.h"
@@ -45,7 +46,7 @@ const vector<string> & QtUtils::qtContainers()
 bool QtUtils::isQtIterableClass(const string &className)
 {
     const auto &classes = qtContainers();
-    return find(classes.cbegin(), classes.cend(), className) != classes.cend();
+    return clazy_std::contains(classes, className);
 }
 
 bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
@@ -59,7 +60,7 @@ bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
 bool QtUtils::isQtAssociativeContainer(const string &className)
 {
     static const vector<string> classes = { "QSet", "QMap", "QHash" };
-    return find(classes.cbegin(), classes.cend(), className) != classes.cend();
+    return clazy_std::contains(classes, className);
 }
 
 bool QtUtils::isBootstrapping(const clang::CompilerInstance &ci)

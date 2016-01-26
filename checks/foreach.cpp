@@ -187,7 +187,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
                 if (detachingMethodsMap().find(className) != detachingMethodsMap().end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap().at(className);
-                    if (std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) != allowedFunctions.cend()) {
+                    if (clazy_std::contains(allowedFunctions, functionName)) {
                         Expr *expr = memberExpr->getBase();
 
                         if (expr) {

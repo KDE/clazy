@@ -81,7 +81,7 @@ static bool isInterestingFunction2(FunctionDecl *func)
         return false;
 
     static const vector<string> functions = {"QString::arg"};
-    return find(functions.cbegin(), functions.cend(), func->getQualifiedNameAsString()) == functions.cend();
+    return !clazy_std::contains(functions, func->getQualifiedNameAsString());
 }
 
 // Checks for pointer->bool implicit casts
@@ -183,7 +183,7 @@ bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
     static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
     auto macro = Lexer::getImmediateMacroName(loc, m_ci.getSourceManager(), m_ci.getLangOpts());
-    return find(macros.cbegin(), macros.cend(), macro) != macros.cend();
+    return clazy_std::contains(macros, macro);
 }
 
 

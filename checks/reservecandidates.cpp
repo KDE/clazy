@@ -24,6 +24,7 @@
 
 #include "reservecandidates.h"
 #include "Utils.h"
+#include "clazy_stl.h"
 #include "MacroUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
@@ -126,10 +127,7 @@ static bool isCandidateOperator(CXXOperatorCallExpr *oper)
 
 bool ReserveCandidates::containerWasReserved(clang::ValueDecl *valueDecl) const
 {
-    if (!valueDecl)
-        return false;
-
-    return std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) != m_foundReserves.cend();
+    return valueDecl && clazy_std::contains(m_foundReserves, valueDecl);
 }
 
 bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
@@ -245,7 +243,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
     if (!valueDecl)
         return false;
 
-    if (std::find(m_foundReserves.cbegin(), m_foundReserves.cend(), valueDecl) == m_foundReserves.cend()) {
+    if (!clazy_std::contains(m_foundReserves, valueDecl)) {
         m_foundReserves.push_back(valueDecl);
     }
 
@@ -261,7 +259,7 @@ static bool isJavaIterator(CXXMemberCallExpr *call)
                                          "QVectorIterator", "QLinkedListIterator", "QStringListIterator"};
     CXXRecordDecl *record = call->getRecordDecl();
     string name = record == nullptr ? "" : record->getNameAsString();
-    return find(names.cbegin(), names.cend(), name) != names.cend();
+    return clazy_std::contains(names, name);
 }
 
 bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
@@ -340,10 +338,10 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     // For some reason we generate two warnings on some foreaches, so cache the ones we processed
     // and return true so we don't trigger a warning
-    if (find(nonComplexOnesCache.cbegin(), nonComplexOnesCache.cend(), rawLoc) != nonComplexOnesCache.cend())
+    if (clazy_std::contains(nonComplexOnesCache, rawLoc))
         return true;
 
-    if (find(complexOnesCache.cbegin(), complexOnesCache.cend(), rawLoc) != complexOnesCache.cend())
+    if (clazy_std::contains(complexOnesCache, rawLoc))
         return true;
 
     Stmt *it = s;

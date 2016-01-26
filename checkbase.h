@@ -25,6 +25,7 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
+#include "clazy_stl.h"
 #include <clang/Frontend/CompilerInstance.h>
 #include <llvm/Config/llvm-config.h>
 #include <string>

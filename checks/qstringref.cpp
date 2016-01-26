@@ -45,14 +45,11 @@ StringRefCandidates::StringRefCandidates(const std::string &name, const clang::C
 
 static bool isInterestingFirstMethod(CXXMethodDecl *method)
 {
-    if (!method)
-        return false;
-
-    if (method->getParent()->getNameAsString() != "QString")
+    if (!method || method->getParent()->getNameAsString() != "QString")
         return false;
 
     static const vector<string> list = { "left", "mid", "right" };
-    return std::find(list.cbegin(), list.cend(), method->getNameAsString()) != list.cend();
+    return clazy_std::contains(list, method->getNameAsString());
 }
 
 static bool isInterestingSecondMethod(CXXMethodDecl *method)
@@ -66,8 +63,8 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method)
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
                                          "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toInt",
                                          "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4"};
-    const bool isInList = std::find(list.cbegin(), list.cend(), method->getNameAsString()) != list.cend();
-    if (!isInList)
+
+    if (!clazy_std::contains(list, method->getNameAsString()))
         return false;
 
     if (method->getNumParams() > 0) {
@@ -90,7 +87,7 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
     if (!method || method->getParent()->getNameAsString() != "QString")
         return false;
 
-    return find(list.cbegin(), list.cend(), method->getNameAsString()) != list.cend();
+    return clazy_std::contains(list, method->getNameAsString());
 }
 
 void StringRefCandidates::VisitStmt(clang::Stmt *stmt)

@@ -28,6 +28,7 @@
 #include "checkmanager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
@@ -105,12 +106,12 @@ namespace StringUtils {
 
 inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::string> &functionNames)
 {
-    return func && std::find(functionNames.cbegin(), functionNames.cend(), func->getNameAsString()) != functionNames.cend();
+    return func && clazy_std::contains(functionNames, func->getNameAsString());
 }
 
 inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<std::string> &classNames)
 {
-    return record && std::find(classNames.cbegin(), classNames.cend(), record->getNameAsString()) != classNames.cend();
+    return record && clazy_std::contains(classNames, record->getNameAsString());
 }
 
 inline void printLocation(const clang::SourceManager &sm, const clang::SourceLocation &loc, bool newLine = true)

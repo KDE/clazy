@@ -58,7 +58,7 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
                                               "QVariantComparisonHelper",
                                               "QHashDummyValue", "QCharRef", "QString::Null"
                                              };
-    return std::find(ignoreList.cbegin(), ignoreList.cend(), record->getQualifiedNameAsString()) != ignoreList.cend();
+    return clazy_std::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
 static bool shouldIgnoreFunction(clang::FunctionDecl *function)
@@ -76,10 +76,10 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
                                                        "QSslCertificate::verify", // Fixed in Qt6
                                                        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
                                                       };
-    if (std::find(ignoreList.cbegin(), ignoreList.cend(), function->getNameAsString()) != ignoreList.cend())
+    if (clazy_std::contains(ignoreList, function->getNameAsString()))
         return true;
 
-    return std::find(qualifiedIgnoreList.cbegin(), qualifiedIgnoreList.cend(), function->getQualifiedNameAsString()) != qualifiedIgnoreList.cend();
+    return clazy_std::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
 FunctionArgsByRef::FunctionArgsByRef(const std::string &name, const clang::CompilerInstance &ci)

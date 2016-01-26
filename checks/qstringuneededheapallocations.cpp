@@ -24,6 +24,7 @@
 
 #include "qstringuneededheapallocations.h"
 #include "Utils.h"
+#include "clazy_stl.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include "MethodSignatureUtils.h"
@@ -70,7 +71,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
     if (!isOfClass(method, "QString"))
         return false;
 
-    return Utils::isAscii(lt) && std::find(methods.cbegin(), methods.cend(), method->getNameAsString()) != methods.cend();
+    return Utils::isAscii(lt) && clazy_std::contains(methods, method->getNameAsString());
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call

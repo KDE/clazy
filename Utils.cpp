@@ -228,7 +228,7 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
     if (memberCall) {
         auto methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
         if (methodDecl && !methodDecl->isConst() && !methodDecl->isStatic() &&
-                std::find(method_blacklist.cbegin(), method_blacklist.cend(), methodDecl->getNameAsString()) == method_blacklist.cend())
+                !clazy_std::contains(method_blacklist, methodDecl->getNameAsString()))
             return true;
     }
 
@@ -1105,8 +1105,7 @@ QualType Utils::unrefQualType(const QualType &qualType)
 bool Utils::isSharedPointer(CXXRecordDecl *record)
 {
     static const vector<string> names = { "std::shared_ptr", "QSharedPointer", "boost::shared_ptr" };
-    return record ? find(names.cbegin(), names.cend(), record->getQualifiedNameAsString()) != names.cend()
-                  : false;
+    return record ? clazy_std::contains(names, record->getQualifiedNameAsString()) : false;
 }
 
 bool Utils::isInitializedExternally(clang::VarDecl *varDecl)

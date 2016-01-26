@@ -22,6 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include "clazy_stl.h"
 #include "checkmanager.h"
 #include "Utils.h"
 #include "StringUtils.h"
@@ -58,7 +59,7 @@ CheckManager::CheckManager()
 bool CheckManager::isReservedCheckName(const string &name) const
 {
     static const vector<string> names = { "clazy" };
-    if (find(names.cbegin(), names.cend(), name) != names.cend())
+    if (clazy_std::contains(names, name))
         return true;
 
     // level0, level1, etc are not allowed
@@ -251,7 +252,7 @@ bool CheckManager::allFixitsEnabled() const
 
 bool CheckManager::isOptionSet(const string &optionName) const
 {
-    return std::find(m_extraOptions.cbegin(), m_extraOptions.cend(), optionName) != m_extraOptions.cend();
+    return clazy_std::contains(m_extraOptions, optionName);
 }
 
 RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str) const

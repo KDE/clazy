@@ -64,5 +64,5 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
                                                 "QMatrix",
                                                 "QBitRef", "QJsonValueRef"
                                               };
-    return find(blacklisted.cbegin(), blacklisted.cend(), qualifiedName) != blacklisted.cend();
+    return clazy_std::contains(blacklisted, qualifiedName);
 }

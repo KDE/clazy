@@ -66,7 +66,7 @@ static bool classIsOk(const string &className)
 {
     // List of classes we usually use Qt4 syntax
     static const vector<string> okClasses = { "QDBusInterface" };
-    return std::find(okClasses.cbegin(), okClasses.cend(), className) != okClasses.cend();
+    return clazy_std::contains(okClasses, className);
 }
 
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6

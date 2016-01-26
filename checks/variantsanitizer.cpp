@@ -44,7 +44,7 @@ static bool isMatchingClass(const std::string &name, const clang::CompilerInstan
                                            "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
                                            "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
 
-    return find(classes.cbegin(), classes.cend(), name) != classes.cend();
+    return clazy_std::contains(classes, name);
 }
 
 void VariantSanitizer::VisitStmt(clang::Stmt *stm)

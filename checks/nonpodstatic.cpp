@@ -39,7 +39,7 @@ static bool shouldIgnoreType(const std::string &name, const clang::CompilerInsta
 {
     // Q_GLOBAL_STATIC and such
     static vector<string> blacklist = {"Holder", "AFUNC", "QLoggingCategory"};
-    return find(blacklist.cbegin(), blacklist.cend(), name) != blacklist.cend();
+    return clazy_std::contains(blacklist, name);
 }
 
 NonPodStatic::NonPodStatic(const std::string &name, const clang::CompilerInstance &ci)

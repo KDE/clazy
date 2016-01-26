@@ -114,8 +114,7 @@ void StringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
     vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
     vector<clang::CallExpr *> argCalls;
     for (auto call : callExprs) {
-        if (std::find(m_alreadyProcessedChainedCalls.cbegin(), m_alreadyProcessedChainedCalls.cend(), call) == m_alreadyProcessedChainedCalls.cend()
-                && isArgFuncWithOnlyQString(call)) {
+        if (!clazy_std::contains(m_alreadyProcessedChainedCalls, call) && isArgFuncWithOnlyQString(call)) {
             argCalls.push_back(call);
             m_alreadyProcessedChainedCalls.push_back(call);
         } else {

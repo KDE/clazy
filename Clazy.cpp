@@ -24,7 +24,7 @@
 
 #include "Utils.h"
 #include "StringUtils.h"
-
+#include "clazy_stl.h"
 #include "checkbase.h"
 #include "checkmanager.h"
 

@@ -56,7 +56,7 @@ DetachingTemporary::DetachingTemporary(const std::string &name, const clang::Com
 bool isAllowedChainedClass(const std::string &className)
 {
     static const vector<string> allowed = {"QString", "QByteArray", "QVariant"};
-    return find(allowed.cbegin(), allowed.cend(), className) != allowed.cend();
+    return clazy_std::contains(allowed, className);
 }
 
 bool isAllowedChainedMethod(const std::string &methodName)
@@ -68,7 +68,7 @@ bool isAllowedChainedMethod(const std::string &methodName)
                                            "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList",
                                            "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes",
                                            "QMimeData::formats", "i18n", "QAbstractTransition::targetStates"};
-    return find(allowed.cbegin(), allowed.cend(), methodName) != allowed.cend();
+    return clazy_std::contains(allowed, methodName);
 }
 
 void DetachingTemporary::VisitStmt(clang::Stmt *stm)
@@ -144,12 +144,10 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     string error;
 
-    const bool isReadFunction = std::find(allowedFunctions.cbegin(), allowedFunctions.cend(), functionName) != allowedFunctions.cend();
-    const bool isWriteFunction = std::find(allowedWriteFunctions.cbegin(), allowedWriteFunctions.cend(), functionName) != allowedWriteFunctions.cend();
+    const bool isReadFunction = clazy_std::contains(allowedFunctions, functionName);
+    const bool isWriteFunction = clazy_std::contains(allowedWriteFunctions, functionName);
 
     if (isReadFunction || isWriteFunction) {
-
-
         bool returnTypeIsIterator = false;
         CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
         if (returnRecord) {

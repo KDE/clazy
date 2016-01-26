@@ -56,7 +56,7 @@ static bool isDisallowedClass(const string &className)
 {
     static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
                                                "QScriptValue", "QTextLine", "QTextBlock", "QDomNode" };
-    return find(disallowed.cbegin(), disallowed.cend(), className) != disallowed.cend();
+    return clazy_std::contains(disallowed, className);
 }
 
 static bool isKnownType(const string &className)
@@ -66,7 +66,7 @@ static bool isKnownType(const string &className)
                                           "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D"
                                           , "QVector4D", "QSize", "QSizeF", "QSizePolicy" };
 
-    return find(types.cbegin(), types.cend(), className) != types.cend();
+    return clazy_std::contains(types, className);
 }
 
 void WritingToTemporary::VisitStmt(clang::Stmt *stmt)

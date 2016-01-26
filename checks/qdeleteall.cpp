@@ -39,7 +39,7 @@ QDeleteAll::QDeleteAll(const std::string &name, const clang::CompilerInstance &c
 static bool isInterestingMethod(const string &name)
 {
     static const vector<string> names = { "values", "keys" };
-    return find(names.cbegin(), names.cend(), name) != names.cend();
+    return clazy_std::contains(names, name);
 }
 
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
