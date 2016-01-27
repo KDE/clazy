@@ -60,6 +60,9 @@ namespace Utils {
     /// Returns true if childDecl is a descent from parentDecl
     bool derivesFrom(clang::CXXRecordDecl *derived, clang::CXXRecordDecl *possibleBase);
 
+    // Returns true if the class derived is or descends from a class named parent
+    bool derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase);
+
     /// Returns true if the class has at least one constexpr ctor
     bool hasConstexprCtor(clang::CXXRecordDecl *decl);
 
@@ -108,9 +111,6 @@ namespace Utils {
     /// If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before
     bool loopCanBeInterrupted(clang::Stmt *loop, const clang::CompilerInstance &ci,
                               const clang::SourceLocation &onlyBeforeThisLoc);
-
-    // Returns true if the class derived is or descends from a class named parent
-    bool descendsFrom(clang::CXXRecordDecl *derived, const std::string &parentName);
 
     // Returns true if a body of statements contains a non const member call on object declared by varDecl
     // For example:

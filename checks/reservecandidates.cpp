@@ -55,7 +55,7 @@ static bool isAReserveClass(CXXRecordDecl *recordDecl)
     static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet", "QVarLengthArray"};
 
     for (auto it = classes.cbegin(), end = classes.cend(); it != end; ++it) {
-        if (Utils::descendsFrom(recordDecl, *it))
+        if (Utils::derivesFrom(recordDecl, *it))
             return true;
     }
 

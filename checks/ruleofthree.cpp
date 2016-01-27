@@ -107,12 +107,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         }
     }
 
-    if (!hasUserDtor) {
-        if (Utils::descendsFrom(record, "QSharedData"))
-            return;
-
-        if (dtorDefaultedByUser)
-            return;
+    if (!hasUserDtor && (Utils::derivesFrom(record, "QSharedData") || dtorDefaultedByUser)) {
+        return;
     }
 
     if (Utils::hasMember(record, "QSharedDataPointer"))

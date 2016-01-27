@@ -330,12 +330,12 @@ bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstanc
     return false;
 }
 
-bool Utils::descendsFrom(clang::CXXRecordDecl *derived, const std::string &parentName)
+bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
     if (!derived)
         return false;
 
-    if (derived->getNameAsString() == parentName)
+    if (derived->getNameAsString() == possibleBase)
         return true;
 
     auto it = derived->bases_begin();
@@ -344,9 +344,9 @@ bool Utils::descendsFrom(clang::CXXRecordDecl *derived, const std::string &paren
     for (; it != end; ++it) {
         QualType qt = (*it).getType();
         const Type *t = qt.getTypePtrOrNull();
-        if (t == nullptr)
+        if (!t)
             continue;
-        if (Utils::descendsFrom(t->getAsCXXRecordDecl(), parentName))
+        if (derivesFrom(t->getAsCXXRecordDecl(), possibleBase))
             return true;
     }
 
