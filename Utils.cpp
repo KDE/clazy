@@ -235,8 +235,8 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
     // Maybe there's an implicit cast in between..
     vector<MemberExpr*> memberExprs;
     vector<DeclRefExpr*> declRefs;
-    HierarchyUtils::getChilds<MemberExpr>(implicitObject, memberExprs);
-    HierarchyUtils::getChilds<DeclRefExpr>(implicitObject, declRefs);
+    HierarchyUtils::getChildsHACK<MemberExpr>(implicitObject, memberExprs);
+    HierarchyUtils::getChildsHACK<DeclRefExpr>(implicitObject, declRefs);
 
     if (!memberExprs.empty()) {
         return memberExprs.at(0)->getMemberDecl();

@@ -145,9 +145,6 @@ namespace Utils {
 
     bool isImplicitCastTo(clang::Stmt *, const std::string &);
 
-    clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
-
-
     bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 
     // Returns the body of a for, while or do loop

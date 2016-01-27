@@ -46,6 +46,10 @@ bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
  */
 bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name);
 
+/**
+ * Returns the first child of stm of type T.
+ * Does depth-first.
+ */
 template <typename T>
 T* getFirstChildOfType(clang::Stmt *stm)
 {
@@ -66,7 +70,10 @@ T* getFirstChildOfType(clang::Stmt *stm)
     return nullptr;
 }
 
-// Like getFirstChildOfType() but only looks at first child, so basically first branch of the tree
+
+/**
+ * Returns the first child of stm of type T, but only looks at the first branch.
+ */
 template <typename T>
 T* getFirstChildOfType2(clang::Stmt *stm)
 {
@@ -113,9 +120,8 @@ clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
 
 /// Goes into a statement and returns it's childs of type T
 /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
-
 template <typename T>
-void getChilds(clang::Stmt *stm, std::vector<T*> &result_list)
+void getChildsHACK(clang::Stmt *stm, std::vector<T*> &result_list)
 {
     if (!stm)
         return;
@@ -136,9 +142,8 @@ void getChilds(clang::Stmt *stm, std::vector<T*> &result_list)
             continue;
         }
 
-        auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(child);
-        if (cleanups) {
-            getChilds<T>(cleanups, result_list);
+        if (auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(child)) {
+            getChildsHACK<T>(cleanups, result_list);
         }
     }
 }
