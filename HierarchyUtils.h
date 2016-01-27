@@ -52,14 +52,14 @@ T* getFirstChildOfType(clang::Stmt *stm)
     if (!stm)
         return nullptr;
 
-    for (auto it = stm->child_begin(), end = stm->child_end(); it != end; ++it) {
-        if (!*it) // Can happen
+    for (auto child : stm->children()) {
+        if (!child) // Can happen
             continue;
 
-        if (auto s = clang::dyn_cast<T>(*it))
+        if (auto s = clang::dyn_cast<T>(child))
             return s;
 
-        if (auto s = getFirstChildOfType<T>(*it))
+        if (auto s = getFirstChildOfType<T>(child))
             return s;
     }
 
@@ -126,17 +126,17 @@ void getChilds(clang::Stmt *stm, std::vector<T*> &result_list)
         return;
     }
 
-    for (auto it = stm->child_begin(), e = stm->child_end(); it != e; ++it) {
-        if (*it == nullptr) // Can happen
+    for (auto child : stm->children()) {
+        if (!child) // Can happen
             continue;
 
-        auto expr = clang::dyn_cast<T>(*it);
+        auto expr = clang::dyn_cast<T>(child);
         if (expr) {
             result_list.push_back(expr);
             continue;
         }
 
-        auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(*it);
+        auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(child);
         if (cleanups) {
             getChilds<T>(cleanups, result_list);
         }
@@ -153,14 +153,11 @@ void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
     if (cexpr)
         result_list.push_back(cexpr);
 
-    auto it = stmt->child_begin();
-    auto end = stmt->child_end();
-
     if (depth > 0 || depth == -1) {
         if (depth > 0)
             --depth;
-        for (; it != end; ++it) {
-            getChilds2(*it, result_list, depth);
+        for (auto child : stmt->children()) {
+            getChilds2(child, result_list, depth);
         }
     }
 }

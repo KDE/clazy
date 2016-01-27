@@ -138,8 +138,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         return classification;
 
     // Look for char* arguments
-    for (auto it = connectFunc->param_begin(), e = connectFunc->param_end(); it != e; ++it) {
-        ParmVarDecl *parm = *it;
+    for (auto parm : connectFunc->params()) {
         QualType qt = parm->getType();
         const Type *t = qt.getTypePtrOrNull();
         if (!t || !t->isPointerType())
@@ -178,8 +177,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     if (classification & ConnectFlag_OldStyle) {
         // It's old style, but check if all macros are literals
         int numLiterals = 0;
-        for (auto it = connectCall->arg_begin(), end = connectCall->arg_end(); it != end; ++it) {
-            auto argLocation = (*it)->getLocStart();
+        for (auto arg : connectCall->arguments()) {
+            auto argLocation = arg->getLocStart();
             string dummy;
             if (isSignalOrSlot(argLocation, dummy))
                 ++numLiterals;
@@ -326,8 +325,8 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     string implicitCallee;
     string macroName;
     CXXMethodDecl *senderMethod = nullptr;
-    for (auto it = call->arg_begin(), end = call->arg_end(); it != end; ++it) {
-        auto s = (*it)->getLocStart();
+    for (auto arg : call->arguments()) {
+        SourceLocation s = arg->getLocStart();
         static const CXXRecordDecl *lastRecordDecl = nullptr;
         if (isSignalOrSlot(s, macroName)) {
             macroNum++;
@@ -440,12 +439,12 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             fixits.push_back(FixItHint::CreateReplacement(range, replacement));
             lastRecordDecl = nullptr;
         } else {
-            Expr *expr = *it;
+            Expr *expr = arg;
             const auto record = expr ? expr->getBestDynamicClassType() : nullptr;
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = FixItUtils::locForNextToken(m_ci, (*it)->getLocStart(), tok::comma);
+                    auto endLoc = FixItUtils::locForNextToken(m_ci, arg->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

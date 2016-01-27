@@ -113,8 +113,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         FunctionDecl *parentFunc = parentCall ? parentCall->getDirectCallee() : nullptr;
         if (parentFunc && parentFunc->getNumParams() == parentCall->getNumArgs()) {
             int i = 0;
-            for (auto it = parentCall->arg_begin(), end = parentCall->arg_end(); it != end; ++it) {
-                Expr *argExpr = *it;
+            for (auto argExpr : parentCall->arguments()) {
                 if (CXXMemberCallExpr *expr2 = HierarchyUtils::getFirstChildOfType<CXXMemberCallExpr>(argExpr)) {
                     if (expr2 == memberCall) {
                         // Success, we found which arg

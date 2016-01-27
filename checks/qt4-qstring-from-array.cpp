@@ -63,8 +63,8 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor, bool &is_char_array,
     if (!ctor || !isOfClass(ctor, "QString"))
         return false;
 
-    for (auto it = ctor->param_begin(), end = ctor->param_end(); it != end; ++it) {
-        if (isInterestingParam(*it, is_char_array, is_byte_array))
+    for (auto param : ctor->params()) {
+        if (isInterestingParam(param, is_char_array, is_byte_array))
             break;
 
         return false;

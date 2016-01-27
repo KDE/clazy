@@ -47,9 +47,8 @@ bool Utils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
     if (!derived || !possibleBase || derived == possibleBase)
         return false;
 
-    for (auto it = derived->bases_begin(), e = derived->bases_end(); it != e; ++it) {
-        CXXBaseSpecifier *base = it;
-        const Type *type = base->getType().getTypePtrOrNull();
+    for (auto base : derived->bases()) {
+        const Type *type = base.getType().getTypePtrOrNull();
         if (!type) continue;
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
 
@@ -63,12 +62,9 @@ bool Utils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
 
 bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 {
-    for (auto it = decl->ctor_begin(), e = decl->ctor_end(); it != e; ++it) {
-        CXXConstructorDecl *ctor = *it;
-        if (ctor->isConstexpr())
-            return true;
-    }
-    return false;
+    return clazy_std::any_of(decl->ctors(), [](CXXConstructorDecl *ctor) {
+        return ctor->isConstexpr();
+    });
 }
 
 ClassTemplateSpecializationDecl *Utils::templateDecl(Decl *decl)
@@ -377,11 +373,11 @@ template<class T>
 static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, bool byRefOnly)
 {
     unsigned int param = 0;
-    for (auto arg = expr->arg_begin(), arg_end = expr->arg_end(); arg != arg_end; ++arg) {
-        DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(*arg);
+    for (auto arg : expr->arguments()) {
+        DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(arg);
         if (!refExpr)  {
-            if ((*arg)->child_begin() != (*arg)->child_end()) {
-                refExpr = dyn_cast<DeclRefExpr>(*((*arg)->child_begin()));
+            if (arg->child_begin() != arg->child_end()) {
+                refExpr = dyn_cast<DeclRefExpr>(*(arg->child_begin()));
                 if (!refExpr)
                     continue;
             } else {
@@ -631,16 +627,14 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
 
     vector<CXXMethodDecl *> methods;
 
-    for (auto it = record->method_begin(), e = record->method_end(); it != e; ++it) {
-        CXXMethodDecl *method = *it;
+    for (auto method : record->methods()) {
         if (method->getNameAsString() == methodName)
             methods.push_back(method);
     }
 
     // Also include the base classes
-    for (auto it = record->bases_begin(), e = record->bases_end(); it != e; ++it) {
-
-        const Type *t = (*it).getType().getTypePtrOrNull();
+    for (auto base : record->bases()) {
+        const Type *t = base.getType().getTypePtrOrNull();
         if (t) {
             auto baseMethods = methodsFromString(t->getAsCXXRecordDecl(), methodName);
             if (!baseMethods.empty())
@@ -804,8 +798,7 @@ bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
     // We're inside a method belonging to a class (contextRecord).
     // Is contextRecord a friend of record ? Lets check:
 
-    for (auto it = record->friend_begin(), e = record->friend_end(); it != e; ++it) {
-        FriendDecl *fr = *it;
+    for (auto fr : record->friends()) {
         TypeSourceInfo *si = fr->getFriendType();
         if (si) {
             const Type *t = si->getType().getTypePtrOrNull();
@@ -945,8 +938,7 @@ CXXRecordDecl *Utils::rootBaseClass(CXXRecordDecl *derived)
 
 CXXConstructorDecl *Utils::copyCtor(CXXRecordDecl *record)
 {
-    for (auto it = record->ctor_begin(), end = record->ctor_end(); it != end; ++it) {
-        CXXConstructorDecl *ctor = *it;
+    for (auto ctor : record->ctors()) {
         if (ctor->isCopyConstructor())
             return ctor;
     }
@@ -956,8 +948,7 @@ CXXConstructorDecl *Utils::copyCtor(CXXRecordDecl *record)
 
 CXXMethodDecl *Utils::copyAssign(CXXRecordDecl *record)
 {
-    for (auto it = record->method_begin(), end = record->method_end(); it != end; ++it) {
-        CXXMethodDecl *copyAssign = *it;
+    for (auto copyAssign : record->methods()) {
         if (copyAssign->isCopyAssignmentOperator())
             return copyAssign;
     }
@@ -970,8 +961,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
     if (!record)
         return false;
 
-    for (auto it = record->field_begin(), end = record->field_end(); it != end; ++it) {
-        FieldDecl *field = *it;
+    for (auto field : record->fields()) {
         field->getParent()->getNameAsString();
         QualType qt = field->getType();
         const Type *t = qt.getTypePtrOrNull();

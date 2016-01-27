@@ -117,9 +117,8 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
     Stmt *body = functionDecl->getBody();
 
     int i = -1;
-    for (auto it = functionDecl->param_begin(), end = functionDecl->param_end(); it != end; ++it) {
+    for (auto param : functionDecl->params()) {
         i++;
-        const ParmVarDecl *param = *it;
         QualType paramQt = Utils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
@@ -144,8 +143,8 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
             } else if (classif.passSmallTrivialByValue) {
                 error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
                 if (isFixitEnabled(FixitAll)) {
-                    for (auto it = functionDecl->redecls_begin(), end = functionDecl->redecls_end(); it != end; ++it) { // Fix in both header and .cpp
-                        FunctionDecl *fdecl = dyn_cast<FunctionDecl>(*it);
+                    for (auto redecl : functionDecl->redecls()) { // Fix in both header and .cpp
+                        FunctionDecl *fdecl = dyn_cast<FunctionDecl>(redecl);
                         const ParmVarDecl *param = fdecl->getParamDecl(i);
                         fixits.push_back(fixitByValue(fdecl, param, classif));
                     }

@@ -76,13 +76,8 @@ bool QtUtils::isQObject(CXXRecordDecl *decl)
     if (decl->getName() == "QObject")
         return true;
 
-    for (auto it = decl->bases_begin(), end = decl->bases_end(); it != end; ++it) {
-        CXXBaseSpecifier *base = it;
-        const Type *type = base->getType().getTypePtr();
-        CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
-        if (isQObject(baseDecl))
-            return true;
-    }
-
-    return false;
+    return clazy_std::any_of(decl->bases(), [](CXXBaseSpecifier base) {
+        const Type *type = base.getType().getTypePtr();
+        return type && QtUtils::isQObject(type->getAsCXXRecordDecl());
+    });
 }

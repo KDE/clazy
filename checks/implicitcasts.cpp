@@ -59,9 +59,7 @@ static bool isInterestingFunction(FunctionDecl *func)
     bool hasBoolArgument = false;
     bool hasPointerArgument = false;
 
-    for (auto it = func->param_begin(), end = func->param_end(); it != end; ++it) {
-
-        ParmVarDecl *param = *it;
+    for (auto param : func->params()) {
         const Type *t = param->getType().getTypePtrOrNull();
         hasBoolArgument |= (t && t->isBooleanType());
         hasPointerArgument |= (t && t->isPointerType());
@@ -94,9 +92,9 @@ static bool iterateCallExpr(T* callExpr, CheckBase *check)
     bool result = false;
 
     int i = 0;
-    for (auto it = callExpr->arg_begin(), end = callExpr->arg_end(); it != end; ++it) {
+    for (auto arg : callExpr->arguments()) {
         ++i;
-        auto implicitCast = dyn_cast<ImplicitCastExpr>(*it);
+        auto implicitCast = dyn_cast<ImplicitCastExpr>(arg);
         if (!implicitCast || implicitCast->getCastKind() != clang::CK_PointerToBoolean)
             continue;
 
@@ -117,9 +115,9 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
     bool result = false;
 
     int i = 0;
-    for (auto it = callExpr->arg_begin(), end = callExpr->arg_end(); it != end; ++it) {
+    for (auto arg : callExpr->arguments()) {
         ++i;
-        auto implicitCast = dyn_cast<ImplicitCastExpr>(*it);
+        auto implicitCast = dyn_cast<ImplicitCastExpr>(arg);
         if (!implicitCast || implicitCast->getCastKind() != clang::CK_IntegralCast)
             continue;
 
