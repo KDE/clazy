@@ -63,8 +63,9 @@ static bool isKnownType(const string &className)
 {
     static const vector<string> types = { "QList", "QVector", "QMap", "QHash", "QString", "QSet",
                                           "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
-                                          "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D"
-                                          , "QVector4D", "QSize", "QSizeF", "QSizePolicy" };
+                                          "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D",
+                                          "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
+                                          "QPointF" };
 
     return clazy_std::contains(types, className);
 }
