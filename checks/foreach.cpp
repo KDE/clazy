@@ -208,12 +208,9 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
         }
     }
 
-    for (auto it = stm->child_begin(), end = stm->child_end(); it != end; ++it) {
-        if (containsDetachments(*it, containerValueDecl))
-            return true;
-    }
-
-    return false;
+    return clazy_std::any_child(stm, [this, containerValueDecl](Stmt *child) {
+        return this->containsDetachments(child, containerValueDecl);
+    });
 }
 
 REGISTER_CHECK_WITH_FLAGS("foreach", Foreach, CheckLevel1)
