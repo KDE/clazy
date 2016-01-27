@@ -89,15 +89,11 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
         }
     }
 
-    if (!ternary) {
+    if (!ternary)
         ternary = dyn_cast<ConditionalOperator>(stm);
-    }
 
-    auto it = stm->child_begin();
-    auto end = stm->child_end();
-
-    for (; it != end; ++it) {
-        auto expr = qlatin1CtorExpr(*it, ternary);
+    for (auto child : stm->children()) {
+        auto expr = qlatin1CtorExpr(child, ternary);
         if (expr)
             return expr;
     }
@@ -117,17 +113,11 @@ static bool containsStringLiteralNoCallExpr(Stmt *stmt)
     if (sl)
         return true;
 
-    auto it = stmt->child_begin();
-    auto end = stmt->child_end();
-
-    for (; it != end; ++it) {
-        if (*it == nullptr)
+    for (auto child : stmt->children()) {
+        if (!child)
             continue;
-        CallExpr *callExpr = dyn_cast<CallExpr>(*it);
-        if (callExpr)
-            continue;
-
-        if (containsStringLiteralNoCallExpr(*it))
+        CallExpr *callExpr = dyn_cast<CallExpr>(child);
+        if (!callExpr && containsStringLiteralNoCallExpr(child))
             return true;
     }
 

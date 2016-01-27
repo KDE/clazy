@@ -208,25 +208,20 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
             return true;
     }*/
 
-    auto it = stm->child_begin();
-    auto e = stm->child_end();
-    for (; it != e; ++it) {
-        if (childsHaveSideEffects(*it))
-            return true;
-    }
-
-    return false;
+    return clazy_std::any_of(stm->children(), [](Stmt *s) {
+        return childsHaveSideEffects(s);
+    });
 }
 
 CXXRecordDecl *Utils::recordFromVarDecl(Decl *decl)
 {
     auto varDecl = dyn_cast<VarDecl>(decl);
-    if (varDecl == nullptr)
+    if (!varDecl)
         return nullptr;
 
     QualType qt = varDecl->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (t == nullptr)
+    if (!t)
         return nullptr;
 
     return t->getAsCXXRecordDecl();
@@ -281,12 +276,12 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     if (!operatorCall)
         return nullptr;
 
-    for (auto it = operatorCall->child_begin(); it != operatorCall->child_end(); ++it) {
-        if (*it == nullptr) // Can happen
+    for (auto child : operatorCall->children()) {
+        if (!child) // Can happen
             continue;
 
-        auto declRefExpr = dyn_cast<DeclRefExpr>(*it);
-        auto memberExpr =  dyn_cast<MemberExpr>(*it);
+        auto declRefExpr = dyn_cast<DeclRefExpr>(child);
+        auto memberExpr =  dyn_cast<MemberExpr>(child);
         if (declRefExpr) {
             return declRefExpr->getDecl();
         } else if (memberExpr) {
@@ -299,9 +294,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
 
 bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
 {
-    if (!valueDecl)
-        return false;
-    DeclContext *context = valueDecl->getDeclContext();
+    DeclContext *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
     return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(valueDecl);
 }
 
@@ -321,13 +314,9 @@ bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstanc
         }
     }
 
-    auto end = stmt->child_end();
-    for (auto it = stmt->child_begin(); it != end; ++it) {
-        if (loopCanBeInterrupted(*it, ci, onlyBeforeThisLoc))
-            return true;
-    }
-
-    return false;
+    return clazy_std::any_of(stmt->children(), [&ci, onlyBeforeThisLoc](Stmt *s) {
+        return Utils::loopCanBeInterrupted(s, ci, onlyBeforeThisLoc);
+    });
 }
 
 bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
@@ -518,16 +507,16 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
 bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
 {
     bool skipFirst = true;
-    for (auto it = ternary->child_begin(), e = ternary->child_end(); it != e; ++it) {
+    for (auto child : ternary->children()) {
         if (skipFirst) {
             skipFirst = false;
             continue;
         }
 
-        if (isa<StringLiteral>(*it))
+        if (isa<StringLiteral>(child))
             continue;
 
-        auto arrayToPointerDecay = dyn_cast<ImplicitCastExpr>(*it);
+        auto arrayToPointerDecay = dyn_cast<ImplicitCastExpr>(child);
         if (!arrayToPointerDecay || !isa<StringLiteral>(*(arrayToPointerDecay->child_begin())))
             return false;
     }

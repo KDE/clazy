@@ -106,7 +106,6 @@ SourceLocation FixItUtils::locForNextToken(const CompilerInstance &ci, SourceLoc
     if (result.getKind() == kind)
         return start;
 
-
     auto nextStart = Lexer::getLocForEndOfToken(start, 0, ci.getSourceManager(), ci.getLangOpts());
     if (nextStart.getRawEncoding() == start.getRawEncoding())
         return {};
@@ -121,8 +120,8 @@ SourceLocation FixItUtils::biggestSourceLocationInStmt(const SourceManager &sm, 
 
     SourceLocation biggestLoc = stmt->getLocEnd();
 
-    for (auto it = stmt->child_begin(), end = stmt->child_end(); it != end; ++it) {
-        SourceLocation candidateLoc = biggestSourceLocationInStmt(sm, *it);
+    for (auto child : stmt->children()) {
+        SourceLocation candidateLoc = biggestSourceLocationInStmt(sm, child);
         if (candidateLoc.isValid() && sm.isBeforeInSLocAddrSpace(biggestLoc, candidateLoc))
             biggestLoc = candidateLoc;
     }

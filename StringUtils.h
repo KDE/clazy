@@ -194,9 +194,8 @@ inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
                  << "; end=" << s->getLocStart().printToString(sm)
                  << "\n";
 
-    for (auto it = s->child_begin(), e = s->child_end(); it != e; ++it)
-        dump(sm, *it);
-
+    for (auto child : s->children())
+        dump(sm, child);
 }
 
 }
