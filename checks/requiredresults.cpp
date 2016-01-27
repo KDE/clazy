@@ -86,16 +86,16 @@ bool RequiredResults::shouldIgnoreMethod(const std::string &qualifiedName)
 void RequiredResults::VisitStmt(clang::Stmt *stm)
 {
     auto compound = dyn_cast<CompoundStmt>(stm);
-    if (compound == nullptr)
+    if (!compound)
         return;
 
-    for (auto it = compound->child_begin(), end = compound->child_end(); it != end ; ++it) {
-        auto callExpr = dyn_cast<CXXMemberCallExpr>(*it);
-        if (callExpr == nullptr)
+    for (auto child : compound->children()) {
+        auto callExpr = dyn_cast<CXXMemberCallExpr>(child);
+        if (!callExpr)
             continue;
 
         CXXMethodDecl *methodDecl =	callExpr->getMethodDecl();
-        if (methodDecl == nullptr || !methodDecl->isConst())
+        if (!methodDecl || !methodDecl->isConst())
             continue;
 
         std::string methodName = methodDecl->getQualifiedNameAsString();
@@ -104,18 +104,15 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
 
         QualType qt = methodDecl->getReturnType();
         const Type *type = qt.getTypePtrOrNull();
-        if (type == nullptr || type->isVoidType())
+        if (!type || type->isVoidType())
             continue;
 
         // Bail-out if any parameter is a non-const-ref or pointer
-        auto it2 = methodDecl->param_begin();
-        auto e = methodDecl->param_end();
         bool bailout = false;
-        for (; it2 != e ; ++it2) {
-            auto paramVarDecl = *it2;
+        for (auto paramVarDecl : methodDecl->params()) {
             QualType qt = paramVarDecl->getType();
             const Type *type = qt.getTypePtrOrNull();
-            if (type == nullptr || type->isPointerType()) {
+            if (!type || type->isPointerType()) {
                 bailout = true;
                 break;
             }
