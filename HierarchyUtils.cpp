@@ -59,7 +59,6 @@ vector<Stmt*> HierarchyUtils::childs(clang::Stmt *parent)
     return children;
 }
 
-
 bool HierarchyUtils::isChildOf(Stmt *child, Stmt *parent)
 {
     if (!child || !parent)
@@ -67,6 +66,27 @@ bool HierarchyUtils::isChildOf(Stmt *child, Stmt *parent)
 
     for (auto c = parent->child_begin(), end = parent->child_end(); c != end; ++c) {
         if (*c == child || isChildOf(child, *c))
+            return true;
+    }
+
+    return false;
+}
+
+bool HierarchyUtils::isParentOfMemberFunctionCall(Stmt *stm, const std::string &name)
+{
+    if (!stm)
+        return false;
+
+    auto expr = dyn_cast<MemberExpr>(stm);
+
+    if (expr) {
+        auto namedDecl = dyn_cast<NamedDecl>(expr->getMemberDecl());
+        if (namedDecl && namedDecl->getNameAsString() == name)
+            return true;
+    }
+
+    for (auto it = stm->child_begin(), e = stm->child_end(); it != e; ++it) {
+        if (isParentOfMemberFunctionCall(*it, name))
             return true;
     }
 

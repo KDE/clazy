@@ -143,31 +143,6 @@ bool Utils::statementIsInFunc(clang::ParentMap *parentMap, clang::Stmt *stmt, co
 }
 */
 
-
-bool Utils::isParentOfMemberFunctionCall(Stmt *stm, const std::string &name)
-{
-    if (!stm)
-        return false;
-
-    auto expr = dyn_cast<MemberExpr>(stm);
-
-    if (expr) {
-        auto namedDecl = dyn_cast<NamedDecl>(expr->getMemberDecl());
-        if (namedDecl && namedDecl->getNameAsString() == name)
-            return true;
-    }
-
-    auto it = stm->child_begin();
-    auto e = stm->child_end();
-    for (; it != e; ++it) {
-        if (isParentOfMemberFunctionCall(*it, name))
-            return true;
-    }
-
-    return false;
-}
-
-
 bool Utils::allChildrenMemberCallsConst(Stmt *stm)
 {
     if (!stm)

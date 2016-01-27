@@ -41,6 +41,11 @@ namespace HierarchyUtils {
  */
 bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
 
+/**
+ * Returns true if stm is parent of a member function call named "name"
+ */
+bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name);
+
 template <typename T>
 T* getFirstChildOfType(clang::Stmt *stm)
 {

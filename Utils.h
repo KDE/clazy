@@ -80,9 +80,6 @@ namespace Utils {
     /// Returns true if stmt is inside a function named name
     //bool statementIsInFunc(clang::ParentMap *, clang::Stmt *stmt, const std::string &name);
 
-    /// Returns true if stm is parent of a member function call named "name"
-    bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name);
-
     /// Returns true if all the child member function calls are const functions.
     bool allChildrenMemberCallsConst(clang::Stmt *stm);
 
