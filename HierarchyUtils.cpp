@@ -85,7 +85,7 @@ bool HierarchyUtils::isParentOfMemberFunctionCall(Stmt *stm, const std::string &
             return true;
     }
 
-    return clazy_std::any_child(stm, [name] (Stmt *child) {
+    return clazy_std::any_of(stm->children(), [name] (Stmt *child) {
         return isParentOfMemberFunctionCall(child, name);
     });
 

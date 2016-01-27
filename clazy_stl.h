@@ -64,11 +64,10 @@ typename C::const_iterator find_if(const C &container, Pred pred)
     return std::find_if(container.cbegin(), container.cend(), pred);
 }
 
-template<typename Pred>
-bool any_child(clang::Stmt *s, Pred pred)
+template<typename Range, typename Pred>
+bool any_of(Range r, Pred pred)
 {
-    return s ? std::any_of(s->child_begin(), s->child_end(), pred)
-             : false;
+    return std::any_of(r.begin(), r.end(), pred);
 }
 
 }
