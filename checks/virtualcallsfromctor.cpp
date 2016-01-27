@@ -81,11 +81,11 @@ SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *c
     processedStmts.push_back(stmt);
 
     std::vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds2<CXXMemberCallExpr>(stmt, memberCalls);
+    HierarchyUtils::getChilds<CXXMemberCallExpr>(stmt, memberCalls);
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {
         CXXMethodDecl *memberDecl = callExpr->getMethodDecl();
-        if (memberDecl == nullptr || dyn_cast<CXXThisExpr>(callExpr->getImplicitObjectArgument()) == nullptr)
+        if (!memberDecl || dyn_cast<CXXThisExpr>(callExpr->getImplicitObjectArgument()) == nullptr)
             continue;
 
         if (memberDecl->getParent() == classDecl) {

@@ -131,7 +131,7 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
         return nullptr;
 
     vector<StringLiteral*> literals;
-    HierarchyUtils::getChilds2(call, literals, 2);
+    HierarchyUtils::getChilds(call, literals, 2);
     return literals.empty() ? nullptr : literals[0];
 }
 
@@ -285,7 +285,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
 vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
 {
     vector<CXXConstructExpr*> constructExprs;
-    HierarchyUtils::getChilds2<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
+    HierarchyUtils::getChilds<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
 
     vector<FixItHint> fixits;
     fixits.reserve(2);
@@ -442,7 +442,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
         return;
 
     std::vector<StringLiteral*> stringLiterals;
-    HierarchyUtils::getChilds2<StringLiteral>(operatorCall, stringLiterals);
+    HierarchyUtils::getChilds<StringLiteral>(operatorCall, stringLiterals);
 
     //  We're only after string literals, str.contains(some_method_returning_const_char_is_fine())
     if (stringLiterals.empty())
@@ -462,7 +462,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     vector<FixItHint> fixits;
 
     vector<StringLiteral*> literals;
-    HierarchyUtils::getChilds2<StringLiteral>(stm, literals, 2);
+    HierarchyUtils::getChilds<StringLiteral>(stm, literals, 2);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
         if (literals[0]->getNumConcatenated() > 1) {
@@ -511,7 +511,7 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     }
 
     vector<ConditionalOperator*> ternaries;
-    HierarchyUtils::getChilds2(callExpr, ternaries, 2);
+    HierarchyUtils::getChilds(callExpr, ternaries, 2);
     if (!ternaries.empty()) {
         auto ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {

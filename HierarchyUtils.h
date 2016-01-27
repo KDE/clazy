@@ -149,7 +149,7 @@ void getChildsHACK(clang::Stmt *stm, std::vector<T*> &result_list)
 }
 
 template <typename T>
-void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
+void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
 {
     if (!stmt)
         return;
@@ -162,7 +162,7 @@ void getChilds2(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
         if (depth > 0)
             --depth;
         for (auto child : stmt->children()) {
-            getChilds2(child, result_list, depth);
+            getChilds(child, result_list, depth);
         }
     }
 }

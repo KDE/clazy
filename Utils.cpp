@@ -318,7 +318,7 @@ bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possib
 bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 {
     std::vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds2<CXXMemberCallExpr>(body, memberCalls);
+    HierarchyUtils::getChilds<CXXMemberCallExpr>(body, memberCalls);
 
     for (auto it = memberCalls.cbegin(), end = memberCalls.cend(); it != end; ++it) {
         CXXMemberCallExpr *memberCall = *it;
@@ -336,7 +336,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 
     // Check for operator calls:
     std::vector<CXXOperatorCallExpr*> operatorCalls;
-    HierarchyUtils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
+    HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
         CXXOperatorCallExpr *operatorExpr = *it;
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
@@ -409,7 +409,7 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
         return false;
 
     std::vector<CallExpr*> callExprs;
-    HierarchyUtils::getChilds2<CallExpr>(body, callExprs);
+    HierarchyUtils::getChilds<CallExpr>(body, callExprs);
     for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
         CallExpr *callexpr = *it;
         FunctionDecl *fDecl = callexpr->getDirectCallee();
@@ -421,7 +421,7 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
     }
 
     std::vector<CXXConstructExpr*> constructExprs;
-    HierarchyUtils::getChilds2<CXXConstructExpr>(body, constructExprs);
+    HierarchyUtils::getChilds<CXXConstructExpr>(body, constructExprs);
     for (auto it = constructExprs.cbegin(), end = constructExprs.cend(); it != end; ++it) {
         CXXConstructExpr *constructExpr = *it;
         FunctionDecl *fDecl = constructExpr->getConstructor();
@@ -439,7 +439,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
         return false;
 
     std::vector<CXXOperatorCallExpr*> operatorCalls;
-    HierarchyUtils::getChilds2<CXXOperatorCallExpr>(body, operatorCalls);
+    HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
         CXXOperatorCallExpr *operatorExpr = *it;
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
@@ -460,7 +460,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 {
     std::vector<clang::CXXDefaultArgExpr*> exprs;
-    HierarchyUtils::getChilds2<clang::CXXDefaultArgExpr>(expr, exprs, 1);
+    HierarchyUtils::getChilds<clang::CXXDefaultArgExpr>(expr, exprs, 1);
     return !exprs.empty();
 }
 
@@ -470,7 +470,7 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
         return false;
 
     std::vector<StringLiteral*> stringLiterals;
-    HierarchyUtils::getChilds2<StringLiteral>(stm, stringLiterals, depth);
+    HierarchyUtils::getChilds<StringLiteral>(stm, stringLiterals, depth);
 
     if (allowEmpty)
         return !stringLiterals.empty();
@@ -1026,19 +1026,19 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
         return false;
 
     vector<DeclStmt*> declStmts;
-    HierarchyUtils::getChilds2<DeclStmt>(body, declStmts);
+    HierarchyUtils::getChilds<DeclStmt>(body, declStmts);
     for (auto it = declStmts.cbegin(), end = declStmts.cend(); it != end; ++it) {
         DeclStmt *declStmt = *it;
         if (declStmt->getSingleDecl() == varDecl) {
             vector<DeclRefExpr*> declRefs;
 
-            HierarchyUtils::getChilds2<DeclRefExpr>(declStmt, declRefs);
+            HierarchyUtils::getChilds<DeclRefExpr>(declStmt, declRefs);
             if (!declRefs.empty()) {
                 return true;
             }
 
             vector<CallExpr*> callExprs;
-            HierarchyUtils::getChilds2<CallExpr>(declStmt, callExprs);
+            HierarchyUtils::getChilds<CallExpr>(declStmt, callExprs);
             if (!callExprs.empty()) {
                 return true;
             }

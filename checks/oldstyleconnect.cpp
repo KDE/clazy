@@ -203,7 +203,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
 bool OldStyleConnect::isQPointer(Expr *expr) const
 {
     vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds2<CXXMemberCallExpr>(expr, memberCalls);
+    HierarchyUtils::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
     for (auto callExpr : memberCalls) {
         if (!callExpr->getDirectCallee())

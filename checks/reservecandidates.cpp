@@ -268,7 +268,7 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
         return false;
 
     vector<CallExpr*> callExprs;
-    HierarchyUtils::getChilds2<CallExpr>(expr, callExprs);
+    HierarchyUtils::getChilds<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
         if (isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr)))
@@ -281,7 +281,7 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
     }
 
     vector<ArraySubscriptExpr*> subscriptExprs;
-    HierarchyUtils::getChilds2<ArraySubscriptExpr>(expr, subscriptExprs);
+    HierarchyUtils::getChilds<ArraySubscriptExpr>(expr, subscriptExprs);
     if (!subscriptExprs.empty())
         return true;
 

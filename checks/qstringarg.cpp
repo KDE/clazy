@@ -46,7 +46,7 @@ static bool stringContains(const string &needle, const string &haystack)
 static string variableNameFromArg(Expr *arg)
 {
     vector<DeclRefExpr*> declRefs;
-    HierarchyUtils::getChilds2<DeclRefExpr>(arg, declRefs);
+    HierarchyUtils::getChilds<DeclRefExpr>(arg, declRefs);
     if (declRefs.size() == 1) {
         ValueDecl *decl = declRefs.at(0)->getDecl();
         return decl ? decl->getNameAsString() : string();
@@ -152,7 +152,7 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
         if (p && p->getNameAsString() == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
             vector<IntegerLiteral*> literals;
-            HierarchyUtils::getChilds2<IntegerLiteral>(memberCall->getArg(2), literals);
+            HierarchyUtils::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
             if (!literals.empty())
                 return;
 
@@ -167,7 +167,7 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
         if (p && p->getNameAsString() == "fieldWidth") {
             // He specified a literal, so he knows what he's doing, otherwise he would have put it directly in the string
             vector<IntegerLiteral*> literals;
-            HierarchyUtils::getChilds2<IntegerLiteral>(memberCall->getArg(1), literals);
+            HierarchyUtils::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);
             if (!literals.empty())
                 return;
 

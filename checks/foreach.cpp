@@ -84,7 +84,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     vector<DeclRefExpr*> declRefExprs;
-    HierarchyUtils::getChilds2<DeclRefExpr>(constructExpr, declRefExprs);
+    HierarchyUtils::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
     if (declRefExprs.empty())
         return;
 
@@ -135,13 +135,13 @@ void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
     vector<ForStmt*> forStatements;
-    HierarchyUtils::getChilds2<ForStmt>(m_lastForStmt->getBody(), forStatements);
+    HierarchyUtils::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
     if (forStatements.empty())
         return;
 
     // Get the variable declaration (lhs of foreach)
     vector<DeclStmt*> varDecls;
-    HierarchyUtils::getChilds2<DeclStmt>(forStatements.at(0), varDecls);
+    HierarchyUtils::getChilds<DeclStmt>(forStatements.at(0), varDecls);
     if (varDecls.empty())
         return;
 
