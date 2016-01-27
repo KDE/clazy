@@ -25,6 +25,8 @@
 namespace clang {
     class CXXMethodDecl;
     class CXXRecordDecl;
+    class ClassTemplateSpecializationDecl;
+    class Decl;
 }
 
 namespace TemplateUtils
@@ -42,4 +44,6 @@ namespace TemplateUtils
      *    If the class was QList<int>(), it would return {int}
      */
     std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXRecordDecl *);
+
+    clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
 }

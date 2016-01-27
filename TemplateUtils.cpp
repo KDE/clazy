@@ -62,3 +62,15 @@ std::vector<clang::QualType> TemplateUtils::getTemplateArgumentsTypes(CXXRecordD
 
     return typesFromTemplateArguments(templateDecl->getTemplateInstantiationArgs());
 }
+
+ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)
+{
+    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    if (!varDecl) return nullptr;
+    QualType qt = varDecl->getType();
+    const Type *t = qt.getTypePtrOrNull();
+    if (!t) return nullptr;
+    CXXRecordDecl *classDecl = t->getAsCXXRecordDecl();
+    if (!classDecl) return nullptr;
+    return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
+}

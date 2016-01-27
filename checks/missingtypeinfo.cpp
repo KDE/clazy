@@ -24,6 +24,7 @@
 
 #include "missingtypeinfo.h"
 #include "Utils.h"
+#include "TemplateUtils.h"
 #include <TypeUtils.h>
 #include "checkmanager.h"
 
@@ -49,7 +50,7 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     }
 
     // Catches QList<Foo>
-    ClassTemplateSpecializationDecl *tstdecl = Utils::templateDecl(decl);
+    ClassTemplateSpecializationDecl *tstdecl = TemplateUtils::templateDecl(decl);
     if (!tstdecl)
         return;
 

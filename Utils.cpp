@@ -67,18 +67,6 @@ bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
     });
 }
 
-ClassTemplateSpecializationDecl *Utils::templateDecl(Decl *decl)
-{
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl) return nullptr;
-    QualType qt = varDecl->getType();
-    const Type *t = qt.getTypePtrOrNull();
-    if (!t) return nullptr;
-    CXXRecordDecl *classDecl = t->getAsCXXRecordDecl();
-    if (!classDecl) return nullptr;
-    return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
-}
-
 CXXRecordDecl * Utils::namedCastInnerDecl(CXXNamedCastExpr *staticOrDynamicCast)
 {
     Expr *e = staticOrDynamicCast->getSubExpr();
