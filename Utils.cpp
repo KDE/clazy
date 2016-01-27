@@ -938,22 +938,6 @@ bool Utils::isAscii(StringLiteral *lt)
     return lt && lt->isAscii() && !lt->containsNonAsciiOrNull();
 }
 
-bool Utils::isChildOf(Stmt *child, Stmt *parent)
-{
-    if (!child || !parent)
-        return false;
-
-
-    for (auto c = parent->child_begin(), end = parent->child_end(); c != end; ++c) {
-        if (*c == child)
-            return true;
-        if (isChildOf(child, *c))
-            return true;
-    }
-
-    return false;
-}
-
 bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
 {
     if (!s)

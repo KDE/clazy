@@ -58,3 +58,17 @@ vector<Stmt*> HierarchyUtils::childs(clang::Stmt *parent)
 
     return children;
 }
+
+
+bool HierarchyUtils::isChildOf(Stmt *child, Stmt *parent)
+{
+    if (!child || !parent)
+        return false;
+
+    for (auto c = parent->child_begin(), end = parent->child_end(); c != end; ++c) {
+        if (*c == child || isChildOf(child, *c))
+            return true;
+    }
+
+    return false;
+}

@@ -36,6 +36,11 @@ class ParentMap;
 
 namespace HierarchyUtils {
 
+/**
+ * Returns true if child is a child of parent.
+ */
+bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
+
 template <typename T>
 T* getFirstChildOfType(clang::Stmt *stm)
 {
