@@ -107,9 +107,9 @@ T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int dep
     return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
 }
 
-clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
+clang::Stmt * getFirstChild(clang::Stmt *parent);
 
-std::vector<clang::Stmt*> childs(clang::Stmt *parent);
+clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
 
 /// Goes into a statement and returns it's childs of type T
 /// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal

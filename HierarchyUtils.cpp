@@ -46,19 +46,6 @@ clang::Stmt * HierarchyUtils::getFirstChildAtDepth(clang::Stmt *s, unsigned int 
     return s->child_begin() == s->child_end() ? nullptr : getFirstChildAtDepth(*s->child_begin(), --depth);
 }
 
-vector<Stmt*> HierarchyUtils::childs(clang::Stmt *parent)
-{
-    vector<Stmt*> children;
-
-    if (!parent)
-        return children;
-
-    for (auto it = parent->child_begin(), end = parent->child_end(); it != end; ++it)
-        children.push_back(*it);
-
-    return children;
-}
-
 bool HierarchyUtils::isChildOf(Stmt *child, Stmt *parent)
 {
     if (!child || !parent)
@@ -90,4 +77,13 @@ bool HierarchyUtils::isParentOfMemberFunctionCall(Stmt *stm, const std::string &
     });
 
     return false;
+}
+
+clang::Stmt *HierarchyUtils::getFirstChild(clang::Stmt *parent)
+{
+    if (!parent)
+        return nullptr;
+
+    auto it = parent->child_begin();
+    return it == parent->child_end() ? nullptr : *it;
 }

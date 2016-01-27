@@ -121,8 +121,9 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         if (impl) {
             if (impl->getCastKind() == CK_LValueToRValue)
                 return;
-            auto childs = HierarchyUtils::childs(impl);
-            if (!childs.empty() && isa<ImplicitCastExpr>(childs[0]) && dyn_cast<ImplicitCastExpr>(childs[0])->getCastKind() == CK_LValueToRValue)
+
+            Stmt *firstChild = HierarchyUtils::getFirstChild(impl);
+            if (firstChild && isa<ImplicitCastExpr>(firstChild) && dyn_cast<ImplicitCastExpr>(firstChild)->getCastKind() == CK_LValueToRValue)
                 return;
         }
     }
