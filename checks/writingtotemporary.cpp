@@ -65,7 +65,7 @@ static bool isKnownType(const string &className)
                                           "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
                                           "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D",
                                           "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
-                                          "QPointF" };
+                                          "QPointF", "QColor" };
 
     return clazy_std::contains(types, className);
 }
