@@ -51,12 +51,9 @@ bool HierarchyUtils::isChildOf(Stmt *child, Stmt *parent)
     if (!child || !parent)
         return false;
 
-    for (auto c = parent->child_begin(), end = parent->child_end(); c != end; ++c) {
-        if (*c == child || isChildOf(child, *c))
-            return true;
-    }
-
-    return false;
+    return clazy_std::any_of(parent->children(), [child](Stmt *c) {
+        return c == child || HierarchyUtils::isChildOf(child, c);
+    });
 }
 
 bool HierarchyUtils::isParentOfMemberFunctionCall(Stmt *stm, const std::string &name)
