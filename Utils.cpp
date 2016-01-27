@@ -338,21 +338,14 @@ bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possib
     if (derived->getNameAsString() == possibleBase)
         return true;
 
-    auto it = derived->bases_begin();
-    auto end = derived->bases_end();
-
-    for (; it != end; ++it) {
-        QualType qt = (*it).getType();
-        const Type *t = qt.getTypePtrOrNull();
-        if (!t)
-            continue;
-        if (derivesFrom(t->getAsCXXRecordDecl(), possibleBase))
+    for (auto base : derived->bases()) {
+        const Type *t = base.getType().getTypePtrOrNull();
+        if (t && derivesFrom(t->getAsCXXRecordDecl(), possibleBase))
             return true;
     }
 
     return false;
 }
-
 
 bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 {
