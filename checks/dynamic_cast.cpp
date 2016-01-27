@@ -56,7 +56,7 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
 
     if (castFrom == castTo) {
         emitWarning(stm->getLocStart(), "Casting to itself");
-    } else if (Utils::isChildOf(/*child=*/castFrom, castTo)) {
+    } else if (Utils::derivesFrom(/*child=*/castFrom, castTo)) {
         emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary");
     }
 }

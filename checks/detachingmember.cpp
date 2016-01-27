@@ -101,10 +101,9 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (parentBinaryOp && parentBinaryOp->isAssignmentOp()) {
         // m_foo[0] += .. is OK
         Expr *lhs = parentBinaryOp->getLHS();
-        if (callExpr == lhs || Utils::isChildOf(callExpr, lhs))
+        if (callExpr == lhs || HierarchyUtils::isChildOf(callExpr, lhs))
             return;
     }
-
 
     const bool returnsNonConstIterator = stringEndsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
     if (returnsNonConstIterator) {

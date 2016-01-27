@@ -42,25 +42,18 @@
 using namespace clang;
 using namespace std;
 
-bool Utils::isChildOf(CXXRecordDecl *childDecl, CXXRecordDecl *parentDecl)
+bool Utils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
 {
-    if (!childDecl || !parentDecl)
+    if (!derived || !possibleBase || derived == possibleBase)
         return false;
 
-    if (childDecl == parentDecl)
-        return false;
-
-    for (auto it = childDecl->bases_begin(), e = childDecl->bases_end(); it != e; ++it) {
+    for (auto it = derived->bases_begin(), e = derived->bases_end(); it != e; ++it) {
         CXXBaseSpecifier *base = it;
         const Type *type = base->getType().getTypePtrOrNull();
         if (!type) continue;
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
 
-        if (parentDecl == baseDecl) {
-            return true;
-        }
-
-        if (isChildOf(baseDecl, parentDecl)) {
+        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase)) {
             return true;
         }
     }
@@ -887,10 +880,10 @@ bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
         return false;
 
     // For protected there's still hope, since record might be a derived or base class
-    if (isChildOf(record, contextRecord))
+    if (derivesFrom(record, contextRecord))
         return true;
 
-    if (isChildOf(contextRecord, record)) {
+    if (derivesFrom(contextRecord, record)) {
         isSpecialProtectedCase = true;
         return true;
     }
