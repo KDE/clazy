@@ -23,7 +23,7 @@
 */
 
 #include "HierarchyUtils.h"
-
+#include "clazy_stl.h"
 #include <clang/AST/ParentMap.h>
 
 using namespace std;
@@ -85,10 +85,9 @@ bool HierarchyUtils::isParentOfMemberFunctionCall(Stmt *stm, const std::string &
             return true;
     }
 
-    for (auto it = stm->child_begin(), e = stm->child_end(); it != e; ++it) {
-        if (isParentOfMemberFunctionCall(*it, name))
-            return true;
-    }
+    return clazy_std::any_child(stm, [name] (Stmt *child) {
+        return isParentOfMemberFunctionCall(child, name);
+    });
 
     return false;
 }

@@ -23,6 +23,7 @@
 #ifndef CLAZY_STL_H
 #define CLAZY_STL_H
 
+#include <clang/AST/Stmt.h>
 #include <algorithm>
 
 namespace clazy_std {
@@ -61,6 +62,13 @@ template<typename C, typename Pred>
 typename C::const_iterator find_if(const C &container, Pred pred)
 {
     return std::find_if(container.cbegin(), container.cend(), pred);
+}
+
+template<typename Pred>
+bool any_child(clang::Stmt *s, Pred pred)
+{
+    return s ? std::any_of(s->child_begin(), s->child_end(), pred)
+             : false;
 }
 
 }
