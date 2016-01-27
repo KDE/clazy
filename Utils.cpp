@@ -275,11 +275,11 @@ ClassTemplateSpecializationDecl *Utils::templateSpecializationFromVarDecl(Decl *
 
 ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
 {
-    if (memberCall == nullptr)
+    if (!memberCall)
         return nullptr;
 
     Expr *implicitObject = memberCall->getImplicitObjectArgument();
-    if (implicitObject == nullptr)
+    if (!implicitObject)
         return nullptr;
 
     auto declRefExpr = dyn_cast<DeclRefExpr>(implicitObject);
@@ -310,7 +310,7 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
 
 ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
 {
-    if (operatorCall == nullptr)
+    if (!operatorCall)
         return nullptr;
 
     for (auto it = operatorCall->child_begin(); it != operatorCall->child_end(); ++it) {
@@ -339,7 +339,7 @@ bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
 
 bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
 {
-    if (stmt == nullptr)
+    if (!stmt)
         return false;
 
     if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
@@ -364,7 +364,7 @@ bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstanc
 
 bool Utils::descendsFrom(clang::CXXRecordDecl *derived, const std::string &parentName)
 {
-    if (derived == nullptr)
+    if (!derived)
         return false;
 
     if (derived->getNameAsString() == parentName)
@@ -394,11 +394,11 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
     for (auto it = memberCalls.cbegin(), end = memberCalls.cend(); it != end; ++it) {
         CXXMemberCallExpr *memberCall = *it;
         CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
-        if (methodDecl == nullptr || methodDecl->isConst())
+        if (!methodDecl || methodDecl->isConst())
             continue;
 
         ValueDecl *valueDecl = Utils::valueDeclForMemberCall(*it);
-        if (valueDecl == nullptr)
+        if (!valueDecl)
             continue;
 
         if (valueDecl == varDecl)
@@ -411,14 +411,14 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
     for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
         CXXOperatorCallExpr *operatorExpr = *it;
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
-        if (fDecl == nullptr)
+        if (!fDecl)
             continue;
         CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
         if (methodDecl == nullptr || methodDecl->isConst())
             continue;
 
         ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(*it);
-        if (valueDecl == nullptr)
+        if (!valueDecl)
             continue;
 
         if (valueDecl == varDecl)
@@ -537,7 +537,7 @@ bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 
 bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
 {
-    if (stm == nullptr)
+    if (!stm)
         return false;
 
     std::vector<StringLiteral*> stringLiterals;
@@ -1011,7 +1011,7 @@ CXXRecordDecl *Utils::rootBaseClass(CXXRecordDecl *derived)
     CXXBaseSpecifier *base = derived->bases_begin();
     CXXRecordDecl *record = base->getType()->getAsCXXRecordDecl();
 
-    return record == nullptr ? derived : rootBaseClass(record);
+    return record ? rootBaseClass(record) : derived;
 }
 
 CXXConstructorDecl *Utils::copyCtor(CXXRecordDecl *record)
