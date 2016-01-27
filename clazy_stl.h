@@ -70,6 +70,12 @@ bool any_of(Range r, Pred pred)
     return std::any_of(r.begin(), r.end(), pred);
 }
 
+template<typename Range, typename Pred>
+bool all_of(Range r, Pred pred)
+{
+    return std::all_of(r.begin(), r.end(), pred);
+}
+
 }
 
 

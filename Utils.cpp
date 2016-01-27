@@ -156,14 +156,9 @@ bool Utils::allChildrenMemberCallsConst(Stmt *stm)
             return false;
     }
 
-    auto it = stm->child_begin();
-    auto e = stm->child_end();
-    for (; it != e; ++it) {
-        if (!allChildrenMemberCallsConst(*it))
-            return false;
-    }
-
-    return true;
+    return clazy_std::all_of(stm->children(), [](Stmt *child) {
+        return allChildrenMemberCallsConst(child);
+    });
 }
 
 bool Utils::childsHaveSideEffects(Stmt *stm)
