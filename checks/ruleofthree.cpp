@@ -114,7 +114,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (Utils::hasMember(record, "QSharedDataPointer"))
         return; // These need boiler-plate copy ctor and dtor
 
-    const string filename = m_ci.getSourceManager().getFilename(recordStart);
+    const string filename = sm().getFilename(recordStart);
     if (clazy_std::endsWith(className, "Private") && clazy_std::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 

@@ -262,16 +262,15 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
 
     vector<FixItHint> fixits;
     SourceLocation rangeStart = begin->getLocStart();
-    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm(), m_ci.getLangOpts());
 
-    const auto &sm = m_ci.getSourceManager();
     if (rangeEnd.isInvalid()) {
         // Fallback. Have seen a case in the wild where the above would fail, it's very rare
         rangeEnd = rangeStart.getLocWithOffset(replacee.size() - 2);
         if (rangeEnd.isInvalid()) {
-            StringUtils::printLocation(sm, rangeStart);
-            StringUtils::printLocation(sm, rangeEnd);
-            StringUtils::printLocation(sm, Lexer::getLocForEndOfToken(rangeStart, 0, m_ci.getSourceManager(), m_ci.getLangOpts()));
+            StringUtils::printLocation(sm(), rangeStart);
+            StringUtils::printLocation(sm(), rangeEnd);
+            StringUtils::printLocation(sm(), Lexer::getLocForEndOfToken(rangeStart, 0, sm(), m_ci.getLangOpts()));
             queueManualFixitWarning(begin->getLocStart(), fixitType);
             return {};
         }
@@ -290,14 +289,14 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTerna
     vector<FixItHint> fixits;
     fixits.reserve(2);
     if (constructExprs.size() != 2) {
-        llvm::errs() << "Weird ternary operator with " << constructExprs.size() << " at " << ternary->getLocStart().printToString(m_ci.getSourceManager()) << "\n";
+        llvm::errs() << "Weird ternary operator with " << constructExprs.size() << " at " << ternary->getLocStart().printToString(sm()) << "\n";
         assert(false);
         return fixits;
     }
 
     for (int i = 0; i < 2; ++i) {
         SourceLocation rangeStart = constructExprs[i]->getLocStart();
-        SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+        SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm(), m_ci.getLangOpts());
         fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral"));
     }
 
@@ -373,9 +372,9 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
             }
         }
 
-        auto classNameLoc = Lexer::getLocForEndOfToken(callExpr->getLocStart(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
-        auto scopeOperatorLoc = Lexer::getLocForEndOfToken(classNameLoc, 0, m_ci.getSourceManager(), m_ci.getLangOpts());
-        auto methodNameLoc = Lexer::getLocForEndOfToken(scopeOperatorLoc, -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+        auto classNameLoc = Lexer::getLocForEndOfToken(callExpr->getLocStart(), 0, sm(), m_ci.getLangOpts());
+        auto scopeOperatorLoc = Lexer::getLocForEndOfToken(classNameLoc, 0, sm(), m_ci.getLangOpts());
+        auto methodNameLoc = Lexer::getLocForEndOfToken(scopeOperatorLoc, -1, sm(), m_ci.getLangOpts());
         SourceRange range(callExpr->getLocStart(), methodNameLoc);
         fixits.push_back(FixItHint::CreateReplacement(range, replacement));
     } else {
@@ -416,7 +415,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
 vector<FixItHint> QStringUneededHeapAllocations::fixItRemoveToken(Stmt *stmt, bool removeParenthesis)
 {
     SourceLocation start = stmt->getLocStart();
-    SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1, m_ci.getSourceManager(), m_ci.getLangOpts());
+    SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1, sm(), m_ci.getLangOpts());
 
     vector<FixItHint> fixits;
 

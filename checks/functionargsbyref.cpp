@@ -187,8 +187,8 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
     }
 
     if (!startLoc.isValid() || !endLoc.isValid()) {
-        llvm::errs() << "Internal error could not apply fixit " << startLoc.printToString(m_ci.getSourceManager())
-                     << ';' << endLoc.printToString(m_ci.getSourceManager()) << "\n";
+        llvm::errs() << "Internal error could not apply fixit " << startLoc.printToString(sm())
+                     << ';' << endLoc.printToString(sm()) << "\n";
         return {};
     }
 

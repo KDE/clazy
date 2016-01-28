@@ -187,8 +187,8 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
         return {};
     }
 
-    auto insertionLoc = Lexer::getLocForEndOfToken(memberExpr->getLocEnd(), 0, m_ci.getSourceManager(), m_ci.getLangOpts());
-    // llvm::errs() << insertionLoc.printToString(m_ci.getSourceManager()) << "\n";
+    auto insertionLoc = Lexer::getLocForEndOfToken(memberExpr->getLocEnd(), 0, sm(), m_ci.getLangOpts());
+    // llvm::errs() << insertionLoc.printToString(sm()) << "\n";
     if (!insertionLoc.isValid()) {
         queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 2");
         return {};

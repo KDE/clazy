@@ -167,7 +167,7 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
 
     const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
     // We only want containers defined outside of the loop we're examining
-    if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(loopBody->getLocStart(), valueDecl->getLocStart()))
+    if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(loopBody->getLocStart(), valueDecl->getLocStart()))
         return false;
 
     if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
@@ -349,7 +349,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     PresumedLoc lastForeachForStm;
     while (Stmt *parent = HierarchyUtils::parent(m_parentMap, it)) {
         const SourceLocation parentStart = parent->getLocStart();
-        if (!isMemberVariable && m_ci.getSourceManager().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
+        if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
             return false;
         }
@@ -364,7 +364,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             loopCount++;
 
         if (MacroUtils::isInMacro(m_ci, parentStart, "Q_FOREACH")) {
-            auto ploc = m_ci.getSourceManager().getPresumedLoc(parentStart);
+            auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting
             } else {

@@ -111,7 +111,7 @@ OldStyleConnect::OldStyleConnect(const std::string &name, const clang::CompilerI
     : CheckBase(name, ci)
 {
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    m_preprocessorCallbacks = new PreprocessorCallbacks(this, m_ci.getSourceManager(), m_ci.getLangOpts());
+    m_preprocessorCallbacks = new PreprocessorCallbacks(this, sm(), m_ci.getLangOpts());
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 #endif
@@ -272,10 +272,10 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     if (!macroLoc.isMacroID())
         return "error";
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(macroLoc);
+    auto expansionRange = sm().getImmediateExpansionRange(macroLoc);
     SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
-    auto charRange = Lexer::getAsCharRange(range, m_ci.getSourceManager(), m_ci.getLangOpts());
-    const string text = Lexer::getSourceText(charRange, m_ci.getSourceManager(), m_ci.getLangOpts());
+    auto charRange = Lexer::getAsCharRange(range, sm(), m_ci.getLangOpts());
+    const string text = Lexer::getSourceText(charRange, sm(), m_ci.getLangOpts());
 
     static regex rx(R"(\s*(SIGNAL|SLOT)\s*\(\s*(.+)\s*\(.*)");
 
@@ -300,7 +300,7 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) cons
     if (!loc.isMacroID() || loc.isInvalid())
         return false;
 
-    macroName = Lexer::getImmediateMacroName(loc, m_ci.getSourceManager(), m_ci.getLangOpts());
+    macroName = Lexer::getImmediateMacroName(loc, sm(), m_ci.getLangOpts());
     return macroName == "SIGNAL" || macroName == "SLOT";
 }
 
@@ -419,16 +419,16 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             string qualifiedName;
             auto contextRecord = ContextUtils::firstContextOfType<CXXRecordDecl>(m_lastDecl->getDeclContext());
-            const bool isInInclude = m_ci.getSourceManager().getMainFileID() != m_ci.getSourceManager().getFileID(call->getLocStart());
+            const bool isInInclude = sm().getMainFileID() != sm().getFileID(call->getLocStart());
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = ContextUtils::getMostNeededQualifiedName(m_ci.getSourceManager(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = ContextUtils::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
-            auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(s);
+            auto expansionRange = sm().getImmediateExpansionRange(s);
             SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
 
             const string functionPointer = '&' + qualifiedName;

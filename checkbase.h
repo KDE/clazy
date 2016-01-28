@@ -26,6 +26,7 @@
 #define CHECK_BASE_H
 
 #include "clazy_stl.h"
+#include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <llvm/Config/llvm-config.h>
 #include <string>
@@ -84,6 +85,9 @@ protected:
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
     virtual std::vector<std::string> supportedOptions() const;
     bool isOptionSet(const std::string &optionName) const;
+
+    const clang::CompilerInstance &ci() const { return m_ci; }
+    const clang::SourceManager &sm() const { return m_ci.getSourceManager(); }
 
     const clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;

@@ -78,10 +78,10 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
 
     for (auto it = m_qobjectMacroLocations.cbegin(), end = m_qobjectMacroLocations.cend(); it != end; ++it) {
         const SourceLocation &loc = *it;
-        if (m_ci.getSourceManager().getFileID(loc) != m_ci.getSourceManager().getFileID(startLoc))
+        if (sm().getFileID(loc) != sm().getFileID(startLoc))
             continue; // Different file
 
-        if (m_ci.getSourceManager().isBeforeInSLocAddrSpace(startLoc, loc) && m_ci.getSourceManager().isBeforeInSLocAddrSpace(loc, decl->getLocEnd()))
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, decl->getLocEnd()))
             return; // We found a Q_OBJECT after start and before end, it's ours.
     }
 

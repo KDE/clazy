@@ -91,10 +91,10 @@ void CheckBase::VisitDecl(Decl *)
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 {
-    if (!loc.isValid() || m_ci.getSourceManager().isInSystemHeader(loc))
+    if (!loc.isValid() || sm().isInSystemHeader(loc))
         return true;
 
-    auto filename = m_ci.getSourceManager().getFilename(loc);
+    auto filename = sm().getFilename(loc);
 
     const std::vector<std::string> files = filesToIgnore();
     for (auto &file : files) {
@@ -143,7 +143,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
 
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
 {
-    FullSourceLoc full(loc, m_ci.getSourceManager());
+    FullSourceLoc full(loc, sm());
     unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
     DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
     for (const FixItHint& fixit : fixits) {
@@ -162,10 +162,10 @@ void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, int fixitType
 
 bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
 {
-    PresumedLoc ploc = m_ci.getSourceManager().getPresumedLoc(loc);
+    PresumedLoc ploc = sm().getPresumedLoc(loc);
     for (auto rawLoc : m_emittedWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
-        PresumedLoc p = m_ci.getSourceManager().getPresumedLoc(l);
+        PresumedLoc p = sm().getPresumedLoc(l);
         if (Utils::presumedLocationsEqual(p, ploc))
             return true;
     }
@@ -175,10 +175,10 @@ bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
 
 bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
 {
-    PresumedLoc ploc = m_ci.getSourceManager().getPresumedLoc(loc);
+    PresumedLoc ploc = sm().getPresumedLoc(loc);
     for (auto loc : m_emittedManualFixItsWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(loc);
-        PresumedLoc p = m_ci.getSourceManager().getPresumedLoc(l);
+        PresumedLoc p = sm().getPresumedLoc(l);
         if (Utils::presumedLocationsEqual(p, ploc))
             return true;
     }

@@ -105,7 +105,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
         if (op->isAssignmentOp()) {
             if (DeclRefExpr *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
                 ValueDecl *valueDecl = declRef->getDecl();
-                if (valueDecl && m_ci.getSourceManager().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stmStart)) {
+                if (valueDecl && sm().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stmStart)) {
                     // llvm::errs() << "reason3\n";
                     warn = true;
                 }
@@ -116,7 +116,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
             ValueDecl *valueDecl = declRef->getDecl();
             auto type = op->getOpcode();
             if (type != UnaryOperatorKind::UO_Deref && type != UnaryOperatorKind::UO_AddrOf) {
-                if (valueDecl && m_ci.getSourceManager().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stmStart)) {
+                if (valueDecl && sm().isBeforeInSLocAddrSpace(valueDecl->getLocStart(), stmStart)) {
                     // llvm::errs() << "reason5 " << op->getOpcodeStr() << "\n";
                     warn = true;
                 }
