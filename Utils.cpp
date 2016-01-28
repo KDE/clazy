@@ -364,7 +364,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
     for (auto arg : expr->arguments()) {
         DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(arg);
         if (!refExpr)  {
-            if (arg->child_begin() != arg->child_end()) {
+            if (clazy_std::hasChildren(arg)) {
                 refExpr = dyn_cast<DeclRefExpr>(*(arg->child_begin()));
                 if (!refExpr)
                     continue;
@@ -1051,22 +1051,7 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
 bool Utils::functionHasEmptyBody(clang::FunctionDecl *func)
 {
     Stmt *body = func ? func->getBody() : nullptr;
-    if (!body)
-        return false;
-
-    auto it = body->child_begin();
-    if (it == body->child_end()) {
-        return true;
-    }
-
-    if (auto *compound = dyn_cast<CompoundStmt>(*it)) {
-        bool isEmpty = compound->child_begin() == compound->child_end();
-        if (isEmpty) {
-            return true;
-        }
-    }
-
-    return false;
+    return !clazy_std::hasChildren(body);
 }
 
 clang::Expr *Utils::isWriteOperator(Stmt *stm)

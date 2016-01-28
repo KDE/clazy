@@ -43,7 +43,8 @@ clang::Stmt * HierarchyUtils::getFirstChildAtDepth(clang::Stmt *s, unsigned int 
     if (depth == 0 || !s)
         return s;
 
-    return s->child_begin() == s->child_end() ? nullptr : getFirstChildAtDepth(*s->child_begin(), --depth);
+    return clazy_std::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
+                                     : nullptr;
 }
 
 bool HierarchyUtils::isChildOf(Stmt *child, Stmt *parent)

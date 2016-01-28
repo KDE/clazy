@@ -90,6 +90,16 @@ void copy_if(const SrcContainer &src, DstContainer &dst, Pred pred)
     std::copy_if(src.cbegin(), src.cend(), std::back_inserter(dst), pred);
 }
 
+template <typename Range>
+bool isEmpty(Range r)
+{
+    return r.begin() == r.end();
+}
+
+inline bool hasChildren(clang::Stmt *s)
+{
+    return s && !clazy_std::isEmpty(s->children());
+}
 
 }
 
