@@ -110,15 +110,41 @@ inline bool hasChildren(clang::Stmt *s)
     return s && !clazy_std::isEmpty(s->children());
 }
 
-inline bool stringStartsWith(const std::string &target, const std::string &maybeBeginning)
+/**
+ * Returns true if the string target starts with maybeBeginning
+ */
+inline bool startsWith(const std::string &target, const std::string &maybeBeginning)
 {
     return target.compare(0, maybeBeginning.length(), maybeBeginning) == 0;
 }
 
-inline bool stringEndsWith(const std::string &target, const std::string &maybeEnding)
+/**
+ * Returns true if the string target starts with any of the strings in beginningCandidates
+ */
+inline bool startsWithAny(const std::string &target, const std::vector<std::string> &beginningCandidates)
+{
+    return clazy_std::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
+        return clazy_std::startsWith(target, maybeBeginning);
+    });
+}
+
+/**
+ * Returns true if the stirng target ends with maybeEnding
+ */
+inline bool endsWith(const std::string &target, const std::string &maybeEnding)
 {
     return target.size() >= maybeEnding.size() &&
             target.compare(target.size() - maybeEnding.size(), maybeEnding.size(), maybeEnding) == 0;
+}
+
+/**
+ * Returns true if the string target ends with any of the strings in endingCandidates
+ */
+inline bool endsWithAny(const std::string &target, const std::vector<std::string> &endingCandidates)
+{
+    return clazy_std::any_of(endingCandidates, [target](const std::string &maybeEnding) {
+        return clazy_std::endsWith(target, maybeEnding);
+    });
 }
 
 }

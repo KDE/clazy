@@ -115,7 +115,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         return; // These need boiler-plate copy ctor and dtor
 
     const string filename = m_ci.getSourceManager().getFilename(recordStart);
-    if (clazy_std::stringEndsWith(className, "Private") && (clazy_std::stringEndsWith(filename, ".cpp") || clazy_std::stringEndsWith(filename, ".cxx") || clazy_std::stringEndsWith(filename, "_p.h")))
+    if (clazy_std::endsWith(className, "Private") && clazy_std::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 
     string msg = classQualifiedName + " has ";

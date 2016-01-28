@@ -63,11 +63,11 @@ bool CheckManager::isReservedCheckName(const string &name) const
         return true;
 
     // level0, level1, etc are not allowed
-    if (clazy_std::stringStartsWith(name, s_levelPrefix))
+    if (clazy_std::startsWith(name, s_levelPrefix))
         return true;
 
     // These are fixit names
-    if (clazy_std::stringStartsWith(name, s_fixitNamePrefix))
+    if (clazy_std::startsWith(name, s_fixitNamePrefix))
         return true;
 
     return false;
@@ -95,7 +95,7 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
         return 0;
     }
 
-    if (!clazy_std::stringStartsWith(fixitName, s_fixitNamePrefix)) {
+    if (!clazy_std::startsWith(fixitName, s_fixitNamePrefix)) {
         assert(false);
         return 0;
     }
@@ -270,7 +270,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
             const string checkName = checkNameForFixIt(name);
             auto it = checkForName(m_registeredChecks, checkName);
             if (it == m_registeredChecks.cend()) {
-                if (clazy_std::stringStartsWith(name, s_levelPrefix) && name.size() == strlen(s_levelPrefix) + 1) {
+                if (clazy_std::startsWith(name, s_levelPrefix) && name.size() == strlen(s_levelPrefix) + 1) {
                     auto lastChar = name.back();
                     const int digit = lastChar - '0';
                     if (digit > CheckLevelUndefined && digit <= MaxCheckLevel) {

@@ -112,7 +112,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!secondFuncReturnType || !secondFuncReturnType->isVoidType())
         return;
 
-    if (!isKnownType(record->getNameAsString()) && !clazy_std::stringStartsWith(secondFunc->getNameAsString(), "set") && !m_widenCriteria)
+    if (!isKnownType(record->getNameAsString()) && !clazy_std::startsWith(secondFunc->getNameAsString(), "set") && !m_widenCriteria)
         return;
 
     emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + secondFunc->getQualifiedNameAsString());
