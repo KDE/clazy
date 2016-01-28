@@ -76,6 +76,14 @@ bool all_of(Range r, Pred pred)
     return std::all_of(r.begin(), r.end(), pred);
 }
 
+template<typename SrcContainer, typename DstContainer>
+typename DstContainer::iterator copy(const SrcContainer &src, DstContainer &dst)
+{
+    dst.reserve(dst.size() + src.size);
+    return std::copy(src.cbegin(), src.cend(), std::back_inserter(dst));
+}
+
+
 }
 
 
