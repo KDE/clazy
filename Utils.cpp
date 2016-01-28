@@ -26,6 +26,7 @@
 #include "MethodSignatureUtils.h"
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
+#include "ContextUtils.h"
 
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
@@ -269,12 +270,6 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     }
 
     return nullptr;
-}
-
-bool Utils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
-{
-    DeclContext *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
-    return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(valueDecl);
 }
 
 bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
@@ -669,160 +664,6 @@ const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, string 
     return nullptr;
 }
 
-static string nameForContext(DeclContext *context)
-{
-    if (auto  *ns = dyn_cast<NamespaceDecl>(context)) {
-        return ns->getNameAsString();
-    } else if (auto rec = dyn_cast<CXXRecordDecl>(context)) {
-        return rec->getNameAsString();
-    } else if (auto *method = dyn_cast<CXXMethodDecl>(context)) {
-        return method->getNameAsString();
-    } else if (dyn_cast<TranslationUnitDecl>(context)){
-        return {};
-    } else {
-        llvm::errs() << "Unhandled kind: " << context->getDeclKindName() << "\n";
-    }
-
-    return {};
-}
-
-string Utils::getMostNeededQualifiedName(const SourceManager &sourceManager, CXXMethodDecl *method, DeclContext *currentScope, SourceLocation usageLoc, bool honourUsingDirectives)
-{
-    if (!currentScope)
-        return method->getQualifiedNameAsString();
-
-    // All namespaces, classes, inner class qualifications
-    auto methodContexts = contextsForDecl(method->getDeclContext());
-
-    // Visible scopes in current scope
-    auto visibleContexts = contextsForDecl(currentScope);
-
-    // Collect using directives
-    vector<UsingDirectiveDecl*> usings;
-    if (honourUsingDirectives) {
-        for (DeclContext *context : visibleContexts) {
-            auto range = context->using_directives();
-            for (auto it = range.begin(), end = range.end(); it != end; ++it) {
-                usings.push_back(*it);
-            }
-        }
-    }
-
-    for (UsingDirectiveDecl *u : usings) {
-        NamespaceDecl *ns = u->getNominatedNamespace();
-        if (ns) {
-            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, u->getLocStart()))
-                continue;
-
-            visibleContexts.push_back(ns->getOriginalNamespace());
-        }
-    }
-
-    for (DeclContext *context : visibleContexts) {
-
-        if (context != method->getParent()) { // Don't remove the most immediate
-            auto it = clazy_std::find_if(methodContexts, [context](DeclContext *c) {
-                    if (c == context)
-                        return true;
-                    auto ns1 = dyn_cast<NamespaceDecl>(c);
-                    auto ns2 = dyn_cast<NamespaceDecl>(context);
-                    return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
-
-                });
-            if (it != methodContexts.end()) {
-                methodContexts.erase(it, it + 1);
-            }
-        }
-    }
-
-    string neededContexts;
-    for (DeclContext *context : methodContexts) {
-        neededContexts = nameForContext(context) + "::" + neededContexts;
-    }
-
-    const string result = neededContexts + method->getNameAsString();
-    return result;
-}
-
-std::vector<DeclContext *> Utils::contextsForDecl(DeclContext *currentScope)
-{
-    std::vector<DeclContext *> decls;
-    decls.reserve(20); // jump-start
-    while (currentScope) {
-        decls.push_back(currentScope);
-        currentScope = currentScope->getParent();
-    }
-
-    return decls;
-}
-
-bool Utils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &isSpecialProtectedCase)
-{
-    isSpecialProtectedCase = false;
-    if (!method || !method->getParent())
-        return false;
-
-    if (method->getAccess() == clang::AccessSpecifier::AS_public)
-        return true;
-
-    if (!context)
-        return false;
-
-    CXXRecordDecl *contextRecord = nullptr;
-
-    do {
-        contextRecord = dyn_cast<CXXRecordDecl>(context);
-        context = context->getParent();
-    } while (contextRecord == nullptr && context);
-
-    if (!contextRecord) // If we're not inside a class method we can't take the address of a private/protected method
-        return false;
-
-    CXXRecordDecl *record = method->getParent();
-    if (record == contextRecord)
-        return true;
-
-    // We're inside a method belonging to a class (contextRecord).
-    // Is contextRecord a friend of record ? Lets check:
-
-    for (auto fr : record->friends()) {
-        TypeSourceInfo *si = fr->getFriendType();
-        if (si) {
-            const Type *t = si->getType().getTypePtrOrNull();
-            CXXRecordDecl *friendClass = t ? t->getAsCXXRecordDecl() : nullptr;
-            if (friendClass == contextRecord) {
-                return true;
-            }
-        }
-    }
-
-    // There's still hope, lets see if the context is nested inside the class we're trying to access
-    // Inner classes can access private members of outter classes.
-    DeclContext *it = contextRecord;
-    do {
-        it = it->getParent();
-        if (it == record)
-            return true;
-    } while (it);
-
-    if (method->getAccess() == clang::AccessSpecifier::AS_private)
-        return false;
-
-    if (method->getAccess() != clang::AccessSpecifier::AS_protected) // shouldnt happen, must be protected at this point.
-        return false;
-
-    // For protected there's still hope, since record might be a derived or base class
-    if (derivesFrom(record, contextRecord))
-        return true;
-
-    if (derivesFrom(contextRecord, record)) {
-        isSpecialProtectedCase = true;
-        return true;
-    }
-
-    return false;
-}
-
 bool Utils::isConvertibleTo(const Type *source, const Type *target)
 {
     if (!source || !target)
@@ -844,17 +685,6 @@ bool Utils::isConvertibleTo(const Type *source, const Type *target)
         return true;
 
     return false;
-}
-
-CXXRecordDecl* Utils::firstMethodOrClassContext(DeclContext *context)
-{
-    if (!context)
-        return nullptr;
-
-    if (isa<CXXRecordDecl>(context))
-        return dyn_cast<CXXRecordDecl>(context);
-
-    return firstMethodOrClassContext(context->getParent());
 }
 
 bool Utils::isAscii(StringLiteral *lt)

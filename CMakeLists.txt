@@ -103,6 +103,7 @@ set(SRC_FILES
     checks/wrong-qglobalstatic.cpp
     checks/virtualcallsfromctor.cpp
     Clazy.cpp
+    ContextUtils.cpp
     FixItUtils.cpp
     HierarchyUtils.cpp
     MacroUtils.cpp

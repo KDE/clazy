@@ -27,6 +27,7 @@
 #include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
+#include "ContextUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -410,21 +411,21 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             DeclContext *context = m_lastDecl->getDeclContext();
 
             bool isSpecialProtectedCase = false;
-            if (!Utils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
+            if (!ContextUtils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
                 string msg = "Can't fix " + StringUtils::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
             }
 
             string qualifiedName;
-            CXXRecordDecl *contextRecord = Utils::firstMethodOrClassContext(m_lastDecl->getDeclContext());
+            auto contextRecord = ContextUtils::firstContextOfType<CXXRecordDecl>(m_lastDecl->getDeclContext());
             const bool isInInclude = m_ci.getSourceManager().getMainFileID() != m_ci.getSourceManager().getFileID(call->getLocStart());
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = Utils::getMostNeededQualifiedName(m_ci.getSourceManager(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = ContextUtils::getMostNeededQualifiedName(m_ci.getSourceManager(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
             auto expansionRange = m_ci.getSourceManager().getImmediateExpansionRange(s);

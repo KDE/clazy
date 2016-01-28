@@ -28,6 +28,7 @@
 #include "MacroUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "ContextUtils.h"
 #include "HierarchyUtils.h"
 
 #include <clang/AST/Decl.h>
@@ -141,7 +142,7 @@ bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
     if (!valueDecl || isa<ParmVarDecl>(valueDecl) || containerWasReserved(valueDecl))
         return false;
 
-    if (Utils::isValueDeclInFunctionContext(valueDecl))
+    if (ContextUtils::isValueDeclInFunctionContext(valueDecl))
         return true;
 
     // Actually, lets allow for some member variables containers if they are being used inside CTORs or DTORs

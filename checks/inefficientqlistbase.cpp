@@ -25,6 +25,7 @@
 #include "inefficientqlistbase.h"
 #include "Utils.h"
 #include "TypeUtils.h"
+#include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "TemplateUtils.h"
 #include "checkmanager.h"
@@ -50,7 +51,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
     DeclContext *context = varDecl->getDeclContext();
     FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
 
-    if ((m_ignoreMode & IgnoreNonLocalVariable) && !Utils::isValueDeclInFunctionContext(varDecl)) {
+    if ((m_ignoreMode & IgnoreNonLocalVariable) && !ContextUtils::isValueDeclInFunctionContext(varDecl)) {
         return true;
     }
 

@@ -97,11 +97,6 @@ namespace Utils {
     // such as "QList<F> list"
     clang::ValueDecl * valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
 
-    /// Returns true if a decl is inside a function, instead of say a class field.
-    /// This returns true if "QList<int> l;" is a local variable, instead of being a class field such
-    /// as struct Foo { QList<int> l; }
-    bool isValueDeclInFunctionContext(clang::ValueDecl *);
-
     // Returns true of this value decl is a member variable of a class or struct
     // returns null if not
     clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);
@@ -158,28 +153,6 @@ namespace Utils {
     // o1->foo() => "o1"
     // foo() => "this"
     const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call, std::string &implicitCallee);
-
-
-    // The list of namespaces, classes, inner classes. The inner ones are at the beginning of the list
-    std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
-
-    clang::CXXRecordDecl *firstMethodOrClassContext(clang::DeclContext *);
-
-    // Returns fully/smi-fully qualified name for a method
-    // but doesn't overqualify with namespaces which we're already in.
-    // if currentScope == nullptr will return a fully qualified name
-    std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager, clang::CXXMethodDecl *method, clang::DeclContext *currentScope, clang::SourceLocation usageLoc, bool honourUsingDirectives);
-
-    // Returns true, if in a specific context, we can take the address of a method
-    // for example doing &ClassName::SomePrivateMember might not be possible if the member is private
-    // but might be possible if we're in a context which is friend of ClassName
-    // Or it might be protected but context is a derived class
-    //
-    // When inside a derived class scope it's possible to take the address of a protected base method
-    // but only if you qualify it with the derived class name, so &Derived::baseMethod, instead of &Base::baseMethod
-    // If this was the case then isSpecialProtectedCase will be true
-
-    bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context, bool &isSpecialProtectedCase);
 
     // Convertible means that a signal with of type source can connect to a signal/slot of type target
     bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
