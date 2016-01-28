@@ -28,16 +28,19 @@
 
 namespace clazy_std {
 
+// Don't use .begin() or cend(), clang's ranges don't have them
+// Don't use .size(), clang's ranges doesn't have it
+
 template<typename C>
 bool contains(const C &container, const typename C::value_type &value)
 {
-   return std::find(container.cbegin(), container.cend(), value) != container.cend();
+   return std::find(container.begin(), container.end(), value) != container.end();
 }
 
 template<typename C, typename Pred>
 bool contains_if(const C &container, Pred pred)
 {
-   return std::find_if(container.cbegin(), container.cend(), pred) != container.cend();
+   return std::find_if(container.begin(), container.end(), pred) != container.end();
 }
 
 template<typename C>
@@ -49,7 +52,7 @@ typename C::iterator find(C &container, const typename C::value_type &value)
 template<typename C>
 typename C::const_iterator find(const C &container, const typename C::value_type &value)
 {
-    return std::find(container.cbegin(), container.cend(), value);
+    return std::find(container.begin(), container.end(), value);
 }
 
 template<typename C, typename Pred>
@@ -61,37 +64,43 @@ typename C::iterator find_if(C &container, Pred pred)
 template<typename C, typename Pred>
 typename C::const_iterator find_if(const C &container, Pred pred)
 {
-    return std::find_if(container.cbegin(), container.cend(), pred);
+    return std::find_if(container.begin(), container.end(), pred);
 }
 
 template<typename Range, typename Pred>
-bool any_of(Range r, Pred pred)
+bool any_of(const Range &r, Pred pred)
 {
     return std::any_of(r.begin(), r.end(), pred);
 }
 
 template<typename Range, typename Pred>
-bool all_of(Range r, Pred pred)
+bool all_of(const Range &r, Pred pred)
 {
     return std::all_of(r.begin(), r.end(), pred);
+}
+
+template <typename Range>
+size_t count(const Range &r)
+{
+    return std::distance(r.begin(), r.end());
 }
 
 template<typename SrcContainer, typename DstContainer>
 void copy(const SrcContainer &src, DstContainer &dst)
 {
-    dst.reserve(dst.size() + src.size());
-    std::copy(src.cbegin(), src.cend(), std::back_inserter(dst));
+    dst.reserve(clazy_std::count(dst) + clazy_std::count(src));
+    std::copy(src.begin(), src.end(), std::back_inserter(dst));
 }
 
 template<typename SrcContainer, typename DstContainer, typename Pred>
 void copy_if(const SrcContainer &src, DstContainer &dst, Pred pred)
 {
-    dst.reserve(dst.size() + src.size());
-    std::copy_if(src.cbegin(), src.cend(), std::back_inserter(dst), pred);
+    dst.reserve(clazy_std::count(dst) + clazy_std::count(src));
+    std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);
 }
 
 template <typename Range>
-bool isEmpty(Range r)
+bool isEmpty(const Range &r)
 {
     return r.begin() == r.end();
 }
