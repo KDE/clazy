@@ -96,10 +96,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXRecordDecl *record = secondMethod->getParent();
-    if (!record)
-        return;
-
-    if (isDisallowedClass(record->getNameAsString()))
+    if (!record || isDisallowedClass(record->getNameAsString()))
         return;
 
     QualType qt = firstFunc->getReturnType();
