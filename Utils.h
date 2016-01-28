@@ -262,6 +262,16 @@ namespace Utils {
      * Returns false if either function or it's body are null.
      */
     bool functionHasEmptyBody(clang::FunctionDecl *func);
+
+    /**
+     * If stm is an UnaryOperator or BinaryOperator that writes to the variable it returns the expression
+     * that represents the variable (Usually a MemberExpr or DeclRefExpr for local variables).
+     *
+     * Otherwise returns nullptr.
+     *
+     * The operators that write to the variable are operator=, operator+=, operator++, etc.
+     */
+    clang::Expr* isWriteOperator(clang::Stmt *stm);
 }
 
 #endif

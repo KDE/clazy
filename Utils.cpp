@@ -1068,3 +1068,17 @@ bool Utils::functionHasEmptyBody(clang::FunctionDecl *func)
 
     return false;
 }
+
+clang::Expr *Utils::isWriteOperator(Stmt *stm)
+{
+    if (!stm)
+        return nullptr;
+
+    if (UnaryOperator *up = dyn_cast<UnaryOperator>(stm))
+        return up->getSubExpr();
+
+    if (BinaryOperator *bp = dyn_cast<BinaryOperator>(stm))
+        return bp->getLHS();
+
+    return nullptr;
+}
