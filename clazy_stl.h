@@ -110,6 +110,17 @@ inline bool hasChildren(clang::Stmt *s)
     return s && !clazy_std::isEmpty(s->children());
 }
 
+inline bool stringStartsWith(const std::string &target, const std::string &maybeBeginning)
+{
+    return target.compare(0, maybeBeginning.length(), maybeBeginning) == 0;
+}
+
+inline bool stringEndsWith(const std::string &target, const std::string &maybeEnding)
+{
+    return target.size() >= maybeEnding.size() &&
+            target.compare(target.size() - maybeEnding.size(), maybeEnding.size(), maybeEnding) == 0;
+}
+
 }
 
 
