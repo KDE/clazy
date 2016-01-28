@@ -174,25 +174,24 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
  * Similar to getChilds(), but with startLocation support.
  */
 template <typename T>
-std::vector<T> getStatements(clang::CompilerInstance &ci, clang::Stmt *body, clang::SourceLocation startLocation)
+std::vector<T*> getStatements(const clang::CompilerInstance &ci, clang::Stmt *body, clang::SourceLocation startLocation)
 {
-    std::vector<T> statements;
+    std::vector<T*> statements;
     if (!body)
         return statements;
 
     for (auto child : body->children()) {
-        if (startLocation.isValid() && !ci.getSourceManager().isBeforeInSLocAddrSpace(startLocation, child->getLocStart()))
-            continue;
+        if (T *childT = clang::dyn_cast<T>(child)) {
+            if (!startLocation.isValid() || !ci.getSourceManager().isBeforeInSLocAddrSpace(startLocation, child->getLocStart()))
+                statements.push_back(childT);
+        }
 
-        statements.push_back(child);
         auto childStatements = getStatements<T>(ci, child, startLocation);
         clazy_std::copy(childStatements, statements);
     }
 
-
     return statements;
 }
-
 
 }
 

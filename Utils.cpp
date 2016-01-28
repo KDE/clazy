@@ -749,6 +749,7 @@ string Utils::getMostNeededQualifiedName(const SourceManager &sourceManager, CXX
 std::vector<DeclContext *> Utils::contextsForDecl(DeclContext *currentScope)
 {
     std::vector<DeclContext *> decls;
+    decls.reserve(20); // jump-start
     while (currentScope) {
         decls.push_back(currentScope);
         currentScope = currentScope->getParent();
