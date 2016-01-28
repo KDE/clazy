@@ -626,7 +626,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
         if (t) {
             auto baseMethods = methodsFromString(t->getAsCXXRecordDecl(), methodName);
             if (!baseMethods.empty())
-                std::copy(baseMethods.begin(), baseMethods.end(), std::back_inserter(methods));
+                clazy_std::copy(baseMethods, methods);
         }
     }
 

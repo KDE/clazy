@@ -192,7 +192,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
                         auto removalFixits = fixItRemoveToken(ctorExpr, true);
                         if (!removalFixits.empty())  {
-                            std::copy(removalFixits.begin(), removalFixits.end(), std::back_inserter(fixits));
+                            clazy_std::copy(removalFixits, fixits);
                         }
                     }
                 } else {

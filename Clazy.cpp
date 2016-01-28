@@ -264,7 +264,7 @@ protected:
 
         // Add checks from requested level
         auto checksFromRequestedLevel = checkManager->checksFromRequestedLevel();
-        copy(checksFromRequestedLevel.cbegin(), checksFromRequestedLevel.cend(), back_inserter(m_checks));
+        clazy_std::copy(checksFromRequestedLevel, m_checks);
 
         // Remove dups
         sort(m_checks.begin(), m_checks.end(), checkLessThan);
