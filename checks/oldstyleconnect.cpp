@@ -111,7 +111,7 @@ OldStyleConnect::OldStyleConnect(const std::string &name, const clang::CompilerI
     : CheckBase(name, ci)
 {
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    m_preprocessorCallbacks = new PreprocessorCallbacks(this, sm(), m_ci.getLangOpts());
+    m_preprocessorCallbacks = new PreprocessorCallbacks(this, sm(), lo());
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 #endif
@@ -274,8 +274,8 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
     auto expansionRange = sm().getImmediateExpansionRange(macroLoc);
     SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
-    auto charRange = Lexer::getAsCharRange(range, sm(), m_ci.getLangOpts());
-    const string text = Lexer::getSourceText(charRange, sm(), m_ci.getLangOpts());
+    auto charRange = Lexer::getAsCharRange(range, sm(), lo());
+    const string text = Lexer::getSourceText(charRange, sm(), lo());
 
     static regex rx(R"(\s*(SIGNAL|SLOT)\s*\(\s*(.+)\s*\(.*)");
 
@@ -300,7 +300,7 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) cons
     if (!loc.isMacroID() || loc.isInvalid())
         return false;
 
-    macroName = Lexer::getImmediateMacroName(loc, sm(), m_ci.getLangOpts());
+    macroName = Lexer::getImmediateMacroName(loc, sm(), lo());
     return macroName == "SIGNAL" || macroName == "SLOT";
 }
 

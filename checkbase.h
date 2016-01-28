@@ -86,8 +86,10 @@ protected:
     virtual std::vector<std::string> supportedOptions() const;
     bool isOptionSet(const std::string &optionName) const;
 
+    // 3 shortcuts for stuff that litter the codebase all over.
     const clang::CompilerInstance &ci() const { return m_ci; }
     const clang::SourceManager &sm() const { return m_ci.getSourceManager(); }
+    const clang::LangOptions &lo() const { return m_ci.getLangOpts(); }
 
     const clang::CompilerInstance &m_ci;
     clang::TranslationUnitDecl *m_tu;

@@ -180,7 +180,7 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
     static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
-    auto macro = Lexer::getImmediateMacroName(loc, sm(), m_ci.getLangOpts());
+    auto macro = Lexer::getImmediateMacroName(loc, sm(), lo());
     return clazy_std::contains(macros, macro);
 }
 

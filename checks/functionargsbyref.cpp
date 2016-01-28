@@ -172,7 +172,7 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
 {
     QualType qt = Utils::unrefQualType(param->getType());
     qt.removeLocalConst();
-    const string typeName = qt.getAsString(PrintingPolicy(m_ci.getLangOpts()));
+    const string typeName = qt.getAsString(PrintingPolicy(lo()));
     string replacement = typeName + ' ' + string(param->getName());
     SourceLocation startLoc = param->getLocStart();
     SourceLocation endLoc = param->getLocEnd();
