@@ -26,7 +26,8 @@
 #define CLAZY_HIERARCHY_UTILS_H
 
 // Contains utility classes to retrieve parents and childs from AST Nodes
-
+#include "clazy_stl.h"
+#include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/ExprCXX.h>
 
@@ -166,6 +167,32 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
         }
     }
 }
+/**
+ * Returns all statements of type T in body, starting from startLocation, or from body->getLocStart() if
+ * startLocation is null.
+ *
+ * Similar to getChilds(), but with startLocation support.
+ */
+template <typename T>
+std::vector<T> getStatements(clang::CompilerInstance &ci, clang::Stmt *body, clang::SourceLocation startLocation)
+{
+    std::vector<T> statements;
+    if (!body)
+        return statements;
+
+    for (auto child : body->children()) {
+        if (startLocation.isValid() && !ci.getSourceManager().isBeforeInSLocAddrSpace(startLocation, child->getLocStart()))
+            continue;
+
+        statements.push_back(child);
+        auto childStatements = getStatements<T>(ci, child, startLocation);
+        clazy_std::copy(childStatements, statements);
+    }
+
+
+    return statements;
+}
+
 
 }
 
