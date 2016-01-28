@@ -36,7 +36,7 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
         return true;
 
     auto qualifiedName = record->getQualifiedNameAsString();
-    if (record->getNameAsString() == "iterator" || record->getNameAsString() == "const_iterator") {
+    if (clazy_std::equalsAny(record->getNameAsString(), { "iterator", "const_iterator" })) {
         if (clazy_std::startsWith(qualifiedName, "QList<")) // Fixed in Qt6
             return true;
     }

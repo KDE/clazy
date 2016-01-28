@@ -129,7 +129,17 @@ inline bool startsWithAny(const std::string &target, const std::vector<std::stri
 }
 
 /**
- * Returns true if the stirng target ends with maybeEnding
+ * Returns true if the target equals any of the candidate strings
+ */
+inline bool equalsAny(const std::string &target, const std::vector<std::string> &candidates)
+{
+    return clazy_std::any_of(candidates, [target](const std::string &candidate) {
+        return candidate == target;
+    });
+}
+
+/**
+ * Returns true if the string target ends with maybeEnding
  */
 inline bool endsWith(const std::string &target, const std::string &maybeEnding)
 {
