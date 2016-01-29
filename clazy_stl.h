@@ -73,10 +73,22 @@ bool any_of(const Range &r, Pred pred)
     return std::any_of(r.begin(), r.end(), pred);
 }
 
+template<typename Pred>
+bool any_of(const clang::StmtRange &r, Pred pred)
+{
+    return std::any_of(r.first, r.second, pred);
+}
+
 template<typename Range, typename Pred>
 bool all_of(const Range &r, Pred pred)
 {
     return std::all_of(r.begin(), r.end(), pred);
+}
+
+template<typename Pred>
+bool all_of(const clang::StmtRange &r, Pred pred)
+{
+    return std::all_of(r.first, r.second, pred);
 }
 
 template <typename Range>
@@ -102,7 +114,8 @@ void copy_if(const SrcContainer &src, DstContainer &dst, Pred pred)
 template <typename Range>
 bool isEmpty(const Range &r)
 {
-    return r.begin() == r.end();
+    // TODO: investigate if clang 3.6 has StmtRange::empty() and remove this
+    return r.empty();
 }
 
 inline bool hasChildren(clang::Stmt *s)
