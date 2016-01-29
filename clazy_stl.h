@@ -73,11 +73,16 @@ bool any_of(const Range &r, Pred pred)
     return std::any_of(r.begin(), r.end(), pred);
 }
 
-template<typename Pred>
-bool any_of(const clang::StmtRange &r, Pred pred)
-{
-    return std::any_of(r.first, r.second, pred);
-}
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 7
+
+    template<typename Pred>
+    bool any_of(const clang::StmtRange &r, Pred pred)
+    {
+        return std::any_of(r.first, r.second, pred);
+    }
+
+#endif
+
 
 template<typename Range, typename Pred>
 bool all_of(const Range &r, Pred pred)
@@ -85,11 +90,15 @@ bool all_of(const Range &r, Pred pred)
     return std::all_of(r.begin(), r.end(), pred);
 }
 
-template<typename Pred>
-bool all_of(const clang::StmtRange &r, Pred pred)
-{
-    return std::all_of(r.first, r.second, pred);
-}
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 7
+
+    template<typename Pred>
+    bool all_of(const clang::StmtRange &r, Pred pred)
+    {
+        return std::all_of(r.first, r.second, pred);
+    }
+
+#endif
 
 template <typename Range>
 size_t count(const Range &r)
@@ -111,12 +120,18 @@ void copy_if(const SrcContainer &src, DstContainer &dst, Pred pred)
     std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);
 }
 
-template <typename Range>
-bool isEmpty(const Range &r)
-{
-    // TODO: investigate if clang 3.6 has StmtRange::empty() and remove this
-    return r.empty();
-}
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 7
+    template <typename Range>
+    bool isEmpty(const Range &r)
+    {
+        return r.begin() == r.end();
+    }
+#else
+    inline bool isEmpty(const clang::StmtRange &r)
+    {
+        return r.empty();
+    }
+#endif
 
 inline bool hasChildren(clang::Stmt *s)
 {
