@@ -181,8 +181,9 @@ std::vector<T*> getStatements(const clang::CompilerInstance &ci, clang::Stmt *bo
         return statements;
 
     for (auto child : body->children()) {
+        if (!child) continue; // can happen
         if (T *childT = clang::dyn_cast<T>(child)) {
-            if (!startLocation.isValid() || !ci.getSourceManager().isBeforeInSLocAddrSpace(startLocation, child->getLocStart()))
+            if (!startLocation.isValid() || ci.getSourceManager().isBeforeInSLocAddrSpace(startLocation, child->getLocStart()))
                 statements.push_back(childT);
         }
 
