@@ -23,6 +23,7 @@
 #define CLAZY_MACRO_UTILS_H
 
 #include <string>
+#include <vector>
 
 namespace clang {
 class CompilerInstance;
@@ -42,6 +43,11 @@ bool isPredefined(const clang::CompilerInstance &, const std::string &macroName)
  * Returns true if the source location loc is inside a macro named macroName.
  */
 bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
+
+/**
+ * Returns true if the source location loc is inside any of the specified macros.
+ */
+bool isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames);
 
 }
 

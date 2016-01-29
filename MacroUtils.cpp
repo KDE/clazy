@@ -20,6 +20,7 @@
 */
 
 #include "MacroUtils.h"
+#include "clazy_stl.h"
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Lexer.h>
 #include <clang/Basic/SourceLocation.h>
@@ -48,4 +49,11 @@ bool MacroUtils::isInMacro(const CompilerInstance &ci, SourceLocation loc, const
     }
 
     return false;
+}
+
+bool MacroUtils::isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames)
+{
+    return clazy_std::any_of(macroNames, [&ci, loc](const string &macroName) {
+        return isInMacro(ci, loc, macroName);
+    });
 }
