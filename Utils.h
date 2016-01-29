@@ -245,6 +245,11 @@ namespace Utils {
      * The operators that write to the variable are operator=, operator+=, operator++, etc.
      */
     clang::Expr* isWriteOperator(clang::Stmt *stm);
+
+    /**
+     * Returns true if stmt is a for, while or do-while loop
+     */
+    bool isLoop(clang::Stmt *);
 }
 
 #endif

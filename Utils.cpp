@@ -896,3 +896,8 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
 
     return nullptr;
 }
+
+bool Utils::isLoop(Stmt *stmt)
+{
+    return isa<DoStmt>(stmt) || isa<WhileStmt>(stmt) || isa<ForStmt>(stmt);
+}
