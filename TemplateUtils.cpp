@@ -33,7 +33,8 @@ static vector<QualType> typesFromTemplateArguments(const TemplateArgumentList &t
     result.reserve(numArgs);
     for (int i = 0; i < numArgs; ++i) {
         const TemplateArgument &arg = templateArgs.get(i);
-        result.push_back(arg.getAsType());
+        if (arg.getKind() == TemplateArgument::Type)
+            result.push_back(arg.getAsType());
     }
 
     return result;
