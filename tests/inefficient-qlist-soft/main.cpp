@@ -83,3 +83,9 @@ void foo5()
 {
     QList<BigType> b5 = B1().b().a();
 }
+
+void test_bug358740()
+{
+    QList<int> list; // OK
+    int a, b;
+}
