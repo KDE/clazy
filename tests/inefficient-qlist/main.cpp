@@ -42,4 +42,8 @@ void foo1(QList<BigType> big2)
 }
 
 
-
+void test_bug358740()
+{
+    QList<int> list; // OK
+    int a, b;
+}
