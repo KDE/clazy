@@ -100,6 +100,9 @@ bool transformTwoCallsIntoOne(const clang::CompilerInstance &ci, clang::CallExpr
 bool transformTwoCallsIntoOneV2(const clang::CompilerInstance &ci, clang::CXXMemberCallExpr *bar,
                                 const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
+clang::FixItHint fixItReplaceWordWithWord(const clang::CompilerInstance &ci, clang::Stmt *begin,
+                                          const std::string &replacement, const std::string &replacee);
+
 }
 
 #endif

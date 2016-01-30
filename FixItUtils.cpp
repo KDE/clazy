@@ -27,6 +27,7 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Lex/Lexer.h>
+#include <StringUtils.h>
 
 using namespace FixItUtils;
 using namespace clang;
@@ -176,4 +177,25 @@ bool FixItUtils::transformTwoCallsIntoOneV2(const CompilerInstance &ci, CXXMembe
 
     fixits.push_back(FixItUtils::createReplacement({ start, end }, replacement));
     return true;
+}
+
+FixItHint FixItUtils::fixItReplaceWordWithWord(const clang::CompilerInstance &ci, clang::Stmt *begin,
+                                               const string &replacement, const string &replacee)
+{
+    auto &sm = ci.getSourceManager();
+    SourceLocation rangeStart = begin->getLocStart();
+    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm, ci.getLangOpts());
+
+    if (rangeEnd.isInvalid()) {
+        // Fallback. Have seen a case in the wild where the above would fail, it's very rare
+        rangeEnd = rangeStart.getLocWithOffset(replacee.size() - 2);
+        if (rangeEnd.isInvalid()) {
+            StringUtils::printLocation(sm, rangeStart);
+            StringUtils::printLocation(sm, rangeEnd);
+            StringUtils::printLocation(sm, Lexer::getLocForEndOfToken(rangeStart, 0, sm, ci.getLangOpts()));
+            return {};
+        }
+    }
+
+    return FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), replacement);
 }

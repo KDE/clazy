@@ -261,22 +261,12 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
     }
 
     vector<FixItHint> fixits;
-    SourceLocation rangeStart = begin->getLocStart();
-    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm(), lo());
-
-    if (rangeEnd.isInvalid()) {
-        // Fallback. Have seen a case in the wild where the above would fail, it's very rare
-        rangeEnd = rangeStart.getLocWithOffset(replacee.size() - 2);
-        if (rangeEnd.isInvalid()) {
-            StringUtils::printLocation(sm(), rangeStart);
-            StringUtils::printLocation(sm(), rangeEnd);
-            StringUtils::printLocation(sm(), Lexer::getLocForEndOfToken(rangeStart, 0, sm(), lo()));
-            queueManualFixitWarning(begin->getLocStart(), fixitType);
-            return {};
-        }
+    FixItHint fixit = FixItUtils::fixItReplaceWordWithWord(ci(), begin, replacement, replacee);
+    if (fixit.isNull()) {
+        queueManualFixitWarning(begin->getLocStart(), fixitType);
+    } else {
+        fixits.push_back(fixit);
     }
-
-    fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), replacement));
 
     return fixits;
 }
@@ -300,7 +290,8 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTerna
         fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral"));
     }
 
-    return fixits;}
+    return fixits;
+}
 
 
 // true for: QString::fromLatin1().arg()
@@ -313,9 +304,8 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
         return false;
 
     MemberExpr *memberExpr = dyn_cast<MemberExpr>(s);
-    if (memberExpr) {
+    if (memberExpr)
         return true;
-    }
 
     auto constructExpr = dyn_cast<CXXConstructExpr>(s);
     if (constructExpr && isOfClass(constructExpr, "QString"))
