@@ -231,6 +231,11 @@ namespace Utils {
     bool isInitializedExternally(clang::VarDecl *varDecl);
 
     /**
+     * Returns true if declStmt refers to varDecl
+     */
+    bool referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl);
+
+    /**
      * Returns true if the body of a function is empty.
      * Returns false if either function or it's body are null.
      */

@@ -857,7 +857,7 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
     vector<DeclStmt*> declStmts;
     HierarchyUtils::getChilds<DeclStmt>(body, declStmts);
     for (DeclStmt *declStmt : declStmts) {
-        if (declStmt->getSingleDecl() == varDecl) {
+        if (referencesVarDecl(declStmt, varDecl)) {
             vector<DeclRefExpr*> declRefs;
 
             HierarchyUtils::getChilds<DeclRefExpr>(declStmt, declRefs);
@@ -899,4 +899,17 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
 bool Utils::isLoop(Stmt *stmt)
 {
     return isa<DoStmt>(stmt) || isa<WhileStmt>(stmt) || isa<ForStmt>(stmt);
+}
+
+bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl)
+{
+    if (!declStmt || !varDecl)
+        return false;
+
+    if (declStmt->isSingleDecl() && declStmt->getSingleDecl() == varDecl)
+        return true;
+
+    return clazy_std::any_of(declStmt->getDeclGroup(), [varDecl](Decl *decl) {
+        return varDecl == decl;
+    });
 }
