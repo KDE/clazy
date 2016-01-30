@@ -856,8 +856,7 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
 
     vector<DeclStmt*> declStmts;
     HierarchyUtils::getChilds<DeclStmt>(body, declStmts);
-    for (auto it = declStmts.cbegin(), end = declStmts.cend(); it != end; ++it) {
-        DeclStmt *declStmt = *it;
+    for (DeclStmt *declStmt : declStmts) {
         if (declStmt->getSingleDecl() == varDecl) {
             vector<DeclRefExpr*> declRefs;
 
