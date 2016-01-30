@@ -103,6 +103,10 @@ bool transformTwoCallsIntoOneV2(const clang::CompilerInstance &ci, clang::CXXMem
 clang::FixItHint fixItReplaceWordWithWord(const clang::CompilerInstance &ci, clang::Stmt *begin,
                                           const std::string &replacement, const std::string &replacee);
 
+std::vector<clang::FixItHint> fixItRemoveToken(const clang::CompilerInstance &ci,
+                                               clang::Stmt *stmt,
+                                               bool removeParenthesis);
+
 }
 
 #endif

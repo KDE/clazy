@@ -199,3 +199,23 @@ FixItHint FixItUtils::fixItReplaceWordWithWord(const clang::CompilerInstance &ci
 
     return FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), replacement);
 }
+
+vector<FixItHint> FixItUtils::fixItRemoveToken(const clang::CompilerInstance &ci, Stmt *stmt, bool removeParenthesis)
+{
+    SourceLocation start = stmt->getLocStart();
+    SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1,
+                                                    ci.getSourceManager(), ci.getLangOpts());
+
+    vector<FixItHint> fixits;
+
+    if (start.isValid() && end.isValid()) {
+        fixits.push_back(FixItHint::CreateRemoval(SourceRange(start, end)));
+
+        if (removeParenthesis) {
+            // Remove the last parenthesis
+            fixits.push_back(FixItHint::CreateRemoval(SourceRange(stmt->getLocEnd(), stmt->getLocEnd())));
+        }
+    }
+
+    return fixits;
+}

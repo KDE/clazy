@@ -190,8 +190,10 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                     bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
-                        auto removalFixits = fixItRemoveToken(ctorExpr, true);
-                        if (!removalFixits.empty())  {
+                        auto removalFixits = FixItUtils::fixItRemoveToken(ci(), ctorExpr, true);
+                        if (removalFixits.empty())  {
+                            queueManualFixitWarning(ctorExpr->getLocStart(), QLatin1StringAllocations, "Internal error: invalid start or end location");
+                        } else {
                             clazy_std::copy(removalFixits, fixits);
                         }
                     }
@@ -397,28 +399,6 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
         }
 
         FixItUtils::insertParentMethodCall(revisedReplacement, range, /**by-ref*/fixits);
-    }
-
-    return fixits;
-}
-
-vector<FixItHint> QStringUneededHeapAllocations::fixItRemoveToken(Stmt *stmt, bool removeParenthesis)
-{
-    SourceLocation start = stmt->getLocStart();
-    SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1, sm(), lo());
-
-    vector<FixItHint> fixits;
-
-    if (start.isValid() && end.isValid()) {
-        fixits.push_back(FixItHint::CreateRemoval(SourceRange(start, end)));
-
-        if (removeParenthesis) {
-            // Remove the last parenthesis
-            fixits.push_back(FixItHint::CreateRemoval(SourceRange(stmt->getLocEnd(), stmt->getLocEnd())));
-        }
-
-    } else {
-        queueManualFixitWarning(start, QLatin1StringAllocations, "Internal error: invalid start or end location");
     }
 
     return fixits;
