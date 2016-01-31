@@ -190,6 +190,14 @@ inline bool endsWithAny(const std::string &target, const std::vector<std::string
     });
 }
 
+
+inline std::string toLower(const std::string &s)
+{
+    std::string result(s.size(), 0);
+    std::transform(s.begin(), s.end(), result.begin(), ::tolower);
+    return result;
+}
+
 }
 
 

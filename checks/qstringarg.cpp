@@ -36,13 +36,6 @@ StringArg::StringArg(const std::string &name, const clang::CompilerInstance &ci)
 
 }
 
-static bool stringContains(const string &haystack, const string &needle)
-{
-    string loweredHaystack = haystack;
-    std::transform(loweredHaystack.begin(), loweredHaystack.end(), loweredHaystack.begin(), ::tolower);
-    return clazy_std::contains(loweredHaystack, needle);
-}
-
 static string variableNameFromArg(Expr *arg)
 {
     vector<DeclRefExpr*> declRefs;
@@ -156,11 +149,9 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
             if (!literals.empty())
                 return;
 
-            string variableName = variableNameFromArg(memberCall->getArg(2));
-            if (!variableName.empty()) {
-                if (stringContains(variableName, "base"))
-                    return;
-            }
+            string variableName = clazy_std::toLower(variableNameFromArg(memberCall->getArg(2)));
+            if (clazy_std::contains(variableName, "base"))
+                return;
         }
 
         p = method->getParamDecl(1);
@@ -172,11 +163,9 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
                 return;
 
             // the variable is named "width", user knows what he's doing
-            string variableName = variableNameFromArg(memberCall->getArg(1));
-            if (!variableName.empty()) {
-                if (stringContains(variableName, "width"))
-                    return;
-            }
+            string variableName = clazy_std::toLower(variableNameFromArg(memberCall->getArg(1)));
+            if (clazy_std::contains(variableName, "width"))
+                return;
         }
 
         emitWarning(stmt->getLocStart(), "Using QString::arg() with fillChar overload");
