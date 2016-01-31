@@ -94,11 +94,10 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
     if (!loc.isValid() || sm().isInSystemHeader(loc))
         return true;
 
-    auto filename = sm().getFilename(loc);
+    string filename = sm().getFilename(loc);
 
-    return clazy_std::any_of(filesToIgnore(), [filename](const std::string &file) {
-        bool contains = filename.find(file) != std::string::npos;
-        return contains;
+    return clazy_std::any_of(filesToIgnore(), [filename](const std::string &ignored) {
+        return clazy_std::contains(filename, ignored);
     });
 }
 

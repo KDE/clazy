@@ -36,11 +36,11 @@ StringArg::StringArg(const std::string &name, const clang::CompilerInstance &ci)
 
 }
 
-static bool stringContains(const string &needle, const string &haystack)
+static bool stringContains(const string &haystack, const string &needle)
 {
     string loweredHaystack = haystack;
     std::transform(loweredHaystack.begin(), loweredHaystack.end(), loweredHaystack.begin(), ::tolower);
-    return loweredHaystack.find(needle) != string::npos;
+    return clazy_std::contains(loweredHaystack, needle);
 }
 
 static string variableNameFromArg(Expr *arg)
@@ -158,7 +158,7 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
 
             string variableName = variableNameFromArg(memberCall->getArg(2));
             if (!variableName.empty()) {
-                if (stringContains("base", variableName))
+                if (stringContains(variableName, "base"))
                     return;
             }
         }
@@ -174,7 +174,7 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
             // the variable is named "width", user knows what he's doing
             string variableName = variableNameFromArg(memberCall->getArg(1));
             if (!variableName.empty()) {
-                if (stringContains("width", variableName))
+                if (stringContains(variableName, "width"))
                     return;
             }
         }

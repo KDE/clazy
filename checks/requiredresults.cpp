@@ -118,7 +118,7 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
             }
 
             // qt.isConstQualified() not working !? TODO: Replace this string parsing when I figure it out
-            if (type->isReferenceType() && qt.getAsString().find("const ") == std::string::npos) {
+            if (type->isReferenceType() && !clazy_std::contains(qt.getAsString(), "const ")) {
                 bailout = true;
                 break;
             }

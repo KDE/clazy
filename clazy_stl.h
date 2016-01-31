@@ -37,6 +37,11 @@ bool contains(const C &container, const typename C::value_type &value)
    return std::find(container.begin(), container.end(), value) != container.end();
 }
 
+inline bool contains(const std::string &haystack, const std::string &needle)
+{
+   return haystack.find(needle) != std::string::npos;
+}
+
 template<typename C, typename Pred>
 bool contains_if(const C &container, Pred pred)
 {
