@@ -96,14 +96,10 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 
     auto filename = sm().getFilename(loc);
 
-    const std::vector<std::string> files = filesToIgnore();
-    for (auto &file : files) {
+    return clazy_std::any_of(filesToIgnore(), [filename](const std::string &file) {
         bool contains = filename.find(file) != std::string::npos;
-        if (contains)
-            return true;
-    }
-
-    return false;
+        return contains;
+    });
 }
 
 std::vector<std::string> CheckBase::filesToIgnore() const
