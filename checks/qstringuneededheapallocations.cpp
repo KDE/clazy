@@ -185,7 +185,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         vector<FixItHint> fixits;
         if (isFixitEnabled(QLatin1StringAllocations)) {
             if (!qlatin1Ctor->getLocStart().isMacroID()) {
-                if (ternary == nullptr) {
+                if (!ternary) {
                     fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String", QLatin1StringAllocations);
                     bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_parentMap, ctorExpr));
                     if (shouldRemoveQString) {
@@ -208,9 +208,9 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         emitWarning(stm->getLocStart(), msg, fixits);
     } else {
         vector<FixItHint> fixits;
-        if (ctorExpr->child_begin() != ctorExpr->child_end()) {
+        if (clazy_std::hasChildren(ctorExpr)) {
             auto pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
-            if (pointerDecay && pointerDecay->child_begin() != pointerDecay->child_end()) {
+            if (clazy_std::hasChildren(pointerDecay)) {
                 StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt && isFixitEnabled(CharPtrAllocations)) {
                     Stmt *grandParent = HierarchyUtils::parent(m_parentMap, lt, 2);
@@ -218,7 +218,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                     Stmt *grandGrandGrandParent = HierarchyUtils::parent(m_parentMap, lt, 4);
                     if (grandParent == ctorExpr && grandGrandParent && isa<CXXBindTemporaryExpr>(grandGrandParent) && grandGrandGrandParent && isa<CXXFunctionalCastExpr>(grandGrandGrandParent)) {
                         // This is the case of QString("foo"), replace QString
-                        //llvm::errs() << "case1\n";
+
                         const bool literalIsEmpty = lt->getLength() == 0;
                         if (literalIsEmpty && HierarchyUtils::getFirstParentOfType<MemberExpr>(m_parentMap, ctorExpr) == nullptr)
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString", CharPtrAllocations);
@@ -227,7 +227,6 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                         else
                             queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro.");
                     } else {
-                        //llvm::errs() << "case2\n";
 
                         auto parentMemberCallExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
 
@@ -295,7 +294,6 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTerna
     return fixits;
 }
 
-
 // true for: QString::fromLatin1().arg()
 // false for: QString::fromLatin1("")
 // true for: QString s = QString::fromLatin1("foo")
@@ -310,7 +308,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
         return true;
 
     auto constructExpr = dyn_cast<CXXConstructExpr>(s);
-    if (constructExpr && isOfClass(constructExpr, "QString"))
+    if (isOfClass(constructExpr, "QString"))
         return true;
 
     if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "class QLatin1String"))
@@ -321,8 +319,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
 
     CallExpr *callExpr = dyn_cast<CallExpr>(s);
     StringLiteral *literal = stringLiteralForCall(callExpr);
-    CXXOperatorCallExpr *op = dyn_cast<CXXOperatorCallExpr>(s);
-    if (op)
+    if (isa<CXXOperatorCallExpr>(s))
         return false;
 
     if (currentCall > 0 && callExpr) {
