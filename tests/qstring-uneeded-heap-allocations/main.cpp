@@ -210,3 +210,10 @@ void testEmpty()
 {
     QStringList list = QStringList() << "foo" << "";
 }
+
+
+void test_bug358732()
+{
+    QString("foo").sprintf("0x%02X", 0x1E); // Warn and use QSL
+    QString("").sprintf("0x%02X", 0x1E); // Warn and use QSL
+}

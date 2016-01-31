@@ -220,7 +220,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                         // This is the case of QString("foo"), replace QString
                         //llvm::errs() << "case1\n";
                         const bool literalIsEmpty = lt->getLength() == 0;
-                        if (literalIsEmpty)
+                        if (literalIsEmpty && HierarchyUtils::getFirstParentOfType<MemberExpr>(m_parentMap, ctorExpr) == nullptr)
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString", CharPtrAllocations);
                         else if (!ctorExpr->getLocStart().isMacroID())
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString", CharPtrAllocations);
