@@ -22,6 +22,7 @@
 #include "ContextUtils.h"
 #include "clazy_stl.h"
 #include "Utils.h"
+#include <clang/AST/ParentMap.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/AST/DeclCXX.h>
@@ -188,6 +189,21 @@ bool ContextUtils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context,
     if (Utils::derivesFrom(contextRecord, record)) {
         isSpecialProtectedCase = true;
         return true;
+    }
+
+    return false;
+}
+
+bool ContextUtils::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
+{
+    if (!stmt)
+        return false;
+
+    Stmt *p = pmap->getParent(stmt);
+    while (p) {
+        if (Utils::isLoop(p))
+            return true;
+        p = pmap->getParent(p);
     }
 
     return false;

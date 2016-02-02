@@ -36,6 +36,7 @@ class DeclContext;
 class SourceManager;
 class SourceLocation;
 class CXXMethodDecl;
+class ParentMap;
 }
 
 namespace ContextUtils
@@ -71,6 +72,11 @@ T* firstContextOfType(clang::DeclContext *context)
 
     return ContextUtils::firstContextOfType<T>(context->getParent());
 }
+
+/**
+ * Returns true of stmt is inside a for, while or do-white
+ */
+bool isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt);
 
 
 /**
