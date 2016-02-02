@@ -121,6 +121,9 @@ namespace Utils {
     // By ref or pointer
     bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl, bool byRefOnly);
 
+    // Returns true if we take the address of varDecl, such as: &foo
+    bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body, const clang::ValueDecl *valDecl);
+
     // QString::fromLatin1("foo")    -> true
     // QString::fromLatin1("foo", 1) -> false
     bool callHasDefaultArguments(clang::CallExpr *expr);

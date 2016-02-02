@@ -426,6 +426,21 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
     return false;
 }
 
+bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const clang::ValueDecl *valDecl)
+{
+    if (!body || !valDecl)
+        return false;
+
+    auto unaries = HierarchyUtils::getStatements<UnaryOperator>(ci, body);
+    return clazy_std::any_of(unaries, [valDecl](UnaryOperator *op) {
+        if (op->getOpcode() != clang::UO_AddrOf)
+            return false;
+
+        auto declRef = HierarchyUtils::getFirstChildOfType<DeclRefExpr>(op);
+        return declRef && declRef->getDecl() == valDecl;
+    });
+}
+
 bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 {
     if (!body)
