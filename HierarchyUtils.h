@@ -174,7 +174,7 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
  * Similar to getChilds(), but with startLocation support.
  */
 template <typename T>
-std::vector<T*> getStatements(const clang::CompilerInstance &ci, clang::Stmt *body, clang::SourceLocation startLocation)
+std::vector<T*> getStatements(const clang::CompilerInstance &ci, clang::Stmt *body, clang::SourceLocation startLocation = {})
 {
     std::vector<T*> statements;
     if (!body)
