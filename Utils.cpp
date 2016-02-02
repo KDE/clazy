@@ -417,10 +417,8 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
 
     std::vector<CXXConstructExpr*> constructExprs;
     HierarchyUtils::getChilds<CXXConstructExpr>(body, constructExprs);
-    for (auto it = constructExprs.cbegin(), end = constructExprs.cend(); it != end; ++it) {
-        CXXConstructExpr *constructExpr = *it;
+    for (CXXConstructExpr *constructExpr : constructExprs) {
         FunctionDecl *fDecl = constructExpr->getConstructor();
-
         if (isArgOfFunc(constructExpr, fDecl, varDecl, byRefOnly))
             return true;
     }
