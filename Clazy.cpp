@@ -78,12 +78,10 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
     if (!s)
         return;
 
-    auto it = s->child_begin();
-    auto e = s->child_end();
-    for (; it != e; ++it) {
-        llvm::errs() << "Patching " << (*it)->getStmtClassName() << "\n";
-        map->setParent(*it, s);
-        manuallyPopulateParentMap(map, *it);
+    for (Stmt *child : s->children()) {
+        llvm::errs() << "Patching " << child->getStmtClassName() << "\n";
+        map->setParent(child, s);
+        manuallyPopulateParentMap(map, child);
     }
 }
 
@@ -102,7 +100,7 @@ public:
 
     ~LazyASTConsumer()
     {
-        if (m_rewriter != nullptr) {
+        if (m_rewriter) {
             m_rewriter->WriteFixedFiles();
             delete m_rewriter;
         }
@@ -120,8 +118,8 @@ public:
 
     bool VisitDecl(Decl *decl)
     {
-        for (auto it = m_createdChecks.cbegin(), end = m_createdChecks.cend(); it != end; ++it) {
-            (*it)->VisitDeclaration(decl);
+        for (const auto &check : m_createdChecks) {
+            check->VisitDeclaration(decl);
         }
 
         return true;
@@ -138,14 +136,14 @@ public:
         lastStm = stm;
 
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
-        // So re-set a parent map each time we go into a different hieararchy
-        if (m_parentMap == nullptr || !m_parentMap->hasParent(stm)) {
-            assert(stm != nullptr);
+        // So re-set a parent map each time we go into a different hierarchy
+        if (!m_parentMap || !m_parentMap->hasParent(stm)) {
+            assert(stm);
             setParentMap(new ParentMap(stm));
         }
 
-        for (auto it = m_createdChecks.cbegin(), end = m_createdChecks.cend(); it != end; ++it) {
-            (*it)->VisitStatement(stm);
+        for (const auto &check : m_createdChecks) {
+            check->VisitStatement(stm);
         }
 
         return true;
@@ -193,7 +191,6 @@ static bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
 {
     return c1.name < c2.name;
 }
-
 
 static bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredCheck &c2)
 {
