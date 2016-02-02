@@ -900,8 +900,14 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
     if (!stm)
         return nullptr;
 
-    if (UnaryOperator *up = dyn_cast<UnaryOperator>(stm))
+    if (UnaryOperator *up = dyn_cast<UnaryOperator>(stm)) {
+
+        auto opcode = up->getOpcode();
+        if (opcode == clang::UO_AddrOf || opcode == clang::UO_Deref)
+            return nullptr;
+
         return up->getSubExpr();
+    }
 
     if (BinaryOperator *bp = dyn_cast<BinaryOperator>(stm))
         return bp->getLHS();
