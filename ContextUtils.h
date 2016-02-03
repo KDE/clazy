@@ -74,9 +74,10 @@ T* firstContextOfType(clang::DeclContext *context)
 }
 
 /**
- * Returns true of stmt is inside a for, while or do-white
+ * Returns true of stmt is inside a for, while or do-while loop.
+ * If yes, returns the loop statement, otherwise nullptr.
  */
-bool isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt);
+clang::Stmt* isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt);
 
 
 /**
