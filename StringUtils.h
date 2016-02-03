@@ -30,9 +30,15 @@
 #include "HierarchyUtils.h"
 #include "clazy_stl.h"
 
+#include "clang/AST/PrettyPrinter.h"
+#include <clang/Basic/LangOptions.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
 #include <string>
+
+namespace clang {
+class LangOpts;
+}
 
 namespace StringUtils {
 
@@ -146,6 +152,11 @@ inline std::string qualifiedMethodName(clang::FunctionDecl *func)
     return method->getParent()->getNameAsString() + "::" + method->getNameAsString();
 }
 
+inline std::string qualifiedMethodName(clang::CallExpr *call)
+{
+    return call ? qualifiedMethodName(call->getDirectCallee()) : std::string();
+}
+
 inline void printParents(clang::ParentMap *map, clang::Stmt *s)
 {
     int level = 0;
@@ -173,6 +184,22 @@ inline std::string accessString(clang::AccessSpecifier s)
     }
     return {};
 }
+
+/**
+ * Returns the type of qt without CV qualifiers or references.
+ * "const QString &" -> "QString"
+ */
+inline std::string simpleTypeName(clang::QualType qt, clang::LangOptions lo)
+{
+    return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
+}
+
+/**
+ * Returns the type of an argument at index index without CV qualifiers or references.
+ * void foo(int a, const QString &);
+ * simpleArgTypeName(foo, 1, lo) would return "QString"
+ */
+std::string simpleArgTypeName(clang::FunctionDecl *func, uint index, clang::LangOptions);
 
 inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {

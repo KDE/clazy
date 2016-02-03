@@ -23,12 +23,12 @@
 */
 
 #include "StringUtils.h"
-
 #include <string>
 #include <sstream>
 #include <vector>
 
 using namespace std;
+using namespace clang;
 
 vector<string> StringUtils::splitString(const string &str, char separator)
 {
@@ -51,3 +51,14 @@ vector<string> StringUtils::splitString(const char *str, char separator)
 }
 
 
+std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index, clang::LangOptions lo)
+{
+    if (!func || index >= func->getNumParams())
+        return {};
+
+    ParmVarDecl *parm = func->getParamDecl(index);
+    if (!parm)
+        return {};
+
+    return simpleTypeName(parm->getType(), lo);
+}
