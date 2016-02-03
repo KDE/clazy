@@ -278,13 +278,12 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
     std::vector<CXXMemberCallExpr*> memberCalls;
     HierarchyUtils::getChilds<CXXMemberCallExpr>(body, memberCalls);
 
-    for (auto it = memberCalls.cbegin(), end = memberCalls.cend(); it != end; ++it) {
-        CXXMemberCallExpr *memberCall = *it;
+    for (CXXMemberCallExpr *memberCall : memberCalls) {
         CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
         if (!methodDecl || methodDecl->isConst())
             continue;
 
-        ValueDecl *valueDecl = Utils::valueDeclForMemberCall(*it);
+        ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
         if (!valueDecl)
             continue;
 
@@ -295,8 +294,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
     // Check for operator calls:
     std::vector<CXXOperatorCallExpr*> operatorCalls;
     HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
-    for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
-        CXXOperatorCallExpr *operatorExpr = *it;
+    for (CXXOperatorCallExpr *operatorExpr : operatorCalls) {
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
         if (!fDecl)
             continue;
@@ -304,7 +302,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
         if (methodDecl == nullptr || methodDecl->isConst())
             continue;
 
-        ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(*it);
+        ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
         if (!valueDecl)
             continue;
 
@@ -409,8 +407,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 
     std::vector<CXXOperatorCallExpr*> operatorCalls;
     HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
-    for (auto it = operatorCalls.cbegin(), end = operatorCalls.cend(); it != end; ++it) {
-        CXXOperatorCallExpr *operatorExpr = *it;
+    for (CXXOperatorCallExpr *operatorExpr : operatorCalls) {
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
         if (!fDecl)
             continue;

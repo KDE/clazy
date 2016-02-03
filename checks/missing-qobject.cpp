@@ -76,8 +76,7 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
 
     const SourceLocation startLoc = decl->getLocStart();
 
-    for (auto it = m_qobjectMacroLocations.cbegin(), end = m_qobjectMacroLocations.cend(); it != end; ++it) {
-        const SourceLocation &loc = *it;
+    for (const SourceLocation &loc : m_qobjectMacroLocations) {
         if (sm().getFileID(loc) != sm().getFileID(startLoc))
             continue; // Different file
 

@@ -55,12 +55,9 @@ static bool isAReserveClass(CXXRecordDecl *recordDecl)
 
     static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet", "QVarLengthArray"};
 
-    for (auto it = classes.cbegin(), end = classes.cend(); it != end; ++it) {
-        if (Utils::derivesFrom(recordDecl, *it))
-            return true;
-    }
-
-    return false;
+    return clazy_std::any_of(classes, [recordDecl](const string &className) {
+        return Utils::derivesFrom(recordDecl, className);
+    });
 }
 
 static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)

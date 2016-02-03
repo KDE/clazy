@@ -83,11 +83,8 @@ string ContextUtils::getMostNeededQualifiedName(const SourceManager &sourceManag
     // Collect using directives
     vector<UsingDirectiveDecl*> usings;
     if (honourUsingDirectives) {
-        for (DeclContext *context : visibleContexts) {
-            auto range = context->using_directives();
-            for (auto it = range.begin(), end = range.end(); it != end; ++it) {
-                usings.push_back(*it);
-            }
+        for (DeclContext *context : visibleContexts) {;
+            clazy_std::copy(context->using_directives(), usings);
         }
     }
 
