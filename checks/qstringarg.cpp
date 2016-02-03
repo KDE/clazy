@@ -74,11 +74,11 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
         return false;
 
     ParmVarDecl *secondParam = method->getParamDecl(1);
-    if (classNameFor(secondParam) == "QString")
+    if (StringUtils::classNameFor(secondParam) == "QString")
         return true;
 
     ParmVarDecl *firstParam = method->getParamDecl(0);
-    if (classNameFor(firstParam) != "QString")
+    if (StringUtils::classNameFor(firstParam) != "QString")
         return false;
 
     // This is a arg(QString, int, QChar) call, it's good if the second parameter is a default param

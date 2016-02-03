@@ -41,6 +41,9 @@ namespace clang {
 class LangOpts;
 }
 
+
+namespace StringUtils {
+
 template <typename T>
 inline std::string classNameFor(T *ctorDecl)
 {
@@ -90,8 +93,6 @@ inline bool isOfClass(T *node, const std::string &className)
 {
     return node && classNameFor<T>(node) == className;
 }
-
-namespace StringUtils {
 
 inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::string> &functionNames)
 {

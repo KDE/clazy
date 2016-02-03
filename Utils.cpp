@@ -521,7 +521,7 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &classNa
         return false;
 
     CXXMethodDecl *methodDecl = dyn_cast<clang::CXXMethodDecl>(functionDecl);
-    if (!className.empty() && !isOfClass(methodDecl, className))
+    if (!className.empty() && !StringUtils::isOfClass(methodDecl, className))
         return false;
 
     if (functionDecl->getNameAsString() != "operator=")

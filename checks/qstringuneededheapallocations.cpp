@@ -68,7 +68,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
     // indexOf() and contains() are slower, don't include it. They internally call qt_from_latin1() making them 30% slower than QStringLiteral
     static const vector<string> methods = {"append", "compare", "endsWith", "startsWith", "insert", "lastIndexOf", "prepend", "replace" };
 
-    if (!isOfClass(method, "QString"))
+    if (!StringUtils::isOfClass(method, "QString"))
         return false;
 
     return Utils::isAscii(lt) && clazy_std::contains(methods, method->getNameAsString());
@@ -83,7 +83,7 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
     CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stm);
     if (constructExpr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
-        if (isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1)) {
+        if (StringUtils::isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1)) {
             if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false, 2))
                 return constructExpr;
         }
@@ -142,7 +142,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    if (!isOfClass(ctorDecl, "QString"))
+    if (!StringUtils::isOfClass(ctorDecl, "QString"))
         return;
 
     static const vector<string> blacklistedParentCtors = { "QRegExp", "QIcon" };
@@ -308,7 +308,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
         return true;
 
     auto constructExpr = dyn_cast<CXXConstructExpr>(s);
-    if (isOfClass(constructExpr, "QString"))
+    if (StringUtils::isOfClass(constructExpr, "QString"))
         return true;
 
     if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "class QLatin1String"))
@@ -419,7 +419,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
-    if (!isOfClass(methodDecl, "QString"))
+    if (!StringUtils::isOfClass(methodDecl, "QString"))
         return;
 
     if (!hasCharPtrArgument(methodDecl))
@@ -460,7 +460,7 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (!isOfClass(methodDecl, "QString"))
+    if (!StringUtils::isOfClass(methodDecl, "QString"))
         return;
 
     if (!Utils::callHasDefaultArguments(callExpr) || !hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
