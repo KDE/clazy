@@ -44,7 +44,7 @@ CheckManager *CheckManager::instance()
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
     , m_requestedLevel(CheckLevelUndefined)
-    , m_extraOptions(StringUtils::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
+    , m_extraOptions(clazy_std::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
@@ -257,7 +257,7 @@ bool CheckManager::isOptionSet(const string &optionName) const
 
 RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str) const
 {
-    vector<string> checkNames = StringUtils::splitString(str, ',');
+    vector<string> checkNames = clazy_std::splitString(str, ',');
     RegisteredCheck::List result;
 
     for (const string &name : checkNames) {

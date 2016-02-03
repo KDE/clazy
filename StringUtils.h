@@ -41,13 +41,6 @@ namespace clang {
 class LangOpts;
 }
 
-namespace StringUtils {
-
-std::vector<std::string> splitString(const char *str, char separator);
-std::vector<std::string> splitString(const std::string &str, char separator);
-// TODO: Move other stuff into this namespace
-}
-
 template <typename T>
 inline std::string classNameFor(T *ctorDecl)
 {

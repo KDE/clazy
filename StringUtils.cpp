@@ -24,32 +24,10 @@
 
 #include "StringUtils.h"
 #include <string>
-#include <sstream>
 #include <vector>
 
 using namespace std;
 using namespace clang;
-
-vector<string> StringUtils::splitString(const string &str, char separator)
-{
-    string token;
-    vector<string> result;
-    istringstream istream(str);
-    while (std::getline(istream, token, separator)) {
-        result.push_back(token);
-    }
-
-    return result;
-}
-
-vector<string> StringUtils::splitString(const char *str, char separator)
-{
-    if (!str)
-        return {};
-
-    return splitString(string(str), separator);
-}
-
 
 std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index, clang::LangOptions lo)
 {

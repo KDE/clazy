@@ -25,6 +25,7 @@
 
 #include <clang/AST/Stmt.h>
 #include <algorithm>
+#include <sstream>
 
 namespace clazy_std {
 
@@ -198,7 +199,27 @@ inline std::string toLower(const std::string &s)
     return result;
 }
 
+
+inline std::vector<std::string> splitString(const std::string &str, char separator)
+{
+    std::string token;
+    std::vector<std::string> result;
+    std::istringstream istream(str);
+    while (std::getline(istream, token, separator)) {
+        result.push_back(token);
+    }
+
+    return result;
 }
 
+inline std::vector<std::string> splitString(const char *str, char separator)
+{
+    if (!str)
+        return {};
+
+    return clazy_std::splitString(std::string(str), separator);
+}
+
+}
 
 #endif
