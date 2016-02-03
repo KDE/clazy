@@ -226,6 +226,13 @@ void sort(Container &c, LessThan lessThan)
     std::sort(c.begin(), c.end(), lessThan);
 }
 
+template<typename Container, typename LessThan>
+void sort_and_remove_dups(Container &c, LessThan lessThan)
+{
+    std::sort(c.begin(), c.end(), lessThan);
+    c.erase(std::unique(c.begin(), c.end()), c.end());
+}
+
 }
 
 #endif
