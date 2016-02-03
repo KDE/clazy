@@ -54,10 +54,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
 
 static bool isInterestingSecondMethod(CXXMethodDecl *method, clang::LangOptions lo)
 {
-    if (!method)
-        return false;
-
-    if (method->getParent()->getNameAsString() != "QString")
+    if (!method || method->getParent()->getNameAsString() != "QString")
         return false;
 
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
@@ -85,10 +82,7 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
     // Here we look for code like str.firstMethod().secondMethod(), where firstMethod() is for example mid() and secondMethod is for example, toInt()
 
     CallExpr *call = dyn_cast<CallExpr>(stmt);
-    if (!call)
-        return;
-
-    if (processCase1(dyn_cast<CXXMemberCallExpr>(call)))
+    if (!call || processCase1(dyn_cast<CXXMemberCallExpr>(call)))
         return;
 
     processCase2(call);
