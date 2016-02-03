@@ -188,7 +188,7 @@ std::vector<T*> getStatements(const clang::CompilerInstance &ci, clang::Stmt *bo
         }
 
         auto childStatements = getStatements<T>(ci, child, startLocation);
-        clazy_std::copy(childStatements, statements);
+        clazy_std::append(childStatements, statements);
     }
 
     return statements;

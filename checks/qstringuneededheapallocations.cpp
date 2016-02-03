@@ -194,7 +194,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
                         if (removalFixits.empty())  {
                             queueManualFixitWarning(ctorExpr->getLocStart(), QLatin1StringAllocations, "Internal error: invalid start or end location");
                         } else {
-                            clazy_std::copy(removalFixits, fixits);
+                            clazy_std::append(removalFixits, fixits);
                         }
                     }
                 } else {

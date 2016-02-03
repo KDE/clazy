@@ -580,7 +580,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
         return {};
 
     vector<CXXMethodDecl *> methods;
-    clazy_std::copy_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
+    clazy_std::append_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
         return m->getNameAsString() == methodName;
     });
 
@@ -590,7 +590,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
         if (t) {
             auto baseMethods = methodsFromString(t->getAsCXXRecordDecl(), methodName);
             if (!baseMethods.empty())
-                clazy_std::copy(baseMethods, methods);
+                clazy_std::append(baseMethods, methods);
         }
     }
 

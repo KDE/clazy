@@ -113,14 +113,14 @@ size_t count(const Range &r)
 }
 
 template<typename SrcContainer, typename DstContainer>
-void copy(const SrcContainer &src, DstContainer &dst)
+void append(const SrcContainer &src, DstContainer &dst)
 {
     dst.reserve(clazy_std::count(dst) + clazy_std::count(src));
     std::copy(src.begin(), src.end(), std::back_inserter(dst));
 }
 
 template<typename SrcContainer, typename DstContainer, typename Pred>
-void copy_if(const SrcContainer &src, DstContainer &dst, Pred pred)
+void append_if(const SrcContainer &src, DstContainer &dst, Pred pred)
 {
     dst.reserve(clazy_std::count(dst) + clazy_std::count(src));
     std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);

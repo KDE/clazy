@@ -199,7 +199,7 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
 {
     RegisteredCheck::List result;
     if (level > CheckLevelUndefined && level <= MaxCheckLevel) {
-        clazy_std::copy_if(m_registeredChecks, result, [level](const RegisteredCheck &r) {
+        clazy_std::append_if(m_registeredChecks, result, [level](const RegisteredCheck &r) {
             return r.level <= level;
         });
     }
@@ -275,7 +275,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
                     const int digit = lastChar - '0';
                     if (digit > CheckLevelUndefined && digit <= MaxCheckLevel) {
                         RegisteredCheck::List levelChecks = checksForLevel(digit);
-                        clazy_std::copy(levelChecks, result);
+                        clazy_std::append(levelChecks, result);
                     } else {
                         llvm::errs() << "Invalid check: " << name << "\n";
                     }
