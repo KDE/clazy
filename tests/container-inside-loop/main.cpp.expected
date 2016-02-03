@@ -1,0 +1,1 @@
+container-inside-loop/main.cpp:15:22: warning: container inside loop causes unneeded allocations [-Wclazy-container-inside-loop]

@@ -66,6 +66,7 @@ set(SRC_FILES
     checkmanager.cpp
     checks/autounexpectedqstringbuilder.cpp
     checks/assertwithsideeffects.cpp
+    checks/container-inside-loop.cpp
     checks/copyable-polymorphic.cpp
     checks/detachingbase.cpp
     checks/detachingmember.cpp
