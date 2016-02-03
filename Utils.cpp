@@ -368,8 +368,7 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOrP
 
     std::vector<CallExpr*> callExprs;
     HierarchyUtils::getChilds<CallExpr>(body, callExprs);
-    for (auto it = callExprs.cbegin(), end = callExprs.cend(); it != end; ++it) {
-        CallExpr *callexpr = *it;
+    for (CallExpr *callexpr : callExprs) {
         FunctionDecl *fDecl = callexpr->getDirectCallee();
         if (!fDecl)
             continue;
