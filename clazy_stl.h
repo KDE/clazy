@@ -220,6 +220,12 @@ inline std::vector<std::string> splitString(const char *str, char separator)
     return clazy_std::splitString(std::string(str), separator);
 }
 
+template<typename Container, typename LessThan>
+void sort(Container &c, LessThan lessThan)
+{
+    std::sort(c.begin(), c.end(), lessThan);
+}
+
 }
 
 #endif

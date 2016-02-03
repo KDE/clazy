@@ -264,7 +264,7 @@ protected:
         clazy_std::append(checksFromRequestedLevel, m_checks);
 
         // Remove dups
-        sort(m_checks.begin(), m_checks.end(), checkLessThan);
+        clazy_std::sort(m_checks, checkLessThan);
         m_checks.erase(unique(m_checks.begin(), m_checks.end()), m_checks.end());
 
         if (printRequestedChecks) {
@@ -287,7 +287,7 @@ protected:
     void PrintHelp(llvm::raw_ostream &ros)
     {
         RegisteredCheck::List checks = CheckManager::instance()->availableChecks(MaxCheckLevel);
-        sort(checks.begin(), checks.end(), checkLessThanByLevel);
+        clazy_std::sort(checks, checkLessThanByLevel);
 
         ros << "Available checks and FixIts:\n\n";
 
