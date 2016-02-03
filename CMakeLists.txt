@@ -82,6 +82,7 @@ set(SRC_FILES
     checks/qgetenv.cpp
     checks/functionargsbyref.cpp
     checks/qdeleteall.cpp
+    checks/qfileinfo-exists.cpp
     checks/qmapkey.cpp
     checks/qset-intersects.cpp
     checks/qstringarg.cpp
