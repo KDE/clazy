@@ -318,8 +318,9 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 template<class T>
 static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, bool byRefOrPtrOnly)
 {
-    unsigned int param = 0;
+    unsigned int param = -1;
     for (auto arg : expr->arguments()) {
+        ++param;
         DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(arg);
         if (!refExpr)  {
             if (clazy_std::hasChildren(arg)) {
@@ -354,8 +355,6 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
 
         if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified())
             return true; // function receives non-const ref, so our foreach variable cant be const-ref
-
-        ++param;
     }
 
     return false;
