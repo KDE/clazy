@@ -534,6 +534,13 @@ vector<string> QStringUneededHeapAllocations::supportedOptions() const
     return options;
 }
 
+vector<string> QStringUneededHeapAllocations::filesToIgnore() const
+{
+    // https://codereview.qt-project.org/#/c/19792/ uic won't be fixed
+    static const vector<string> files = { "ui_" };
+    return files;
+}
+
 const char *const s_checkName = "qstring-uneeded-heap-allocations";
 REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringUneededHeapAllocations, CheckLevel1)
 REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)

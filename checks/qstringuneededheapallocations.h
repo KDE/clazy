@@ -61,7 +61,7 @@ public:
 
 protected:
     std::vector<std::string> supportedOptions() const override;
-
+    std::vector<std::string> filesToIgnore() const override;
 private:
     void VisitCtor(clang::Stmt *);
     void VisitOperatorCall(clang::Stmt *);
