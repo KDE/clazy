@@ -80,9 +80,6 @@ namespace Utils {
     // So, if the var decl is "QList<Foo> f;", returns the template specialization QList<Foo>
     clang::ClassTemplateSpecializationDecl * templateSpecializationFromVarDecl(clang::Decl *);
 
-    /// Returns true if stmt is inside a function named name
-    //bool statementIsInFunc(clang::ParentMap *, clang::Stmt *stmt, const std::string &name);
-
     /// Returns true if all the child member function calls are const functions.
     bool allChildrenMemberCallsConst(clang::Stmt *stm);
 

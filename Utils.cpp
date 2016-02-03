@@ -91,43 +91,6 @@ CXXRecordDecl * Utils::namedCastOuterDecl(CXXNamedCastExpr *staticOrDynamicCast)
     return t2->getAsCXXRecordDecl();
 }
 
-/*
-void printLocation(const SourceLocation &start, const SourceLocation &end)
-{
-    SourceManager &sm = m_ci.getSourceManager();
-
-    LangOptions lopt;
-    clang::SourceLocation b(start), _e(end);
-    clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, sm, lopt));
-
-
-    std::string resultText = ' ' + std::string(sm.getCharacterData(b), sm.getCharacterData(e)-sm.getCharacterData(b));
-    std::string filename = sm.getFilename(start);
-    int linenumber = sm.getSpellingLineNumber(start);
-
-    llvm::errs() << filename << ':' << linenumber << resultText << "\n";
-//        Utils::emitWarning(m_ci, start, "Use qobject_cast rather than dynamic_cast");
-}
-*/
-
-
-/*
-bool Utils::statementIsInFunc(clang::ParentMap *parentMap, clang::Stmt *stmt, const std::string &name)
-{
-    if (!stmt)
-        return false;
-
-    CXXMethodDecl *method = dyn_cast<Stmt>(stmt);
-    if (!method)
-        return statementIsInFunc(parentMap, parentMap->getParent(stmt), name);
-
-
-    llvm::errs() << "Non-const method is: " << methodDecl->getQualifiedNameAsString() << "\n";
-
-    return true;
-}
-*/
-
 bool Utils::allChildrenMemberCallsConst(Stmt *stm)
 {
     if (!stm)
