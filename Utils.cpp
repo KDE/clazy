@@ -316,7 +316,7 @@ bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 }
 
 template<class T>
-static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, bool byRefOnly)
+static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, bool byRefOrPtrOnly)
 {
     unsigned int param = 0;
     for (auto arg : expr->arguments()) {
@@ -334,7 +334,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
         if (refExpr->getDecl() != varDecl) // It's our variable ?
             continue;
 
-        if (!byRefOnly) {
+        if (!byRefOrPtrOnly) {
             // We found it
             return true;
         }
@@ -361,7 +361,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
     return false;
 }
 
-bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnly)
+bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOrPtrOnly)
 {
     if (!body)
         return false;
@@ -374,7 +374,7 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
         if (!fDecl)
             continue;
 
-        if (isArgOfFunc(callexpr, fDecl, varDecl, byRefOnly))
+        if (isArgOfFunc(callexpr, fDecl, varDecl, byRefOrPtrOnly))
             return true;
     }
 
@@ -382,7 +382,7 @@ bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOnl
     HierarchyUtils::getChilds<CXXConstructExpr>(body, constructExprs);
     for (CXXConstructExpr *constructExpr : constructExprs) {
         FunctionDecl *fDecl = constructExpr->getConstructor();
-        if (isArgOfFunc(constructExpr, fDecl, varDecl, byRefOnly))
+        if (isArgOfFunc(constructExpr, fDecl, varDecl, byRefOrPtrOnly))
             return true;
     }
 

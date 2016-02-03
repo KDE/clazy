@@ -116,7 +116,7 @@ namespace Utils {
 
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)
     // By ref or pointer
-    bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl, bool byRefOnly);
+    bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl, bool byRefOrPtrOnly);
 
     // Returns true if we take the address of varDecl, such as: &foo
     bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body, const clang::ValueDecl *valDecl);
