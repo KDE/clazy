@@ -57,8 +57,29 @@ std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index
         return {};
 
     ParmVarDecl *parm = func->getParamDecl(index);
-    if (!parm)
-        return {};
+    return simpleTypeName(parm, lo);
+}
 
-    return simpleTypeName(parm->getType(), lo);
+bool StringUtils::anyArgIsOfSimpleType(clang::FunctionDecl *func,
+                                       const std::string &simpleType,
+                                       clang::LangOptions lo)
+{
+    if (!func)
+        return false;
+
+    return clazy_std::any_of(func->params(), [simpleType,lo](ParmVarDecl *p){
+        return simpleTypeName(p, lo) == simpleType;
+    });
+}
+
+bool StringUtils::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
+                                          const vector<string> &simpleTypes,
+                                          clang::LangOptions lo)
+{
+    if (!func)
+        return false;
+
+    return clazy_std::any_of(simpleTypes, [func,lo](const string &simpleType) {
+        return StringUtils::anyArgIsOfSimpleType(func, simpleType, lo);
+    });
 }

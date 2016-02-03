@@ -35,6 +35,7 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
 #include <string>
+#include <vector>
 
 namespace clang {
 class LangOpts;
@@ -194,12 +195,29 @@ inline std::string simpleTypeName(clang::QualType qt, clang::LangOptions lo)
     return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
 }
 
+inline std::string simpleTypeName(clang::ParmVarDecl *p, clang::LangOptions lo)
+{
+    return p ? simpleTypeName(p->getType(), lo) : std::string();
+}
+
 /**
  * Returns the type of an argument at index index without CV qualifiers or references.
  * void foo(int a, const QString &);
  * simpleArgTypeName(foo, 1, lo) would return "QString"
  */
 std::string simpleArgTypeName(clang::FunctionDecl *func, uint index, clang::LangOptions);
+
+/**
+ * Returns true if any of the function's arguments if of type simpleType
+ * By "simple" we mean without const or &, *
+ */
+bool anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleType, clang::LangOptions);
+
+/**
+ * Returns true if any of the function's arguments if of any of the types in simpleTypes
+ * By "simple" we mean without const or &, *
+ */
+bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::string> &simpleTypes, clang::LangOptions);
 
 inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {

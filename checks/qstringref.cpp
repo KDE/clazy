@@ -52,7 +52,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
     return clazy_std::contains(list, method->getNameAsString());
 }
 
-static bool isInterestingSecondMethod(CXXMethodDecl *method)
+static bool isInterestingSecondMethod(CXXMethodDecl *method, clang::LangOptions lo)
 {
     if (!method)
         return false;
@@ -67,17 +67,7 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method)
     if (!clazy_std::contains(list, method->getNameAsString()))
         return false;
 
-    if (method->getNumParams() > 0) {
-        // Check any argument is a QRegExp or QRegularExpression
-        ParmVarDecl *firstParam = method->getParamDecl(0);
-        if (firstParam) {
-            const string paramSig = firstParam->getType().getAsString();
-            if (paramSig == "const class QRegExp &" || paramSig == "class QRegExp &" || paramSig == "const class QRegularExpression &")
-                return false;
-        }
-    }
-
-    return true;
+    return !StringUtils::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
 }
 
 static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
@@ -113,7 +103,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
     // In the AST secondMethod() is parent of firstMethod() call, and will be visited first (because at runtime firstMethod() is resolved first().
     // So check for interesting second method first
     CXXMethodDecl *method = memberCall->getMethodDecl();
-    if (!isInterestingSecondMethod(method))
+    if (!isInterestingSecondMethod(method, lo()))
         return false;
 
     vector<CallExpr *> callExprs = Utils::callListForChain(memberCall);
