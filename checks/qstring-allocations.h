@@ -22,8 +22,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANG_LAZY_CAST_FROM_ASCII_TO_STRING_H
-#define CLANG_LAZY_CAST_FROM_ASCII_TO_STRING_H
+#ifndef CLAZY_STRING_ALLOCATIONS_H
+#define CLAZY_STRING_ALLOCATIONS_H
 
 #include "checkbase.h"
 
@@ -45,18 +45,18 @@ enum FromFunction {
 
 
 /**
- * Finds places where there are uneeded memory allocations due to temporary QStrings.
+ * Finds places where there are unneeded memory allocations due to temporary QStrings.
  *
  * For example:
  * QString s = QLatin1String("foo"); // should be QStringLiteral
  * QString::fromLatin1("foo") and QString::fromUtf8("foo") // should be QStringLiteral, or QLatin1String if being passed to an overload taking QLatin1String
  *
- * See README-qstring-uneeded-heap-allocations for more information.
+ * See README-qstring-allocations for more information.
  */
-class QStringUneededHeapAllocations : public CheckBase
+class QStringAllocations : public CheckBase
 {
 public:
-    QStringUneededHeapAllocations(const std::string &name, const clang::CompilerInstance &ci);
+    QStringAllocations(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
 
 protected:

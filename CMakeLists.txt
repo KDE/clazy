@@ -88,7 +88,7 @@ set(SRC_FILES
     checks/qset-intersects.cpp
     checks/qstringarg.cpp
     checks/qstringref.cpp
-    checks/qstringuneededheapallocations.cpp
+    checks/qstring-allocations.cpp
     checks/qt4-qstring-from-array.cpp
     checks/missingtypeinfo.cpp
     checks/missing-qobject.cpp

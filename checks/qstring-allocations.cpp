@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "qstringuneededheapallocations.h"
+#include "qstring-allocations.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 #include "StringUtils.h"
@@ -50,12 +50,12 @@ enum Fixit {
     CharPtrAllocations = 0x4,
 };
 
-QStringUneededHeapAllocations::QStringUneededHeapAllocations(const std::string &name, const clang::CompilerInstance &ci)
+QStringAllocations::QStringAllocations(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
 }
 
-void QStringUneededHeapAllocations::VisitStmt(clang::Stmt *stm)
+void QStringAllocations::VisitStmt(clang::Stmt *stm)
 {
     VisitCtor(stm);
     VisitOperatorCall(stm);
@@ -135,7 +135,7 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
     return literals.empty() ? nullptr : literals[0];
 }
 
-void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
+void QStringAllocations::VisitCtor(Stmt *stm)
 {
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
     if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/ true))
@@ -251,7 +251,7 @@ void QStringUneededHeapAllocations::VisitCtor(Stmt *stm)
     }
 }
 
-vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee, int fixitType)
+vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee, int fixitType)
 {
     if (replacee == "QLatin1String") {
         StringLiteral *lt = stringLiteralForCall(begin);
@@ -272,7 +272,7 @@ vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWord(clang:
     return fixits;
 }
 
-vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
+vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
 {
     vector<CXXConstructExpr*> constructExprs;
     HierarchyUtils::getChilds<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
@@ -336,7 +336,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
     return false;
 }
 
-std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFromUtf8(CallExpr *callExpr, FromFunction fromFunction)
+std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(CallExpr *callExpr, FromFunction fromFunction)
 {
     vector<FixItHint> fixits;
 
@@ -373,7 +373,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItReplaceFromLatin1OrFr
     return fixits;
 }
 
-std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::StringLiteral *lt, const string &replacement)
+std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral *lt, const string &replacement)
 {
     vector<FixItHint> fixits;
 
@@ -401,7 +401,7 @@ std::vector<FixItHint> QStringUneededHeapAllocations::fixItRawLiteral(clang::Str
     return fixits;
 }
 
-void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
+void QStringAllocations::VisitOperatorCall(Stmt *stm)
 {
     CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
     if (!operatorCall)
@@ -449,7 +449,7 @@ void QStringUneededHeapAllocations::VisitOperatorCall(Stmt *stm)
     emitWarning(stm->getLocStart(), msg, fixits);
 }
 
-void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
+void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 {
     CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
     if (!callExpr)
@@ -501,7 +501,7 @@ void QStringUneededHeapAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     }
 }
 
-void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
+void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 {
     CXXOperatorCallExpr *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
     if (!Utils::isAssignOperator(callExpr, "QString", "class QLatin1String"))
@@ -526,7 +526,7 @@ void QStringUneededHeapAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
 
-vector<string> QStringUneededHeapAllocations::supportedOptions() const
+vector<string> QStringAllocations::supportedOptions() const
 {
     // no-msvc-compat - use QStringLiteral inside arrays, which is fine if you don't use MSVC
 
@@ -534,15 +534,15 @@ vector<string> QStringUneededHeapAllocations::supportedOptions() const
     return options;
 }
 
-vector<string> QStringUneededHeapAllocations::filesToIgnore() const
+vector<string> QStringAllocations::filesToIgnore() const
 {
     // https://codereview.qt-project.org/#/c/19792/ uic won't be fixed
     static const vector<string> files = { "ui_" };
     return files;
 }
 
-const char *const s_checkName = "qstring-uneeded-heap-allocations";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringUneededHeapAllocations, CheckLevel1)
+const char *const s_checkName = "qstring-allocations";
+REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringAllocations, CheckLevel1)
 REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)
 REGISTER_FIXIT(FromLatin1_FromUtf8Allocations, "fix-fromLatin1_fromUtf8-allocations", s_checkName)
 REGISTER_FIXIT(CharPtrAllocations, "fix-fromCharPtrAllocations", s_checkName)

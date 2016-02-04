@@ -18,14 +18,14 @@
         {
             "filename" : "no-msvc-compat.cpp",
             "env" : {
-                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-no-msvc-compat"
+                "CLAZY_EXTRA_OPTIONS" : "qstring-allocations-no-msvc-compat"
             }
         },
         {
             "filename" : "no-msvc-compat.cpp_fixed.cpp",
             "isFixedFile" : true,
             "env" : {
-                "CLAZY_EXTRA_OPTIONS" : "qstring-uneeded-heap-allocations-no-msvc-compat"
+                "CLAZY_EXTRA_OPTIONS" : "qstring-allocations-no-msvc-compat"
             }
         }
     ]

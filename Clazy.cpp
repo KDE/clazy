@@ -324,10 +324,10 @@ protected:
         ros << "\nIf nothing is specified, all checks from level0 and level1 will be run.\n\n";
         ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
         ros << "    export CLAZY_CHECKS=\"level0\"\n";
-        ros << "    export CLAZY_CHECKS=\"level0,reserve-candidates,qstring-uneeded-heap-allocations\"\n";
+        ros << "    export CLAZY_CHECKS=\"level0,reserve-candidates,qstring-allocations\"\n";
         ros << "    export CLAZY_CHECKS=\"reserve-candidates\"\n\n";
         ros << "or pass as compiler arguments, for example:\n";
-        ros << "    -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-uneeded-heap-allocations\n";
+        ros << "    -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-allocations\n";
         ros << "\n";
         ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
         ros << "    export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";

@@ -1,0 +1,1 @@
+qstring-allocations/msvc-compat.cpp:8:17: warning: QString(const char*) being called [-Wclazy-qstring-allocations]

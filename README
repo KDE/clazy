@@ -76,7 +76,7 @@ Checks from level1:
     foreach
     non-pod-global-static
     old-style-connect    (fix-old-style-connect)
-    qstring-uneeded-heap-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+    qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     qdeleteall
 
 Checks from level2:

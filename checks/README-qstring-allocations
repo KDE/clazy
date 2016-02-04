@@ -1,6 +1,6 @@
-qstring-uneeded-heap-allocations
+qstring-unneeded-heap-allocations
 
-Finds places where there are uneeded memory allocations due to temporary QStrings.
+Finds places where there are unneeded memory allocations due to temporary QStrings.
 
 Here's a summary of stuff that allocates:
 
@@ -42,4 +42,4 @@ Warnings:
 
     Also note that MSVC crashes when QStringLiteral is used inside initializer lists. For that reason
     no warning or fixit is emitted for this case unless you set an env variable:
-        export CLAZY_EXTRA_OPTIONS="qstring-uneeded-heap-allocations-no-msvc-compat"
+        export CLAZY_EXTRA_OPTIONS="qstring-allocations-no-msvc-compat"

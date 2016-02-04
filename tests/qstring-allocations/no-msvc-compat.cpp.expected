@@ -1,0 +1,7 @@
+qstring-allocations/no-msvc-compat.cpp:4:29: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+qstring-allocations/no-msvc-compat.cpp:8:17: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+qstring-allocations/no-msvc-compat.cpp:14:17: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+qstring-allocations/no-msvc-compat.cpp:15:5: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+qstring-allocations/no-msvc-compat.cpp:16:5: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+qstring-allocations/no-msvc-compat.cpp:19:9: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-allocations]
+qstring-allocations/no-msvc-compat.cpp:20:10: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-allocations]
