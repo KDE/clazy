@@ -48,11 +48,12 @@ CheckManager::CheckManager()
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
-    if (fixitsEnv != nullptr) {
-        if (string(fixitsEnv) == string("all_fixits"))
+    if (fixitsEnv) {
+        if (string(fixitsEnv) == string("all_fixits")) {
             m_enableAllFixits = true;
-        else
+        } else {
             m_requestedFixitName = string(fixitsEnv);
+        }
     }
 }
 
