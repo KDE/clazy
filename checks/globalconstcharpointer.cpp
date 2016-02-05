@@ -38,18 +38,18 @@ GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, const cl
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 {
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (varDecl == nullptr || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() ||
+    if (!varDecl || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() ||
         !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace() || varDecl->hasExternalStorage())
         return;
 
     QualType qt = varDecl->getType();
     const Type *type = qt.getTypePtrOrNull();
-    if (type == nullptr || !type->isPointerType() || qt.isConstQualified() || varDecl->isStaticLocal())
+    if (!type || !type->isPointerType() || qt.isConstQualified() || varDecl->isStaticLocal())
         return;
 
     QualType pointeeQt = type->getPointeeType();
     const Type *pointeeType = pointeeQt.getTypePtrOrNull();
-    if (pointeeType == nullptr || !pointeeType->isCharType())
+    if (!pointeeType || !pointeeType->isCharType())
         return;
 
     emitWarning(decl->getLocStart(), "non const global char *");
