@@ -8,7 +8,7 @@ Requested checks: foreach, writing-to-temporary
 Requested checks: old-style-connect
 Requested checks: old-style-connect
 Requested checks: foreach, old-style-connect
-Requested checks: auto-unexpected-qstringbuilder, container-inside-loop, detaching-temporary, foreach, function-args-by-ref, global-const-char-pointer, implicit-casts, inefficient-qlist-soft, isempty-vs-count, missing-qobject, non-pod-global-static, old-style-connect, qdatetime-utc, qdeleteall, qfileinfo-exists, qgetenv, qmap-with-key-pointer, qstring-allocations, qstring-arg, qstring-ref, range-loop, reserve-candidates, rule-of-three, rule-of-two-soft, temporary-iterator, variant-sanitizer, virtual-call-ctor, writing-to-temporary, wrong-qglobalstatic
+Requested checks: auto-unexpected-qstringbuilder, container-inside-loop, detaching-temporary, foreach, function-args-by-ref, global-const-char-pointer, implicit-casts, inefficient-qlist-soft, missing-qobject, non-pod-global-static, old-style-connect, qdatetime-utc, qdeleteall, qfileinfo-exists, qgetenv, qmap-with-key-pointer, qstring-allocations, qstring-arg, qstring-ref, range-loop, reserve-candidates, rule-of-three, rule-of-two-soft, temporary-iterator, variant-sanitizer, virtual-call-ctor, writing-to-temporary, wrong-qglobalstatic
 Requested checks: implicit-casts
 Requested checks: foreach, implicit-casts
 Requested checks: old-style-connect
