@@ -164,7 +164,9 @@ void Foreach::checkBigTypeMissingRef()
         } else if (classif.passNonTriviallyCopyableByConstRef) {
             error = "Missing reference in foreach with non trivial type (" + paramStr + ')';
         } else if (classif.passSmallTrivialByValue) {
-            error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
+            //error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
+            // Don't warn. The compiler can (and most do) optimize this and generate the same code
+            return;
         }
 
         emitWarning(varDecl->getLocStart(), error.c_str());
