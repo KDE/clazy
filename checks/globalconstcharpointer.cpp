@@ -57,7 +57,8 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 
 std::vector<std::string> GlobalConstCharPointer::filesToIgnore() const
 {
-    static const std::vector<std::string> files = {"errno.h", "getopt.h", "StdHeader.h", "3rdparty", "mysql.h"};
+    static const std::vector<std::string> files = { "errno.h", "getopt.h", "StdHeader.h",
+                                                    "3rdparty", "mysql.h", "qpicture.cpp"};
     return files;
 }
 
