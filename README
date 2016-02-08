@@ -61,37 +61,46 @@ You may want to choose which checks to enable before starting to compile.
 There are many checks and they are divided in levels:
 
 Checks from level0:
+    container-anti-pattern
+    wrong-qglobalstatic
     writing-to-temporary
     variant-sanitizer
-    temporary-iterator
-    qdatetime-utc
-    qgetenv    (fix-qgetenv)
-    qmap-with-key-pointer
-    qstring-arg
     qstring-ref    (fix-missing-qstringref)
+    temporary-iterator
+    qstring-arg
+    qmap-with-key-pointer
+    qdatetime-utc    (fix-qdatetime-utc)
+    qgetenv    (fix-qgetenv)
+    qfileinfo-exists
 
 Checks from level1:
-    auto-unexpected-qstringbuilder
-    detaching-temporary
-    foreach
+    range-loop
     non-pod-global-static
-    old-style-connect    (fix-old-style-connect)
+    missing-qobject
     qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     qdeleteall
+    inefficient-qlist-soft
+    foreach
+    detaching-temporary
+    auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
 
 Checks from level2:
-    virtual-call-ctor
+    rule-of-two-soft
+    rule-of-three
     reserve-candidates
+    virtual-call-ctor
+    old-style-connect    (fix-old-style-connect)
     function-args-by-ref
     implicit-casts
     global-const-char-pointer
+    container-inside-loop
 
 Checks from level3:
     missing-typeinfo
-    inefficient-qlist
     bogus-dynamic-cast
     detaching-member
-    assert-with-side-effects    (fix-auto-unexpected-qstringbuilder)
+    copyable-polymorphic
+    assert-with-side-effects
 
 Description of each level:
 level0: Very stable checks, 100% safe, no false-positives
