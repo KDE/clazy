@@ -1,0 +1,18 @@
+container-anti-pattern
+
+Finds when temporary containers are being created needlessly.
+These cases are usually easy to fix by using iterators, avoiding unneeded memory allocations.
+
+Matches code like:
+
+    {QMap, QHash, QSet}.values().*
+    {QMap, QHash}.keys().*
+    {QVector, QSet}.toList().*
+    {QList}::toVector().*
+
+For example:
+    set.toList()[0]; // use set.constFirst() instead
+    hash.values().size(); // Use hash.size() instead
+    hash.keys().contains(); // Use hash.contains() instead
+    hash.values().contains(); // Use hash.find instead
+    map.values(k).foo ; // Use QMap::equal_range(k) instead
