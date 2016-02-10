@@ -11,3 +11,6 @@ to avoid the heap allocation caused by toLower().
 Matches any of the following cases:
     str.{toLower, toUpper}().{contains, compare, startsWith, endsWith}()
 
+Note:
+    Qt::CaseInsensitive compare is different from toLower() comparison for a few code points, but it
+    should be very rare: http://lists.qt-project.org/pipermail/development/2016-February/024776.html
