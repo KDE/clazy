@@ -64,6 +64,7 @@ Checks from level0:
     container-anti-pattern
     wrong-qglobalstatic
     writing-to-temporary
+    qstring-insensitive-allocation
     variant-sanitizer
     qstring-ref    (fix-missing-qstringref)
     temporary-iterator
