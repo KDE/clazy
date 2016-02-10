@@ -1,0 +1,4 @@
+qstring-insensitive-allocation/main.cpp:6:5: warning: unneeded allocation [-Wclazy-qstring-insensitive-allocation]
+qstring-insensitive-allocation/main.cpp:7:5: warning: unneeded allocation [-Wclazy-qstring-insensitive-allocation]
+qstring-insensitive-allocation/main.cpp:8:5: warning: unneeded allocation [-Wclazy-qstring-insensitive-allocation]
+qstring-insensitive-allocation/main.cpp:9:5: warning: unneeded allocation [-Wclazy-qstring-insensitive-allocation]
