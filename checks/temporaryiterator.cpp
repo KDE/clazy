@@ -4,8 +4,8 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
   Copyright (C) 2015 Nyall Dawson <nyall.dawson@gmail.com>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
 
+#include <clang/AST/ParentMap.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
@@ -80,6 +81,11 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     const std::string functionName = methodDecl->getNameAsString();
     const auto &allowedFunctions = it->second;
     if (!clazy_std::contains(allowedFunctions, functionName))
+        return;
+
+
+    // Catch getList().cbegin().value(), which is ok
+    if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, m_parentMap->getParent(memberExpr)))
         return;
 
     // Catch variant.toList().cbegin(), which is ok

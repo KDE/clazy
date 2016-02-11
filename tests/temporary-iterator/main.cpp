@@ -45,3 +45,14 @@ void testDereference()
     for (auto it = listOfLists[ns].constBegin(); it != listOfLists[ns].constEnd(); ++it) {} // OK
 
 }
+
+QHash<int,int> getHash()
+{
+    return {};
+}
+
+void testMember()
+{
+    getHash().cbegin(); // Warning
+    getHash().cbegin().value(); // OK
+}

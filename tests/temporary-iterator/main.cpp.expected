@@ -1,3 +1,4 @@
 temporary-iterator/main.cpp:22:20: warning: Don't call QList::begin() on temporary [-Wclazy-temporary-iterator]
 temporary-iterator/main.cpp:22:45: warning: Don't call QList::end() on temporary [-Wclazy-temporary-iterator]
 temporary-iterator/main.cpp:29:5: warning: Don't call QList::cbegin() on temporary [-Wclazy-temporary-iterator]
+temporary-iterator/main.cpp:56:5: warning: Don't call QHash::cbegin() on temporary [-Wclazy-temporary-iterator]
