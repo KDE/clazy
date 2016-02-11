@@ -208,7 +208,7 @@ namespace Utils {
 
     /**
      * If qt is a reference, return it without a reference.
-     * If qt is nor a reference, return qt.
+     * If qt is not a reference, return qt.
      *
      * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
      * returns false. Must go through qualType->getPointeeType().isConstQualified().

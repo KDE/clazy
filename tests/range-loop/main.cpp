@@ -32,9 +32,9 @@ void testQtContainer()
     for (int i : getQtList()) { // Warning
     }
 
-
-
-
+    for (int i : qt_container) { }  // Warning
+    for (const int &i : qt_container) { } // Warning
+    for (int &i : qt_container) { } // OK
 
 
 

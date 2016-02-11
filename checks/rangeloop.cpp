@@ -60,6 +60,10 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (qt.isConstQualified()) // const won't detach
         return;
 
+    auto loopVariableType = rangeLoop->getLoopVariable()->getType();
+    if (!Utils::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType())
+        return;
+
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
     if (QtUtils::isQtIterableClass(Utils::rootBaseClass(record))) {
         emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
