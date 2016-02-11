@@ -18,3 +18,14 @@ void test()
     a = map.keys().at(0); // Warning
     list.toVector().size(); // Warning
 }
+
+void testRangeLoop()
+{
+    QHash<int,int> hash;
+    for (auto i : hash.values()) {} // Warning
+    for (auto i : hash.keys()) {} // Warning
+    for (auto i : hash) {} // OK
+    foreach (auto i, hash.keys()) {} // Warning
+    foreach (auto i, hash.values()) {} // Warning
+    foreach (auto i, hash) {} // OK
+}

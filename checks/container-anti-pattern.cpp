@@ -23,6 +23,7 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "MacroUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -38,7 +39,7 @@ ContainerAntiPattern::ContainerAntiPattern(const std::string &name, const clang:
 
 static bool isInterestingCall(CallExpr *call)
 {
-    FunctionDecl *func = call->getDirectCallee();
+    FunctionDecl *func = call ? call->getDirectCallee() : nullptr;
     if (!func)
         return false;
 
@@ -51,6 +52,12 @@ static bool isInterestingCall(CallExpr *call)
 
 void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
 {
+    if (handleRangeLoop(dyn_cast<CXXForRangeStmt>(stmt)))
+        return;
+
+    if (handleForeach(dyn_cast<CXXConstructExpr>(stmt)))
+        return;
+
     vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
     if (calls.size() < 2)
         return;
@@ -64,6 +71,42 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
 
 
     emitWarning(stmt->getLocStart(), "allocating an unneeded temporary container");
+}
+
+bool ContainerAntiPattern::handleRangeLoop(CXXForRangeStmt *stm)
+{
+    Expr *containerExpr = stm ? stm->getRangeInit() : nullptr;
+    if (!containerExpr)
+        return false;
+
+    if (MacroUtils::isInAnyMacro(ci(), stm->getLocStart(), { "foreach", "Q_FOREACH" }))
+        return false;
+
+    auto memberExpr = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
+    if (isInterestingCall(memberExpr)) {
+        emitWarning(stm->getLocStart(), "allocating an unneeded temporary container");
+        return true;
+    }
+
+    return false;
+}
+
+bool ContainerAntiPattern::handleForeach(clang::CXXConstructExpr *constructExpr)
+{
+    if (!constructExpr || constructExpr->getNumArgs() < 1)
+        return false;
+
+    CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
+    if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
+        return false;
+
+    auto memberExpr = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(constructExpr);
+    if (isInterestingCall(memberExpr)) {
+        emitWarning(constructExpr->getLocStart(), "allocating an unneeded temporary container");
+        return true;
+    }
+
+    return false;
 }
 
 

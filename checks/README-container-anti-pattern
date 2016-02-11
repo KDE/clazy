@@ -9,6 +9,9 @@ Matches code like:
     {QMap, QHash}.keys().*
     {QVector, QSet}.toList().*
     {QList}::toVector().*
+    for (auto i : {QHash, QMap}.values()) {}
+    foreach (auto i, {QHash, QMap}.values()) {}
+
 
 For example:
     set.toList()[0]; // use set.constFirst() instead
@@ -16,3 +19,4 @@ For example:
     hash.keys().contains(); // Use hash.contains() instead
     hash.values().contains(); // Use hash.find instead
     map.values(k).foo ; // Use QMap::equal_range(k) instead
+    for (auto i : hash.values()) {} // Iterate the hash directly instead: for (auto i : hash) {}

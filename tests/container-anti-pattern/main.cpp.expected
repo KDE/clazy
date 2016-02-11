@@ -3,3 +3,7 @@ container-anti-pattern/main.cpp:16:5: warning: allocating an unneeded temporary 
 container-anti-pattern/main.cpp:17:13: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]
 container-anti-pattern/main.cpp:18:9: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]
 container-anti-pattern/main.cpp:19:5: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]
+container-anti-pattern/main.cpp:25:5: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]
+container-anti-pattern/main.cpp:26:5: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]
+container-anti-pattern/main.cpp:28:5: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]
+container-anti-pattern/main.cpp:29:5: warning: allocating an unneeded temporary container [-Wclazy-container-anti-pattern]

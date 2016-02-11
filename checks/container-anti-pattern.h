@@ -26,6 +26,8 @@
 
 namespace clang {
 class Stmt;
+class CXXForRangeStmt;
+class CXXConstructExpr;
 }
 
 /**
@@ -39,6 +41,9 @@ class ContainerAntiPattern : public CheckBase
 public:
     explicit ContainerAntiPattern(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
+private:
+    bool handleRangeLoop(clang::CXXForRangeStmt *);
+    bool handleForeach(clang::CXXConstructExpr *);
 };
 
 #endif
