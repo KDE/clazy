@@ -32,6 +32,13 @@ void testQtContainer()
     for (int i : getQtList()) { // Warning
     }
 
+
+
+
+
+
+
+
     for (int i : getConstQtList()) { // OK
     }
 
