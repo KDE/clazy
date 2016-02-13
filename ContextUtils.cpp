@@ -190,18 +190,3 @@ bool ContextUtils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context,
 
     return false;
 }
-
-Stmt* ContextUtils::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
-{
-    if (!stmt)
-        return nullptr;
-
-    Stmt *p = pmap->getParent(stmt);
-    while (p) {
-        if (Utils::isLoop(p))
-            return p;
-        p = pmap->getParent(p);
-    }
-
-    return nullptr;
-}

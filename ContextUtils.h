@@ -73,12 +73,6 @@ T* firstContextOfType(clang::DeclContext *context)
     return ContextUtils::firstContextOfType<T>(context->getParent());
 }
 
-/**
- * Returns true of stmt is inside a for, while or do-while loop.
- * If yes, returns the loop statement, otherwise nullptr.
- */
-clang::Stmt* isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt);
-
 
 /**
  * Returns fully/semi-fully qualified name for a method, but doesn't over-qualify with namespaces

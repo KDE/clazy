@@ -24,6 +24,7 @@
 #include "checkmanager.h"
 #include "StringUtils.h"
 #include "MacroUtils.h"
+#include "LoopUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -66,13 +67,12 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingCall(callexpr1))
         return;
 
-
     emitWarning(stmt->getLocStart(), "allocating an unneeded temporary container");
 }
 
 bool ContainerAntiPattern::handleLoop(Stmt *stm)
 {
-    Expr *containerExpr = Utils::containerExprForLoop(stm);
+    Expr *containerExpr = LoopUtils::containerExprForLoop(stm);
     if (!containerExpr)
         return false;
 

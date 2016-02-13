@@ -30,6 +30,7 @@
 #include "StringUtils.h"
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
+#include "LoopUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -151,7 +152,7 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
     if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
         return false;
 
-    if (Utils::loopCanBeInterrupted(loopBody, m_ci, callExpr->getLocStart()))
+    if (LoopUtils::loopCanBeInterrupted(loopBody, m_ci, callExpr->getLocStart()))
         return false;
 
     return true;
@@ -162,7 +163,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (registerReserveStatement(stm))
         return;
 
-    auto body = Utils::bodyFromLoop(stm);
+    auto body = LoopUtils::bodyFromLoop(stm);
     if (!body)
         return;
 

@@ -236,27 +236,6 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     return nullptr;
 }
 
-bool Utils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci, const clang::SourceLocation &onlyBeforeThisLoc)
-{
-    if (!stmt)
-        return false;
-
-    if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
-        if (onlyBeforeThisLoc.isValid()) {
-            FullSourceLoc sourceLoc(stmt->getLocStart(), ci.getSourceManager());
-            FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, ci.getSourceManager());
-            if (sourceLoc.isBeforeInTranslationUnitThan(otherSourceLoc))
-                return true;
-        } else {
-            return true;
-        }
-    }
-
-    return clazy_std::any_of(stmt->children(), [&ci, onlyBeforeThisLoc](Stmt *s) {
-        return Utils::loopCanBeInterrupted(s, ci, onlyBeforeThisLoc);
-    });
-}
-
 bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
     if (!derived)
@@ -553,30 +532,6 @@ bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::Pr
 CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
 {
     return decl ? dyn_cast<CXXRecordDecl>(decl->getDeclContext()) : nullptr;
-}
-
-Stmt *Utils::bodyFromLoop(Stmt *loop)
-{
-    if (!loop)
-        return nullptr;
-
-    if (auto forstm = dyn_cast<ForStmt>(loop)) {
-        return forstm->getBody();
-    }
-
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
-        return rangeLoop->getBody();
-    }
-
-    if (auto whilestm = dyn_cast<WhileStmt>(loop)) {
-        return whilestm->getBody();
-    }
-
-    if (auto dostm = dyn_cast<DoStmt>(loop)) {
-        return dostm->getBody();
-    }
-
-    return nullptr;
 }
 
 std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *record, const string &methodName)
@@ -878,11 +833,6 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
     return nullptr;
 }
 
-bool Utils::isLoop(Stmt *stmt)
-{
-    return isa<DoStmt>(stmt) || isa<WhileStmt>(stmt) || isa<ForStmt>(stmt) || isa<CXXForRangeStmt>(stmt);
-}
-
 bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl)
 {
     if (!declStmt || !varDecl)
@@ -894,28 +844,4 @@ bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl
     return clazy_std::any_of(declStmt->getDeclGroup(), [varDecl](Decl *decl) {
         return varDecl == decl;
     });
-}
-
-clang::Expr *Utils::containerExprForLoop(Stmt *loop)
-{
-    if (!loop)
-        return nullptr;
-
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
-        return rangeLoop->getRangeInit();
-    }
-
-    if (auto constructExpr = dyn_cast<CXXConstructExpr>(loop)) {
-        if (constructExpr->getNumArgs() < 1)
-            return nullptr;
-
-        CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-        if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
-            return nullptr;
-
-
-        return constructExpr;
-    }
-
-    return nullptr;
 }

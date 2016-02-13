@@ -23,7 +23,7 @@
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
-#include "ContextUtils.h"
+#include "LoopUtils.h"
 
 #include <clang/AST/ParentMap.h>
 #include <clang/AST/AST.h>
@@ -52,7 +52,7 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
     if (!declStm || !declStm->isSingleDecl())
         return;
 
-    Stmt *loopStmt = ContextUtils::isInLoop(m_parentMap, stmt);
+    Stmt *loopStmt = LoopUtils::isInLoop(m_parentMap, stmt);
     if (!loopStmt)
         return;
 

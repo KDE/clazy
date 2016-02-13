@@ -98,12 +98,6 @@ namespace Utils {
     // returns null if not
     clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);
 
-    /// Recursively goes through stmt's children and returns true if it finds a "break", "continue" or a "return" stmt
-    /// All child statements that are on a source code line <
-    /// If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before
-    bool loopCanBeInterrupted(clang::Stmt *loop, const clang::CompilerInstance &ci,
-                              const clang::SourceLocation &onlyBeforeThisLoc);
-
     // Returns true if a body of statements contains a non const member call on object declared by varDecl
     // For example:
     // Foo foo; // this is the varDecl
@@ -142,8 +136,6 @@ namespace Utils {
 
     bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 
-    // Returns the body of a for, while or do loop
-    clang::Stmt *bodyFromLoop(clang::Stmt*);
 
     // Returns the list of methods with name methodName that the class/struct record contains
     std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record, const std::string &methodName);
@@ -250,18 +242,6 @@ namespace Utils {
      * The operators that write to the variable are operator=, operator+=, operator++, etc.
      */
     clang::Expr* isWriteOperator(clang::Stmt *stm);
-
-    /**
-     * Returns true if stmt is a for, while or do-while loop
-     */
-    bool isLoop(clang::Stmt *);
-
-    /**
-     * Returns the container expression for a range-loop or Q_FOREACH
-     *
-     * Q_FOREACH (auto f, expression) or for (auto i : expression)
-     */
-    clang::Expr* containerExprForLoop(clang::Stmt *loop);
 }
 
 #endif

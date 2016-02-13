@@ -110,6 +110,7 @@ set(SRC_FILES
     ContextUtils.cpp
     FixItUtils.cpp
     HierarchyUtils.cpp
+    LoopUtils.cpp
     MacroUtils.cpp
     TemplateUtils.cpp
     StringUtils.cpp
