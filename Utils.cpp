@@ -28,6 +28,7 @@
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
 
+#include <clang/AST/StmtCXX.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
@@ -875,7 +876,7 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
 
 bool Utils::isLoop(Stmt *stmt)
 {
-    return isa<DoStmt>(stmt) || isa<WhileStmt>(stmt) || isa<ForStmt>(stmt);
+    return isa<DoStmt>(stmt) || isa<WhileStmt>(stmt) || isa<ForStmt>(stmt) || isa<CXXForRangeStmt>(stmt);
 }
 
 bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl)
