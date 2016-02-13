@@ -564,6 +564,10 @@ Stmt *Utils::bodyFromLoop(Stmt *loop)
         return forstm->getBody();
     }
 
+    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
+        return rangeLoop->getBody();
+    }
+
     if (auto whilestm = dyn_cast<WhileStmt>(loop)) {
         return whilestm->getBody();
     }

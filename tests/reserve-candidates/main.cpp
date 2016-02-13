@@ -218,3 +218,11 @@ void moreStuff()
         v.push_back(1);
     }
 }
+
+
+void rangeLoop()
+{
+    QVector<int> v1, v2;
+    for (auto i : v1)
+        v2.push_back(i);
+}
