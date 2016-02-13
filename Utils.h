@@ -255,6 +255,13 @@ namespace Utils {
      * Returns true if stmt is a for, while or do-while loop
      */
     bool isLoop(clang::Stmt *);
+
+    /**
+     * Returns the container expression for a range-loop or Q_FOREACH
+     *
+     * Q_FOREACH (auto f, expression) or for (auto i : expression)
+     */
+    clang::Expr* containerExprForLoop(clang::Stmt *loop);
 }
 
 #endif

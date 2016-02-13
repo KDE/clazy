@@ -52,10 +52,7 @@ static bool isInterestingCall(CallExpr *call)
 
 void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
 {
-    if (handleRangeLoop(dyn_cast<CXXForRangeStmt>(stmt)))
-        return;
-
-    if (handleForeach(dyn_cast<CXXConstructExpr>(stmt)))
+    if (handleLoop(stmt)) // catch for (auto i : map.values()) and such
         return;
 
     vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
@@ -73,9 +70,9 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
     emitWarning(stmt->getLocStart(), "allocating an unneeded temporary container");
 }
 
-bool ContainerAntiPattern::handleRangeLoop(CXXForRangeStmt *stm)
+bool ContainerAntiPattern::handleLoop(Stmt *stm)
 {
-    Expr *containerExpr = stm ? stm->getRangeInit() : nullptr;
+    Expr *containerExpr = Utils::containerExprForLoop(stm);
     if (!containerExpr)
         return false;
 
@@ -88,23 +85,6 @@ bool ContainerAntiPattern::handleRangeLoop(CXXForRangeStmt *stm)
     return false;
 }
 
-bool ContainerAntiPattern::handleForeach(clang::CXXConstructExpr *constructExpr)
-{
-    if (!constructExpr || constructExpr->getNumArgs() < 1)
-        return false;
-
-    CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-    if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
-        return false;
-
-    auto memberExpr = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(constructExpr);
-    if (isInterestingCall(memberExpr)) {
-        emitWarning(constructExpr->getLocStart(), "allocating an unneeded temporary container");
-        return true;
-    }
-
-    return false;
-}
 
 
 REGISTER_CHECK_WITH_FLAGS("container-anti-pattern", ContainerAntiPattern, CheckLevel0)

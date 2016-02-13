@@ -891,3 +891,27 @@ bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl
         return varDecl == decl;
     });
 }
+
+clang::Expr *Utils::containerExprForLoop(Stmt *loop)
+{
+    if (!loop)
+        return nullptr;
+
+    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
+        return rangeLoop->getRangeInit();
+    }
+
+    if (auto constructExpr = dyn_cast<CXXConstructExpr>(loop)) {
+        if (constructExpr->getNumArgs() < 1)
+            return nullptr;
+
+        CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
+        if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
+            return nullptr;
+
+
+        return constructExpr;
+    }
+
+    return nullptr;
+}

@@ -42,8 +42,7 @@ public:
     explicit ContainerAntiPattern(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
-    bool handleRangeLoop(clang::CXXForRangeStmt *);
-    bool handleForeach(clang::CXXConstructExpr *);
+    bool handleLoop(clang::Stmt *);
 };
 
 #endif
