@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -81,8 +81,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     if (!classDecl)
         return false;
 
-    auto methodName = methodDecl->getNameAsString();
-    if (methodName != "append" && methodName != "push_back" && methodName != "push" /*&& methodName != "insert"*/)
+    if (!clazy_std::equalsAny(methodDecl->getNameAsString(), { "append", "push_back", "push", "operator<<", "operator+=" }))
         return false;
 
     if (!isAReserveClass(classDecl))
@@ -102,25 +101,7 @@ static bool isCandidateOperator(CXXOperatorCallExpr *oper)
     if (!oper)
         return false;
 
-    auto calleeDecl = dyn_cast_or_null<CXXMethodDecl>(oper->getDirectCallee());
-    if (!calleeDecl)
-        return false;
-
-    const std::string operatorName = calleeDecl->getNameAsString();
-    if (operatorName != "operator<<" && operatorName != "operator+=")
-        return false;
-
-    CXXRecordDecl *recordDecl = calleeDecl->getParent();
-    if (!isAReserveClass(recordDecl))
-        return false;
-
-    // Catch cases like: QList<T>::append(const QList<T> &), which don't make sense to reserve.
-    // In this case, the parameter has the same type of the class
-    ParmVarDecl *parm = calleeDecl->getParamDecl(0);
-    if (paramIsSameTypeAs(parm->getType().getTypePtrOrNull(), recordDecl))
-        return false;
-
-    return true;
+    return isCandidateMethod(dyn_cast_or_null<CXXMethodDecl>(oper->getDirectCallee()));
 }
 
 bool ReserveCandidates::containerWasReserved(clang::ValueDecl *valueDecl) const
