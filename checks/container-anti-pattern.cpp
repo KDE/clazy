@@ -79,9 +79,6 @@ bool ContainerAntiPattern::handleRangeLoop(CXXForRangeStmt *stm)
     if (!containerExpr)
         return false;
 
-    if (MacroUtils::isInAnyMacro(ci(), stm->getLocStart(), { "foreach", "Q_FOREACH" }))
-        return false;
-
     auto memberExpr = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
     if (isInterestingCall(memberExpr)) {
         emitWarning(stm->getLocStart(), "allocating an unneeded temporary container");
