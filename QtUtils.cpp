@@ -81,3 +81,26 @@ bool QtUtils::isQObject(CXXRecordDecl *decl)
         return type && QtUtils::isQObject(type->getAsCXXRecordDecl());
     });
 }
+
+bool QtUtils::isConvertibleTo(const Type *source, const Type *target)
+{
+    if (!source || !target)
+        return false;
+
+    if (source->isPointerType() ^ target->isPointerType())
+        return false;
+
+    if (source == target)
+        return true;
+
+    if (source->getPointeeCXXRecordDecl() && source->getPointeeCXXRecordDecl() == target->getPointeeCXXRecordDecl())
+        return true;
+
+    if (source->isIntegerType() && target->isIntegerType())
+        return true;
+
+    if (source->isFloatingType() && target->isFloatingType())
+        return true;
+
+    return false;
+}

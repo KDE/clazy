@@ -25,6 +25,9 @@
 namespace clang {
 class CompilerInstance;
 class QualType;
+class Stmt;
+class VarDecl;
+class Type;
 }
 
 namespace TypeUtils
@@ -33,6 +36,37 @@ namespace TypeUtils
      * Returns the sizeof(void*) for the platform we're compiling for, in bits.
      */
     int sizeOfPointer(const clang::CompilerInstance &, const clang::QualType &qt);
+
+    struct QualTypeClassification {
+        bool isConst = false;
+        bool isReference = false;
+        bool isBig = false;
+        bool isNonTriviallyCopyable = false;
+        bool passBigTypeByConstRef = false;
+        bool passNonTriviallyCopyableByConstRef = false;
+        bool passSmallTrivialByValue = false;
+        int size_of_T = 0;
+    };
+
+    /**
+     * Classifies a QualType, for example:
+     *
+     * This function is useful to know if a type should be passed by value or const-ref.
+     * The optional parameter body is in order to advise non-const-ref -> value, since the body
+     * needs to be inspected to see if we that would compile.
+     */
+    bool classifyQualType(const clang::CompilerInstance &ci, const clang::VarDecl *varDecl,
+                          QualTypeClassification &classification,
+                          clang::Stmt *body = nullptr);
+
+    /**
+     * If qt is a reference, return it without a reference.
+     * If qt is not a reference, return qt.
+     *
+     * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
+     * returns false. Must go through qualType->getPointeeType().isConstQualified().
+     */
+    clang::QualType unrefQualType(const clang::QualType &qt);
 }
 
 #endif

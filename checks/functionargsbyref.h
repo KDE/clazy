@@ -35,7 +35,7 @@ class ParmVarDecl;
 class FunctionDecl;
 }
 
-namespace Utils {
+namespace TypeUtils {
 struct QualTypeClassification;
 }
 
@@ -53,8 +53,11 @@ protected:
     std::vector<std::string> filesToIgnore() const override;
 private:
     void processFunction(clang::FunctionDecl *);
-    clang::FixItHint fixitByValue(clang::FunctionDecl *func, const clang::ParmVarDecl *param, const Utils::QualTypeClassification &);
-    clang::FixItHint fixitByConstRef(const clang::ParmVarDecl *, const Utils::QualTypeClassification &);
+    clang::FixItHint fixitByValue(clang::FunctionDecl *func, const clang::ParmVarDecl *param,
+                                  const TypeUtils::QualTypeClassification &);
+
+    clang::FixItHint fixitByConstRef(const clang::ParmVarDecl *,
+                                     const TypeUtils::QualTypeClassification &);
 };
 
 #endif

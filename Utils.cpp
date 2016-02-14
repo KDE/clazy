@@ -595,29 +595,6 @@ const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, string 
     return nullptr;
 }
 
-bool Utils::isConvertibleTo(const Type *source, const Type *target)
-{
-    if (!source || !target)
-        return false;
-
-    if (source->isPointerType() ^ target->isPointerType())
-        return false;
-
-    if (source == target)
-        return true;
-
-    if (source->getPointeeCXXRecordDecl() && source->getPointeeCXXRecordDecl() == target->getPointeeCXXRecordDecl())
-        return true;
-
-    if (source->isIntegerType() && target->isIntegerType())
-        return true;
-
-    if (source->isFloatingType() && target->isFloatingType())
-        return true;
-
-    return false;
-}
-
 bool Utils::isAscii(StringLiteral *lt)
 {
     // 'é' for some reason has isAscii() == true, so also call containsNonAsciiOrNull
@@ -721,51 +698,6 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
     }
 
     return false;
-}
-
-bool Utils::classifyQualType(const CompilerInstance &ci, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
-{
-    if (!varDecl)
-        return false;
-
-    QualType qualType = unrefQualType(varDecl->getType());
-    const Type *paramType = qualType.getTypePtrOrNull();
-    if (!paramType || paramType->isIncompleteType())
-        return false;
-
-    classif.size_of_T = ci.getASTContext().getTypeSize(qualType) / 8;
-    classif.isBig = classif.size_of_T > 16;
-    CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-    classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
-    classif.isReference = varDecl->getType()->isLValueReferenceType();
-    classif.isConst = qualType.isConstQualified();
-
-    if (varDecl->getType()->isRValueReferenceType()) // && ref, nothing to do here
-        return true;
-
-    if (classif.isConst && !classif.isReference) {
-        classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
-        if (classif.isBig) {
-            classif.passBigTypeByConstRef = true;
-        }
-    } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
-        classif.passSmallTrivialByValue = true;
-    } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
-        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(body, varDecl, /*byrefonly=*/ true)))
-            return true;
-        classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
-        if (classif.isBig) {
-            classif.passBigTypeByConstRef = true;
-        }
-    }
-
-    return true;
-}
-
-QualType Utils::unrefQualType(const QualType &qualType)
-{
-    const Type *t = qualType.getTypePtrOrNull();
-    return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
 }
 
 bool Utils::isSharedPointer(CXXRecordDecl *record)

@@ -26,6 +26,7 @@
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
+#include "TypeUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -150,8 +151,8 @@ void Foreach::checkBigTypeMissingRef()
     if (!varDecl)
         return;
 
-    Utils::QualTypeClassification classif;
-    bool success = Utils::classifyQualType(m_ci, varDecl, /*by-ref*/classif, forStatements.at(0));
+    TypeUtils::QualTypeClassification classif;
+    bool success = TypeUtils::classifyQualType(m_ci, varDecl, /*by-ref*/classif, forStatements.at(0));
     if (!success)
         return;
 

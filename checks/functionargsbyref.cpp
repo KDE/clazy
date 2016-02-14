@@ -25,6 +25,7 @@
 #include "functionargsbyref.h"
 #include "Utils.h"
 #include "FixItUtils.h"
+#include "TypeUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -119,7 +120,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
     int i = -1;
     for (auto param : functionDecl->params()) {
         i++;
-        QualType paramQt = Utils::unrefQualType(param->getType());
+        QualType paramQt = TypeUtils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
             continue;
@@ -127,8 +128,8 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
         if (shouldIgnoreClass(paramType->getAsCXXRecordDecl()))
             continue;
 
-        Utils::QualTypeClassification classif;
-        bool success = Utils::classifyQualType(m_ci, param, classif, body);
+        TypeUtils::QualTypeClassification classif;
+        bool success = TypeUtils::classifyQualType(m_ci, param, classif, body);
         if (!success)
             continue;
 
@@ -168,9 +169,10 @@ void FunctionArgsByRef::VisitStmt(Stmt *stmt)
     }
 }
 
-FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl *param, const Utils::QualTypeClassification &)
+FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl *param,
+                                          const TypeUtils::QualTypeClassification &)
 {
-    QualType qt = Utils::unrefQualType(param->getType());
+    QualType qt = TypeUtils::unrefQualType(param->getType());
     qt.removeLocalConst();
     const string typeName = qt.getAsString(PrintingPolicy(lo()));
     string replacement = typeName + ' ' + string(param->getName());
@@ -195,7 +197,8 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
     return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
 }
 
-clang::FixItHint FunctionArgsByRef::fixitByConstRef(const ParmVarDecl *, const Utils::QualTypeClassification &)
+clang::FixItHint FunctionArgsByRef::fixitByConstRef(const ParmVarDecl *,
+                                                    const TypeUtils::QualTypeClassification &)
 {
     FixItHint fixit;
     return fixit;

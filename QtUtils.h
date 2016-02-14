@@ -28,6 +28,7 @@
 namespace clang {
 class CXXRecordDecl;
 class CompilerInstance;
+class Type;
 }
 
 namespace QtUtils
@@ -68,6 +69,11 @@ bool isBootstrapping(const clang::CompilerInstance &);
  * Returns if decl is or derives from QObject
  */
 bool isQObject(clang::CXXRecordDecl *decl);
+
+/**
+ * Convertible means that a signal with of type source can connect to a signal/slot of type target
+ */
+bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
 
 }
 

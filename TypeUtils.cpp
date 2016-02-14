@@ -20,8 +20,12 @@
 */
 
 #include "TypeUtils.h"
+#include "Utils.h"
+
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ASTContext.h>
+#include <clang/AST/StmtCXX.h>
+#include <clang/AST/DeclCXX.h>
 
 using namespace clang;
 
@@ -32,4 +36,49 @@ int TypeUtils::sizeOfPointer(const clang::CompilerInstance &ci, const clang::Qua
     // HACK: What's a better way of getting the size of a pointer ?
     auto &astContext = ci.getASTContext();
     return astContext.getTypeSize(astContext.getPointerType(qt));
+}
+
+bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
+{
+    if (!varDecl)
+        return false;
+
+    QualType qualType = TypeUtils::unrefQualType(varDecl->getType());
+    const Type *paramType = qualType.getTypePtrOrNull();
+    if (!paramType || paramType->isIncompleteType())
+        return false;
+
+    classif.size_of_T = ci.getASTContext().getTypeSize(qualType) / 8;
+    classif.isBig = classif.size_of_T > 16;
+    CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
+    classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
+    classif.isReference = varDecl->getType()->isLValueReferenceType();
+    classif.isConst = qualType.isConstQualified();
+
+    if (varDecl->getType()->isRValueReferenceType()) // && ref, nothing to do here
+        return true;
+
+    if (classif.isConst && !classif.isReference) {
+        classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
+        if (classif.isBig) {
+            classif.passBigTypeByConstRef = true;
+        }
+    } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
+        classif.passSmallTrivialByValue = true;
+    } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
+        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(body, varDecl, /*byrefonly=*/ true)))
+            return true;
+        classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
+        if (classif.isBig) {
+            classif.passBigTypeByConstRef = true;
+        }
+    }
+
+    return true;
+}
+
+QualType TypeUtils::unrefQualType(const QualType &qualType)
+{
+    const Type *t = qualType.getTypePtrOrNull();
+    return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
 }

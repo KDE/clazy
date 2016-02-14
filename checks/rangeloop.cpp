@@ -25,6 +25,7 @@
 #include "rangeloop.h"
 #include "Utils.h"
 #include "QtUtils.h"
+#include "TypeUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -61,7 +62,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     auto loopVariableType = rangeLoop->getLoopVariable()->getType();
-    if (!Utils::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType())
+    if (!TypeUtils::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType())
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
@@ -72,9 +73,9 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
 void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 {
-    Utils::QualTypeClassification classif;
+    TypeUtils::QualTypeClassification classif;
     auto varDecl = rangeLoop->getLoopVariable();
-    bool success = Utils::classifyQualType(m_ci, varDecl, /*by-ref*/classif, rangeLoop);
+    bool success = TypeUtils::classifyQualType(m_ci, varDecl, /*by-ref*/classif, rangeLoop);
     if (!success)
         return;
 

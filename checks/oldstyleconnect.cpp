@@ -28,6 +28,7 @@
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include "ContextUtils.h"
+#include "QtUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -394,7 +395,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 for (unsigned int i = 0; i < numReceiverParams; ++i) {
                     ParmVarDecl *receiverParm = methodDecl->getParamDecl(i);
                     ParmVarDecl *senderParm = senderMethod->getParamDecl(i);
-                    if (!Utils::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
+                    if (!QtUtils::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
                         string msg = string("Sender's parameters are incompatible with the receiver's");
                         queueManualFixitWarning(s, FixItConnects, msg);
                         return {};
