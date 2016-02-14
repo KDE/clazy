@@ -119,36 +119,6 @@ clang::Stmt * getFirstChild(clang::Stmt *parent);
 
 clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
 
-/// Goes into a statement and returns it's childs of type T
-/// It only goes down 1 level of children, except if there's a ExprWithCleanups, which we unpeal
-template <typename T>
-void getChildsHACK(clang::Stmt *stm, std::vector<T*> &result_list)
-{
-    if (!stm)
-        return;
-
-    auto expr = clang::dyn_cast<T>(stm);
-    if (expr) {
-        result_list.push_back(expr);
-        return;
-    }
-
-    for (auto child : stm->children()) {
-        if (!child) // Can happen
-            continue;
-
-        auto expr = clang::dyn_cast<T>(child);
-        if (expr) {
-            result_list.push_back(expr);
-            continue;
-        }
-
-        if (auto cleanups = clang::dyn_cast<clang::ExprWithCleanups>(child)) {
-            getChildsHACK<T>(cleanups, result_list);
-        }
-    }
-}
-
 template <typename T>
 void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
 {
@@ -174,20 +144,24 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
  * Similar to getChilds(), but with startLocation support.
  */
 template <typename T>
-std::vector<T*> getStatements(const clang::CompilerInstance &ci, clang::Stmt *body, clang::SourceLocation startLocation = {})
+std::vector<T*> getStatements(clang::Stmt *body, clang::SourceManager *sm = nullptr, clang::SourceLocation startLocation = {}, int depth = -1, bool includeParent = false)
 {
     std::vector<T*> statements;
-    if (!body)
+    if (!body || depth == 0)
         return statements;
+
+    if (includeParent)
+        if (T *t = clang::dyn_cast<T>(body))
+            statements.push_back(t);
 
     for (auto child : body->children()) {
         if (!child) continue; // can happen
         if (T *childT = clang::dyn_cast<T>(child)) {
-            if (!startLocation.isValid() || ci.getSourceManager().isBeforeInSLocAddrSpace(startLocation, child->getLocStart()))
+            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(startLocation, child->getLocStart())))
                 statements.push_back(childT);
         }
 
-        auto childStatements = getStatements<T>(ci, child, startLocation);
+        auto childStatements = getStatements<T>(child, sm, startLocation, depth - 1);
         clazy_std::append(childStatements, statements);
     }
 

@@ -178,13 +178,10 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (isa<IfStmt>(body))
         return;
 
-    vector<CXXMemberCallExpr*> callExprs;
-    vector<CXXOperatorCallExpr*> operatorCalls;
-
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
-    HierarchyUtils::getChildsHACK<CXXMemberCallExpr>(body, callExprs);
-    HierarchyUtils::getChildsHACK<CXXOperatorCallExpr>(body, operatorCalls); // For operator<<
+    auto callExprs = HierarchyUtils::getStatements<CXXMemberCallExpr>(body, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
+    auto operatorCalls = HierarchyUtils::getStatements<CXXOperatorCallExpr>(body, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true); // For operator<<
 
     for (CXXMemberCallExpr *callExpr : callExprs) {
         if (!isCandidateMethod(callExpr->getMethodDecl()))
