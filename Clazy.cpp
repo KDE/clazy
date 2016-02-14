@@ -136,10 +136,14 @@ public:
         lastStm = stm;
 
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
-        // So re-set a parent map each time we go into a different hierarchy
+        // So add to parent map each time we go into a different hierarchy
         if (!m_parentMap || !m_parentMap->hasParent(stm)) {
             assert(stm);
-            setParentMap(new ParentMap(stm));
+            if (m_parentMap) {
+                m_parentMap->addStmt(stm);
+            } else {
+                setParentMap(new ParentMap(stm));
+            }
         }
 
         for (const auto &check : m_createdChecks) {

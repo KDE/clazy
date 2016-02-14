@@ -71,7 +71,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
     if (!StringUtils::isOfClass(method, "QString"))
         return false;
 
-    return Utils::isAscii(lt) && clazy_std::contains(methods, method->getNameAsString());
+    return (!lt || Utils::isAscii(lt)) && clazy_std::contains(methods, method->getNameAsString());
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call

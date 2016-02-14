@@ -226,3 +226,18 @@ void rangeLoop()
     for (auto i : v1)
         v2.push_back(i);
 }
+
+struct Foo
+{
+    Foo ip() const;
+    QList<Foo> addressEntries;
+};
+
+void testNesting2()
+{
+    QList<Foo> result;
+    QList<Foo> privs;
+    foreach (const Foo &p, privs)
+        foreach (const Foo &entry, privs)
+            result += entry.ip();
+}

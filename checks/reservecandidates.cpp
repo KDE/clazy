@@ -293,9 +293,9 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     if (clazy_std::contains(nonComplexOnesCache, rawLoc) || clazy_std::contains(complexOnesCache, rawLoc))
         return true;
 
-    Stmt *it = s;
+    Stmt *parent = s;
     PresumedLoc lastForeachForStm;
-    while (Stmt *parent = HierarchyUtils::parent(m_parentMap, it)) {
+    while ((parent = HierarchyUtils::parent(m_parentMap, parent))) {
         const SourceLocation parentStart = parent->getLocStart();
         if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
@@ -330,8 +330,6 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             complexOnesCache.push_back(rawLoc);
             return true;
         }
-
-        it = parent;
     }
 
     nonComplexOnesCache.push_back(rawLoc);
