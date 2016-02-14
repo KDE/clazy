@@ -212,7 +212,6 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
     return nullptr;
 }
 
-
 ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
 {
     if (!operatorCall)
@@ -233,6 +232,18 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
 
     return nullptr;
 }
+
+clang::ValueDecl * Utils::valueDeclForCallExpr(clang::CallExpr *expr)
+{
+    if (auto memberExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
+       return valueDeclForMemberCall(memberExpr);
+    } else if (auto operatorExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
+        return valueDeclForOperatorCall(operatorExpr);
+    }
+
+    return nullptr;
+}
+
 
 bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {

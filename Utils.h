@@ -94,6 +94,9 @@ namespace Utils {
     // such as "QList<F> list"
     clang::ValueDecl * valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
 
+    // overload
+    clang::ValueDecl * valueDeclForCallExpr(clang::CallExpr *);
+
     // Returns true of this value decl is a member variable of a class or struct
     // returns null if not
     clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);

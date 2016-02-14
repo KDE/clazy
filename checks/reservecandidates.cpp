@@ -98,7 +98,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     return true;
 }
 
-static bool isCandidateOperator(CXXOperatorCallExpr *oper)
+static bool isCandidate(CallExpr *oper)
 {
     if (!oper)
         return false;
@@ -180,23 +180,13 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
-    auto callExprs = HierarchyUtils::getStatements<CXXMemberCallExpr>(body, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
-    auto operatorCalls = HierarchyUtils::getStatements<CXXOperatorCallExpr>(body, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true); // For operator<<
+    auto callExprs = HierarchyUtils::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1, /*includeParent=*/ true);
 
-    for (CXXMemberCallExpr *callExpr : callExprs) {
-        if (!isCandidateMethod(callExpr->getMethodDecl()))
+    for (CallExpr *callExpr : callExprs) {
+        if (!isCandidate(callExpr))
             continue;
 
-        ValueDecl *valueDecl = Utils::valueDeclForMemberCall(callExpr);
-        if (isReserveCandidate(valueDecl, body, callExpr))
-            emitWarning(callExpr->getLocStart(), "Reserve candidate");
-    }
-
-    for (CXXOperatorCallExpr *callExpr : operatorCalls) {
-        if (!isCandidateOperator(callExpr))
-            continue;
-
-        ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(callExpr);
+        ValueDecl *valueDecl = Utils::valueDeclForCallExpr(callExpr);
         if (isReserveCandidate(valueDecl, body, callExpr))
             emitWarning(callExpr->getLocStart(), "Reserve candidate");
     }
