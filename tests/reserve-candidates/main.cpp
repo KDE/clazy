@@ -240,4 +240,12 @@ void testNesting2()
     foreach (const Foo &p, privs)
         foreach (const Foo &entry, privs)
             result += entry.ip();
+
+    QVector<int> v2;
+    for (int u = 0; u < 10; ++u) {
+        for (int n = 0; n < 10; ++n) {
+            v2.append(1);
+        }
+    }
+
 }

@@ -280,7 +280,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     if (!s || declLocation.isInvalid())
         return false;
 
-    int loopCount = 0;
+    int forCount = 0;
     int foreachCount = 0;
 
     static vector<unsigned int> nonComplexOnesCache;
@@ -308,9 +308,6 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             return true;
         }
 
-        if (isLoop)
-            loopCount++;
-
         if (QtUtils::isInForeach(m_ci, parentStart)) {
             auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
@@ -319,17 +316,17 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
                 foreachCount++;
                 lastForeachForStm = ploc;
             }
+        } else {
+            if (isLoop)
+                forCount++;
         }
 
-        if (foreachCount > 1) { // two foreaches are almost always a false-positve
+        if (foreachCount > 1 || forCount > 1) { // two foreaches are almost always a false-positve
             complexOnesCache.push_back(rawLoc);
             return true;
         }
 
-        if (loopCount >= 4) {
-            complexOnesCache.push_back(rawLoc);
-            return true;
-        }
+
     }
 
     nonComplexOnesCache.push_back(rawLoc);
