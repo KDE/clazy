@@ -109,3 +109,22 @@ bool QtUtils::isInForeach(const clang::CompilerInstance &ci, clang::SourceLocati
 {
     return MacroUtils::isInAnyMacro(ci, loc, { "Q_FOREACH", "foreach" });
 }
+
+bool QtUtils::isJavaIterator(CXXRecordDecl *record)
+{
+    if (!record)
+        return false;
+
+    static const vector<string> names = { "QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
+                                         "QVectorIterator", "QLinkedListIterator", "QStringListIterator" };
+
+    return clazy_std::contains(names, record->getNameAsString());
+}
+
+bool QtUtils::isJavaIterator(CXXMemberCallExpr *call)
+{
+    if (!call)
+        return false;
+
+    return isJavaIterator(call->getRecordDecl());
+}

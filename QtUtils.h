@@ -29,6 +29,7 @@ namespace clang {
 class CXXRecordDecl;
 class CompilerInstance;
 class Type;
+class CXXMemberCallExpr;
 }
 
 namespace QtUtils
@@ -79,6 +80,16 @@ bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
  * Returns true if \a loc is in a foreach macro
  */
 bool isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc);
+
+/**
+ * Returns true if \a record is a java-style iterator
+ */
+bool isJavaIterator(clang::CXXRecordDecl *record);
+
+/**
+ * Returns true if the call is on a java-style iterator class.
+ */
+bool isJavaIterator(clang::CXXMemberCallExpr *call);
 
 }
 
