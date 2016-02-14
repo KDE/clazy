@@ -223,9 +223,8 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
     if (!valueDecl)
         return false;
 
-    if (!clazy_std::contains(m_foundReserves, valueDecl)) {
+    if (!clazy_std::contains(m_foundReserves, valueDecl))
         m_foundReserves.push_back(valueDecl);
-    }
 
     return true;
 }
@@ -283,7 +282,7 @@ bool ReserveCandidates::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
     auto forstm = dyn_cast<ForStmt>(stm);
     if (forstm) {
         isLoop = true;
-        return forstm->getCond() == nullptr || forstm->getInc() == nullptr || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
+        return !forstm->getCond() || !forstm->getInc() || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
     }
 
     auto whilestm = dyn_cast<WhileStmt>(stm);
