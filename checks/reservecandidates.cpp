@@ -217,7 +217,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
     return true;
 }
 
-bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
+bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
 {
     if (!expr)
         return false;
@@ -252,27 +252,24 @@ bool ReserveCandidates::expressionIsTooComplex(clang::Expr *expr) const
     return false;
 }
 
-bool ReserveCandidates::loopIsTooComplex(clang::Stmt *stm, bool &isLoop) const
+bool ReserveCandidates::loopIsComplex(clang::Stmt *stm, bool &isLoop) const
 {
     isLoop = false;
-    auto forstm = dyn_cast<ForStmt>(stm);
-    if (forstm) {
+
+    if (auto forstm = dyn_cast<ForStmt>(stm)) {
         isLoop = true;
-        return !forstm->getCond() || !forstm->getInc() || expressionIsTooComplex(forstm->getCond()) || expressionIsTooComplex(forstm->getInc());
+        return !forstm->getCond() || !forstm->getInc() || expressionIsComplex(forstm->getCond()) || expressionIsComplex(forstm->getInc());
     }
 
-    auto whilestm = dyn_cast<WhileStmt>(stm);
-    if (whilestm) {
+    if (isa<CXXForRangeStmt>(stm)) {
         isLoop = true;
-        return true; // Too many false-positives with while statement. Ignore it.
-        //return expressionIsTooComplex(whilestm->getCond());
+        return false;
     }
 
-    auto dostm = dyn_cast<DoStmt>(stm);
-    if (dostm) {
+    if (dyn_cast<DoStmt>(stm) || dyn_cast<WhileStmt>(stm)) {
+        // Too many false-positives with while statements. Ignore it.
         isLoop = true;
-        return true; // Too many false-positives with do-while statement. Ignore it.
-        //return expressionIsTooComplex(dostm->getCond());
+        return true;
     }
 
     return false;
@@ -293,10 +290,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     // For some reason we generate two warnings on some foreaches, so cache the ones we processed
     // and return true so we don't trigger a warning
-    if (clazy_std::contains(nonComplexOnesCache, rawLoc))
-        return true;
-
-    if (clazy_std::contains(complexOnesCache, rawLoc))
+    if (clazy_std::contains(nonComplexOnesCache, rawLoc) || clazy_std::contains(complexOnesCache, rawLoc))
         return true;
 
     Stmt *it = s;
@@ -309,7 +303,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
         }
 
         bool isLoop = false;
-        if (loopIsTooComplex(parent, isLoop)) {
+        if (loopIsComplex(parent, isLoop)) {
             complexOnesCache.push_back(rawLoc);
             return true;
         }

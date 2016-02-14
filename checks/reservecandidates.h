@@ -53,8 +53,8 @@ private:
     bool registerReserveStatement(clang::Stmt *stmt);
     bool containerWasReserved(clang::ValueDecl*) const;
     bool acceptsValueDecl(clang::ValueDecl *valueDecl) const;
-    bool expressionIsTooComplex(clang::Expr *) const;
-    bool loopIsTooComplex(clang::Stmt *, bool &isLoop) const;
+    bool expressionIsComplex(clang::Expr *) const;
+    bool loopIsComplex(clang::Stmt *, bool &isLoop) const;
     bool isInComplexLoop(clang::Stmt *, clang::SourceLocation declLocation, bool isMemberVariable) const;
     bool isReserveCandidate(clang::ValueDecl *valueDecl, clang::Stmt *loopBody, clang::CallExpr *callExpr) const;
 
