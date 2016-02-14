@@ -75,6 +75,11 @@ bool isQObject(clang::CXXRecordDecl *decl);
  */
 bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
 
+/**
+ * Returns true if \a loc is in a foreach macro
+ */
+bool isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc);
+
 }
 
 #endif

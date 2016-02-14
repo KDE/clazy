@@ -28,6 +28,7 @@
 #include "MacroUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "QtUtils.h"
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "LoopUtils.h"
@@ -341,7 +342,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
         if (isLoop)
             loopCount++;
 
-        if (MacroUtils::isInMacro(m_ci, parentStart, "Q_FOREACH")) {
+        if (QtUtils::isInForeach(m_ci, parentStart)) {
             auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting

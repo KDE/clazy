@@ -104,3 +104,8 @@ bool QtUtils::isConvertibleTo(const Type *source, const Type *target)
 
     return false;
 }
+
+bool QtUtils::isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc)
+{
+    return MacroUtils::isInAnyMacro(ci, loc, { "Q_FOREACH", "foreach" });
+}
