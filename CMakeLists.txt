@@ -80,6 +80,7 @@ set(SRC_FILES
     checks/inefficientqlist.cpp
     checks/inefficient-qlist-soft.cpp
     checks/implicitcasts.cpp
+    checks/lambda-in-connect.cpp
     checks/qdatetimeutc.cpp
     checks/qgetenv.cpp
     checks/functionargsbyref.cpp
