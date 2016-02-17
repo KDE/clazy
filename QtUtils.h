@@ -30,6 +30,8 @@ class CXXRecordDecl;
 class CompilerInstance;
 class Type;
 class CXXMemberCallExpr;
+class CallExpr;
+class ValueDecl;
 }
 
 namespace QtUtils
@@ -90,6 +92,8 @@ bool isJavaIterator(clang::CXXRecordDecl *record);
  * Returns true if the call is on a java-style iterator class.
  */
 bool isJavaIterator(clang::CXXMemberCallExpr *call);
+
+clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
 
 }
 

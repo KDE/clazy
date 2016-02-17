@@ -23,6 +23,7 @@
 #include "QtUtils.h"
 #include "Utils.h"
 #include "MacroUtils.h"
+#include "HierarchyUtils.h"
 
 using namespace std;
 using namespace clang;
@@ -127,4 +128,17 @@ bool QtUtils::isJavaIterator(CXXMemberCallExpr *call)
         return false;
 
     return isJavaIterator(call->getRecordDecl());
+}
+
+clang::ValueDecl *QtUtils::signalSenderForConnect(clang::CallExpr *call)
+{
+    if (!call || call->getNumArgs() < 1)
+        return nullptr;
+
+    Expr *firstArg = call->getArg(0);
+    auto declRef = isa<DeclRefExpr>(firstArg) ? cast<DeclRefExpr>(firstArg) : HierarchyUtils::getFirstChildOfType2<DeclRefExpr>(firstArg);
+    if (!declRef)
+        return nullptr;
+
+    return declRef->getDecl();
 }
