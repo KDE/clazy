@@ -25,6 +25,7 @@
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
+#include "QtUtils.h"
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
 
@@ -46,6 +47,13 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
     auto callExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_parentMap, lambda);
     if (StringUtils::qualifiedMethodName(callExpr) != "QObject::connect")
         return;
+
+    ValueDecl *senderDecl = QtUtils::signalSenderForConnect(callExpr);
+    if (senderDecl) {
+        const Type *t = senderDecl->getType().getTypePtrOrNull();
+        if (t && !t->isPointerType())
+            return;
+    }
 
     for (auto capture : lambda->captures()) {
         if (capture.getCaptureKind() == clang::LCK_ByRef && ContextUtils::isValueDeclInFunctionContext(capture.getCapturedVar()))

@@ -33,6 +33,10 @@ struct C
         QObject *o;
         QObject::connect(o, &QObject::destroyed, [this]() { }); // OK
         QObject::connect(o, &QObject::destroyed, []() { s; }); // OK
+
+        int m;
+        QObject o2;
+        QObject::connect(&o2, &QObject::destroyed, [&m]() { m; }); // OK
     }
 
     int m;
