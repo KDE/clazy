@@ -81,7 +81,7 @@ T* getFirstChildOfType2(clang::Stmt *stm)
     if (!stm)
         return nullptr;
 
-    if (stm->child_begin() != stm->child_end()) {
+    if (clazy_std::hasChildren(stm)) {
         auto child = *(stm->child_begin());
         if (auto s = clang::dyn_cast<T>(child))
             return s;
