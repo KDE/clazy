@@ -4,7 +4,7 @@ Finds unneeded allocations such as:
     if (str.toLower().contains("foo"))
 
 which you should fix as:
-    if (str.toLower().contains("foo", Qt::CaseInsensitive))
+    if (str.contains("foo", Qt::CaseInsensitive))
 
 to avoid the heap allocation caused by toLower().
 
