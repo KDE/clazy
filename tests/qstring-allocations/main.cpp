@@ -217,3 +217,15 @@ void test_bug358732()
     QString("foo").sprintf("0x%02X", 0x1E); // Warn and use QSL
     QString("").sprintf("0x%02X", 0x1E); // Warn and use QSL
 }
+
+
+struct QTestData {};
+
+template<typename T>
+QTestData &operator<<(QTestData &data, const T &value);
+
+void test_QTestData()
+{
+    QTestData t;
+    t << QString::fromLatin1("foo");
+}
