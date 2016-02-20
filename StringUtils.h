@@ -59,13 +59,19 @@ inline std::string classNameFor(clang::CXXConstructorDecl *ctorDecl)
 template <>
 inline std::string classNameFor(clang::CXXMethodDecl *method)
 {
-    return method->getParent()->getNameAsString();
+    return method ? method->getParent()->getNameAsString() : std::string();
 }
 
 template <>
 inline std::string classNameFor(clang::CXXConstructExpr *expr)
 {
     return classNameFor(expr->getConstructor());
+}
+
+template <>
+inline std::string classNameFor(clang::CXXOperatorCallExpr *call)
+{
+    return call ? classNameFor(llvm::dyn_cast_or_null<clang::CXXMethodDecl>(call->getDirectCallee())) : std::string();
 }
 
 template <>
@@ -152,6 +158,15 @@ inline std::string qualifiedMethodName(clang::CallExpr *call)
     return call ? qualifiedMethodName(call->getDirectCallee()) : std::string();
 }
 
+inline std::string methodName(clang::CallExpr *call)
+{
+    if (!call)
+        return {};
+
+    clang::FunctionDecl *func = call->getDirectCallee();
+    return func ? func->getNameAsString() : std::string();
+}
+
 inline void printParents(clang::ParentMap *map, clang::Stmt *s)
 {
     int level = 0;
@@ -212,6 +227,14 @@ inline std::string returnTypeName(clang::CallExpr *call, clang::LangOptions lo,
 
     clang::FunctionDecl *func = call->getDirectCallee();
     return func ? StringUtils::typeName(func->getReturnType(), lo, simpleName) : std::string();
+}
+
+inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName,
+                              clang::LangOptions lo, bool simpleName = true)
+{
+    return clazy_std::any_of(func->params(), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
+        return StringUtils::typeName(param->getType(), lo, simpleName) == typeName;
+    });
 }
 
 /**
