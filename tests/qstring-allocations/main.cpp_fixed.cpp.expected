@@ -229,3 +229,13 @@ void test_QTestData()
     QTestData t;
     t << QStringLiteral("foo");
 }
+
+void test_QStringList_streamOp()
+{
+    QStringList list;
+    list << QStringLiteral("foo") << QStringLiteral("foo") << QStringLiteral("foo") << QStringLiteral("foo");
+    list += QStringLiteral("foo");
+    list += QStringLiteral("foo");
+    list += QStringLiteral("foo");
+    list += QStringLiteral("foo");
+}

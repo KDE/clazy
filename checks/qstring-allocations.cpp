@@ -298,7 +298,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::C
 // false for: QString::fromLatin1("")
 // true for: QString s = QString::fromLatin1("foo")
 // false for: s += QString::fromLatin1("foo"), etc.
-static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, int currentCall = 0)
+static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, const SourceManager &sm , int currentCall = 0)
 {
     if (!s)
         return false;
@@ -323,7 +323,13 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, i
     if (operatorCall && StringUtils::returnTypeName(operatorCall, lo) != "QTestData") {
         // QTest::newRow will static_assert when using QLatin1String
         // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
-        return false;
+
+        string className = StringUtils::classNameFor(operatorCall);
+        if (className == "QString") {
+            return false;
+        } else if (className.empty() && StringUtils::hasArgumentOfType(operatorCall->getDirectCallee(), "QString", lo)) {
+            return false;
+        }
     }
 
     if (currentCall > 0 && callExpr) {
@@ -335,7 +341,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, i
     }
 
     if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) // skip this cruft
-        return isQStringLiteralCandidate(HierarchyUtils::parent(map, s), map, lo, currentCall + 1);
+        return isQStringLiteralCandidate(HierarchyUtils::parent(map, s), map, lo, sm, currentCall + 1);
 
     return false;
 }
@@ -344,7 +350,7 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
 {
     vector<FixItHint> fixits;
 
-    std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap, lo()) ? "QStringLiteral"
+    std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap, lo(), sm()) ? "QStringLiteral"
                                                                                : "QLatin1String";
 
     if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {
