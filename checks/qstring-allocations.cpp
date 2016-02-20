@@ -298,7 +298,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::C
 // false for: QString::fromLatin1("")
 // true for: QString s = QString::fromLatin1("foo")
 // false for: s += QString::fromLatin1("foo"), etc.
-static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall = 0)
+static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, int currentCall = 0)
 {
     if (!s)
         return false;
@@ -319,8 +319,12 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
 
     CallExpr *callExpr = dyn_cast<CallExpr>(s);
     StringLiteral *literal = stringLiteralForCall(callExpr);
-    if (isa<CXXOperatorCallExpr>(s))
+    auto operatorCall = dyn_cast<CXXOperatorCallExpr>(s);
+    if (operatorCall && StringUtils::returnTypeName(operatorCall, lo) != "QTestData") {
+        // QTest::newRow will static_assert when using QLatin1String
+        // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
         return false;
+    }
 
     if (currentCall > 0 && callExpr) {
         auto fDecl = callExpr->getDirectCallee();
@@ -331,7 +335,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, int currentCall =
     }
 
     if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) // skip this cruft
-        return isQStringLiteralCandidate(HierarchyUtils::parent(map, s), map, currentCall + 1);
+        return isQStringLiteralCandidate(HierarchyUtils::parent(map, s), map, lo, currentCall + 1);
 
     return false;
 }
@@ -340,7 +344,7 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
 {
     vector<FixItHint> fixits;
 
-    std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap) ? "QStringLiteral"
+    std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap, lo()) ? "QStringLiteral"
                                                                                : "QLatin1String";
 
     if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {
@@ -406,6 +410,12 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
     if (!operatorCall)
         return;
+
+    if (StringUtils::returnTypeName(operatorCall, lo()) == "QTestData") {
+        // QTest::newRow will static_assert when using QLatin1String
+        // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
+        return;
+    }
 
     std::vector<StringLiteral*> stringLiterals;
     HierarchyUtils::getChilds<StringLiteral>(operatorCall, stringLiterals);
