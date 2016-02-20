@@ -77,7 +77,7 @@ Checks from level0:
 Checks from level1:
     range-loop
     non-pod-global-static
-    missing-qobject
+    missing-qobject-macro
     qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     qdeleteall
     inefficient-qlist-soft
