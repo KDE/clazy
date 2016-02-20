@@ -194,6 +194,26 @@ inline std::string simpleTypeName(clang::ParmVarDecl *p, clang::LangOptions lo)
     return p ? simpleTypeName(p->getType(), lo) : std::string();
 }
 
+inline std::string typeName(clang::QualType qt, clang::LangOptions lo, bool simpleName)
+{
+    return simpleName ? simpleTypeName(qt, lo) : qt.getAsString(lo);
+}
+
+/**
+ * Returns the type name of the return type.
+ * If \a simpleName is true, any cv qualifications, ref or pointer are not taken into account, so
+ * const Foo & would be equal to Foo.
+ */
+inline std::string returnTypeName(clang::CallExpr *call, clang::LangOptions lo,
+                                  bool simpleName = true)
+{
+    if (!call)
+        return {};
+
+    clang::FunctionDecl *func = call->getDirectCallee();
+    return func ? StringUtils::typeName(func->getReturnType(), lo, simpleName) : std::string();
+}
+
 /**
  * Returns the type of an argument at index index without CV qualifiers or references.
  * void foo(int a, const QString &);
