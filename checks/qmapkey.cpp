@@ -41,7 +41,7 @@ QMapKeyChecker::QMapKeyChecker(const std::string &name, const clang::CompilerIns
 void QMapKeyChecker::VisitDecl(clang::Decl *decl)
 {
     auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (tsdecl == nullptr || tsdecl->getName() != "QMap")
+    if (!tsdecl || tsdecl->getName() != "QMap")
         return;
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
