@@ -98,6 +98,7 @@ protected:
     std::string m_name;
 
     clang::Decl *m_lastDecl;
+    clang::Stmt *m_lastStmt;
 private:
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;

@@ -40,6 +40,7 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
     , m_name(name)
     , m_lastDecl(nullptr)
+    , m_lastStmt(nullptr)
     , m_enabledFixits(0)
 {
     ASTContext &context = m_ci.getASTContext();
@@ -54,6 +55,7 @@ CheckBase::~CheckBase()
 void CheckBase::VisitStatement(Stmt *stm)
 {
     if (!shouldIgnoreFile(stm->getLocStart())) {
+        m_lastStmt = stm;
         VisitStmt(stm);
     }
 }
