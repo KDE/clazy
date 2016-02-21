@@ -54,22 +54,4 @@ inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments
     return false;
 }
 
-inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName, int expected_arguments = -1)
-{
-    if (expected_arguments != -1 && (int)func->param_size() != expected_arguments)
-        return false;
-
-    auto it = func->param_begin();
-    auto e = func->param_end();
-
-    for (; it != e; ++it) {
-        clang::QualType qt = (*it)->getType();
-        if (qt.getAsString() == typeName.c_str())
-            return true;
-    }
-
-    return false;
-}
-
-
 #endif

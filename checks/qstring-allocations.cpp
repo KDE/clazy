@@ -166,7 +166,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
     string paramType;
     if (hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
-    } else if (hasArgumentOfType(ctorDecl, "class QLatin1String", 1)) {
+    } else if (ctorDecl->param_size() == 1 && StringUtils::hasArgumentOfType(ctorDecl, "QLatin1String", lo())) {
         paramType = "QLatin1String";
         isQLatin1String = true;
     } else {
