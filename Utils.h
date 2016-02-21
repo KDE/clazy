@@ -133,7 +133,9 @@ namespace Utils {
     // foo ? "bar" : "baz"
     bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
 
-    bool isAssignOperator(clang::CXXOperatorCallExpr *op, const std::string &className, const std::string &argumentType);
+    bool isAssignOperator(clang::CXXOperatorCallExpr *op,
+                          const std::string &className,
+                          const std::string &argumentType, clang::LangOptions lo);
 
     bool isImplicitCastTo(clang::Stmt *, const std::string &);
 

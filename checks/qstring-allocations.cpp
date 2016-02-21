@@ -311,10 +311,10 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, c
     if (StringUtils::isOfClass(constructExpr, "QString"))
         return true;
 
-    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "class QLatin1String"))
+    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QLatin1String", lo))
         return true;
 
-    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "class QString &&"))
+    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QString", lo))
         return true;
 
     CallExpr *callExpr = dyn_cast<CallExpr>(s);
@@ -520,7 +520,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 {
     CXXOperatorCallExpr *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
-    if (!Utils::isAssignOperator(callExpr, "QString", "class QLatin1String"))
+    if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo()))
         return;
 
     if (!containsStringLiteralNoCallExpr(stmt))

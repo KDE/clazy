@@ -458,7 +458,8 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
     return true;
 }
 
-bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &className, const std::string &argumentType)
+bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &className,
+                             const std::string &argumentType, clang::LangOptions lo)
 {
     if (!op)
         return false;
@@ -471,10 +472,10 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &classNa
     if (!className.empty() && !StringUtils::isOfClass(methodDecl, className))
         return false;
 
-    if (functionDecl->getNameAsString() != "operator=")
+    if (functionDecl->getNameAsString() != "operator=" || functionDecl->param_size() != 1)
         return false;
 
-    if (!argumentType.empty() && !hasArgumentOfType(functionDecl, argumentType, 1)) {
+    if (!argumentType.empty() && !StringUtils::hasArgumentOfType(functionDecl, argumentType, lo)) {
         return false;
     }
 
