@@ -166,8 +166,8 @@ void moreShouldBeQLatin1String()
 {
     QString s;
     bool b = (s == QString::fromLatin1("="));
-    if (s.startsWith("Version=5")) {
-    }
+    if (s.startsWith("Version=5")) {}
+    if (s.startsWith(QLatin1String("Version=5"))) {} // OK
     QString result = QString::fromLatin1("Enum") + s;
 }
 
