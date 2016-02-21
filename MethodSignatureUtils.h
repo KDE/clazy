@@ -33,18 +33,15 @@ inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments
     if (expected_arguments != -1 && (int)func->param_size() != expected_arguments)
         return false;
 
-    auto it = func->param_begin();
-    auto e = func->param_end();
-
-    for (; it != e; ++it) {
-        clang::QualType qt = (*it)->getType();
+    for (auto param : func->params()) {
+        clang::QualType qt = param->getType();
         const clang::Type *t = qt.getTypePtrOrNull();
-        if (t == nullptr)
+        if (!t)
             continue;
 
         const clang::Type *realT = t->getPointeeType().getTypePtrOrNull();
 
-        if (realT == nullptr)
+        if (!realT)
             continue;
 
         if (realT->isCharType())
