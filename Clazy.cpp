@@ -110,7 +110,7 @@ public:
 
     void setParentMap(ParentMap *map)
     {
-        delete m_parentMap;
+        assert(map && !m_parentMap);
         m_parentMap = map;
         for (auto &check : m_createdChecks)
             check->setParentMap(map);
@@ -127,8 +127,11 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
+        if (!m_parentMap)
+            setParentMap(new ParentMap(stm));
+
         // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
-        if (lastStm && isa<CXXCatchStmt>(lastStm) && m_parentMap && !m_parentMap->hasParent(stm)) {
+        if (lastStm && isa<CXXCatchStmt>(lastStm) && !m_parentMap->hasParent(stm)) {
             m_parentMap->setParent(stm, lastStm);
             manuallyPopulateParentMap(m_parentMap, stm);
         }
@@ -137,14 +140,8 @@ public:
 
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
         // So add to parent map each time we go into a different hierarchy
-        if (!m_parentMap || !m_parentMap->hasParent(stm)) {
-            assert(stm);
-            if (m_parentMap) {
-                m_parentMap->addStmt(stm);
-            } else {
-                setParentMap(new ParentMap(stm));
-            }
-        }
+        if (!m_parentMap->hasParent(stm))
+            m_parentMap->addStmt(stm);
 
         for (const auto &check : m_createdChecks) {
             check->VisitStatement(stm);
