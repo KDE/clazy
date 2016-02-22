@@ -88,10 +88,13 @@ bool isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc);
  */
 bool isJavaIterator(clang::CXXRecordDecl *record);
 
+bool isJavaIterator(clang::CXXMemberCallExpr *call);
+
 /**
  * Returns true if the call is on a java-style iterator class.
+ * Returns if sizeof(T) > sizeof(void*), which would make QList<T> inefficient
  */
-bool isJavaIterator(clang::CXXMemberCallExpr *call);
+bool isTooBigForQList(clang::QualType, const clang::CompilerInstance &ci);
 
 clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
 

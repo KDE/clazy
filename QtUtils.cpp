@@ -22,8 +22,11 @@
 #include "clazy_stl.h"
 #include "QtUtils.h"
 #include "Utils.h"
+#include "TypeUtils.h"
 #include "MacroUtils.h"
 #include "HierarchyUtils.h"
+
+#include <clang/AST/AST.h>
 
 using namespace std;
 using namespace clang;
@@ -141,4 +144,9 @@ clang::ValueDecl *QtUtils::signalSenderForConnect(clang::CallExpr *call)
         return nullptr;
 
     return declRef->getDecl();
+}
+
+bool QtUtils::isTooBigForQList(clang::QualType qt, const clang::CompilerInstance &ci)
+{
+    return (int)ci.getASTContext().getTypeSize(qt) <= TypeUtils::sizeOfPointer(ci, qt);
 }
