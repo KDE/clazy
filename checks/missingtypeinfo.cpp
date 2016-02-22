@@ -57,7 +57,7 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     const bool isQList = tstdecl->getName() == "QList";
     const bool isQVector = tstdecl->getName() == "QVector";
 
-    if (!tstdecl || (!isQList && !isQVector))
+    if (!isQList && !isQVector)
         return;
 
     const TemplateArgumentList &tal = tstdecl->getTemplateArgs();
