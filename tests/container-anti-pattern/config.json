@@ -2,6 +2,10 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "qset.cpp",
+            "minimum_qt_version" : 560
         }
     ]
 }

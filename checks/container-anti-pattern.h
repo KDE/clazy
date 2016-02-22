@@ -42,6 +42,7 @@ public:
     explicit ContainerAntiPattern(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    bool VisitQSet(clang::Stmt *stmt);
     bool handleLoop(clang::Stmt *);
 };
 

@@ -1,7 +1,0 @@
-qset-intersects
-
-Finds cases where you're using set.intersect(other).isEmpty(), which is much slower than just calling QSet::intersects().
-QSet::intersect() allocates memory and iterates the whole set.
-QSet::intersects() bails out immediatley once one common item is found and doesn't allocate memory.
-
-Requires Qt 5.6

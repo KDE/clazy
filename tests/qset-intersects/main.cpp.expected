@@ -1,1 +1,0 @@
-qset-intersects/main.cpp:7:5: warning: Use QSet::intersects() instead [-Wclazy-qset-intersects]

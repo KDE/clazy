@@ -56,6 +56,9 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
     if (handleLoop(stmt)) // catch for (auto i : map.values()) and such
         return;
 
+    if (VisitQSet(stmt))
+        return;
+
     vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
     if (calls.size() < 2)
         return;
@@ -68,6 +71,34 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
         return;
 
     emitWarning(stmt->getLocStart(), "allocating an unneeded temporary container");
+}
+
+bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
+{
+    CXXMemberCallExpr *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!secondCall || !secondCall->getMethodDecl())
+        return false;
+
+    CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
+    const string secondMethodName = StringUtils::qualifiedMethodName(secondMethod);
+    if (secondMethodName != "QSet::isEmpty")
+        return false;
+
+    vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
+    if (chainedCalls.size() < 2)
+        return false;
+
+    CallExpr *firstCall = chainedCalls[chainedCalls.size() - 1];
+    FunctionDecl *firstFunc = firstCall->getDirectCallee();
+    if (!firstFunc)
+        return false;
+
+    CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    if (!firstMethod || StringUtils::qualifiedMethodName(firstMethod) != "QSet::intersect")
+        return false;
+
+    emitWarning(stmt->getLocStart(), "Use QSet::intersects() instead");
+    return true;
 }
 
 bool ContainerAntiPattern::handleLoop(Stmt *stm)
