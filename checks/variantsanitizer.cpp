@@ -50,15 +50,15 @@ static bool isMatchingClass(const std::string &name, const clang::CompilerInstan
 void VariantSanitizer::VisitStmt(clang::Stmt *stm)
 {
     auto callExpr = dyn_cast<CXXMemberCallExpr>(stm);
-    if (callExpr == nullptr)
+    if (!callExpr)
         return;
 
     CXXMethodDecl *methodDecl = callExpr->getMethodDecl();
-    if (methodDecl == nullptr || methodDecl->getNameAsString() != "value")
+    if (!methodDecl || methodDecl->getNameAsString() != "value")
         return;
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (decl == nullptr || decl->getNameAsString() != "QVariant")
+    if (!decl || decl->getNameAsString() != "QVariant")
         return;
 
     vector<QualType> typeList = TemplateUtils::getTemplateArgumentsTypes(methodDecl);
