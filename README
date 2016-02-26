@@ -65,7 +65,7 @@ Checks from level0:
     wrong-qglobalstatic
     writing-to-temporary
     qstring-insensitive-allocation
-    variant-sanitizer
+    qvariant-template-instantiation
     qstring-ref    (fix-missing-qstringref)
     temporary-iterator
     qstring-arg

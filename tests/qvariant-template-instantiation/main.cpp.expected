@@ -1,0 +1,2 @@
+qvariant-template-instantiation/main.cpp:21:5: warning: Use QVariant::toQUrl() instead of QVariant::value<QUrl>() [-Wclazy-qvariant-template-instantiation]
+qvariant-template-instantiation/main.cpp:22:5: warning: Use QVariant::toBool() instead of QVariant::value<Bool>() [-Wclazy-qvariant-template-instantiation]

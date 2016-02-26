@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "variantsanitizer.h"
+#include "qvariant-template-instantiation.h"
 #include "Utils.h"
 #include "TemplateUtils.h"
 #include "StringUtils.h"
@@ -31,7 +31,7 @@
 using namespace std;
 using namespace clang;
 
-VariantSanitizer::VariantSanitizer(const std::string &name, const clang::CompilerInstance &ci)
+QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
 
@@ -48,7 +48,7 @@ static bool isMatchingClass(const std::string &name, const clang::CompilerInstan
     return clazy_std::contains(classes, name);
 }
 
-void VariantSanitizer::VisitStmt(clang::Stmt *stm)
+void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
 {
     auto callExpr = dyn_cast<CXXMemberCallExpr>(stm);
     if (!callExpr)
@@ -84,4 +84,4 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("variant-sanitizer", VariantSanitizer, CheckLevel0)
+REGISTER_CHECK_WITH_FLAGS("qvariant-template-instantiation", QVariantTemplateInstantiation, CheckLevel0)

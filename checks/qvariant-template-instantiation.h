@@ -32,10 +32,10 @@
  *
  * TODO: Missing QVariants of QHash<QString,QVariant>, QList<QVariant> and QMap<QString, QVariant>
  */
-class VariantSanitizer : public CheckBase
+class QVariantTemplateInstantiation : public CheckBase
 {
 public:
-    VariantSanitizer(const std::string &name, const clang::CompilerInstance &ci);
+    QVariantTemplateInstantiation(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

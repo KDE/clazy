@@ -1,2 +1,0 @@
-variant-sanitizer/main.cpp:21:5: warning: Use QVariant::toQUrl() instead of QVariant::value<QUrl>() [-Wclazy-variant-sanitizer]
-variant-sanitizer/main.cpp:22:5: warning: Use QVariant::toBool() instead of QVariant::value<Bool>() [-Wclazy-variant-sanitizer]

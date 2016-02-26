@@ -83,6 +83,7 @@ set(SRC_FILES
     checks/lambda-in-connect.cpp
     checks/qdatetimeutc.cpp
     checks/qgetenv.cpp
+    checks/qvariant-template-instantiation.cpp
     checks/functionargsbyref.cpp
     checks/qdeleteall.cpp
     checks/qfileinfo-exists.cpp
@@ -102,7 +103,6 @@ set(SRC_FILES
     checks/ruleoftwosoft.cpp
     checks/ruleofthree.cpp
     checks/temporaryiterator.cpp
-    checks/variantsanitizer.cpp
     checks/writingtotemporary.cpp
     checks/wrong-qglobalstatic.cpp
     checks/virtualcallsfromctor.cpp
