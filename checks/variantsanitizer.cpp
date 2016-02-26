@@ -25,6 +25,7 @@
 #include "variantsanitizer.h"
 #include "Utils.h"
 #include "TemplateUtils.h"
+#include "StringUtils.h"
 #include "checkmanager.h"
 
 using namespace std;
@@ -74,8 +75,11 @@ void VariantSanitizer::VisitStmt(clang::Stmt *stm)
         matches = t->isClassType() && recordDecl && isMatchingClass(recordDecl->getNameAsString(), m_ci);
     }
 
+    string typeName = StringUtils::simpleTypeName(typeList[0], lo());
+    typeName[0] = toupper(typeName[0]);
+
     if (matches) {
-        std::string error = std::string("Use QVariant::toFoo() instead of QVariant::value<Foo>()");
+        std::string error = std::string("Use QVariant::to" + typeName + "() instead of QVariant::value<" + typeName + ">()");
         emitWarning(stm->getLocStart(), error.c_str());
     }
 }
