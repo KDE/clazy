@@ -97,7 +97,6 @@ Checks from level2:
     container-inside-loop
 
 Checks from level3:
-    missing-typeinfo
     bogus-dynamic-cast
     detaching-member
     copyable-polymorphic
