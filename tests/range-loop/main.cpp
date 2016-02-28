@@ -101,7 +101,7 @@ void test_missing_ref()
         nop();
     }
 
-    // Test #3: Warning
+    // Test #3: No warning
     for (BigTrivial t : bigTrivials) {
         nop();
     }
@@ -111,7 +111,7 @@ void test_missing_ref()
         nop();
     }
 
-    // Test #5: Warning
+    // Test #5: No Warning
     for (const BigTrivial t : bigTrivials) {
         t.constFoo();
     }
@@ -131,7 +131,7 @@ void test_missing_ref()
         nop2(t);
     }
 
-    // Test #9: Warning
+    // Test #9: No Warning
     for (BigTrivial t : bigTrivials) {
         nop3(t);
     }

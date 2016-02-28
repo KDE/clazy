@@ -79,15 +79,10 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
     if (!success)
         return;
 
-    if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
+    if (classif.passNonTriviallyCopyableByConstRef) {
         string error;
         const string paramStr = varDecl->getType().getAsString();
-        if (classif.passBigTypeByConstRef) {
-            error = "Missing reference in range-for with sizeof(T) = ";
-            error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ')';
-        } else if (classif.passNonTriviallyCopyableByConstRef) {
-            error = "Missing reference in range-for with non trivial type (" + paramStr + ')';
-        }
+        error = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
