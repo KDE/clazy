@@ -1,5 +1,4 @@
 {
-    "enabled" : false,
     "tests" : [
         {
             "filename" : "main.cpp"
