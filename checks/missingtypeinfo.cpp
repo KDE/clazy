@@ -28,6 +28,7 @@
 #include "TypeUtils.h"
 #include "QtUtils.h"
 #include "checkmanager.h"
+#include "StringUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclTemplate.h>
@@ -67,16 +68,13 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 
     const Type *t = qt2.getTypePtrOrNull();
     CXXRecordDecl *record = t ? t->getAsCXXRecordDecl() : nullptr;
-    if (!record || !record->getDefinition())
+    if (!record || !record->getDefinition() || typeHasClassification(qt2))
         return; // Don't crash if we only have a fwd decl
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
     const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, m_ci);
 
     if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
-        if (m_typeInfos.count(record->getQualifiedNameAsString()) != 0)
-            return;
-
         std::string typeName = record->getName();
         std::string s;
         std::stringstream out;
@@ -96,11 +94,9 @@ void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
     }
 }
 
-bool MissingTypeinfo::ignoreTypeInfo(const std::string &className) const
+bool MissingTypeinfo::typeHasClassification(QualType qt) const
 {
-    std::vector<std::string> primitives {"QPair", "QTime"}; // clazy bug
-    return clazy_std::contains(primitives, className);
+    return m_typeInfos.find(StringUtils::simpleTypeName(qt, lo())) != m_typeInfos.end();
 }
-
 
 REGISTER_CHECK_WITH_FLAGS("missing-typeinfo", MissingTypeinfo, CheckLevel3)

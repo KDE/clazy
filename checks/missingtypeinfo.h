@@ -29,6 +29,7 @@
 
 namespace clang {
 class ClassTemplateSpecializationDecl;
+class CXXRecordDecl;
 }
 
 /**
@@ -42,7 +43,7 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);
-    bool ignoreTypeInfo(const std::string &className) const;
+    bool typeHasClassification(clang::QualType) const;
     std::set<std::string> m_typeInfos;
 };
 
