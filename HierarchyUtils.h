@@ -144,7 +144,7 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
  * Similar to getChilds(), but with startLocation support.
  */
 template <typename T>
-std::vector<T*> getStatements(clang::Stmt *body, clang::SourceManager *sm = nullptr, clang::SourceLocation startLocation = {}, int depth = -1, bool includeParent = false)
+std::vector<T*> getStatements(clang::Stmt *body, const clang::SourceManager *sm = nullptr, clang::SourceLocation startLocation = {}, int depth = -1, bool includeParent = false)
 {
     std::vector<T*> statements;
     if (!body || depth == 0)
@@ -157,7 +157,7 @@ std::vector<T*> getStatements(clang::Stmt *body, clang::SourceManager *sm = null
     for (auto child : body->children()) {
         if (!child) continue; // can happen
         if (T *childT = clang::dyn_cast<T>(child)) {
-            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(startLocation, child->getLocStart())))
+            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), child->getLocStart())))
                 statements.push_back(childT);
         }
 
