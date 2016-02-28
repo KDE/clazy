@@ -92,16 +92,9 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (decl->getName() == "QTypeInfo") {
-        auto &args = decl->getTemplateArgs();
-        if (args.size() != 1)
-            return;
-
-        QualType qt = args[0].getAsType();
-        const Type *t = qt.getTypePtrOrNull();
-        CXXRecordDecl *recordDecl =  t ? t->getAsCXXRecordDecl() : nullptr;
-        if (recordDecl) {
-            m_typeInfos.insert(recordDecl->getQualifiedNameAsString());
-        }
+        const string typeName = TemplateUtils::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
+        if (!typeName.empty())
+            m_typeInfos.insert(typeName);
     }
 }
 
