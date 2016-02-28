@@ -130,7 +130,7 @@ inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, 
         printLocation(sm, s->getLocStart(), newLine);
 }
 
-inline void printLocation(clang::PresumedLoc loc, bool newLine = true)
+inline void printLocation(const clang::PresumedLoc &loc, bool newLine = true)
 {
     llvm::errs() << loc.getFilename() << ' ' << loc.getLine() << ':' << loc.getColumn();
     if (newLine)
@@ -199,17 +199,17 @@ inline std::string accessString(clang::AccessSpecifier s)
  * Returns the type of qt without CV qualifiers or references.
  * "const QString &" -> "QString"
  */
-inline std::string simpleTypeName(clang::QualType qt, clang::LangOptions lo)
+inline std::string simpleTypeName(clang::QualType qt, const clang::LangOptions &lo)
 {
     return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
 }
 
-inline std::string simpleTypeName(clang::ParmVarDecl *p, clang::LangOptions lo)
+inline std::string simpleTypeName(clang::ParmVarDecl *p, const clang::LangOptions &lo)
 {
     return p ? simpleTypeName(p->getType(), lo) : std::string();
 }
 
-inline std::string typeName(clang::QualType qt, clang::LangOptions lo, bool simpleName)
+inline std::string typeName(clang::QualType qt, const clang::LangOptions &lo, bool simpleName)
 {
     return simpleName ? simpleTypeName(qt, lo) : qt.getAsString(lo);
 }
@@ -219,7 +219,7 @@ inline std::string typeName(clang::QualType qt, clang::LangOptions lo, bool simp
  * If \a simpleName is true, any cv qualifications, ref or pointer are not taken into account, so
  * const Foo & would be equal to Foo.
  */
-inline std::string returnTypeName(clang::CallExpr *call, clang::LangOptions lo,
+inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOptions &lo,
                                   bool simpleName = true)
 {
     if (!call)
@@ -230,7 +230,7 @@ inline std::string returnTypeName(clang::CallExpr *call, clang::LangOptions lo,
 }
 
 inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName,
-                              clang::LangOptions lo, bool simpleName = true)
+                              const clang::LangOptions &lo, bool simpleName = true)
 {
     return clazy_std::any_of(func->params(), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
         return StringUtils::typeName(param->getType(), lo, simpleName) == typeName;
@@ -242,19 +242,19 @@ inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &type
  * void foo(int a, const QString &);
  * simpleArgTypeName(foo, 1, lo) would return "QString"
  */
-std::string simpleArgTypeName(clang::FunctionDecl *func, uint index, clang::LangOptions);
+std::string simpleArgTypeName(clang::FunctionDecl *func, uint index, const clang::LangOptions &);
 
 /**
  * Returns true if any of the function's arguments if of type simpleType
  * By "simple" we mean without const or &, *
  */
-bool anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleType, clang::LangOptions);
+bool anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleType, const clang::LangOptions &);
 
 /**
  * Returns true if any of the function's arguments if of any of the types in simpleTypes
  * By "simple" we mean without const or &, *
  */
-bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::string> &simpleTypes, clang::LangOptions);
+bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::string> &simpleTypes, const clang::LangOptions &);
 
 inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {

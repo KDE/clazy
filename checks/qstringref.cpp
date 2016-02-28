@@ -52,7 +52,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
     return clazy_std::contains(list, method->getNameAsString());
 }
 
-static bool isInterestingSecondMethod(CXXMethodDecl *method, clang::LangOptions lo)
+static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOptions &lo)
 {
     if (!method || method->getParent()->getNameAsString() != "QString")
         return false;

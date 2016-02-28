@@ -135,7 +135,7 @@ namespace Utils {
 
     bool isAssignOperator(clang::CXXOperatorCallExpr *op,
                           const std::string &className,
-                          const std::string &argumentType, clang::LangOptions lo);
+                          const std::string &argumentType, const clang::LangOptions &lo);
 
     bool isImplicitCastTo(clang::Stmt *, const std::string &);
 

@@ -29,7 +29,7 @@
 using namespace std;
 using namespace clang;
 
-std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index, clang::LangOptions lo)
+std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index, const clang::LangOptions &lo)
 {
     if (!func || index >= func->getNumParams())
         return {};
@@ -40,7 +40,7 @@ std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index
 
 bool StringUtils::anyArgIsOfSimpleType(clang::FunctionDecl *func,
                                        const std::string &simpleType,
-                                       clang::LangOptions lo)
+                                       const clang::LangOptions &lo)
 {
     if (!func)
         return false;
@@ -52,7 +52,7 @@ bool StringUtils::anyArgIsOfSimpleType(clang::FunctionDecl *func,
 
 bool StringUtils::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
                                           const vector<string> &simpleTypes,
-                                          clang::LangOptions lo)
+                                          const clang::LangOptions &lo)
 {
     if (!func)
         return false;

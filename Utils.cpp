@@ -459,7 +459,7 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
 }
 
 bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &className,
-                             const std::string &argumentType, clang::LangOptions lo)
+                             const std::string &argumentType, const clang::LangOptions &lo)
 {
     if (!op)
         return false;
