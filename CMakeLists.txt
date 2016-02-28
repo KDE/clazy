@@ -96,7 +96,7 @@ set(SRC_FILES
 #   checks/missingtypeinfo.cpp
     checks/missing-qobject-macro.cpp
     checks/nonpodstatic.cpp
-    checks/rangeloop.cpp
+    checks/range-loop.cpp
     checks/requiredresults.cpp
     checks/reservecandidates.cpp
     checks/ruleofbase.cpp

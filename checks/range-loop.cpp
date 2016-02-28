@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "rangeloop.h"
+#include "range-loop.h"
 #include "Utils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
