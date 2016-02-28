@@ -46,9 +46,8 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 {
     // Catches QTypeInfo<Foo> to know type classification
     auto templateDef = dyn_cast<ClassTemplateSpecializationDecl>(decl);
-    if (templateDef) {
+    if (templateDef)
         registerQTypeInfo(templateDef);
-    }
 
     // Catches QList<Foo>
     ClassTemplateSpecializationDecl *tstdecl = TemplateUtils::templateDecl(decl);
@@ -67,25 +66,25 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     QualType qt2 = tal[0].getAsType();
 
     const Type *t = qt2.getTypePtrOrNull();
-    if (!t || !t->getAsCXXRecordDecl() || !t->getAsCXXRecordDecl()->getDefinition())
+    CXXRecordDecl *record = t ? t->getAsCXXRecordDecl() : nullptr;
+    if (!record || !record->getDefinition())
         return; // Don't crash if we only have a fwd decl
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
     const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, m_ci);
 
     if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
-
-        std::string typeName = t->getAsCXXRecordDecl()->getName();
-        if (m_typeInfos.count(t->getAsCXXRecordDecl()->getQualifiedNameAsString()) != 0)
+        if (m_typeInfos.count(record->getQualifiedNameAsString()) != 0)
             return;
 
+        std::string typeName = record->getName();
         if (t->isRecordType() && !ignoreTypeInfo(typeName)) {
             std::string s;
             std::stringstream out;
             out << m_ci.getASTContext().getTypeSize(qt2)/8;
             s = "Missing Q_DECLARE_TYPEINFO: " + typeName;
             emitWarning(decl->getLocStart(), s.c_str());
-            emitWarning(t->getAsCXXRecordDecl()->getLocStart(), "Type declared here:", false);
+            emitWarning(record->getLocStart(), "Type declared here:", false);
         }
     }
 }
