@@ -42,6 +42,7 @@ class Check:
     def __init__(self, name):
         self.name = name
         self.minimum_clang_version = 360 # clang 3.6.0
+        self.enabled = True
         self.tests = []
 #-------------------------------------------------------------------------------
 # utility functions #1
@@ -66,6 +67,9 @@ def load_json(check_name):
 
     if 'minimum_clang_version' in decoded:
         check.minimum_clang_version = decoded['minimum_clang_version']
+
+    if 'enabled' in decoded:
+        check.enabled = decoded['enabled']
 
     if 'tests' in decoded:
         for t in decoded['tests']:
@@ -276,7 +280,9 @@ def load_checks(all_check_names):
     checks = []
     for name in all_check_names:
         try:
-            checks.append(load_json(name))
+            check = load_json(name)
+            if check.enabled:
+                checks.append(check)
         except:
             print "Error while loading " + name
             raise
