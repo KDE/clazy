@@ -93,7 +93,7 @@ void CheckBase::VisitDecl(Decl *)
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 {
-    if (!loc.isValid() || sm().isInSystemHeader(loc))
+    if (!loc.isValid() || (ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(loc)))
         return true;
 
     string filename = sm().getFilename(loc);

@@ -80,6 +80,7 @@ protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
     bool shouldIgnoreFile(clang::SourceLocation) const;
+    virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
     virtual std::vector<std::string> filesToIgnore() const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
