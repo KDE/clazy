@@ -20,6 +20,8 @@
 */
 
 #include "TemplateUtils.h"
+#include "StringUtils.h"
+
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
 
@@ -74,4 +76,24 @@ ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)
     CXXRecordDecl *classDecl = t->getAsCXXRecordDecl();
     if (!classDecl) return nullptr;
     return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
+}
+
+string TemplateUtils::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
+                                                 uint index, const LangOptions &lo, bool recordOnly)
+{
+    if (!specialization)
+        return {};
+
+    auto &args = specialization->getTemplateArgs();
+    if (args.size() <= index)
+        return {};
+
+    QualType qt = args[index].getAsType();
+    if (recordOnly) {
+        const Type *t = qt.getTypePtrOrNull();
+        if (!t || !t->getAsCXXRecordDecl())
+            return {};
+    }
+
+    return StringUtils::simpleTypeName(args[index].getAsType(), lo);
 }

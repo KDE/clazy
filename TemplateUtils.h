@@ -20,7 +20,9 @@
 */
 
 #include <clang/AST/Type.h>
+
 #include <vector>
+#include <string>
 
 namespace clang {
     class CXXMethodDecl;
@@ -46,4 +48,14 @@ namespace TemplateUtils
     std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXRecordDecl *);
 
     clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
+
+    /**
+     * Returns a string with the type name of the argument at the specified index.
+     * If recordOnly is true, then it will only return a name if the argument is a class or struct.
+     *
+     * Example: For QList<Foo>, getTemplateArgumentTypeStr(decl, 0) would return "Foo"
+     */
+    std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl*,
+                                           uint index, const clang::LangOptions &lo, bool recordOnly = false);
+
 }
