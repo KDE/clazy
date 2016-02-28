@@ -170,7 +170,7 @@ void FunctionArgsByRef::VisitStmt(Stmt *stmt)
 }
 
 FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl *param,
-                                          const TypeUtils::QualTypeClassification &)
+                                          TypeUtils::QualTypeClassification)
 {
     QualType qt = TypeUtils::unrefQualType(param->getType());
     qt.removeLocalConst();
@@ -197,8 +197,7 @@ FixItHint FunctionArgsByRef::fixitByValue(FunctionDecl *func, const ParmVarDecl 
     return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
 }
 
-clang::FixItHint FunctionArgsByRef::fixitByConstRef(const ParmVarDecl *,
-                                                    const TypeUtils::QualTypeClassification &)
+clang::FixItHint FunctionArgsByRef::fixitByConstRef(const ParmVarDecl *, TypeUtils::QualTypeClassification)
 {
     FixItHint fixit;
     return fixit;

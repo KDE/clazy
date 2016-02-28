@@ -110,14 +110,14 @@ inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<std::st
     return record && clazy_std::contains(classNames, record->getNameAsString());
 }
 
-inline void printLocation(const clang::SourceManager &sm, const clang::SourceLocation &loc, bool newLine = true)
+inline void printLocation(const clang::SourceManager &sm, clang::SourceLocation loc, bool newLine = true)
 {
     llvm::errs() << loc.printToString(sm);
     if (newLine)
         llvm::errs() << "\n";
 }
 
-inline void printRange(const clang::SourceManager &sm, const clang::SourceRange &range, bool newLine = true)
+inline void printRange(const clang::SourceManager &sm, clang::SourceRange range, bool newLine = true)
 {
     printLocation(sm, range.getBegin(), false);
     llvm::errs() << '-';

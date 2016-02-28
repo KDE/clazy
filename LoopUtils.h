@@ -49,7 +49,7 @@ namespace LoopUtils {
      * If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before
      */
     bool loopCanBeInterrupted(clang::Stmt *loop, const clang::CompilerInstance &ci,
-                              const clang::SourceLocation &onlyBeforeThisLoc);
+                              clang::SourceLocation onlyBeforeThisLoc);
 
     /**
      * Returns true if stmt is a for, while or do-while loop

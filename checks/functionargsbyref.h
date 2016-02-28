@@ -54,10 +54,9 @@ protected:
 private:
     void processFunction(clang::FunctionDecl *);
     clang::FixItHint fixitByValue(clang::FunctionDecl *func, const clang::ParmVarDecl *param,
-                                  const TypeUtils::QualTypeClassification &);
+                                  TypeUtils::QualTypeClassification);
 
-    clang::FixItHint fixitByConstRef(const clang::ParmVarDecl *,
-                                     const TypeUtils::QualTypeClassification &);
+    clang::FixItHint fixitByConstRef(const clang::ParmVarDecl *, TypeUtils::QualTypeClassification);
 };
 
 #endif

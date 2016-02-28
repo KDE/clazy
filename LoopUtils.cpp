@@ -59,7 +59,7 @@ Stmt *LoopUtils::bodyFromLoop(Stmt *loop)
 }
 
 bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci,
-                                     const clang::SourceLocation &onlyBeforeThisLoc)
+                                     clang::SourceLocation onlyBeforeThisLoc)
 {
     if (!stmt)
         return false;

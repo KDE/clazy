@@ -33,7 +33,7 @@ using namespace FixItUtils;
 using namespace clang;
 using namespace std;
 
-clang::FixItHint FixItUtils::createReplacement(const clang::SourceRange &range, const std::string &replacement)
+clang::FixItHint FixItUtils::createReplacement(clang::SourceRange range, const std::string &replacement)
 {
     if (range.getBegin().isInvalid()) {
         return {};
@@ -42,7 +42,7 @@ clang::FixItHint FixItUtils::createReplacement(const clang::SourceRange &range, 
     }
 }
 
-clang::FixItHint FixItUtils::createInsertion(const clang::SourceLocation &start, const std::string &insertion)
+clang::FixItHint FixItUtils::createInsertion(clang::SourceLocation start, const std::string &insertion)
 {
     if (start.isInvalid()) {
         return {};
@@ -77,7 +77,7 @@ SourceRange FixItUtils::rangeForLiteral(const CompilerInstance& ci, StringLitera
     return range;
 }
 
-void FixItUtils::insertParentMethodCall(const std::string &method, const SourceRange &range, std::vector<FixItHint> &fixits)
+void FixItUtils::insertParentMethodCall(const std::string &method, SourceRange range, std::vector<FixItHint> &fixits)
 {
     fixits.push_back(FixItUtils::createInsertion(range.getEnd(), ")"));
     fixits.push_back(FixItUtils::createInsertion(range.getBegin(), method + '('));

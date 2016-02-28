@@ -29,7 +29,7 @@
 
 using namespace clang;
 
-int TypeUtils::sizeOfPointer(const clang::CompilerInstance &ci, const clang::QualType &qt)
+int TypeUtils::sizeOfPointer(const clang::CompilerInstance &ci, clang::QualType qt)
 {
     if (!qt.getTypePtrOrNull())
         return -1;
@@ -77,7 +77,7 @@ bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varD
     return true;
 }
 
-QualType TypeUtils::unrefQualType(const QualType &qualType)
+QualType TypeUtils::unrefQualType(QualType qualType)
 {
     const Type *t = qualType.getTypePtrOrNull();
     return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;

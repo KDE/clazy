@@ -35,7 +35,7 @@ namespace TypeUtils
     /**
      * Returns the sizeof(void*) for the platform we're compiling for, in bits.
      */
-    int sizeOfPointer(const clang::CompilerInstance &, const clang::QualType &qt);
+    int sizeOfPointer(const clang::CompilerInstance &, clang::QualType qt);
 
     struct QualTypeClassification {
         bool isConst = false;
@@ -66,7 +66,7 @@ namespace TypeUtils
      * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
      * returns false. Must go through qualType->getPointeeType().isConstQualified().
      */
-    clang::QualType unrefQualType(const clang::QualType &qt);
+    clang::QualType unrefQualType(clang::QualType qt);
 }
 
 #endif

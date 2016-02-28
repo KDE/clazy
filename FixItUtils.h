@@ -44,17 +44,17 @@ namespace FixItUtils {
 /**
  * Replaces whatever is in range, with replacement
  */
-clang::FixItHint createReplacement(const clang::SourceRange &range, const std::string &replacement);
+clang::FixItHint createReplacement(clang::SourceRange range, const std::string &replacement);
 
 /**
  * Inserts insertion at start
  */
-clang::FixItHint createInsertion(const clang::SourceLocation &start, const std::string &insertion);
+clang::FixItHint createInsertion(clang::SourceLocation start, const std::string &insertion);
 
 /**
  * Transforms foo into method(foo), by inserting "method(" at the beginning, and ')' at the end
  */
-void insertParentMethodCall(const std::string &method, const clang::SourceRange &range, std::vector<clang::FixItHint> &fixits);
+void insertParentMethodCall(const std::string &method, clang::SourceRange range, std::vector<clang::FixItHint> &fixits);
 
 /**
  * Transforms foo into method("literal"), by inserting "method(" at the beginning, and ')' at the end
