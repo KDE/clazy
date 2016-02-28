@@ -26,6 +26,7 @@
 #include "Utils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "StringUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
@@ -81,7 +82,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 
     if (classif.passNonTriviallyCopyableByConstRef) {
         string error;
-        const string paramStr = varDecl->getType().getAsString();
+        const string paramStr = StringUtils::simpleTypeName(varDecl->getType(), lo());
         error = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able

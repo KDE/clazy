@@ -3,4 +3,4 @@ range-loop/main.cpp:32:5: warning: c++11 range-loop might detach Qt container (Q
 range-loop/main.cpp:35:5: warning: c++11 range-loop might detach Qt container (QList) [-Wclazy-range-loop]
 range-loop/main.cpp:36:5: warning: c++11 range-loop might detach Qt container (QList) [-Wclazy-range-loop]
 range-loop/main.cpp:66:5: warning: c++11 range-loop might detach Qt container (QMultiMap) [-Wclazy-range-loop]
-range-loop/main.cpp:110:10: warning: Missing reference in range-for with non trivial type (struct SmallNonTrivial) [-Wclazy-range-loop]
+range-loop/main.cpp:110:10: warning: Missing reference in range-for with non trivial type (SmallNonTrivial) [-Wclazy-range-loop]
