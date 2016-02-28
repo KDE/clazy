@@ -32,6 +32,7 @@ class Type;
 class CXXMemberCallExpr;
 class CallExpr;
 class ValueDecl;
+class LangOptions;
 }
 
 namespace QtUtils
@@ -62,6 +63,11 @@ bool isQtAssociativeContainer(const std::string &className);
  * Returns a list of Qt containers.
  */
 const std::vector<std::string> & qtContainers();
+
+/**
+ * Returns true if a type represents a Qt container class.
+ */
+bool isQtContainer(clang::QualType, clang::LangOptions);
 
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler

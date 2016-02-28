@@ -25,6 +25,7 @@
 #include "TypeUtils.h"
 #include "MacroUtils.h"
 #include "HierarchyUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/AST.h>
 
@@ -149,4 +150,12 @@ clang::ValueDecl *QtUtils::signalSenderForConnect(clang::CallExpr *call)
 bool QtUtils::isTooBigForQList(clang::QualType qt, const clang::CompilerInstance &ci)
 {
     return (int)ci.getASTContext().getTypeSize(qt) <= TypeUtils::sizeOfPointer(ci, qt);
+}
+
+bool QtUtils::isQtContainer(QualType t, LangOptions lo)
+{
+    const string typeName = StringUtils::simpleTypeName(t, lo);
+    return clazy_std::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
+        return container == typeName;
+    });
 }
