@@ -58,6 +58,7 @@ class CheckBase
 public:
     typedef std::vector<std::unique_ptr<CheckBase> > List;
     explicit CheckBase(const std::string &name, const clang::CompilerInstance &ci);
+    CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
 

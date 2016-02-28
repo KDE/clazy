@@ -52,6 +52,7 @@ namespace {
 class MyFixItOptions : public FixItOptions
 {
 public:
+    MyFixItOptions(const MyFixItOptions &other) = delete;
     MyFixItOptions(bool inplace)
     {
         InPlace = inplace;
