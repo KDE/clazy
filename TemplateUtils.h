@@ -58,4 +58,6 @@ namespace TemplateUtils
     std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl*,
                                            uint index, const clang::LangOptions &lo, bool recordOnly = false);
 
+    clang::QualType getTemplateArgumentType(clang::ClassTemplateSpecializationDecl *, uint index);
+
 }

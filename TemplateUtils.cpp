@@ -68,6 +68,9 @@ std::vector<clang::QualType> TemplateUtils::getTemplateArgumentsTypes(CXXRecordD
 
 ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)
 {
+    if (isa<ClassTemplateSpecializationDecl>(decl))
+        return dyn_cast<ClassTemplateSpecializationDecl>(decl);
+
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
     if (!varDecl) return nullptr;
     QualType qt = varDecl->getType();
@@ -96,4 +99,16 @@ string TemplateUtils::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl
     }
 
     return StringUtils::simpleTypeName(args[index].getAsType(), lo);
+}
+
+clang::QualType TemplateUtils::getTemplateArgumentType(ClassTemplateSpecializationDecl *specialization, uint index)
+{
+    if (!specialization)
+        return {};
+
+    auto &args = specialization->getTemplateArgs();
+    if (args.size() <= index)
+        return {};
+
+    return args[index].getAsType();
 }
