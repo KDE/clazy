@@ -78,14 +78,12 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
             return;
 
         std::string typeName = record->getName();
-        if (t->isRecordType() && !ignoreTypeInfo(typeName)) {
-            std::string s;
-            std::stringstream out;
-            out << m_ci.getASTContext().getTypeSize(qt2)/8;
-            s = "Missing Q_DECLARE_TYPEINFO: " + typeName;
-            emitWarning(decl->getLocStart(), s.c_str());
-            emitWarning(record->getLocStart(), "Type declared here:", false);
-        }
+        std::string s;
+        std::stringstream out;
+        out << m_ci.getASTContext().getTypeSize(qt2)/8;
+        s = "Missing Q_DECLARE_TYPEINFO: " + typeName;
+        emitWarning(decl->getLocStart(), s.c_str());
+        emitWarning(record->getLocStart(), "Type declared here:", false);
     }
 }
 
