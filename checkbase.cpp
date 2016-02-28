@@ -108,6 +108,16 @@ std::vector<std::string> CheckBase::filesToIgnore() const
     return {};
 }
 
+void CheckBase::emitWarning(clang::Decl *d, const std::string &error, bool printWarningTag)
+{
+    emitWarning(d->getLocStart(), error, printWarningTag);
+}
+
+void CheckBase::emitWarning(clang::Stmt *s, const std::string &error, bool printWarningTag)
+{
+    emitWarning(s->getLocStart(), error, printWarningTag);
+}
+
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag)
 {
     emitWarning(loc, error, {}, printWarningTag);
