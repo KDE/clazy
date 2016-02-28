@@ -103,9 +103,10 @@ set(SRC_FILES
     checks/ruleoftwosoft.cpp
     checks/ruleofthree.cpp
     checks/temporaryiterator.cpp
+    checks/unused-non-trivial-variable.cpp
+    checks/virtualcallsfromctor.cpp
     checks/writingtotemporary.cpp
     checks/wrong-qglobalstatic.cpp
-    checks/virtualcallsfromctor.cpp
     Clazy.cpp
     ContextUtils.cpp
     FixItUtils.cpp

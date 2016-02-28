@@ -1,0 +1,2 @@
+unused-non-trivial-variable/main.cpp:8:5: warning: unused QString [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/main.cpp:9:5: warning: unused QString [-Wclazy-unused-non-trivial-variable]
