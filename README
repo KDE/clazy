@@ -78,7 +78,6 @@ Checks from level1:
     range-loop
     non-pod-global-static
     missing-qobject-macro
-    qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     qdeleteall
     inefficient-qlist-soft
     foreach
@@ -86,6 +85,7 @@ Checks from level1:
     auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
 
 Checks from level2:
+    qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     rule-of-two-soft
     rule-of-three
     reserve-candidates

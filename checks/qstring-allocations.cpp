@@ -558,7 +558,7 @@ vector<string> QStringAllocations::filesToIgnore() const
 }
 
 const char *const s_checkName = "qstring-allocations";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringAllocations, CheckLevel1)
+REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringAllocations, CheckLevel2)
 REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)
 REGISTER_FIXIT(FromLatin1_FromUtf8Allocations, "fix-fromLatin1_fromUtf8-allocations", s_checkName)
 REGISTER_FIXIT(CharPtrAllocations, "fix-fromCharPtrAllocations", s_checkName)
