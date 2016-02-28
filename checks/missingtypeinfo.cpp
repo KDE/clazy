@@ -45,12 +45,6 @@ MissingTypeinfo::MissingTypeinfo(const std::string &name, const clang::CompilerI
 
 void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 {
-    // Catches QTypeInfo<Foo> to know type classification
-    auto templateDef = dyn_cast<ClassTemplateSpecializationDecl>(decl);
-    if (templateDef)
-        registerQTypeInfo(templateDef);
-
-    // Catches QList<Foo>
     ClassTemplateSpecializationDecl *tstdecl = TemplateUtils::templateDecl(decl);
     if (!tstdecl)
         return;
@@ -58,14 +52,12 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     const bool isQList = tstdecl->getName() == "QList";
     const bool isQVector = tstdecl->getName() == "QVector";
 
-    if (!isQList && !isQVector)
+    if (!isQList && !isQVector) {
+        registerQTypeInfo(tstdecl);
         return;
+    }
 
-    const TemplateArgumentList &tal = tstdecl->getTemplateArgs();
-
-    if (tal.size() != 1) return;
-    QualType qt2 = tal[0].getAsType();
-
+    QualType qt2 = TemplateUtils::getTemplateArgumentType(tstdecl, 0);
     const Type *t = qt2.getTypePtrOrNull();
     CXXRecordDecl *record = t ? t->getAsCXXRecordDecl() : nullptr;
     if (!record || !record->getDefinition() || typeHasClassification(qt2))
@@ -80,8 +72,8 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
         std::stringstream out;
         out << m_ci.getASTContext().getTypeSize(qt2)/8;
         s = "Missing Q_DECLARE_TYPEINFO: " + typeName;
-        emitWarning(decl->getLocStart(), s.c_str());
-        emitWarning(record->getLocStart(), "Type declared here:", false);
+        emitWarning(decl, s.c_str());
+        emitWarning(record, "Type declared here:", false);
     }
 }
 
