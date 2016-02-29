@@ -33,8 +33,6 @@
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclTemplate.h>
 
-#include <sstream>
-
 using namespace std;
 using namespace clang;
 
@@ -71,11 +69,7 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
         if (typeName == "QPair") // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
             return;
 
-        std::string s;
-        std::stringstream out;
-        out << m_ci.getASTContext().getTypeSize(qt2)/8;
-        s = "Missing Q_DECLARE_TYPEINFO: " + typeName;
-        emitWarning(decl, s.c_str());
+        emitWarning(decl, "Missing Q_DECLARE_TYPEINFO: " + typeName);
         emitWarning(record, "Type declared here:", false);
     }
 }
