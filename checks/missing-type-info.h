@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,8 +22,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANG_LAZY_MOVABLE_H
-#define CLANG_LAZY_MOVABLE_H
+#ifndef CLAZY_MISSING_TYPE_INFO_H
+#define CLAZY_MISSING_TYPE_INFO_H
 
 #include "checkbase.h"
 
@@ -33,8 +33,10 @@ class CXXRecordDecl;
 }
 
 /**
- * Advises usage of Q_PRIMITIVE_TYPE or Q_MOVABLE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
+ * Suggests usage of Q_PRIMITIVE_TYPE or Q_MOVABLE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
  * or using QVector<T>. Unless they already have a classification.
+ *
+ * See README-missing-type-info for more info.
  */
 class MissingTypeinfo : public CheckBase
 {
