@@ -68,6 +68,9 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
 
     if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
         std::string typeName = record->getName();
+        if (typeName == "QPair") // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
+            return;
+
         std::string s;
         std::stringstream out;
         out << m_ci.getASTContext().getTypeSize(qt2)/8;

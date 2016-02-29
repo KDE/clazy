@@ -1,7 +1,7 @@
 #include <QtCore/QList>
 #include <QtCore/QVector>
 #include <QtCore/QTime>
-
+#include <QtCore/QPair>
 
 
 struct A {
@@ -32,4 +32,5 @@ void test()
     QVector<C> l6;
     QList<QTime> t;
     QVector<QTime> t2;
+    QVector<QPair<int, int>> t3; // OK
 }
