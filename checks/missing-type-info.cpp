@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "missingtypeinfo.h"
+#include "missing-type-info.h"
 #include "Utils.h"
 #include "TemplateUtils.h"
 #include "TypeUtils.h"

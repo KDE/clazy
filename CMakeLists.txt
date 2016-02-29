@@ -93,7 +93,7 @@ set(SRC_FILES
     checks/qstring-allocations.cpp
     checks/qstring-insensitive-allocation.cpp
     checks/qt4-qstring-from-array.cpp
-    checks/missingtypeinfo.cpp
+    checks/missing-type-info.cpp
     checks/missing-qobject-macro.cpp
     checks/nonpodstatic.cpp
     checks/range-loop.cpp
