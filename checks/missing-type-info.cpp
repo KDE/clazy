@@ -88,4 +88,4 @@ bool MissingTypeinfo::typeHasClassification(QualType qt) const
     return m_typeInfos.find(StringUtils::simpleTypeName(qt, lo())) != m_typeInfos.end();
 }
 
-REGISTER_CHECK_WITH_FLAGS("missing-typeinfo", MissingTypeinfo, CheckLevel3)
+REGISTER_CHECK_WITH_FLAGS("missing-typeinfo", MissingTypeinfo, CheckLevel2)
