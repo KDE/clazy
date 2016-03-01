@@ -87,6 +87,9 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     const int numNotImplemented = missingList.size();
 
     const string className = record->getNameAsString();
+    if (shouldIgnoreType(className))
+        return;
+
     const string classQualifiedName = record->getQualifiedNameAsString();
 
     if (hasUserDtor && numImplemented == 1) {
@@ -143,6 +146,14 @@ std::vector<string> RuleOfThree::filesToIgnore() const
 {
     static const std::vector<string> files = { "qrc_" };
     return files;
+}
+
+bool RuleOfThree::shouldIgnoreType(const std::string &className) const
+{
+    static const vector<string> types = { "QTransform" // Fixed for Qt 6
+                                        };
+
+    return clazy_std::contains(types, className);
 }
 
 REGISTER_CHECK_WITH_FLAGS("rule-of-three", RuleOfThree, CheckLevel2)

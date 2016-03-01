@@ -41,6 +41,8 @@ public:
     void VisitDecl(clang::Decl *d) override;
 protected:
     std::vector<std::string> filesToIgnore() const override;
+private:
+    bool shouldIgnoreType(const std::string &className) const;
 };
 
 #endif
