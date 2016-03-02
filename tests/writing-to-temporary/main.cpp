@@ -1,3 +1,18 @@
+#include <QtCore/QSize>
+#include <QtXml/QDomNode>
+
+
+
+
+
+
+
+
+
+
+
+
+
 struct Foo
 {
     int m;
@@ -25,7 +40,7 @@ void test()
     f.setM(1); // OK
 }
 
-#include <QtCore/QSize>
+
 
 QSize getSize() { return QSize(); }
 
@@ -33,8 +48,6 @@ void testKnownTypes()
 {
     getSize().transpose(); // Warning
 }
-
-#include <QtXml/QDomNode>
 
 QDomNode getNode() { return {}; }
 
