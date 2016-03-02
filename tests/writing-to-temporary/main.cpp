@@ -1,6 +1,6 @@
 #include <QtCore/QSize>
+#include <QtGui/QColor>
 #include <QtXml/QDomNode>
-
 
 
 
@@ -56,4 +56,11 @@ void testDisallowedType() // bug #354363
     getNode().firstChild(); // OK
     QDomNode node;
     node.firstChild().setPrefix(""); // OK
+}
+
+void testQColor()
+{
+    QColor col;
+    int *c, *m, *y, *k, *a;
+    col.toCmyk().getCmyk(c, m, y, k, a);
 }

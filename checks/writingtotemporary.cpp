@@ -59,6 +59,12 @@ static bool isDisallowedClass(const string &className)
     return clazy_std::contains(disallowed, className);
 }
 
+static bool isDisallowedMethod(const string &name)
+{
+    static const vector<string> disallowed = { "QColor::getCmyk", "QColor::getCmykF" };
+    return clazy_std::contains(disallowed, name);
+}
+
 static bool isKnownType(const string &className)
 {
     static const vector<string> types = { "QList", "QVector", "QMap", "QHash", "QString", "QSet",
@@ -112,7 +118,11 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy_std::startsWith(secondFunc->getNameAsString(), "set"))
         return;
 
-    emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + secondFunc->getQualifiedNameAsString());
+    const string &methodName = secondMethod->getQualifiedNameAsString();
+    if (isDisallowedMethod(methodName))
+        return;
+
+    emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + methodName);
 }
 
 REGISTER_CHECK_WITH_FLAGS("writing-to-temporary", WritingToTemporary, CheckLevel0)
