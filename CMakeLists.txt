@@ -84,7 +84,7 @@ set(SRC_FILES
     checks/qdatetimeutc.cpp
     checks/qgetenv.cpp
     checks/qvariant-template-instantiation.cpp
-    checks/functionargsbyref.cpp
+    checks/function-args-by-ref.cpp
     checks/qdeleteall.cpp
     checks/qfileinfo-exists.cpp
     checks/qmapkey.cpp

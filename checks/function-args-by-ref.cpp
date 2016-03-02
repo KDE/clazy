@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "functionargsbyref.h"
+#include "function-args-by-ref.h"
 #include "Utils.h"
 #include "FixItUtils.h"
 #include "TypeUtils.h"
