@@ -128,8 +128,12 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
-        if (!m_parentMap)
+        if (!m_parentMap) {
+            if (m_ci.getDiagnostics().hasUnrecoverableErrorOccurred())
+                return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
+
             setParentMap(new ParentMap(stm));
+        }
 
         // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
         if (lastStm && isa<CXXCatchStmt>(lastStm) && !m_parentMap->hasParent(stm)) {
