@@ -56,8 +56,8 @@ namespace TemplateUtils
      * Example: For QList<Foo>, getTemplateArgumentTypeStr(decl, 0) would return "Foo"
      */
     std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl*,
-                                           uint index, const clang::LangOptions &lo, bool recordOnly = false);
+                                           unsigned int index, const clang::LangOptions &lo, bool recordOnly = false);
 
-    clang::QualType getTemplateArgumentType(clang::ClassTemplateSpecializationDecl *, uint index);
+    clang::QualType getTemplateArgumentType(clang::ClassTemplateSpecializationDecl *, unsigned int index);
 
 }

@@ -242,7 +242,7 @@ inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &type
  * void foo(int a, const QString &);
  * simpleArgTypeName(foo, 1, lo) would return "QString"
  */
-std::string simpleArgTypeName(clang::FunctionDecl *func, uint index, const clang::LangOptions &);
+std::string simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &);
 
 /**
  * Returns true if any of the function's arguments if of type simpleType

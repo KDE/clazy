@@ -82,7 +82,7 @@ ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)
 }
 
 string TemplateUtils::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
-                                                 uint index, const LangOptions &lo, bool recordOnly)
+                                                 unsigned int index, const LangOptions &lo, bool recordOnly)
 {
     if (!specialization)
         return {};
@@ -101,7 +101,7 @@ string TemplateUtils::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl
     return StringUtils::simpleTypeName(args[index].getAsType(), lo);
 }
 
-clang::QualType TemplateUtils::getTemplateArgumentType(ClassTemplateSpecializationDecl *specialization, uint index)
+clang::QualType TemplateUtils::getTemplateArgumentType(ClassTemplateSpecializationDecl *specialization, unsigned int index)
 {
     if (!specialization)
         return {};

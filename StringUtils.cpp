@@ -29,7 +29,7 @@
 using namespace std;
 using namespace clang;
 
-std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, uint index, const clang::LangOptions &lo)
+std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &lo)
 {
     if (!func || index >= func->getNumParams())
         return {};
