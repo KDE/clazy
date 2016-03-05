@@ -90,6 +90,7 @@ set(SRC_FILES
     checks/qgetenv.cpp
     checks/qvariant-template-instantiation.cpp
     checks/function-args-by-ref.cpp
+    checks/function-args-by-value.cpp
     checks/qdeleteall.cpp
     checks/qfileinfo-exists.cpp
     checks/qmapkey.cpp

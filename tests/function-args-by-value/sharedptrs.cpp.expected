@@ -1,0 +1,1 @@
+function-args-by-value/sharedptrs.cpp:7:11: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]

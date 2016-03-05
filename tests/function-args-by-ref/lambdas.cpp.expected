@@ -1,2 +1,1 @@
-function-args-by-ref/lambdas.cpp:12:18: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-ref]
 function-args-by-ref/lambdas.cpp:15:18: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
