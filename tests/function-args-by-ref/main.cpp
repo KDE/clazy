@@ -208,3 +208,8 @@ struct CopyCtor // bug #360112
 {
     CopyCtor(const CopyCtor &) {}
 };
+
+struct Ctors
+{
+    Ctors (NonTrivial) {}
+};
