@@ -40,6 +40,11 @@
 
 #include <iostream>
 
+/// WARNING
+///
+/// This code is a bit unreadable and unmaintanable due to the fact that there are more corner-cases than normal cases.
+/// It will be rewritten in a new check, so don't bother.
+
 using namespace clang;
 using namespace std;
 
