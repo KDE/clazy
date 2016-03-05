@@ -110,15 +110,15 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
     return "Missing reference on large type sizeof " + typeName + " is " + sizeStr + " bytes)";
 }
 
-void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
+void FunctionArgsByRef::processFunction(FunctionDecl *func)
 {
-    if (!functionDecl || shouldIgnoreFunction(functionDecl)
-            || !functionDecl->isThisDeclarationADefinition()) return;
+    if (!func || shouldIgnoreFunction(func)
+            || !func->isThisDeclarationADefinition()) return;
 
-    Stmt *body = functionDecl->getBody();
+    Stmt *body = func->getBody();
 
     int i = -1;
-    for (auto param : functionDecl->params()) {
+    for (auto param : func->params()) {
         i++;
         QualType paramQt = TypeUtils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
@@ -144,7 +144,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *functionDecl)
             } else if (classif.passSmallTrivialByValue) {
                 error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
                 if (isFixitEnabled(FixitAll)) {
-                    for (auto redecl : functionDecl->redecls()) { // Fix in both header and .cpp
+                    for (auto redecl : func->redecls()) { // Fix in both header and .cpp
                         FunctionDecl *fdecl = dyn_cast<FunctionDecl>(redecl);
                         const ParmVarDecl *param = fdecl->getParamDecl(i);
                         fixits.push_back(fixitByValue(fdecl, param, classif));
