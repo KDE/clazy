@@ -203,3 +203,8 @@ struct DeletedCtor // bug #360112
 {
     Q_DISABLE_COPY(DeletedCtor)
 };
+
+struct CopyCtor // bug #360112
+{
+    CopyCtor(const CopyCtor &) {}
+};
