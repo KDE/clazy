@@ -198,3 +198,8 @@ struct QDBusMessage
 {
     void createErrorReply(QString) {}
 };
+
+struct DeletedCtor // bug #360112
+{
+    Q_DISABLE_COPY(DeletedCtor)
+};

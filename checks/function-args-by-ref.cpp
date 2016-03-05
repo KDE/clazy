@@ -112,8 +112,9 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
 
 void FunctionArgsByRef::processFunction(FunctionDecl *func)
 {
-    if (!func || shouldIgnoreFunction(func)
-            || !func->isThisDeclarationADefinition()) return;
+    if (!func || shouldIgnoreFunction(func) ||
+        !func->isThisDeclarationADefinition() || func->isDeleted())
+        return;
 
     Stmt *body = func->getBody();
 
