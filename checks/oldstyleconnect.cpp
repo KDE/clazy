@@ -386,7 +386,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 senderMethod = methodDecl;
             } else if (macroNum == 2) {
                 const unsigned int numReceiverParams = methodDecl->getNumParams();
-                if (numReceiverParams > senderMethod->getNumParams()) {
+                if (numReceiverParams > senderMethod->getMinRequiredArguments()) {
                     string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(senderMethod->getNumParams()) + ')';
                     queueManualFixitWarning(s, FixItConnects, msg);
                     return {};
