@@ -44,13 +44,8 @@ To build a CMake project use
 
 and rebuild.
 
-To make it the default compiler for cmake projects just:
 
- export CXX="clazy"
-
-Don't forget to clean and re-run cmake
-
-To make it the default compiler for qmake projects, just run qmake like:
+To make it the compiler for qmake projects, just run qmake like:
 qmake -spec linux-clang QMAKE_CXX="clazy"
 
 Alternatively, if you want to use clang directly, without the wrapper:
