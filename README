@@ -38,8 +38,16 @@ Compile your programs with it instead of clang++/g++.
 Note that this command is just a convenience wrapper which calls:
 clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy
 
+To build a CMake project use
+
+ cmake . -DCMAKE_CXX_COMPILER=clazy
+
+and rebuild.
+
 To make it the default compiler for cmake projects just:
-export CXX="clazy"
+
+ export CXX="clazy"
+
 Don't forget to clean and re-run cmake
 
 To make it the default compiler for qmake projects, just run qmake like:
