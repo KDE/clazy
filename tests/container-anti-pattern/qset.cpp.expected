@@ -1,0 +1,1 @@
+container-anti-pattern/qset.cpp:7:5: warning: Use QSet::intersects() instead [-Wclazy-container-anti-pattern]
