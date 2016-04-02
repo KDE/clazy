@@ -349,3 +349,7 @@ private:
 
 static FrontendPluginRegistry::Add<LazyASTAction>
 X("clang-lazy", "clang lazy plugin");
+
+#ifdef CLAZY_ON_WINDOWS_HACK
+LLVM_EXPORT_REGISTRY(FrontendPluginRegistry)
+#endif
