@@ -2,6 +2,7 @@
 
 import sys, os, subprocess, string, re, json, threading, multiprocessing
 from threading import Thread
+from sys import platform as _platform
 
 class QtInstallation:
     def __init__(self):
@@ -111,8 +112,14 @@ def find_qt_installation(major_version, qmakes):
 
     return installation
 
+def libraryName():
+    if _platform == 'win32':
+        return 'ClangLazy.dll'
+    else:
+        return 'ClangLazy.so'
+
 def compiler_command(qt):
-    return "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
+    return "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
 
 def dump_ast_command(test):
     return "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
@@ -131,7 +138,7 @@ CLANG_VERSION = int(version.replace('.', ''))
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
 _link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
-_help_command = "echo | clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
+_help_command = "echo | clang++ -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
