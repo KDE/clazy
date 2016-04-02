@@ -569,7 +569,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
 
 const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, string &implicitCallee)
 {
-    implicitCallee = {};
+    implicitCallee.clear();
     Expr *implicitArgument= call->getImplicitObjectArgument();
     if (!implicitArgument) {
         return nullptr;

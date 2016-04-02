@@ -297,7 +297,7 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 
 bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) const
 {
-    macroName = {};
+    macroName.clear();
     if (!loc.isMacroID() || loc.isInvalid())
         return false;
 
