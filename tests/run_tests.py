@@ -55,11 +55,12 @@ class Check:
 # utility functions #1
 
 def get_command_output(cmd, test_env = os.environ):
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=test_env)
-    if p.wait() != 0:
-        return None
-    output = p.communicate()
-    return output[0] + output[1]
+    try:
+        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
+    except subprocess.CalledProcessError, e:
+        return e.output,False
+
+    return output,True
 
 def load_json(check_name):
     check = Check(check_name)
@@ -106,9 +107,9 @@ def find_qt_installation(major_version, qmakes):
     installation = QtInstallation()
 
     for qmake in qmakes:
-        qmake_version_str = get_command_output(qmake + " -query QT_VERSION")
-        if qmake_version_str and qmake_version_str.startswith(str(major_version) + "."):
-            qmake_header_path = get_command_output(qmake + " -query QT_INSTALL_HEADERS").strip()
+        qmake_version_str,success = get_command_output(qmake + " -query QT_VERSION")
+        if success and qmake_version_str.startswith(str(major_version) + "."):
+            qmake_header_path = get_command_output(qmake + " -query QT_INSTALL_HEADERS")[0].strip()
             if qmake_header_path:
                 installation.qmake_header_path = qmake_header_path
                 installation.int_version = int(qmake_version_str.replace(".", ""))
@@ -132,7 +133,7 @@ def dump_ast_command(test):
 
 #-------------------------------------------------------------------------------
 # Get clang version
-version = get_command_output('clang --version')
+version,success = get_command_output('clang --version')
 
 match = re.search('clang version (.*?)[ -]', version)
 version = match.group(1)
@@ -165,8 +166,9 @@ def qt_installation(major_version):
     return None
 
 def run_command(cmd, output_file = "", test_env = os.environ):
-    lines = get_command_output(cmd, test_env)
-    if lines is None:
+    lines,success = get_command_output(cmd, test_env)
+    if not success and not output_file:
+        print lines
         return False
 
     lines = lines.replace('\r\n', '\n')
@@ -174,6 +176,9 @@ def run_command(cmd, output_file = "", test_env = os.environ):
         f = open(output_file, 'w')
         f.writelines(lines)
         f.close()
+    else:
+        print lines
+
     return True
 
 def print_usage():
