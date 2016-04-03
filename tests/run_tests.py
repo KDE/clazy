@@ -161,8 +161,9 @@ def qt_installation(major_version):
 def run_command(cmd, output_file = ""):
     lines = get_command_output(cmd)
     if lines is None:
-        return False;
+        return False
 
+    lines = lines.replace('\r\n', '\n')
     if output_file:
         f = open(output_file, 'w')
         f.writelines(lines)
