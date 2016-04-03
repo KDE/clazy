@@ -8,7 +8,7 @@ git@git.kde.org:clazy
 http://anongit.kde.org/clazy
 
 --------------------------------------------------------------------------------
-BUILD INSTRUCTIONS
+BUILD INSTRUCTIONS (Linux)
 
 * Install needed dependencies:
   OpenSUSE tumbleweed: zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel
@@ -23,11 +23,34 @@ BUILD INSTRUCTIONS
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DLLVM_TARGETS_TO_BUILD=X86 -DCMAKE_BUILD_TYPE=Release ..
   $ make -jX && make install
 
-* Build the clang-lazy plugin
+* Build the clazy plugin
+  $ cd clazy/
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
   $ make && make install
 
 See troubleshooting section if you have problems.
+--------------------------------------------------------------------------------
+BUILD INSTRUCTIONS (Windows)
+
+The instructions assume your terminal is suitable for development (msvc2013).
+jom, nmake, git, cmake and cl should be in your PATH.
+
+* Build and install llvm and clang from master (3.9)
+  > git clone https://github.com/llvm-mirror/llvm.git <some_directory>
+  > cd <some_directory>\tools\ && git clone https://github.com/llvm-mirror/clang.git
+  > cd clang
+  > git cherry-pick ae1cd1e7c301954bab703e9116a30b330902d43a
+  > git cherry-pick bce41007c954eafd1d2fdcecbf4cc007697901e7
+  > mkdir <some_directory>\build && cd <some_directory>\build
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X64" -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
+  > jom
+  > nmake install
+  > Add c:\my_install_folder\llvm\ to PATH
+
+* Build the clazy plugin
+  > cd clazy\
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" -DCLAZY_ON_WINDOWS_HACK=ON
+  > jom && nmake install
 
 --------------------------------------------------------------------------------
 SETTING UP YOUR PROJECT TO BUILD WITH CLAZY
