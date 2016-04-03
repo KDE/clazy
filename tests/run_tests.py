@@ -22,7 +22,7 @@ class Test:
         self.link = False # If true we also call the linker
         self.check = check
         self.qt_major_version = 5 # Tests use Qt 5 by default
-        self.env = {}
+        self.env = os.environ
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -39,6 +39,12 @@ class Test:
             result += key + '="' + self.env[key] + '" '
         return result
 
+    def setEnv(self, e):
+        self.env = os.environ.copy()
+        for key in e:
+            key_str = key.encode('ascii', 'ignore')
+            self.env[key_str] = e[key].encode('ascii', 'ignore')
+
 class Check:
     def __init__(self, name):
         self.name = name
@@ -48,8 +54,8 @@ class Check:
 #-------------------------------------------------------------------------------
 # utility functions #1
 
-def get_command_output(cmd):
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+def get_command_output(cmd, test_env = os.environ):
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=test_env)
     if p.wait() != 0:
         return None
     output = p.communicate()
@@ -90,7 +96,7 @@ def load_json(check_name):
             if 'qt_major_version' in t:
                 test.setQtMajorVersion(t['qt_major_version'])
             if 'env' in t:
-                test.env = t['env']
+                test.setEnv(t['env'])
 
             check.tests.append(test)
 
@@ -158,8 +164,8 @@ def qt_installation(major_version):
 
     return None
 
-def run_command(cmd, output_file = ""):
-    lines = get_command_output(cmd)
+def run_command(cmd, output_file = "", test_env = os.environ):
+    lines = get_command_output(cmd, test_env)
     if lines is None:
         return False
 
@@ -231,7 +237,7 @@ def run_unit_test(test):
     result_file = filename + ".result"
     expected_file = filename + ".expected"
 
-    compiler_cmd = test.envString() + compiler_command(qt)
+    compiler_cmd = compiler_command(qt)
 
     if test.link:
         cmd = compiler_cmd + " " + _link_flags
@@ -255,7 +261,7 @@ def run_unit_test(test):
     if _verbose:
         print "Running: " + clazy_cmd
 
-    cmd_success = run_command(clazy_cmd, output_file)
+    cmd_success = run_command(clazy_cmd, output_file, test.env)
 
     if not cmd_success:
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
