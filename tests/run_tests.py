@@ -167,6 +167,7 @@ def qt_installation(major_version):
 
 def run_command(cmd, output_file = "", test_env = os.environ):
     lines,success = get_command_output(cmd, test_env)
+    lines = lines.replace("std::_Container_base0", "std::_Vector_base") # Hack for Windows, we have std::_Vector_base in the expected data
     if not success and not output_file:
         print lines
         return False
