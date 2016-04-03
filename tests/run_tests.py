@@ -326,7 +326,7 @@ if _dump_ast:
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)
 requested_check_names = filter(lambda x: x not in switches, args)
-requested_check_names = map(lambda x: x.strip("/"), requested_check_names)
+requested_check_names = map(lambda x: x.strip("/\\"), requested_check_names)
 
 for check_name in requested_check_names:
     if check_name not in all_check_names:
