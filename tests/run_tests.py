@@ -48,10 +48,11 @@ class Check:
 # utility functions #1
 
 def get_command_output(cmd):
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     if p.wait() != 0:
-        return ""
-    return p.communicate()[0];
+        return None
+    output = p.communicate()
+    return output[0] + output[1]
 
 def load_json(check_name):
     check = Check(check_name)
@@ -150,9 +151,15 @@ def qt_installation(major_version):
 
     return None
 
-def run_command(cmd):
-    if os.system(cmd) != 0:
-        return False
+def run_command(cmd, output_file = ""):
+    lines = get_command_output(cmd)
+    if lines is None:
+        return False;
+
+    if output_file:
+        f = open(output_file, 'w')
+        f.writelines(lines)
+        f.close()
     return True
 
 def print_usage():
@@ -240,7 +247,7 @@ def run_unit_test(test):
     if _verbose:
         print "Running: " + clazy_cmd
 
-    cmd_success = run_command(clazy_cmd + " > " + output_file + " 2> " + output_file)
+    cmd_success = run_command(clazy_cmd, output_file)
 
     if not cmd_success:
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
