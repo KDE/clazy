@@ -59,8 +59,9 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
             Stmt *p = HierarchyUtils::parent(m_parentMap, stmt, i);
             while (p) {
                 CallExpr *pc = dyn_cast<CallExpr>(p);
-                if (pc) {
-                    if (pc->getDirectCallee() && pc->getDirectCallee()->getNameAsString() == "qDeleteAll") {
+                FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
+                if (f) {
+                    if (f->getNameAsString() == "qDeleteAll") {
                         emitWarning(p->getLocStart(), "Calling qDeleteAll with " + offendingClassName + "::" + funcName + ", call qDeleteAll on the container itself");
                     }
                     break;
