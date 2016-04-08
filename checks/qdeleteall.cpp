@@ -62,7 +62,12 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
                     if (f->getNameAsString() == "qDeleteAll") {
-                        emitWarning(p->getLocStart(), "Calling qDeleteAll with " + offendingClassName + "::" + funcName + ", call qDeleteAll on the container itself");
+                        string msg = "Calling qDeleteAll with " + offendingClassName + "::" + funcName;
+                        if (func->getNumParams() == 0) {
+                            msg += ", call qDeleteAll on the container itself";
+                        }
+
+                        emitWarning(p->getLocStart(), msg);
                     }
                     break;
                 }

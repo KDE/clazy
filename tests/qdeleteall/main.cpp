@@ -67,4 +67,6 @@ int main()
     qDeleteAll(m.keys()); // warning
     qDeleteAll(keys()); // ok
 
+    qDeleteAll(h.values(1)); // warning
+
 }
