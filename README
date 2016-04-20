@@ -61,6 +61,10 @@ Compile your programs with it instead of clang++/g++.
 Note that this command is just a convenience wrapper which calls:
 clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy
 
+If you have multiple versions of clang installed (say clang++-3.5 and clang++-3.6)
+you can choose which one to use by setting the CLANGXX environment variable, like so:
+export CLANGXX=clang++-3.6; clazy
+
 To build a CMake project use
 
  cmake . -DCMAKE_CXX_COMPILER=clazy
