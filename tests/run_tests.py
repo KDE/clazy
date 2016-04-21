@@ -23,6 +23,7 @@ class Test:
         self.check = check
         self.qt_major_version = 5 # Tests use Qt 5 by default
         self.env = os.environ
+        self.checks = []
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -98,6 +99,11 @@ def load_json(check_name):
                 test.setQtMajorVersion(t['qt_major_version'])
             if 'env' in t:
                 test.setEnv(t['env'])
+            if 'checks' in t:
+                test.checks = t['checks']
+
+            if not test.checks:
+                test.checks.append(test.check.name)
 
             check.tests.append(test)
 
@@ -253,7 +259,7 @@ def run_unit_test(test):
     if test.isScript():
         clazy_cmd = "./" + filename
     else:
-        clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + checkname + " "
+        clazy_cmd = cmd + " -Xclang -plugin-arg-clang-lazy -Xclang " + string.join(test.checks, ',') + " "
         if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
             clazy_cmd += _enable_fixits_argument + " "
         clazy_cmd += filename
