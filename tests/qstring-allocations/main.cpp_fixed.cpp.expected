@@ -16,7 +16,7 @@ void test()
 {
     QString s1;
     const char *cstring = "foo";
-    s1.contains(QStringLiteral("string")); // Warning
+    s1.contains(QLatin1String("string")); // Warning
     s1.contains(some_char_pointer()); // OK
 
     QString s2 = QStringLiteral("string"); // Warning
@@ -56,8 +56,8 @@ void test()
     QString s15 = QLatin1String(""); // Warning
     s15.startsWith(QLatin1String("ff")); // OK
     s15.startsWith(QLatin1String("ff")); // Warning, should be QLatin1String
-    s15.contains(QStringLiteral("ff")); // Warning, should be QStringLiteral
-    s15.indexOf(QStringLiteral("ff")); // Warning, should be QStringLiteral
+    s15.contains(QLatin1String("ff")); // Warning, should be QStringLiteral
+    s15.indexOf(QLatin1String("ff")); // Warning, should be QStringLiteral
 }
 
 
@@ -97,7 +97,7 @@ void test5()
 {
     test4(QStringLiteral("foo")); // Warning
     QString s;
-    s.contains(QStringLiteral("a")); // Warning
+    s.contains(QLatin1String("a")); // Warning
     s.compare(QStringLiteral("a"), QLatin1String("a")); // Warning
 }
 
@@ -135,7 +135,7 @@ void testCharsets()
         return;
     if (s == QString::fromLatin1("foó %1").arg(1))
         return;
-    s.contains(QString::fromLatin1("é"));
+    s.contains(QLatin1String("é"));
     s += QLatin1String(
         "fóó" );
     QString s123 = QString::fromLatin1(some_char_pointer_indirection("fóó"));
