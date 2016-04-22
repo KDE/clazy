@@ -29,6 +29,8 @@
 
 /**
  * Finds cases where you're using QMap<K,T> and K is a pointer. QHash<K,T> should be used instead.
+ *
+ * See README-qmap-with-pointer-key for more information.
  */
 class QMapWithPointerKey : public CheckBase {
 public:
