@@ -1,0 +1,1 @@
+qmap-with-pointer-key/main.cpp:18:5: warning: Use QHash<K,T> instead of QMap<K,T> when K is a pointer [-Wclazy-qmap-with-pointer-key]

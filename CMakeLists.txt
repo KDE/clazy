@@ -100,7 +100,7 @@ set(SRC_FILES
     checks/function-args-by-value.cpp
     checks/qdeleteall.cpp
     checks/qfileinfo-exists.cpp
-    checks/qmapkey.cpp
+    checks/qmap-with-pointer-key.cpp
     checks/qstringarg.cpp
     checks/qstringref.cpp
     checks/qstring-allocations.cpp

@@ -99,7 +99,7 @@ Checks from level0:
     qstring-ref    (fix-missing-qstringref)
     temporary-iterator
     qstring-arg
-    qmap-with-key-pointer
+    qmap-with-pointer-key
     qdatetime-utc    (fix-qdatetime-utc)
     qgetenv    (fix-qgetenv)
     qfileinfo-exists

@@ -22,18 +22,37 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef QMAP_KEY_CHECK_H
-#define QMAP_KEY_CHECK_H
+#include "qmap-with-pointer-key.h"
+#include "Utils.h"
+#include "checkmanager.h"
 
-#include "checkbase.h"
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
 
-/**
- * Finds cases where you're using QMap<K,T> and K is a pointer. QHash<K,T> should be used instead.
- */
-class QMapKeyChecker : public CheckBase {
-public:
-    QMapKeyChecker(const std::string &name, const clang::CompilerInstance &ci);
-    void VisitDecl(clang::Decl *decl) override;
-};
+using namespace clang;
+using namespace std;
 
-#endif
+QMapWithPointerKey::QMapWithPointerKey(const std::string &name, const clang::CompilerInstance &ci)
+    : CheckBase(name, ci)
+{
+}
+
+void QMapWithPointerKey::VisitDecl(clang::Decl *decl)
+{
+    auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
+    if (!tsdecl || tsdecl->getName() != "QMap")
+        return;
+
+    const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
+    if (templateArguments.size() != 2)
+        return;
+
+    QualType qt = templateArguments[0].getAsType();
+    const Type *t = qt.getTypePtrOrNull();
+    if (t && t->isPointerType()) {
+        emitWarning(decl->getLocStart(), "Use QHash<K,T> instead of QMap<K,T> when K is a pointer");
+    }
+}
+
+REGISTER_CHECK_WITH_FLAGS("qmap-with-pointer-key", QMapWithPointerKey, CheckLevel0)
