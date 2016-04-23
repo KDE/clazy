@@ -39,13 +39,10 @@ using namespace std;
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
     , m_name(name)
-    , m_lastDecl(nullptr)
-    , m_lastStmt(nullptr)
+    , m_context(m_ci.getASTContext())
+    , m_tu(m_context.getTranslationUnitDecl())
     , m_enabledFixits(0)
 {
-    ASTContext &context = m_ci.getASTContext();
-    m_tu = context.getTranslationUnitDecl();
-    m_lastMethodDecl = nullptr;
 }
 
 CheckBase::~CheckBase()

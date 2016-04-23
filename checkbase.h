@@ -96,13 +96,14 @@ protected:
     const clang::LangOptions &lo() const { return m_ci.getLangOpts(); }
 
     const clang::CompilerInstance &m_ci;
-    clang::TranslationUnitDecl *m_tu;
+    const std::string m_name;
+    const clang::ASTContext &m_context;
+    clang::TranslationUnitDecl *const m_tu;
     clang::ParentMap *m_parentMap;
-    clang::CXXMethodDecl *m_lastMethodDecl;
-    std::string m_name;
 
-    clang::Decl *m_lastDecl;
-    clang::Stmt *m_lastStmt;
+    clang::CXXMethodDecl *m_lastMethodDecl = nullptr;
+    clang::Decl *m_lastDecl = nullptr;
+    clang::Stmt *m_lastStmt = nullptr;
 private:
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
