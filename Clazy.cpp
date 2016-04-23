@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -88,13 +88,14 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 class LazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<LazyASTConsumer>
 {
 public:
-    LazyASTConsumer(CompilerInstance &ci, const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
+    LazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
+                    const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
     {
-        m_createdChecks = CheckManager::instance()->createChecks(requestedChecks, ci);
-        if (CheckManager::instance()->fixitsEnabled())
+        m_createdChecks = checkManager->createChecks(requestedChecks, ci);
+        if (checkManager->fixitsEnabled())
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
     }
 
@@ -202,11 +203,19 @@ static bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
     return c1.level < c2.level;
 }
 
-class LazyASTAction : public PluginASTAction {
+class LazyASTAction : public PluginASTAction
+{
+public:
+    LazyASTAction()
+        : PluginASTAction()
+        , m_checkManager(CheckManager::instance())
+    {
+    }
+
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
     {
-        return llvm::make_unique<LazyASTConsumer>(ci, m_checks, m_inplaceFixits);
+        return llvm::make_unique<LazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
     }
 
     bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_) override
@@ -226,15 +235,14 @@ protected:
         // This argument is for debugging purposes
         const bool printRequestedChecks = parseArgument("print-requested-checks", args);
 
-        auto checkManager = CheckManager::instance();
         const CheckLevel requestedLevel = parseLevel(/*by-ref*/args);
         if (requestedLevel != CheckLevelUndefined) {
-            checkManager->setRequestedLevel(requestedLevel);
+            m_checkManager->setRequestedLevel(requestedLevel);
         }
 
         if (parseArgument("enable-all-fixits", args)) {
             // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
-            checkManager->enableAllFixIts();
+            m_checkManager->enableAllFixIts();
         }
 
         if (args.size() > 1) {
@@ -247,7 +255,7 @@ protected:
             PrintHelp(llvm::errs());
             return false;
         } else if (args.size() == 1) {
-            m_checks = checkManager->checksForCommaSeparatedString(args[0]);
+            m_checks = m_checkManager->checksForCommaSeparatedString(args[0]);
             if (m_checks.empty()) {
                 llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
                 PrintHelp(llvm::errs());
@@ -256,16 +264,16 @@ protected:
         }
 
         // Append checks specified from env variable
-        RegisteredCheck::List checksFromEnv = CheckManager::instance()->requestedChecksThroughEnv();
+        RegisteredCheck::List checksFromEnv = m_checkManager->requestedChecksThroughEnv();
         copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(m_checks));
 
         if (m_checks.empty() && requestedLevel == CheckLevelUndefined) {
             // No check or level specified, lets use the default level
-            checkManager->setRequestedLevel(DefaultCheckLevel);
+            m_checkManager->setRequestedLevel(DefaultCheckLevel);
         }
 
         // Add checks from requested level
-        auto checksFromRequestedLevel = checkManager->checksFromRequestedLevel();
+        auto checksFromRequestedLevel = m_checkManager->checksFromRequestedLevel();
         clazy_std::append(checksFromRequestedLevel, m_checks);
         clazy_std::sort_and_remove_dups(m_checks, checkLessThan);
 
@@ -288,7 +296,7 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros)
     {
-        RegisteredCheck::List checks = CheckManager::instance()->availableChecks(MaxCheckLevel);
+        RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
         clazy_std::sort(checks, checkLessThanByLevel);
 
         ros << "Available checks and FixIts:\n\n";
@@ -309,7 +317,7 @@ protected:
             auto padded = check.name;
             padded.insert(padded.end(), 39 - padded.size(), ' ');
             ros << "    " << check.name;
-            auto fixits = CheckManager::instance()->availableFixIts(check.name);
+            auto fixits = m_checkManager->availableFixIts(check.name);
             if (!fixits.empty()) {
                 ros << "    (";
                 bool isFirst = true;
@@ -342,6 +350,7 @@ protected:
 private:
     RegisteredCheck::List m_checks;
     bool m_inplaceFixits = true;
+    CheckManager *const m_checkManager;
 };
 
 }

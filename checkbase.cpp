@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -42,6 +42,7 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     , m_context(m_ci.getASTContext())
     , m_tu(m_context.getTranslationUnitDecl())
     , m_enabledFixits(0)
+    , m_checkManager(CheckManager::instance())
 {
 }
 
@@ -197,7 +198,7 @@ std::vector<string> CheckBase::supportedOptions() const
 bool CheckBase::isOptionSet(const std::string &optionName) const
 {
     const string qualifiedName = name() + '-' + optionName;
-    return CheckManager::instance()->isOptionSet(qualifiedName);
+    return m_checkManager->isOptionSet(qualifiedName);
 }
 
 void CheckBase::setEnabledFixits(int fixits)
@@ -207,5 +208,5 @@ void CheckBase::setEnabledFixits(int fixits)
 
 bool CheckBase::isFixitEnabled(int fixit) const
 {
-    return (m_enabledFixits & fixit) || CheckManager::instance()->allFixitsEnabled();
+    return (m_enabledFixits & fixit) || m_checkManager->allFixitsEnabled();
 }
