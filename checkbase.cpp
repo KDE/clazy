@@ -63,8 +63,7 @@ void CheckBase::VisitDeclaration(Decl *decl)
         return;
 
     m_lastDecl = decl;
-    auto mdecl = dyn_cast<CXXMethodDecl>(decl);
-    if (mdecl)
+    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
         m_lastMethodDecl = mdecl;
 
     VisitDecl(decl);
