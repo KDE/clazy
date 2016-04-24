@@ -5,6 +5,14 @@
             "filename" : "test_requested_checks.sh",
             "compare_everything" : true,
             "minimum_qt_version" : 550
+        },
+        {
+            "filename" : "suppressions.cpp",
+            "checks"   : ["qstring-allocations", "foreach"]
+        },
+        {
+            "filename" : "suppressionsWholeFile.cpp",
+            "checks"   : ["qstring-allocations", "foreach"]
         }
     ]
 }

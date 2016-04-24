@@ -128,6 +128,7 @@ set(SRC_FILES
     MacroUtils.cpp
     TemplateUtils.cpp
     StringUtils.cpp
+    SuppressionManager.cpp
     TypeUtils.cpp
     QtUtils.cpp
     Utils.cpp)
@@ -135,7 +136,9 @@ set(SRC_FILES
 if (HAS_STD_REGEX)
     set(SRC_FILES ${SRC_FILES} checks/oldstyleconnect.cpp)
 else()
+    add_definitions(-DNO_STD_REGEX)
     message("old-style-connect check is disabled due to missing std::regex support")
+    message("Suppressions are disabled due to missing std::regex support")
 endif()
 
 add_clang_plugin(ClangLazy ${SRC_FILES})

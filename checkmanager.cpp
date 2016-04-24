@@ -304,3 +304,8 @@ CheckLevel CheckManager::requestedLevel() const
 {
     return m_requestedLevel;
 }
+
+SuppressionManager *CheckManager::suppressionManager()
+{
+    return &m_suppressionManager;
+}

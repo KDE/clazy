@@ -43,6 +43,7 @@ class SourceLocation;
 }
 
 class CheckManager;
+class SuppressionManager;
 
 enum CheckLevel {
     CheckLevelUndefined = -1,
@@ -99,13 +100,14 @@ protected:
 
     const clang::CompilerInstance &m_ci;
     const std::string m_name;
-    const clang::ASTContext &m_context;
+    clang::ASTContext &m_context;
     clang::TranslationUnitDecl *const m_tu;
     clang::ParentMap *m_parentMap;
 
     clang::CXXMethodDecl *m_lastMethodDecl = nullptr;
     clang::Decl *m_lastDecl = nullptr;
     clang::Stmt *m_lastStmt = nullptr;
+    SuppressionManager *m_suppressionManager = nullptr;
 private:
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;

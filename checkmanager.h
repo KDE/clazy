@@ -26,6 +26,7 @@
 #define CLANG_LAZY_CHECK_MANAGER_H
 
 #include "checkbase.h"
+#include "SuppressionManager.h"
 
 #include <string>
 #include <functional>
@@ -87,6 +88,8 @@ public:
     void setRequestedLevel(CheckLevel level);
     CheckLevel requestedLevel() const;
 
+    SuppressionManager* suppressionManager();
+
 private:
     CheckManager();
 
@@ -101,6 +104,7 @@ private:
     bool m_enableAllFixits;
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
+    SuppressionManager m_suppressionManager;
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
