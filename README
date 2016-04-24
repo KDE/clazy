@@ -12,8 +12,9 @@ BUILD INSTRUCTIONS (Linux)
 
 * Install needed dependencies:
   OpenSUSE tumbleweed: zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel
-  Ubuntu-15.10: apt-get install g++ cmake clang llvm git-core libclang-3.6-dev
+  Ubuntu-16.04: apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev
   Archlinux: pacman -S make llvm clang python2 cmake qt5-base git gcc
+  Other distros: Check llvm/clang build docs.
 
 * Build and install clang >= 3.6 if your distro doesn't provide it
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
