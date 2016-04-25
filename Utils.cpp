@@ -311,7 +311,8 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
         DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(arg);
         if (!refExpr)  {
             if (clazy_std::hasChildren(arg)) {
-                refExpr = dyn_cast<DeclRefExpr>(*(arg->child_begin()));
+                Stmt* firstChild = *(arg->child_begin()); // Can be null (bug #362236)
+                refExpr = firstChild ? dyn_cast<DeclRefExpr>(firstChild) : nullptr;
                 if (!refExpr)
                     continue;
             } else {
