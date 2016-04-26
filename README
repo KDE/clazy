@@ -175,7 +175,8 @@ TROUBLESHOOTING
   [2] https://llvm.org/bugs/show_bug.cgi?id=23529
 
 - [Fedora 23] cmake can't find LLVM ?
-  Looks like /usr/share/llvm/cmake/LLVM-Config.cmake is buggy. Better build your own llvm/clang.
+  Try installing the llvm-static package. If that doesn't work you'll have to build llvm/clang yourself
+  (There are reports that /usr/share/llvm/cmake/LLVM-Config.cmake is buggy).
 
 - Some checks are misteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off
