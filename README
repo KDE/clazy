@@ -43,7 +43,7 @@ jom, nmake, git, cmake and cl should be in your PATH.
   > git cherry-pick ae1cd1e7c301954bab703e9116a30b330902d43a
   > git cherry-pick bce41007c954eafd1d2fdcecbf4cc007697901e7
   > mkdir <some_directory>\build && cd <some_directory>\build
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X64" -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X86" -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
   > jom
   > nmake install
   > Add c:\my_install_folder\llvm\ to PATH
