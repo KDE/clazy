@@ -50,6 +50,16 @@ bool isQtIterableClass(clang::CXXRecordDecl *record);
 bool isQtIterableClass(const std::string &className);
 
 /**
+ * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
+ */
+bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
+
+/**
+ * Overload.
+ */
+bool isQtCOWIterableClass(const std::string &className);
+
+/**
  * Returns true if the class is a Qt class which is an associative container (QHash, QMap, QSet)
  */
 bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
@@ -65,9 +75,15 @@ bool isQtAssociativeContainer(const std::string &className);
 const std::vector<std::string> & qtContainers();
 
 /**
+ * Returns a list of implicitly shared Qt containers.
+ */
+const std::vector<std::string> & qtCOWContainers();
+
+/**
  * Returns true if a type represents a Qt container class.
  */
 bool isQtContainer(clang::QualType, clang::LangOptions);
+
 
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler

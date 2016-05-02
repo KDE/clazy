@@ -48,6 +48,28 @@ const vector<string> & QtUtils::qtContainers()
     return classes;
 }
 
+const vector<string> & QtUtils::qtCOWContainers()
+{
+    static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
+                                            "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString",
+                                            "QByteArray", "QJsonArray", "QLinkedList" };
+    return classes;
+}
+
+bool QtUtils::isQtCOWIterableClass(clang::CXXRecordDecl *record)
+{
+    if (!record)
+        return false;
+
+    return isQtCOWIterableClass(record->getQualifiedNameAsString());
+}
+
+bool QtUtils::isQtCOWIterableClass(const string &className)
+{
+    const auto &classes = qtCOWContainers();
+    return clazy_std::contains(classes, className);
+}
+
 bool QtUtils::isQtIterableClass(const string &className)
 {
     const auto &classes = qtContainers();
