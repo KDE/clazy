@@ -67,7 +67,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    if (QtUtils::isQtIterableClass(Utils::rootBaseClass(record))) {
+    if (QtUtils::isQtCOWIterableClass(Utils::rootBaseClass(record))) {
         emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
     }
 }

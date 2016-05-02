@@ -1,8 +1,8 @@
 #include <QtCore/QList>
 #include <vector>
 #include <QtCore/QMap>
+#include <QtCore/QSequentialIterable>
 using namespace std;
-
 QList<int> getQtList()
 {
     return {}; // dummy, not important
@@ -140,4 +140,8 @@ void test_missing_ref()
     for (BigTrivial t : bigTrivials) {
         nop4(&t);
     }
+
+    // Test #10: No warning (bug #362587)
+    QSequentialIterable si = QVariant().value<QSequentialIterable>();
+    for (const auto &s : si) {}
 }
