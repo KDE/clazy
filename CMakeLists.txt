@@ -76,8 +76,8 @@ set(SYMBOL_FILE Lazy.exports)
 set(SRC_FILES
     checkbase.cpp
     checkmanager.cpp
-    checks/autounexpectedqstringbuilder.cpp
     checks/assertwithsideeffects.cpp
+    checks/autounexpectedqstringbuilder.cpp
     checks/container-anti-pattern.cpp
     checks/container-inside-loop.cpp
     checks/copyable-polymorphic.cpp
@@ -86,35 +86,35 @@ set(SRC_FILES
     checks/detachingtemporary.cpp
     checks/dynamic_cast.cpp
     checks/foreach.cpp
-    checks/globalconstcharpointer.cpp
-    checks/isempty-vs-count.cpp
-    checks/inefficientqlistbase.cpp
-    checks/inefficientqlist.cpp
-    checks/inefficient-qlist-soft.cpp
-    checks/implicitcasts.cpp
-    checks/lambda-in-connect.cpp
-    checks/qdatetimeutc.cpp
-    checks/qgetenv.cpp
-    checks/qvariant-template-instantiation.cpp
     checks/function-args-by-ref.cpp
     checks/function-args-by-value.cpp
+    checks/globalconstcharpointer.cpp
+    checks/implicitcasts.cpp
+    checks/inefficient-qlist-soft.cpp
+    checks/inefficientqlist.cpp
+    checks/inefficientqlistbase.cpp
+    checks/isempty-vs-count.cpp
+    checks/lambda-in-connect.cpp
+    checks/missing-qobject-macro.cpp
+    checks/missing-type-info.cpp
+    checks/nonpodstatic.cpp
+    checks/qdatetimeutc.cpp
     checks/qdeleteall.cpp
     checks/qfileinfo-exists.cpp
+    checks/qgetenv.cpp
     checks/qmap-with-pointer-key.cpp
-    checks/qstringarg.cpp
-    checks/qstringref.cpp
     checks/qstring-allocations.cpp
     checks/qstring-insensitive-allocation.cpp
+    checks/qstringarg.cpp
+    checks/qstringref.cpp
     checks/qt4-qstring-from-array.cpp
-    checks/missing-type-info.cpp
-    checks/missing-qobject-macro.cpp
-    checks/nonpodstatic.cpp
+    checks/qvariant-template-instantiation.cpp
     checks/range-loop.cpp
     checks/requiredresults.cpp
     checks/reservecandidates.cpp
     checks/ruleofbase.cpp
-    checks/ruleoftwosoft.cpp
     checks/ruleofthree.cpp
+    checks/ruleoftwosoft.cpp
     checks/temporaryiterator.cpp
     checks/unused-non-trivial-variable.cpp
     checks/virtualcallsfromctor.cpp
@@ -126,11 +126,11 @@ set(SRC_FILES
     HierarchyUtils.cpp
     LoopUtils.cpp
     MacroUtils.cpp
-    TemplateUtils.cpp
+    QtUtils.cpp
     StringUtils.cpp
     SuppressionManager.cpp
+    TemplateUtils.cpp
     TypeUtils.cpp
-    QtUtils.cpp
     Utils.cpp)
 
 if (HAS_STD_REGEX)
