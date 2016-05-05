@@ -105,6 +105,7 @@ set(SRC_FILES
     checks/qmap-with-pointer-key.cpp
     checks/qstring-allocations.cpp
     checks/qstring-insensitive-allocation.cpp
+    checks/qstring-left.cpp
     checks/qstringarg.cpp
     checks/qstringref.cpp
     checks/qt4-qstring-from-array.cpp
