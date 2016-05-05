@@ -168,44 +168,6 @@ else()
 endif()
 
 # Install the explanation README's
-set(README_FILES
-    checks/README-auto-unexpected-qstringbuilder
-    checks/README-bogus-dynamic-cast
-    checks/README-container-anti-pattern
-    checks/README-container-inside-loop
-    checks/README-copyable-polymorphic
-    checks/README-detaching-member
-    checks/README-detaching-temporary
-    checks/README-foreach
-    checks/README-function-args-by-ref
-    checks/README-function-args-by-value
-    checks/README-implicit-casts
-    checks/README-inefficient-qlist
-    checks/README-inefficient-qlist-soft
-    checks/README-isempty-vs-count
-    checks/README-lambda-in-connect
-    checks/README-missing-qobject
-    checks/README-missing-type-info
-    checks/README-non-pod-global-static
-    checks/README-old-style-connect
-    checks/README-qdatetime-utc
-    checks/README-qdeleteall
-    checks/README-qfileinfo-exists
-    checks/README-qgetenv
-    checks/README-qmap-with-key-pointer
-    checks/README-qstring-allocations
-    checks/README-qstring-arg
-    checks/README-qstring-insensitive-allocation
-    checks/README-qstring-ref
-    checks/README-qt4-qstring-from-array
-    checks/README-range-loop
-    checks/README-reserve-candidates
-    checks/README-rule-of-three
-    checks/README-rule-of-two-soft
-    checks/README-temporary-iterator
-    checks/README-unused-non-trivial-variable
-    checks/README-variant-template-instantiation
-    checks/README-writing-to-temporary
-    checks/README-wrong-qglobalstatic
-)
+
+file(GLOB README_FILES checks/README-*)
 install(FILES ${README_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc)
