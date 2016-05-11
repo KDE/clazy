@@ -247,5 +247,15 @@ void testNesting2()
             v2.append(1);
         }
     }
+}
 
+#include <QtCore/QQueue>
+void bug362943()
+{
+    QVector<int> vect;
+    QQueue<int> q;
+    q.reserve(10);
+    for (const int i: vect) {
+        q << i;
+    }
 }
