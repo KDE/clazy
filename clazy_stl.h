@@ -144,6 +144,21 @@ inline bool hasChildren(clang::Stmt *s)
     return s && !clazy_std::isEmpty(s->children());
 }
 
+inline clang::Stmt* childAt(clang::Stmt *s, int index)
+{
+    int count = s ? std::distance(s->child_begin(), s->child_end()) : 0;
+    if (count > index) {
+        auto it = s->child_begin();
+        while (index > 0) {
+            ++it;
+            --index;
+        }
+        return *it;
+    }
+
+    return nullptr;
+}
+
 /**
  * Returns true if the string target starts with maybeBeginning
  */
