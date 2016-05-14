@@ -217,16 +217,20 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     if (!operatorCall)
         return nullptr;
 
-    for (auto child : operatorCall->children()) {
-        if (!child) // Can happen
-            continue;
+    // CXXOperatorCallExpr doesn't have API to access the value decl.
+    // By inspecting several ASTs I noticed it's always in the 2nd child
 
-        auto declRefExpr = dyn_cast<DeclRefExpr>(child);
-        auto memberExpr =  dyn_cast<MemberExpr>(child);
-        if (declRefExpr) {
-            return declRefExpr->getDecl();
-        } else if (memberExpr) {
-            return memberExpr->getMemberDecl();
+    Stmt *child2 = clazy_std::childAt(operatorCall, 1);
+    if (!child2)
+        return nullptr;
+
+    if (auto memberExpr = dyn_cast<MemberExpr>(child2)) {
+        return memberExpr->getMemberDecl();
+    } else {
+        vector<DeclRefExpr*> refs;
+        HierarchyUtils::getChilds<DeclRefExpr>(child2, refs);
+        if (refs.size() == 1) {
+            return refs[0]->getDecl();
         }
     }
 
