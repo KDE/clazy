@@ -22,7 +22,7 @@
 
 #ifndef CLAZY_FIXIT_UTILS_H
 #define CLAZY_FIXIT_UTILS_H
-
+#include "clazylib_export.h"
 #include <clang/Parse/Parser.h>
 
 #include <string>
@@ -44,35 +44,35 @@ namespace FixItUtils {
 /**
  * Replaces whatever is in range, with replacement
  */
-clang::FixItHint createReplacement(clang::SourceRange range, const std::string &replacement);
+CLAZYLIB_EXPORT clang::FixItHint createReplacement(clang::SourceRange range, const std::string &replacement);
 
 /**
  * Inserts insertion at start
  */
-clang::FixItHint createInsertion(clang::SourceLocation start, const std::string &insertion);
+CLAZYLIB_EXPORT clang::FixItHint createInsertion(clang::SourceLocation start, const std::string &insertion);
 
 /**
  * Transforms foo into method(foo), by inserting "method(" at the beginning, and ')' at the end
  */
-void insertParentMethodCall(const std::string &method, clang::SourceRange range, std::vector<clang::FixItHint> &fixits);
+CLAZYLIB_EXPORT void insertParentMethodCall(const std::string &method, clang::SourceRange range, std::vector<clang::FixItHint> &fixits);
 
 /**
  * Transforms foo into method("literal"), by inserting "method(" at the beginning, and ')' at the end
  * Takes into account multi-token literals such as "foo""bar"
  */
-bool insertParentMethodCallAroundStringLiteral(const clang::CompilerInstance& ci, const std::string &method, clang::StringLiteral *lt, std::vector<clang::FixItHint> &fixits);
+CLAZYLIB_EXPORT bool insertParentMethodCallAroundStringLiteral(const clang::CompilerInstance& ci, const std::string &method, clang::StringLiteral *lt, std::vector<clang::FixItHint> &fixits);
 
 /**
  * Returns the range this literal spans. Takes into account multi token literals, such as "foo""bar"
  */
-clang::SourceRange rangeForLiteral(const clang::CompilerInstance& ci, clang::StringLiteral *);
+CLAZYLIB_EXPORT clang::SourceRange rangeForLiteral(const clang::CompilerInstance& ci, clang::StringLiteral *);
 
 /**
  * Goes through all children of stmt and finds the biggests source location.
  */
-clang::SourceLocation biggestSourceLocationInStmt(const clang::SourceManager &sm, clang::Stmt *stmt);
+CLAZYLIB_EXPORT clang::SourceLocation biggestSourceLocationInStmt(const clang::SourceManager &sm, clang::Stmt *stmt);
 
-clang::SourceLocation locForNextToken(const clang::CompilerInstance &ci, clang::SourceLocation start, clang::tok::TokenKind kind);
+CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(const clang::CompilerInstance &ci, clang::SourceLocation start, clang::tok::TokenKind kind);
 
 /**
  * Returns the end location of the token that starts at start.
@@ -84,12 +84,12 @@ clang::SourceLocation locForNextToken(const clang::CompilerInstance &ci, clang::
  *             ^  // expr->getLocEnd()
  *      ^         // FixItUtils::locForEndOfToken(expr->getLocStart())
  */
-clang::SourceLocation locForEndOfToken(const clang::CompilerInstance &ci, clang::SourceLocation start, int offset = 0);
+CLAZYLIB_EXPORT clang::SourceLocation locForEndOfToken(const clang::CompilerInstance &ci, clang::SourceLocation start, int offset = 0);
 
 /**
  * Transforms a call such as: foo("hello").bar() into baz("hello")
  */
-bool transformTwoCallsIntoOne(const clang::CompilerInstance &ci, clang::CallExpr *foo, clang::CXXMemberCallExpr *bar,
+CLAZYLIB_EXPORT bool transformTwoCallsIntoOne(const clang::CompilerInstance &ci, clang::CallExpr *foo, clang::CXXMemberCallExpr *bar,
                               const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
 
@@ -97,13 +97,13 @@ bool transformTwoCallsIntoOne(const clang::CompilerInstance &ci, clang::CallExpr
  * Transforms a call such as: foo("hello").bar() into baz()
  * This version basically replaces everything from start to end with baz.
  */
-bool transformTwoCallsIntoOneV2(const clang::CompilerInstance &ci, clang::CXXMemberCallExpr *bar,
+CLAZYLIB_EXPORT bool transformTwoCallsIntoOneV2(const clang::CompilerInstance &ci, clang::CXXMemberCallExpr *bar,
                                 const std::string &baz, std::vector<clang::FixItHint> &fixits);
 
-clang::FixItHint fixItReplaceWordWithWord(const clang::CompilerInstance &ci, clang::Stmt *begin,
+CLAZYLIB_EXPORT clang::FixItHint fixItReplaceWordWithWord(const clang::CompilerInstance &ci, clang::Stmt *begin,
                                           const std::string &replacement, const std::string &replacee);
 
-std::vector<clang::FixItHint> fixItRemoveToken(const clang::CompilerInstance &ci,
+CLAZYLIB_EXPORT std::vector<clang::FixItHint> fixItRemoveToken(const clang::CompilerInstance &ci,
                                                clang::Stmt *stmt,
                                                bool removeParenthesis);
 

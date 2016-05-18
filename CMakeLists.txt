@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (ClangLazy)
 
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 find_package(Clang 3.6 MODULE REQUIRED)
 
@@ -68,14 +69,49 @@ macro(add_clang_plugin name)
         target_link_libraries( ${name} ${user_lib} )
     endforeach()
 
+    target_link_libraries( ${name} clazylib )
+
 endmacro(add_clang_plugin)
 
+# clazylib version
+set(clazylib_VERSION_MAJOR 0)
+set(clazylib_VERSION_MINOR 1)
+# Enable the full x.y.z version only for release versions
+set(clazylib_VERSION_PATCH 0)
+set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
+
+include_directories(${CMAKE_BINARY_DIR})
+set(CLAZY_LIB_SRC
+    checkbase.cpp
+    checkmanager.cpp
+    SuppressionManager.cpp
+    ContextUtils.cpp
+    FixItUtils.cpp
+    HierarchyUtils.cpp
+    LoopUtils.cpp
+    MacroUtils.cpp
+    QtUtils.cpp
+    StringUtils.cpp
+    TemplateUtils.cpp
+    TypeUtils.cpp
+    Utils.cpp)
+
+add_library(clazylib SHARED
+    ${CLAZY_LIB_SRC}
+    )
+
+set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
+include("GNUInstallDirs")
+
+install(TARGETS clazylib EXPORT LibClaryExport
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
 
 set(SYMBOL_FILE Lazy.exports)
 
 set(SRC_FILES
-    checkbase.cpp
-    checkmanager.cpp
     checks/assertwithsideeffects.cpp
     checks/autounexpectedqstringbuilder.cpp
     checks/container-anti-pattern.cpp
@@ -122,17 +158,7 @@ set(SRC_FILES
     checks/writingtotemporary.cpp
     checks/wrong-qglobalstatic.cpp
     Clazy.cpp
-    ContextUtils.cpp
-    FixItUtils.cpp
-    HierarchyUtils.cpp
-    LoopUtils.cpp
-    MacroUtils.cpp
-    QtUtils.cpp
-    StringUtils.cpp
-    SuppressionManager.cpp
-    TemplateUtils.cpp
-    TypeUtils.cpp
-    Utils.cpp)
+    )
 
 if (HAS_STD_REGEX)
     set(SRC_FILES ${SRC_FILES} checks/oldstyleconnect.cpp)
@@ -148,7 +174,6 @@ set_target_properties(ClangLazy PROPERTIES
     LINKER_LANGUAGE CXX
     PREFIX "")
 
-include("GNUInstallDirs")
 install(TARGETS ClangLazy     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                               LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                               ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -171,3 +196,23 @@ endif()
 
 file(GLOB README_FILES checks/README-*)
 install(FILES ${README_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc)
+
+set(CLAZY_LIB_INCLUDES
+    checkbase.h
+    checkmanager.h
+    SuppressionManager.h
+    ContextUtils.h
+    FixItUtils.h
+    HierarchyUtils.h
+    LoopUtils.h
+    MacroUtils.h
+    QtUtils.h
+    StringUtils.h
+    TemplateUtils.h
+    TypeUtils.h
+    Utils.h
+    clazy_stl.h
+    clazylib_export.h
+    )
+
+install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy )
