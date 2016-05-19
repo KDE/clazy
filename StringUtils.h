@@ -25,7 +25,6 @@
 #ifndef CLANG_LAZY_STRING_UTILS_H
 #define CLANG_LAZY_STRING_UTILS_H
 
-#include "checkmanager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "clazy_stl.h"

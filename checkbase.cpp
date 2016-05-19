@@ -24,6 +24,7 @@
 
 #include "checkbase.h"
 #include "StringUtils.h"
+#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
