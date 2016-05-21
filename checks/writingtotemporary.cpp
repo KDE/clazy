@@ -55,7 +55,7 @@ vector<string> WritingToTemporary::supportedOptions() const
 static bool isDisallowedClass(const string &className)
 {
     static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
-                                               "QScriptValue", "QTextLine", "QTextBlock", "QDomNode" };
+                                               "QScriptValue", "QTextLine", "QTextBlock", "QDomNode", "QJSValue" };
     return clazy_std::contains(disallowed, className);
 }
 
