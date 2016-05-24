@@ -24,7 +24,7 @@
 
 #ifndef CLANG_LAZY_CHECK_MANAGER_H
 #define CLANG_LAZY_CHECK_MANAGER_H
-
+#include "clazylib_export.h"
 #include "checkbase.h"
 #include "SuppressionManager.h"
 
@@ -33,7 +33,7 @@
 #include <vector>
 #include <unordered_map>
 
-struct RegisteredFixIt {
+struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
     RegisteredFixIt() : id(-1) {}
     RegisteredFixIt(int id, const std::string &name) : id(id), name(name) {}
@@ -44,7 +44,7 @@ struct RegisteredFixIt {
 
 using FactoryFunction = std::function<CheckBase*(const clang::CompilerInstance &ci)>;
 
-struct RegisteredCheck {
+struct CLAZYLIB_EXPORT RegisteredCheck {
     typedef std::vector<RegisteredCheck> List;
     std::string name;
     CheckLevel level;
@@ -52,7 +52,7 @@ struct RegisteredCheck {
     bool operator==(const RegisteredCheck &other) const { return name == other.name; }
 };
 
-class CheckManager
+class CLAZYLIB_EXPORT CheckManager
 {
 public:
     static CheckManager *instance();

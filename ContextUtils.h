@@ -22,6 +22,8 @@
 #ifndef CLAZY_CONTEXT_UTILS_H
 #define CLAZY_CONTEXT_UTILS_H
 
+#include "clazylib_export.h"
+
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -47,13 +49,13 @@ namespace ContextUtils
  * This returns true if "QList<int> l;" is a local variable, instead of being a class field such
  * as struct Foo { QList<int> l; }
  */
-bool isValueDeclInFunctionContext(clang::ValueDecl *);
+CLAZYLIB_EXPORT bool isValueDeclInFunctionContext(clang::ValueDecl *);
 
 /**
  * Returns the list of scopes for a decl context (namespaces, classes, inner classes, etc)
  * The inner ones are at the beginning of the list
  */
-std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
+CLAZYLIB_EXPORT std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
 
 
 /**
@@ -81,7 +83,7 @@ T* firstContextOfType(clang::DeclContext *context)
  * if currentScope == nullptr will return a fully qualified name
  */
 
-std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager,
+CLAZYLIB_EXPORT std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager,
                                        clang::CXXMethodDecl *method,
                                        clang::DeclContext *currentScope,
                                        clang::SourceLocation usageLoc, bool honourUsingDirectives);
@@ -96,7 +98,7 @@ std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager
  * but only if you qualify it with the derived class name, so &Derived::baseMethod, instead of &Base::baseMethod
  * If this was the case then isSpecialProtectedCase will be true
  */
-bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context, bool &isSpecialProtectedCase);
+CLAZYLIB_EXPORT bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context, bool &isSpecialProtectedCase);
 
 }
 

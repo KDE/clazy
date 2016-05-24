@@ -22,6 +22,8 @@
 #ifndef CLAZY_QT_UTILS_H
 #define CLAZY_QT_UTILS_H
 
+#include "clazylib_export.h"
+
 #include <string>
 #include <vector>
 
@@ -42,83 +44,83 @@ namespace QtUtils
  * Returns true if the class is a Qt class which can be iterated with foreach.
  * Which means all containers and also stuff like QAssociativeIterable.
  */
-bool isQtIterableClass(clang::CXXRecordDecl *record);
+CLAZYLIB_EXPORT bool isQtIterableClass(clang::CXXRecordDecl *record);
 
 /**
  * Overload.
  */
-bool isQtIterableClass(const std::string &className);
+CLAZYLIB_EXPORT bool isQtIterableClass(const std::string &className);
 
 /**
  * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
  */
-bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
+CLAZYLIB_EXPORT bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
 
 /**
  * Overload.
  */
-bool isQtCOWIterableClass(const std::string &className);
+CLAZYLIB_EXPORT bool isQtCOWIterableClass(const std::string &className);
 
 /**
  * Returns true if the class is a Qt class which is an associative container (QHash, QMap, QSet)
  */
-bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
+CLAZYLIB_EXPORT bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
 
 /**
  * Overload.
  */
-bool isQtAssociativeContainer(const std::string &className);
+CLAZYLIB_EXPORT bool isQtAssociativeContainer(const std::string &className);
 
 /**
  * Returns a list of Qt containers.
  */
-const std::vector<std::string> & qtContainers();
+CLAZYLIB_EXPORT const std::vector<std::string> & qtContainers();
 
 /**
  * Returns a list of implicitly shared Qt containers.
  */
-const std::vector<std::string> & qtCOWContainers();
+CLAZYLIB_EXPORT const std::vector<std::string> & qtCOWContainers();
 
 /**
  * Returns true if a type represents a Qt container class.
  */
-bool isQtContainer(clang::QualType, clang::LangOptions);
+CLAZYLIB_EXPORT bool isQtContainer(clang::QualType, clang::LangOptions);
 
 
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler
  */
-bool isBootstrapping(const clang::CompilerInstance &);
+CLAZYLIB_EXPORT bool isBootstrapping(const clang::CompilerInstance &);
 
 /**
  * Returns if decl is or derives from QObject
  */
-bool isQObject(clang::CXXRecordDecl *decl);
+CLAZYLIB_EXPORT bool isQObject(clang::CXXRecordDecl *decl);
 
 /**
  * Convertible means that a signal with of type source can connect to a signal/slot of type target
  */
-bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
+CLAZYLIB_EXPORT bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
 
 /**
  * Returns true if \a loc is in a foreach macro
  */
-bool isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc);
+CLAZYLIB_EXPORT bool isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc);
 
 /**
  * Returns true if \a record is a java-style iterator
  */
-bool isJavaIterator(clang::CXXRecordDecl *record);
+CLAZYLIB_EXPORT bool isJavaIterator(clang::CXXRecordDecl *record);
 
-bool isJavaIterator(clang::CXXMemberCallExpr *call);
+CLAZYLIB_EXPORT bool isJavaIterator(clang::CXXMemberCallExpr *call);
 
 /**
  * Returns true if the call is on a java-style iterator class.
  * Returns if sizeof(T) > sizeof(void*), which would make QList<T> inefficient
  */
-bool isTooBigForQList(clang::QualType, const clang::CompilerInstance &ci);
+CLAZYLIB_EXPORT bool isTooBigForQList(clang::QualType, const clang::CompilerInstance &ci);
 
-clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
+CLAZYLIB_EXPORT clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
 
 }
 

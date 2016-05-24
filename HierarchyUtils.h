@@ -24,7 +24,7 @@
 
 #ifndef CLAZY_HIERARCHY_UTILS_H
 #define CLAZY_HIERARCHY_UTILS_H
-
+#include "clazylib_export.h"
 // Contains utility classes to retrieve parents and childs from AST Nodes
 #include "clazy_stl.h"
 #include <clang/Frontend/CompilerInstance.h>
@@ -40,12 +40,12 @@ namespace HierarchyUtils {
 /**
  * Returns true if child is a child of parent.
  */
-bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
+CLAZYLIB_EXPORT bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
 
 /**
  * Returns true if stm is parent of a member function call named "name"
  */
-bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name);
+CLAZYLIB_EXPORT bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name);
 
 /**
  * Returns the first child of stm of type T.
@@ -96,7 +96,7 @@ T* getFirstChildOfType2(clang::Stmt *stm)
 // If depth = 0, return s
 // If depth = 1, returns parent of s
 // etc.
-clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, unsigned int depth = 1);
+CLAZYLIB_EXPORT clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, unsigned int depth = 1);
 
 // Returns the first parent of type T, with max depth depth
 template <typename T>
@@ -115,9 +115,9 @@ T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int dep
     return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
 }
 
-clang::Stmt * getFirstChild(clang::Stmt *parent);
+CLAZYLIB_EXPORT clang::Stmt * getFirstChild(clang::Stmt *parent);
 
-clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
+CLAZYLIB_EXPORT clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
 
 template <typename T>
 void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)

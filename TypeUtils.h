@@ -22,6 +22,8 @@
 #ifndef CLAZY_TYPE_UTILS_H
 #define CLAZY_TYPE_UTILS_H
 
+#include "clazylib_export.h"
+
 namespace clang {
 class CompilerInstance;
 class QualType;
@@ -35,7 +37,7 @@ namespace TypeUtils
     /**
      * Returns the sizeof(void*) for the platform we're compiling for, in bits.
      */
-    int sizeOfPointer(const clang::CompilerInstance &, clang::QualType qt);
+    CLAZYLIB_EXPORT int sizeOfPointer(const clang::CompilerInstance &, clang::QualType qt);
 
     struct QualTypeClassification {
         bool isConst = false;
@@ -55,7 +57,7 @@ namespace TypeUtils
      * The optional parameter body is in order to advise non-const-ref -> value, since the body
      * needs to be inspected to see if we that would compile.
      */
-    bool classifyQualType(const clang::CompilerInstance &ci, const clang::VarDecl *varDecl,
+    CLAZYLIB_EXPORT bool classifyQualType(const clang::CompilerInstance &ci, const clang::VarDecl *varDecl,
                           QualTypeClassification &classification,
                           clang::Stmt *body = nullptr);
 
@@ -66,7 +68,7 @@ namespace TypeUtils
      * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
      * returns false. Must go through qualType->getPointeeType().isConstQualified().
      */
-    clang::QualType unrefQualType(clang::QualType qt);
+    CLAZYLIB_EXPORT clang::QualType unrefQualType(clang::QualType qt);
 }
 
 #endif

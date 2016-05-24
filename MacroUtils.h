@@ -22,6 +22,8 @@
 #ifndef CLAZY_MACRO_UTILS_H
 #define CLAZY_MACRO_UTILS_H
 
+#include "clazylib_export.h"
+
 #include <string>
 #include <vector>
 
@@ -37,17 +39,17 @@ namespace MacroUtils
  * Returns true is macroName was defined via compiler invocation argument.
  * Like $ gcc -Dfoo main.cpp
  */
-bool isPredefined(const clang::CompilerInstance &, const std::string &macroName);
+CLAZYLIB_EXPORT bool isPredefined(const clang::CompilerInstance &, const std::string &macroName);
 
 /**
  * Returns true if the source location loc is inside a macro named macroName.
  */
-bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
+CLAZYLIB_EXPORT bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
 
 /**
  * Returns true if the source location loc is inside any of the specified macros.
  */
-bool isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames);
+CLAZYLIB_EXPORT bool isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames);
 
 }
 
