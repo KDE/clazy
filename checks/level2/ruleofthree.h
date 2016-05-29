@@ -1,9 +1,6 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
-  Author: Sérgio Martins <sergio.martins@kdab.com>
-
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
@@ -22,23 +19,30 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef DETACHING_MEMBER_H
-#define DETACHING_MEMBER_H
+#ifndef CLANG_LAZY_RULE_OF_THREE_H
+#define CLANG_LAZY_RULE_OF_THREE_H
 
-#include "detachingbase.h"
+#include "../ruleofbase.h"
+
+namespace clang {
+class Decl;
+}
 
 /**
- * Finds places where you're calling non-const member functions on member containers.
+ * Finds classes or structs which violate the rule of three.
+ * If a class has dtor, copy-dtor or copy-assign operator it should have all three.
  *
- * For example m_list.first(), which would detach if the container is shared.
- * See README-deatching-member for more information
+ * See README-rule-of-three for more information
  */
-class DetachingMember : public DetachingBase
+class RuleOfThree : public RuleOfBase
 {
 public:
-    explicit DetachingMember(const std::string &name, const clang::CompilerInstance &ci);
-    void VisitStmt(clang::Stmt *stm) override;
+    explicit RuleOfThree(const std::string &name, const clang::CompilerInstance &ci);
+    void VisitDecl(clang::Decl *d) override;
+protected:
     std::vector<std::string> filesToIgnore() const override;
+private:
+    bool shouldIgnoreType(const std::string &className) const;
 };
 
 #endif

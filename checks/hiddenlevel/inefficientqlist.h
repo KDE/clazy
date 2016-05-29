@@ -1,6 +1,9 @@
 /*
    This file is part of the clazy static checker.
 
+  Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Author: Sérgio Martins <sergio.martins@kdab.com>
+
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
@@ -19,30 +22,20 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANG_LAZY_RULE_OF_THREE_H
-#define CLANG_LAZY_RULE_OF_THREE_H
+#ifndef INEFFICIENT_QLIST_H
+#define INEFFICIENT_QLIST_H
 
-#include "ruleofbase.h"
-
-namespace clang {
-class Decl;
-}
+#include "../inefficientqlistbase.h"
 
 /**
- * Finds classes or structs which violate the rule of three.
- * If a class has dtor, copy-dtor or copy-assign operator it should have all three.
+ * Finds usages of QList<T> where T is bigger than sizeof(void*), where QVector should be used instead.
  *
- * See README-rule-of-three for more information
+ * See README-inefficient-qlist.
  */
-class RuleOfThree : public RuleOfBase
+class InefficientQList : public InefficientQListBase
 {
 public:
-    explicit RuleOfThree(const std::string &name, const clang::CompilerInstance &ci);
-    void VisitDecl(clang::Decl *d) override;
-protected:
-    std::vector<std::string> filesToIgnore() const override;
-private:
-    bool shouldIgnoreType(const std::string &className) const;
+    explicit InefficientQList(const std::string &name, const clang::CompilerInstance &ci);
 };
 
 #endif

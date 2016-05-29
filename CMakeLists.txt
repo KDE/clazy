@@ -112,56 +112,71 @@ install(TARGETS clazylib EXPORT LibClaryExport
 set(SYMBOL_FILE Lazy.exports)
 
 set(SRC_FILES
-    checks/assertwithsideeffects.cpp
-    checks/autounexpectedqstringbuilder.cpp
-    checks/container-anti-pattern.cpp
-    checks/container-inside-loop.cpp
-    checks/copyable-polymorphic.cpp
+    #level0
+    checks/level0/container-anti-pattern.cpp
+    checks/level0/lambda-in-connect.cpp
+    checks/level0/qdatetimeutc.cpp
+    checks/level0/qfileinfo-exists.cpp
+    checks/level0/qgetenv.cpp
+    checks/level0/qmap-with-pointer-key.cpp
+    checks/level0/qstringarg.cpp
+    checks/level0/qstring-insensitive-allocation.cpp
+    checks/level0/qstringref.cpp
+    checks/level0/qvariant-template-instantiation.cpp
+    checks/level0/temporaryiterator.cpp
+    checks/level0/unused-non-trivial-variable.cpp
+    checks/level0/writingtotemporary.cpp
+    checks/level0/wrong-qglobalstatic.cpp
+
+    #level1
+    checks/level1/autounexpectedqstringbuilder.cpp
+    checks/level1/detachingtemporary.cpp
+    checks/level1/foreach.cpp
+    checks/level1/inefficient-qlist-soft.cpp
+    checks/level1/missing-qobject-macro.cpp
+    checks/level1/nonpodstatic.cpp
+    checks/level1/qdeleteall.cpp
+    checks/level1/qstring-left.cpp
+    checks/level1/range-loop.cpp
+
+    #level2
+    checks/level2/container-inside-loop.cpp
+    checks/level2/function-args-by-ref.cpp
+    checks/level2/function-args-by-value.cpp
+    checks/level2/globalconstcharpointer.cpp
+    checks/level2/implicitcasts.cpp
+    checks/level2/missing-type-info.cpp
+    #checks/level2/oldstyleconnect.cpp) requires std::regex, see below
+    checks/level2/qstring-allocations.cpp
+    checks/level2/reservecandidates.cpp
+    checks/level2/ruleofthree.cpp
+    checks/level2/ruleoftwosoft.cpp
+    checks/level2/virtualcallsfromctor.cpp
+
+    #level3
+    checks/level3/assertwithsideeffects.cpp
+    checks/level3/copyable-polymorphic.cpp
+    checks/level3/detachingmember.cpp
+    checks/level3/dynamic_cast.cpp
+
+    #hiddenlevel
+    checks/hiddenlevel/inefficientqlist.cpp
+    checks/hiddenlevel/isempty-vs-count.cpp
+    checks/hiddenlevel/qt4-qstring-from-array.cpp
+
+    #support classes
     checks/detachingbase.cpp
-    checks/detachingmember.cpp
-    checks/detachingtemporary.cpp
-    checks/dynamic_cast.cpp
-    checks/foreach.cpp
-    checks/function-args-by-ref.cpp
-    checks/function-args-by-value.cpp
-    checks/globalconstcharpointer.cpp
-    checks/implicitcasts.cpp
-    checks/inefficient-qlist-soft.cpp
-    checks/inefficientqlist.cpp
     checks/inefficientqlistbase.cpp
-    checks/isempty-vs-count.cpp
-    checks/lambda-in-connect.cpp
-    checks/missing-qobject-macro.cpp
-    checks/missing-type-info.cpp
-    checks/nonpodstatic.cpp
-    checks/qdatetimeutc.cpp
-    checks/qdeleteall.cpp
-    checks/qfileinfo-exists.cpp
-    checks/qgetenv.cpp
-    checks/qmap-with-pointer-key.cpp
-    checks/qstring-allocations.cpp
-    checks/qstring-insensitive-allocation.cpp
-    checks/qstring-left.cpp
-    checks/qstringarg.cpp
-    checks/qstringref.cpp
-    checks/qt4-qstring-from-array.cpp
-    checks/qvariant-template-instantiation.cpp
-    checks/range-loop.cpp
     checks/requiredresults.cpp
-    checks/reservecandidates.cpp
     checks/ruleofbase.cpp
-    checks/ruleofthree.cpp
-    checks/ruleoftwosoft.cpp
-    checks/temporaryiterator.cpp
-    checks/unused-non-trivial-variable.cpp
-    checks/virtualcallsfromctor.cpp
-    checks/writingtotemporary.cpp
-    checks/wrong-qglobalstatic.cpp
+
+    #top-level worker
     Clazy.cpp
-    )
+)
 
 if (HAS_STD_REGEX)
-    set(SRC_FILES ${SRC_FILES} checks/oldstyleconnect.cpp)
+    #level2
+    set(SRC_FILES ${SRC_FILES} checks/level2/oldstyleconnect.cpp)
 else()
     add_definitions(-DNO_STD_REGEX)
     message("old-style-connect check is disabled due to missing std::regex support")
@@ -194,8 +209,16 @@ endif()
 
 # Install the explanation README's
 
-file(GLOB README_FILES checks/README-*)
-install(FILES ${README_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc)
+file(GLOB README_LEVEL0_FILES checks/level0/README-*)
+file(GLOB README_LEVEL1_FILES checks/level1/README-*)
+file(GLOB README_LEVEL2_FILES checks/level2/README-*)
+file(GLOB README_LEVEL3_FILES checks/level3/README-*)
+file(GLOB README_HIDDENLEVEL_FILES checks/hiddenlevel/README-*)
+install(FILES ${README_LEVEL0_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level0)
+install(FILES ${README_LEVEL1_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level1)
+install(FILES ${README_LEVEL2_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level2)
+install(FILES ${README_LEVEL3_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level3)
+install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/hiddenlevel)
 
 set(CLAZY_LIB_INCLUDES
     checkbase.h

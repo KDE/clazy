@@ -1,9 +1,6 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
-  Author: Sérgio Martins <sergio.martins@kdab.com>
-
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
@@ -22,20 +19,26 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef INEFFICIENT_QLIST_H
-#define INEFFICIENT_QLIST_H
+#ifndef CLANG_LAZY_RULE_OF_TWO_SOFT_H
+#define CLANG_LAZY_RULE_OF_TWO_SOFT_H
 
-#include "inefficientqlistbase.h"
+#include "../ruleofbase.h"
+
+namespace clang {
+class Stmt;
+}
 
 /**
- * Finds usages of QList<T> where T is bigger than sizeof(void*), where QVector should be used instead.
+ * Finds classes or structs which violate the rule of two.
+ * If a class has a copy-ctor it should have copy-assignment operator too, and vice-versa.
  *
- * See README-inefficient-qlist.
+ * See README-rule-of-two-soft for more information
  */
-class InefficientQList : public InefficientQListBase
+class RuleOfTwoSoft : public RuleOfBase
 {
 public:
-    explicit InefficientQList(const std::string &name, const clang::CompilerInstance &ci);
+    explicit RuleOfTwoSoft(const std::string &name, const clang::CompilerInstance &ci);
+    void VisitStmt(clang::Stmt *s) override;
 };
 
 #endif

@@ -1,6 +1,9 @@
 /*
    This file is part of the clazy static checker.
 
+  Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Author: Sérgio Martins <sergio.martins@kdab.com>
+
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
@@ -19,26 +22,23 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANG_LAZY_RULE_OF_TWO_SOFT_H
-#define CLANG_LAZY_RULE_OF_TWO_SOFT_H
+#ifndef DETACHING_MEMBER_H
+#define DETACHING_MEMBER_H
 
-#include "ruleofbase.h"
-
-namespace clang {
-class Stmt;
-}
+#include "../detachingbase.h"
 
 /**
- * Finds classes or structs which violate the rule of two.
- * If a class has a copy-ctor it should have copy-assignment operator too, and vice-versa.
+ * Finds places where you're calling non-const member functions on member containers.
  *
- * See README-rule-of-two-soft for more information
+ * For example m_list.first(), which would detach if the container is shared.
+ * See README-deatching-member for more information
  */
-class RuleOfTwoSoft : public RuleOfBase
+class DetachingMember : public DetachingBase
 {
 public:
-    explicit RuleOfTwoSoft(const std::string &name, const clang::CompilerInstance &ci);
-    void VisitStmt(clang::Stmt *s) override;
+    explicit DetachingMember(const std::string &name, const clang::CompilerInstance &ci);
+    void VisitStmt(clang::Stmt *stm) override;
+    std::vector<std::string> filesToIgnore() const override;
 };
 
 #endif
