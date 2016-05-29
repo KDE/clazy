@@ -25,7 +25,7 @@
 #ifndef DETACHING_TEMPORARIES_H
 #define DETACHING_TEMPORARIES_H
 
-#include "../detachingbase.h"
+#include "checks/detachingbase.h"
 
 /**
  * Finds places where you're calling non-const member functions on temporaries.

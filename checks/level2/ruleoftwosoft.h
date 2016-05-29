@@ -22,7 +22,7 @@
 #ifndef CLANG_LAZY_RULE_OF_TWO_SOFT_H
 #define CLANG_LAZY_RULE_OF_TWO_SOFT_H
 
-#include "../ruleofbase.h"
+#include "checks/ruleofbase.h"
 
 namespace clang {
 class Stmt;

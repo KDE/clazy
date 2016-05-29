@@ -25,7 +25,7 @@
 #ifndef DETACHING_MEMBER_H
 #define DETACHING_MEMBER_H
 
-#include "../detachingbase.h"
+#include "checks/detachingbase.h"
 
 /**
  * Finds places where you're calling non-const member functions on member containers.
