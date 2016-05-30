@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy $@
