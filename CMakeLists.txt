@@ -209,18 +209,22 @@ else()
 endif()
 
 # Install the explanation README's
-
+set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/clazy/doc)
 file(GLOB README_LEVEL0_FILES checks/level0/README-*)
 file(GLOB README_LEVEL1_FILES checks/level1/README-*)
 file(GLOB README_LEVEL2_FILES checks/level2/README-*)
 file(GLOB README_LEVEL3_FILES checks/level3/README-*)
 file(GLOB README_HIDDENLEVEL_FILES checks/hiddenlevel/README-*)
-install(FILES ${README_LEVEL0_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level0)
-install(FILES ${README_LEVEL1_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level1)
-install(FILES ${README_LEVEL2_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level2)
-install(FILES ${README_LEVEL3_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/level3)
-install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${SHARE_INSTALL_DIR}/clazy/doc/hiddenlevel)
+install(FILES ${README_LEVEL0_FILES} DESTINATION ${DOC_INSTALL_DIR}/level0)
+install(FILES ${README_LEVEL1_FILES} DESTINATION ${DOC_INSTALL_DIR}/level1)
+install(FILES ${README_LEVEL2_FILES} DESTINATION ${DOC_INSTALL_DIR}/level2)
+install(FILES ${README_LEVEL3_FILES} DESTINATION ${DOC_INSTALL_DIR}/level3)
+install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${DOC_INSTALL_DIR}/hiddenlevel)
 
+# Install more doc files
+install(FILES README.txt LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
+
+# Install public headers
 set(CLAZY_LIB_INCLUDES
     checkbase.h
     checkmanager.h
@@ -237,6 +241,6 @@ set(CLAZY_LIB_INCLUDES
     Utils.h
     clazy_stl.h
     clazylib_export.h
-    )
+)
 
-install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy )
+install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
