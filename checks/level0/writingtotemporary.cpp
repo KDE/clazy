@@ -55,7 +55,8 @@ vector<string> WritingToTemporary::supportedOptions() const
 static bool isDisallowedClass(const string &className)
 {
     static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
-                                               "QScriptValue", "QTextLine", "QTextBlock", "QDomNode", "QJSValue" };
+                                               "QScriptValue", "QTextLine", "QTextBlock", "QDomNode",
+                                               "QJSValue", "QTextTableCell" };
     return clazy_std::contains(disallowed, className);
 }
 
@@ -71,7 +72,7 @@ static bool isKnownType(const string &className)
                                           "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
                                           "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D",
                                           "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
-                                          "QPointF", "QColor", "QTextTableCell" };
+                                          "QPointF", "QColor" };
 
     return clazy_std::contains(types, className);
 }

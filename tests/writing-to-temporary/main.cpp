@@ -1,7 +1,7 @@
 #include <QtCore/QSize>
 #include <QtGui/QColor>
+#include <QtGui/QTextTableCell>
 #include <QtXml/QDomNode>
-
 
 
 
@@ -63,4 +63,12 @@ void testQColor()
     QColor col;
     int *c, *m, *y, *k, *a;
     col.toCmyk().getCmyk(c, m, y, k, a);
+}
+
+
+void test363428()
+{
+    QTextCursor cursor;
+    QTextTable *currentTable;
+    currentTable->cellAt(cursor).setFormat(QTextCharFormat());
 }
