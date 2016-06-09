@@ -1,12 +1,10 @@
-container-inside-loop
+# container-inside-loop
 
 Finds places defining containers inside loops.
-Defining them outside and using resize(0) will save allocations.
-Supported containers: QList, QVector, std::vector
+Defining them outside the loop and using `resize(0)` will save memory allocations.
 
-
-Example:
-
+#### Example
+```
 // This will allocate memory at least N times:
 for (int i = 0; i < N; ++i) {
     QVector<int> v;
@@ -23,3 +21,8 @@ for (int i = 0; i < N; ++i) {
     v.append(bar);
     (...)
 }
+```
+
+#### Supported containers
+
+`QList`, `QVector` and `std::vector`
