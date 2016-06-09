@@ -98,8 +98,7 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
         ternary = dyn_cast<ConditionalOperator>(stm);
 
     for (auto child : stm->children()) {
-        auto expr = qlatin1CtorExpr(child, ternary);
-        if (expr)
+        if (auto expr = qlatin1CtorExpr(child, ternary))
             return expr;
     }
 
