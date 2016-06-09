@@ -239,3 +239,14 @@ void test_QStringList_streamOp()
     list += QString::fromLatin1("foo");
     list += "foo";
 }
+
+// #364092
+inline constexpr QLatin1String operator"" _L1 (const char *str, std::size_t len)
+{
+     return QLatin1String(str, len);
+}
+
+void test364092()
+{
+    QString s = "F"_L1; // UNEXPECTED PASS :(
+}
