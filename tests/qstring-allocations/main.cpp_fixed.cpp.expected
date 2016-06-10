@@ -250,3 +250,8 @@ void test364092()
 {
     QString s = "F"_L1; // UNEXPECTED PASS :(
 }
+
+void testQLatin1String2Args()
+{
+    QString s2 = QLatin1String("foo", 3);
+}

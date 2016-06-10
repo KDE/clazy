@@ -74,3 +74,4 @@ qstring-allocations/main.cpp:236:92: warning: QString(const char*) being called 
 qstring-allocations/main.cpp:238:13: warning: QString(QLatin1String) being called [-Wclazy-qstring-allocations]
 qstring-allocations/main.cpp:239:13: warning: QString::fromLatin1() being passed a literal [-Wclazy-qstring-allocations]
 qstring-allocations/main.cpp:240:13: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+qstring-allocations/main.cpp:256:18: warning: QString(QLatin1String) being called [-Wclazy-qstring-allocations]

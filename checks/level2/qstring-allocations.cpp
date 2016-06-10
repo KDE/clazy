@@ -55,6 +55,12 @@ enum Fixit {
     CharPtrAllocations = 0x4,
 };
 
+struct Latin1Expr {
+    CXXConstructExpr *qlatin1ctorexpr;
+    bool enableFixit;
+    bool isValid() const { return qlatin1ctorexpr != nullptr; }
+};
+
 QStringAllocations::QStringAllocations(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
@@ -80,17 +86,18 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
-static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
+static Latin1Expr qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
 {
     if (!stm)
-        return nullptr;
+        return {};
 
     CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stm);
     if (constructExpr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
-        if (StringUtils::isOfClass(ctor, "QLatin1String") && hasCharPtrArgument(ctor, 1)) {
+        const int numArgs = ctor->getNumParams();
+        if (StringUtils::isOfClass(ctor, "QLatin1String")) {
             if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false, 2))
-                return constructExpr;
+                return {constructExpr, /*enableFixits=*/ numArgs == 1};
         }
     }
 
@@ -98,11 +105,12 @@ static CXXConstructExpr *qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &terna
         ternary = dyn_cast<ConditionalOperator>(stm);
 
     for (auto child : stm->children()) {
-        if (auto expr = qlatin1CtorExpr(child, ternary))
+        auto expr = qlatin1CtorExpr(child, ternary);
+        if (expr.isValid())
             return expr;
     }
 
-    return nullptr;
+    return {};
 }
 
 // Returns true if there's a literal in the hierarchy, but aborts if it's parented on CallExpr
@@ -181,13 +189,15 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
     if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
-        CXXConstructExpr *qlatin1Ctor = qlatin1CtorExpr(stm, ternary);
-        if (!qlatin1Ctor) {
+        Latin1Expr qlatin1expr = qlatin1CtorExpr(stm, ternary);
+        if (!qlatin1expr.isValid()) {
             return;
         }
 
+        auto qlatin1Ctor = qlatin1expr.qlatin1ctorexpr;
+
         vector<FixItHint> fixits;
-        if (isFixitEnabled(QLatin1StringAllocations)) {
+        if (qlatin1expr.enableFixit && isFixitEnabled(QLatin1StringAllocations)) {
             if (!qlatin1Ctor->getLocStart().isMacroID()) {
                 if (!ternary) {
                     fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String", QLatin1StringAllocations);
@@ -531,7 +541,7 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
         return;
 
     ConditionalOperator *ternary = nullptr;
-    Stmt *begin = qlatin1CtorExpr(stmt, ternary);
+    Stmt *begin = qlatin1CtorExpr(stmt, ternary).qlatin1ctorexpr;
 
     if (!begin)
         return;
