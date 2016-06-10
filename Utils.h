@@ -214,6 +214,13 @@ namespace Utils {
      * The operators that write to the variable are operator=, operator+=, operator++, etc.
      */
     CLAZYLIB_EXPORT clang::Expr* isWriteOperator(clang::Stmt *stm);
+
+    /**
+     * Gets the UserDefinedLiteral of type @p type which is somewhere in the ast of @p stm.
+     * Returns nullptr if there's no such UserDefinedLiteral.
+     */
+    CLAZYLIB_EXPORT clang::UserDefinedLiteral* userDefinedLiteral(clang::Stmt *stm, const std::string &type,
+                                                                  const clang::LangOptions &lo);
 }
 
 #endif

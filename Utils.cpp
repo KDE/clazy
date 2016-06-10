@@ -792,3 +792,16 @@ bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl
         return varDecl == decl;
     });
 }
+
+UserDefinedLiteral *Utils::userDefinedLiteral(Stmt *stm, const std::string &type, const clang::LangOptions &lo)
+{
+    auto udl = dyn_cast<UserDefinedLiteral>(stm);
+    if (!udl)
+        udl = HierarchyUtils::getFirstChildOfType<UserDefinedLiteral>(stm);
+
+    if (udl && StringUtils::returnTypeName(udl, lo) == type) {
+        return udl;
+    }
+
+    return nullptr;
+}
