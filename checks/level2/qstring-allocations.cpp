@@ -86,7 +86,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
-static Latin1Expr qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
+Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
 {
     if (!stm)
         return {};
@@ -96,8 +96,12 @@ static Latin1Expr qlatin1CtorExpr(Stmt *stm, ConditionalOperator * &ternary)
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
         const int numArgs = ctor->getNumParams();
         if (StringUtils::isOfClass(ctor, "QLatin1String")) {
+
             if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false, 2))
                 return {constructExpr, /*enableFixits=*/ numArgs == 1};
+
+            if (Utils::userDefinedLiteral(constructExpr, "QLatin1String", lo()))
+                return {constructExpr, /*enableFixits=*/ false};
         }
     }
 

@@ -36,7 +36,10 @@ class FixItHint;
 class ConditionalOperator;
 class CallExpr;
 class StringLiteral;
+class ConditionalOperator;
 }
+
+class Latin1Expr;
 
 enum FromFunction {
     FromLatin1,
@@ -72,6 +75,8 @@ private:
     std::vector<clang::FixItHint> fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *);
     std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr, FromFunction);
     std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt, const std::string &replacement);
+
+    Latin1Expr qlatin1CtorExpr(clang::Stmt *stm, clang::ConditionalOperator * &ternary);
 };
 
 #endif

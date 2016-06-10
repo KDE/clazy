@@ -248,7 +248,7 @@ inline constexpr QLatin1String operator"" _L1 (const char *str, std::size_t len)
 
 void test364092()
 {
-    QString s = "F"_L1; // UNEXPECTED PASS :(
+    QString s = "F"_L1;
 }
 
 void testQLatin1String2Args()
