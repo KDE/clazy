@@ -5,6 +5,7 @@ You can get clazy from:
 - https://github.com/KDE/clazy
 - git@git.kde.org:clazy
 - http://anongit.kde.org/clazy
+
 --------------------------------------------------------------------------------
 # Build Instructions (Linux)
 
@@ -203,6 +204,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
   Don't include the "clazy-" prefix. If, for example, you want to disable qstring-allocations you would write:
 `// clazy:exclude=qstring-allocations` not clazy-qstring-allocations.
+
 --------------------------------------------------------------------------------
 # Reporting bugs and wishes
 
