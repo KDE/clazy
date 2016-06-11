@@ -1,13 +1,14 @@
-detaching-member
+# detaching-member
 
 Finds places where member containers are potentially detached.
 
-For example:
-
+#### Example
+```
 QString MyClass::myMethod()
 {
     return m_container.first(); // Should be constFirst()
 }
+```
 
-
-Warning: This check is disabled by default as it reports too many false positives for now
+#### Pitfalls
+This check is disabled by default as it reports too many false positives for now.
