@@ -1,4 +1,4 @@
-function-args-by-value
+# function-args-by-value
 
 Warns when you should be passing by value instead of by-ref.
 Types with sizeof <= 16 bytes [1] which are trivially-copyable [2] and trivially-destructible [3] should be passed by value.
