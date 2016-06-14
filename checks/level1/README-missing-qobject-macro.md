@@ -1,4 +1,4 @@
-# missing-qobject
+# missing-qobject-macro
 
 Finds `QObject` derived classes that don't have a Q_OBJECT macro.
 

@@ -1,4 +1,4 @@
-# variant-template-instantiation
+# qvariant-template-instantiation
 
 Detects when you're using `QVariant::value<Foo>()` instead of `QVariant::toFoo()`.
 
