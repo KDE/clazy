@@ -6,7 +6,7 @@ Old style syntax (`SIGNAL`/`SLOT`) is much slower than using pointer to member s
 Here's a non-exhaustive list of caveats of PMF connects:
 - You can't disconnect with new-syntax if the connect was made with old-syntax (and vice-versa)
 - You can't disconnect from a static slot with new-syntax (although connecting works!)
-- Difference in behaviour when calling slots of partially destroyed objects (https://codereview.qt-project.org/#/c/83800)
+- Difference in behaviour when calling slots of partially destroyed objects (<https://codereview.qt-project.org/#/c/83800>)
 
 #### Fixits
 

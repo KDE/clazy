@@ -3,7 +3,7 @@ Finds places where a call to `qDeleteAll()` has a redundant `values()` or `keys(
 Those calls create a temporary `QList<int>` and allocate memory.
 
 #### Example
-```
+
     QSet<Cookies> set;
 
     // BAD: Unneeded container iteration and memory allocation to construct list of values
@@ -11,7 +11,6 @@ Those calls create a temporary `QList<int>` and allocate memory.
 
     // GOOD: Unneeded container iteration and memory allocation to construct list of values
     qDeleteAll(set);
-```
 
 #### Pitfalls
 

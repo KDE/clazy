@@ -3,31 +3,33 @@
 Finds places with unneeded memory allocations due to temporary `QString`s.
 
 Here's a summary of usages that allocate:
-```
-    1. QString s = "foo"; // Allocates, use QStringLiteral("foo") instead
 
-    2. QString s = QLatin1String("foo"); // Allocates, use QStringLiteral("foo") instead
-    2.1) QString s = QLatin1String(""); // No allocation. QString is optimized for this case, so it's safe for empty literals
+1. `QString s = "foo"; // Allocates, use QStringLiteral("foo") instead`
 
-    3. QString s = QStringLiteral("foo"); // No allocation
+2. `QString s = QLatin1String("foo"); // Allocates, use QStringLiteral("foo") instead`
 
-    4. QString s = QString::fromLatin1("foo"); // Allocates, use QStringLiteral
+    2.1 `QString s = QLatin1String(""); // No allocation. QString is optimized for this case, so it's safe for empty literals`
 
-    5. QString s = QString::fromUtf8("foo"); // Allocates, use QStringLiteral
+3. `QString s = QStringLiteral("foo"); // No allocation`
 
-    6. s == "foo" // Allocates, use QLatin1String
+4. `QString s = QString::fromLatin1("foo"); // Allocates, use QStringLiteral`
 
-    7. s == QLatin1String("foo) // No allocation
+5. `QString s = QString::fromUtf8("foo"); // Allocates, use QStringLiteral`
 
-    8. s == QStringLiteral("foo") // No allocation
+6. `s == "foo" // Allocates, use QLatin1String`
 
-    9. QString {"append", "compare", "endsWith", "startsWith", "indexOf", "insert",
-                "lastIndexOf", "prepend", "replace", "contains" } // They all have QLatin1String overloads, so passing a QLatin1String is ok.
+7. `s == QLatin1String("foo) // No allocation`
 
-    10. QString::fromLatin1("foo %1").arg(bar) // Allocates twice, replacing with QStringLiteral makes it allocate only onece.
-```
+8. `s == QStringLiteral("foo") // No allocation`
+
+9. `QString {"append", "compare", "endsWith", "startsWith", "indexOf", "insert",`
+   `         "lastIndexOf", "prepend", "replace", "contains" } // They all have QLatin1String overloads, so passing a QLatin1String is ok.`
+
+10. `QString::fromLatin1("foo %1").arg(bar) // Allocates twice, replacing with QStringLiteral makes it allocate only once.`
+
 
 #### Fixits
+
     fix-qlatin1string-allocations        // To replace QLatin1String with QStringLiteral only where it was allocating before
     fix-fromLatin1_fromUtf8-allocations  // To replace fromLatin1() and fromUtf8() so it doesn't allocate
     fix-fromCharPtrAllocations           // To replace raw string literals so it doesn't allocate
@@ -37,10 +39,11 @@ Here's a summary of usages that allocate:
 
 #### Pitfalls
 
-1. `QStringLiteral` might make your app crash at exit if plugins are involved.
+- `QStringLiteral` might make your app crash at exit if plugins are involved.
 See:
-https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit and
-http://lists.qt-project.org/pipermail/development/2015-November/023681.html
+<https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit> and
+<http://lists.qt-project.org/pipermail/development/2015-November/023681.html>
 
-2. Also note that MSVC crashes when `QStringLiteral` is used inside initializer lists. For that reason no warning or fixit is emitted for this case unless you set an env variable:
-        `export CLAZY_EXTRA_OPTIONS="qstring-allocations-no-msvc-compat"`
+- Also note that MSVC crashes when `QStringLiteral` is used inside initializer lists. For that reason no warning or fixit is emitted for this case unless you set an env variable:
+
+        export CLAZY_EXTRA_OPTIONS="qstring-allocations-no-msvc-compat"

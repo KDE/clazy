@@ -9,4 +9,4 @@ Matches any of the following cases:
 
 #### Pitfalls
 `Qt::CaseInsensitive` is different from `QString::toLower()` comparison for a few code points, but it
-should be very rare: http://lists.qt-project.org/pipermail/development/2016-February/024776.html
+should be very rare: <http://lists.qt-project.org/pipermail/development/2016-February/024776.html>

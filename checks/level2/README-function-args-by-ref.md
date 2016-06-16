@@ -8,6 +8,6 @@ This check will ignore shared pointers, you're on your own. Most of the times pa
 Note that in some cases there might be false-positives: There's a pattern where you pass a movable type
 by value and then move from it in the ctor initialization list. This check does not honour that and warns.
 
-[1] http://www.macieira.org/blog/2012/02/the-value-of-passing-by-value/
-[2] http://en.cppreference.com/w/cpp/concept/TriviallyCopyable
-[3] http://www.cplusplus.com/reference/type_traits/is_trivially_destructible/
+- [1] <http://www.macieira.org/blog/2012/02/the-value-of-passing-by-value/>
+- [2] <http://en.cppreference.com/w/cpp/concept/TriviallyCopyable>
+- [3] <http://www.cplusplus.com/reference/type_traits/is_trivially_destructible/>
