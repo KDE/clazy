@@ -236,19 +236,19 @@ install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
 set(CLAZY_LIB_INCLUDES
   checkbase.h
   checkmanager.h
-  SuppressionManager.h
+  clazylib_export.h
+  clazy_stl.h
   ContextUtils.h
   FixItUtils.h
   HierarchyUtils.h
   LoopUtils.h
   MacroUtils.h
   QtUtils.h
+  SuppressionManager.h
   StringUtils.h
   TemplateUtils.h
   TypeUtils.h
   Utils.h
-  clazy_stl.h
-  clazylib_export.h
 )
 
 install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
