@@ -107,9 +107,9 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
         if (!type || type->isVoidType())
             continue;
 
-        // Bail-out if any parameter is a non-const-ref or pointer
+        // Bail-out if any parameter is a non-const-ref or pointer bool bailout = false;
         bool bailout = false;
-        for (auto paramVarDecl : methodDecl->params()) {
+        for (auto paramVarDecl : Utils::functionParameters(methodDecl)) {
             QualType qt = paramVarDecl->getType();
             const Type *type = qt.getTypePtrOrNull();
             if (!type || type->isPointerType()) {

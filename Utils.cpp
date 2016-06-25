@@ -805,3 +805,15 @@ UserDefinedLiteral *Utils::userDefinedLiteral(Stmt *stm, const std::string &type
 
     return nullptr;
 }
+
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 8
+clang::FunctionDecl::param_range Utils::functionParameters(clang::FunctionDecl *func)
+{
+    return func->params();
+}
+#else
+clang::ArrayRef<clang::ParmVarDecl *> Utils::functionParameters(clang::FunctionDecl *func)
+{
+    return func->parameters();
+}
+#endif

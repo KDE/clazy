@@ -59,7 +59,7 @@ static bool isInterestingFunction(FunctionDecl *func)
     bool hasBoolArgument = false;
     bool hasPointerArgument = false;
 
-    for (auto param : func->params()) {
+    for (auto param : Utils::functionParameters(func)) {
         const Type *t = param->getType().getTypePtrOrNull();
         hasBoolArgument |= (t && t->isBooleanType());
         hasPointerArgument |= (t && t->isPointerType());

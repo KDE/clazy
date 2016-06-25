@@ -232,7 +232,7 @@ inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOption
 inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName,
                               const clang::LangOptions &lo, bool simpleName = true)
 {
-    return clazy_std::any_of(func->params(), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
+    return clazy_std::any_of(Utils::functionParameters(func), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
         return StringUtils::typeName(param->getType(), lo, simpleName) == typeName;
     });
 }

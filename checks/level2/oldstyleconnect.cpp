@@ -140,7 +140,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         return classification;
 
     // Look for char* arguments
-    for (auto parm : connectFunc->params()) {
+    for (auto parm : Utils::functionParameters(connectFunc)) {
         QualType qt = parm->getType();
         const Type *t = qt.getTypePtrOrNull();
         if (!t || !t->isPointerType())

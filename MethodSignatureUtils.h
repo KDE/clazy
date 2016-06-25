@@ -25,6 +25,7 @@
 #ifndef METHOD_SIGNATURE_UTILS_H
 #define METHOD_SIGNATURE_UTILS_H
 
+#include "Utils.h"
 #include <clang/AST/Decl.h>
 #include <string>
 
@@ -33,7 +34,7 @@ inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments
     if (expected_arguments != -1 && (int)func->param_size() != expected_arguments)
         return false;
 
-    for (auto param : func->params()) {
+    for (auto param : Utils::functionParameters(func)) {
         clang::QualType qt = param->getType();
         const clang::Type *t = qt.getTypePtrOrNull();
         if (!t)

@@ -221,6 +221,19 @@ namespace Utils {
      */
     CLAZYLIB_EXPORT clang::UserDefinedLiteral* userDefinedLiteral(clang::Stmt *stm, const std::string &type,
                                                                   const clang::LangOptions &lo);
+
+    /**
+     * Returns the function parameters fom @p func
+     * This should be used instead of calling FunctionDecl::params() since it changed signature in
+     * clang 3.9.
+     */
+    CLAZYLIB_EXPORT
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 8
+    clang::FunctionDecl::param_range
+#else
+    clang::ArrayRef<clang::ParmVarDecl *>
+#endif
+    functionParameters(clang::FunctionDecl *func);
 }
 
 #endif

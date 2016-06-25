@@ -108,7 +108,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
     Stmt *body = func->getBody();
 
     int i = -1;
-    for (auto param : func->params()) {
+    for (auto param : Utils::functionParameters(func)) {
         i++;
         QualType paramQt = TypeUtils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
