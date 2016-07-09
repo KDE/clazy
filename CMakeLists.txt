@@ -117,7 +117,6 @@ install(TARGETS clazylib EXPORT LibClaryExport
 set(SYMBOL_FILE Lazy.exports)
 
 set(SRC_FILES
-  #level0
   checks/level0/container-anti-pattern.cpp
   checks/level0/lambda-in-connect.cpp
   checks/level0/qdatetimeutc.cpp
@@ -132,8 +131,6 @@ set(SRC_FILES
   checks/level0/unused-non-trivial-variable.cpp
   checks/level0/writingtotemporary.cpp
   checks/level0/wrong-qglobalstatic.cpp
-
-  #level1
   checks/level1/autounexpectedqstringbuilder.cpp
   checks/level1/detachingtemporary.cpp
   checks/level1/foreach.cpp
@@ -143,39 +140,28 @@ set(SRC_FILES
   checks/level1/qdeleteall.cpp
   checks/level1/qstring-left.cpp
   checks/level1/range-loop.cpp
-
-  #level2
   checks/level2/container-inside-loop.cpp
   checks/level2/function-args-by-ref.cpp
   checks/level2/function-args-by-value.cpp
   checks/level2/globalconstcharpointer.cpp
   checks/level2/implicitcasts.cpp
   checks/level2/missing-type-info.cpp
-  #checks/level2/oldstyleconnect.cpp) requires std::regex, see below
   checks/level2/qstring-allocations.cpp
   checks/level2/reservecandidates.cpp
   checks/level2/ruleofthree.cpp
   checks/level2/ruleoftwosoft.cpp
   checks/level2/virtualcallsfromctor.cpp
-
-  #level3
   checks/level3/assertwithsideeffects.cpp
   checks/level3/copyable-polymorphic.cpp
   checks/level3/detachingmember.cpp
   checks/level3/dynamic_cast.cpp
-
-  #hiddenlevel
   checks/hiddenlevel/inefficientqlist.cpp
   checks/hiddenlevel/isempty-vs-count.cpp
   checks/hiddenlevel/qt4-qstring-from-array.cpp
-
-  #support classes
   checks/detachingbase.cpp
   checks/inefficientqlistbase.cpp
   checks/requiredresults.cpp
   checks/ruleofbase.cpp
-
-  #top-level worker
   Clazy.cpp
 )
 
