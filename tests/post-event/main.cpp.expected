@@ -1,0 +1,2 @@
+post-event/main.cpp:15:5: warning: Events passed to postEvent should be heap allocated [-Wclazy-post-event]
+post-event/main.cpp:17:5: warning: Events passed to postEvent should be heap allocated [-Wclazy-post-event]
