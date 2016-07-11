@@ -21,6 +21,8 @@
 
 #include "TypeUtils.h"
 #include "Utils.h"
+#include <HierarchyUtils.h>
+#include <StringUtils.h>
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ASTContext.h>
@@ -81,4 +83,45 @@ QualType TypeUtils::unrefQualType(QualType qualType)
 {
     const Type *t = qualType.getTypePtrOrNull();
     return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
+}
+
+void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
+                                     const clang::LangOptions &lo,
+                                     bool &isStack, bool &isHeap)
+{
+    isStack = false;
+    isHeap = false;
+    if (isa<CXXNewExpr>(arg)) {
+        isHeap = true;
+        return;
+    }
+
+    std::vector<DeclRefExpr*> declrefs;
+    HierarchyUtils::getChilds(arg, declrefs, 3);
+
+    std::vector<DeclRefExpr*> interestingDeclRefs;
+    for (auto declref : declrefs) {
+        auto t = declref->getType().getTypePtrOrNull();
+        if (!t)
+            continue;
+
+        // Remove the '*' if it's a pointer
+        QualType qt = t->isPointerType() ? t->getPointeeType()
+                                         : declref->getType();
+
+        if (t && type == StringUtils::simpleTypeName(qt, lo)) {
+            interestingDeclRefs.push_back(declref);
+        }
+    }
+
+    if (interestingDeclRefs.size() > 1) {
+        // Too complex
+        return;
+    }
+
+    if (!interestingDeclRefs.empty()) {
+        auto declref = interestingDeclRefs[0];
+        isStack = !declref->getType().getTypePtr()->isPointerType();
+        isHeap = !isStack;
+    }
 }

@@ -23,9 +23,12 @@
 #define CLAZY_TYPE_UTILS_H
 
 #include "clazylib_export.h"
+#include <string>
 
 namespace clang {
 class CompilerInstance;
+class Expr;
+class LangOptions;
 class QualType;
 class Stmt;
 class VarDecl;
@@ -69,6 +72,15 @@ namespace TypeUtils
      * returns false. Must go through qualType->getPointeeType().isConstQualified().
      */
     CLAZYLIB_EXPORT clang::QualType unrefQualType(clang::QualType qt);
+
+
+    /**
+     * Returns if @p arg is stack or heap allocated.
+     * true means it is. false means it either isn't or the situation was too complex to judge.
+     */
+    CLAZYLIB_EXPORT void heapOrStackAllocated(clang::Expr *arg, const std::string &type,
+                                              const clang::LangOptions &lo,
+                                              bool &isStack, bool &isHeap);
 }
 
 #endif
