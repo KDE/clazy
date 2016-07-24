@@ -23,6 +23,7 @@
 #include "clazy_stl.h"
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Lexer.h>
+#include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Basic/SourceLocation.h>
 
 using namespace std;

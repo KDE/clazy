@@ -126,16 +126,16 @@ void append_if(const SrcContainer &src, DstContainer &dst, Pred pred)
     std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);
 }
 
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 7
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR < 8
+    inline bool isEmpty(const clang::StmtRange &r)
+    {
+        return r.empty();
+    }
+#else
     template <typename Range>
     bool isEmpty(const Range &r)
     {
         return r.begin() == r.end();
-    }
-#else
-    inline bool isEmpty(const clang::StmtRange &r)
-    {
-        return r.empty();
     }
 #endif
 
