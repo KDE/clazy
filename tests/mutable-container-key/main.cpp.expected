@@ -1,0 +1,5 @@
+mutable-container-key/main.cpp:16:5: warning: Associative container key might be modified externally [-Wclazy-mutable-container-key]
+mutable-container-key/main.cpp:17:5: warning: Associative container key might be modified externally [-Wclazy-mutable-container-key]
+mutable-container-key/main.cpp:21:5: warning: Associative container key might be modified externally [-Wclazy-mutable-container-key]
+mutable-container-key/main.cpp:22:5: warning: Associative container key might be modified externally [-Wclazy-mutable-container-key]
+mutable-container-key/main.cpp:23:5: warning: Associative container key might be modified externally [-Wclazy-mutable-container-key]

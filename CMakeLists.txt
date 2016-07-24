@@ -127,6 +127,7 @@ set(SRC_FILES
   checks/level0/qstring-insensitive-allocation.cpp
   checks/level0/qstringref.cpp
   checks/level0/qvariant-template-instantiation.cpp
+  checks/level0/mutable-container-key.cpp
   checks/level0/temporaryiterator.cpp
   checks/level0/unused-non-trivial-variable.cpp
   checks/level0/writingtotemporary.cpp
