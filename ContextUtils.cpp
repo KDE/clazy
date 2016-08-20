@@ -31,9 +31,9 @@
 using namespace clang;
 using namespace std;
 
-bool ContextUtils::isValueDeclInFunctionContext(clang::ValueDecl *valueDecl)
+bool ContextUtils::isValueDeclInFunctionContext(const clang::ValueDecl *valueDecl)
 {
-    DeclContext *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
+    const DeclContext *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
     return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(valueDecl);
 }
 

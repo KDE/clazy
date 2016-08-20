@@ -49,7 +49,7 @@ namespace ContextUtils
  * This returns true if "QList<int> l;" is a local variable, instead of being a class field such
  * as struct Foo { QList<int> l; }
  */
-CLAZYLIB_EXPORT bool isValueDeclInFunctionContext(clang::ValueDecl *);
+CLAZYLIB_EXPORT bool isValueDeclInFunctionContext(const clang::ValueDecl *);
 
 /**
  * Returns the list of scopes for a decl context (namespaces, classes, inner classes, etc)
