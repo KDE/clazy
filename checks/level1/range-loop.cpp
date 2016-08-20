@@ -28,6 +28,7 @@
 #include "TypeUtils.h"
 #include "StringUtils.h"
 #include "checkmanager.h"
+#include "LoopUtils.h"
 
 #include <clang/AST/AST.h>
 
@@ -67,9 +68,13 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    if (QtUtils::isQtCOWIterableClass(Utils::rootBaseClass(record))) {
-        emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
-    }
+    if (!QtUtils::isQtCOWIterableClass(Utils::rootBaseClass(record)))
+        return;
+
+    if (QtUtils::containerNeverDetaches(LoopUtils::containerDeclForLoop(rangeLoop)))
+        return;
+
+    emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
 }
 
 void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)

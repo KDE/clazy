@@ -2,14 +2,14 @@
 #include <vector>
 #include <QtCore/QMap>
 #include <QtCore/QSequentialIterable>
+#include <QtCore/QVarLengthArray>
 
 
 
 
 
-
-
-
+void receivingList(QList<int>);
+void receivingMap(QMultiMap<int,int>);
 
 
 using namespace std;
@@ -33,6 +33,7 @@ const QList<int> & getConstRefQtList()
 void testQtContainer()
 {
     QList<int> qt_container;
+    receivingList(qt_container);
     for (int i : qt_container) { // Warning
     }
 
@@ -74,6 +75,7 @@ public:
 void testQMultiMapDetach()
 {
     QMultiMap<int,int> m;
+    receivingMap(m);
     for (int i : m) {
     }
 }
@@ -155,4 +157,14 @@ void test_missing_ref()
     // Test #10: No warning (bug #362587)
     QSequentialIterable si = QVariant().value<QSequentialIterable>();
     for (const auto &s : si) {}
+}
+
+void testBug367485()
+{
+    QList<int> list;
+    for (auto a : list) {} // OK
+
+    QList<int> list2;
+    receivingList(list2);
+    for (auto a : list2) {} // Warning
 }
