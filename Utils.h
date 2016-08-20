@@ -115,10 +115,12 @@ namespace Utils {
 
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)
     // By ref or pointer
-    CLAZYLIB_EXPORT bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl, bool byRefOrPtrOnly);
+    CLAZYLIB_EXPORT bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl,
+                                            bool byRefOrPtrOnly);
 
     // Returns true if we take the address of varDecl, such as: &foo
-    CLAZYLIB_EXPORT bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body, const clang::ValueDecl *valDecl);
+    CLAZYLIB_EXPORT bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body,
+                                        const clang::ValueDecl *valDecl);
 
     // QString::fromLatin1("foo")    -> true
     // QString::fromLatin1("foo", 1) -> false
@@ -128,8 +130,11 @@ namespace Utils {
     // if allowEmpty is false, "" will be ignored
     CLAZYLIB_EXPORT bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
-    CLAZYLIB_EXPORT bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
-    CLAZYLIB_EXPORT bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<std::string> &anyOf);
+    CLAZYLIB_EXPORT bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s,
+                                              const std::vector<std::string> &anyOf);
+
+    CLAZYLIB_EXPORT bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s,
+                                        const std::vector<std::string> &anyOf);
 
     // returns true if the ternary operator has two string literal arguments, such as:
     // foo ? "bar" : "baz"
@@ -145,13 +150,15 @@ namespace Utils {
 
 
     // Returns the list of methods with name methodName that the class/struct record contains
-    CLAZYLIB_EXPORT std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record, const std::string &methodName);
+    CLAZYLIB_EXPORT std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record,
+                                                                         const std::string &methodName);
 
     // Returns the most derived class. (CXXMemberCallExpr::getRecordDecl() return the first base class with the method)
     // The returned callee is the name of the variable on which the member call was made:
     // o1->foo() => "o1"
     // foo() => "this"
-    CLAZYLIB_EXPORT const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call, std::string &implicitCallee);
+    CLAZYLIB_EXPORT const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call,
+                                                                    std::string &implicitCallee);
 
     CLAZYLIB_EXPORT bool isAscii(clang::StringLiteral *lt);
 
