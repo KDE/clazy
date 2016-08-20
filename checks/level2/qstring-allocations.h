@@ -39,7 +39,7 @@ class StringLiteral;
 class ConditionalOperator;
 }
 
-class Latin1Expr;
+struct Latin1Expr;
 
 enum FromFunction {
     FromLatin1,
