@@ -26,6 +26,7 @@
 #include "MacroUtils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
+#include "ContextUtils.h"
 
 #include <clang/AST/AST.h>
 
@@ -180,4 +181,24 @@ bool QtUtils::isQtContainer(QualType t, LangOptions lo)
     return clazy_std::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
         return container == typeName;
     });
+}
+
+bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl)
+{
+    if (!valDecl)
+        return false;
+
+    const FunctionDecl *context = dyn_cast<FunctionDecl>(valDecl->getDeclContext());
+    if (!context)
+        return false;
+
+    Stmt *body = context->getBody();
+    if (!body)
+        return false;
+
+    // TODO1: Being passed to a function as const should be OK
+    if (Utils::isPassedToFunction(body, valDecl, false))
+        return false;
+
+    return true;
 }

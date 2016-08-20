@@ -122,6 +122,17 @@ CLAZYLIB_EXPORT bool isTooBigForQList(clang::QualType, const clang::CompilerInst
 
 CLAZYLIB_EXPORT clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
 
+
+/**
+ * Returns true if we can prove the container doesn't detach.
+ * Returns false otherwise, meaning that you can't conclude anything if false is returned.
+ *
+ * For true to be returned, all these conditions must verify:
+ * - Container is a local variable
+ * - It's not passed to any function
+ * - It's not assigned to another variable
+ */
+CLAZYLIB_EXPORT bool containerNeverDetaches(const clang::VarDecl *valDecl);
 }
 
 #endif
