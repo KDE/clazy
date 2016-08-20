@@ -104,6 +104,20 @@ clang::Expr *LoopUtils::containerExprForLoop(Stmt *loop)
     return nullptr;
 }
 
+VarDecl* LoopUtils::containerDeclForLoop(clang::Stmt *loop)
+{
+    Expr *expr = containerExprForLoop(loop);
+    if (!expr)
+        return nullptr;
+
+    auto declRef = dyn_cast<DeclRefExpr>(expr);
+    if (!declRef)
+        return nullptr;
+
+    ValueDecl *valueDecl = declRef->getDecl();
+    return valueDecl ? dyn_cast<VarDecl>(valueDecl) : nullptr;
+}
+
 Stmt* LoopUtils::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
 {
     if (!stmt)

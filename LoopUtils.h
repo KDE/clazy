@@ -69,6 +69,13 @@ namespace LoopUtils {
     CLAZYLIB_EXPORT clang::Expr* containerExprForLoop(clang::Stmt *loop);
 
     /**
+     * Returns the container decl for a range-loop or Q_FOREACH
+     *
+     * Q_FOREACH (auto f, container) or for (auto i : container)
+     */
+    CLAZYLIB_EXPORT clang::VarDecl* containerDeclForLoop(clang::Stmt *loop);
+
+    /**
      * Returns true of stmt is inside a for, while or do-while loop.
      * If yes, returns the loop statement, otherwise nullptr.
      */
