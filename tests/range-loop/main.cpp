@@ -2,7 +2,18 @@
 #include <vector>
 #include <QtCore/QMap>
 #include <QtCore/QSequentialIterable>
+
+
+
+
+
+
+
+
+
+
 using namespace std;
+
 QList<int> getQtList()
 {
     return {}; // dummy, not important
