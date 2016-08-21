@@ -1,7 +1,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QHash>
-
-
+#include <QtCore/QQueue>
+#include <QtCore/QVarLengthArray>
 
 
 
@@ -255,7 +255,7 @@ void testNesting2()
     }
 }
 
-#include <QtCore/QQueue>
+
 void bug362943()
 {
     QVector<int> vect;
@@ -263,5 +263,13 @@ void bug362943()
     q.reserve(10);
     for (const int i: vect) {
         q << i;
+    }
+}
+
+void bug367484()
+{
+    QVarLengthArray<int> array;
+    for (int i = 0; i < 10; ++i) {
+        array.append(i); // OK
     }
 }
