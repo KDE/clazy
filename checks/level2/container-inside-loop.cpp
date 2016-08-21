@@ -24,6 +24,7 @@
 #include "checkmanager.h"
 #include "StringUtils.h"
 #include "LoopUtils.h"
+#include "StmtBodyRange.h"
 
 #include <clang/AST/ParentMap.h>
 #include <clang/AST/AST.h>
@@ -60,7 +61,7 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
     if (!varDecl || Utils::isInitializedExternally(varDecl))
         return;
 
-    if (Utils::isPassedToFunction(loopStmt, varDecl, true))
+    if (Utils::isPassedToFunction(StmtBodyRange(loopStmt), varDecl, true))
         return;
 
     emitWarning(stmt->getLocStart(), "container inside loop causes unneeded allocations");

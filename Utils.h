@@ -58,6 +58,8 @@ namespace clang {
     class BinaryOperator;
 }
 
+struct StmtBodyRange;
+
 namespace Utils {
     /// Returns true if childDecl is a descent from parentDecl
     CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, clang::CXXRecordDecl *possibleBase);
@@ -115,7 +117,7 @@ namespace Utils {
 
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)
     // By ref or pointer
-    CLAZYLIB_EXPORT bool isPassedToFunction(clang::Stmt *body, const clang::VarDecl *varDecl,
+    CLAZYLIB_EXPORT bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl,
                                             bool byRefOrPtrOnly);
 
     // Returns true if we take the address of varDecl, such as: &foo

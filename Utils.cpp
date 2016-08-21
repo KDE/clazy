@@ -27,6 +27,7 @@
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
+#include "StmtBodyRange.h"
 
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/ASTContext.h>
@@ -352,14 +353,18 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
     return false;
 }
 
-bool Utils::isPassedToFunction(Stmt *body, const VarDecl *varDecl, bool byRefOrPtrOnly)
+bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *varDecl, bool byRefOrPtrOnly)
 {
-    if (!body)
+    if (!bodyRange.isValid())
         return false;
 
+    Stmt *body = bodyRange.body;
     std::vector<CallExpr*> callExprs;
     HierarchyUtils::getChilds<CallExpr>(body, callExprs);
     for (CallExpr *callexpr : callExprs) {
+        if (bodyRange.isOutsideRange(callexpr))
+            continue;
+
         FunctionDecl *fDecl = callexpr->getDirectCallee();
         if (!fDecl)
             continue;

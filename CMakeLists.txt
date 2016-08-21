@@ -233,6 +233,7 @@ set(CLAZY_LIB_INCLUDES
   MacroUtils.h
   QtUtils.h
   SuppressionManager.h
+  StmtBodyRange.h
   StringUtils.h
   TemplateUtils.h
   TypeUtils.h

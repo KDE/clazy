@@ -21,6 +21,7 @@
 
 #include "TypeUtils.h"
 #include "Utils.h"
+#include "StmtBodyRange.h"
 #include <HierarchyUtils.h>
 #include <StringUtils.h>
 
@@ -68,7 +69,7 @@ bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varD
     } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
         classif.passSmallTrivialByValue = true;
     } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
-        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(body, varDecl, /*byrefonly=*/ true)))
+        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
             return true;
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
         if (classif.isBig) {

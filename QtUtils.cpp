@@ -23,6 +23,7 @@
 #include "QtUtils.h"
 #include "Utils.h"
 #include "TypeUtils.h"
+#include "StmtBodyRange.h"
 #include "MacroUtils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
@@ -197,7 +198,7 @@ bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl)
         return false;
 
     // TODO1: Being passed to a function as const should be OK
-    if (Utils::isPassedToFunction(body, valDecl, false))
+    if (Utils::isPassedToFunction(StmtBodyRange(body), valDecl, false))
         return false;
 
     return true;

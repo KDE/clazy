@@ -29,6 +29,7 @@
 #include "HierarchyUtils.h"
 #include "TemplateUtils.h"
 #include "checkmanager.h"
+#include "StmtBodyRange.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -64,7 +65,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
         return true;
     }
 
-    if ((m_ignoreMode & IgnoreIsPassedToFunctions) && Utils::isPassedToFunction(body, varDecl, /*by-ref=*/ false)) {
+    if ((m_ignoreMode & IgnoreIsPassedToFunctions) && Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*by-ref=*/ false)) {
         return true;
     }
 
