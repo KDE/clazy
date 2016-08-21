@@ -28,12 +28,12 @@
 
 struct StmtBodyRange
 {
-    clang::Stmt *const body = nullptr;
-    clang::SourceManager *const sm = nullptr;
+    clang::Stmt *body = nullptr;
+    const clang::SourceManager *const sm = nullptr;
     const clang::SourceLocation searchUntilLoc; // We don't search after this point
 
     explicit StmtBodyRange(clang::Stmt *body,
-                           clang::SourceManager *sm = nullptr,
+                           const clang::SourceManager *sm = nullptr,
                            clang::SourceLocation searchUntilLoc = {})
         : body(body)
         , sm(sm)

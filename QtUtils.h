@@ -37,6 +37,8 @@ class ValueDecl;
 class LangOptions;
 }
 
+struct StmtBodyRange;
+
 namespace QtUtils
 {
 
@@ -132,7 +134,8 @@ CLAZYLIB_EXPORT clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
  * - It's not passed to any function
  * - It's not assigned to another variable
  */
-CLAZYLIB_EXPORT bool containerNeverDetaches(const clang::VarDecl *valDecl);
+CLAZYLIB_EXPORT bool containerNeverDetaches(const clang::VarDecl *varDecl,
+                                            StmtBodyRange bodyRange);
 }
 
 #endif

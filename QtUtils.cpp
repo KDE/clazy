@@ -184,7 +184,7 @@ bool QtUtils::isQtContainer(QualType t, LangOptions lo)
     });
 }
 
-bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl)
+bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange)
 {
     if (!valDecl)
         return false;
@@ -193,12 +193,12 @@ bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl)
     if (!context)
         return false;
 
-    Stmt *body = context->getBody();
-    if (!body)
+    bodyRange.body = context->getBody();
+    if (!bodyRange.body)
         return false;
 
     // TODO1: Being passed to a function as const should be OK
-    if (Utils::isPassedToFunction(StmtBodyRange(body), valDecl, false))
+    if (Utils::isPassedToFunction(bodyRange, valDecl, false))
         return false;
 
     return true;

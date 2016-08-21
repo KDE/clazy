@@ -167,4 +167,12 @@ void testBug367485()
     QList<int> list2;
     receivingList(list2);
     for (auto a : list2) {} // Warning
+
+    QList<int> list3;
+    for (auto a : list3) {} // OK
+    receivingList(list3);
+
+    QList<int> list4;
+    foreach (auto a, list4) {} // OK
+    receivingList(list4);
 }

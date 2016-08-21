@@ -376,6 +376,8 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
     std::vector<CXXConstructExpr*> constructExprs;
     HierarchyUtils::getChilds<CXXConstructExpr>(body, constructExprs);
     for (CXXConstructExpr *constructExpr : constructExprs) {
+        if (bodyRange.isOutsideRange(constructExpr))
+            continue;
         FunctionDecl *fDecl = constructExpr->getConstructor();
         if (isArgOfFunc(constructExpr, fDecl, varDecl, byRefOrPtrOnly))
             return true;

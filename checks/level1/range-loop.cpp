@@ -29,6 +29,7 @@
 #include "StringUtils.h"
 #include "checkmanager.h"
 #include "LoopUtils.h"
+#include "StmtBodyRange.h"
 
 #include <clang/AST/AST.h>
 
@@ -71,7 +72,8 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (!QtUtils::isQtCOWIterableClass(Utils::rootBaseClass(record)))
         return;
 
-    if (QtUtils::containerNeverDetaches(LoopUtils::containerDeclForLoop(rangeLoop)))
+    StmtBodyRange bodyRange(nullptr, &sm(), rangeLoop->getLocStart());
+    if (QtUtils::containerNeverDetaches(LoopUtils::containerDeclForLoop(rangeLoop), bodyRange))
         return;
 
     emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
