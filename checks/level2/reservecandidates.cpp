@@ -50,18 +50,6 @@ ReserveCandidates::ReserveCandidates(const std::string &name, const clang::Compi
 {
 }
 
-static bool isAReserveClass(CXXRecordDecl *recordDecl)
-{
-    if (!recordDecl)
-        return false;
-
-    static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet", "QVarLengthArray"};
-
-    return clazy_std::any_of(classes, [recordDecl](const string &className) {
-        return Utils::derivesFrom(recordDecl, className);
-    });
-}
-
 static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)
 {
     if (!paramType || !classDecl)
@@ -86,7 +74,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     if (!clazy_std::equalsAny(methodDecl->getNameAsString(), { "append", "push_back", "push", "operator<<", "operator+=" }))
         return false;
 
-    if (!isAReserveClass(classDecl))
+    if (!QtUtils::isAReserveClass(classDecl))
         return false;
 
     // Catch cases like: QList<T>::append(const QList<T> &), which don't make sense to reserve.
@@ -204,7 +192,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
         return false;
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!isAReserveClass(decl))
+    if (!QtUtils::isAReserveClass(decl))
         return false;
 
     ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);

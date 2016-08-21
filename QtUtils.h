@@ -136,6 +136,13 @@ CLAZYLIB_EXPORT clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
  */
 CLAZYLIB_EXPORT bool containerNeverDetaches(const clang::VarDecl *varDecl,
                                             StmtBodyRange bodyRange);
+
+/**
+ * Returns true if recordDecl is one of the container classes that supports reserve(), such
+ * as QList, QVector, etc.
+ */
+CLAZYLIB_EXPORT bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
+
 }
 
 #endif

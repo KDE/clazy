@@ -203,3 +203,15 @@ bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRang
 
     return true;
 }
+
+bool QtUtils::isAReserveClass(CXXRecordDecl *recordDecl)
+{
+    if (!recordDecl)
+        return false;
+
+    static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet", "QVarLengthArray"};
+
+    return clazy_std::any_of(classes, [recordDecl](const string &className) {
+        return Utils::derivesFrom(recordDecl, className);
+    });
+}
