@@ -120,6 +120,7 @@ set(SRC_FILES
   checks/level0/container-anti-pattern.cpp
   checks/level0/lambda-in-connect.cpp
   checks/level0/qdatetimeutc.cpp
+  checks/level0/qenums.cpp
   checks/level0/qfileinfo-exists.cpp
   checks/level0/qgetenv.cpp
   checks/level0/qmap-with-pointer-key.cpp

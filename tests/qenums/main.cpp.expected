@@ -1,0 +1,1 @@
+qenums/main.cpp:9:5: warning: Use Q_ENUM instead of Q_ENUMS [-Wclazy-qenums]
