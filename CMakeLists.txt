@@ -8,7 +8,8 @@
 #
 project(ClangLazy)
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
+include(GenerateExportHeader)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 find_package(Clang 3.6 MODULE REQUIRED)
@@ -104,6 +105,7 @@ set(CLAZY_LIB_SRC
 )
 
 add_library(clazylib SHARED ${CLAZY_LIB_SRC})
+generate_export_header(clazylib)
 
 set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
 include("GNUInstallDirs")
