@@ -57,6 +57,9 @@ public:
         if (range.getBegin().isMacroID())
             return;
 
+        if (m_sm.isInSystemHeader(range.getBegin()))
+            return;
+
         q->emitWarning(range.getBegin(), "Use Q_ENUM instead of Q_ENUMS");
     }
 
