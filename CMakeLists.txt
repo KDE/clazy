@@ -227,7 +227,7 @@ install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
 set(CLAZY_LIB_INCLUDES
   checkbase.h
   checkmanager.h
-  clazylib_export.h
+  ${CMAKE_BINARY_DIR}/clazylib_export.h
   clazy_stl.h
   ContextUtils.h
   FixItUtils.h
