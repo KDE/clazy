@@ -57,6 +57,11 @@ CheckManager::CheckManager()
     }
 }
 
+bool CheckManager::checkExists(const string &name) const
+{
+    return checkForName(m_registeredChecks, name) != m_registeredChecks.cend();
+}
+
 bool CheckManager::isReservedCheckName(const string &name) const
 {
     static const vector<string> names = { "clazy" };
@@ -158,14 +163,14 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv() const
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;
     if (requestedChecksThroughEnv.empty()) {
         const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv) {
             requestedChecksThroughEnv = string(checksEnv) == "all_checks" ? availableChecks(CheckLevel2)
-                                                                          : checksForCommaSeparatedString(checksEnv);
+                                                                          : checksForCommaSeparatedString(checksEnv, /*by-ref=*/ userDisabledChecks);
         }
 
         const string checkName = checkNameForFixIt(m_requestedFixitName);
@@ -256,7 +261,18 @@ bool CheckManager::isOptionSet(const string &optionName) const
     return clazy_std::contains(m_extraOptions, optionName);
 }
 
-RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str) const
+/*static */
+void CheckManager::removeChecksFromList(RegisteredCheck::List &list, vector<string> &checkNames)
+{
+    for (auto &name : checkNames) {
+        list.erase(remove_if(list.begin(), list.end(), [name](const RegisteredCheck &c) {
+            return c.name == name;
+        }), list.end());
+    }
+}
+
+RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str,
+                                                                  vector<string> &userDisabledChecks) const
 {
     vector<string> checkNames = clazy_std::splitString(str, ',');
     RegisteredCheck::List result;
@@ -270,7 +286,8 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
             // Unknown, but might be a fixit name
             const string checkName = checkNameForFixIt(name);
             auto it = checkForName(m_registeredChecks, checkName);
-            if (it == m_registeredChecks.cend()) {
+            const bool checkDoesntExist = it == m_registeredChecks.cend();
+            if (checkDoesntExist) {
                 if (clazy_std::startsWith(name, s_levelPrefix) && name.size() == strlen(s_levelPrefix) + 1) {
                     auto lastChar = name.back();
                     const int digit = lastChar - '0';
@@ -281,7 +298,17 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
                         llvm::errs() << "Invalid check: " << name << "\n";
                     }
                 } else {
-                    llvm::errs() << "Invalid check: " << name << "\n";
+                    if (clazy_std::startsWith(name, "no-")) {
+                        string checkName = name;
+                        checkName.erase(0, 3);
+                        if (checkExists(checkName)) {
+                            userDisabledChecks.push_back(checkName);
+                        } else {
+                            llvm::errs() << "Invalid check: " << name << "\n";
+                        }
+                    } else {
+                        llvm::errs() << "Invalid check: " << name << "\n";
+                    }
                 }
             } else {
                 result.push_back(*it);
@@ -291,6 +318,8 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
             result.push_back(*it);
         }
     }
+
+    removeChecksFromList(result, userDisabledChecks);
 
     return result;
 }

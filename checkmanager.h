@@ -61,10 +61,11 @@ public:
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
-    RegisteredCheck::List requestedChecksThroughEnv() const;
+    RegisteredCheck::List requestedChecksThroughEnv(std::vector<std::string> &userDisabledChecks) const;
 
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
-    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
+    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str,
+                                                        std::vector<std::string> &userDisabledChecks) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
 
     /**
@@ -90,9 +91,12 @@ public:
 
     SuppressionManager* suppressionManager();
 
+    static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
+
 private:
     CheckManager();
 
+    bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;
     std::unique_ptr<CheckBase> createCheck(const std::string &name, const clang::CompilerInstance &ci);

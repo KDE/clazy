@@ -255,7 +255,8 @@ protected:
             PrintHelp(llvm::errs());
             return false;
         } else if (args.size() == 1) {
-            m_checks = m_checkManager->checksForCommaSeparatedString(args[0]);
+            vector<string> userDisabledChecks;
+            m_checks = m_checkManager->checksForCommaSeparatedString(args[0], /*by-ref=*/userDisabledChecks);
             if (m_checks.empty()) {
                 llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
                 PrintHelp(llvm::errs());
@@ -263,8 +264,9 @@ protected:
             }
         }
 
+        vector<string> userDisabledChecks;
         // Append checks specified from env variable
-        RegisteredCheck::List checksFromEnv = m_checkManager->requestedChecksThroughEnv();
+        RegisteredCheck::List checksFromEnv = m_checkManager->requestedChecksThroughEnv(/*by-ref*/userDisabledChecks);
         copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(m_checks));
 
         if (m_checks.empty() && requestedLevel == CheckLevelUndefined) {
@@ -276,6 +278,7 @@ protected:
         auto checksFromRequestedLevel = m_checkManager->checksFromRequestedLevel();
         clazy_std::append(checksFromRequestedLevel, m_checks);
         clazy_std::sort_and_remove_dups(m_checks, checkLessThan);
+        CheckManager::removeChecksFromList(m_checks, userDisabledChecks);
 
         if (printRequestedChecks) {
             llvm::errs() << "Requested checks: ";

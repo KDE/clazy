@@ -80,3 +80,29 @@ echo | $CLAZY_COMMAND_STDIN
 # Use both env variable and compiler argument
 export CLAZY_CHECKS="level0,reserve-candidates"
 echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,level0 -")
+
+unset CLAZY_FIXIT
+unset CLAZY_CHECKS
+
+# Test disabling checks works
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach,no-foreach -")
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,no-foreach -")
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,no-implicit-casts -")
+echo | $($CLAZY_COMMAND" -Xclang -plugin-arg-clang-lazy -Xclang level0,no-qenums,no-qgetenv -")
+
+# Test disabling checks works, now with env variables
+export CLAZY_CHECKS="implicit-casts,foreach,no-foreach"
+echo | $CLAZY_COMMAND_STDIN
+
+export CLAZY_CHECKS="implicit-casts,no-foreach"
+echo | $CLAZY_COMMAND_STDIN
+
+export CLAZY_CHECKS="implicit-casts,no-implicit-casts"
+echo | $CLAZY_COMMAND_STDIN
+
+export CLAZY_CHECKS="level0,no-qenums,no-qgetenv"
+echo | $CLAZY_COMMAND_STDIN
+
+export CLAZY_CHECKS="no-qenums"
+echo | $CLAZY_COMMAND_STDIN
+

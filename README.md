@@ -107,6 +107,7 @@ Checks from level0:
     qdatetime-utc    (fix-qdatetime-utc)
     qgetenv    (fix-qgetenv)
     qfileinfo-exists
+    qenums
 
 Checks from level1:
     range-loop
@@ -145,11 +146,12 @@ Checks from level3:
 
 If you don't specify anything then all checks from level0 and level1 will run.
 To specify a list of checks to run, or to choose a level, you can use the `CLAZY_CHECKS` env variable or pass arguments to the compiler.
+You can disable checks by prefixing with no-, in case you don't want all checks from a given level.
 
 ##### Example via env variable
 ```
 export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor" # Enables only these 3 checks
-export CLAZY_CHECKS="level0" # Enables all checks from level0
+export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except for qenums
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```
 ##### Example via compiler argument
