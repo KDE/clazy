@@ -134,6 +134,10 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         if (!success)
             continue;
 
+        vector<CXXCtorInitializer *> ctorInits = Utils::ctorInitializer(dyn_cast<CXXConstructorDecl>(func), param);
+        if (Utils::ctorInitializerContainsMove(ctorInits))
+            continue;
+
         if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
             string error;
             std::vector<FixItHint> fixits;

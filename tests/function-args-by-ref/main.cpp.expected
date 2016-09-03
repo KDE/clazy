@@ -8,3 +8,4 @@ function-args-by-ref/main.cpp:102:12: warning: Missing reference on non-trivial 
 function-args-by-ref/main.cpp:121:35: warning: Missing reference on non-trivial type (struct NoUserCtorsButNotTrivial) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:145:39: warning: Missing reference on non-trivial type (struct DefaultButNotTrivialCopyable) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:214:12: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/main.cpp:227:12: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]

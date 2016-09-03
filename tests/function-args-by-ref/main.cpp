@@ -213,3 +213,18 @@ struct Ctors
 {
     Ctors (NonTrivial) {}
 };
+
+
+struct Ctors2
+{
+    Ctors2(NonTrivial n) : m(std::move(n)), i(0) {} // Ok
+    NonTrivial m;
+    int i;
+};
+
+struct Ctors3
+{
+    Ctors3(NonTrivial n) : m(n), i(0) {} // Warning
+    NonTrivial m;
+    int i;
+};
