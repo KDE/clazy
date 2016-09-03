@@ -153,8 +153,10 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
-    unsigned id = m_ci.getDiagnostics().getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, error.c_str());
-    DiagnosticBuilder B = m_ci.getDiagnostics().Report(full, id);
+    auto &engine = m_ci.getDiagnostics();
+    auto severity = engine.getWarningsAsErrors() ? DiagnosticIDs::Error : DiagnosticIDs::Warning;
+    unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
+    DiagnosticBuilder B = engine.Report(full, id);
     for (const FixItHint& fixit : fixits) {
         if (!fixit.isNull())
             B.AddFixItHint(fixit);

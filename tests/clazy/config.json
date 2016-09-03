@@ -13,6 +13,11 @@
         {
             "filename" : "suppressionsWholeFile.cpp",
             "checks"   : ["qstring-allocations", "foreach"]
+        },
+        {
+            "filename" : "werror.cpp",
+            "flags"    : "-Werror",
+            "checks"   : ["foreach"]
         }
     ]
 }

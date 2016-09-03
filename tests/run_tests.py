@@ -284,7 +284,8 @@ def run_unit_test(test):
         return False
 
     if not test.compare_everything and not test.isFixedFile:
-        extract_word("warning:", output_file, result_file)
+        word_to_grep = "warning:" if "-Werror" not in test.flags else "error:"
+        extract_word(word_to_grep, output_file, result_file)
 
     printableName = checkname
     if len(test.check.tests) > 1:
