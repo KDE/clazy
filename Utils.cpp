@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -824,3 +824,50 @@ clang::ArrayRef<clang::ParmVarDecl *> Utils::functionParameters(clang::FunctionD
     return func->parameters();
 }
 #endif
+
+vector<CXXCtorInitializer *> Utils::ctorInitializer(CXXConstructorDecl *ctor, clang::ParmVarDecl *param)
+{
+    if (!ctor)
+        return {};
+
+    vector <CXXCtorInitializer *> result;
+
+    for (auto it = ctor->init_begin(), end = ctor->init_end(); it != end; ++it) {
+        auto ctorInit = *it;
+        vector<DeclRefExpr*> declRefs;
+        HierarchyUtils::getChilds(ctorInit->getInit(), declRefs);
+        for (auto declRef : declRefs) {
+            if (declRef->getDecl() == param) {
+                result.push_back(ctorInit);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
+{
+    if (!init)
+        return false;
+
+    vector<CallExpr*> calls;
+    HierarchyUtils::getChilds(init->getInit(), calls);
+
+    for (auto call : calls) {
+        if (FunctionDecl  *funcDecl = call->getDirectCallee()) {
+            if (funcDecl->getQualifiedNameAsString() == "std::move")
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool Utils::ctorInitializerContainsMove(const vector<CXXCtorInitializer*> &ctorInits)
+{
+    return clazy_std::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
+        return Utils::ctorInitializerContainsMove(ctorInit);
+    });
+}

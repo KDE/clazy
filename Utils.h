@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -243,6 +243,26 @@ namespace Utils {
     clang::ArrayRef<clang::ParmVarDecl *>
 #endif
     functionParameters(clang::FunctionDecl *func);
+
+
+    /**
+     * For the given ctor, and ctor param, returns the ctor member initializers that used that param.
+     * Example:
+     * MyCtor(int a, int b) : c(a), d(b) {}
+     * auto result = Utils::ctorInitializer(MyCtor, b); // Result is the statement "d(b)"
+     */
+    CLAZYLIB_EXPORT std::vector<clang::CXXCtorInitializer*> ctorInitializer(clang::CXXConstructorDecl *ctor,
+                                                                            clang::ParmVarDecl *param);
+
+   /**
+    * Returns true if a ctor initializer contains a std::move()
+    * Example
+    * MyCtor(Foo a) : c(move(a)) {} // Would return true for this init list
+    */
+    CLAZYLIB_EXPORT bool ctorInitializerContainsMove(clang::CXXCtorInitializer*);
+
+    // Overload that recieves a vector and returns true if any ctor initializer contains a move()
+    CLAZYLIB_EXPORT bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer*> &);
 }
 
 #endif
