@@ -21,3 +21,4 @@ compile_fixed.output
 *.ast
 /clazy
 clazylib_export.h
+output.log
