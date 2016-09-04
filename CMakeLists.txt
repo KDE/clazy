@@ -53,6 +53,20 @@ endif()
 string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
 list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
 
+macro(link_to_llvm name)
+  foreach(clang_lib ${CLANG_LIBS})
+    target_link_libraries(${name} ${clang_lib})
+  endforeach()
+
+  foreach(llvm_lib ${LLVM_LIBS_LIST})
+    target_link_libraries(${name} ${llvm_lib})
+  endforeach()
+
+  foreach(user_lib ${USER_LIBS})
+    target_link_libraries(${name} ${user_lib})
+  endforeach()
+endmacro()
+
 macro(add_clang_plugin name)
   set(srcs ${ARGN})
 
@@ -65,17 +79,7 @@ macro(add_clang_plugin name)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
   endif()
 
-  foreach(clang_lib ${CLANG_LIBS})
-    target_link_libraries(${name} ${clang_lib})
-  endforeach()
-
-  foreach(llvm_lib ${LLVM_LIBS_LIST})
-    target_link_libraries(${name} ${llvm_lib})
-  endforeach()
-
-  foreach(user_lib ${USER_LIBS})
-    target_link_libraries(${name} ${user_lib})
-  endforeach()
+  link_to_llvm(${name})
 
   if(MSVC)
     target_link_libraries(${name} version.lib)
@@ -109,6 +113,9 @@ set(CLAZY_LIB_SRC
 )
 
 add_library(clazylib SHARED ${CLAZY_LIB_SRC})
+link_to_llvm(clazylib)
+
+
 generate_export_header(clazylib)
 
 set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
