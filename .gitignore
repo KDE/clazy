@@ -22,3 +22,5 @@ compile_fixed.output
 /clazy
 clazylib_export.h
 output.log
+/clazy.bat
+/bin/
