@@ -37,14 +37,16 @@ See troubleshooting section if you have problems.
 --------------------------------------------------------------------------------
 # Build Instructions (Windows)
 
-The instructions assume your terminal is suitable for development (msvc2013).
+The instructions assume your terminal is suitable for development (msvc2015).
 jom, nmake, git, cmake and cl should be in your PATH.
 
-##### Build and install llvm and clang from master (3.9):
+##### Build and install llvm and clang 3.9:
 ```
   > git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   > cd <some_directory>\tools\ && git clone https://github.com/llvm-mirror/clang.git
+  > git checkout release_39
   > cd clang
+  > git checkout release_39
   > git cherry-pick ae1cd1e7c301954bab703e9116a30b330902d43a
   > git cherry-pick bce41007c954eafd1d2fdcecbf4cc007697901e7
   > mkdir <some_directory>\build && cd <some_directory>\build
