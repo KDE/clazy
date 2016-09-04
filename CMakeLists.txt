@@ -77,6 +77,10 @@ macro(add_clang_plugin name)
     target_link_libraries(${name} ${user_lib})
   endforeach()
 
+  if(MSVC)
+    target_link_libraries(${name} version.lib)
+  endif()
+
   target_link_libraries(${name} clazylib)
 endmacro()
 
