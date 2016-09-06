@@ -65,6 +65,8 @@ jom, nmake, git, cmake and cl should be in your PATH.
 --------------------------------------------------------------------------------
 # Setting up your project to build with clazy
 
+Note: Wherever `clazy` it mentioned, replace with `clazy.bat` if you're on Windows.
+
 You should now have the clazy command available to you, in <prefix>/bin/.
 Compile your programs with it instead of clang++/g++.
 
