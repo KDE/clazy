@@ -53,7 +53,7 @@ jom, nmake, git, cmake and cl should be in your PATH.
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X86" -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
   > jom
   > nmake install
-  > Add c:\my_install_folder\llvm\ to PATH
+  > Add c:\my_install_folder\llvm\bin\ to PATH
 ```
 
 ##### Build the clazy plugin:
