@@ -112,6 +112,7 @@ set(CLAZY_LIB_SRC
   Utils.cpp
 )
 
+link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 add_library(clazylib SHARED ${CLAZY_LIB_SRC})
 link_to_llvm(clazylib)
 
