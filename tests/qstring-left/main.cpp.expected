@@ -1,2 +1,2 @@
 qstring-left/main.cpp:6:14: warning: QString::left(0) returns an empty string [-Wclazy-qstring-left]
-qstring-left/main.cpp:7:9: warning: Use QString::at(0) instead of QString::left(0) [-Wclazy-qstring-left]
+qstring-left/main.cpp:7:9: warning: Use QString::at(0) instead of QString::left(1) [-Wclazy-qstring-left]
