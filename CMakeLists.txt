@@ -148,6 +148,7 @@ set(SRC_FILES
   checks/level0/writingtotemporary.cpp
   checks/level0/wrong-qglobalstatic.cpp
   checks/level1/autounexpectedqstringbuilder.cpp
+  checks/level1/child-event-qobject-cast.cpp
   checks/level1/detachingtemporary.cpp
   checks/level1/foreach.cpp
   checks/level1/inefficient-qlist-soft.cpp
