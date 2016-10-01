@@ -107,9 +107,9 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 return;
             }
 
-            static regex rx(R"(.*clazy:excludeall=(.*))");
+            static regex rx(R"(clazy:excludeall=(.*?)(\s|$))");
             smatch match;
-            if (regex_match(comment, match, rx) && match.size() == 2) {
+            if (regex_search(comment, match, rx) && match.size() > 1) {
                 vector<string> checks = clazy_std::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
             }
@@ -121,8 +121,8 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 continue;
             }
 
-            static regex rx2(R"(.*clazy:exclude=(.*))");
-            if (regex_match(comment, match, rx2) && match.size() == 2) {
+            static regex rx2(R"(clazy:exclude=(.*?)(\s|$))");
+            if (regex_search(comment, match, rx2) && match.size() > 1) {
                 vector<string> checks = clazy_std::splitString(match[1], ',');
 
                 for (const string &checkName : checks) {

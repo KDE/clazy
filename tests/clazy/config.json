@@ -8,7 +8,7 @@
         },
         {
             "filename" : "suppressions.cpp",
-            "checks"   : ["qstring-allocations", "foreach"]
+            "checks"   : ["qstring-allocations", "foreach", "qdatetime-utc"]
         },
         {
             "filename" : "suppressionsWholeFile.cpp",
