@@ -13,6 +13,7 @@ You can get clazy from:
 - OpenSUSE tumbleweed: zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel
 - Ubuntu-16.04: apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev
 - Archlinux: pacman -S make llvm clang python2 cmake qt5-base git gcc
+- Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
 ##### Build and install clang >= 3.6 if your distro doesn't provide it:
@@ -191,9 +192,12 @@ For better results don't use parallel builds, otherwise a fixit being applied in
   [1] https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
   [2] https://llvm.org/bugs/show_bug.cgi?id=23529
 
-- [Fedora 23] cmake can't find LLVM ?
-  Try installing the llvm-static package. If that doesn't work you'll have to build llvm/clang yourself
+- [Fedora] cmake can't find LLVM ?
+  Try building llvm/clang yourself
   (There are reports that /usr/share/llvm/cmake/LLVM-Config.cmake is buggy).
+
+- [Fedora] CommandLine Error: Option 'opt-bisect-limit' registered more than once!
+  Remove the llvm-static package and use the dynamically linked libraries instead
 
 - Some checks are misteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off.
