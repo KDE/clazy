@@ -81,6 +81,11 @@ namespace TypeUtils
     CLAZYLIB_EXPORT void heapOrStackAllocated(clang::Expr *arg, const std::string &type,
                                               const clang::LangOptions &lo,
                                               bool &isStack, bool &isHeap);
+
+    /**
+     * Returns true if t is an AutoType that can't be deduced.
+     */
+    CLAZYLIB_EXPORT bool isUndeducibleAuto(const clang::Type *t);
 }
 
 #endif

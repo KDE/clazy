@@ -51,6 +51,9 @@ bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varD
     if (!paramType || paramType->isIncompleteType())
         return false;
 
+    if (isUndeducibleAuto(paramType))
+        return false;
+
     classif.size_of_T = ci.getASTContext().getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
@@ -125,4 +128,13 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
         isStack = !declref->getType().getTypePtr()->isPointerType();
         isHeap = !isStack;
     }
+}
+
+bool TypeUtils::isUndeducibleAuto(const Type *t)
+{
+    if (!t)
+        return false;
+
+    auto at = dyn_cast<AutoType>(t);
+    return at && at->getDeducedType().isNull();
 }
