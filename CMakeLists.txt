@@ -21,6 +21,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
+option(CLAZY_INSTALL_NO_HEADERS "Enable this option to suppress installation of headers" OFF)
 option(CLAZY_ON_WINDOWS_HACK "Enable this option if you're using a patched clang to support plugins on Windows" OFF)
 if(CLAZY_ON_WINDOWS_HACK)
   message("Using Windows plugin support hack")
@@ -236,24 +237,25 @@ install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${DOC_INSTALL_DIR}/hiddenl
 # Install more doc files
 install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
 
-# Install public headers
-set(CLAZY_LIB_INCLUDES
-  checkbase.h
-  checkmanager.h
-  ${CMAKE_BINARY_DIR}/clazylib_export.h
-  clazy_stl.h
-  ContextUtils.h
-  FixItUtils.h
-  HierarchyUtils.h
-  LoopUtils.h
-  MacroUtils.h
-  QtUtils.h
-  SuppressionManager.h
-  StmtBodyRange.h
-  StringUtils.h
-  TemplateUtils.h
-  TypeUtils.h
-  Utils.h
-)
-
-install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
+if (NOT CLAZY_INSTALL_NO_HEADERS)
+  # Install public headers
+  set(CLAZY_LIB_INCLUDES
+    checkbase.h
+    checkmanager.h
+    ${CMAKE_BINARY_DIR}/clazylib_export.h
+    clazy_stl.h
+    ContextUtils.h
+    FixItUtils.h
+    HierarchyUtils.h
+    LoopUtils.h
+    MacroUtils.h
+    QtUtils.h
+    SuppressionManager.h
+    StmtBodyRange.h
+    StringUtils.h
+    TemplateUtils.h
+    TypeUtils.h
+    Utils.h
+  )
+  install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
+endif()
