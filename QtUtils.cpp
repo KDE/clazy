@@ -99,7 +99,7 @@ bool QtUtils::isBootstrapping(const clang::CompilerInstance &ci)
 
 bool QtUtils::isQObject(CXXRecordDecl *decl)
 {
-    if (!decl)
+    if (!decl || !decl->hasDefinition())
         return false;
 
     if (decl->getName() == "QObject")
@@ -109,6 +109,13 @@ bool QtUtils::isQObject(CXXRecordDecl *decl)
         const Type *type = base.getType().getTypePtr();
         return type && QtUtils::isQObject(type->getAsCXXRecordDecl());
     });
+}
+
+bool QtUtils::isQObject(clang::QualType qt)
+{
+    qt = TypeUtils::pointeeQualType(qt);
+    const auto t = qt.getTypePtrOrNull();
+    return t ? isQObject(t->getAsCXXRecordDecl()) : false;
 }
 
 bool QtUtils::isConvertibleTo(const Type *source, const Type *target)

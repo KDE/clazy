@@ -35,6 +35,7 @@ class CXXMemberCallExpr;
 class CallExpr;
 class ValueDecl;
 class LangOptions;
+class QualType;
 }
 
 struct StmtBodyRange;
@@ -98,6 +99,11 @@ CLAZYLIB_EXPORT bool isBootstrapping(const clang::CompilerInstance &);
  * Returns if decl is or derives from QObject
  */
 CLAZYLIB_EXPORT bool isQObject(clang::CXXRecordDecl *decl);
+
+/**
+ * Overload.
+ */
+CLAZYLIB_EXPORT bool isQObject(clang::QualType);
 
 /**
  * Convertible means that a signal with of type source can connect to a signal/slot of type target
