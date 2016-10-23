@@ -1,0 +1,3 @@
+ctor-missing-parent-argument/main.cpp:3:1: warning: Test should take QObject parent argument in CTOR [-Wclazy-ctor-missing-parent-argument]
+ctor-missing-parent-argument/main.cpp:9:1: warning: Test2 should take QObject parent argument in CTOR [-Wclazy-ctor-missing-parent-argument]
+ctor-missing-parent-argument/main.cpp:28:1: warning: Test5 should take QObject parent argument in CTOR [-Wclazy-ctor-missing-parent-argument]

@@ -153,6 +153,7 @@ set(SRC_FILES
   checks/level1/detachingtemporary.cpp
   checks/level1/foreach.cpp
   checks/level1/inefficient-qlist-soft.cpp
+  checks/level1/ctor-missing-parent-argument.cpp
   checks/level1/missing-qobject-macro.cpp
   checks/level1/nonpodstatic.cpp
   checks/level1/qdeleteall.cpp

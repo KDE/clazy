@@ -8,7 +8,7 @@ Requested checks: foreach, writing-to-temporary
 Requested checks: old-style-connect
 Requested checks: old-style-connect
 Requested checks: foreach, old-style-connect
-Requested checks: auto-unexpected-qstringbuilder, child-event-qobject-cast, container-anti-pattern, container-inside-loop, detaching-temporary, foreach, function-args-by-ref, function-args-by-value, global-const-char-pointer, implicit-casts, inefficient-qlist-soft, lambda-in-connect, missing-qobject-macro, missing-typeinfo, mutable-container-key, non-pod-global-static, old-style-connect, post-event, qdatetime-utc, qdeleteall, qenums, qfileinfo-exists, qgetenv, qmap-with-pointer-key, qstring-allocations, qstring-arg, qstring-insensitive-allocation, qstring-left, qstring-ref, qvariant-template-instantiation, range-loop, reserve-candidates, rule-of-three, rule-of-two-soft, temporary-iterator, unused-non-trivial-variable, virtual-call-ctor, writing-to-temporary, wrong-qglobalstatic
+Requested checks: auto-unexpected-qstringbuilder, child-event-qobject-cast, container-anti-pattern, container-inside-loop, ctor-missing-parent-argument, detaching-temporary, foreach, function-args-by-ref, function-args-by-value, global-const-char-pointer, implicit-casts, inefficient-qlist-soft, lambda-in-connect, missing-qobject-macro, missing-typeinfo, mutable-container-key, non-pod-global-static, old-style-connect, post-event, qdatetime-utc, qdeleteall, qenums, qfileinfo-exists, qgetenv, qmap-with-pointer-key, qstring-allocations, qstring-arg, qstring-insensitive-allocation, qstring-left, qstring-ref, qvariant-template-instantiation, range-loop, reserve-candidates, rule-of-three, rule-of-two-soft, temporary-iterator, unused-non-trivial-variable, virtual-call-ctor, writing-to-temporary, wrong-qglobalstatic
 Requested checks: implicit-casts
 Requested checks: foreach, implicit-casts
 Requested checks: old-style-connect
@@ -50,14 +50,15 @@ Checks from level1:
     qstring-left
     qdeleteall
     non-pod-global-static
+    inefficient-qlist-soft
     foreach
     detaching-temporary
     child-event-qobject-cast
     auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
-    inefficient-qlist-soft
 
 Checks from level2:
     old-style-connect    (fix-old-style-connect)
+    ctor-missing-parent-argument
     virtual-call-ctor
     rule-of-two-soft
     rule-of-three
