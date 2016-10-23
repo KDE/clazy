@@ -75,6 +75,12 @@ namespace TypeUtils
 
 
     /**
+     * If qt is a pointer or ref, return it without * or &.
+     * Otherwise return qt unchanged.
+     */
+    CLAZYLIB_EXPORT clang::QualType pointeeQualType(clang::QualType qt);
+
+    /**
      * Returns if @p arg is stack or heap allocated.
      * true means it is. false means it either isn't or the situation was too complex to judge.
      */

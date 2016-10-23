@@ -89,6 +89,13 @@ QualType TypeUtils::unrefQualType(QualType qualType)
     return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
 }
 
+QualType TypeUtils::pointeeQualType(QualType qualType)
+{
+    // TODO: Make this recursive when we need to remove more than one level of *
+    const Type *t = qualType.getTypePtrOrNull();
+    return (t && (t->isReferenceType() || t->isPointerType())) ? t->getPointeeType() : qualType;
+}
+
 void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
                                      const clang::LangOptions &lo,
                                      bool &isStack, bool &isHeap)
