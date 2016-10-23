@@ -38,6 +38,19 @@ CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, co
 {
 }
 
+static string expectedParentTypeFor(CXXRecordDecl *decl)
+{
+    if (TypeUtils::derivesFrom(decl, "QWidget")) {
+        return "QWidget";
+    } else if (TypeUtils::derivesFrom(decl, "QQuickItem")) {
+        return "QQuickItem";
+    } else if (TypeUtils::derivesFrom(decl, "Qt3DCore::QEntity")) {
+        return "Qt3DCore::QNode";
+    }
+
+    return "QObject";
+}
+
 void CtorMissingParentArgument::VisitDecl(Decl *decl)
 {
     auto record = dyn_cast<CXXRecordDecl>(decl);
@@ -49,13 +62,14 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     }
 
     bool foundParentArgument = false;
+    const string parentType = expectedParentTypeFor(record);
     for (auto ctor : record->ctors()) {
         if (ctor->isCopyOrMoveConstructor())
             continue;
 
         for (auto param : ctor->parameters()) {
             QualType qt = TypeUtils::pointeeQualType(param->getType());
-            if (!qt.isConstQualified() && QtUtils::isQObject(qt)) {
+            if (!qt.isConstQualified() && TypeUtils::derivesFrom(qt, parentType)) {
                 foundParentArgument = true;
                 break;
             }
@@ -63,7 +77,9 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     }
 
     if (!foundParentArgument) {
-        emitWarning(decl, record->getQualifiedNameAsString() + string(" should take QObject parent argument in CTOR"));
+        emitWarning(decl, record->getQualifiedNameAsString() +
+                          string(" should take ") +
+                          parentType + string(" parent argument in CTOR"));
     }
 }
 
