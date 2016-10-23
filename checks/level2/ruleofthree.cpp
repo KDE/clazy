@@ -24,6 +24,7 @@
 #include "MacroUtils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/AST.h>
 
@@ -110,7 +111,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         }
     }
 
-    if (!hasUserDtor && (Utils::derivesFrom(record, "QSharedData") || dtorDefaultedByUser)) {
+    if (!hasUserDtor && (TypeUtils::derivesFrom(record, "QSharedData") || dtorDefaultedByUser)) {
         return;
     }
 

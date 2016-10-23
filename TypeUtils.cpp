@@ -145,3 +145,38 @@ bool TypeUtils::isUndeducibleAuto(const Type *t)
     auto at = dyn_cast<AutoType>(t);
     return at && at->getDeducedType().isNull();
 }
+
+bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
+{
+    if (!derived || !possibleBase || derived == possibleBase)
+        return false;
+
+    for (auto base : derived->bases()) {
+        const Type *type = base.getType().getTypePtrOrNull();
+        if (!type) continue;
+        CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
+
+        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
+{
+    if (!derived)
+        return false;
+
+    if (derived->getNameAsString() == possibleBase)
+        return true;
+
+    for (auto base : derived->bases()) {
+        const Type *t = base.getType().getTypePtrOrNull();
+        if (t && derivesFrom(t->getAsCXXRecordDecl(), possibleBase))
+            return true;
+    }
+
+    return false;
+}

@@ -219,6 +219,6 @@ bool QtUtils::isAReserveClass(CXXRecordDecl *recordDecl)
     static const std::vector<std::string> classes = {"QVector", "vector", "QList", "QSet"};
 
     return clazy_std::any_of(classes, [recordDecl](const string &className) {
-        return Utils::derivesFrom(recordDecl, className);
+        return TypeUtils::derivesFrom(recordDecl, className);
     });
 }

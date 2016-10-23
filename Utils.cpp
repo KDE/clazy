@@ -45,24 +45,6 @@
 using namespace clang;
 using namespace std;
 
-bool Utils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
-{
-    if (!derived || !possibleBase || derived == possibleBase)
-        return false;
-
-    for (auto base : derived->bases()) {
-        const Type *type = base.getType().getTypePtrOrNull();
-        if (!type) continue;
-        CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
-
-        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 {
     return clazy_std::any_of(decl->ctors(), [](CXXConstructorDecl *ctor) {
@@ -249,23 +231,6 @@ clang::ValueDecl * Utils::valueDeclForCallExpr(clang::CallExpr *expr)
     return nullptr;
 }
 
-
-bool Utils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
-{
-    if (!derived)
-        return false;
-
-    if (derived->getNameAsString() == possibleBase)
-        return true;
-
-    for (auto base : derived->bases()) {
-        const Type *t = base.getType().getTypePtrOrNull();
-        if (t && derivesFrom(t->getAsCXXRecordDecl(), possibleBase))
-            return true;
-    }
-
-    return false;
-}
 
 bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
 {

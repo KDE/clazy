@@ -25,6 +25,7 @@
 #include "dynamic_cast.h"
 #include "Utils.h"
 #include "checkmanager.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -56,7 +57,7 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
 
     if (castFrom == castTo) {
         emitWarning(stm->getLocStart(), "Casting to itself");
-    } else if (Utils::derivesFrom(/*child=*/castFrom, castTo)) {
+    } else if (TypeUtils::derivesFrom(/*child=*/castFrom, castTo)) {
         emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary");
     }
 }

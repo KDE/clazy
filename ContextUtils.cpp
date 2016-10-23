@@ -22,6 +22,7 @@
 #include "ContextUtils.h"
 #include "clazy_stl.h"
 #include "Utils.h"
+#include "TypeUtils.h"
 #include <clang/AST/ParentMap.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
@@ -180,10 +181,10 @@ bool ContextUtils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context,
         return false;
 
     // For protected there's still hope, since record might be a derived or base class
-    if (Utils::derivesFrom(record, contextRecord))
+    if (TypeUtils::derivesFrom(record, contextRecord))
         return true;
 
-    if (Utils::derivesFrom(contextRecord, record)) {
+    if (TypeUtils::derivesFrom(contextRecord, record)) {
         isSpecialProtectedCase = true;
         return true;
     }

@@ -33,6 +33,7 @@ class QualType;
 class Stmt;
 class VarDecl;
 class Type;
+class CXXRecordDecl;
 }
 
 namespace TypeUtils
@@ -92,6 +93,14 @@ namespace TypeUtils
      * Returns true if t is an AutoType that can't be deduced.
      */
     CLAZYLIB_EXPORT bool isUndeducibleAuto(const clang::Type *t);
+
+    /**
+     * Returns true if childDecl is a descent from parentDecl
+     **/
+    CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, clang::CXXRecordDecl *possibleBase);
+
+    // Overload
+    CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase);
 }
 
 #endif

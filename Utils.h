@@ -61,12 +61,6 @@ namespace clang {
 struct StmtBodyRange;
 
 namespace Utils {
-    /// Returns true if childDecl is a descent from parentDecl
-    CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, clang::CXXRecordDecl *possibleBase);
-
-    // Returns true if the class derived is or descends from a class named parent
-    CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase);
-
     /// Returns true if the class has at least one constexpr ctor
     CLAZYLIB_EXPORT bool hasConstexprCtor(clang::CXXRecordDecl *decl);
 
