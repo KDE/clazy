@@ -169,7 +169,7 @@ bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &po
     if (!derived || !derived->hasDefinition())
         return false;
 
-    if (derived->getNameAsString() == possibleBase)
+    if (derived->getQualifiedNameAsString() == possibleBase)
         return true;
 
     for (auto base : derived->bases()) {
