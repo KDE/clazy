@@ -99,16 +99,7 @@ bool QtUtils::isBootstrapping(const clang::CompilerInstance &ci)
 
 bool QtUtils::isQObject(CXXRecordDecl *decl)
 {
-    if (!decl || !decl->hasDefinition())
-        return false;
-
-    if (decl->getName() == "QObject")
-        return true;
-
-    return clazy_std::any_of(decl->bases(), [](CXXBaseSpecifier base) {
-        const Type *type = base.getType().getTypePtr();
-        return type && QtUtils::isQObject(type->getAsCXXRecordDecl());
-    });
+    return TypeUtils::derivesFrom(decl, "QObject");
 }
 
 bool QtUtils::isQObject(clang::QualType qt)

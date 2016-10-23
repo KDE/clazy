@@ -166,7 +166,7 @@ bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
 
 bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
-    if (!derived)
+    if (!derived || !derived->hasDefinition())
         return false;
 
     if (derived->getNameAsString() == possibleBase)
