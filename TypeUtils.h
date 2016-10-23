@@ -101,6 +101,9 @@ namespace TypeUtils
 
     // Overload
     CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase);
+
+    // Overload
+    CLAZYLIB_EXPORT bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
 }
 
 #endif

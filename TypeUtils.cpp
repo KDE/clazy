@@ -180,3 +180,10 @@ bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &po
 
     return false;
 }
+
+bool TypeUtils::derivesFrom(QualType derivedQT, const std::string &possibleBase)
+{
+    derivedQT = pointeeQualType(derivedQT);
+    const auto t = derivedQT.getTypePtrOrNull();
+    return t ? derivesFrom(t->getAsCXXRecordDecl(), possibleBase) : false;
+}
