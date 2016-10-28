@@ -64,6 +64,25 @@ jom, nmake, git, cmake and cl should be in your PATH.
   > jom && nmake install
   ```
 --------------------------------------------------------------------------------
+# Build Instructions (macOS)
+
+#### Install clang and llvm from macports
+
+```
+$ sudo port install clang-3.8 llvm-3.8
+$ sudo ln -sf /opt/local/bin/llvm-config-mp-3.8 /opt/local/bin/llvm-config
+$ sudo port select --set clang mp-clang-3.8
+
+#### Build the clazy plugin
+```
+  $ export CXX=clang++
+  $ cmake -DCLAZY_MACPORTS=ON
+  $ make
+  $ make install
+```
+
+--------------------------------------------------------------------------------
+# Build Instructions (Windows)
 # Setting up your project to build with clazy
 
 Note: Wherever `clazy` it mentioned, replace with `clazy.bat` if you're on Windows.

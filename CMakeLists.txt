@@ -21,6 +21,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
+option(CLAZY_MACPORTS "Enable this option to build against llvm from MacPorts" OFF)
 option(CLAZY_INSTALL_NO_HEADERS "Enable this option to suppress installation of headers" OFF)
 option(CLAZY_ON_WINDOWS_HACK "Enable this option if you're using a patched clang to support plugins on Windows" OFF)
 if(CLAZY_ON_WINDOWS_HACK)
@@ -86,6 +87,10 @@ macro(add_clang_plugin name)
     target_link_libraries(${name} version.lib)
   endif()
 
+  if(CLAZY_MACPORTS)
+    target_link_libraries(${name} LLVM)
+  endif()
+
   target_link_libraries(${name} clazylib)
 endmacro()
 
@@ -117,6 +122,9 @@ link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 add_library(clazylib SHARED ${CLAZY_LIB_SRC})
 link_to_llvm(clazylib)
 
+if(CLAZY_MACPORTS)
+  target_link_libraries(clazylib LLVM)
+endif()
 
 generate_export_header(clazylib)
 
