@@ -64,4 +64,4 @@ then
   exit
 fi
 
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy $@
+${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@ -Xclang -add-plugin -Xclang clang-lazy $@
