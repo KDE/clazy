@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python2
 
 import sys, os, subprocess, string, re, json, threading, multiprocessing
 from threading import Thread
