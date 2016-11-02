@@ -70,9 +70,9 @@ jom, nmake, git, cmake and cl should be in your PATH.
 #### Install clang and llvm from MacPorts
 
 ```
-$ sudo port install clang-3.8 llvm-3.8
-$ sudo ln -sf /opt/local/bin/llvm-config-mp-3.8 /opt/local/bin/llvm-config
-$ sudo port select --set clang mp-clang-3.8
+$ sudo port install clang-3.9 llvm-3.9
+$ sudo ln -sf /opt/local/bin/llvm-config-mp-3.9 /opt/local/bin/llvm-config
+$ sudo port select --set clang mp-clang-3.9
 
 #### Build the clazy plugin
 ```
@@ -92,6 +92,7 @@ $ brew install --with-clang llvm
 
 #### Build the clazy plugin
 ```
+  $ export CXX=clang++
   $ export LLVM_ROOT=/usr/local/opt/llvm
   $ cmake
   $ make

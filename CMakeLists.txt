@@ -50,9 +50,12 @@ else()
   set(HAS_STD_REGEX FALSE)
 endif()
 
-# Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
 string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
-list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
+
+if(NOT APPLE)
+  # Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
+  list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
+endif()
 
 macro(link_to_llvm name)
   foreach(clang_lib ${CLANG_LIBS})
@@ -66,6 +69,11 @@ macro(link_to_llvm name)
   foreach(user_lib ${USER_LIBS})
     target_link_libraries(${name} ${user_lib})
   endforeach()
+
+  foreach(llvm_system_lib ${LLVM_SYSTEM_LIBS})
+    target_link_libraries(${name} ${llvm_system_lib})
+  endforeach()
+
 endmacro()
 
 macro(add_clang_plugin name)
@@ -84,10 +92,6 @@ macro(add_clang_plugin name)
 
   if(MSVC)
     target_link_libraries(${name} version.lib)
-  endif()
-
-  if(APPLE)
-    target_link_libraries(${name} LLVM)
   endif()
 
   target_link_libraries(${name} clazylib)
@@ -120,10 +124,6 @@ set(CLAZY_LIB_SRC
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 add_library(clazylib SHARED ${CLAZY_LIB_SRC})
 link_to_llvm(clazylib)
-
-if(APPLE)
-  target_link_libraries(clazylib LLVM)
-endif()
 
 generate_export_header(clazylib)
 

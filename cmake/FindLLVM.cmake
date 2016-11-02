@@ -110,6 +110,12 @@ if (LLVM_FOUND)
   )
 
   execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --system-libs
+    OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --prefix
     OUTPUT_VARIABLE LLVM_INSTALL_PREFIX
     OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -137,4 +143,5 @@ if (LLVM_FOUND)
   message(STATUS "Found LLVM (version: ${LLVM_VERSION}): (using ${LLVM_CONFIG_EXECUTABLE})")
   message(STATUS "  Include dirs:   ${LLVM_INCLUDE_DIRS}")
   message(STATUS "  LLVM libraries: ${LLVM_LIBS}")
+  message(STATUS "  LLVM System libraries: ${LLVM_SYSTEM_LIBS}")
 endif()
