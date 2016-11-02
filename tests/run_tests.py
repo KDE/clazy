@@ -133,6 +133,8 @@ def find_qt_installation(major_version, qmakes):
 def libraryName():
     if _platform == 'win32':
         return 'ClangLazy.dll'
+    elif _platform == 'darwin':
+        return 'ClangLazy.dylib'
     else:
         return 'ClangLazy.so'
 
