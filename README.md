@@ -99,7 +99,6 @@ $ brew install --with-clang llvm
 ```
 
 --------------------------------------------------------------------------------
-# Build Instructions (Windows)
 # Setting up your project to build with clazy
 
 Note: Wherever `clazy` it mentioned, replace with `clazy.bat` if you're on Windows.
