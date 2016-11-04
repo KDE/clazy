@@ -130,58 +130,59 @@ Read on if you want to enable/disable which checks are run.
 
 You may want to choose which checks to enable before starting to compile.
 There are many checks and they are divided in levels:
-```
-Checks from level0:
-    mutable-container-key
-    container-anti-pattern
-    wrong-qglobalstatic
-    writing-to-temporary
-    unused-non-trivial-variable
-    temporary-iterator
-    qvariant-template-instantiation
-    qstring-ref    (fix-missing-qstringref)
-    qstring-insensitive-allocation
-    qstring-arg
-    qmap-with-pointer-key
-    qgetenv    (fix-qgetenv)
-    qfileinfo-exists
-    qenums
-    qdatetime-utc    (fix-qdatetime-utc)
-    lambda-in-connect
 
-Checks from level1:
-    missing-qobject-macro
-    post-event
-    range-loop
-    qstring-left
-    qdeleteall
-    non-pod-global-static
-    foreach
-    detaching-temporary
-    child-event-qobject-cast
-    auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
-    inefficient-qlist-soft
 
-Checks from level2:
-    old-style-connect    (fix-old-style-connect)
-    virtual-call-ctor
-    rule-of-two-soft
-    rule-of-three
-    reserve-candidates
-    qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
-    missing-typeinfo
-    implicit-casts
-    global-const-char-pointer
-    function-args-by-value
-    function-args-by-ref
-    container-inside-loop
+- Checks from level0:
+    - mutable-container-key
+    - container-anti-pattern
+    - wrong-qglobalstatic
+    - writing-to-temporary
+    - unused-non-trivial-variable
+    - temporary-iterator
+    - qvariant-template-instantiation
+    - qstring-ref    (fix-missing-qstringref)
+    - qstring-insensitive-allocation
+    - qstring-arg
+    - qmap-with-pointer-key
+    - qgetenv    (fix-qgetenv)
+    - qfileinfo-exists
+    - qenums
+    - qdatetime-utc    (fix-qdatetime-utc)
+    - lambda-in-connect
 
-Checks from level3:
-    assert-with-side-effects
-    copyable-polymorphic
-    detaching-member
-    bogus-dynamic-cast
-```
+- Checks from level1:
+    - missing-qobject-macro
+    - post-event
+    - range-loop
+    - qstring-left
+    - qdeleteall
+    - non-pod-global-static
+    - foreach
+    - detaching-temporary
+    - child-event-qobject-cast
+    - auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
+    - inefficient-qlist-soft
+
+- Checks from level2:
+    - old-style-connect    (fix-old-style-connect)
+    - virtual-call-ctor
+    - rule-of-two-soft
+    - rule-of-three
+    - reserve-candidates
+    - qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+    - missing-typeinfo
+    - implicit-casts
+    - global-const-char-pointer
+    - function-args-by-value
+    - function-args-by-ref
+    - container-inside-loop
+
+- Checks from level3:
+    - assert-with-side-effects
+    - copyable-polymorphic
+    - detaching-member
+    - bogus-dynamic-cast
+
 ## Description of each level
 - level0: Very stable checks, 99.99% safe, no false-positives
 - level1: Similar to level0, but sometimes (rarely) there might be some false-positives
