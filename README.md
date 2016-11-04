@@ -9,9 +9,9 @@ You can get clazy from:
 # Build Instructions (Linux)
 
 ## Install Dependencies:
-- OpenSUSE tumbleweed: zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel
-- Ubuntu-16.04: apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev
-- Archlinux: pacman -S make llvm clang python2 cmake qt5-base git gcc
+- OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
+- Ubuntu-16.04: `apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev`
+- Archlinux: `pacman -S make llvm clang python2 cmake qt5-base git gcc`
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
@@ -250,8 +250,8 @@ You can also suppress individual warnings by file or by line by inserting commen
 - To disable specific checks in specific source lines, insert a comment in the same line as the warning:
 `(...) // clazy:exclude=check1,check2`
 
-Don't include the "clazy-" prefix. If, for example, you want to disable qstring-allocations you would write:
-`// clazy:exclude=qstring-allocations` not clazy-qstring-allocations.
+Don't include the `clazy-` prefix. If, for example, you want to disable qstring-allocations you would write:
+`// clazy:exclude=qstring-allocations` not `clazy-qstring-allocations`.
 
 # Reporting bugs and wishes
 
