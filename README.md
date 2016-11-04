@@ -6,17 +6,16 @@ You can get clazy from:
 - git@git.kde.org:clazy
 - http://anongit.kde.org/clazy
 
---------------------------------------------------------------------------------
 # Build Instructions (Linux)
 
-##### Install Dependencies:
+## Install Dependencies:
 - OpenSUSE tumbleweed: zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel
 - Ubuntu-16.04: apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev
 - Archlinux: pacman -S make llvm clang python2 cmake qt5-base git gcc
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
-##### Build and install clang >= 3.6 if your distro doesn't provide it:
+## Build and install clang >= 3.6 if your distro doesn't provide it:
 ```
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   $ cd <some_directory>/tools/ && git clone https://github.com/llvm-mirror/clang.git
@@ -26,7 +25,7 @@ You can get clazy from:
   $ make -jX && make install
 ```
 
-##### Build the clazy plugin:
+## Build the clazy plugin:
 ```
   $ cd clazy/
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
@@ -35,13 +34,12 @@ You can get clazy from:
 
 See troubleshooting section if you have problems.
 
---------------------------------------------------------------------------------
 # Build Instructions (Windows)
 
 The instructions assume your terminal is suitable for development (msvc2015).
 jom, nmake, git, cmake and cl should be in your PATH.
 
-##### Build and install llvm and clang 3.9:
+## Build and install llvm and clang 3.9:
 ```
   > git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   > cd <some_directory>\tools\ && git clone https://github.com/llvm-mirror/clang.git
@@ -57,24 +55,23 @@ jom, nmake, git, cmake and cl should be in your PATH.
   > Add c:\my_install_folder\llvm\bin\ to PATH
 ```
 
-##### Build the clazy plugin:
+## Build the clazy plugin:
 ```
   > cd clazy\
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" -DCLAZY_ON_WINDOWS_HACK=ON
   > jom && nmake install
   ```
 
---------------------------------------------------------------------------------
 # Build Instructions (macOS with MacPorts)
 
-#### Install clang and llvm from MacPorts
+## Install clang and llvm from MacPorts
 
 ```
 $ sudo port install clang-3.9 llvm-3.9
 $ sudo ln -sf /opt/local/bin/llvm-config-mp-3.9 /opt/local/bin/llvm-config
 $ sudo port select --set clang mp-clang-3.9
 
-#### Build the clazy plugin
+## Build the clazy plugin
 ```
   $ export CXX=clang++
   $ cmake
@@ -82,15 +79,14 @@ $ sudo port select --set clang mp-clang-3.9
   $ make install
 ```
 
---------------------------------------------------------------------------------
 # Build Instructions (macOS with Homebrew)
 
-#### Install clang and llvm from Homebrew
+## Install clang and llvm from Homebrew
 
 ```
 $ brew install --with-clang llvm
 
-#### Build the clazy plugin
+## Build the clazy plugin
 ```
   $ export CXX=clang++
   $ export LLVM_ROOT=/usr/local/opt/llvm
@@ -99,7 +95,6 @@ $ brew install --with-clang llvm
   $ make install
 ```
 
---------------------------------------------------------------------------------
 # Setting up your project to build with clazy
 
 Note: Wherever `clazy` it mentioned, replace with `clazy.bat` if you're on Windows.
@@ -129,7 +124,6 @@ You can also edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instea
 You're all set, clazy will now run some checks on your project, but not all of them.
 Read on if you want to enable/disable which checks are run.
 
---------------------------------------------------------------------------------
 # Selecting which checks to enable
 
 You may want to choose which checks to enable before starting to compile.
@@ -186,7 +180,7 @@ Checks from level3:
     detaching-member
     bogus-dynamic-cast
 ```
-#### Description of each level
+## Description of each level
 - level0: Very stable checks, 99.99% safe, no false-positives
 - level1: Similar to level0, but sometimes (rarely) there might be some false-positives
 - level2: Sometimes has false-positives (20-30%).
@@ -196,17 +190,16 @@ If you don't specify anything then all checks from level0 and level1 will run.
 To specify a list of checks to run, or to choose a level, you can use the `CLAZY_CHECKS` env variable or pass arguments to the compiler.
 You can disable checks by prefixing with no-, in case you don't want all checks from a given level.
 
-##### Example via env variable
+## Example via env variable
 ```
 export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor" # Enables only these 3 checks
 export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except for qenums
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```
-##### Example via compiler argument
+## Example via compiler argument
 `clazy -Xclang -plugin-arg-clang-lazy -Xclang level0,detaching-temporary`
 Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.
 
---------------------------------------------------------------------------------
 # Enabling Fixits
 
 Some checks support fixits, in which clazy will re-write your source files whenever it can fix something.
@@ -217,7 +210,6 @@ Only one fixit can be enabled each time.
 **WARNING**: Backup your code, don't blame me if a fixit is not applied correctly.
 For better results don't use parallel builds, otherwise a fixit being applied in an header file might be done twice.
 
---------------------------------------------------------------------------------
 # Troubleshooting
 
 - clang: symbol lookup error: /usr/lib/x86_64-linux-gnu/ClangLazy.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv
@@ -238,7 +230,6 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 - Some checks are misteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off.
 
---------------------------------------------------------------------------------
 # Reducing warning noise
 
 - If you think you found a false-positive, file a bug report.
@@ -258,15 +249,12 @@ For better results don't use parallel builds, otherwise a fixit being applied in
   Don't include the "clazy-" prefix. If, for example, you want to disable qstring-allocations you would write:
 `// clazy:exclude=qstring-allocations` not clazy-qstring-allocations.
 
---------------------------------------------------------------------------------
 # Reporting bugs and wishes
 
 - bug tracker: https://bugs.kde.org/enter_bug.cgi?product=clazy
 - IRC: #kde-clazy (freenode)
 - E-mail: smartins@kde.org
 
---------------------------------------------------------------------------------
 # Contributing patches
 https://git.reviewboard.kde.org
 
---------------------------------------------------------------------------------
