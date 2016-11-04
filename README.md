@@ -60,7 +60,7 @@ jom, nmake, git, cmake and cl should be in your PATH.
   > cd clazy\
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" -DCLAZY_ON_WINDOWS_HACK=ON
   > jom && nmake install
-  ```
+```
 
 # Build Instructions (macOS with MacPorts)
 
@@ -70,6 +70,7 @@ jom, nmake, git, cmake and cl should be in your PATH.
 $ sudo port install clang-3.9 llvm-3.9
 $ sudo ln -sf /opt/local/bin/llvm-config-mp-3.9 /opt/local/bin/llvm-config
 $ sudo port select --set clang mp-clang-3.9
+```
 
 ## Build the clazy plugin
 ```
@@ -85,6 +86,7 @@ $ sudo port select --set clang mp-clang-3.9
 
 ```
 $ brew install --with-clang llvm
+```
 
 ## Build the clazy plugin
 ```
