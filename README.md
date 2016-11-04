@@ -230,7 +230,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 - [Fedora] CommandLine Error: `Option 'opt-bisect-limit' registered more than once!`
   Remove the llvm-static package and use the dynamically linked libraries instead
 
-- Some checks are misteriously not producing warnings or not applying fixits ?
+- Some checks are mysteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off.
 
 # Reducing warning noise
