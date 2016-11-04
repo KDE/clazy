@@ -101,7 +101,7 @@ $ brew install --with-clang llvm
 
 Note: Wherever `clazy` it mentioned, replace with `clazy.bat` if you're on Windows.
 
-You should now have the clazy command available to you, in <prefix>/bin/.
+You should now have the clazy command available to you, in `<prefix>/bin/`.
 Compile your programs with it instead of clang++/g++.
 
 Note that this command is just a convenience wrapper which calls:
@@ -190,7 +190,7 @@ Checks from level3:
 
 If you don't specify anything then all checks from level0 and level1 will run.
 To specify a list of checks to run, or to choose a level, you can use the `CLAZY_CHECKS` env variable or pass arguments to the compiler.
-You can disable checks by prefixing with no-, in case you don't want all checks from a given level.
+You can disable checks by prefixing with `no-`, in case you don't want all checks from a given level.
 
 ## Example via env variable
 ```
@@ -214,7 +214,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 # Troubleshooting
 
-- clang: symbol lookup error: /usr/lib/x86_64-linux-gnu/ClangLazy.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv
+- clang: symbol lookup error: `/usr/lib/x86_64-linux-gnu/ClangLazy.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv`.
   This is due to mixing ABIs. Your clang/llvm was compiled with the new gcc c++ ABI [1] but you compiled the clazy plugin with clang (which uses old ABI [2]).
 
   The solution is to build the clazy plugin with gcc or use a distro which hasn't migrated to gcc5 ABI yet, such as archlinux.
@@ -226,7 +226,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
   Try building llvm/clang yourself
   (There are reports that /usr/share/llvm/cmake/LLVM-Config.cmake is buggy).
 
-- [Fedora] CommandLine Error: Option 'opt-bisect-limit' registered more than once!
+- [Fedora] CommandLine Error: `Option 'opt-bisect-limit' registered more than once!`
   Remove the llvm-static package and use the dynamically linked libraries instead
 
 - Some checks are misteriously not producing warnings or not applying fixits ?
@@ -235,7 +235,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 # Reducing warning noise
 
 - If you think you found a false-positive, file a bug report.
-- If you want to suppress warnings from headers of Qt or 3rd party code, include them with -isystem instead of -I.
+- If you want to suppress warnings from headers of Qt or 3rd party code, include them with `-isystem` instead of `-I`.
 
 - You can also suppress individual warnings by file or by line by inserting comments:
 
