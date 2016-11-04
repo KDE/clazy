@@ -2,9 +2,9 @@
 
 You can get clazy from:
 
-- https://github.com/KDE/clazy
+- <https://github.com/KDE/clazy>
 - git@git.kde.org:clazy
-- http://anongit.kde.org/clazy
+- <http://anongit.kde.org/clazy>
 
 # Build Instructions (Linux)
 
@@ -216,12 +216,12 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 # Troubleshooting
 
 - clang: symbol lookup error: `/usr/lib/x86_64-linux-gnu/ClangLazy.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv`.
-  This is due to mixing ABIs. Your clang/llvm was compiled with the new gcc c++ ABI [1] but you compiled the clazy plugin with clang (which uses old ABI [2]).
+  This is due to mixing ABIs. Your clang/llvm was compiled with the [new gcc c++ ABI][1] but you compiled the clazy plugin with clang (which uses [the old ABI][2]).
 
   The solution is to build the clazy plugin with gcc or use a distro which hasn't migrated to gcc5 ABI yet, such as archlinux.
 
-  [1] https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
-  [2] https://llvm.org/bugs/show_bug.cgi?id=23529
+[1]: https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
+[2]: https://llvm.org/bugs/show_bug.cgi?id=23529
 
 - [Fedora] cmake can't find LLVM ?
   Try building llvm/clang yourself
@@ -254,10 +254,10 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 # Reporting bugs and wishes
 
-- bug tracker: https://bugs.kde.org/enter_bug.cgi?product=clazy
+- bug tracker: <https://bugs.kde.org/enter_bug.cgi?product=clazy>
 - IRC: #kde-clazy (freenode)
-- E-mail: smartins@kde.org
+- E-mail: <smartins@kde.org>
 
 # Contributing patches
-https://git.reviewboard.kde.org
 
+<https://git.reviewboard.kde.org>
