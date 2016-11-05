@@ -35,11 +35,7 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
     if (!record)
         return true;
 
-    auto qualifiedName = record->getQualifiedNameAsString();
-    if (clazy_std::equalsAny(record->getNameAsString(), { "iterator", "const_iterator" })) {
-        if (clazy_std::startsWith(qualifiedName, "QList<")) // Fixed in Qt6
-            return true;
-    }
+    const auto qualifiedName = StringUtils::classNameFor(record);
 
     static const vector<string> blacklisted = { "QAtomicInt", "QBasicAtomicInteger", "QAtomicInteger", "QBasicAtomicPointer",
                                                 "QList::iterator", "QList::const_iterator", "QTextBlock::iterator",
@@ -62,7 +58,8 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
                                                 "QFuture::const_iterator",
                                                 "QFuture::iterator",
                                                 "QMatrix",
-                                                "QBitRef", "QJsonValueRef"
+                                                "QBitRef", "QJsonValueRef",
+                                                "QTypedArrayData::iterator"
                                               };
     return clazy_std::contains(blacklisted, qualifiedName);
 }
