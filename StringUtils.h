@@ -44,37 +44,47 @@ class LangOpts;
 
 namespace StringUtils {
 
-template <typename T>
-inline std::string classNameFor(T *ctorDecl)
+// Returns the class name.
+// The name will not include any templates, so  "QVector::iterator" would be returned for QVector<int>::iterator
+// Use record->getQualifiedNameAsString() if you want the templates.
+
+inline std::string classNameFor(const clang::CXXRecordDecl *record)
 {
-    return std::string();
+    if (!record)
+        return {};
+
+    const std::string name = record->getNameAsString();
+
+    if (auto p = record->getParent()) {
+        // TODO: Also append the namespace, when needed.
+        auto parentName = classNameFor(llvm::dyn_cast<clang::CXXRecordDecl>(p));
+        if (!parentName.empty())
+            return parentName + "::" + name;
+    }
+
+    return name;
 }
 
-template <>
 inline std::string classNameFor(clang::CXXConstructorDecl *ctorDecl)
 {
-    return ctorDecl->getParent()->getNameAsString();
+    return classNameFor(ctorDecl->getParent());
 }
 
-template <>
 inline std::string classNameFor(clang::CXXMethodDecl *method)
 {
-    return method ? method->getParent()->getNameAsString() : std::string();
+    return method ? classNameFor(method->getParent()) : std::string();
 }
 
-template <>
 inline std::string classNameFor(clang::CXXConstructExpr *expr)
 {
     return classNameFor(expr->getConstructor());
 }
 
-template <>
 inline std::string classNameFor(clang::CXXOperatorCallExpr *call)
 {
     return call ? classNameFor(llvm::dyn_cast_or_null<clang::CXXMethodDecl>(call->getDirectCallee())) : std::string();
 }
 
-template <>
 inline std::string classNameFor(clang::ParmVarDecl *param)
 {
     if (!param)
@@ -88,16 +98,13 @@ inline std::string classNameFor(clang::ParmVarDecl *param)
     const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl()
                                                            : t->getPointeeCXXRecordDecl();
 
-    if (record)
-        return record->getNameAsString();
-
-    return {};
+    return classNameFor(record);
 }
 
 template <typename T>
 inline bool isOfClass(T *node, const std::string &className)
 {
-    return node && classNameFor<T>(node) == className;
+    return node && classNameFor(node) == className;
 }
 
 inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::string> &functionNames)
