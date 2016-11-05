@@ -26,56 +26,56 @@ Could not find checks in comma separated string implicit-casts,no-implicit-casts
 Available checks and FixIts:
 
 Checks from level0:
-    mutable-container-key
     container-anti-pattern
-    wrong-qglobalstatic
-    writing-to-temporary
-    unused-non-trivial-variable
-    temporary-iterator
-    qvariant-template-instantiation
-    qstring-ref    (fix-missing-qstringref)
-    qstring-insensitive-allocation
-    qstring-arg
-    qmap-with-pointer-key
-    qgetenv    (fix-qgetenv)
-    qfileinfo-exists
-    qenums
-    qdatetime-utc    (fix-qdatetime-utc)
     lambda-in-connect
+    mutable-container-key
+    qdatetime-utc    (fix-qdatetime-utc)
+    qenums
+    qfileinfo-exists
+    qgetenv    (fix-qgetenv)
+    qmap-with-pointer-key
+    qstring-arg
+    qstring-insensitive-allocation
+    qstring-ref    (fix-missing-qstringref)
+    qvariant-template-instantiation
+    temporary-iterator
+    unused-non-trivial-variable
+    writing-to-temporary
+    wrong-qglobalstatic
 
 Checks from level1:
-    missing-qobject-macro
-    post-event
-    range-loop
-    qstring-left
-    qdeleteall
-    non-pod-global-static
-    inefficient-qlist-soft
-    foreach
-    detaching-temporary
-    child-event-qobject-cast
     auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
+    child-event-qobject-cast
+    detaching-temporary
+    foreach
+    inefficient-qlist-soft
+    missing-qobject-macro
+    non-pod-global-static
+    post-event
+    qdeleteall
+    qstring-left
+    range-loop
 
 Checks from level2:
-    old-style-connect    (fix-old-style-connect)
-    ctor-missing-parent-argument
-    virtual-call-ctor
-    rule-of-two-soft
-    rule-of-three
-    reserve-candidates
-    qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
-    missing-typeinfo
-    implicit-casts
-    global-const-char-pointer
-    function-args-by-value
-    function-args-by-ref
     container-inside-loop
+    ctor-missing-parent-argument
+    function-args-by-ref
+    function-args-by-value
+    global-const-char-pointer
+    implicit-casts
+    missing-typeinfo
+    old-style-connect    (fix-old-style-connect)
+    qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+    reserve-candidates
+    rule-of-three
+    rule-of-two-soft
+    virtual-call-ctor
 
 Checks from level3:
     assert-with-side-effects
+    bogus-dynamic-cast
     copyable-polymorphic
     detaching-member
-    bogus-dynamic-cast
 
 If nothing is specified, all checks from level0 and level1 will be run.
 

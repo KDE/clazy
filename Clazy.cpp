@@ -200,6 +200,9 @@ static bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
 
 static bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredCheck &c2)
 {
+    if (c1.level == c2.level)
+        return checkLessThan(c1, c2);
+
     return c1.level < c2.level;
 }
 
