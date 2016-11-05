@@ -166,6 +166,7 @@ set(SRC_FILES
   checks/level1/qdeleteall.cpp
   checks/level1/qstring-left.cpp
   checks/level1/range-loop.cpp
+  checks/level1/ruleoftwosoft.cpp
   checks/level1/post-event.cpp
   checks/level2/container-inside-loop.cpp
   checks/level2/function-args-by-ref.cpp
@@ -176,7 +177,6 @@ set(SRC_FILES
   checks/level2/qstring-allocations.cpp
   checks/level2/reservecandidates.cpp
   checks/level2/ruleofthree.cpp
-  checks/level2/ruleoftwosoft.cpp
   checks/level2/virtualcallsfromctor.cpp
   checks/level3/assertwithsideeffects.cpp
   checks/level3/copyable-polymorphic.cpp
