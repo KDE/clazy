@@ -56,4 +56,4 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("copyable-polymorphic", CopyablePolymorphic, CheckLevel3)
+REGISTER_CHECK_WITH_FLAGS("copyable-polymorphic", CopyablePolymorphic, CheckLevel1)

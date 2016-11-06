@@ -157,6 +157,7 @@ set(SRC_FILES
   checks/level0/wrong-qglobalstatic.cpp
   checks/level1/autounexpectedqstringbuilder.cpp
   checks/level1/child-event-qobject-cast.cpp
+  checks/level1/copyable-polymorphic.cpp
   checks/level1/detachingtemporary.cpp
   checks/level1/foreach.cpp
   checks/level1/inefficient-qlist-soft.cpp
@@ -179,7 +180,6 @@ set(SRC_FILES
   checks/level2/ruleofthree.cpp
   checks/level2/virtualcallsfromctor.cpp
   checks/level3/assertwithsideeffects.cpp
-  checks/level3/copyable-polymorphic.cpp
   checks/level3/detachingmember.cpp
   checks/level3/dynamic_cast.cpp
   checks/hiddenlevel/inefficientqlist.cpp
