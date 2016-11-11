@@ -24,6 +24,7 @@
 
 #include "dynamic_cast.h"
 #include "Utils.h"
+#include "QtUtils.h"
 #include "checkmanager.h"
 #include "TypeUtils.h"
 
@@ -48,8 +49,8 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     if (!castFrom)
         return;
 
-    //if (QtUtils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
-        //emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
+    if (isOptionSet("qobject") && QtUtils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
+        emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);
     if (!castTo)

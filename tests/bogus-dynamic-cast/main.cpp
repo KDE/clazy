@@ -1,4 +1,4 @@
-
+#include <QtCore/QObject>
 
 
 
@@ -34,3 +34,14 @@ void test()
     dynamic_cast<B*>(a); // OK
     dynamic_cast<B*>(b); // warning: Casting to itself
 }
+
+class MyObj : public QObject
+{
+public:
+};
+
+void testQObjectCast(QObject *o)
+{
+    dynamic_cast<MyObj*>(o); // Warn
+}
+
