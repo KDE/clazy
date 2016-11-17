@@ -2,6 +2,13 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "qobjectcast.cpp",
+            "env" :
+                {
+                    "CLAZY_EXTRA_OPTIONS" : "bogus-dynamic-cast-qobject"
+                }
         }
     ]
 }

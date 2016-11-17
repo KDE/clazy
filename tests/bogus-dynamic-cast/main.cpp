@@ -42,6 +42,5 @@ public:
 
 void testQObjectCast(QObject *o)
 {
-    dynamic_cast<MyObj*>(o); // Warn
+    dynamic_cast<MyObj*>(o); // OK
 }
-
