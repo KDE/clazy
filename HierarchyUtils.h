@@ -37,6 +37,14 @@ class ParentMap;
 
 namespace HierarchyUtils {
 
+enum UnpealOption {
+    IgnoreNone             = 0,
+    IgnoreImplicitCasts    = 1,
+    IgnoreExprWithCleanups = 2
+};
+
+typedef int UnpealOptions;
+
 /**
  * Returns true if child is a child of parent.
  */
@@ -166,6 +174,32 @@ std::vector<T*> getStatements(clang::Stmt *body, const clang::SourceManager *sm 
     }
 
     return statements;
+}
+
+/**
+ * If stmt is of type T, then stmt is returned.
+ * If stmt is of type IgnoreImplicitCast or IgnoreExprWithCleanups (depending on options) then stmt's
+ * first child is tested instead (recurses).
+ * Otherwise nullptr is returned.
+ *
+ * This is useful for example when the interesting statement is under an Implicit cast, so:
+ **/
+template <typename T>
+T* unpeal(clang::Stmt *stmt, UnpealOptions options = IgnoreNone)
+{
+    if (!stmt)
+        return nullptr;
+
+    if (auto tt = llvm::dyn_cast<T>(stmt))
+        return tt;
+
+    if ((options & IgnoreImplicitCasts) && llvm::isa<clang::ImplicitCastExpr>(stmt))
+        return unpeal<T>(HierarchyUtils::getFirstChild(stmt), options);
+
+    if ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(stmt))
+        return unpeal<T>(HierarchyUtils::getFirstChild(stmt), options);
+
+    return nullptr;
 }
 
 }
