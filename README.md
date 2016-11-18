@@ -162,6 +162,7 @@ There are many checks and they are divided in levels:
     - child-event-qobject-cast
     - auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
     - inefficient-qlist-soft
+    - returning-data-from-temporary
 
 - Checks from level2:
     - old-style-connect    (fix-old-style-connect)
