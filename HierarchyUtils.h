@@ -37,13 +37,13 @@ class ParentMap;
 
 namespace HierarchyUtils {
 
-enum UnpealOption {
+enum IgnoreStmt {
     IgnoreNone             = 0,
     IgnoreImplicitCasts    = 1,
     IgnoreExprWithCleanups = 2
 };
 
-typedef int UnpealOptions;
+typedef int IgnoreStmts;
 
 /**
  * Returns true if child is a child of parent.
@@ -185,7 +185,7 @@ std::vector<T*> getStatements(clang::Stmt *body, const clang::SourceManager *sm 
  * This is useful for example when the interesting statement is under an Implicit cast, so:
  **/
 template <typename T>
-T* unpeal(clang::Stmt *stmt, UnpealOptions options = IgnoreNone)
+T* unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
 {
     if (!stmt)
         return nullptr;
