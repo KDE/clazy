@@ -167,6 +167,7 @@ set(SRC_FILES
   checks/level1/qdeleteall.cpp
   checks/level1/qstring-left.cpp
   checks/level1/range-loop.cpp
+  checks/level1/returning-data-from-temporary.cpp
   checks/level1/ruleoftwosoft.cpp
   checks/level1/post-event.cpp
   checks/level2/container-inside-loop.cpp
