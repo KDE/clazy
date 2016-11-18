@@ -104,6 +104,19 @@ namespace TypeUtils
 
     // Overload
     CLAZYLIB_EXPORT bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
+
+    /**
+     * Returns true if the value is const. This is usually equivalent to qt.isConstQualified() but
+     * takes care of the special case where qt represents a pointer. Many times you don't care if the
+     * pointer is const or not and just care about the pointee.
+     *
+     * A a;        => false
+     * const A a;  => true
+     * A* a;       => false
+     * const A* a; => true
+     * A *const a; => false
+     */
+    CLAZYLIB_EXPORT bool valueIsConst(clang::QualType qt);
 }
 
 #endif

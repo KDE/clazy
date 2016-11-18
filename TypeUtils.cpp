@@ -187,3 +187,8 @@ bool TypeUtils::derivesFrom(QualType derivedQT, const std::string &possibleBase)
     const auto t = derivedQT.getTypePtrOrNull();
     return t ? derivesFrom(t->getAsCXXRecordDecl(), possibleBase) : false;
 }
+
+bool TypeUtils::valueIsConst(QualType qt)
+{
+    return pointeeQualType(qt).isConstQualified();
+}
