@@ -24,7 +24,9 @@
 
 #include "HierarchyUtils.h"
 #include "clazy_stl.h"
+
 #include <clang/AST/ParentMap.h>
+#include <clang/AST/ExprCXX.h>
 
 using namespace std;
 using namespace clang;
@@ -84,4 +86,10 @@ clang::Stmt *HierarchyUtils::getFirstChild(clang::Stmt *parent)
 
     auto it = parent->child_begin();
     return it == parent->child_end() ? nullptr : *it;
+}
+
+bool HierarchyUtils::isIgnoredByOption(Stmt *s, HierarchyUtils::IgnoreStmts options)
+{
+    return ((options & IgnoreImplicitCasts)    && isa<ImplicitCastExpr>(s)) ||
+           ((options & IgnoreExprWithCleanups) && isa<ExprWithCleanups>(s));
 }

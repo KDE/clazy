@@ -145,6 +145,10 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
         }
     }
 }
+
+bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options);
+
+
 /**
  * Returns all statements of type T in body, starting from startLocation, or from body->getLocStart() if
  * startLocation is null.
@@ -152,7 +156,11 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
  * Similar to getChilds(), but with startLocation support.
  */
 template <typename T>
-std::vector<T*> getStatements(clang::Stmt *body, const clang::SourceManager *sm = nullptr, clang::SourceLocation startLocation = {}, int depth = -1, bool includeParent = false)
+std::vector<T*> getStatements(clang::Stmt *body,
+                              const clang::SourceManager *sm = nullptr,
+                              clang::SourceLocation startLocation = {},
+                              int depth = -1, bool includeParent = false,
+                              IgnoreStmts ignoreOptions = IgnoreNone)
 {
     std::vector<T*> statements;
     if (!body || depth == 0)
@@ -169,7 +177,10 @@ std::vector<T*> getStatements(clang::Stmt *body, const clang::SourceManager *sm 
                 statements.push_back(childT);
         }
 
-        auto childStatements = getStatements<T>(child, sm, startLocation, depth - 1);
+        if (!isIgnoredByOption(child, ignoreOptions))
+            --depth;
+
+        auto childStatements = getStatements<T>(child, sm, startLocation, depth, false, ignoreOptions);
         clazy_std::append(childStatements, statements);
     }
 

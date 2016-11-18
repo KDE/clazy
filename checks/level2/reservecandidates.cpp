@@ -168,7 +168,10 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
-    auto callExprs = HierarchyUtils::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1, /*includeParent=*/ true);
+    auto callExprs = HierarchyUtils::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1,
+                                                             /*includeParent=*/ true,
+                                                             HierarchyUtils::IgnoreExprWithCleanups);
+
 
     for (CallExpr *callExpr : callExprs) {
         if (!isCandidate(callExpr))
