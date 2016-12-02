@@ -59,7 +59,7 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
 
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
                                          "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
-                                         "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4"};
+                                         "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4", "trimmed" };
 
     if (!clazy_std::contains(list, method->getNameAsString()))
         return false;
