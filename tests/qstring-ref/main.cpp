@@ -10,7 +10,7 @@ void test()
     s.toInt(&ok); // OK
     s.midRef(1, 1).toInt(&ok); // OK
     s.mid(s.lastIndexOf(QLatin1Char('#')) + 1).toUpper(); // OK
-    s.mid(s.lastIndexOf(QLatin1Char('#')) + 1).trimmed(); // OK
+    s.mid(s.lastIndexOf(QLatin1Char('#')) + 1).trimmed(); // Warning
     const QRegExp r;
     QRegExp r2;
     s.mid(1, 1).indexOf(r); // OK
