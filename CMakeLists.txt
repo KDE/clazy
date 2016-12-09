@@ -149,6 +149,7 @@ set(SRC_FILES
   checks/level0/qstringarg.cpp
   checks/level0/qstring-insensitive-allocation.cpp
   checks/level0/qstringref.cpp
+  checks/level0/qt-macros.cpp
   checks/level0/qvariant-template-instantiation.cpp
   checks/level0/mutable-container-key.cpp
   checks/level0/temporaryiterator.cpp

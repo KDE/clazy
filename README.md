@@ -149,6 +149,7 @@ There are many checks and they are divided in levels:
     - qenums
     - qdatetime-utc    (fix-qdatetime-utc)
     - lambda-in-connect
+    - qt-macros
 
 - Checks from level1:
     - missing-qobject-macro

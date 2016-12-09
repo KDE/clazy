@@ -1,0 +1,4 @@
+qt-macros/main.cpp:1:2: warning: Include qglobal.h before testing Q_OS_ macros [-Wclazy-qt-macros]
+qt-macros/main.cpp:4:5: warning: Include qglobal.h before testing Q_OS_ macros [-Wclazy-qt-macros]
+qt-macros/main.cpp:9:5: warning: Q_OS_WINDOWS is wrong, use Q_OS_WIN instead [-Wclazy-qt-macros]
+qt-macros/main.cpp:12:2: warning: Q_OS_WINDOWS is wrong, use Q_OS_WIN instead [-Wclazy-qt-macros]
