@@ -38,7 +38,7 @@ using namespace std;
 static bool shouldIgnoreType(const std::string &name, const clang::CompilerInstance &ci)
 {
     // Q_GLOBAL_STATIC and such
-    static vector<string> blacklist = {"Holder", "AFUNC", "QLoggingCategory"};
+    static vector<string> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage"};
     return clazy_std::contains(blacklist, name);
 }
 
