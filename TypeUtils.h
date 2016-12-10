@@ -34,6 +34,7 @@ class Stmt;
 class VarDecl;
 class Type;
 class CXXRecordDecl;
+class CXXBaseSpecifier;
 }
 
 namespace TypeUtils
@@ -104,6 +105,11 @@ namespace TypeUtils
 
     // Overload
     CLAZYLIB_EXPORT bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
+
+    /**
+     * Returns the CXXRecordDecl represented by the CXXBaseSpecifier
+     */
+    CLAZYLIB_EXPORT clang::CXXRecordDecl * recordFromBaseSpecifier(const clang::CXXBaseSpecifier &);
 
     /**
      * Returns true if the value is const. This is usually equivalent to qt.isConstQualified() but

@@ -173,8 +173,7 @@ bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &po
         return true;
 
     for (auto base : derived->bases()) {
-        const Type *t = base.getType().getTypePtrOrNull();
-        if (t && derivesFrom(t->getAsCXXRecordDecl(), possibleBase))
+        if (derivesFrom(recordFromBaseSpecifier(base), possibleBase))
             return true;
     }
 
@@ -186,6 +185,12 @@ bool TypeUtils::derivesFrom(QualType derivedQT, const std::string &possibleBase)
     derivedQT = pointeeQualType(derivedQT);
     const auto t = derivedQT.getTypePtrOrNull();
     return t ? derivesFrom(t->getAsCXXRecordDecl(), possibleBase) : false;
+}
+
+clang::CXXRecordDecl * TypeUtils::recordFromBaseSpecifier(const clang::CXXBaseSpecifier &base)
+{
+    const Type *t = base.getType().getTypePtrOrNull();
+    return t ? t->getAsCXXRecordDecl() : nullptr;
 }
 
 bool TypeUtils::valueIsConst(QualType qt)
