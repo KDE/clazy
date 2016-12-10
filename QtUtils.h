@@ -149,6 +149,11 @@ CLAZYLIB_EXPORT bool containerNeverDetaches(const clang::VarDecl *varDecl,
  */
 CLAZYLIB_EXPORT bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
 
+/**
+ * Returns the base class that inherits QObject.
+ * Useful when the class has more than one base class and we're only interested in the QObject one.
+ */
+CLAZYLIB_EXPORT clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl);
 }
 
 #endif

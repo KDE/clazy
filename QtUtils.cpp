@@ -213,3 +213,18 @@ bool QtUtils::isAReserveClass(CXXRecordDecl *recordDecl)
         return TypeUtils::derivesFrom(recordDecl, className);
     });
 }
+
+clang::CXXRecordDecl *QtUtils::getQObjectBaseClass(clang::CXXRecordDecl *recordDecl)
+{
+    if (!recordDecl)
+        return nullptr;
+
+    for (auto baseClass : recordDecl->bases()) {
+        CXXRecordDecl *record = TypeUtils::recordFromBaseSpecifier(baseClass);
+        if (isQObject(record))
+            return record;
+    }
+
+    return nullptr;
+}
+
