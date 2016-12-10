@@ -1,0 +1,4 @@
+base-class-event/main.cpp:10:1: warning: Return QObject::event() instead of false [-Wclazy-base-class-event]
+base-class-event/main.cpp:22:5: warning: Return QObject::event() instead of false [-Wclazy-base-class-event]
+base-class-event/main.cpp:59:5: warning: Return MyObj3::event() instead of false [-Wclazy-base-class-event]
+base-class-event/main.cpp:64:5: warning: Return MyObj3::eventFilter() instead of false [-Wclazy-base-class-event]
