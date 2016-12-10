@@ -83,4 +83,4 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("base-class-event", BaseClassEvent, CheckLevel1)
+REGISTER_CHECK_WITH_FLAGS("base-class-event", BaseClassEvent, CheckLevel2)

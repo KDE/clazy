@@ -164,7 +164,6 @@ There are many checks and they are divided in levels:
     - auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
     - inefficient-qlist-soft
     - returning-data-from-temporary
-    - base-class-event
 
 - Checks from level2:
     - old-style-connect    (fix-old-style-connect)
@@ -179,6 +178,7 @@ There are many checks and they are divided in levels:
     - function-args-by-value
     - function-args-by-ref
     - container-inside-loop
+    - base-class-event
 
 - Checks from level3:
     - assert-with-side-effects

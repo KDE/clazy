@@ -157,7 +157,6 @@ set(SRC_FILES
   checks/level0/writingtotemporary.cpp
   checks/level0/wrong-qglobalstatic.cpp
   checks/level1/autounexpectedqstringbuilder.cpp
-  checks/level1/base-class-event.cpp
   checks/level1/child-event-qobject-cast.cpp
   checks/level1/copyable-polymorphic.cpp
   checks/level1/detachingtemporary.cpp
@@ -172,6 +171,7 @@ set(SRC_FILES
   checks/level1/returning-data-from-temporary.cpp
   checks/level1/ruleoftwosoft.cpp
   checks/level1/post-event.cpp
+  checks/level2/base-class-event.cpp
   checks/level2/container-inside-loop.cpp
   checks/level2/function-args-by-ref.cpp
   checks/level2/function-args-by-value.cpp
