@@ -116,7 +116,7 @@ void CheckBase::emitWarning(clang::Stmt *s, const std::string &error, bool print
     emitWarning(s->getLocStart(), error, printWarningTag);
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, bool printWarningTag)
+void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag)
 {
     emitWarning(loc, error, {}, printWarningTag);
 }

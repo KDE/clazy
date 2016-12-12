@@ -41,6 +41,7 @@ using namespace std;
 class MissingQ_OBJECTPreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
+    MissingQ_OBJECTPreprocessorCallbacks(const MissingQ_OBJECTPreprocessorCallbacks &) = delete;
     MissingQ_OBJECTPreprocessorCallbacks(MissingQ_OBJECT *q)
         : clang::PPCallbacks()
         , q(q)

@@ -38,13 +38,12 @@ using namespace std;
 class QEnumsPreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
-
+    QEnumsPreprocessorCallbacks(const QEnumsPreprocessorCallbacks &) = delete;
     QEnumsPreprocessorCallbacks(Qenums *q, const SourceManager &sm, const LangOptions &lo)
         : clang::PPCallbacks()
         , q(q)
         , m_sm(sm)
         , m_langOpts(lo)
-
     {
     }
 

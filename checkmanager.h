@@ -57,7 +57,7 @@ class CLAZYLIB_EXPORT CheckManager
 public:
     static CheckManager *instance();
 
-    int registerCheck(const std::string &name, CheckLevel level, FactoryFunction);
+    int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
@@ -73,7 +73,7 @@ public:
      */
     RegisteredCheck::List checksFromRequestedLevel() const;
 
-    CheckBase::List createChecks(RegisteredCheck::List requestedChecks, const clang::CompilerInstance &ci);
+    CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, const clang::CompilerInstance &ci);
 
     bool fixitsEnabled() const;
     void enableAllFixIts();

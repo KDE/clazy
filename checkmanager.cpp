@@ -79,7 +79,8 @@ bool CheckManager::isReservedCheckName(const string &name) const
     return false;
 }
 
-int CheckManager::registerCheck(const std::string &name, CheckLevel level, FactoryFunction factory)
+int CheckManager::registerCheck(const std::string &name, CheckLevel level,
+                                const FactoryFunction &factory)
 {
     assert(factory != nullptr);
     assert(!name.empty());
@@ -185,7 +186,7 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &us
 RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks,
                                                                  const string &name) const
 {
-    return clazy_std::find_if(checks, [name](RegisteredCheck r) {
+    return clazy_std::find_if(checks, [name](const RegisteredCheck &r) {
         return r.name == name;
     } );
 }
@@ -213,7 +214,7 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
     return result;
 }
 
-CheckBase::List CheckManager::createChecks(RegisteredCheck::List requestedChecks,
+CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
                                            const CompilerInstance &ci)
 {
     const string fixitCheckName = checkNameForFixIt(m_requestedFixitName);

@@ -87,6 +87,7 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 
 class LazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<LazyASTConsumer>
 {
+    LazyASTConsumer(const LazyASTConsumer &) = delete;
 public:
     LazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
                     const RegisteredCheck::List &requestedChecks, bool inplaceFixits)

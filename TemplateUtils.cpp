@@ -28,13 +28,13 @@
 using namespace std;
 using namespace clang;
 
-static vector<QualType> typesFromTemplateArguments(const TemplateArgumentList &templateArgs)
+static vector<QualType> typesFromTemplateArguments(const TemplateArgumentList *templateArgs)
 {
     vector<QualType> result;
-    const int numArgs = templateArgs.size();
+    const int numArgs = templateArgs->size();
     result.reserve(numArgs);
     for (int i = 0; i < numArgs; ++i) {
-        const TemplateArgument &arg = templateArgs.get(i);
+        const TemplateArgument &arg = templateArgs->get(i);
         if (arg.getKind() == TemplateArgument::Type)
             result.push_back(arg.getAsType());
     }
@@ -51,7 +51,7 @@ vector<QualType> TemplateUtils::getTemplateArgumentsTypes(CXXMethodDecl *method)
     if (!specializationInfo || !specializationInfo->TemplateArguments)
         return {};
 
-    return typesFromTemplateArguments(*(specializationInfo->TemplateArguments));
+    return typesFromTemplateArguments(specializationInfo->TemplateArguments);
 }
 
 std::vector<clang::QualType> TemplateUtils::getTemplateArgumentsTypes(CXXRecordDecl *record)
@@ -63,7 +63,7 @@ std::vector<clang::QualType> TemplateUtils::getTemplateArgumentsTypes(CXXRecordD
     if (!templateDecl)
         return {};
 
-    return typesFromTemplateArguments(templateDecl->getTemplateInstantiationArgs());
+    return typesFromTemplateArguments(&(templateDecl->getTemplateInstantiationArgs()));
 }
 
 ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)

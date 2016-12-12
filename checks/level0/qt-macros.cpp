@@ -35,6 +35,7 @@ using namespace std;
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
 class QtMacrosPreprocessorCallbacks : public clang::PPCallbacks
 {
+    QtMacrosPreprocessorCallbacks(const QtMacrosPreprocessorCallbacks &) = delete;
 public:
     QtMacrosPreprocessorCallbacks(QtMacros *q, const SourceManager &sm, const LangOptions &lo)
         : clang::PPCallbacks()

@@ -316,7 +316,8 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::C
 // false for: QString::fromLatin1("")
 // true for: QString s = QString::fromLatin1("foo")
 // false for: s += QString::fromLatin1("foo"), etc.
-static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, LangOptions lo, const SourceManager &sm , int currentCall = 0)
+static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions &lo,
+                                      const SourceManager &sm , int currentCall = 0)
 {
     if (!s)
         return false;

@@ -75,7 +75,7 @@ static bool classIsOk(const string &className)
 class PreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
-
+    PreprocessorCallbacks(const PreprocessorCallbacks &) = delete;
     PreprocessorCallbacks(OldStyleConnect *q, const SourceManager &sm, const LangOptions &lo)
         : clang::PPCallbacks()
         , q(q)
@@ -225,7 +225,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 
 bool OldStyleConnect::isPrivateSlot(const string &name) const
 {
-    return clazy_std::contains_if(m_privateSlots, [name](PrivateSlot slot) {
+    return clazy_std::contains_if(m_privateSlots, [name](const PrivateSlot &slot) {
         return slot.name == name;
     });
 }

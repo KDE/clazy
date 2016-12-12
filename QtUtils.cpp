@@ -174,7 +174,7 @@ bool QtUtils::isTooBigForQList(clang::QualType qt, const clang::CompilerInstance
     return (int)ci.getASTContext().getTypeSize(qt) <= TypeUtils::sizeOfPointer(ci, qt);
 }
 
-bool QtUtils::isQtContainer(QualType t, LangOptions lo)
+bool QtUtils::isQtContainer(QualType t, const LangOptions &lo)
 {
     const string typeName = StringUtils::simpleTypeName(t, lo);
     return clazy_std::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
@@ -182,7 +182,7 @@ bool QtUtils::isQtContainer(QualType t, LangOptions lo)
     });
 }
 
-bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange)
+bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange) // clazy:exclude=function-args-by-value
 {
     if (!valDecl)
         return false;
