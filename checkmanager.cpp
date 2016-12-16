@@ -26,6 +26,7 @@
 #include "checkmanager.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "AccessSpecifierManager.h"
 
 #include <stdlib.h>
 
@@ -338,4 +339,15 @@ CheckLevel CheckManager::requestedLevel() const
 SuppressionManager *CheckManager::suppressionManager()
 {
     return &m_suppressionManager;
+}
+
+void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
+{
+    if (!m_accessSpecifierManager)
+        m_accessSpecifierManager = new AccessSpecifierManager(ci);
+}
+
+AccessSpecifierManager *CheckManager::accessSpecifierManager() const
+{
+    return m_accessSpecifierManager;
 }

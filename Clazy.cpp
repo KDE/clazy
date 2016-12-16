@@ -27,6 +27,7 @@
 #include "clazy_stl.h"
 #include "checkbase.h"
 #include "checkmanager.h"
+#include "AccessSpecifierManager.h"
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
@@ -94,6 +95,7 @@ public:
         : m_ci(ci)
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
+        , m_checkManager(checkManager)
     {
         m_createdChecks = checkManager->createChecks(requestedChecks, ci);
         if (checkManager->fixitsEnabled())
@@ -120,9 +122,11 @@ public:
 
     bool VisitDecl(Decl *decl)
     {
-        for (const auto &check : m_createdChecks) {
+        if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
+            a->VisitDeclaration(decl);
+
+        for (const auto &check : m_createdChecks)
             check->VisitDeclaration(decl);
-        }
 
         return true;
     }
@@ -166,6 +170,7 @@ public:
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
+    CheckManager *const m_checkManager;
 };
 
 //------------------------------------------------------------------------------

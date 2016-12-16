@@ -33,6 +33,8 @@
 #include <vector>
 #include <unordered_map>
 
+class AccessSpecifierManager;
+
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
     RegisteredFixIt() : id(-1) {}
@@ -91,6 +93,12 @@ public:
 
     SuppressionManager* suppressionManager();
 
+    /**
+     * We only enable it if a check needs it, for performance reasons
+     */
+    void enableAccessSpecifierManager(const clang::CompilerInstance &ci);
+    AccessSpecifierManager *accessSpecifierManager() const;
+
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
 private:
@@ -109,6 +117,7 @@ private:
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
     SuppressionManager m_suppressionManager;
+    AccessSpecifierManager *m_accessSpecifierManager = nullptr;
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \

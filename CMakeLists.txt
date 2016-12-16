@@ -106,6 +106,7 @@ set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
 
 include_directories(${CMAKE_BINARY_DIR})
 set(CLAZY_LIB_SRC
+  AccessSpecifierManager.cpp
   checkbase.cpp
   checkmanager.cpp
   SuppressionManager.cpp
@@ -251,6 +252,7 @@ install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
 if (NOT CLAZY_INSTALL_NO_HEADERS)
   # Install public headers
   set(CLAZY_LIB_INCLUDES
+    AccessSpecifierManager.h
     checkbase.h
     checkmanager.h
     ${CMAKE_BINARY_DIR}/clazylib_export.h
