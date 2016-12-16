@@ -228,3 +228,25 @@ clang::CXXRecordDecl *QtUtils::getQObjectBaseClass(clang::CXXRecordDecl *recordD
     return nullptr;
 }
 
+
+bool QtUtils::isConnect(FunctionDecl *func)
+{
+    return func && func->getQualifiedNameAsString() == "QObject::connect";
+}
+
+bool QtUtils::connectHasPMFStyle(FunctionDecl *func)
+{
+    // Look for char* arguments
+    for (auto parm : Utils::functionParameters(func)) {
+        QualType qt = parm->getType();
+        const Type *t = qt.getTypePtrOrNull();
+        if (!t || !t->isPointerType())
+            continue;
+
+        const Type *ptt = t->getPointeeType().getTypePtrOrNull();
+        if (ptt && ptt->isCharType())
+            return false;
+    }
+
+    return true;
+}

@@ -36,6 +36,9 @@ class CallExpr;
 class ValueDecl;
 class LangOptions;
 class QualType;
+class VarDecl;
+class SourceLocation;
+class FunctionDecl;
 }
 
 struct StmtBodyRange;
@@ -154,6 +157,20 @@ CLAZYLIB_EXPORT bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
  * Useful when the class has more than one base class and we're only interested in the QObject one.
  */
 CLAZYLIB_EXPORT clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl);
+
+/**
+ * Returns true if the function declaration is QObject::connect().
+ */
+CLAZYLIB_EXPORT bool isConnect(clang::FunctionDecl *func);
+
+/**
+ * Returns true if the function declaration represents a QObject::connect() using the new Qt5
+ * (pointer to member) syntax.
+ *
+ * It's assumed that func represents a connect().
+ */
+CLAZYLIB_EXPORT bool connectHasPMFStyle(clang::FunctionDecl *func);
+
 }
 
 #endif

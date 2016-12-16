@@ -139,22 +139,11 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     if (classification == ConnectFlag_None)
         return classification;
 
-    // Look for char* arguments
-    for (auto parm : Utils::functionParameters(connectFunc)) {
-        QualType qt = parm->getType();
-        const Type *t = qt.getTypePtrOrNull();
-        if (!t || !t->isPointerType())
-            continue;
-
-        const Type *ptt = t->getPointeeType().getTypePtrOrNull();
-        if (ptt && ptt->isCharType()) {
-            classification |= ConnectFlag_OldStyle;
-            break;
-        }
-    }
-
-    if (!(classification & ConnectFlag_OldStyle))
+    if (QtUtils::connectHasPMFStyle(connectFunc))
+        classification |= ConnectFlag_OldStyle;
+    else
         return classification;
+
 
     const int numParams = connectFunc->getNumParams();
 
