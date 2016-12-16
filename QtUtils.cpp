@@ -250,3 +250,42 @@ bool QtUtils::connectHasPMFStyle(FunctionDecl *func)
 
     return true;
 }
+
+CXXMethodDecl *QtUtils::pmfFromConnect(CallExpr *funcCall, int argIndex)
+{
+    if (!funcCall)
+        return nullptr;
+
+    const int numArgs = funcCall->getNumArgs();
+    if (numArgs < 4) {
+        llvm::errs() << "error, connect call has less than 4 arguments\n";
+        return nullptr;
+    }
+
+    if (argIndex >= numArgs) {
+        llvm::errs() << "error, invalid argIndex " << argIndex << " " << numArgs;
+        return nullptr;
+    }
+
+    Expr *expr = funcCall->getArg(argIndex);
+    return pmfFromUnary(dyn_cast<UnaryOperator>(expr));
+}
+
+CXXMethodDecl *QtUtils::pmfFromUnary(UnaryOperator *uo)
+{
+    if (!uo)
+        return nullptr;
+
+    Expr *subExpr = uo->getSubExpr();
+    if (!subExpr)
+        return nullptr;
+
+    auto declref = dyn_cast<DeclRefExpr>(subExpr);
+
+    if (declref)
+        return dyn_cast<CXXMethodDecl>(declref->getDecl());
+
+    return nullptr;
+}
+
+

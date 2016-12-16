@@ -39,6 +39,8 @@ class QualType;
 class VarDecl;
 class SourceLocation;
 class FunctionDecl;
+class UnaryOperator;
+class CXXMethodDecl;
 }
 
 struct StmtBodyRange;
@@ -170,6 +172,14 @@ CLAZYLIB_EXPORT bool isConnect(clang::FunctionDecl *func);
  * It's assumed that func represents a connect().
  */
 CLAZYLIB_EXPORT bool connectHasPMFStyle(clang::FunctionDecl *func);
+
+
+/**
+ * Returns the method referenced by a PMF-style connect for the specified connect() call.
+ */
+CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
+
+CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
 
 }
 
