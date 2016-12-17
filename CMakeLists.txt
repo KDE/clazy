@@ -140,6 +140,7 @@ install(TARGETS clazylib EXPORT LibClaryExport
 set(SYMBOL_FILE Lazy.exports)
 
 set(SRC_FILES
+  checks/level0/connect-non-signal.cpp
   checks/level0/container-anti-pattern.cpp
   checks/level0/lambda-in-connect.cpp
   checks/level0/qdatetimeutc.cpp

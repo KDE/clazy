@@ -1,0 +1,2 @@
+connect-non-signal/main.cpp:20:5: warning: MyObj::foo is not a signal [-Wclazy-connect-non-signal]
+connect-non-signal/main.cpp:38:5: warning: MyObj2::foo is not a signal [-Wclazy-connect-non-signal]
