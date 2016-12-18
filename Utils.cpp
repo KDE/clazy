@@ -821,7 +821,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
     HierarchyUtils::getChilds(init->getInit(), calls);
 
     for (auto call : calls) {
-        if (FunctionDecl  *funcDecl = call->getDirectCallee()) {
+        if (FunctionDecl *funcDecl = call->getDirectCallee()) {
             if (funcDecl->getQualifiedNameAsString() == "std::move")
                 return true;
         }
@@ -845,4 +845,44 @@ string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
         return {};
 
     return splitted[splitted.size() - 1];
+}
+
+SourceLocation Utils::locForNextToken(SourceLocation loc, const clang::SourceManager &sm, const clang::LangOptions &lo)
+{
+    std::pair<FileID, unsigned> locInfo = sm.getDecomposedLoc(loc);
+    bool InvalidTemp = false;
+    StringRef File = sm.getBufferData(locInfo.first, &InvalidTemp);
+    if (InvalidTemp) {
+        llvm::errs() << "Failed to get buffer data\n";
+        return {};
+    }
+    const char *TokenBegin = File.data() + locInfo.second;
+    Lexer lexer(sm.getLocForStartOfFile(locInfo.first), lo, File.begin(),
+                TokenBegin, File.end());
+
+    Token Tok;
+    lexer.LexFromRawLexer(Tok);
+
+    SourceLocation TokenLoc = Tok.getLocation();
+
+    // Calculate how much whitespace needs to be skipped if any.
+    unsigned NumWhitespaceChars = 0;
+    const char *TokenEnd = sm.getCharacterData(TokenLoc) +
+            Tok.getLength();
+    unsigned char C = *TokenEnd;
+    while (isHorizontalWhitespace(C)) {
+        C = *(++TokenEnd);
+        NumWhitespaceChars++;
+    }
+
+    // Skip \r, \n, \r\n, or \n\r
+    if (C == '\n' || C == '\r') {
+        char PrevC = C;
+        C = *(++TokenEnd);
+        NumWhitespaceChars++;
+        if ((C == '\n' || C == '\r') && C != PrevC)
+            NumWhitespaceChars++;
+    }
+
+    return loc.getLocWithOffset(Tok.getLength() + NumWhitespaceChars);
 }

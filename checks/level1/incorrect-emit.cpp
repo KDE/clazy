@@ -95,43 +95,7 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
         callLoc = sm().getFileLoc(callLoc);
 
     for (const SourceLocation &emitLoc : m_emitLocations) {
-        // TODO: Refactor Lexer stuff into a reusable method
-        std::pair<FileID, unsigned> LocInfo = sm().getDecomposedLoc(emitLoc);
-        bool InvalidTemp = false;
-        StringRef File = sm().getBufferData(LocInfo.first, &InvalidTemp);
-        if (InvalidTemp) {
-            llvm::errs() << "Failed to get buffer data\n";
-            return false;
-        }
-        const char *TokenBegin = File.data() + LocInfo.second;
-        Lexer lexer(sm().getLocForStartOfFile(LocInfo.first), lo(), File.begin(),
-                    TokenBegin, File.end());
-
-        Token Tok;
-        lexer.LexFromRawLexer(Tok);
-
-        SourceLocation TokenLoc = Tok.getLocation();
-
-        // Calculate how much whitespace needs to be skipped if any.
-        unsigned NumWhitespaceChars = 0;
-        const char *TokenEnd = sm().getCharacterData(TokenLoc) +
-                Tok.getLength();
-        unsigned char C = *TokenEnd;
-        while (isHorizontalWhitespace(C)) {
-            C = *(++TokenEnd);
-            NumWhitespaceChars++;
-        }
-
-        // Skip \r, \n, \r\n, or \n\r
-        if (C == '\n' || C == '\r') {
-            char PrevC = C;
-            C = *(++TokenEnd);
-            NumWhitespaceChars++;
-            if ((C == '\n' || C == '\r') && C != PrevC)
-                NumWhitespaceChars++;
-        }
-
-        const SourceLocation nextTokenLoc = emitLoc.getLocWithOffset(Tok.getLength() + NumWhitespaceChars);
+        SourceLocation nextTokenLoc = Utils::locForNextToken(emitLoc, sm(), lo());
         if (nextTokenLoc == callLoc)
             return true;
     }

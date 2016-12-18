@@ -262,6 +262,17 @@ namespace Utils {
      * Returns the filename for the source location loc
      */
     CLAZYLIB_EXPORT std::string filenameForLoc(clang::SourceLocation loc, const clang::SourceManager &sm);
+
+    /**
+     * Returns the location after the lexer token that is at loc.
+     * For example:
+     *     emit sig();
+     * If loc refers to the location of 'emit', then this function will return the source location if
+     * the sig() call.
+     */
+    CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(clang::SourceLocation loc,
+                                                          const clang::SourceManager &sm,
+                                                          const clang::LangOptions &lo);
 }
 
 #endif
