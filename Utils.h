@@ -257,6 +257,11 @@ namespace Utils {
 
     // Overload that recieves a vector and returns true if any ctor initializer contains a move()
     CLAZYLIB_EXPORT bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer*> &);
+
+    /**
+     * Returns the filename for the source location loc
+     */
+    CLAZYLIB_EXPORT std::string filenameForLoc(clang::SourceLocation loc, const clang::SourceManager &sm);
 }
 
 #endif

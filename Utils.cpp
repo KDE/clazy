@@ -836,3 +836,13 @@ bool Utils::ctorInitializerContainsMove(const vector<CXXCtorInitializer*> &ctorI
         return Utils::ctorInitializerContainsMove(ctorInit);
     });
 }
+
+string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
+{
+    string filename = sm.getFilename(loc);
+    auto splitted = clazy_std::splitString(filename, '/');
+    if (splitted.empty())
+        return {};
+
+    return splitted[splitted.size() - 1];
+}
