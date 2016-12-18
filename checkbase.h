@@ -154,6 +154,7 @@ private:
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits;
     CheckManager *const m_checkManager;
+    long m_elapsedTime = 0;
 };
 
 #endif

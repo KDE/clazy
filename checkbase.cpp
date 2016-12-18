@@ -33,6 +33,7 @@
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
 
 #include <vector>
+#include <chrono>
 
 using namespace clang;
 using namespace std;
@@ -67,6 +68,28 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
 
 #endif
 
+struct RAIIElapsedTime
+{
+#ifdef CLAZY_PROFILE_TIME_TAKEN
+    RAIIElapsedTime(long &elapsedTime)
+        : m_begin(std::chrono::steady_clock::now())
+        , m_elapsedTime(elapsedTime)
+    {
+    }
+
+    ~RAIIElapsedTime()
+    {
+        auto end = std::chrono::steady_clock::now();
+        m_elapsedTime += std::chrono::duration_cast<std::chrono::microseconds>(end - m_begin).count();
+    }
+
+    const std::chrono::steady_clock::time_point m_begin;
+    long &m_elapsedTime;
+#else
+    RAIIElapsedTime(long &) {}
+#endif
+};
+
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
     , m_name(name)
@@ -77,17 +100,22 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
 #endif
     , m_enabledFixits(0)
     , m_checkManager(CheckManager::instance())
+    , m_elapsedTime(0)
 {
 }
 
 CheckBase::~CheckBase()
 {
+#ifdef CLAZY_PROFILE_TIME_TAKEN
+    llvm::errs() << m_name << " took " << m_elapsedTime << " micro seconds\n";
+#endif
 }
 
 void CheckBase::VisitStatement(Stmt *stm)
 {
     if (!shouldIgnoreFile(stm->getLocStart())) {
         m_lastStmt = stm;
+        RAIIElapsedTime et(m_elapsedTime);
         VisitStmt(stm);
     }
 }
@@ -101,6 +129,7 @@ void CheckBase::VisitDeclaration(Decl *decl)
     if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
         m_lastMethodDecl = mdecl;
 
+    RAIIElapsedTime et(m_elapsedTime);
     VisitDecl(decl);
 }
 
