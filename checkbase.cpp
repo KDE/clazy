@@ -242,6 +242,13 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
     m_queuedManualInterventionWarnings.clear();
 }
 
+void CheckBase::emitInternalError(SourceLocation loc, string error)
+{
+    const string tag = " [-Wclazy-" + name() + ']';
+    llvm::errs() << tag << ": internal error: " << error
+                 << " at " << loc.printToString(sm()) << "\n";
+}
+
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());

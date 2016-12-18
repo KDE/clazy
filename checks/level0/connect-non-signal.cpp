@@ -52,13 +52,13 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 
     CXXMethodDecl *method = QtUtils::pmfFromConnect(call, /*argIndex=*/ 1);
     if (!method) {
-        llvm::errs() << "error, couldn't find error from pmf connect";
+        emitInternalError(func->getLocStart(), "couldn't find method from pmf connect");
         return;
     }
 
     QtAccessSpecifierType qst = CheckManager::instance()->accessSpecifierManager()->qtAccessSpecifierType(method);
     if (qst == QtAccessSpecifier_Unknown) {
-        llvm::errs() << "error, couldn't find access specifier type\n";
+        emitInternalError(method->getLocStart(), "error, couldn't find access specifier type");
     } else if (qst != QtAccessSpecifier_Signal) {
         emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
     }

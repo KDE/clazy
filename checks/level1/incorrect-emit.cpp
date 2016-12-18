@@ -74,7 +74,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
 
     const QtAccessSpecifierType type = accessSpecifierManager->qtAccessSpecifierType(method);
     if (type == QtAccessSpecifier_Unknown) {
-        llvm::errs() << "error, couldn't find access specifier type\n";
+        emitInternalError(method->getLocStart(), "couldn't find access specifier type");
         return;
     }
 

@@ -107,6 +107,7 @@ public:
     void emitWarning(clang::Stmt *, const std::string &error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
+    void emitInternalError(clang::SourceLocation loc, std::string error);
 
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
