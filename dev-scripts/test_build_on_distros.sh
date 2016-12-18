@@ -7,8 +7,14 @@ then
     BRANCH="master"
 fi
 
-docker run -i -t iamsergio/clazy-ubuntu-14.04 sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
-docker run -i -t iamsergio/clazy-ubuntu-15.10 sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
-docker run -i -t iamsergio/clazy-ubuntu-16.04 sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
-docker run -i -t iamsergio/clazy-opensuse-tumbleweed sh $BUILD_SCRIPT $BRANCH $J_FLAG && \
-docker run -i -t iamsergio/clazy-archlinux sh $BUILD_SCRIPT $BRANCH $J_FLAG
+function run_test
+{
+    echo "Testing $1..."
+    docker run -i -t iamsergio/clazy-$1 sh $BUILD_SCRIPT $BRANCH $J_FLAG &> clazy-$1.log
+}
+
+run_test ubuntu-14.04
+run_test ubuntu-15.10
+run_test ubuntu-16.04
+run_test pensuse-tumbleweed
+run_test archlinux
