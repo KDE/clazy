@@ -30,8 +30,14 @@
 #include "clazy_stl.h"
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Parse/Parser.h>
 #include <llvm/Config/llvm-config.h>
+
 #include <string>
+
+#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR == 6
+# define IS_OLD_CLANG
+#endif
 
 namespace clang {
 class CXXMethodDecl;
@@ -44,6 +50,7 @@ class PresumedLoc;
 class SourceLocation;
 }
 
+class CheckBase;
 class CheckManager;
 class SuppressionManager;
 
@@ -57,6 +64,26 @@ enum CheckLevel {
     MaxCheckLevel = CheckLevel3,
     DefaultCheckLevel = CheckLevel1
 };
+
+#if !defined(IS_OLD_CLANG)
+
+class ClazyPreprocessorCallbacks : public clang::PPCallbacks
+{
+public:
+    ClazyPreprocessorCallbacks(const ClazyPreprocessorCallbacks &) = delete;
+    explicit ClazyPreprocessorCallbacks(CheckBase *check);
+
+    void MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDefinition &,
+                      clang::SourceRange, const clang::MacroArgs *) override;
+    void MacroDefined(const clang::Token &MacroNameTok, const clang::MacroDirective*) override;
+    void Defined(const clang::Token &MacroNameTok, const clang::MacroDefinition &, clang::SourceRange Range) override;
+    void Ifdef(clang::SourceLocation, const clang::Token &MacroNameTok, const clang::MacroDefinition &) override;
+
+private:
+    CheckBase *const check;
+};
+
+#endif
 
 class CLAZYLIB_EXPORT CheckBase
 {
@@ -84,6 +111,13 @@ public:
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
+    virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &);
+    virtual void VisitMacroDefined(const clang::Token &macroNameTok);
+    virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
+    virtual void VisitIfdef(clang::SourceLocation, const clang::Token &macroNameTok);
+
+    void enablePreProcessorCallbacks();
+
     bool shouldIgnoreFile(clang::SourceLocation) const;
     virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
     virtual std::vector<std::string> filesToIgnore() const;
@@ -111,6 +145,10 @@ protected:
     clang::Stmt *m_lastStmt = nullptr;
     SuppressionManager *m_suppressionManager = nullptr;
 private:
+    friend class ClazyPreprocessorCallbacks;
+#if !defined(IS_OLD_CLANG)
+    ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
+#endif
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;

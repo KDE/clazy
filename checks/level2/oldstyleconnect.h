@@ -40,8 +40,6 @@ struct PrivateSlot
     std::string name;
 };
 
-class PreprocessorCallbacks;
-
 /**
  * Finds usages of old-style Qt connect statements.
  *
@@ -53,6 +51,8 @@ public:
     OldStyleConnect(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *) override;
     void addPrivateSlot(const PrivateSlot &);
+protected:
+    void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &) override;
 private:
     std::string signalOrSlotNameFromMacro(clang::SourceLocation macroLoc);
     std::vector<clang::FixItHint> fixits(int classification, clang::CallExpr *);
@@ -60,9 +60,6 @@ private:
     int classifyConnect(clang::FunctionDecl *connectFunc, clang::CallExpr *connectCall);
     bool isQPointer(clang::Expr *expr) const;
     bool isPrivateSlot(const std::string &name) const;
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    PreprocessorCallbacks *m_preprocessorCallbacks;
-#endif
     PrivateSlot::List m_privateSlots;
 };
 

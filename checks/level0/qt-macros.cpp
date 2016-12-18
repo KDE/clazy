@@ -27,75 +27,47 @@
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
-#include <clang/Parse/Parser.h>
 
 using namespace clang;
 using namespace std;
 
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-class QtMacrosPreprocessorCallbacks : public clang::PPCallbacks
-{
-    QtMacrosPreprocessorCallbacks(const QtMacrosPreprocessorCallbacks &) = delete;
-public:
-    QtMacrosPreprocessorCallbacks(QtMacros *q, const SourceManager &sm, const LangOptions &lo)
-        : clang::PPCallbacks()
-        , q(q)
-        , m_sm(sm)
-        , m_langOpts(lo)
-    {
-    }
-
-    void MacroDefined(const Token &MacroNameTok, const MacroDirective *MD) override
-    {
-        if (q->m_OSMacroExists)
-            return;
-
-        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (!ii)
-            return;
-
-        if (clazy_std::startsWith(ii->getName(), "Q_OS_"))
-            q->m_OSMacroExists = true;
-    }
-
-    void checkIfDef(const Token &MacroNameTok, SourceLocation Loc)
-    {
-        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (!ii)
-            return;
-
-        if (ii->getName() == "Q_OS_WINDOWS") {
-            q->emitWarning(Loc, "Q_OS_WINDOWS is wrong, use Q_OS_WIN instead");
-        } else if (!q->m_OSMacroExists && clazy_std::startsWith(ii->getName(), "Q_OS_")) {
-            q->emitWarning(Loc, "Include qglobal.h before testing Q_OS_ macros");
-        }
-    }
-
-    void Defined(const Token &MacroNameTok, const MacroDefinition &MD, SourceRange Range) override
-    {
-        checkIfDef(MacroNameTok, Range.getBegin());
-    }
-
-    void Ifdef(SourceLocation Loc, const Token &MacroNameTok, const MacroDefinition &) override
-    {
-        checkIfDef(MacroNameTok, Loc);
-    }
-
-    QtMacros *const q;
-    const SourceManager& m_sm;
-    LangOptions m_langOpts;
-};
-#endif
-
 QtMacros::QtMacros(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    m_preprocessorCallbacks = new QtMacrosPreprocessorCallbacks(this, sm(), lo());
-    Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
-#endif
+    enablePreProcessorCallbacks();
 }
 
+void QtMacros::VisitMacroDefined(const Token &MacroNameTok)
+{
+    if (m_OSMacroExists)
+        return;
+
+    IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
+    if (ii && clazy_std::startsWith(ii->getName(), "Q_OS_"))
+        m_OSMacroExists = true;
+}
+
+void QtMacros::checkIfDef(const Token &macroNameTok, SourceLocation Loc)
+{
+    IdentifierInfo *ii = macroNameTok.getIdentifierInfo();
+    if (!ii)
+        return;
+
+    if (ii->getName() == "Q_OS_WINDOWS") {
+        emitWarning(Loc, "Q_OS_WINDOWS is wrong, use Q_OS_WIN instead");
+    } else if (!m_OSMacroExists && clazy_std::startsWith(ii->getName(), "Q_OS_")) {
+        emitWarning(Loc, "Include qglobal.h before testing Q_OS_ macros");
+    }
+}
+
+void QtMacros::VisitDefined(const Token &macroNameTok, const SourceRange &range)
+{
+    checkIfDef(macroNameTok, range.getBegin());
+}
+
+void QtMacros::VisitIfdef(SourceLocation loc, const Token &macroNameTok)
+{
+    checkIfDef(macroNameTok, loc);
+}
 
 REGISTER_CHECK_WITH_FLAGS("qt-macros", QtMacros, CheckLevel0)

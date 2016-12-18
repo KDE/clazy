@@ -37,11 +37,44 @@
 using namespace clang;
 using namespace std;
 
+#if !defined(IS_OLD_CLANG)
+
+ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
+    : check(check)
+{
+}
+
+void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &,
+                                              SourceRange range, const MacroArgs *)
+{
+    check->VisitMacroExpands(macroNameTok, range);
+}
+
+void ClazyPreprocessorCallbacks::Defined(const Token &macroNameTok, const MacroDefinition &, SourceRange range)
+{
+    check->VisitDefined(macroNameTok, range);
+}
+
+void ClazyPreprocessorCallbacks::Ifdef(SourceLocation loc, const Token &macroNameTok, const MacroDefinition &)
+{
+    check->VisitIfdef(loc, macroNameTok);
+}
+
+void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const MacroDirective *)
+{
+    check->VisitMacroDefined(macroNameTok);
+}
+
+#endif
+
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
     , m_name(name)
     , m_context(m_ci.getASTContext())
     , m_tu(m_context.getTranslationUnitDecl())
+#if !defined(IS_OLD_CLANG)
+    , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
+#endif
     , m_enabledFixits(0)
     , m_checkManager(CheckManager::instance())
 {
@@ -83,10 +116,40 @@ void CheckBase::setParentMap(ParentMap *parentMap)
 
 void CheckBase::VisitStmt(Stmt *)
 {
+    // Overriden in derived classes
 }
 
 void CheckBase::VisitDecl(Decl *)
 {
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitMacroExpands(const Token &, const SourceRange &)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitMacroDefined(const Token &)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitDefined(const Token &, const SourceRange &)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::enablePreProcessorCallbacks()
+{
+#if !defined(IS_OLD_CLANG)
+    Preprocessor &pi = m_ci.getPreprocessor();
+    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+#endif
 }
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const

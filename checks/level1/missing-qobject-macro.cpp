@@ -33,37 +33,21 @@
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
 #include <clang/Lex/MacroArgs.h>
-#include <clang/Parse/Parser.h>
 
 using namespace clang;
 using namespace std;
 
-class MissingQ_OBJECTPreprocessorCallbacks : public clang::PPCallbacks
-{
-public:
-    MissingQ_OBJECTPreprocessorCallbacks(const MissingQ_OBJECTPreprocessorCallbacks &) = delete;
-    MissingQ_OBJECTPreprocessorCallbacks(MissingQ_OBJECT *q)
-        : clang::PPCallbacks()
-        , q(q)
-    {
-    }
-
-    void MacroExpands(const Token &MacroNameTok, const MacroDefinition &MD, SourceRange range, const MacroArgs*) override
-    {
-        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (ii && ii->getName() == "Q_OBJECT")
-            q->registerQ_OBJECT(range.getBegin());
-    }
-
-    MissingQ_OBJECT *const q;
-};
-
 MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
-    , m_preprocessorCallbacks(new MissingQ_OBJECTPreprocessorCallbacks(this))
 {
-    Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    enablePreProcessorCallbacks();
+}
+
+void MissingQ_OBJECT::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range)
+{
+    IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
+    if (ii && ii->getName() == "Q_OBJECT")
+        registerQ_OBJECT(range.getBegin());
 }
 
 void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)

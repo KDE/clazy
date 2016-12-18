@@ -28,8 +28,6 @@ namespace clang {
     class CXXMemberCallExpr;
 }
 
-class QEmitPreprocessorCallbacks;
-
 /**
  * See README-incorrect-emit.md for more info.
  */
@@ -40,8 +38,10 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:
+    void VisitMacroExpands(const clang::Token &MacroNameTok,
+                           const clang::SourceRange &range) override;
     bool hasEmitKeyboard(clang::CXXMemberCallExpr *) const;
-    QEmitPreprocessorCallbacks *const m_preprocessorCallbacks;
+    std::vector<clang::SourceLocation> m_emitLocations;
 };
 
 #endif

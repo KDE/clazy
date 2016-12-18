@@ -27,55 +27,31 @@
 #include "checkmanager.h"
 
 #include <clang/AST/AST.h>
-#include <clang/Lex/PPCallbacks.h>
 #include <clang/Lex/Token.h>
 #include <clang/Lex/Preprocessor.h>
 
 using namespace clang;
 using namespace std;
 
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-class QEnumsPreprocessorCallbacks : public clang::PPCallbacks
-{
-public:
-    QEnumsPreprocessorCallbacks(const QEnumsPreprocessorCallbacks &) = delete;
-    QEnumsPreprocessorCallbacks(Qenums *q, const SourceManager &sm, const LangOptions &lo)
-        : clang::PPCallbacks()
-        , q(q)
-        , m_sm(sm)
-        , m_langOpts(lo)
-    {
-    }
-
-    void MacroExpands (const Token &MacroNameTok, const MacroDefinition &MD, SourceRange range, const MacroArgs *Args) override
-    {
-        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (!ii || ii->getName() != "Q_ENUMS")
-            return;
-
-        if (range.getBegin().isMacroID())
-            return;
-
-        if (m_sm.isInSystemHeader(range.getBegin()))
-            return;
-
-        q->emitWarning(range.getBegin(), "Use Q_ENUM instead of Q_ENUMS");
-    }
-
-    Qenums *const q;
-    const SourceManager& m_sm;
-    LangOptions m_langOpts;
-};
-#endif
-
 Qenums::Qenums(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    auto callbacks = new QEnumsPreprocessorCallbacks(this, sm(), lo());
-    Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(callbacks));
-#endif
+    enablePreProcessorCallbacks();
+}
+
+void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
+{
+    IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
+    if (!ii || ii->getName() != "Q_ENUMS")
+        return;
+
+    if (range.getBegin().isMacroID())
+        return;
+
+    if (sm().isInSystemHeader(range.getBegin()))
+        return;
+
+    emitWarning(range.getBegin(), "Use Q_ENUM instead of Q_ENUMS");
 }
 
 REGISTER_CHECK_WITH_FLAGS("qenums", Qenums, CheckLevel0)

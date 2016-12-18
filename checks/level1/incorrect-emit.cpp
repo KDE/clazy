@@ -30,45 +30,25 @@
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
-#include <clang/Parse/Parser.h>
 #include <clang/Lex/Lexer.h>
 
 using namespace clang;
 using namespace std;
 
-class QEmitPreprocessorCallbacks : public clang::PPCallbacks
-{
-    QEmitPreprocessorCallbacks(const QEmitPreprocessorCallbacks &) = delete;
-public:
-    QEmitPreprocessorCallbacks()
-        : clang::PPCallbacks()
-    {
-        emitLocations.reserve(30); // bootstrap it
-    }
-
-    void MacroExpands(const Token &MacroNameTok, const MacroDefinition &,
-                      SourceRange range, const MacroArgs *) override
-    {
-        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (!ii)
-            return;
-
-        if (ii->getName() == "emit" || ii->getName() == "Q_EMIT")
-            emitLocations.push_back(range.getBegin());
-    }
-
-    vector<SourceLocation> emitLocations;
-};
-
 IncorrectEmit::IncorrectEmit(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
-    , m_preprocessorCallbacks(new QEmitPreprocessorCallbacks())
 {
     CheckManager::instance()->enableAccessSpecifierManager(ci);
-    Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    enablePreProcessorCallbacks();
+    m_emitLocations.reserve(30); // bootstrap it
 }
 
+void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
+{
+    IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
+    if (ii && (ii->getName() == "emit" || ii->getName() == "Q_EMIT"))
+        m_emitLocations.push_back(range.getBegin());
+}
 
 void IncorrectEmit::VisitStmt(Stmt *stmt)
 {
@@ -114,7 +94,7 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
     if (callLoc.isMacroID())
         callLoc = sm().getFileLoc(callLoc);
 
-    for (const SourceLocation &emitLoc : m_preprocessorCallbacks->emitLocations) {
+    for (const SourceLocation &emitLoc : m_emitLocations) {
         // TODO: Refactor Lexer stuff into a reusable method
         std::pair<FileID, unsigned> LocInfo = sm().getDecomposedLoc(emitLoc);
         bool InvalidTemp = false;

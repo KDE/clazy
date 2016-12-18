@@ -31,6 +31,9 @@ class Qenums : public CheckBase
 {
 public:
     explicit Qenums(const std::string &name, const clang::CompilerInstance &ci);
+private:
+    void VisitMacroExpands(const clang::Token &MacroNameTok,
+                           const clang::SourceRange &range) override;
 };
 
 #endif

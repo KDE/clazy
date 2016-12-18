@@ -35,8 +35,6 @@
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclTemplate.h>
 #include <clang/Lex/Lexer.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Parse/Parser.h>
 
 #include <regex>
 
@@ -71,51 +69,10 @@ static bool classIsOk(const string &className)
     return clazy_std::contains(okClasses, className);
 }
 
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-class PreprocessorCallbacks : public clang::PPCallbacks
-{
-public:
-    PreprocessorCallbacks(const PreprocessorCallbacks &) = delete;
-    PreprocessorCallbacks(OldStyleConnect *q, const SourceManager &sm, const LangOptions &lo)
-        : clang::PPCallbacks()
-        , q(q)
-        , m_sm(sm)
-        , m_langOpts(lo)
-
-    {
-    }
-
-    void MacroExpands (const Token &MacroNameTok, const MacroDefinition &MD, SourceRange range, const MacroArgs *Args) override
-    {
-        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (!ii || ii->getName() != "Q_PRIVATE_SLOT")
-            return;
-
-        auto charRange = Lexer::getAsCharRange(range, m_sm, m_langOpts);
-        const string text = Lexer::getSourceText(charRange, m_sm, m_langOpts);
-
-        static regex rx(R"(Q_PRIVATE_SLOT\s*\((.*)\s*,\s*.*\s+(.*)\(.*)");
-        smatch match;
-        if (!regex_match(text, match, rx) || match.size() != 3)
-            return;
-
-        q->addPrivateSlot({match[1], match[2]});
-    }
-
-    OldStyleConnect *const q;
-    const SourceManager& m_sm;
-    LangOptions m_langOpts;
-};
-#endif
-
 OldStyleConnect::OldStyleConnect(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    m_preprocessorCallbacks = new PreprocessorCallbacks(this, sm(), lo());
-    Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
-#endif
+    enablePreProcessorCallbacks();
 }
 
 int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connectCall)
@@ -250,6 +207,23 @@ void OldStyleConnect::VisitStmt(Stmt *s)
 void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
 {
     m_privateSlots.push_back(slot);
+}
+
+void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range)
+{
+    IdentifierInfo *ii = macroNameTok.getIdentifierInfo();
+    if (!ii || ii->getName() != "Q_PRIVATE_SLOT")
+        return;
+
+    auto charRange = Lexer::getAsCharRange(range, sm(), lo());
+    const string text = Lexer::getSourceText(charRange, sm(), lo());
+
+    static regex rx(R"(Q_PRIVATE_SLOT\s*\((.*)\s*,\s*.*\s+(.*)\(.*)");
+    smatch match;
+    if (!regex_match(text, match, rx) || match.size() != 3)
+        return;
+
+    addPrivateSlot({match[1], match[2]});
 }
 
 // SIGNAL(foo()) -> foo

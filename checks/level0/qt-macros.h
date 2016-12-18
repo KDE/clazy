@@ -34,11 +34,12 @@ class QtMacros : public CheckBase
 public:
     explicit QtMacros(const std::string &name, const clang::CompilerInstance &ci);
 private:
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
-    friend class QtMacrosPreprocessorCallbacks;
-    QtMacrosPreprocessorCallbacks *m_preprocessorCallbacks;
+    void checkIfDef(const clang::Token &MacroNameTok, clang::SourceLocation Loc);
+    void VisitMacroDefined(const clang::Token &MacroNameTok) override;
+    void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &range) override;
+    void VisitIfdef(clang::SourceLocation loc, const clang::Token &macroNameTok) override;
+
     bool m_OSMacroExists = false;
-#endif
 };
 
 #endif

@@ -61,7 +61,7 @@ static void sorted_insert(ClazySpecifierList &v, const ClazyAccessSpecifier &ite
     v.insert(std::upper_bound(v.begin(), v.end(), item, pred), item);
 }
 
-// #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
+#if !(LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR == 6)
 class AccessSpecifierPreprocessorCallbacks : public clang::PPCallbacks
 {
     AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
@@ -100,6 +100,7 @@ public:
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
+#endif
 
 AccessSpecifierManager::AccessSpecifierManager(const clang::CompilerInstance &ci)
     : m_ci(ci)
