@@ -88,7 +88,7 @@ public:
             return;
 
         const SourceLocation loc = range.getBegin();
-        if (loc.isMacroID() || m_ci.getSourceManager().isInSystemHeader(loc))
+        if (loc.isMacroID())
             return;
 
         QtAccessSpecifierType qtAccessSpecifier = isSlots ? QtAccessSpecifier_Slot
@@ -131,7 +131,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
     auto record = dyn_cast<CXXRecordDecl>(decl);
     auto accessSpec = dyn_cast<AccessSpecDecl>(decl);
 
-    if ((!record && !accessSpec) || m_ci.getSourceManager().isInSystemHeader(decl->getLocStart()))
+    if (!record && !accessSpec)
         return;
 
     const auto &sm = m_ci.getSourceManager();
