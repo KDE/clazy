@@ -140,10 +140,9 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         return classification;
 
     if (QtUtils::connectHasPMFStyle(connectFunc))
-        classification |= ConnectFlag_OldStyle;
-    else
         return classification;
-
+    else
+        classification |= ConnectFlag_OldStyle;
 
     const int numParams = connectFunc->getNumParams();
 
