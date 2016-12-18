@@ -31,8 +31,6 @@
 using namespace clang;
 using namespace std;
 
-std::once_flag s_consolidateWasCalled;
-
 static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs,
                                    const SourceManager &sm)
 {
