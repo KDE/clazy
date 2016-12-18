@@ -125,14 +125,11 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     const string methodName = connectFunc->getQualifiedNameAsString();
     if (methodName == "QObject::connect")
         classification |= ConnectFlag_Connect;
-
-    if (methodName == "QObject::disconnect")
+    else if (methodName == "QObject::disconnect")
         classification |= ConnectFlag_Disconnect;
-
-    if (methodName == "QTimer::singleShot")
+    else if (methodName == "QTimer::singleShot")
         classification |= ConnectFlag_QTimerSingleShot;
-
-    if (methodName == "QState::addTransition")
+    else if (methodName == "QState::addTransition")
         classification |= ConnectFlag_QStateAddTransition;
 
 
