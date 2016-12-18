@@ -13,7 +13,6 @@ function run_test
     docker run -i -t iamsergio/clazy-$1 sh $BUILD_SCRIPT $BRANCH $J_FLAG &> clazy-$1.log
 }
 
-run_test ubuntu-14.04
 run_test ubuntu-15.10
 run_test ubuntu-16.04
 run_test pensuse-tumbleweed
