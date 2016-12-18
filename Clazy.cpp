@@ -122,9 +122,10 @@ public:
 
     bool VisitDecl(Decl *decl)
     {
+#if !defined(IS_OLD_CLANG)
         if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
             a->VisitDeclaration(decl);
-
+#endif
         for (const auto &check : m_createdChecks)
             check->VisitDeclaration(decl);
 
