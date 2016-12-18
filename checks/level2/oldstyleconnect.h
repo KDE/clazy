@@ -27,6 +27,8 @@
 
 #include "checkbase.h"
 
+#if !defined(IS_OLD_CLANG)
+
 namespace clang {
 class CallExpr;
 class CXXMemberCallExpr;
@@ -63,4 +65,5 @@ private:
     PrivateSlot::List m_privateSlots;
 };
 
+#endif
 #endif

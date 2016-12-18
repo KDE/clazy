@@ -23,6 +23,9 @@
 */
 
 #include "oldstyleconnect.h"
+
+#if !defined(IS_OLD_CLANG)
+
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"
@@ -423,3 +426,4 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 const char *const s_checkName = "old-style-connect";
 REGISTER_CHECK_WITH_FLAGS(s_checkName, OldStyleConnect, CheckLevel2)
 REGISTER_FIXIT(FixItConnects, "fix-old-style-connect", s_checkName)
+#endif
