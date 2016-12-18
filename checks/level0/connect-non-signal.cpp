@@ -21,6 +21,9 @@
 */
 
 #include "connect-non-signal.h"
+
+#if !defined(IS_OLD_CLANG)
+
 #include "AccessSpecifierManager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
@@ -65,3 +68,5 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 }
 
 REGISTER_CHECK_WITH_FLAGS("connect-non-signal", ConnectNonSignal, CheckLevel0)
+
+#endif

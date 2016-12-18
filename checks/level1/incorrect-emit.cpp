@@ -19,8 +19,11 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "AccessSpecifierManager.h"
 #include "incorrect-emit.h"
+
+#if !defined(IS_OLD_CLANG)
+
+#include "AccessSpecifierManager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
@@ -104,3 +107,5 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
 }
 
 REGISTER_CHECK_WITH_FLAGS("incorrect-emit", IncorrectEmit, CheckLevel1)
+
+#endif

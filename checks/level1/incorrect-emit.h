@@ -24,6 +24,8 @@
 
 #include "checkbase.h"
 
+#if !defined(IS_OLD_CLANG)
+
 namespace clang {
     class CXXMemberCallExpr;
 }
@@ -44,4 +46,5 @@ private:
     std::vector<clang::SourceLocation> m_emitLocations;
 };
 
+#endif
 #endif
