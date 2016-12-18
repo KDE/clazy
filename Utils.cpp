@@ -511,7 +511,7 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
 
 bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2)
 {
-    return l1.getColumn() == l2.getColumn() &&
+    return l1.isValid() && l2.isValid() && l1.getColumn() == l2.getColumn() &&
            l1.getLine()   == l2.getLine()   &&
             string(l1.getFilename()) == string(l2.getFilename());
 }
