@@ -170,8 +170,10 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
         return QtAccessSpecifier_Unknown;
 
     CXXRecordDecl *record = method->getParent();
-    auto it = m_specifiersMap.find(record);
+    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
+        return QtAccessSpecifier_None;
 
+    auto it = m_specifiersMap.find(record);
     if (it == m_specifiersMap.cend())
         return QtAccessSpecifier_Unknown;
 
