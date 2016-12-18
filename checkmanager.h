@@ -24,6 +24,7 @@
 
 #ifndef CLANG_LAZY_CHECK_MANAGER_H
 #define CLANG_LAZY_CHECK_MANAGER_H
+
 #include "clazylib_export.h"
 #include "checkbase.h"
 #include "SuppressionManager.h"
@@ -97,7 +98,9 @@ public:
      * We only enable it if a check needs it, for performance reasons
      */
     void enableAccessSpecifierManager(const clang::CompilerInstance &ci);
+#if !defined(IS_OLD_CLANG)
     AccessSpecifierManager *accessSpecifierManager() const;
+#endif
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
@@ -117,7 +120,9 @@ private:
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
     SuppressionManager m_suppressionManager;
+#if !defined(IS_OLD_CLANG)
     AccessSpecifierManager *m_accessSpecifierManager = nullptr;
+#endif
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \

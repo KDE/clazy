@@ -343,11 +343,15 @@ SuppressionManager *CheckManager::suppressionManager()
 
 void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 {
+#if !defined(IS_OLD_CLANG)
     if (!m_accessSpecifierManager)
         m_accessSpecifierManager = new AccessSpecifierManager(ci);
+#endif
 }
 
+#if !defined(IS_OLD_CLANG)
 AccessSpecifierManager *CheckManager::accessSpecifierManager() const
 {
     return m_accessSpecifierManager;
 }
+#endif

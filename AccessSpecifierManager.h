@@ -23,9 +23,13 @@
 #ifndef CLAZY_ACCESS_SPECIFIER_MANAGER_H
 #define CLAZY_ACCESS_SPECIFIER_MANAGER_H
 
-#include <clang/Frontend/CompilerInstance.h>
-#include <unordered_map>
-#include <vector>
+#include "checkbase.h"
+
+#if !defined(IS_OLD_CLANG)
+
+# include <clang/Frontend/CompilerInstance.h>
+# include <unordered_map>
+# include <vector>
 
 /*
    clang supports "public", "private" and "protected"
@@ -86,4 +90,5 @@ private:
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
 };
 
+#endif // !IS_OLD_CLANG
 #endif
