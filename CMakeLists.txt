@@ -173,6 +173,7 @@ set(SRC_FILES
   checks/level1/returning-data-from-temporary.cpp
   checks/level1/ruleoftwosoft.cpp
   checks/level1/post-event.cpp
+  checks/level1/incorrect-emit.cpp
   checks/level2/base-class-event.cpp
   checks/level2/container-inside-loop.cpp
   checks/level2/function-args-by-ref.cpp
