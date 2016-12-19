@@ -176,7 +176,7 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
 
     auto it = m_specifiersMap.find(record);
     if (it == m_specifiersMap.cend())
-        return QtAccessSpecifier_Unknown;
+        return QtAccessSpecifier_None;
 
     const ClazySpecifierList &accessSpecifiers = it->second;
 
