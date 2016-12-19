@@ -67,6 +67,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
 
     if (Stmt *parent = HierarchyUtils::parent(m_parentMap, methodCall)) {
         // Check if we're inside a chained call, such as: emit d_func()->mySignal()
+        // We're not interested in the d_func() call, so skip it
         if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, parent))
             return;
     }
@@ -89,6 +90,25 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     } else if (!isSignal && hasEmit) {
         emitWarning(stmt, "Emit keyword being used with non-signal " + methodName);
     }
+
+    if (isSignal)
+        checkCallSignalInsideCTOR(methodCall);
+}
+
+void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
+{
+    if (!m_lastMethodDecl)
+        return;
+
+    auto ctorDecl = dyn_cast<CXXConstructorDecl>(m_lastMethodDecl);
+    if (!ctorDecl)
+        return;
+
+    Expr *implicitArg = callExpr->getImplicitObjectArgument();
+    if (!implicitArg || !isa<CXXThisExpr>(implicitArg)) // emit other->sig() is ok
+        return;
+
+    emitWarning(callExpr->getLocStart(), "Emitting inside constructor has no effect");
 }
 
 bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const

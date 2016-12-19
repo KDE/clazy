@@ -40,6 +40,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:
+    void checkCallSignalInsideCTOR(clang::CXXMemberCallExpr *);
     void VisitMacroExpands(const clang::Token &MacroNameTok,
                            const clang::SourceRange &range) override;
     bool hasEmitKeyboard(clang::CXXMemberCallExpr *) const;

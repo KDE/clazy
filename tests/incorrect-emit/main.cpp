@@ -12,10 +12,10 @@ static MyObject * s_obj;
 class MyObject : public QObject
 {
 public:
+    MyObject();
     void pub();
     MyObject* memberFunc() const;
     MyObject *another;
-
 private:
     void priv();
 
@@ -47,4 +47,12 @@ void MyObject::pub()
     memberFunc()->sig(); // Warning
     emit another->sig(); // OK
     emit s_obj->sig(); // OK
+}
+
+
+MyObject::MyObject()
+{
+    emit sig(); // Warning
+    emit another->sig(); // OK;
+    emit memberFunc()->sig(); // OK;
 }
