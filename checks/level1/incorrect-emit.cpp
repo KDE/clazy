@@ -85,7 +85,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     const string methodName = method->getQualifiedNameAsString();
     const bool isSignal = type == QtAccessSpecifier_Signal;
     if (isSignal && !hasEmit) {
-        emitWarning(stmt, "Missing emit keyword on signal call " + methodName + "; " + filename);
+        emitWarning(stmt, "Missing emit keyword on signal call " + methodName);
     } else if (!isSignal && hasEmit) {
         emitWarning(stmt, "Emit keyword being used with non-signal " + methodName);
     }
