@@ -72,7 +72,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     }
 
     const string filename = Utils::filenameForLoc(stmt->getLocStart(), sm());
-    if (clazy_std::startsWith(filename, "moc_")) // blacklist
+    if (clazy_std::startsWith(filename, "moc_") || clazy_std::endsWith(filename, ".moc")) // blacklist
         return;
 
     const QtAccessSpecifierType type = accessSpecifierManager->qtAccessSpecifierType(method);
