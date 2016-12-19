@@ -118,7 +118,17 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
         callLoc = sm().getFileLoc(callLoc);
 
     for (const SourceLocation &emitLoc : m_emitLocations) {
-        SourceLocation nextTokenLoc = Utils::locForNextToken(emitLoc, sm(), lo());
+        // We cache the calculation of the next token because it uses the Lexer and hence expensive.
+        auto it = m_locationCache.find(emitLoc.getRawEncoding());
+
+        SourceLocation nextTokenLoc;
+        if (it == m_locationCache.end()) {
+            nextTokenLoc = Utils::locForNextToken(emitLoc, sm(), lo());
+            m_locationCache[emitLoc.getRawEncoding()] = nextTokenLoc;
+        } else {
+            nextTokenLoc = it->second;
+        }
+
         if (nextTokenLoc == callLoc)
             return true;
     }

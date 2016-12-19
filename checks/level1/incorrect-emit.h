@@ -26,6 +26,8 @@
 
 #if !defined(IS_OLD_CLANG)
 
+#include <unordered_map>
+
 namespace clang {
     class CXXMemberCallExpr;
 }
@@ -45,6 +47,7 @@ private:
                            const clang::SourceRange &range) override;
     bool hasEmitKeyboard(clang::CXXMemberCallExpr *) const;
     std::vector<clang::SourceLocation> m_emitLocations;
+    mutable std::unordered_map<unsigned, clang::SourceLocation> m_locationCache;
 };
 
 #endif
