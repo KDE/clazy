@@ -108,6 +108,9 @@ void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
     if (!implicitArg || !isa<CXXThisExpr>(implicitArg)) // emit other->sig() is ok
         return;
 
+    if (HierarchyUtils::getFirstParentOfType<LambdaExpr>(m_parentMap, callExpr) != nullptr)
+        return; // Emit is inside a lambda, it's fine
+
     emitWarning(callExpr->getLocStart(), "Emitting inside constructor has no effect");
 }
 

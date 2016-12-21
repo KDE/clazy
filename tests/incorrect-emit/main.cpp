@@ -55,4 +55,5 @@ MyObject::MyObject()
     emit sig(); // Warning
     emit another->sig(); // OK;
     emit memberFunc()->sig(); // OK;
+    [this]{ emit sig(); }; // OK
 }
