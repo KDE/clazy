@@ -185,6 +185,7 @@ set(SRC_FILES
   checks/level2/reservecandidates.cpp
   checks/level2/ruleofthree.cpp
   checks/level2/virtualcallsfromctor.cpp
+  checks/level2/returning-void-expression.cpp
   checks/level3/assertwithsideeffects.cpp
   checks/level3/detachingmember.cpp
   checks/level3/dynamic_cast.cpp
