@@ -30,6 +30,8 @@ private Q_SLOTS:
 
 protected:
     void prot();
+    Q_SIGNAL void singularSig();
+    Q_SLOT void singularSlot();
 };
 
 void MyObject::pub()
@@ -56,4 +58,11 @@ MyObject::MyObject()
     emit another->sig(); // OK;
     emit memberFunc()->sig(); // OK;
     [this]{ emit sig(); }; // OK
+    emit singularSig(); // Warning
+    singularSlot(); // OK
+}
+
+void MyObject::singularSlot()
+{
+    singularSig(); // Warning
 }

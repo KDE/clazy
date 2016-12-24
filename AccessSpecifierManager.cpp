@@ -62,14 +62,12 @@ static void sorted_insert(ClazySpecifierList &v, const ClazyAccessSpecifier &ite
     v.insert(std::upper_bound(v.begin(), v.end(), item, pred), item);
 }
 
-#if !(LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR == 6)
 class AccessSpecifierPreprocessorCallbacks : public clang::PPCallbacks
 {
     AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
 public:
-    AccessSpecifierPreprocessorCallbacks(AccessSpecifierManager *q, const clang::CompilerInstance &ci)
+    AccessSpecifierPreprocessorCallbacks(const clang::CompilerInstance &ci)
         : clang::PPCallbacks()
-        , q(q)
         , m_ci(ci)
     {
         m_qtAccessSpecifiers.reserve(30); // bootstrap it
@@ -85,30 +83,46 @@ public:
         auto name = ii->getName();
         const bool isSlots = name == "slots" || name == "Q_SLOTS";
         const bool isSignals = isSlots ? false : (name == "signals" || name == "Q_SIGNALS");
-        if (!isSlots && !isSignals)
+
+        const bool isSlot = (isSlots || isSignals) ? false : name == "Q_SLOT";
+        const bool isSignal = (isSlots || isSignals || isSlot) ? false : name == "Q_SIGNAL";
+        if (!isSlots && !isSignals && !isSlot && !isSignal)
             return;
 
-        const SourceLocation loc = range.getBegin();
+        SourceLocation loc = range.getBegin();
         if (loc.isMacroID())
             return;
 
-        QtAccessSpecifierType qtAccessSpecifier = isSlots ? QtAccessSpecifier_Slot
-                                                          : QtAccessSpecifier_Signal;
-        m_qtAccessSpecifiers.push_back( { loc, clang::AS_none, qtAccessSpecifier } );
+        if (isSignals || isSlots) {
+            QtAccessSpecifierType qtAccessSpecifier = (isSlots || isSlot) ? QtAccessSpecifier_Slot
+                                                                          : QtAccessSpecifier_Signal;
+
+            m_qtAccessSpecifiers.push_back( { loc, clang::AS_none, qtAccessSpecifier } );
+        } else {
+            // Get the location of the method declaration, so we can compare directly when we visit methods
+            loc = Utils::locForNextToken(loc, m_ci.getSourceManager(), m_ci.getLangOpts());
+            if (loc.isInvalid())
+                return;
+            if (isSignal) {
+                m_individualSignals.push_back(loc.getRawEncoding());
+            } else {
+                m_individualSlots.push_back(loc.getRawEncoding());
+            }
+        }
     }
 
-    AccessSpecifierManager *const q;
+    vector<unsigned> m_individualSignals; // Q_SIGNAL
+    vector<unsigned> m_individualSlots;   // Q_SLOT
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
-#endif
 
 AccessSpecifierManager::AccessSpecifierManager(const clang::CompilerInstance &ci)
     : m_ci(ci)
-    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(this, ci))
+    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(ci))
 {
     Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    pi.addPPCallbacks(unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 }
 
 ClazySpecifierList& AccessSpecifierManager::entryForClassDefinition(CXXRecordDecl *classDecl)
@@ -169,6 +183,22 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
 {
     if (!method)
         return QtAccessSpecifier_Unknown;
+
+    SourceLocation loc = method->getLocStart();
+
+    // Process Q_SIGNAL:
+    for (auto signalLoc : m_preprocessorCallbacks->m_individualSignals) {
+        if (signalLoc == loc.getRawEncoding())
+            return QtAccessSpecifier_Signal;
+    }
+
+    // Process Q_SLOT:
+    for (auto slotLoc : m_preprocessorCallbacks->m_individualSlots) {
+        if (slotLoc == loc.getRawEncoding())
+            return QtAccessSpecifier_Slot;
+    }
+
+    // Process Q_SLOTS and Q_SIGNALS:
 
     CXXRecordDecl *record = method->getParent();
     if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
