@@ -52,7 +52,7 @@ static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyA
     }
 
     return lhs.loc < rhs.loc;
-};
+}
 
 static void sorted_insert(ClazySpecifierList &v, const ClazyAccessSpecifier &item, const clang::SourceManager &sm)
 {
