@@ -85,7 +85,7 @@ public:
 private:
     ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl*);
     const clang::CompilerInstance &m_ci;
-    clang::CXXRecordDecl *classDefinitionForLoc(clang::SourceLocation loc);
+    clang::CXXRecordDecl *classDefinitionForLoc(clang::SourceLocation loc) const;
     std::unordered_map<clang::CXXRecordDecl*, ClazySpecifierList> m_specifiersMap;
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
 };

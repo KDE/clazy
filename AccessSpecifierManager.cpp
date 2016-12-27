@@ -131,7 +131,7 @@ ClazySpecifierList& AccessSpecifierManager::entryForClassDefinition(CXXRecordDec
     return specifiers;
 }
 
-CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocation loc)
+CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocation loc) const
 {
     for (auto it : m_specifiersMap) {
         CXXRecordDecl *record = it.first;
