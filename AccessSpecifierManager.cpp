@@ -133,7 +133,7 @@ ClazySpecifierList& AccessSpecifierManager::entryForClassDefinition(CXXRecordDec
 
 CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocation loc) const
 {
-    for (auto it : m_specifiersMap) {
+    for (const auto &it : m_specifiersMap) {
         CXXRecordDecl *record = it.first;
         if (record->getLocStart() < loc && loc < record->getLocEnd())
             return record;
