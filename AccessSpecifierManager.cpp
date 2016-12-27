@@ -26,6 +26,7 @@
 
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
+#include "QtUtils.h"
 
 #include <clang/Basic/SourceManager.h>
 #include <clang/Parse/Parser.h>
@@ -152,8 +153,10 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
     const auto &sm = m_ci.getSourceManager();
 
     if (record) {
-        // We got a new record, lets fetch signals and slots that the pre-processor gathered
+        if (!QtUtils::isQObject(record))
+            return;
 
+        // We got a new record, lets fetch signals and slots that the pre-processor gathered
         ClazySpecifierList &specifiers = entryForClassDefinition(record);
 
         auto it = m_preprocessorCallbacks->m_qtAccessSpecifiers.begin();
@@ -166,11 +169,9 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
             }
         }
     } else if (accessSpec) {
-
         DeclContext *declContext = accessSpec->getDeclContext();
         auto record = dyn_cast<CXXRecordDecl>(declContext);
-        if (!record) {
-            llvm::errs() << "Received access specifier without class definition\n";
+        if (!record || !QtUtils::isQObject(record)) {
             return;
         }
 
