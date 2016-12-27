@@ -66,3 +66,15 @@ void MyObject::singularSlot()
 {
     singularSig(); // Warning
 }
+
+struct NotQObject
+{
+    QObject *o;
+    void test1() {}
+    void test()
+    {
+        test1(); // OK
+        emit test1(); // Warning
+        emit o->destroyed(); // OK
+    }
+};

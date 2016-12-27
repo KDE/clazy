@@ -6,3 +6,4 @@ incorrect-emit/main.cpp:49:5: warning: Missing emit keyword on signal call MyObj
 incorrect-emit/main.cpp:57:10: warning: Emitting inside constructor has no effect [-Wclazy-incorrect-emit]
 incorrect-emit/main.cpp:61:10: warning: Emitting inside constructor has no effect [-Wclazy-incorrect-emit]
 incorrect-emit/main.cpp:67:5: warning: Missing emit keyword on signal call MyObject::singularSig [-Wclazy-incorrect-emit]
+incorrect-emit/main.cpp:77:14: warning: Emit keyword being used with non-signal NotQObject::test1 [-Wclazy-incorrect-emit]
