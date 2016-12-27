@@ -38,36 +38,6 @@
 using namespace clang;
 using namespace std;
 
-#if !defined(IS_OLD_CLANG)
-
-ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
-    : check(check)
-{
-}
-
-void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &,
-                                              SourceRange range, const MacroArgs *)
-{
-    check->VisitMacroExpands(macroNameTok, range);
-}
-
-void ClazyPreprocessorCallbacks::Defined(const Token &macroNameTok, const MacroDefinition &, SourceRange range)
-{
-    check->VisitDefined(macroNameTok, range);
-}
-
-void ClazyPreprocessorCallbacks::Ifdef(SourceLocation loc, const Token &macroNameTok, const MacroDefinition &)
-{
-    check->VisitIfdef(loc, macroNameTok);
-}
-
-void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const MacroDirective *)
-{
-    check->VisitMacroDefined(macroNameTok);
-}
-
-#endif
-
 struct RAIIElapsedTime
 {
 #ifdef CLAZY_PROFILE_TIME_TAKEN
@@ -89,6 +59,40 @@ struct RAIIElapsedTime
     RAIIElapsedTime(long &) {}
 #endif
 };
+
+#if !defined(IS_OLD_CLANG)
+
+ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
+    : check(check)
+{
+}
+
+void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &,
+                                              SourceRange range, const MacroArgs *)
+{
+    RAIIElapsedTime r(check->m_elapsedTime);
+    check->VisitMacroExpands(macroNameTok, range);
+}
+
+void ClazyPreprocessorCallbacks::Defined(const Token &macroNameTok, const MacroDefinition &, SourceRange range)
+{
+    RAIIElapsedTime r(check->m_elapsedTime);
+    check->VisitDefined(macroNameTok, range);
+}
+
+void ClazyPreprocessorCallbacks::Ifdef(SourceLocation loc, const Token &macroNameTok, const MacroDefinition &)
+{
+    RAIIElapsedTime r(check->m_elapsedTime);
+    check->VisitIfdef(loc, macroNameTok);
+}
+
+void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const MacroDirective *)
+{
+    RAIIElapsedTime r(check->m_elapsedTime);
+    check->VisitMacroDefined(macroNameTok);
+}
+
+#endif
 
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
