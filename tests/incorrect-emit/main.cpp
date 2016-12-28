@@ -78,3 +78,17 @@ struct NotQObject
         emit o->destroyed(); // OK
     }
 };
+
+class TestBug373947 : public QObject
+{
+    int method()
+    {
+        return otherMethod(); // OK
+    }
+
+Q_SIGNALS:
+    void someSignal();
+
+public:
+    int otherMethod();
+};
