@@ -145,38 +145,32 @@ CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocation loc)
 void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 {
     auto record = dyn_cast<CXXRecordDecl>(decl);
-    auto accessSpec = dyn_cast<AccessSpecDecl>(decl);
-
-    if (!record && !accessSpec)
+    if (!QtUtils::isQObject(record))
         return;
 
     const auto &sm = m_ci.getSourceManager();
 
-    if (record) {
-        if (!QtUtils::isQObject(record))
-            return;
+    // We got a new record, lets fetch signals and slots that the pre-processor gathered
+    ClazySpecifierList &specifiers = entryForClassDefinition(record);
 
-        // We got a new record, lets fetch signals and slots that the pre-processor gathered
-        ClazySpecifierList &specifiers = entryForClassDefinition(record);
-
-        auto it = m_preprocessorCallbacks->m_qtAccessSpecifiers.begin();
-        while (it != m_preprocessorCallbacks->m_qtAccessSpecifiers.end()) {
-            if (classDefinitionForLoc((*it).loc) == record) {
-                sorted_insert(specifiers, *it, sm);
-                it = m_preprocessorCallbacks->m_qtAccessSpecifiers.erase(it);
-            } else {
-                ++it;
-            }
+    auto it = m_preprocessorCallbacks->m_qtAccessSpecifiers.begin();
+    while (it != m_preprocessorCallbacks->m_qtAccessSpecifiers.end()) {
+        if (classDefinitionForLoc((*it).loc) == record) {
+            sorted_insert(specifiers, *it, sm);
+            it = m_preprocessorCallbacks->m_qtAccessSpecifiers.erase(it);
+        } else {
+            ++it;
         }
-    } else if (accessSpec) {
-        DeclContext *declContext = accessSpec->getDeclContext();
-        auto record = dyn_cast<CXXRecordDecl>(declContext);
-        if (!record || !QtUtils::isQObject(record)) {
-            return;
-        }
+    }
 
+    // Now lets add the normal C++ access specifiers (public, private etc.)
+
+    for (auto d : record->decls()) {
+        auto accessSpec = dyn_cast<AccessSpecDecl>(d);
+        if (!accessSpec || accessSpec->getDeclContext() != record)
+            continue;
         ClazySpecifierList &specifiers = entryForClassDefinition(record);
-        sorted_insert(specifiers, {decl->getLocStart(), accessSpec->getAccess(), QtAccessSpecifier_None }, sm);
+        sorted_insert(specifiers, {accessSpec->getLocStart(), accessSpec->getAccess(), QtAccessSpecifier_None }, sm);
     }
 }
 
