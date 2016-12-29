@@ -27,6 +27,9 @@
             "env" : {
                 "CLAZY_EXTRA_OPTIONS" : "qstring-allocations-no-msvc-compat"
             }
+        },
+        {
+            "filename" : "364092.cpp"
         }
     ]
 }
