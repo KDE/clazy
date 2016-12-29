@@ -142,10 +142,10 @@ def libraryName():
         return 'ClangLazy.so'
 
 def compiler_command(qt):
-    return "clang++ -std=c++11 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
+    return "clang++ -std=c++14 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
 
 def dump_ast_command(test):
-    return "clang++ -std=c++11 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
+    return "clang++ -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
 
 #-------------------------------------------------------------------------------
 # Get clang version
