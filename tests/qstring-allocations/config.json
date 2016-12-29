@@ -29,11 +29,13 @@
             }
         },
         {
-            "filename" : "364092.cpp"
+            "filename" : "364092.cpp",
+            "blacklist_platforms" : ["win32"]
         },
         {
             "filename" : "364092.cpp_fixed.cpp",
-            "isFixedFile" : true
+            "isFixedFile" : true,
+            "blacklist_platforms" : ["win32"]
         }
     ]
 }

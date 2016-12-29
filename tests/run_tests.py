@@ -28,6 +28,7 @@ class Test:
         self.env = os.environ
         self.checks = []
         self.flags = ""
+        self.blacklist_platforms = []
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -93,6 +94,8 @@ def load_json(check_name):
                 test.minimum_qt_version = t['minimum_qt_version']
             if 'minimum_clang_version' in t:
                 test.minimum_qt_version = t['minimum_clang_version']
+            if 'blacklist_platforms' in t:
+                test.blacklist_platforms = t['blacklist_platforms']
             if 'compare_everything' in t:
                 test.compare_everything = t['compare_everything']
             if 'isFixedFile' in t:
@@ -250,6 +253,9 @@ def run_unit_test(test):
         print "Qt headers: " + qt.qmake_header_path
 
     if qt.int_version < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
+        return True
+
+    if _platform in test.blacklist_platforms:
         return True
 
     checkname = test.check.name
