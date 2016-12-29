@@ -4,13 +4,16 @@ import sys, os, subprocess, string, re, json, threading, multiprocessing
 from threading import Thread
 from sys import platform as _platform
 
+def isWindows():
+    return _platform == 'win32'
+
 class QtInstallation:
     def __init__(self):
         self.int_version = 000
         self.qmake_header_path = "/usr/include/qt/"
 
     def compiler_flags(self):
-        return "-isystem " + self.qmake_header_path + " -fPIC"
+        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC")
 
 class Test:
     def __init__(self, check):
