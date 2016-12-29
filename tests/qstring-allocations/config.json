@@ -30,6 +30,10 @@
         },
         {
             "filename" : "364092.cpp"
+        },
+        {
+            "filename" : "364092.cpp_fixed.cpp",
+            "isFixedFile" : true
         }
     ]
 }
