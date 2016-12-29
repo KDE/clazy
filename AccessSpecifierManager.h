@@ -71,7 +71,7 @@ struct ClazyAccessSpecifier
 
 using ClazySpecifierList = std::vector<ClazyAccessSpecifier>;
 
-class AccessSpecifierManager
+class CLAZYLIB_EXPORT AccessSpecifierManager
 {
 public:
     explicit AccessSpecifierManager(const clang::CompilerInstance &ci);

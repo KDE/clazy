@@ -146,7 +146,7 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
     }
 }
 
-bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options);
+CLAZYLIB_EXPORT bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options);
 
 
 /**
