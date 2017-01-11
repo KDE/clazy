@@ -156,6 +156,7 @@ There are many checks and they are divided in levels:
     - post-event
     - range-loop
     - qstring-left
+    - qlatin1string-non-ascii
     - qdeleteall
     - non-pod-global-static
     - foreach
