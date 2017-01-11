@@ -1,0 +1,2 @@
+tr-non-literal/main.cpp:12:5: warning: tr() without a literal string [-Wclazy-tr-non-literal]
+tr-non-literal/main.cpp:21:21: warning: tr() without a literal string [-Wclazy-tr-non-literal]
