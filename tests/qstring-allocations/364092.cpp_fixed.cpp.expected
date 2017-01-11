@@ -9,3 +9,10 @@ void test364092()
 {
     QString s = "F"_L1; // Warning
 }
+
+void dummy()
+{
+    // Add at least one thing that will trigger a fixit it, otherwise, without
+    // any fixit the file won't be generated and that breaks the test
+    QString s = QStringLiteral("test");
+}

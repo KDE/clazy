@@ -1,1 +1,2 @@
 qstring-allocations/364092.cpp:10:17: warning: QString(QLatin1String) being called [-Wclazy-qstring-allocations]
+qstring-allocations/364092.cpp:17:17: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
