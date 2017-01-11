@@ -139,6 +139,6 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
     return false;
 }
 
-REGISTER_CHECK_WITH_FLAGS("incorrect-emit", IncorrectEmit, CheckLevel2)
+REGISTER_CHECK_WITH_FLAGS("incorrect-emit", IncorrectEmit, CheckLevel1)
 
 #endif
