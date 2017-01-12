@@ -169,7 +169,6 @@ set(SRC_FILES
   checks/level1/qdeleteall.cpp
   checks/level1/qstring-left.cpp
   checks/level1/qlatin1string-non-ascii.cpp
-  checks/level1/tr-non-literal.cpp
   checks/level1/range-loop.cpp
   checks/level1/returning-data-from-temporary.cpp
   checks/level1/ruleoftwosoft.cpp
@@ -193,6 +192,7 @@ set(SRC_FILES
   checks/level3/dynamic_cast.cpp
   checks/hiddenlevel/inefficientqlist.cpp
   checks/hiddenlevel/isempty-vs-count.cpp
+  checks/hiddenlevel/tr-non-literal.cpp
   checks/hiddenlevel/qt4-qstring-from-array.cpp
   checks/detachingbase.cpp
   checks/inefficientqlistbase.cpp

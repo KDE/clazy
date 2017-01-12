@@ -54,4 +54,4 @@ void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
         emitWarning(stmt, "tr() without a literal string");
 }
 
-REGISTER_CHECK_WITH_FLAGS("tr-non-literal", TrNonLiteral, CheckLevel1)
+REGISTER_CHECK_WITH_FLAGS("tr-non-literal", TrNonLiteral, HiddenCheckLevel)
