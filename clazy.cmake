@@ -10,6 +10,7 @@ HELP() {
   echo
   echo "Options:"
   echo "  --help             print program help"
+  echo "  --version          print the program version"
   echo "  --list             print a list of all available checkers, arranged by level"
   echo "  --explain [regexp] print explanations for the checker matching a regexp"
   echo "or"
@@ -20,6 +21,11 @@ HELP() {
   echo
   echo "See the clang++ manual for a list of the very large set of options available"
   echo
+}
+
+VERSION() {
+    echo "clazy version: @CLAZY_PRINT_VERSION@"
+    ${CLANGXX:-clang++} --version | head -1 | awk '{printf("clang++ Version: %s\n",$3)}'
 }
 
 PRLIST() {
@@ -44,6 +50,12 @@ PRINFO() {
 if ( test $# -gt 0 -a "$1" = "--help" )
 then
   HELP
+  exit
+fi
+
+if ( test $# -gt 0 -a "$1" = "--version" )
+then
+  VERSION
   exit
 fi
 
