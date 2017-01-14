@@ -24,3 +24,4 @@ clazylib_export.h
 output.log
 /clazy.bat
 /bin/
+/build/
