@@ -268,7 +268,39 @@ CXXMethodDecl *QtUtils::pmfFromConnect(CallExpr *funcCall, int argIndex)
     }
 
     Expr *expr = funcCall->getArg(argIndex);
-    return pmfFromUnary(dyn_cast<UnaryOperator>(expr));
+    return pmfFromUnary(expr);
+}
+
+
+CXXMethodDecl *QtUtils::pmfFromUnary(Expr *expr)
+{
+    if (auto uo = dyn_cast<UnaryOperator>(expr)) {
+        return pmfFromUnary(uo);
+    } else if (auto call = dyn_cast<CXXOperatorCallExpr>(expr)) {
+
+        if (call->getNumArgs() <= 1)
+            return nullptr;
+
+        FunctionDecl *func = call->getDirectCallee();
+        if (!func)
+            return nullptr;
+
+        auto context = func->getParent();
+        if (!context)
+            return nullptr;
+
+        CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(context);
+        if (!record)
+            return nullptr;
+
+        const std::string className = record->getQualifiedNameAsString();
+        if (className != "QNonConstOverload" && className != "QConstOverload")
+            return nullptr;
+
+        return pmfFromUnary(dyn_cast<UnaryOperator>(call->getArg(1)));
+    }
+
+    return nullptr;
 }
 
 CXXMethodDecl *QtUtils::pmfFromUnary(UnaryOperator *uo)

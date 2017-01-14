@@ -1,0 +1,1 @@
+connect-non-signal/bug374951.cpp:21:5: warning: MyObj::mySlot is not a signal [-Wclazy-connect-non-signal]

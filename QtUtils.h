@@ -41,6 +41,7 @@ class SourceLocation;
 class FunctionDecl;
 class UnaryOperator;
 class CXXMethodDecl;
+class Expr;
 }
 
 struct StmtBodyRange;
@@ -179,6 +180,7 @@ CLAZYLIB_EXPORT bool connectHasPMFStyle(clang::FunctionDecl *func);
  */
 CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
 
+CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::Expr *e);
 CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
 
 }
