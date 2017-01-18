@@ -24,6 +24,7 @@ class Test:
         self.isFixedFile = False
         self.link = False # If true we also call the linker
         self.check = check
+        self.expects_failure = False
         self.qt_major_version = 5 # Tests use Qt 5 by default
         self.env = os.environ
         self.checks = []
@@ -110,6 +111,8 @@ def load_json(check_name):
                 test.checks = t['checks']
             if 'flags' in t:
                 test.flags = t['flags']
+            if 'expects_failure' in t:
+                test.expects_failure = t['expects_failure']
 
             if not test.checks:
                 test.checks.append(test.check.name)
@@ -304,12 +307,22 @@ def run_unit_test(test):
     if len(test.check.tests) > 1:
         printableName += "/" + test.filename
 
-    if files_are_equal(expected_file, result_file):
-        print "[OK]   " + printableName
+    success = files_are_equal(expected_file, result_file)
+
+    if test.expects_failure:
+        if success:
+            print "[XOK]   " + printableName
+        else:
+            print "[XFAIL] " + printableName
+            if not print_differences(expected_file, result_file):
+                return False
     else:
-        print "[FAIL] " + printableName
-        if not print_differences(expected_file, result_file):
-            return False
+        if success:
+            print "[OK]   " + printableName
+        else:
+            print "[FAIL] " + printableName
+            if not print_differences(expected_file, result_file):
+                return False
 
     return True
 
