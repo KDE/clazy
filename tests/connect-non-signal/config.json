@@ -8,6 +8,11 @@
             "filename" : "bug374951.cpp",
             "minimum_clang_version" : 370,
             "minimum_qt_version" : 570
+        },
+        {
+            "filename" : "bug375239.cpp",
+            "minimum_clang_version" : 370,
+            "expects_failure" : true
         }
     ]
 }
