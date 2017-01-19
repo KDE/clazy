@@ -95,8 +95,8 @@ public:
             return;
 
         if (isSignals || isSlots) {
-            QtAccessSpecifierType qtAccessSpecifier = (isSlots || isSlot) ? QtAccessSpecifier_Slot
-                                                                          : QtAccessSpecifier_Signal;
+            QtAccessSpecifierType qtAccessSpecifier = isSlots ? QtAccessSpecifier_Slot
+                                                              : QtAccessSpecifier_Signal;
 
             m_qtAccessSpecifiers.push_back( { loc, clang::AS_none, qtAccessSpecifier } );
         } else {
@@ -179,17 +179,17 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
     if (!method || method->getLocStart().isMacroID())
         return QtAccessSpecifier_Unknown;
 
-    SourceLocation loc = method->getLocStart();
+    const SourceLocation methodLoc = method->getLocStart();
 
     // Process Q_SIGNAL:
     for (auto signalLoc : m_preprocessorCallbacks->m_individualSignals) {
-        if (signalLoc == loc.getRawEncoding())
+        if (signalLoc == methodLoc.getRawEncoding())
             return QtAccessSpecifier_Signal;
     }
 
     // Process Q_SLOT:
     for (auto slotLoc : m_preprocessorCallbacks->m_individualSlots) {
-        if (slotLoc == loc.getRawEncoding())
+        if (slotLoc == methodLoc.getRawEncoding())
             return QtAccessSpecifier_Slot;
     }
 
@@ -209,7 +209,7 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
         return accessSpecifierCompare(lhs, rhs, m_ci.getSourceManager());
     };
 
-    const ClazyAccessSpecifier dummy = { method->getLocStart(), // we're only interested in the location
+    const ClazyAccessSpecifier dummy = { methodLoc, // we're only interested in the location
                                          /*dummy*/ clang::AS_none,
                                          /*dummy*/ QtAccessSpecifier_None };
     auto i = std::upper_bound(accessSpecifiers.cbegin(), accessSpecifiers.cend(), dummy, pred);
