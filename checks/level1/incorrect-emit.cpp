@@ -77,10 +77,8 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
         return;
 
     const QtAccessSpecifierType type = accessSpecifierManager->qtAccessSpecifierType(method);
-    if (type == QtAccessSpecifier_Unknown) {
-        emitInternalError(method->getLocStart(), "couldn't find access specifier type");
+    if (type == QtAccessSpecifier_Unknown)
         return;
-    }
 
     const bool hasEmit = hasEmitKeyboard(methodCall);
     const string methodName = method->getQualifiedNameAsString();

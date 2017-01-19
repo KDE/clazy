@@ -60,11 +60,8 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
     }
 
     QtAccessSpecifierType qst = CheckManager::instance()->accessSpecifierManager()->qtAccessSpecifierType(method);
-    if (qst == QtAccessSpecifier_Unknown) {
-        emitInternalError(method->getLocStart(), "error, couldn't find access specifier type");
-    } else if (qst != QtAccessSpecifier_Signal) {
+    if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
         emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
-    }
 }
 
 REGISTER_CHECK_WITH_FLAGS("connect-non-signal", ConnectNonSignal, CheckLevel0)

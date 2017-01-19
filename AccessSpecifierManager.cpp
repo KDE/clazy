@@ -176,7 +176,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 
 QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDecl *method) const
 {
-    if (!method)
+    if (!method || method->getLocStart().isMacroID())
         return QtAccessSpecifier_Unknown;
 
     SourceLocation loc = method->getLocStart();
