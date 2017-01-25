@@ -40,16 +40,14 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
 {
     if (auto op = dyn_cast<CXXOperatorCallExpr>(s)) {
         FunctionDecl *func = op->getDirectCallee();
-        if (func && func->getNameAsString() == "operator=") {
-            auto method = dyn_cast<CXXMethodDecl>(func);
-            if (method && method->getParent()) {
-                CXXRecordDecl *record = method->getParent();
-                const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
-                const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
-                if (hasCopyCtor && !hasCopyAssignOp && !isBlacklisted(record)) {
-                    string msg = "Using assign operator but class " + record->getQualifiedNameAsString() + " has copy-ctor but no assign operator";
-                    emitWarning(s->getLocStart(), msg);
-                }
+        auto method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
+        if (method && method->getParent() &&  method->isCopyAssignmentOperator()) {
+            CXXRecordDecl *record = method->getParent();
+            const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
+            const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
+            if (hasCopyCtor && !hasCopyAssignOp && !isBlacklisted(record)) {
+                string msg = "Using assign operator but class " + record->getQualifiedNameAsString() + " has copy-ctor but no assign operator";
+                emitWarning(s->getLocStart(), msg);
             }
         }
     } else if (auto ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
