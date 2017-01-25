@@ -48,9 +48,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const SourceLocation recordStart = record->getLocStart();
     if (recordStart.isMacroID()) {
-        if (MacroUtils::isInMacro(m_ci, recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
+        if (MacroUtils::isInMacro(m_ci, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
             return;
-        }
     }
 
     CXXConstructorDecl *copyCtor = Utils::copyCtor(record);
@@ -111,9 +110,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         }
     }
 
-    if (!hasUserDtor && (TypeUtils::derivesFrom(record, "QSharedData") || dtorDefaultedByUser)) {
+    if (!hasUserDtor && (TypeUtils::derivesFrom(record, "QSharedData") || dtorDefaultedByUser))
         return;
-    }
 
     if (Utils::hasMember(record, "QSharedDataPointer"))
         return; // These need boiler-plate copy ctor and dtor

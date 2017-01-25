@@ -38,11 +38,10 @@ RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, const clang::CompilerInsta
 
 void RuleOfTwoSoft::VisitStmt(Stmt *s)
 {
-    CXXOperatorCallExpr *op = dyn_cast<CXXOperatorCallExpr>(s);
-    if (op) {
+    if (auto op = dyn_cast<CXXOperatorCallExpr>(s)) {
         FunctionDecl *func = op->getDirectCallee();
         if (func && func->getNameAsString() == "operator=") {
-            CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(func);
+            auto method = dyn_cast<CXXMethodDecl>(func);
             if (method && method->getParent()) {
                 CXXRecordDecl *record = method->getParent();
                 const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
@@ -53,7 +52,7 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
                 }
             }
         }
-    } else if (CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
+    } else if (auto ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
         CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
         CXXRecordDecl *record = ctorDecl->getParent();
         if (ctorDecl->isCopyConstructor() && record) {
