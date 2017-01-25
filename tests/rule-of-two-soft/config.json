@@ -2,6 +2,10 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "bug375537.cpp",
+            "expects_failure" : true
         }
     ]
 }
