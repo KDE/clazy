@@ -27,6 +27,7 @@
 #include "Utils.h"
 #include "StringUtils.h"
 #include "AccessSpecifierManager.h"
+#include "PreProcessorVisitor.h"
 
 #include <stdlib.h>
 
@@ -349,9 +350,22 @@ void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 #endif
 }
 
+void CheckManager::enablePreprocessorVisitor(const CompilerInstance &ci)
+{
+#if !defined(IS_OLD_CLANG)
+    if (!m_preprocessorVisitor)
+        m_preprocessorVisitor = new PreProcessorVisitor(ci);
+#endif
+}
+
 #if !defined(IS_OLD_CLANG)
 AccessSpecifierManager *CheckManager::accessSpecifierManager() const
 {
     return m_accessSpecifierManager;
+}
+
+PreProcessorVisitor *CheckManager::preprocessorVisitor() const
+{
+    return m_preprocessorVisitor;
 }
 #endif

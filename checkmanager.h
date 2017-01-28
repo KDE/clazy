@@ -35,6 +35,7 @@
 #include <unordered_map>
 
 class AccessSpecifierManager;
+class PreProcessorVisitor;
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
@@ -98,8 +99,11 @@ public:
      * We only enable it if a check needs it, for performance reasons
      */
     void enableAccessSpecifierManager(const clang::CompilerInstance &ci);
+    void enablePreprocessorVisitor(const clang::CompilerInstance &ci);
+
 #if !defined(IS_OLD_CLANG)
     AccessSpecifierManager *accessSpecifierManager() const;
+    PreProcessorVisitor *preprocessorVisitor() const;
 #endif
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
@@ -122,6 +126,7 @@ private:
     SuppressionManager m_suppressionManager;
 #if !defined(IS_OLD_CLANG)
     AccessSpecifierManager *m_accessSpecifierManager = nullptr;
+    PreProcessorVisitor *m_preprocessorVisitor = nullptr;
 #endif
 };
 

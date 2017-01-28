@@ -122,6 +122,7 @@ set(CLAZY_LIB_SRC
   HierarchyUtils.cpp
   LoopUtils.cpp
   MacroUtils.cpp
+  PreProcessorVisitor.cpp
   QtUtils.cpp
   StringUtils.cpp
   TemplateUtils.cpp
