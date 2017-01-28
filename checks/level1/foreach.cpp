@@ -28,6 +28,7 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "checkmanager.h"
+#include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
 
@@ -62,11 +63,15 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
 Foreach::Foreach(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
+    CheckManager::instance()->enablePreprocessorVisitor(ci);
 }
 
 
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
+    if (CheckManager::instance()->preprocessorVisitor()->qtVersion() >= 50900)
+        return;
+
     auto forStm = dyn_cast<ForStmt>(stmt);
     if (forStm) {
         m_lastForStmt = forStm;

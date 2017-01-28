@@ -6,3 +6,5 @@
 
 **Note**: range-loop is prefered over `foreach` since the compiler generates less and more optimized code.
 Use range-loop if your container is const, otherwise a detach will happen.
+
+This check is disabled for Qt >= 5.9
