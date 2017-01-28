@@ -19,6 +19,7 @@ class Test:
     def __init__(self, check):
         self.filename = ""
         self.minimum_qt_version = 500
+        self.maximum_qt_version = 999
         self.minimum_clang_version = 360
         self.compare_everything = False
         self.isFixedFile = False
@@ -93,6 +94,8 @@ def load_json(check_name):
             test.filename = t['filename']
             if 'minimum_qt_version' in t:
                 test.minimum_qt_version = t['minimum_qt_version']
+            if 'maximum_qt_version' in t:
+                test.maximum_qt_version = t['maximum_qt_version']
             if 'minimum_clang_version' in t:
                 test.minimum_qt_version = t['minimum_clang_version']
             if 'blacklist_platforms' in t:
@@ -255,7 +258,7 @@ def run_unit_test(test):
         print "Qt version: " + str(qt.int_version)
         print "Qt headers: " + qt.qmake_header_path
 
-    if qt.int_version < test.minimum_qt_version or CLANG_VERSION < test.minimum_clang_version:
+    if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         return True
 
     if _platform in test.blacklist_platforms:
