@@ -41,7 +41,7 @@ using namespace std;
 IncorrectEmit::IncorrectEmit(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-    CheckManager::instance()->enableAccessSpecifierManager(ci);
+    m_checkManager->enableAccessSpecifierManager(ci);
     enablePreProcessorCallbacks();
     m_emitLocations.reserve(30); // bootstrap it
 }
@@ -59,7 +59,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (!methodCall || !methodCall->getCalleeDecl())
         return;
 
-    AccessSpecifierManager *accessSpecifierManager = CheckManager::instance()->accessSpecifierManager();
+    AccessSpecifierManager *accessSpecifierManager = m_checkManager->accessSpecifierManager();
     auto method = dyn_cast<CXXMethodDecl>(methodCall->getCalleeDecl());
     if (!method || !accessSpecifierManager)
         return;

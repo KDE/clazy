@@ -63,13 +63,13 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
 Foreach::Foreach(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-    CheckManager::instance()->enablePreprocessorVisitor(ci);
+    m_checkManager->enablePreprocessorVisitor(ci);
 }
 
 
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
-    PreProcessorVisitor *preProcessorVisitor = CheckManager::instance()->preprocessorVisitor();
+    PreProcessorVisitor *preProcessorVisitor = m_checkManager->preprocessorVisitor();
     if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50900)
         return;
 

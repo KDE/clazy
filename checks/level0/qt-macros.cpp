@@ -62,13 +62,13 @@ void QtMacros::checkIfDef(const Token &macroNameTok, SourceLocation Loc)
 
 void QtMacros::VisitDefined(const Token &macroNameTok, const SourceRange &range)
 {
-    if (!CheckManager::instance()->usingPreCompiledHeaders(m_ci))
+    if (!m_checkManager->usingPreCompiledHeaders(m_ci))
         checkIfDef(macroNameTok, range.getBegin());
 }
 
 void QtMacros::VisitIfdef(SourceLocation loc, const Token &macroNameTok)
 {
-    if (!CheckManager::instance()->usingPreCompiledHeaders(m_ci))
+    if (!m_checkManager->usingPreCompiledHeaders(m_ci))
         checkIfDef(macroNameTok, loc);
 }
 

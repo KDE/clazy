@@ -145,6 +145,7 @@ protected:
     clang::Decl *m_lastDecl = nullptr;
     clang::Stmt *m_lastStmt = nullptr;
     SuppressionManager *m_suppressionManager = nullptr;
+    CheckManager *const m_checkManager;
 private:
     friend class ClazyPreprocessorCallbacks;
 #if !defined(IS_OLD_CLANG)
@@ -154,7 +155,6 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits;
-    CheckManager *const m_checkManager;
     long m_elapsedTime = 0;
 };
 

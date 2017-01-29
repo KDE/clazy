@@ -99,11 +99,11 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     , m_name(name)
     , m_context(m_ci.getASTContext())
     , m_tu(m_context.getTranslationUnitDecl())
+    , m_checkManager(CheckManager::instance())
 #if !defined(IS_OLD_CLANG)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
 #endif
     , m_enabledFixits(0)
-    , m_checkManager(CheckManager::instance())
     , m_elapsedTime(0)
 {
 }
