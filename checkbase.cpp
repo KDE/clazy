@@ -137,11 +137,6 @@ void CheckBase::VisitDeclaration(Decl *decl)
     VisitDecl(decl);
 }
 
-string CheckBase::name() const
-{
-    return m_name;
-}
-
 void CheckBase::setParentMap(ParentMap *parentMap)
 {
     m_parentMap = parentMap;

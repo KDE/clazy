@@ -37,12 +37,6 @@ using namespace std;
 static const char * s_fixitNamePrefix = "fix-";
 static const char * s_levelPrefix = "level";
 
-CheckManager *CheckManager::instance()
-{
-    static CheckManager s_instance;
-    return &s_instance;
-}
-
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
     , m_requestedLevel(CheckLevelUndefined)
@@ -57,11 +51,6 @@ CheckManager::CheckManager()
             m_requestedFixitName = string(fixitsEnv);
         }
     }
-}
-
-bool CheckManager::usingPreCompiledHeaders(const CompilerInstance &ci) const
-{
-    return !ci.getPreprocessorOpts().ImplicitPCHInclude.empty();
 }
 
 bool CheckManager::checkExists(const string &name) const
@@ -259,11 +248,6 @@ void CheckManager::enableAllFixIts()
     m_enableAllFixits = true;
 }
 
-bool CheckManager::allFixitsEnabled() const
-{
-    return m_enableAllFixits;
-}
-
 bool CheckManager::isOptionSet(const string &optionName) const
 {
     return clazy_std::contains(m_extraOptions, optionName);
@@ -337,16 +321,6 @@ void CheckManager::setRequestedLevel(CheckLevel level)
     m_requestedLevel = level;
 }
 
-CheckLevel CheckManager::requestedLevel() const
-{
-    return m_requestedLevel;
-}
-
-SuppressionManager *CheckManager::suppressionManager()
-{
-    return &m_suppressionManager;
-}
-
 void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 {
 #if !defined(IS_OLD_CLANG)
@@ -362,15 +336,3 @@ void CheckManager::enablePreprocessorVisitor(const CompilerInstance &ci)
         m_preprocessorVisitor = new PreProcessorVisitor(ci);
 #endif
 }
-
-#if !defined(IS_OLD_CLANG)
-AccessSpecifierManager *CheckManager::accessSpecifierManager() const
-{
-    return m_accessSpecifierManager;
-}
-
-PreProcessorVisitor *CheckManager::preprocessorVisitor() const
-{
-    return m_preprocessorVisitor;
-}
-#endif

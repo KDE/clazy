@@ -97,7 +97,7 @@ public:
     void VisitStatement(clang::Stmt *stm);
     void VisitDeclaration(clang::Decl *stm);
 
-    std::string name() const;
+    std::string name() const { return m_name; }
 
     void setParentMap(clang::ParentMap *parentMap);
     void setEnabledFixits(int);

@@ -59,7 +59,11 @@ struct CLAZYLIB_EXPORT RegisteredCheck {
 class CLAZYLIB_EXPORT CheckManager
 {
 public:
-    static CheckManager *instance();
+    static CheckManager *instance()
+    {
+        static CheckManager s_instance;
+        return &s_instance;
+    }
 
     int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
@@ -82,7 +86,7 @@ public:
     bool fixitsEnabled() const;
     void enableAllFixIts();
 
-    bool allFixitsEnabled() const;
+    bool allFixitsEnabled() const { return m_enableAllFixits; }
     bool isOptionSet(const std::string &optionName) const;
 
     /**
@@ -91,9 +95,9 @@ public:
      * conservative and emits less warnings.
      */
     void setRequestedLevel(CheckLevel level);
-    CheckLevel requestedLevel() const;
+    CheckLevel requestedLevel() const { return m_requestedLevel; }
 
-    SuppressionManager* suppressionManager();
+    SuppressionManager* suppressionManager() { return &m_suppressionManager; }
 
     /**
      * We only enable it if a check needs it, for performance reasons
@@ -102,12 +106,15 @@ public:
     void enablePreprocessorVisitor(const clang::CompilerInstance &ci);
 
 #if !defined(IS_OLD_CLANG)
-    AccessSpecifierManager *accessSpecifierManager() const;
-    PreProcessorVisitor *preprocessorVisitor() const;
+    AccessSpecifierManager *accessSpecifierManager() const { return m_accessSpecifierManager; }
+    PreProcessorVisitor *preprocessorVisitor() const { return m_preprocessorVisitor; }
 #endif
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
-    bool usingPreCompiledHeaders(const clang::CompilerInstance &ci) const;
+    bool usingPreCompiledHeaders(const clang::CompilerInstance &ci) const
+    {
+        return !ci.getPreprocessorOpts().ImplicitPCHInclude.empty();
+    }
 
 private:
     CheckManager();
