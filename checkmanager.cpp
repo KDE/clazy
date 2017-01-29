@@ -59,6 +59,11 @@ CheckManager::CheckManager()
     }
 }
 
+bool CheckManager::usingPreCompiledHeaders(const CompilerInstance &ci) const
+{
+    return !ci.getPreprocessorOpts().ImplicitPCHInclude.empty();
+}
+
 bool CheckManager::checkExists(const string &name) const
 {
     return checkForName(m_registeredChecks, name) != m_registeredChecks.cend();
@@ -345,7 +350,7 @@ SuppressionManager *CheckManager::suppressionManager()
 void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 {
 #if !defined(IS_OLD_CLANG)
-    if (!m_accessSpecifierManager)
+    if (!m_accessSpecifierManager && !usingPreCompiledHeaders(ci))
         m_accessSpecifierManager = new AccessSpecifierManager(ci);
 #endif
 }
@@ -353,7 +358,7 @@ void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 void CheckManager::enablePreprocessorVisitor(const CompilerInstance &ci)
 {
 #if !defined(IS_OLD_CLANG)
-    if (!m_preprocessorVisitor)
+    if (!m_preprocessorVisitor && !usingPreCompiledHeaders(ci))
         m_preprocessorVisitor = new PreProcessorVisitor(ci);
 #endif
 }

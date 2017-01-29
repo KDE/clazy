@@ -107,6 +107,7 @@ public:
 #endif
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
+    bool usingPreCompiledHeaders(const clang::CompilerInstance &ci) const;
 
 private:
     CheckManager();

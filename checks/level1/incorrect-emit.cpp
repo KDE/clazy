@@ -60,9 +60,8 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
         return;
 
     AccessSpecifierManager *accessSpecifierManager = CheckManager::instance()->accessSpecifierManager();
-
     auto method = dyn_cast<CXXMethodDecl>(methodCall->getCalleeDecl());
-    if (!method)
+    if (!method || !accessSpecifierManager)
         return;
 
     if (Stmt *parent = HierarchyUtils::parent(m_parentMap, methodCall)) {

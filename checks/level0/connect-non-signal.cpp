@@ -46,7 +46,8 @@ ConnectNonSignal::ConnectNonSignal(const std::string &name, const clang::Compile
 void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 {
     auto call = dyn_cast<CallExpr>(stmt);
-    if (!call)
+    AccessSpecifierManager *accessSpecifierManager = CheckManager::instance()->accessSpecifierManager();
+    if (!call || !accessSpecifierManager)
         return;
 
     FunctionDecl *func = call->getDirectCallee();
@@ -59,7 +60,7 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    QtAccessSpecifierType qst = CheckManager::instance()->accessSpecifierManager()->qtAccessSpecifierType(method);
+    QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
     if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
         emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
 }

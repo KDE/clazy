@@ -123,6 +123,8 @@ Alternatively, if you want to use clang directly, without the wrapper:
 
 You can also edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++ and run qmake -spec linux-clang
 
+It's recommended that you disable pre-compiled headers and don't use ccache.
+
 You're all set, clazy will now run some checks on your project, but not all of them.
 Read on if you want to enable/disable which checks are run.
 

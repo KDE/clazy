@@ -69,7 +69,8 @@ Foreach::Foreach(const std::string &name, const clang::CompilerInstance &ci)
 
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
-    if (CheckManager::instance()->preprocessorVisitor()->qtVersion() >= 50900)
+    PreProcessorVisitor *preProcessorVisitor = CheckManager::instance()->preprocessorVisitor();
+    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50900)
         return;
 
     auto forStm = dyn_cast<ForStmt>(stmt);
