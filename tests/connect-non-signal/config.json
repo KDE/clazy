@@ -12,6 +12,10 @@
         {
             "filename" : "bug375239.cpp",
             "minimum_clang_version" : 370
+        },
+        {
+            "filename" : "bug375748.cpp",
+            "minimum_clang_version" : 370
         }
     ]
 }
