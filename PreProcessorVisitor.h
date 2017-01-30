@@ -27,11 +27,12 @@
 // For example, getting the Qt version can be done once and the result shared
 // with all checks
 
-#include <clang/Lex/PPCallbacks.h>
+#include "checkbase.h"
 
 #if !defined(IS_OLD_CLANG)
 
 #include <string>
+#include <clang/Lex/PPCallbacks.h>
 
 namespace clang {
     class CompilerInstance;
