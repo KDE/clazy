@@ -97,7 +97,7 @@ def load_json(check_name):
             if 'maximum_qt_version' in t:
                 test.maximum_qt_version = t['maximum_qt_version']
             if 'minimum_clang_version' in t:
-                test.minimum_qt_version = t['minimum_clang_version']
+                test.minimum_clang_version = t['minimum_clang_version']
             if 'blacklist_platforms' in t:
                 test.blacklist_platforms = t['blacklist_platforms']
             if 'compare_everything' in t:
