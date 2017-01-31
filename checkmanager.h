@@ -29,6 +29,8 @@
 #include "checkbase.h"
 #include "SuppressionManager.h"
 
+#include <clang/Lex/PreprocessorOptions.h>
+
 #include <string>
 #include <functional>
 #include <vector>
