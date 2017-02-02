@@ -141,7 +141,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     emitWarning(decl->getLocStart(), msg);
 }
 
-std::vector<string> RuleOfThree::filesToIgnore() const
+const std::vector<std::string> & RuleOfThree::filesToIgnore() const
 {
     static const std::vector<string> files = { "qrc_" };
     return files;

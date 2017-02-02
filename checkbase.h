@@ -121,7 +121,7 @@ protected:
 
     bool shouldIgnoreFile(clang::SourceLocation) const;
     virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
-    virtual std::vector<std::string> filesToIgnore() const;
+    virtual const std::vector<std::string> &filesToIgnore() const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});

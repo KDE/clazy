@@ -133,7 +133,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
 
-std::vector<std::string> DetachingMember::filesToIgnore() const
+const std::vector<std::string> & DetachingMember::filesToIgnore() const
 {
     static const vector<string> files = {"qstring.h"};
     return files;

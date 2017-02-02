@@ -168,9 +168,10 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-std::vector<std::string> StringArg::filesToIgnore() const
+const std::vector<std::string> & StringArg::filesToIgnore() const
 {
-    return { "qstring.h" };
+    static std::vector<std::string> files = { "qstring.h" };
+    return files;
 }
 
 std::vector<string> StringArg::supportedOptions() const

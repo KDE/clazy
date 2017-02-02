@@ -41,7 +41,7 @@ ImplicitCasts::ImplicitCasts(const std::string &name, const clang::CompilerInsta
 
 }
 
-std::vector<string> ImplicitCasts::filesToIgnore() const
+const std::vector<std::string> & ImplicitCasts::filesToIgnore() const
 {
     static vector<string> files = {"/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
                                    "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp"};

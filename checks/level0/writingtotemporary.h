@@ -44,7 +44,7 @@ public:
     explicit WritingToTemporary(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
 protected:
-    std::vector<std::string> filesToIgnore() const override;
+    const std::vector<std::string> &filesToIgnore() const override;
     std::vector<std::string> supportedOptions() const override;
 private:
     const bool m_widenCriteria;

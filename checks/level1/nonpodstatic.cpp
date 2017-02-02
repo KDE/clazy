@@ -94,9 +94,10 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
 
 }
 
-std::vector<string> NonPodStatic::filesToIgnore() const
+const std::vector<std::string> & NonPodStatic::filesToIgnore() const
 {
-    return {"main.cpp", "qrc_", "qdbusxml2cpp"};
+    static std::vector<std::string> files = {"main.cpp", "qrc_", "qdbusxml2cpp"};
+    return files;
 }
 
 REGISTER_CHECK_WITH_FLAGS("non-pod-global-static", NonPodStatic, CheckLevel1)

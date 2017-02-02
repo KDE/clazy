@@ -38,7 +38,7 @@ class DetachingMember : public DetachingBase
 public:
     explicit DetachingMember(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
-    std::vector<std::string> filesToIgnore() const override;
+    const std::vector<std::string> &filesToIgnore() const override;
 };
 
 #endif

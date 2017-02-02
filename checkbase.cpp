@@ -192,9 +192,10 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
     });
 }
 
-std::vector<std::string> CheckBase::filesToIgnore() const
+const std::vector<std::string> &CheckBase::filesToIgnore() const
 {
-    return {};
+    static const vector<string> files;
+    return files;
 }
 
 void CheckBase::emitWarning(clang::Decl *d, const std::string &error, bool printWarningTag)

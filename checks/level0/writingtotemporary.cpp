@@ -40,7 +40,7 @@ WritingToTemporary::WritingToTemporary(const std::string &name, const clang::Com
 {
 }
 
-std::vector<string> WritingToTemporary::filesToIgnore() const
+const std::vector<std::string> & WritingToTemporary::filesToIgnore() const
 {
     static const vector<string> files = { "qstring.h" };
     return files;

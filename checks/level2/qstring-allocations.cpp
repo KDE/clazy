@@ -569,7 +569,7 @@ vector<string> QStringAllocations::supportedOptions() const
     return options;
 }
 
-vector<string> QStringAllocations::filesToIgnore() const
+const std::vector<std::string> & QStringAllocations::filesToIgnore() const
 {
     // https://codereview.qt-project.org/#/c/19792/ uic won't be fixed
     static const vector<string> files = { "ui_" };

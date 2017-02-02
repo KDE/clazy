@@ -40,7 +40,7 @@ public:
     explicit RuleOfThree(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *d) override;
 protected:
-    std::vector<std::string> filesToIgnore() const override;
+    const std::vector<std::string> &filesToIgnore() const override;
 private:
     bool shouldIgnoreType(const std::string &className) const;
 };

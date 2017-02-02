@@ -38,7 +38,7 @@ public:
     NonPodStatic(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stm) override;
 protected:
-    std::vector<std::string> filesToIgnore() const override;
+    const std::vector<std::string> &filesToIgnore() const override;
 };
 
 #endif

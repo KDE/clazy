@@ -44,7 +44,7 @@ public:
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 protected:
-    std::vector<std::string> filesToIgnore() const override;
+    const std::vector<std::string> &filesToIgnore() const override;
 private:
     void processFunction(clang::FunctionDecl *);
     clang::FixItHint fixit(clang::FunctionDecl *func, const clang::ParmVarDecl *param,

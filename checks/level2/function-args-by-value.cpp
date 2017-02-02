@@ -168,21 +168,23 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
     return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
 }
 
-std::vector<string> FunctionArgsByValue::filesToIgnore() const
+const std::vector<std::string> & FunctionArgsByValue::filesToIgnore() const
 {
     // TODO: Go over this list
-    return {"/c++/",
-        "qimage.cpp", // TODO: Uncomment in Qt6
-        "qimage.h",    // TODO: Uncomment in Qt6
-        "qevent.h", // TODO: Uncomment in Qt6
-        "avxintrin.h",
-        "avx2intrin.h",
-        "qnoncontiguousbytedevice.cpp",
-        "qlocale_unix.cpp",
-        "/clang/",
-        "qmetatype.h", // TODO: fix in Qt
-        "qbytearray.h" // TODO: fix in Qt
-    };
+    static std::vector<std::string> files = {"/c++/",
+                                             "qimage.cpp", // TODO: Uncomment in Qt6
+                                             "qimage.h",    // TODO: Uncomment in Qt6
+                                             "qevent.h", // TODO: Uncomment in Qt6
+                                             "avxintrin.h",
+                                             "avx2intrin.h",
+                                             "qnoncontiguousbytedevice.cpp",
+                                             "qlocale_unix.cpp",
+                                             "/clang/",
+                                             "qmetatype.h", // TODO: fix in Qt
+                                             "qbytearray.h" // TODO: fix in Qt
+                                         };
+
+    return files;
 }
 
 REGISTER_CHECK_WITH_FLAGS("function-args-by-value", FunctionArgsByValue, CheckLevel2)
