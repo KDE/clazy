@@ -38,28 +38,6 @@
 using namespace clang;
 using namespace std;
 
-struct RAIIElapsedTime
-{
-#ifdef CLAZY_PROFILE_TIME_TAKEN
-    RAIIElapsedTime(long &elapsedTime)
-        : m_begin(std::chrono::steady_clock::now())
-        , m_elapsedTime(elapsedTime)
-    {
-    }
-
-    ~RAIIElapsedTime()
-    {
-        auto end = std::chrono::steady_clock::now();
-        m_elapsedTime += std::chrono::duration_cast<std::chrono::microseconds>(end - m_begin).count();
-    }
-
-    const std::chrono::steady_clock::time_point m_begin;
-    long &m_elapsedTime;
-#else
-    RAIIElapsedTime(long &) {}
-#endif
-};
-
 #if !defined(IS_OLD_CLANG)
 
 ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
@@ -70,25 +48,21 @@ ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
 void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &,
                                               SourceRange range, const MacroArgs *)
 {
-    RAIIElapsedTime r(check->m_elapsedTime);
     check->VisitMacroExpands(macroNameTok, range);
 }
 
 void ClazyPreprocessorCallbacks::Defined(const Token &macroNameTok, const MacroDefinition &, SourceRange range)
 {
-    RAIIElapsedTime r(check->m_elapsedTime);
     check->VisitDefined(macroNameTok, range);
 }
 
 void ClazyPreprocessorCallbacks::Ifdef(SourceLocation loc, const Token &macroNameTok, const MacroDefinition &)
 {
-    RAIIElapsedTime r(check->m_elapsedTime);
     check->VisitIfdef(loc, macroNameTok);
 }
 
 void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const MacroDirective *)
 {
-    RAIIElapsedTime r(check->m_elapsedTime);
     check->VisitMacroDefined(macroNameTok);
 }
 
@@ -104,22 +78,17 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
 #endif
     , m_enabledFixits(0)
-    , m_elapsedTime(0)
 {
 }
 
 CheckBase::~CheckBase()
 {
-#ifdef CLAZY_PROFILE_TIME_TAKEN
-    llvm::errs() << m_name << " took " << m_elapsedTime << " micro seconds\n";
-#endif
 }
 
 void CheckBase::VisitStatement(Stmt *stm)
 {
     if (!shouldIgnoreFile(stm->getLocStart())) {
         m_lastStmt = stm;
-        RAIIElapsedTime et(m_elapsedTime);
         VisitStmt(stm);
     }
 }
@@ -133,7 +102,6 @@ void CheckBase::VisitDeclaration(Decl *decl)
     if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
         m_lastMethodDecl = mdecl;
 
-    RAIIElapsedTime et(m_elapsedTime);
     VisitDecl(decl);
 }
 
