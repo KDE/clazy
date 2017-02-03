@@ -33,6 +33,8 @@ using namespace clang;
 GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
+    m_filesToIgnore = { "errno.h", "getopt.h", "StdHeader.h",
+                        "3rdparty", "mysql.h", "qpicture.cpp" };
 }
 
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
@@ -53,13 +55,6 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
         return;
 
     emitWarning(decl->getLocStart(), "non const global char *");
-}
-
-const std::vector<std::string> & GlobalConstCharPointer::filesToIgnore() const
-{
-    static const std::vector<std::string> files = { "errno.h", "getopt.h", "StdHeader.h",
-                                                    "3rdparty", "mysql.h", "qpicture.cpp"};
-    return files;
 }
 
 REGISTER_CHECK_WITH_FLAGS("global-const-char-pointer", GlobalConstCharPointer, CheckLevel2)

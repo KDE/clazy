@@ -64,6 +64,8 @@ struct Latin1Expr {
 QStringAllocations::QStringAllocations(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
+    // https://codereview.qt-project.org/#/c/19792/ uic won't be fixed
+    m_filesToIgnore = { "ui_" };
 }
 
 void QStringAllocations::VisitStmt(clang::Stmt *stm)
@@ -567,13 +569,6 @@ vector<string> QStringAllocations::supportedOptions() const
 
     static const vector<string> options = { "no-msvc-compat" };
     return options;
-}
-
-const std::vector<std::string> & QStringAllocations::filesToIgnore() const
-{
-    // https://codereview.qt-project.org/#/c/19792/ uic won't be fixed
-    static const vector<string> files = { "ui_" };
-    return files;
 }
 
 const char *const s_checkName = "qstring-allocations";

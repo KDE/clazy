@@ -43,8 +43,6 @@ public:
     explicit FunctionArgsByValue(const std::string &name, const clang::CompilerInstance &ci);
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
-protected:
-    const std::vector<std::string> &filesToIgnore() const override;
 private:
     void processFunction(clang::FunctionDecl *);
     clang::FixItHint fixit(clang::FunctionDecl *func, const clang::ParmVarDecl *param,

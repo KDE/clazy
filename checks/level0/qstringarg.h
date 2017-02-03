@@ -39,8 +39,6 @@ public:
     StringArg(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
-protected:
-    const std::vector<std::string> &filesToIgnore() const override;
 private:
     std::vector<std::string> supportedOptions() const override;
     bool checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls);

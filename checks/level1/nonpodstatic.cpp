@@ -45,6 +45,7 @@ static bool shouldIgnoreType(const std::string &name)
 NonPodStatic::NonPodStatic(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
+    m_filesToIgnore = { "main.cpp", "qrc_", "qdbusxml2cpp" };
 }
 
 void NonPodStatic::VisitStmt(clang::Stmt *stm)
@@ -92,12 +93,6 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
         emitWarning(declStart, error.c_str());
     }
 
-}
-
-const std::vector<std::string> & NonPodStatic::filesToIgnore() const
-{
-    static std::vector<std::string> files = {"main.cpp", "qrc_", "qdbusxml2cpp"};
-    return files;
 }
 
 REGISTER_CHECK_WITH_FLAGS("non-pod-global-static", NonPodStatic, CheckLevel1)

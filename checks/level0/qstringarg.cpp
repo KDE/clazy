@@ -33,7 +33,7 @@ using namespace std;
 StringArg::StringArg(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-
+    m_filesToIgnore = { "qstring.h" };
 }
 
 static string variableNameFromArg(Expr *arg)
@@ -166,12 +166,6 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
 
         emitWarning(stmt->getLocStart(), "Using QString::arg() with fillChar overload");
     }
-}
-
-const std::vector<std::string> & StringArg::filesToIgnore() const
-{
-    static std::vector<std::string> files = { "qstring.h" };
-    return files;
 }
 
 std::vector<string> StringArg::supportedOptions() const

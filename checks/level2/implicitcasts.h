@@ -44,8 +44,6 @@ class ImplicitCasts : public CheckBase
 public:
     ImplicitCasts(const std::string &name, const clang::CompilerInstance &ci);
     void VisitStmt(clang::Stmt *stmt) override;
-protected:
-    const std::vector<std::string> &filesToIgnore() const override;
 private:
     bool isMacroToIgnore(clang::SourceLocation loc) const;
 };

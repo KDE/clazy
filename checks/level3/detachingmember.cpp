@@ -38,6 +38,7 @@ using namespace std;
 DetachingMember::DetachingMember(const std::string &name, const clang::CompilerInstance &ci)
     : DetachingBase(name, ci)
 {
+    m_filesToIgnore = { "qstring.h" };
 }
 
 void DetachingMember::VisitStmt(clang::Stmt *stm)
@@ -131,12 +132,6 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     }
 
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
-}
-
-const std::vector<std::string> & DetachingMember::filesToIgnore() const
-{
-    static const vector<string> files = {"qstring.h"};
-    return files;
 }
 
 REGISTER_CHECK_WITH_FLAGS("detaching-member", DetachingMember, CheckLevel3)

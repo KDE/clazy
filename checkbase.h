@@ -121,7 +121,6 @@ protected:
 
     bool shouldIgnoreFile(clang::SourceLocation) const;
     virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
-    virtual const std::vector<std::string> &filesToIgnore() const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
@@ -132,10 +131,11 @@ protected:
 
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::CompilerInstance &ci() const { return m_ci; }
-    const clang::SourceManager &sm() const { return m_ci.getSourceManager(); }
+    const clang::SourceManager &sm() const { return m_sm; }
     const clang::LangOptions &lo() const { return m_ci.getLangOpts(); }
 
     const clang::CompilerInstance &m_ci;
+    const clang::SourceManager &m_sm;
     const std::string m_name;
     clang::ASTContext &m_context;
     clang::TranslationUnitDecl *const m_tu;
@@ -146,6 +146,7 @@ protected:
     clang::Stmt *m_lastStmt = nullptr;
     SuppressionManager *m_suppressionManager = nullptr;
     CheckManager *const m_checkManager;
+    std::vector<std::string> m_filesToIgnore;
 private:
     friend class ClazyPreprocessorCallbacks;
 #if !defined(IS_OLD_CLANG)

@@ -38,14 +38,8 @@ using namespace std;
 ImplicitCasts::ImplicitCasts(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-
-}
-
-const std::vector<std::string> & ImplicitCasts::filesToIgnore() const
-{
-    static vector<string> files = {"/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
-                                   "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp"};
-    return files;
+    m_filesToIgnore = { "/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
+                        "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp" };
 }
 
 static bool isInterestingFunction(FunctionDecl *func)

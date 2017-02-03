@@ -70,6 +70,7 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
 
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
+    , m_sm(ci.getSourceManager())
     , m_name(name)
     , m_context(m_ci.getASTContext())
     , m_tu(m_context.getTranslationUnitDecl())
@@ -150,20 +151,17 @@ void CheckBase::enablePreProcessorCallbacks()
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 {
+    if (m_filesToIgnore.empty())
+        return false;
+
     if (!loc.isValid() || (ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(loc)))
         return true;
 
     string filename = sm().getFilename(loc);
 
-    return clazy_std::any_of(filesToIgnore(), [filename](const std::string &ignored) {
+    return clazy_std::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
         return clazy_std::contains(filename, ignored);
     });
-}
-
-const std::vector<std::string> &CheckBase::filesToIgnore() const
-{
-    static const vector<string> files;
-    return files;
 }
 
 void CheckBase::emitWarning(clang::Decl *d, const std::string &error, bool printWarningTag)

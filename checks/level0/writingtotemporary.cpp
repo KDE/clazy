@@ -38,12 +38,7 @@ WritingToTemporary::WritingToTemporary(const std::string &name, const clang::Com
     : CheckBase(name, ci)
     , m_widenCriteria(isOptionSet("widen-criteria"))
 {
-}
-
-const std::vector<std::string> & WritingToTemporary::filesToIgnore() const
-{
-    static const vector<string> files = { "qstring.h" };
-    return files;
+    m_filesToIgnore = { "qstring.h" };
 }
 
 vector<string> WritingToTemporary::supportedOptions() const

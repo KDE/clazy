@@ -34,6 +34,7 @@ using namespace std;
 RuleOfThree::RuleOfThree(const std::string &name, const clang::CompilerInstance &ci)
     : RuleOfBase(name, ci)
 {
+    m_filesToIgnore = { "qrc_" };
 }
 
 void RuleOfThree::VisitDecl(clang::Decl *decl)
@@ -139,12 +140,6 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     }
 
     emitWarning(decl->getLocStart(), msg);
-}
-
-const std::vector<std::string> & RuleOfThree::filesToIgnore() const
-{
-    static const std::vector<string> files = { "qrc_" };
-    return files;
 }
 
 bool RuleOfThree::shouldIgnoreType(const std::string &className) const
