@@ -44,6 +44,9 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
         !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace() || varDecl->hasExternalStorage())
         return;
 
+    if (shouldIgnoreFile(decl->getLocStart()))
+        return;
+
     QualType qt = varDecl->getType();
     const Type *type = qt.getTypePtrOrNull();
     if (!type || !type->isPointerType() || qt.isConstQualified() || varDecl->isStaticLocal())

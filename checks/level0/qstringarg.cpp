@@ -126,6 +126,9 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
     if (!memberCall)
         return;
 
+    if (shouldIgnoreFile(stmt->getLocStart()))
+        return;
+
     checkForMultiArgOpportunities(memberCall);
 
     if (!isOptionSet("fillChar-overloads"))

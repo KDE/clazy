@@ -52,6 +52,9 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (!memberCall && !operatorExpr)
         return;
 
+    if (shouldIgnoreFile(stm->getLocStart()))
+        return;
+
     CXXMethodDecl *method = nullptr;
     ValueDecl *memberDecl = nullptr;
     if (operatorExpr) {

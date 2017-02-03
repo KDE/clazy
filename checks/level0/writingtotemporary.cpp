@@ -78,6 +78,9 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!callExpr)
         return;
 
+    if (shouldIgnoreFile(stmt->getLocStart()))
+        return;
+
     // For a chain like getFoo().setBar(), returns {setBar(), getFoo()}
     vector<CallExpr *> callExprs = Utils::callListForChain(callExpr);
     if (callExprs.size() < 2)

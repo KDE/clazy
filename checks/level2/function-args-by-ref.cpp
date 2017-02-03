@@ -112,6 +112,9 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         !func->isThisDeclarationADefinition() || func->isDeleted())
         return;
 
+    if (shouldIgnoreFile(func->getLocStart()))
+        return;
+
     Stmt *body = func->getBody();
 
     int i = -1;
@@ -157,7 +160,8 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 void FunctionArgsByRef::VisitStmt(Stmt *stmt)
 {
     if (LambdaExpr *lambda = dyn_cast<LambdaExpr>(stmt)) {
-        processFunction(lambda->getCallOperator());
+        if (!shouldIgnoreFile(stmt->getLocStart()))
+            processFunction(lambda->getCallOperator());
     }
 }
 

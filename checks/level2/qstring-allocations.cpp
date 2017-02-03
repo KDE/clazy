@@ -64,8 +64,6 @@ struct Latin1Expr {
 QStringAllocations::QStringAllocations(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-    // https://codereview.qt-project.org/#/c/19792/ uic won't be fixed
-    m_filesToIgnore = { "ui_" };
 }
 
 void QStringAllocations::VisitStmt(clang::Stmt *stm)

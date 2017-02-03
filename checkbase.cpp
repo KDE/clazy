@@ -88,7 +88,8 @@ CheckBase::~CheckBase()
 
 void CheckBase::VisitStatement(Stmt *stm)
 {
-    if (!shouldIgnoreFile(stm->getLocStart())) {
+    if (!(ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(stm->getLocStart())))
+    {
         m_lastStmt = stm;
         VisitStmt(stm);
     }
@@ -96,14 +97,14 @@ void CheckBase::VisitStatement(Stmt *stm)
 
 void CheckBase::VisitDeclaration(Decl *decl)
 {
-    if (shouldIgnoreFile(decl->getLocStart()))
-        return;
+    if (!(ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(decl->getLocStart())))
+    {
+        m_lastDecl = decl;
+        if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
+            m_lastMethodDecl = mdecl;
 
-    m_lastDecl = decl;
-    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
-        m_lastMethodDecl = mdecl;
-
-    VisitDecl(decl);
+        VisitDecl(decl);
+    }
 }
 
 void CheckBase::setParentMap(ParentMap *parentMap)
@@ -154,7 +155,7 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
     if (m_filesToIgnore.empty())
         return false;
 
-    if (!loc.isValid() || (ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(loc)))
+    if (!loc.isValid())
         return true;
 
     string filename = sm().getFilename(loc);

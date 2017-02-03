@@ -54,6 +54,9 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
     if (!varDecl || varDecl->isConstexpr() || varDecl->isExternallyVisible() || !varDecl->isFileVarDecl())
         return;
 
+    if (shouldIgnoreFile(stm->getLocStart()))
+        return;
+
     StorageDuration sd = varDecl->getStorageDuration();
     if (sd != StorageDuration::SD_Static)
         return;

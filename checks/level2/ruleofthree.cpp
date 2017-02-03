@@ -47,6 +47,9 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (record != record->getDefinition())
         return;
 
+    if (shouldIgnoreFile(decl->getLocStart()))
+        return;
+
     const SourceLocation recordStart = record->getLocStart();
     if (recordStart.isMacroID()) {
         if (MacroUtils::isInMacro(m_ci, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
