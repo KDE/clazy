@@ -133,14 +133,14 @@ set(SYMBOL_FILE Lazy.exports)
 
 if(HAS_STD_REGEX)
   #level2
-  set(SRC_FILES ${SRC_FILES} checks/level2/oldstyleconnect.cpp)
+  set(CLAZY_SRCS ${CLAZY_SRCS} checks/level2/oldstyleconnect.cpp)
 else()
   add_definitions(-DNO_STD_REGEX)
   message("old-style-connect check is disabled due to missing std::regex support")
   message("Suppressions are disabled due to missing std::regex support")
 endif()
 
-add_clang_plugin(ClangLazy ${SRC_FILES})
+add_clang_plugin(ClangLazy ${CLAZY_SRCS})
 
 set_target_properties(ClangLazy PROPERTIES
   LINKER_LANGUAGE CXX

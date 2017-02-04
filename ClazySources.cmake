@@ -16,7 +16,7 @@ set(CLAZY_LIB_SRC
   ${CMAKE_CURRENT_LIST_DIR}/Utils.cpp
 )
 
-set(SRC_FILES
+set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/checks/level0/container-anti-pattern.cpp
   ${CMAKE_CURRENT_LIST_DIR}/checks/level0/lambda-in-connect.cpp
