@@ -21,7 +21,7 @@
 
 #include <llvm/Config/llvm-config.h>
 
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
+#if !defined(IS_OLD_CLANG)
 
 #include "missing-qobject-macro.h"
 

@@ -234,7 +234,7 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 {
     if (!macroLoc.isMacroID())
         return "error";
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR > 6
+
     auto expansionRange = sm().getImmediateExpansionRange(macroLoc);
     SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
@@ -252,9 +252,6 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     } else {
         return string("regexp failed for ") + text;
     }
-#else
-    return {};
-#endif
 }
 
 bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) const
