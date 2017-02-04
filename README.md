@@ -58,7 +58,7 @@ jom, nmake, git, cmake and cl should be in your PATH.
 ## Build the clazy plugin:
 ```
   > cd clazy\
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" -DCLAZY_ON_WINDOWS_HACK=ON
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM"
   > jom && nmake install
 ```
 

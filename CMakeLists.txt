@@ -1,11 +1,5 @@
 # This is the top-level CMakeLists.txt file for the Clazy project.
 #
-# Pass the following variables to cmake to control the build:
-#
-# -DCLAZY_ON_WINDOWS_HACK=[true|false]
-#  Use Windows plugin support hack to support plugins on Windows.
-#  Default=false
-#
 project(ClangLazy)
 
 cmake_minimum_required(VERSION 3.0)
@@ -30,11 +24,6 @@ add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
 option(CLAZY_INSTALL_NO_HEADERS "Enable this option to suppress installation of headers" OFF)
-option(CLAZY_ON_WINDOWS_HACK "Enable this option if you're using a patched clang to support plugins on Windows" OFF)
-if(CLAZY_ON_WINDOWS_HACK)
-  message("Using Windows plugin support hack")
-  add_definitions(-DCLAZY_ON_WINDOWS_HACK)
-endif()
 
 if(MSVC)
   # disable trigger-happy warnings from Clang/LLVM headers
