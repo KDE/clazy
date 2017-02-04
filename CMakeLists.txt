@@ -10,6 +10,7 @@ project(ClangLazy)
 
 cmake_minimum_required(VERSION 3.0)
 include(GenerateExportHeader)
+include(ClazySources.cmake)
 
 # Version setup
 set(CLAZY_VERSION_MAJOR "1")
@@ -112,23 +113,6 @@ set(clazylib_VERSION_PATCH 0)
 set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
 
 include_directories(${CMAKE_BINARY_DIR})
-set(CLAZY_LIB_SRC
-  AccessSpecifierManager.cpp
-  checkbase.cpp
-  checkmanager.cpp
-  SuppressionManager.cpp
-  ContextUtils.cpp
-  FixItUtils.cpp
-  HierarchyUtils.cpp
-  LoopUtils.cpp
-  MacroUtils.cpp
-  PreProcessorVisitor.cpp
-  QtUtils.cpp
-  StringUtils.cpp
-  TemplateUtils.cpp
-  TypeUtils.cpp
-  Utils.cpp
-)
 
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 add_library(clazylib SHARED ${CLAZY_LIB_SRC})
@@ -146,68 +130,6 @@ install(TARGETS clazylib EXPORT LibClaryExport
 )
 
 set(SYMBOL_FILE Lazy.exports)
-
-set(SRC_FILES
-  checks/level0/connect-non-signal.cpp
-  checks/level0/container-anti-pattern.cpp
-  checks/level0/lambda-in-connect.cpp
-  checks/level0/qdatetimeutc.cpp
-  checks/level0/qenums.cpp
-  checks/level0/qfileinfo-exists.cpp
-  checks/level0/qgetenv.cpp
-  checks/level0/qmap-with-pointer-key.cpp
-  checks/level0/qstringarg.cpp
-  checks/level0/qstring-insensitive-allocation.cpp
-  checks/level0/qstringref.cpp
-  checks/level0/qt-macros.cpp
-  checks/level0/qvariant-template-instantiation.cpp
-  checks/level0/mutable-container-key.cpp
-  checks/level0/temporaryiterator.cpp
-  checks/level0/unused-non-trivial-variable.cpp
-  checks/level0/writingtotemporary.cpp
-  checks/level0/wrong-qglobalstatic.cpp
-  checks/level1/autounexpectedqstringbuilder.cpp
-  checks/level1/child-event-qobject-cast.cpp
-  checks/level1/detachingtemporary.cpp
-  checks/level1/foreach.cpp
-  checks/level1/inefficient-qlist-soft.cpp
-  checks/level1/ctor-missing-parent-argument.cpp
-  checks/level1/missing-qobject-macro.cpp
-  checks/level1/nonpodstatic.cpp
-  checks/level1/qdeleteall.cpp
-  checks/level1/qstring-left.cpp
-  checks/level1/qlatin1string-non-ascii.cpp
-  checks/level1/range-loop.cpp
-  checks/level1/returning-data-from-temporary.cpp
-  checks/level1/ruleoftwosoft.cpp
-  checks/level1/post-event.cpp
-  checks/level1/incorrect-emit.cpp
-  checks/level2/base-class-event.cpp
-  checks/level2/container-inside-loop.cpp
-  checks/level2/function-args-by-ref.cpp
-  checks/level2/function-args-by-value.cpp
-  checks/level2/globalconstcharpointer.cpp
-  checks/level2/implicitcasts.cpp
-  checks/level2/missing-type-info.cpp
-  checks/level2/qstring-allocations.cpp
-  checks/level2/reservecandidates.cpp
-  checks/level2/ruleofthree.cpp
-  checks/level2/virtualcallsfromctor.cpp
-  checks/level2/returning-void-expression.cpp
-  checks/level2/copyable-polymorphic.cpp
-  checks/level3/assertwithsideeffects.cpp
-  checks/level3/detachingmember.cpp
-  checks/level3/dynamic_cast.cpp
-  checks/hiddenlevel/inefficientqlist.cpp
-  checks/hiddenlevel/isempty-vs-count.cpp
-  checks/hiddenlevel/tr-non-literal.cpp
-  checks/hiddenlevel/qt4-qstring-from-array.cpp
-  checks/detachingbase.cpp
-  checks/inefficientqlistbase.cpp
-  checks/requiredresults.cpp
-  checks/ruleofbase.cpp
-  Clazy.cpp
-)
 
 if(HAS_STD_REGEX)
   #level2
