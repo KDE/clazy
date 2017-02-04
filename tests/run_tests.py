@@ -138,7 +138,7 @@ def find_qt_installation(major_version, qmakes):
                     print "Found Qt " + str(installation.int_version) + " using qmake " + qmake
             break
 
-    if installation.int_version == 0:
+    if installation.int_version == 0 and major_version >= 5: # Don't warn for missing Qt4 headers
         print "Error: Couldn't find a Qt" + str(major_version) + " installation"
     return installation
 
