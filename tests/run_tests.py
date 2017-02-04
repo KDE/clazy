@@ -81,6 +81,7 @@ def load_json(check_name):
     contents = f.read()
     f.close()
     decoded = json.loads(contents)
+    check_blacklist_platforms = []
 
     if 'minimum_clang_version' in decoded:
         check.minimum_clang_version = decoded['minimum_clang_version']
@@ -88,9 +89,13 @@ def load_json(check_name):
     if 'enabled' in decoded:
         check.enabled = decoded['enabled']
 
+    if 'blacklist_platforms' in decoded:
+        check_blacklist_platforms = decoded['blacklist_platforms']
+
     if 'tests' in decoded:
         for t in decoded['tests']:
             test = Test(check)
+            test.blacklist_platforms = check_blacklist_platforms
             test.filename = t['filename']
             if 'minimum_qt_version' in t:
                 test.minimum_qt_version = t['minimum_qt_version']

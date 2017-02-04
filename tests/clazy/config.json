@@ -1,27 +1,24 @@
 {
     "minimum_clang_version" : 370,
+    "blacklist_platforms" : "win32",
     "tests" : [
         {
             "filename" : "test_requested_checks.sh",
             "compare_everything" : true,
-            "minimum_qt_version" : 550,
-            "blacklist_platforms" : "win32"
+            "minimum_qt_version" : 550
         },
         {
             "filename" : "suppressions.cpp",
-            "checks"   : ["qstring-allocations", "foreach", "qdatetime-utc"],
-            "blacklist_platforms" : "win32"
+            "checks"   : ["qstring-allocations", "foreach", "qdatetime-utc"]
         },
         {
             "filename" : "suppressionsWholeFile.cpp",
-            "checks"   : ["qstring-allocations", "foreach"],
-            "blacklist_platforms" : "win32"
+            "checks"   : ["qstring-allocations", "foreach"]
         },
         {
             "filename" : "werror.cpp",
             "flags"    : "-Werror",
-            "checks"   : ["foreach"],
-            "blacklist_platforms" : "win32"
+            "checks"   : ["foreach"]
         }
     ]
 }
