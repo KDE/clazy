@@ -77,5 +77,3 @@ set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
 )
-
-set(CLAZY_SRCS ${CLAZY_SRCS}  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp)
