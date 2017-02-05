@@ -135,60 +135,63 @@ There are many checks and they are divided in levels:
 
 
 - Checks from level0:
-    - mutable-container-key
+    - connect-non-signal
     - container-anti-pattern
-    - wrong-qglobalstatic
-    - writing-to-temporary
-    - unused-non-trivial-variable
-    - temporary-iterator
-    - qvariant-template-instantiation
-    - qstring-ref    (fix-missing-qstringref)
-    - qstring-insensitive-allocation
-    - qstring-arg
-    - qmap-with-pointer-key
-    - qgetenv    (fix-qgetenv)
-    - qfileinfo-exists
-    - qenums
-    - qdatetime-utc    (fix-qdatetime-utc)
     - lambda-in-connect
+    - mutable-container-key
+    - qdatetime-utc    (fix-qdatetime-utc)
+    - qenums
+    - qfileinfo-exists
+    - qgetenv    (fix-qgetenv)
+    - qmap-with-pointer-key
+    - qstring-arg
+    - qstring-insensitive-allocation
+    - qstring-ref    (fix-missing-qstringref)
     - qt-macros
+    - qvariant-template-instantiation
+    - temporary-iterator
+    - unused-non-trivial-variable
+    - writing-to-temporary
+    - wrong-qglobalstatic
 
 - Checks from level1:
-    - missing-qobject-macro
-    - post-event
-    - range-loop
-    - qstring-left
-    - qlatin1string-non-ascii
-    - qdeleteall
-    - non-pod-global-static
-    - foreach
-    - detaching-temporary
-    - child-event-qobject-cast
     - auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
+    - child-event-qobject-cast
+    - detaching-temporary
+    - foreach
+    - incorrect-emit
     - inefficient-qlist-soft
+    - missing-qobject-macro
+    - non-pod-global-static
+    - post-event
+    - qdeleteall
+    - qlatin1string-non-ascii
+    - qstring-left
+    - range-loop
     - returning-data-from-temporary
-    - tr-non-literal
+    - rule-of-two-soft
 
 - Checks from level2:
-    - old-style-connect    (fix-old-style-connect)
-    - virtual-call-ctor
-    - rule-of-two-soft
-    - rule-of-three
-    - reserve-candidates
-    - qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
-    - missing-typeinfo
-    - implicit-casts
-    - global-const-char-pointer
-    - function-args-by-value
-    - function-args-by-ref
-    - container-inside-loop
     - base-class-event
+    - container-inside-loop
+    - copyable-polymorphic
+    - ctor-missing-parent-argument
+    - function-args-by-ref
+    - function-args-by-value
+    - global-const-char-pointer
+    - implicit-casts
+    - missing-typeinfo
+    - old-style-connect    (fix-old-style-connect)
+    - qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+    - reserve-candidates
+    - returning-void-expression
+    - rule-of-three
+    - virtual-call-ctor
 
 - Checks from level3:
     - assert-with-side-effects
-    - copyable-polymorphic
-    - detaching-member
     - bogus-dynamic-cast
+    - detaching-member
 
 ## Description of each level
 - level0: Very stable checks, 99.99% safe, no false-positives
