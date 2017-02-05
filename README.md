@@ -15,7 +15,7 @@ You can get clazy from:
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
-## Build and install clang >= 3.6 if your distro doesn't provide it:
+## Build and install clang >= 3.7 if your distro doesn't provide it:
 ```
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   $ cd <some_directory>/tools/ && git clone https://github.com/llvm-mirror/clang.git
@@ -107,9 +107,9 @@ Compile your programs with it instead of clang++/g++.
 Note that this command is just a convenience wrapper which calls:
 `clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy`
 
-If you have multiple versions of clang installed (say clang++-3.5 and clang++-3.6)
+If you have multiple versions of clang installed (say clang++-3.7 and clang++-3.8)
 you can choose which one to use by setting the CLANGXX environment variable, like so:
-`export CLANGXX=clang++-3.6; clazy`
+`export CLANGXX=clang++-3.8; clazy`
 
 To build a CMake project use:
  `cmake . -DCMAKE_CXX_COMPILER=clazy`
