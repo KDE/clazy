@@ -324,12 +324,12 @@ protected:
                 if (check.level > 0)
                     ros << "\n";
 
-                ros << "Checks from level" << to_string(check.level) << ":\n";
+                ros << "- Checks from level" << to_string(check.level) << ":\n";
             }
 
             auto padded = check.name;
             padded.insert(padded.end(), 39 - padded.size(), ' ');
-            ros << "    " << check.name;
+            ros << "    - " << check.name;
             auto fixits = m_checkManager->availableFixIts(check.name);
             if (!fixits.empty()) {
                 ros << "    (";
