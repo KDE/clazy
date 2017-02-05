@@ -1,0 +1,24 @@
+* v0.0.1 (June 10th, 2015)
+  - (...)
+
+
+* v1.0 (September 12th, 2016)
+  - (...)
+
+
+* v1.1 (February 5th, 2017)
+
+  - macOS and Windows support
+  - New checks:
+    child-event-qobject-cast
+    ctor-missing-parent-argument
+    returning-data-from-temporary
+    qt-macros
+    base-class-event
+    connect-non-signal
+    incorrect-emit
+    tr-non-literal
+  - Fixes against clang 4.0
+  - Fixes against Qt 5.9
+  - 60% performance improvement
+  - Fixed many false positives
