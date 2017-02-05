@@ -76,7 +76,7 @@ endmacro()
 macro(add_clang_plugin name)
   set(srcs ${ARGN})
 
-  include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
+  include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
   link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
   add_library(${name} SHARED ${srcs})
@@ -122,7 +122,7 @@ set(SYMBOL_FILE Lazy.exports)
 
 if(HAS_STD_REGEX)
   #level2
-  set(CLAZY_SRCS ${CLAZY_SRCS} checks/level2/oldstyleconnect.cpp)
+  set(CLAZY_SRCS ${CLAZY_SRCS} src/checks/level2/oldstyleconnect.cpp)
 else()
   add_definitions(-DNO_STD_REGEX)
   message("old-style-connect check is disabled due to missing std::regex support")
@@ -176,23 +176,23 @@ install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
 if (NOT CLAZY_INSTALL_NO_HEADERS)
   # Install public headers
   set(CLAZY_LIB_INCLUDES
-    AccessSpecifierManager.h
-    checkbase.h
-    checkmanager.h
+    src/AccessSpecifierManager.h
+    src/checkbase.h
+    src/checkmanager.h
     ${CMAKE_BINARY_DIR}/clazylib_export.h
-    clazy_stl.h
-    ContextUtils.h
-    FixItUtils.h
-    HierarchyUtils.h
-    LoopUtils.h
-    MacroUtils.h
-    QtUtils.h
-    SuppressionManager.h
-    StmtBodyRange.h
-    StringUtils.h
-    TemplateUtils.h
-    TypeUtils.h
-    Utils.h
+    src/clazy_stl.h
+    src/ContextUtils.h
+    src/FixItUtils.h
+    src/HierarchyUtils.h
+    src/LoopUtils.h
+    src/MacroUtils.h
+    src/QtUtils.h
+    src/SuppressionManager.h
+    src/StmtBodyRange.h
+    src/StringUtils.h
+    src/TemplateUtils.h
+    src/TypeUtils.h
+    src/Utils.h
   )
   install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
 endif()
