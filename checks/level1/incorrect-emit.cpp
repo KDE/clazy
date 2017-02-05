@@ -44,6 +44,7 @@ IncorrectEmit::IncorrectEmit(const std::string &name, const clang::CompilerInsta
     m_checkManager->enableAccessSpecifierManager(ci);
     enablePreProcessorCallbacks();
     m_emitLocations.reserve(30); // bootstrap it
+    m_filesToIgnore = { "moc_", ".moc" };
 }
 
 void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
@@ -64,16 +65,15 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (!method || !accessSpecifierManager)
         return;
 
+    if (shouldIgnoreFile(stmt->getLocStart()))
+        return;
+
     if (Stmt *parent = HierarchyUtils::parent(m_parentMap, methodCall)) {
         // Check if we're inside a chained call, such as: emit d_func()->mySignal()
         // We're not interested in the d_func() call, so skip it
         if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, parent))
             return;
     }
-
-    const string filename = Utils::filenameForLoc(stmt->getLocStart(), sm());
-    if (clazy_std::startsWith(filename, "moc_") || clazy_std::endsWith(filename, ".moc")) // blacklist
-        return;
 
     const QtAccessSpecifierType type = accessSpecifierManager->qtAccessSpecifierType(method);
     if (type == QtAccessSpecifier_Unknown)
