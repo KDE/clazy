@@ -26,11 +26,12 @@
 #define CLAZY_MISSING_TYPE_INFO_H
 
 #include "checkbase.h"
+#include <set>
+#include <string>
 
 namespace clang {
 class ClassTemplateSpecializationDecl;
-class CXXRecordDecl;
-}
+} // end namespace clang
 
 /**
  * Suggests usage of Q_PRIMITIVE_TYPE or Q_MOVABLE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
@@ -42,12 +43,15 @@ class MissingTypeinfo : public CheckBase
 {
 public:
     MissingTypeinfo(const std::string &name, const clang::CompilerInstance &ci);
+
     void VisitDecl(clang::Decl *decl) override;
+
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);
     bool ignoresAstNodesInSystemHeaders() const override { return false; } // So we visit Q_DECL_TYPEINFO in Qt headers
     bool typeHasClassification(clang::QualType) const;
+
     std::set<std::string> m_typeInfos;
 };
 
-#endif
+#endif // CLAZY_MISSING_TYPE_INFO_H
