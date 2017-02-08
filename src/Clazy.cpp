@@ -23,6 +23,7 @@
 */
 
 #include "Utils.h"
+#include "Clazy.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
 #include "checkbase.h"
@@ -31,7 +32,7 @@
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
-#include "clang/AST/ASTConsumer.h"
+
 #include "clang/Frontend/CompilerInstance.h"
 #include "llvm/Support/raw_ostream.h"
 #include "clang/AST/RecursiveASTVisitor.h"
@@ -174,7 +175,7 @@ public:
     CheckManager *const m_checkManager;
 };
 
-//------------------------------------------------------------------------------
+}
 
 static bool parseArgument(const string &arg, vector<string> &args)
 {
@@ -213,159 +214,148 @@ static bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
     return c1.level < c2.level;
 }
 
-class ClazyASTAction : public PluginASTAction
+
+ClazyASTAction::ClazyASTAction()
+    : PluginASTAction()
+    , m_checkManager(CheckManager::instance())
 {
-public:
-    ClazyASTAction()
-        : PluginASTAction()
-        , m_checkManager(CheckManager::instance())
-    {
-    }
+}
 
-protected:
-    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(CompilerInstance &ci, llvm::StringRef) override
-    {
-        return llvm::make_unique<LazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
-    }
+std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
+{
+    return llvm::make_unique<LazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
+}
 
-    bool ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_) override
-    {
-        std::vector<std::string> args = args_;
+bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)
+{
+    std::vector<std::string> args = args_;
 
-        if (parseArgument("help", args)) {
-            PrintHelp(llvm::errs());
-            return true;
-        }
-
-        if (parseArgument("no-inplace-fixits", args)) {
-            // Unit-tests don't use inplace fixits
-            m_inplaceFixits = false;
-        }
-
-        // This argument is for debugging purposes
-        const bool printRequestedChecks = parseArgument("print-requested-checks", args);
-
-        const CheckLevel requestedLevel = parseLevel(/*by-ref*/args);
-        if (requestedLevel != CheckLevelUndefined) {
-            m_checkManager->setRequestedLevel(requestedLevel);
-        }
-
-        if (parseArgument("enable-all-fixits", args)) {
-            // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
-            m_checkManager->enableAllFixIts();
-        }
-
-        if (args.size() > 1) {
-            // Too many arguments.
-            llvm::errs() << "Too many arguments: ";
-            for (const std::string &a : args)
-                llvm::errs() << a << ' ';
-            llvm::errs() << "\n";
-
-            PrintHelp(llvm::errs());
-            return false;
-        } else if (args.size() == 1) {
-            vector<string> userDisabledChecks;
-            m_checks = m_checkManager->checksForCommaSeparatedString(args[0], /*by-ref=*/userDisabledChecks);
-            if (m_checks.empty()) {
-                llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
-                PrintHelp(llvm::errs());
-                return false;
-            }
-        }
-
-        vector<string> userDisabledChecks;
-        // Append checks specified from env variable
-        RegisteredCheck::List checksFromEnv = m_checkManager->requestedChecksThroughEnv(/*by-ref*/userDisabledChecks);
-        copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(m_checks));
-
-        if (m_checks.empty() && requestedLevel == CheckLevelUndefined) {
-            // No check or level specified, lets use the default level
-            m_checkManager->setRequestedLevel(DefaultCheckLevel);
-        }
-
-        // Add checks from requested level
-        auto checksFromRequestedLevel = m_checkManager->checksFromRequestedLevel();
-        clazy_std::append(checksFromRequestedLevel, m_checks);
-        clazy_std::sort_and_remove_dups(m_checks, checkLessThan);
-        CheckManager::removeChecksFromList(m_checks, userDisabledChecks);
-
-        if (printRequestedChecks) {
-            llvm::errs() << "Requested checks: ";
-            const unsigned int numChecks = m_checks.size();
-            for (unsigned int i = 0; i < numChecks; ++i) {
-                llvm::errs() << m_checks.at(i).name;
-                const bool isLast = i == numChecks - 1;
-                if (!isLast) {
-                    llvm::errs() << ", ";
-                }
-            }
-
-            llvm::errs() << "\n";
-        }
-
+    if (parseArgument("help", args)) {
+        PrintHelp(llvm::errs());
         return true;
     }
 
-    void PrintHelp(llvm::raw_ostream &ros)
-    {
-        RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
-        clazy_std::sort(checks, checkLessThanByLevel);
-
-        ros << "Available checks and FixIts:\n\n";
-
-        int lastPrintedLevel = -1;
-        const auto numChecks = checks.size();
-        for (unsigned int i = 0; i < numChecks; ++i) {
-            const RegisteredCheck &check = checks[i];
-            if (lastPrintedLevel < check.level) {
-                lastPrintedLevel = check.level;
-
-                if (check.level > 0)
-                    ros << "\n";
-
-                ros << "- Checks from level" << to_string(check.level) << ":\n";
-            }
-
-            auto padded = check.name;
-            padded.insert(padded.end(), 39 - padded.size(), ' ');
-            ros << "    - " << check.name;
-            auto fixits = m_checkManager->availableFixIts(check.name);
-            if (!fixits.empty()) {
-                ros << "    (";
-                bool isFirst = true;
-                for (const auto& fixit : fixits) {
-                    if (isFirst) {
-                        isFirst = false;
-                    } else {
-                        ros << ',';
-                    }
-
-                    ros << fixit.name;
-                }
-                ros << ')';
-            }
-            ros << "\n";
-        }
-        ros << "\nIf nothing is specified, all checks from level0 and level1 will be run.\n\n";
-        ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
-        ros << "    export CLAZY_CHECKS=\"level0\"\n";
-        ros << "    export CLAZY_CHECKS=\"level0,reserve-candidates,qstring-allocations\"\n";
-        ros << "    export CLAZY_CHECKS=\"reserve-candidates\"\n\n";
-        ros << "or pass as compiler arguments, for example:\n";
-        ros << "    -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-allocations\n";
-        ros << "\n";
-        ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
-        ros << "    export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
-        ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
+    if (parseArgument("no-inplace-fixits", args)) {
+        // Unit-tests don't use inplace fixits
+        m_inplaceFixits = false;
     }
 
-private:
-    RegisteredCheck::List m_checks;
-    bool m_inplaceFixits = true;
-    CheckManager *const m_checkManager;
-};
+    // This argument is for debugging purposes
+    const bool printRequestedChecks = parseArgument("print-requested-checks", args);
 
+    const CheckLevel requestedLevel = parseLevel(/*by-ref*/args);
+    if (requestedLevel != CheckLevelUndefined) {
+        m_checkManager->setRequestedLevel(requestedLevel);
+    }
+
+    if (parseArgument("enable-all-fixits", args)) {
+        // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
+        m_checkManager->enableAllFixIts();
+    }
+
+    if (args.size() > 1) {
+        // Too many arguments.
+        llvm::errs() << "Too many arguments: ";
+        for (const std::string &a : args)
+            llvm::errs() << a << ' ';
+        llvm::errs() << "\n";
+
+        PrintHelp(llvm::errs());
+        return false;
+    } else if (args.size() == 1) {
+        vector<string> userDisabledChecks;
+        m_checks = m_checkManager->checksForCommaSeparatedString(args[0], /*by-ref=*/userDisabledChecks);
+        if (m_checks.empty()) {
+            llvm::errs() << "Could not find checks in comma separated string " + args[0] + "\n";
+            PrintHelp(llvm::errs());
+            return false;
+        }
+    }
+
+    vector<string> userDisabledChecks;
+    // Append checks specified from env variable
+    RegisteredCheck::List checksFromEnv = m_checkManager->requestedChecksThroughEnv(/*by-ref*/userDisabledChecks);
+    copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(m_checks));
+
+    if (m_checks.empty() && requestedLevel == CheckLevelUndefined) {
+        // No check or level specified, lets use the default level
+        m_checkManager->setRequestedLevel(DefaultCheckLevel);
+    }
+
+    // Add checks from requested level
+    auto checksFromRequestedLevel = m_checkManager->checksFromRequestedLevel();
+    clazy_std::append(checksFromRequestedLevel, m_checks);
+    clazy_std::sort_and_remove_dups(m_checks, checkLessThan);
+    CheckManager::removeChecksFromList(m_checks, userDisabledChecks);
+
+    if (printRequestedChecks) {
+        llvm::errs() << "Requested checks: ";
+        const unsigned int numChecks = m_checks.size();
+        for (unsigned int i = 0; i < numChecks; ++i) {
+            llvm::errs() << m_checks.at(i).name;
+            const bool isLast = i == numChecks - 1;
+            if (!isLast) {
+                llvm::errs() << ", ";
+            }
+        }
+
+        llvm::errs() << "\n";
+    }
+
+    return true;
+}
+
+void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros)
+{
+    RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
+    clazy_std::sort(checks, checkLessThanByLevel);
+
+    ros << "Available checks and FixIts:\n\n";
+
+    int lastPrintedLevel = -1;
+    const auto numChecks = checks.size();
+    for (unsigned int i = 0; i < numChecks; ++i) {
+        const RegisteredCheck &check = checks[i];
+        if (lastPrintedLevel < check.level) {
+            lastPrintedLevel = check.level;
+
+            if (check.level > 0)
+                ros << "\n";
+
+            ros << "- Checks from level" << to_string(check.level) << ":\n";
+        }
+
+        auto padded = check.name;
+        padded.insert(padded.end(), 39 - padded.size(), ' ');
+        ros << "    - " << check.name;
+        auto fixits = m_checkManager->availableFixIts(check.name);
+        if (!fixits.empty()) {
+            ros << "    (";
+            bool isFirst = true;
+            for (const auto& fixit : fixits) {
+                if (isFirst) {
+                    isFirst = false;
+                } else {
+                    ros << ',';
+                }
+
+                ros << fixit.name;
+            }
+            ros << ')';
+        }
+        ros << "\n";
+    }
+    ros << "\nIf nothing is specified, all checks from level0 and level1 will be run.\n\n";
+    ros << "To specify which checks to enable set the CLAZY_CHECKS env variable, for example:\n";
+    ros << "    export CLAZY_CHECKS=\"level0\"\n";
+    ros << "    export CLAZY_CHECKS=\"level0,reserve-candidates,qstring-allocations\"\n";
+    ros << "    export CLAZY_CHECKS=\"reserve-candidates\"\n\n";
+    ros << "or pass as compiler arguments, for example:\n";
+    ros << "    -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates,qstring-allocations\n";
+    ros << "\n";
+    ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
+    ros << "    export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
+    ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
 }
 
 static FrontendPluginRegistry::Add<ClazyASTAction>
