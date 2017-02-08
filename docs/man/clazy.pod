@@ -1,0 +1,210 @@
+=encoding utf8
+=head1 NAME
+
+clazy - a static source code analyzer for Qt5-based C++.
+
+=head1 SYNOPSIS
+
+clazy [option] [clang++-options]
+
+=head1 DESCRIPTION
+
+clazy scans C++/Qt source code looking for issues related to good coding practice with of Qt5.
+In typical use, during code compilation with clazy you will see any such warnings
+printed to the output normally as you would find any compiler warnings.
+
+clazy has the ability to "fix" the offending code in some cases.  See the B<CLAZY_FIXIT>
+environment variable description below for more information.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--help>
+
+Print help message and exit.
+
+=item B<--version>
+
+Print version information and exit.
+
+=item B<--list>
+
+Print a list of all available checkers, arranged by level.
+
+=item B<--explain>
+
+Print explanations for all checkers.
+
+=item B<--explain> <regexp>
+
+Print explanations for the checkers matching the specified regular expression.
+
+=back
+
+Any of the options above will print the requested information and then exit.
+Otherwise, options are passed directly to clang++ and handled from there.
+
+See the clang manual for a list of the very large set of options available,
+but in normal operation you "compile" your code with clazy just as you
+would with clang.
+
+=head1 EXAMPLES
+
+=over 4
+
+=item Print a list of all available checkers, arranged by check level:
+
+ % clazy --list
+
+ List of available clazy checkers:
+
+ Checks from level0. Very stable checks, 100% safe, no false-positives:
+    connect-non-signal
+    container-anti-pattern
+    lambda-in-connect
+    mutable-container-key
+    qdatetime-utc
+    qenums
+    qfileinfo-exists
+  ....
+
+=item Compile your CMake project with clazy default checkers:
+
+ % cmake -DCMAKE_CXX_COMPILER=clazy <other_cmake_options>
+ then make as normal
+
+=item Compile your CMake project with level2 checks only (non-Windows):
+
+ % export CLAZY_CHECKS="level2"
+ % cmake -DCMAKE_CXX_COMPILER=clazy <other_cmake_options>
+ then make as normal
+
+=item Compile your qmake project with clazy default checkers:
+
+ % qmake -spec linux-clang QMAKE_CXX=clazy <other_qmake_options>
+ then make as normal
+
+=back
+
+=head1 IN-CODE DIRECTIVES
+
+clazy supports the following list of in-code directives:
+
+=over 4
+
+=item clazy:skip
+
+ Exempt an entire file from all checks.
+ No clazy tests will run on the file.
+
+=item clazy:excludeall=<name1[,name2,...,nameN]>
+
+ Exempt the entire file from the specified checks.
+ The clazy checks name1, etc will not be run on this file.
+
+=item clazy:exclude=<name1[,name2,...,nameN]>
+
+ Exclude individual lines from specific checks.
+ The clazy checks tests name1, etc. will not be run on the line where
+ this directive is found.
+
+=back
+
+Don't include the 'clazy-' prefix.  For example, to disable the "qstring-allocations"
+check, you would write:
+
+    // clazy:exclude=qstring-allocations
+
+and not
+
+    // clazy:exclude=clazy-qstring-allocations
+
+Also note that these directives must be C++ style comments; C style comments are ignored.
+
+=head1 ENVIRONMENT
+
+B<CLAZY_CHECKS> - a comma-separated list of checkers or check-sets to run.
+By default, all checkers from the "level0" and "level1" check-sets will run.
+
+B<Examples:>
+
+=over 4
+
+=item 1. Enables the 2 checkers "bogus-dynamic-cast" and "virtual-call-ctor" only:
+
+% export CLAZY_CHECKS="bogus-dynamic-cast,virtual-call-ctor"
+
+=item 2. Enables all checks from the "level0" check-set, except for "qenums":
+
+% export CLAZY_CHECKS="level0,no-qenums"
+
+=item 3. Enables all checks from the "level0" check-set along with the "detaching-temporary" checker:
+
+% export CLAZY_CHECKS="level0,detaching-temporary"
+
+=back
+
+B<CLAZY_FIXIT> - some checkers are able to automatically re-write your source code whenever
+it encounters code it can "fix".  Enable this "fixit" feature by setting this variable
+to the name of the checker with a "fixit" capability.
+
+B<Examples:>
+
+=over 4
+
+=item 1. Fix qlatin1string allocations:
+
+% export CLAZY_FIXIT="fix-qlatin1string-allocations"
+
+=item 2. Fix old-style (simple cases) connect statements:
+
+% export CLAZY_FIXIT=fix-old-style-connect
+
+More documentation is provided when running clazy with the B<--explain> command line option.
+
+Also note that only 1 fixit checker can be run at a time.
+
+=back
+
+B<CLAZY_EXTRA_OPTIONS> - some checkers can adapt their behavior depending on the value
+of this environment variable.  More documentation is provided when running clazy with
+the B<--explain> command line option.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2010-2017 Klaralvdalens Datakonsult AB, a KDAB Group company, <info@kdab.com>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+=head1 SEE ALSO
+
+ clang(1)
+ L<https://www.kdab.com/use-static-analysis-improve-performance>
+
+=head1 AUTHORS
+
+ Sergio Martins <sergio.martins@kdab.com>
+ Laurent Montel <laurent.montel@kdab.com>
+ Allen Winter <allen.winter@kdab.com>
+ Albert Astals Cid <aacid@kde.org>
+ Aurélien Gâteau <agateau@kde.org>
+ Kevin Funk <kevin.funk@kdab.com>
+ Hannah von Reth <hannah.vonreth@kdab.com>
+ Volker Krause <volker.krause@kdab.com>
+ Christian Ehrlicher <Ch.Ehrlicher@gmx.de>
+ Mathias Hasselmann <mathias.hasselmann@kdab.com>
+
+=cut

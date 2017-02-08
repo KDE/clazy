@@ -1,8 +1,14 @@
 # This is the top-level CMakeLists.txt file for the Clazy project.
 #
+# To build the man page from POD, run 'make man' after CMake (assumes perl is available)
+# To install the resulting man page, run 'make install'
+# The man page is not available on Windows.
+#
+
 project(ClangLazy)
 
 cmake_minimum_required(VERSION 3.0)
+include(FeatureSummary)
 include(GenerateExportHeader)
 include(ClazySources.cmake)
 
@@ -174,6 +180,10 @@ install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${DOC_INSTALL_DIR}/hiddenl
 
 # Install more doc files
 install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
+
+# Build docs
+set(MAN_INSTALL_DIR "man/man1")
+add_subdirectory(docs)
 
 if (NOT CLAZY_INSTALL_NO_HEADERS)
   # Install public headers
