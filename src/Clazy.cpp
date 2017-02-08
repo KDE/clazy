@@ -213,10 +213,10 @@ static bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
     return c1.level < c2.level;
 }
 
-class LazyASTAction : public PluginASTAction
+class ClazyASTAction : public PluginASTAction
 {
 public:
-    LazyASTAction()
+    ClazyASTAction()
         : PluginASTAction()
         , m_checkManager(CheckManager::instance())
     {
@@ -368,5 +368,5 @@ private:
 
 }
 
-static FrontendPluginRegistry::Add<LazyASTAction>
+static FrontendPluginRegistry::Add<ClazyASTAction>
 X("clang-lazy", "clang lazy plugin");
