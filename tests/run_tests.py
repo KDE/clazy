@@ -166,7 +166,11 @@ def dump_ast_command(test):
 version,success = get_command_output('clang --version')
 
 match = re.search('clang version (.*?)[ -]', version)
-version = match.group(1)
+try:
+    version = match.group(1)
+except:
+    print "Could not determine clang version, is it in PATH?"
+    sys.exit(-1)
 
 CLANG_VERSION = int(version.replace('.', ''))
 
