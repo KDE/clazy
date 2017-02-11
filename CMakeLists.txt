@@ -30,6 +30,14 @@ add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
 option(CLAZY_INSTALL_NO_HEADERS "Enable this option to suppress installation of headers" OFF)
+if (MSVC)
+
+  if (NOT CLANG_LIBRARY_IMPORT)
+    message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
+  endif()
+
+  message(${CLANG_LIBRARY_IMPORT})
+endif()
 
 if(MSVC)
   # disable trigger-happy warnings from Clang/LLVM headers
@@ -62,8 +70,23 @@ if(NOT APPLE)
   list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
 endif()
 
+if (MSVC)
+  message("REMOVES ${CLANG_LIBS}" )
+  list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
+endif()
+
 macro(link_to_llvm name)
   foreach(clang_lib ${CLANG_LIBS})
+    if (MSVC)
+        get_filename_component(LIB_FILENAME ${clang_lib} NAME)
+        if (LIB_FILENAME STREQUAL "clangFrontend.lib")
+            # On MSVC we don't link against clangFrontend.lib, instead we link against clang.exe (via clang.lib)
+            # Otherwise the clazy plugin would have it's own plugin registry and clang wouldn't see it.
+            # This way clazy registers with clang.
+            continue()
+        endif()
+    endif()
+
     target_link_libraries(${name} ${clang_lib})
   endforeach()
 
@@ -97,6 +120,7 @@ macro(add_clang_plugin name)
 
   if(MSVC)
     target_link_libraries(${name} version.lib)
+    target_link_libraries(${name} ${CLANG_LIBRARY_IMPORT}) # Link against clang.exe to share the plugin registry
   endif()
 
   target_link_libraries(${name} clazylib)

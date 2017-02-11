@@ -37,28 +37,33 @@ See troubleshooting section if you have problems.
 # Build Instructions (Windows)
 
 The instructions assume your terminal is suitable for development (msvc2015).
-jom, nmake, git, cmake and cl should be in your PATH.
+jom, nmake, git, cmake and cl should be in your PATH. Be aware that due to limitations on Windows
+you'll have to make sure to always call clang.exe, never clang++.exe or clang-cl.exe.
 
-## Build and install llvm and clang 3.9:
+## Build and install llvm and clang 4.0:
+
+Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
+
 ```
   > git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   > cd <some_directory>\tools\ && git clone https://github.com/llvm-mirror/clang.git
-  > git checkout release_39
+  > git checkout release_40
   > cd clang
-  > git checkout release_39
-  > git cherry-pick ae1cd1e7c301954bab703e9116a30b330902d43a
-  > git cherry-pick bce41007c954eafd1d2fdcecbf4cc007697901e7
+  > git checkout release_40
   > mkdir <some_directory>\build && cd <some_directory>\build
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X86" -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
   > jom
   > nmake install
   > Add c:\my_install_folder\llvm\bin\ to PATH
 ```
 
 ## Build the clazy plugin:
+
+Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LLVM build dir since it doesn't get installed.
+
 ```
   > cd clazy\
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM"
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCLANG_LIBRARY_IMPORT=C:\path\to\llvm-build\lib\clang.lib -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM"
   > jom && nmake install
 ```
 
