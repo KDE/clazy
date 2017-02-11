@@ -156,10 +156,10 @@ def libraryName():
         return 'ClangLazy.so'
 
 def compiler_command(qt):
-    return "clang++ -std=c++14 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
+    return "clang -std=c++14 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
 
 def dump_ast_command(test):
-    return "clang++ -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
+    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
 
 #-------------------------------------------------------------------------------
 # Get clang version
@@ -179,7 +179,7 @@ CLANG_VERSION = int(version.replace('.', ''))
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
 _link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
-_help_command = "echo | clang++ -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
+_help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
