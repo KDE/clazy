@@ -148,15 +148,15 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     if (isMacroToIgnore(stmt->getLocStart()))
         return;
 
-    if (shouldIgnoreFile(stmt->getLocStart()))
-        return;
-
     // Lets check only in function calls. Otherwise there are too many false positives, it's common
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
     CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
     if (!callExpr && !ctorExpr)
+        return;
+
+    if (shouldIgnoreFile(stmt->getLocStart()))
         return;
 
     FunctionDecl *func = callExpr ? callExpr->getDirectCallee()
