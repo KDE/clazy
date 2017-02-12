@@ -118,11 +118,11 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
     return 0;
 }
 
-unique_ptr<CheckBase> CheckManager::createCheck(const string &name, const CompilerInstance &ci)
+CheckBase* CheckManager::createCheck(const string &name, const CompilerInstance &ci)
 {
     for (const auto& rc : m_registeredChecks) {
         if (rc.name == name) {
-            return unique_ptr<CheckBase>(rc.factory(ci));
+            return rc.factory(ci);
         }
     }
 

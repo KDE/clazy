@@ -88,7 +88,7 @@ private:
 class CLAZYLIB_EXPORT CheckBase
 {
 public:
-    typedef std::vector<std::unique_ptr<CheckBase> > List;
+    typedef std::vector<CheckBase*> List;
     explicit CheckBase(const std::string &name, const clang::CompilerInstance &ci);
     CheckBase(const CheckBase &other) = delete;
 

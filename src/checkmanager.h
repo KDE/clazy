@@ -124,7 +124,7 @@ private:
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;
-    std::unique_ptr<CheckBase> createCheck(const std::string &name, const clang::CompilerInstance &ci);
+    CheckBase* createCheck(const std::string &name, const clang::CompilerInstance &ci);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
