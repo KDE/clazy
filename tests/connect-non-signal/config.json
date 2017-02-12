@@ -19,7 +19,6 @@
         },
         {
             "filename" : "bug376137.cpp",
-            "expects_failure" : true,
             "minimum_clang_version" : 370
         }
     ]

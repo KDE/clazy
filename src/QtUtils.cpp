@@ -298,6 +298,8 @@ CXXMethodDecl *QtUtils::pmfFromUnary(Expr *expr)
             return nullptr;
 
         return pmfFromUnary(dyn_cast<UnaryOperator>(call->getArg(1)));
+    } else if (auto staticCast = dyn_cast<CXXStaticCastExpr>(expr)) {
+        return pmfFromUnary(staticCast->getSubExpr());
     }
 
     return nullptr;

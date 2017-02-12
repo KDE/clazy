@@ -6,8 +6,7 @@ class Foo : public QObject
 public:
     Foo()
     {
-        connect(this, static_cast<void (Foo::*)(int)>(&Foo::bar), [](int) {});
-        connect(this, qOverload<float>(&Foo::bar), [](float) {});
+        connect(this, static_cast<void (Foo::*)(int)>(&Foo::bar), [](int) {}); // OK
     }
 
 Q_SIGNALS:
