@@ -94,6 +94,7 @@ public:
     LazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
                     const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
+        , m_sm(ci.getSourceManager())
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
         , m_checkManager(checkManager)
@@ -123,12 +124,16 @@ public:
 
     bool VisitDecl(Decl *decl)
     {
+        const bool isInSystemHeader = m_sm.isInSystemHeader(decl->getLocStart());
+
 #if !defined(IS_OLD_CLANG)
         if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
             a->VisitDeclaration(decl);
 #endif
-        for (const auto &check : m_createdChecks)
-            check->VisitDeclaration(decl);
+        for (const auto &check : m_createdChecks) {
+            if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
+                check->VisitDeclaration(decl);
+        }
 
         return true;
     }
@@ -155,8 +160,10 @@ public:
         if (!m_parentMap->hasParent(stm))
             m_parentMap->addStmt(stm);
 
+        const bool isInSystemHeader = m_sm.isInSystemHeader(stm->getLocStart());
         for (const auto &check : m_createdChecks) {
-            check->VisitStatement(stm);
+            if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
+                check->VisitStatement(stm);
         }
 
         return true;
@@ -169,6 +176,7 @@ public:
 
     Stmt *lastStm = nullptr;
     CompilerInstance &m_ci;
+    const SourceManager &m_sm;
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;

@@ -88,7 +88,7 @@ private:
 class CLAZYLIB_EXPORT CheckBase
 {
 public:
-    typedef std::vector<std::unique_ptr<CheckBase> > List;
+    typedef std::vector<CheckBase*> List;
     explicit CheckBase(const std::string &name, const clang::CompilerInstance &ci);
     CheckBase(const CheckBase &other) = delete;
 
@@ -108,6 +108,7 @@ public:
     void emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
     void emitInternalError(clang::SourceLocation loc, std::string error);
+    virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
 
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
@@ -120,7 +121,6 @@ protected:
     void enablePreProcessorCallbacks();
 
     bool shouldIgnoreFile(clang::SourceLocation) const;
-    virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});

@@ -88,11 +88,8 @@ CheckBase::~CheckBase()
 
 void CheckBase::VisitStatement(Stmt *stm)
 {
-    if (!(ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(stm->getLocStart())))
-    {
-        m_lastStmt = stm;
-        VisitStmt(stm);
-    }
+    m_lastStmt = stm;
+    VisitStmt(stm);
 }
 
 void CheckBase::VisitDeclaration(Decl *decl)
