@@ -30,13 +30,9 @@ add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
 option(CLAZY_INSTALL_NO_HEADERS "Enable this option to suppress installation of headers" OFF)
-if (MSVC)
 
-  if (NOT CLANG_LIBRARY_IMPORT)
-    message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
-  endif()
-
-  message(${CLANG_LIBRARY_IMPORT})
+if (MSVC AND NOT CLANG_LIBRARY_IMPORT)
+  message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
 endif()
 
 if(MSVC)

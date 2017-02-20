@@ -287,7 +287,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
                         RegisteredCheck::List levelChecks = checksForLevel(digit);
                         clazy_std::append(levelChecks, result);
                     } else {
-                        llvm::errs() << "Invalid check: " << name << "\n";
+                        llvm::errs() << "Invalid level: " << name << "\n";
                     }
                 } else {
                     if (clazy_std::startsWith(name, "no-")) {
@@ -296,7 +296,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
                         if (checkExists(checkName)) {
                             userDisabledChecks.push_back(checkName);
                         } else {
-                            llvm::errs() << "Invalid check: " << name << "\n";
+                            llvm::errs() << "Invalid check to disable: " << name << "\n";
                         }
                     } else {
                         llvm::errs() << "Invalid check: " << name << "\n";
