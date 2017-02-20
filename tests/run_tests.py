@@ -388,6 +388,8 @@ switches = ["--verbose", "--dump-ast", "--help"]
 if _dump_ast:
     del(args[args.index("--dump-ast")])
 
+os.environ['CLAZY_CHECKS'] = ''
+
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)
 requested_check_names = filter(lambda x: x not in switches, args)
