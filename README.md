@@ -13,6 +13,7 @@ Table of contents
          * [Build and install clang](#build-and-install-clang)
          * [Build clazy](#build-clazy)
       * [Windows](#windows)
+         * [Pre-built msvc2015 clang and clazy binaries](#pre-built-msvc2015-clang-and-clazy-binaries)
          * [Build and install clang](#build-and-install-clang-1)
          * [Build clazy](#build-clazy-1)
       * [macOS with MacPorts](#macos-with-macports)
@@ -39,6 +40,7 @@ You can get clazy from:
 - <https://github.com/KDE/clazy>
 - git@git.kde.org:clazy
 - <http://anongit.kde.org/clazy>
+- Source for the v1.1-msvc2015 binary package: <http://download.kde.org/stable/clazy/1.1/clazy_v1.1-src.zip.mirrorlist>
 
 # Build Instructions
 ## Linux
@@ -76,11 +78,17 @@ See troubleshooting section if you have problems.
 
 ## Windows
 
-The instructions assume your terminal is suitable for development (msvc2015).
-jom, nmake, git, cmake and cl should be in your PATH. Be aware that due to limitations on Windows
-you'll have to make sure to always call clang.exe, never clang++.exe or clang-cl.exe.
+### Pre-built msvc2015 clang and clazy binaries
+
+The easiest way is to download the binaries from <http://download.kde.org/stable/clazy/1.1/clazy_v1.1-msvc2015.zip.mirrorlist>. Unzip it somewhere, add bin to PATH and you're ready to go. Use clazy-cl.bat as a drop-in replacement for cl.exe.
+
+If you really want to build clang and clazy yourself then read on, otherwise skip the building topic.
+
 
 ### Build and install clang
+These instructions assume your terminal is suitable for development (msvc2015).
+jom, nmake, git, cmake and cl should be in your PATH.
+
 clang and LLVM >= 4.0 are required.
 
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
