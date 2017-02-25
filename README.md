@@ -1,3 +1,36 @@
+clazy v1.1
+===========
+
+clazy is a compiler plugin which allows clang to understand Qt semantics. You get more than 50 Qt related compiler warnings, ranging from unneeded memory allocations to misusage of API, including fix-its for automatic refactoring.
+
+Table of contents
+=================
+
+   * [Source Code](#source-code)
+   * [Build Instructions (Linux)](#build-instructions-linux)
+      * [Install Dependencies:](#install-dependencies)
+      * [Build and install clang &gt;= 3.7 if your distro doesn't provide it:](#build-and-install-clang--37-if-your-distro-doesnt-provide-it)
+      * [Build the clazy plugin:](#build-the-clazy-plugin)
+   * [Build Instructions (Windows)](#build-instructions-windows)
+      * [Build and install llvm and clang 4.0:](#build-and-install-llvm-and-clang-40)
+      * [Build the clazy plugin:](#build-the-clazy-plugin-1)
+   * [Build Instructions (macOS with MacPorts)](#build-instructions-macos-with-macports)
+      * [Install clang and llvm from MacPorts](#install-clang-and-llvm-from-macports)
+      * [Build the clazy plugin](#build-the-clazy-plugin-2)
+   * [Build Instructions (macOS with Homebrew)](#build-instructions-macos-with-homebrew)
+      * [Install clang and llvm from Homebrew](#install-clang-and-llvm-from-homebrew)
+      * [Build the clazy plugin](#build-the-clazy-plugin-3)
+   * [Setting up your project to build with clazy](#setting-up-your-project-to-build-with-clazy)
+   * [Selecting which checks to enable](#selecting-which-checks-to-enable)
+      * [Description of each level](#description-of-each-level)
+      * [Example via env variable](#example-via-env-variable)
+      * [Example via compiler argument](#example-via-compiler-argument)
+   * [Enabling Fixits](#enabling-fixits)
+   * [Troubleshooting](#troubleshooting)
+   * [Reducing warning noise](#reducing-warning-noise)
+   * [Reporting bugs and wishes](#reporting-bugs-and-wishes)
+   * [Contributing patches](#contributing-patches)
+
 # Source Code
 
 You can get clazy from:
