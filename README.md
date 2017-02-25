@@ -7,19 +7,20 @@ Table of contents
 =================
 
    * [Source Code](#source-code)
-   * [Build Instructions (Linux)](#build-instructions-linux)
-      * [Install Dependencies:](#install-dependencies)
-      * [Build and install clang &gt;= 3.7 if your distro doesn't provide it:](#build-and-install-clang--37-if-your-distro-doesnt-provide-it)
-      * [Build the clazy plugin:](#build-the-clazy-plugin)
-   * [Build Instructions (Windows)](#build-instructions-windows)
-      * [Build and install llvm and clang 4.0:](#build-and-install-llvm-and-clang-40)
-      * [Build the clazy plugin:](#build-the-clazy-plugin-1)
-   * [Build Instructions (macOS with MacPorts)](#build-instructions-macos-with-macports)
-      * [Install clang and llvm from MacPorts](#install-clang-and-llvm-from-macports)
-      * [Build the clazy plugin](#build-the-clazy-plugin-2)
-   * [Build Instructions (macOS with Homebrew)](#build-instructions-macos-with-homebrew)
-      * [Install clang and llvm from Homebrew](#install-clang-and-llvm-from-homebrew)
-      * [Build the clazy plugin](#build-the-clazy-plugin-3)
+   * [Build Instructions](#build-instructions)
+      * [Linux](#linux)
+         * [Install dependencies](#install-dependencies)
+         * [Build and install clang](#build-and-install-clang)
+         * [Build clazy](#build-clazy)
+      * [Windows](#windows)
+         * [Build and install clang](#build-and-install-clang-1)
+         * [Build clazy](#build-clazy-1)
+      * [macOS with MacPorts](#macos-with-macports)
+         * [Install clang](#install-clang)
+         * [Build clazy](#build-clazy-2)
+      * [macOS with Homebrew](#macos-with-homebrew)
+         * [Install clang](#install-clang-1)
+         * [Build clazy](#build-clazy-3)
    * [Setting up your project to build with clazy](#setting-up-your-project-to-build-with-clazy)
    * [Selecting which checks to enable](#selecting-which-checks-to-enable)
       * [Description of each level](#description-of-each-level)
@@ -39,16 +40,22 @@ You can get clazy from:
 - git@git.kde.org:clazy
 - <http://anongit.kde.org/clazy>
 
-# Build Instructions (Linux)
+# Build Instructions
+## Linux
 
-## Install Dependencies:
+### Install dependencies
 - OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
 - Ubuntu-16.04: `apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev`
 - Archlinux: `pacman -S make llvm clang python2 cmake qt5-base git gcc`
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
-## Build and install clang >= 3.7 if your distro doesn't provide it:
+### Build and install clang
+clang and LLVM >= 3.7 are required.
+
+If your distro provides clang then you can skip this step.
+
+
 ```
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   $ cd <some_directory>/tools/ && git clone https://github.com/llvm-mirror/clang.git
@@ -58,7 +65,7 @@ You can get clazy from:
   $ make -jX && make install
 ```
 
-## Build the clazy plugin:
+### Build clazy
 ```
   $ cd clazy/
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
@@ -67,13 +74,14 @@ You can get clazy from:
 
 See troubleshooting section if you have problems.
 
-# Build Instructions (Windows)
+## Windows
 
 The instructions assume your terminal is suitable for development (msvc2015).
 jom, nmake, git, cmake and cl should be in your PATH. Be aware that due to limitations on Windows
 you'll have to make sure to always call clang.exe, never clang++.exe or clang-cl.exe.
 
-## Build and install llvm and clang 4.0:
+### Build and install clang
+clang and LLVM >= 4.0 are required.
 
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
 
@@ -90,7 +98,7 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
   > Add c:\my_install_folder\llvm\bin\ to PATH
 ```
 
-## Build the clazy plugin:
+### Build clazy
 
 Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LLVM build dir since it doesn't get installed.
 
@@ -100,17 +108,16 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
   > jom && nmake install
 ```
 
-# Build Instructions (macOS with MacPorts)
+## macOS with MacPorts
 
-## Install clang and llvm from MacPorts
-
+### Install clang
 ```
 $ sudo port install clang-3.9 llvm-3.9
 $ sudo ln -sf /opt/local/bin/llvm-config-mp-3.9 /opt/local/bin/llvm-config
 $ sudo port select --set clang mp-clang-3.9
 ```
 
-## Build the clazy plugin
+### Build clazy
 ```
   $ export CXX=clang++
   $ cmake
@@ -118,15 +125,15 @@ $ sudo port select --set clang mp-clang-3.9
   $ make install
 ```
 
-# Build Instructions (macOS with Homebrew)
+## macOS with Homebrew
 
-## Install clang and llvm from Homebrew
+### Install clang
 
 ```
 $ brew install --with-clang llvm
 ```
 
-## Build the clazy plugin
+### Build clazy
 ```
   $ export CXX=clang++
   $ export LLVM_ROOT=/usr/local/opt/llvm
