@@ -23,8 +23,8 @@ Table of contents
          * [Install clang](#install-clang-1)
          * [Build clazy](#build-clazy-3)
    * [Setting up your project to build with clazy](#setting-up-your-project-to-build-with-clazy)
+   * [List of checks](#list-of-checks)
    * [Selecting which checks to enable](#selecting-which-checks-to-enable)
-      * [Description of each level](#description-of-each-level)
       * [Example via env variable](#example-via-env-variable)
       * [Example via compiler argument](#example-via-compiler-argument)
    * [Enabling Fixits](#enabling-fixits)
@@ -181,11 +181,15 @@ It's recommended that you disable pre-compiled headers and don't use ccache.
 You're all set, clazy will now run some checks on your project, but not all of them.
 Read on if you want to enable/disable which checks are run.
 
-# Selecting which checks to enable
+# List of checks
 
-You may want to choose which checks to enable before starting to compile.
 There are many checks and they are divided in levels:
+- level0: Very stable checks, 99.99% safe, no false-positives
+- level1: Similar to level0, but sometimes (rarely) there might be some false-positives
+- level2: Sometimes has false-positives (20-30%).
+- level3: Not always correct, possibly very noisy, might require a knowledgeable developer to review, might have a very big rate of false-positives, might have bugs.
 
+clazy runs all checks from level1 by default.
 
 - Checks from level0:
     - [connect-non-signal](src/checks/level0/README-connect-non-signal.md)
@@ -246,12 +250,9 @@ There are many checks and they are divided in levels:
     - [bogus-dynamic-cast](src/checks/level3/README-bogus-dynamic-cast.md)
     - [detaching-member](src/checks/level3/README-detaching-member.md)
 
-## Description of each level
-- level0: Very stable checks, 99.99% safe, no false-positives
-- level1: Similar to level0, but sometimes (rarely) there might be some false-positives
-- level2: Sometimes has false-positives (20-30%).
-- level3: Not always correct, possibly very noisy, might require a knowledgeable developer to review, might have a very big rate of false-positives, might have bugs.
+# Selecting which checks to enable
 
+You may want to choose which checks to enable before starting to compile.
 If you don't specify anything then all checks from level0 and level1 will run.
 To specify a list of checks to run, or to choose a level, you can use the `CLAZY_CHECKS` env variable or pass arguments to the compiler.
 You can disable checks by prefixing with `no-`, in case you don't want all checks from a given level.
