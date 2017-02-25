@@ -335,7 +335,7 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros)
             ros << "- Checks from " << levelStr << ":\n";
         }
 
-        const string relativeReadmePath = levelStr + "/README-" + check.name + ".md";
+        const string relativeReadmePath = "src/checks/" + levelStr + "/README-" + check.name + ".md";
 
         auto padded = check.name;
         padded.insert(padded.end(), 39 - padded.size(), ' ');
