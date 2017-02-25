@@ -31,6 +31,7 @@ Table of contents
    * [Troubleshooting](#troubleshooting)
    * [Reducing warning noise](#reducing-warning-noise)
    * [Reporting bugs and wishes](#reporting-bugs-and-wishes)
+   * [Authors](#authors)
    * [Contributing patches](#contributing-patches)
 
 # Source Code
@@ -321,7 +322,28 @@ Don't include the `clazy-` prefix. If, for example, you want to disable qstring-
 
 - bug tracker: <https://bugs.kde.org/enter_bug.cgi?product=clazy>
 - IRC: #kde-clazy (freenode)
-- E-mail: <smartins@kde.org>
+- E-mail: <smartins at kde.org>
+
+# Authors
+
+- Sérgio Martins
+
+with contributions from:
+
+- Allen Winter
+- Kevin Funk
+- Mathias Hasselmann
+- Laurent Montel
+- Albert Astals Cid
+- Aurélien Gâteau
+- Hannah von Reth
+- Volker Krause
+- Christian Ehrlicher
+
+and thanks to:
+
+- Klarälvdalens Datakonsult AB (<http://www.kdab.com>), for letting me work on clazy as a research project
+
 
 # Contributing patches
 
