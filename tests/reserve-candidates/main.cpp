@@ -2,7 +2,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QQueue>
 #include <QtCore/QVarLengthArray>
-
+#include <vector>
 
 
 
@@ -272,4 +272,11 @@ void bug367484()
     for (int i = 0; i < 10; ++i) {
         array.append(i); // OK
     }
+}
+
+void test_std_vector()
+{
+    std::vector<int> ints;
+    for (int i = 0; i < 10; ++i)
+        ints.push_back(i);
 }
