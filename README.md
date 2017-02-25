@@ -188,63 +188,63 @@ There are many checks and they are divided in levels:
 
 
 - Checks from level0:
-    - connect-non-signal
-    - container-anti-pattern
-    - lambda-in-connect
-    - mutable-container-key
-    - qdatetime-utc    (fix-qdatetime-utc)
-    - qenums
-    - qfileinfo-exists
-    - qgetenv    (fix-qgetenv)
-    - qmap-with-pointer-key
-    - qstring-arg
-    - qstring-insensitive-allocation
-    - qstring-ref    (fix-missing-qstringref)
-    - qt-macros
-    - qvariant-template-instantiation
-    - temporary-iterator
-    - unused-non-trivial-variable
-    - writing-to-temporary
-    - wrong-qglobalstatic
+    - [connect-non-signal](level0/README-connect-non-signal.md)
+    - [container-anti-pattern](level0/README-container-anti-pattern.md)
+    - [lambda-in-connect](level0/README-lambda-in-connect.md)
+    - [mutable-container-key](level0/README-mutable-container-key.md)
+    - [qdatetime-utc](level0/README-qdatetime-utc.md)    (fix-qdatetime-utc)
+    - [qenums](level0/README-qenums.md)
+    - [qfileinfo-exists](level0/README-qfileinfo-exists.md)
+    - [qgetenv](level0/README-qgetenv.md)    (fix-qgetenv)
+    - [qmap-with-pointer-key](level0/README-qmap-with-pointer-key.md)
+    - [qstring-arg](level0/README-qstring-arg.md)
+    - [qstring-insensitive-allocation](level0/README-qstring-insensitive-allocation.md)
+    - [qstring-ref](level0/README-qstring-ref.md)    (fix-missing-qstringref)
+    - [qt-macros](level0/README-qt-macros.md)
+    - [qvariant-template-instantiation](level0/README-qvariant-template-instantiation.md)
+    - [temporary-iterator](level0/README-temporary-iterator.md)
+    - [unused-non-trivial-variable](level0/README-unused-non-trivial-variable.md)
+    - [writing-to-temporary](level0/README-writing-to-temporary.md)
+    - [wrong-qglobalstatic](level0/README-wrong-qglobalstatic.md)
 
 - Checks from level1:
-    - auto-unexpected-qstringbuilder    (fix-auto-unexpected-qstringbuilder)
-    - child-event-qobject-cast
-    - detaching-temporary
-    - foreach
-    - incorrect-emit
-    - inefficient-qlist-soft
-    - missing-qobject-macro
-    - non-pod-global-static
-    - post-event
-    - qdeleteall
-    - qlatin1string-non-ascii
-    - qstring-left
-    - range-loop
-    - returning-data-from-temporary
-    - rule-of-two-soft
+    - [auto-unexpected-qstringbuilder](level1/README-auto-unexpected-qstringbuilder.md)    (fix-auto-unexpected-qstringbuilder)
+    - [child-event-qobject-cast](level1/README-child-event-qobject-cast.md)
+    - [detaching-temporary](level1/README-detaching-temporary.md)
+    - [foreach](level1/README-foreach.md)
+    - [incorrect-emit](level1/README-incorrect-emit.md)
+    - [inefficient-qlist-soft](level1/README-inefficient-qlist-soft.md)
+    - [missing-qobject-macro](level1/README-missing-qobject-macro.md)
+    - [non-pod-global-static](level1/README-non-pod-global-static.md)
+    - [post-event](level1/README-post-event.md)
+    - [qdeleteall](level1/README-qdeleteall.md)
+    - [qlatin1string-non-ascii](level1/README-qlatin1string-non-ascii.md)
+    - [qstring-left](level1/README-qstring-left.md)
+    - [range-loop](level1/README-range-loop.md)
+    - [returning-data-from-temporary](level1/README-returning-data-from-temporary.md)
+    - [rule-of-two-soft](level1/README-rule-of-two-soft.md)
 
 - Checks from level2:
-    - base-class-event
-    - container-inside-loop
-    - copyable-polymorphic
-    - ctor-missing-parent-argument
-    - function-args-by-ref
-    - function-args-by-value
-    - global-const-char-pointer
-    - implicit-casts
-    - missing-typeinfo
-    - old-style-connect    (fix-old-style-connect)
-    - qstring-allocations    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
-    - reserve-candidates
-    - returning-void-expression
-    - rule-of-three
-    - virtual-call-ctor
+    - [base-class-event](level2/README-base-class-event.md)
+    - [container-inside-loop](level2/README-container-inside-loop.md)
+    - [copyable-polymorphic](level2/README-copyable-polymorphic.md)
+    - [ctor-missing-parent-argument](level2/README-ctor-missing-parent-argument.md)
+    - [function-args-by-ref](level2/README-function-args-by-ref.md)
+    - [function-args-by-value](level2/README-function-args-by-value.md)
+    - [global-const-char-pointer](level2/README-global-const-char-pointer.md)
+    - [implicit-casts](level2/README-implicit-casts.md)
+    - [missing-typeinfo](level2/README-missing-typeinfo.md)
+    - [old-style-connect](level2/README-old-style-connect.md)    (fix-old-style-connect)
+    - [qstring-allocations](level2/README-qstring-allocations.md)    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
+    - [reserve-candidates](level2/README-reserve-candidates.md)
+    - [returning-void-expression](level2/README-returning-void-expression.md)
+    - [rule-of-three](level2/README-rule-of-three.md)
+    - [virtual-call-ctor](level2/README-virtual-call-ctor.md)
 
 - Checks from level3:
-    - assert-with-side-effects
-    - bogus-dynamic-cast
-    - detaching-member
+    - [assert-with-side-effects](level3/README-assert-with-side-effects.md)
+    - [bogus-dynamic-cast](level3/README-bogus-dynamic-cast.md)
+    - [detaching-member](level3/README-detaching-member.md)
 
 ## Description of each level
 - level0: Very stable checks, 99.99% safe, no false-positives
