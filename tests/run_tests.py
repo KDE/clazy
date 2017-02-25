@@ -155,15 +155,26 @@ def libraryName():
     else:
         return 'ClangLazy.so'
 
+def more_clazy_args():
+    return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Wno-unused-value -Qunused-arguments "
+
 def compiler_command(qt):
-    return "clang -std=c++14 -Wno-unused-value -Qunused-arguments -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + qt.compiler_flags()
+    if 'CLAZY_CXX' in os.environ:
+        return os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
+
+    return "clang -std=c++14 -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
 
 def dump_ast_command(test):
     return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
 
+def compiler_name():
+    if 'CLAZY_CXX' in os.environ:
+        return os.environ['CLAZY_CXX'] # so we can set clazy.bat instead
+    return 'clang'
+
 #-------------------------------------------------------------------------------
 # Get clang version
-version,success = get_command_output('clang --version')
+version,success = get_command_output(compiler_name() + ' --version')
 
 match = re.search('clang version (.*?)[ -]', version)
 try:
@@ -202,6 +213,7 @@ def qt_installation(major_version):
 def run_command(cmd, output_file = "", test_env = os.environ):
     lines,success = get_command_output(cmd, test_env)
     lines = lines.replace("std::_Container_base0", "std::_Vector_base") # Hack for Windows, we have std::_Vector_base in the expected data
+    lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
     if not success and not output_file:
         print lines
         return False
@@ -376,6 +388,8 @@ switches = ["--verbose", "--dump-ast", "--help"]
 
 if _dump_ast:
     del(args[args.index("--dump-ast")])
+
+os.environ['CLAZY_CHECKS'] = ''
 
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)

@@ -81,7 +81,7 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
 {
     // Here we look for code like str.firstMethod().secondMethod(), where firstMethod() is for example mid() and secondMethod is for example, toInt()
 
-    CallExpr *call = dyn_cast<CallExpr>(stmt);
+    auto call = dyn_cast<CallExpr>(stmt);
     if (!call || processCase1(dyn_cast<CXXMemberCallExpr>(call)))
         return;
 
@@ -105,7 +105,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
         return false;
 
     // The list now contains {secondMethod(), firstMethod() }
-    CXXMemberCallExpr *firstMemberCall = dyn_cast<CXXMemberCallExpr>(callExprs.at(1));
+    auto firstMemberCall = dyn_cast<CXXMemberCallExpr>(callExprs.at(1));
 
     if (!firstMemberCall || !isInterestingFirstMethod(firstMemberCall->getMethodDecl()))
         return false;
@@ -122,7 +122,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 // Catches cases like: s.append(s2.mid(1, 1));
 bool StringRefCandidates::processCase2(CallExpr *call)
 {
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(call);
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(call);
     CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(call);
 
     CXXMethodDecl *method = nullptr;
@@ -146,7 +146,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
     }
 
     CallExpr *innerCall = HierarchyUtils::getFirstChildOfType2<CallExpr>(temp);
-    CXXMemberCallExpr *innerMemberCall = innerCall ? dyn_cast<CXXMemberCallExpr>(innerCall) : nullptr;
+    auto innerMemberCall = innerCall ? dyn_cast<CXXMemberCallExpr>(innerCall) : nullptr;
     if (!innerMemberCall)
         return false;
 

@@ -113,8 +113,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         return;
 
     Expr *expr = memberExpr->getImplicitObjectArgument();
-
-    if (!expr || !expr->isRValue()) // This check is about detaching temporaries, so check for r value
+    if (!expr || expr->isLValue()) // This check is about detaching temporaries, so check for r value
         return;
 
     const Type *containerType = expr->getType().getTypePtrOrNull();

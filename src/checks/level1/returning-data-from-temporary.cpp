@@ -78,7 +78,7 @@ void ReturningDataFromTemporary::handleDataCall(CXXMemberCallExpr *memberCall)
     CXXBindTemporaryExpr *temporaryExpr = nullptr;
 
     while (t) {
-        if (dyn_cast<ImplicitCastExpr>(t)) {
+        if (dyn_cast<ImplicitCastExpr>(t) || dyn_cast<MaterializeTemporaryExpr>(t)) {
             t = HierarchyUtils::getFirstChild(t);
             continue;
         }

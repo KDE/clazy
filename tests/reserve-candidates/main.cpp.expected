@@ -13,3 +13,4 @@ reserve-candidates/main.cpp:181:9: warning: Reserve candidate [-Wclazy-reserve-c
 reserve-candidates/main.cpp:188:9: warning: Reserve candidate [-Wclazy-reserve-candidates]
 reserve-candidates/main.cpp:189:9: warning: Reserve candidate [-Wclazy-reserve-candidates]
 reserve-candidates/main.cpp:233:9: warning: Reserve candidate [-Wclazy-reserve-candidates]
+reserve-candidates/main.cpp:281:9: warning: Reserve candidate [-Wclazy-reserve-candidates]
