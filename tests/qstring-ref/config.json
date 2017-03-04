@@ -4,8 +4,7 @@
             "filename" : "main.cpp"
         },
         {
-            "filename" : "bug376737.cpp",
-            "expects_failure" : true
+            "filename" : "bug376737.cpp"
         }
     ]
 }
