@@ -88,6 +88,46 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
     processCase2(call);
 }
 
+static bool containsChild(Stmt *s, Stmt *target)
+{
+    if (!s)
+        return false;
+
+    if (s == target)
+        return true;
+
+    if (auto mte = dyn_cast<MaterializeTemporaryExpr>(s)) {
+        return containsChild(mte->getTemporary(), target);
+    } else if (auto ice = dyn_cast<ImplicitCastExpr>(s)) {
+        return containsChild(ice->getSubExpr(), target);
+    } else if (auto bte = dyn_cast<CXXBindTemporaryExpr>(s)) {
+        return containsChild(bte->getSubExpr(), target);
+    }
+
+    return false;
+}
+
+bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt* s) const
+{
+    // While passing a QString to the QVariant ctor works fine, passing QStringRef doesn't
+    // So let's not warn when QStrings are cast to something else.
+    if (!s)
+        return false;
+
+    auto constr = HierarchyUtils::getFirstParentOfType<CXXConstructExpr>(m_parentMap, s);
+    if (!constr || constr->getNumArgs() == 0)
+        return false;
+
+    if (containsChild(constr->getArg(0), s)) {
+        CXXConstructorDecl *ctor = constr->getConstructor();
+        CXXRecordDecl *record = ctor ? ctor->getParent() : nullptr;
+        return record ? record->getQualifiedNameAsString() != "QString" : false;
+
+    }
+
+    return false;
+}
+
 // Catches cases like: int i = s.mid(1, 1).toInt()
 bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 {
@@ -109,12 +149,15 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 
     if (!firstMemberCall || !isInterestingFirstMethod(firstMemberCall->getMethodDecl()))
         return false;
-    const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
 
+    if (isConvertedToSomethingElse(memberCall))
+        return false;
+
+    const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled(FixitUseQStringRef)) {
+    if (isFixitEnabled(FixitUseQStringRef))
         fixits = fixit(firstMemberCall);
-    }
+
     emitWarning(firstMemberCall->getLocEnd(), "Use " + firstMethodName + "Ref() instead", fixits);
     return true;
 }

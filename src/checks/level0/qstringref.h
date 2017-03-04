@@ -43,6 +43,7 @@ public:
 private:
     bool processCase1(clang::CXXMemberCallExpr*);
     bool processCase2(clang::CallExpr *call);
+    bool isConvertedToSomethingElse(clang::Stmt* s) const;
 
     std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
     std::vector<clang::FixItHint> fixit(clang::CXXMemberCallExpr*);
