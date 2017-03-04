@@ -179,6 +179,10 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
     if (!method || method->getLocStart().isMacroID())
         return QtAccessSpecifier_Unknown;
 
+    // We want the declaration that's inside class {}, not the ones that are also a method definition
+    // and possibly outside the class
+    method = method->getCanonicalDecl();
+
     const SourceLocation methodLoc = method->getLocStart();
 
     // Process Q_SIGNAL:

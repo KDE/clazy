@@ -5,12 +5,10 @@
             "filename" : "main.cpp"
         },
         {
-            "filename" : "bug377140.cpp",
-            "expects_failure" : true
+            "filename" : "bug377140.cpp"
         },
         {
-            "filename" : "bug377134.cpp",
-            "expects_failure" : true
+            "filename" : "bug377134.cpp"
         }
     ]
 }
