@@ -316,15 +316,17 @@ def run_unit_test(test):
     if _verbose:
         print "Running: " + clazy_cmd
 
+    using_werror = "-Werror" in test.flags
+
     cmd_success = run_command(clazy_cmd, output_file, test.env)
 
-    if not cmd_success:
+    if (not cmd_success and not using_werror) or (cmd_success and using_werror):
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
         print
         return False
 
     if not test.compare_everything and not test.isFixedFile:
-        word_to_grep = "warning:" if "-Werror" not in test.flags else "error:"
+        word_to_grep = "warning:" if not using_werror else "error:"
         extract_word(word_to_grep, output_file, result_file)
 
     printableName = checkname
