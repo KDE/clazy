@@ -226,7 +226,7 @@ def run_command(cmd, output_file = "", test_env = os.environ):
     else:
         print lines
 
-    return True
+    return success
 
 def print_usage():
     print "Usage for " + sys.argv[0].strip("./") + ":\n"
