@@ -173,6 +173,12 @@ def libraryName():
     else:
         return 'ClangLazy.so'
 
+def link_flags():
+    flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
+    if _platform.startswith('linux'):
+        flags += " -lstdc++"
+    return flags
+
 def more_clazy_args():
     return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Wno-unused-value -Qunused-arguments "
 
@@ -207,7 +213,6 @@ CLANG_VERSION = int(version.replace('.', ''))
 # Global variables
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
-_link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
 _help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
@@ -313,7 +318,7 @@ def run_unit_test(test):
     compiler_cmd = compiler_command(qt)
 
     if test.link:
-        cmd = compiler_cmd + " " + _link_flags
+        cmd = compiler_cmd + " " + link_flags()
     else:
         cmd = compiler_cmd + " -c "
 
