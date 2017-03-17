@@ -7,4 +7,5 @@ void test()
     QString line;
     QObject o;
     o.setProperty("size", line.mid(7).trimmed()); // OK
+    QString attributes = line.mid(13).trimmed();  // OK
 }
