@@ -57,6 +57,8 @@ class Check:
     def __init__(self, name):
         self.name = name
         self.minimum_clang_version = 370 # clang 3.7.0
+        self.minimum_qt_version = 500
+        self.maximum_qt_version = 999
         self.enabled = True
         self.tests = []
 #-------------------------------------------------------------------------------
@@ -86,6 +88,12 @@ def load_json(check_name):
     if 'minimum_clang_version' in decoded:
         check.minimum_clang_version = decoded['minimum_clang_version']
 
+    if 'minimum_qt_version' in decoded:
+        check.minimum_qt_version = decoded['minimum_qt_version']
+
+    if 'maximum_qt_version' in decoded:
+        check.maximum_qt_version = decoded['maximum_qt_version']
+
     if 'enabled' in decoded:
         check.enabled = decoded['enabled']
 
@@ -97,12 +105,22 @@ def load_json(check_name):
             test = Test(check)
             test.blacklist_platforms = check_blacklist_platforms
             test.filename = t['filename']
+
             if 'minimum_qt_version' in t:
                 test.minimum_qt_version = t['minimum_qt_version']
+            else:
+                test.minimum_qt_version = check.minimum_qt_version
+
             if 'maximum_qt_version' in t:
                 test.maximum_qt_version = t['maximum_qt_version']
+            else:
+                test.maximum_qt_version = check.maximum_qt_version
+
             if 'minimum_clang_version' in t:
                 test.minimum_clang_version = t['minimum_clang_version']
+            else:
+                test.minimum_clang_version = check.minimum_clang_version
+
             if 'blacklist_platforms' in t:
                 test.blacklist_platforms = t['blacklist_platforms']
             if 'compare_everything' in t:
@@ -155,6 +173,12 @@ def libraryName():
     else:
         return 'ClangLazy.so'
 
+def link_flags():
+    flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
+    if _platform.startswith('linux'):
+        flags += " -lstdc++"
+    return flags
+
 def more_clazy_args():
     return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Wno-unused-value -Qunused-arguments "
 
@@ -189,7 +213,6 @@ CLANG_VERSION = int(version.replace('.', ''))
 # Global variables
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
-_link_flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
 _help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
@@ -226,7 +249,7 @@ def run_command(cmd, output_file = "", test_env = os.environ):
     else:
         print lines
 
-    return True
+    return success
 
 def print_usage():
     print "Usage for " + sys.argv[0].strip("./") + ":\n"
@@ -295,7 +318,7 @@ def run_unit_test(test):
     compiler_cmd = compiler_command(qt)
 
     if test.link:
-        cmd = compiler_cmd + " " + _link_flags
+        cmd = compiler_cmd + " " + link_flags()
     else:
         cmd = compiler_cmd + " -c "
 
@@ -316,15 +339,17 @@ def run_unit_test(test):
     if _verbose:
         print "Running: " + clazy_cmd
 
+    using_werror = "-Werror" in test.flags
+
     cmd_success = run_command(clazy_cmd, output_file, test.env)
 
-    if not cmd_success:
+    if (not cmd_success and not using_werror) or (cmd_success and using_werror):
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
         print
         return False
 
     if not test.compare_everything and not test.isFixedFile:
-        word_to_grep = "warning:" if "-Werror" not in test.flags else "error:"
+        word_to_grep = "warning:" if not using_werror else "error:"
         extract_word(word_to_grep, output_file, result_file)
 
     printableName = checkname

@@ -48,7 +48,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
     if (!method || method->getParent()->getNameAsString() != "QString")
         return false;
 
-    static const vector<string> list = { "left", "mid", "right" };
+    static const vector<string> list = { "left", "mid", "right", "trimmed" };
     return clazy_std::contains(list, method->getNameAsString());
 }
 
@@ -59,7 +59,7 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
 
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
                                          "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
-                                         "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4", "trimmed" };
+                                         "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" };
 
     if (!clazy_std::contains(list, method->getNameAsString()))
         return false;
