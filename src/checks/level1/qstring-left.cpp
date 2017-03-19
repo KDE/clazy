@@ -55,7 +55,7 @@ void QStringLeft::VisitStmt(clang::Stmt *stmt)
         if (value == 0) {
             emitWarning(stmt, "QString::left(0) returns an empty string");
         } else if (value == 1){
-            emitWarning(stmt, "Use QString::at(0) instead of QString::left(1)");
+            emitWarning(stmt, "Use QString::at(0) instead of QString::left(1) to avoid temporary allocations (just be sure the string isn't empty).");
         }
     }
 }
