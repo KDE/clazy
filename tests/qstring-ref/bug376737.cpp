@@ -8,4 +8,8 @@ void test()
     QObject o;
     o.setProperty("size", line.mid(7).trimmed()); // OK
     QString attributes = line.mid(13).trimmed();  // OK
+
+    QString comment;
+    if (!comment.trimmed().isEmpty()) { // OK
+    }
 }
