@@ -48,7 +48,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
     if (!method || method->getParent()->getNameAsString() != "QString")
         return false;
 
-    static const vector<string> list = { "left", "mid", "right", "trimmed" };
+    static const vector<string> list = { "left", "mid", "right" };
     return clazy_std::contains(list, method->getNameAsString());
 }
 
