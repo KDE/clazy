@@ -217,7 +217,8 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
 {
     FullSourceLoc full(loc, sm());
     auto &engine = m_ci.getDiagnostics();
-    auto severity = engine.getWarningsAsErrors() ? DiagnosticIDs::Error : DiagnosticIDs::Warning;
+    auto severity = (engine.getWarningsAsErrors() && !m_checkManager->userDisabledWError()) ? DiagnosticIDs::Error
+                                                                                            : DiagnosticIDs::Warning;
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
     DiagnosticBuilder B = engine.Report(full, id);
     for (const FixItHint& fixit : fixits) {

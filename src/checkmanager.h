@@ -118,6 +118,11 @@ public:
         return !ci.getPreprocessorOpts().ImplicitPCHInclude.empty();
     }
 
+    bool userDisabledWError() const
+    {
+        return m_noWerror;
+    }
+
 private:
     CheckManager();
 
@@ -131,6 +136,7 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
+    bool m_noWerror = false;
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
     SuppressionManager m_suppressionManager;

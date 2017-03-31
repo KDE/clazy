@@ -51,6 +51,9 @@ CheckManager::CheckManager()
             m_requestedFixitName = string(fixitsEnv);
         }
     }
+
+    // Allows user to make clazy ignore -Werror
+    m_noWerror = getenv("CLAZY_NO_WERROR") != nullptr;
 }
 
 bool CheckManager::checkExists(const string &name) const

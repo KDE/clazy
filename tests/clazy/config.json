@@ -18,7 +18,14 @@
         {
             "filename" : "werror.cpp",
             "flags"    : "-Werror",
+            "must_fail": true,
             "checks"   : ["foreach"]
+        },
+        {
+            "filename" : "werror2.cpp",
+            "flags"    : "-Werror",
+            "checks"   : ["foreach"],
+            "env"      : { "CLAZY_NO_WERROR" : "1" }
         }
     ]
 }
