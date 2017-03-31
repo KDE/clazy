@@ -30,6 +30,7 @@ class Test:
         self.env = os.environ
         self.checks = []
         self.flags = ""
+        self.must_fail = False
         self.blacklist_platforms = []
 
     def isScript(self):
@@ -137,6 +138,8 @@ def load_json(check_name):
                 test.checks = t['checks']
             if 'flags' in t:
                 test.flags = t['flags']
+            if 'must_fail' in t:
+                test.must_fail = t['must_fail']
             if 'expects_failure' in t:
                 test.expects_failure = t['expects_failure']
 
@@ -339,17 +342,17 @@ def run_unit_test(test):
     if _verbose:
         print "Running: " + clazy_cmd
 
-    using_werror = "-Werror" in test.flags
+    must_fail = test.must_fail
 
     cmd_success = run_command(clazy_cmd, output_file, test.env)
 
-    if (not cmd_success and not using_werror) or (cmd_success and using_werror):
+    if (not cmd_success and not must_fail) or (cmd_success and must_fail):
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
         print
         return False
 
     if not test.compare_everything and not test.isFixedFile:
-        word_to_grep = "warning:" if not using_werror else "error:"
+        word_to_grep = "warning:" if not must_fail else "error:"
         extract_word(word_to_grep, output_file, result_file)
 
     printableName = checkname

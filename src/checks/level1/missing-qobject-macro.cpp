@@ -59,7 +59,7 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
     if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates
         return;
 
-    if (QtUtils::isBootstrapping(m_ci)) // avoid warnings when building bootstrap lib
+    if (m_checkManager->usingPreCompiledHeaders(m_ci))
         return;
 
     const SourceLocation startLoc = decl->getLocStart();
