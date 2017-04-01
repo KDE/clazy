@@ -171,6 +171,10 @@ B<CLAZY_EXTRA_OPTIONS> - some checkers can adapt their behavior depending on the
 of this environment variable.  More documentation is provided when running clazy with
 the B<--explain> command line option.
 
+B<CLAZY_NO_WERROR> - if this is variable is set, clazy will not treat warnings as errors,
+even if the -Werror compiler option is specified.  This is useful if you want to use -Werror
+only for the regular gcc/clang warnings but not for clazy warnings.
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2010-2017 Klaralvdalens Datakonsult AB, a KDAB Group company, <info@kdab.com>
@@ -192,7 +196,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 =head1 SEE ALSO
 
  clang(1)
- L<https://www.kdab.com/use-static-analysis-improve-performance>
+ https://www.kdab.com/use-static-analysis-improve-performance
 
 =head1 AUTHORS
 
