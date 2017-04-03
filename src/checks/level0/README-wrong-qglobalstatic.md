@@ -1,7 +1,7 @@
 # wrong-qglobalstatic
 
 Finds `Q_GLOBAL_STATIC`s being used with trivial types.
-This is unnecessary and creates more code bloat.
+This is unnecessary and creates code bloat.
 
 #### Example:
 
