@@ -67,12 +67,6 @@ public:
         fd = -1;
         return InPlace ? filename : filename + "_fixed.cpp";
     }
-
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 6
-    // Clang >= 3.7 already has this member.
-    // We define it for clang <= 3.6 so it builds.
-    bool InPlace;
-#endif
 };
 
 static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
@@ -126,10 +120,9 @@ public:
     {
         const bool isInSystemHeader = m_sm.isInSystemHeader(decl->getLocStart());
 
-#if !defined(IS_OLD_CLANG)
         if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
             a->VisitDeclaration(decl);
-#endif
+
         for (const auto &check : m_createdChecks) {
             if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
                 check->VisitDeclaration(decl);

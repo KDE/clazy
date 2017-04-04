@@ -24,8 +24,6 @@
 
 #include "checkbase.h"
 
-#if !defined(IS_OLD_CLANG)
-
 #include <unordered_map>
 
 namespace clang {
@@ -50,5 +48,4 @@ private:
     mutable std::unordered_map<unsigned, clang::SourceLocation> m_locationCache;
 };
 
-#endif
 #endif

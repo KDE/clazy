@@ -21,8 +21,6 @@
 
 #include <llvm/Config/llvm-config.h>
 
-#if !defined(IS_OLD_CLANG)
-
 #include "missing-qobject-macro.h"
 
 #include "Utils.h"
@@ -81,5 +79,3 @@ void MissingQ_OBJECT::registerQ_OBJECT(SourceLocation loc)
 }
 
 REGISTER_CHECK_WITH_FLAGS("missing-qobject-macro", MissingQ_OBJECT, CheckLevel1)
-
-#endif // clang >= 3.7

@@ -38,8 +38,6 @@
 using namespace clang;
 using namespace std;
 
-#if !defined(IS_OLD_CLANG)
-
 ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
     : check(check)
 {
@@ -66,8 +64,6 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
-#endif
-
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     : m_ci(ci)
     , m_sm(ci.getSourceManager())
@@ -75,9 +71,7 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     , m_context(m_ci.getASTContext())
     , m_tu(m_context.getTranslationUnitDecl())
     , m_checkManager(CheckManager::instance())
-#if !defined(IS_OLD_CLANG)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
-#endif
     , m_enabledFixits(0)
 {
 }
@@ -141,10 +135,8 @@ void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
 
 void CheckBase::enablePreProcessorCallbacks()
 {
-#if !defined(IS_OLD_CLANG)
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
-#endif
 }
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const

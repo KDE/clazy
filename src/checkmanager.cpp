@@ -326,16 +326,12 @@ void CheckManager::setRequestedLevel(CheckLevel level)
 
 void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 {
-#if !defined(IS_OLD_CLANG)
     if (!m_accessSpecifierManager && !usingPreCompiledHeaders(ci))
         m_accessSpecifierManager = new AccessSpecifierManager(ci);
-#endif
 }
 
 void CheckManager::enablePreprocessorVisitor(const CompilerInstance &ci)
 {
-#if !defined(IS_OLD_CLANG)
     if (!m_preprocessorVisitor && !usingPreCompiledHeaders(ci))
         m_preprocessorVisitor = new PreProcessorVisitor(ci);
-#endif
 }

@@ -107,10 +107,8 @@ public:
     void enableAccessSpecifierManager(const clang::CompilerInstance &ci);
     void enablePreprocessorVisitor(const clang::CompilerInstance &ci);
 
-#if !defined(IS_OLD_CLANG)
     AccessSpecifierManager *accessSpecifierManager() const { return m_accessSpecifierManager; }
     PreProcessorVisitor *preprocessorVisitor() const { return m_preprocessorVisitor; }
-#endif
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
     bool usingPreCompiledHeaders(const clang::CompilerInstance &ci) const
@@ -140,10 +138,8 @@ private:
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
     SuppressionManager m_suppressionManager;
-#if !defined(IS_OLD_CLANG)
     AccessSpecifierManager *m_accessSpecifierManager = nullptr;
     PreProcessorVisitor *m_preprocessorVisitor = nullptr;
-#endif
 };
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \

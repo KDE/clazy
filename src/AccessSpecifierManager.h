@@ -25,8 +25,6 @@
 
 #include "checkbase.h"
 
-#if !defined(IS_OLD_CLANG)
-
 # include <clang/Frontend/CompilerInstance.h>
 # include <unordered_map>
 # include <vector>
@@ -90,5 +88,4 @@ private:
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
 };
 
-#endif // !IS_OLD_CLANG
 #endif

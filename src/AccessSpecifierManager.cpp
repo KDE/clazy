@@ -22,8 +22,6 @@
 
 #include "AccessSpecifierManager.h"
 
-#if !defined(IS_OLD_CLANG)
-
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
@@ -224,5 +222,3 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
     --i; // One before the upper bound is the last access specifier before our method
     return (*i).qtAccessSpecifier;
 }
-
-#endif

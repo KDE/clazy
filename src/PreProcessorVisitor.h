@@ -29,8 +29,6 @@
 
 #include "checkbase.h"
 
-#if !defined(IS_OLD_CLANG)
-
 #include <string>
 #include <clang/Lex/PPCallbacks.h>
 
@@ -65,5 +63,4 @@ private:
     int m_qtVersion = -1;
 };
 
-#endif
 #endif

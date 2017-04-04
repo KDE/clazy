@@ -25,8 +25,6 @@
 
 #include "checkbase.h"
 
-#if !defined(IS_OLD_CLANG)
-
 /**
  * See README-connect-non-signal.md for more info.
  */
@@ -38,5 +36,4 @@ public:
 private:
 };
 
-#endif
 #endif

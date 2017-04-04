@@ -35,10 +35,6 @@
 
 #include <string>
 
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR == 6
-# define IS_OLD_CLANG
-#endif
-
 namespace clang {
 class CXXMethodDecl;
 class Stmt;
@@ -65,8 +61,6 @@ enum CheckLevel {
     DefaultCheckLevel = CheckLevel1
 };
 
-#if !defined(IS_OLD_CLANG)
-
 class ClazyPreprocessorCallbacks : public clang::PPCallbacks
 {
 public:
@@ -82,8 +76,6 @@ public:
 private:
     CheckBase *const check;
 };
-
-#endif
 
 class CLAZYLIB_EXPORT CheckBase
 {
@@ -149,9 +141,7 @@ protected:
     std::vector<std::string> m_filesToIgnore;
 private:
     friend class ClazyPreprocessorCallbacks;
-#if !defined(IS_OLD_CLANG)
     ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
-#endif
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
