@@ -76,4 +76,18 @@ then
   exit
 fi
 
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@ -Xclang -add-plugin -Xclang clang-lazy $@
+ClangLazyLib=ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@
+
+if ( test -f "$libdir/$ClangLazyLib" )
+then
+    # find plugin libraries in install dir
+    export LD_LIBRARY_PATH=$libdir:$LD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH=$libdir:$DYLD_LIBRARY_PATH
+elif ( test -f "$(dirname $0)/lib/$ClangLazyLib" )
+then
+    # find plugin libraries in build dir
+    export LD_LIBRARY_PATH=$(dirname $0)/lib:$LD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH=$(dirname $0)/lib:$DYLD_LIBRARY_PATH
+fi
+
+${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClangLazyLib -Xclang -add-plugin -Xclang clang-lazy $@
