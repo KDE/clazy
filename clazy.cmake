@@ -90,4 +90,4 @@ then
     export DYLD_LIBRARY_PATH=$(dirname $0)/lib:$DYLD_LIBRARY_PATH
 fi
 
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClangLazyLib -Xclang -add-plugin -Xclang clang-lazy $@
+${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClangLazyLib -Xclang -add-plugin -Xclang clang-lazy "$@"
