@@ -23,6 +23,10 @@
 #define CLAZY_TYPE_UTILS_H
 
 #include "clazylib_export.h"
+
+#include <clang/AST/Type.h>
+#include <clang/AST/Expr.h>
+
 #include <string>
 
 namespace clang {
@@ -123,6 +127,22 @@ namespace TypeUtils
      * A *const a; => false
      */
     CLAZYLIB_EXPORT bool valueIsConst(clang::QualType qt);
+
+    inline clang::CXXRecordDecl* typeAsRecord(clang::QualType qt)
+    {
+        if (qt.isNull())
+            return nullptr;
+
+        return qt->getAsCXXRecordDecl();
+    }
+
+    inline clang::CXXRecordDecl* typeAsRecord(clang::Expr *expr)
+    {
+        if (!expr)
+            return nullptr;
+
+        return typeAsRecord(expr->getType());
+    }
 }
 
 #endif
