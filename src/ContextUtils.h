@@ -57,6 +57,19 @@ CLAZYLIB_EXPORT bool isValueDeclInFunctionContext(const clang::ValueDecl *);
  */
 CLAZYLIB_EXPORT std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
 
+/**
+ * Returns the first context for a decl.
+ */
+inline clang::DeclContext * contextForDecl(clang::Decl *decl)
+{
+    if (!decl)
+        return nullptr;
+
+    if (auto context = llvm::dyn_cast<clang::DeclContext>(decl))
+        return context;
+
+    return decl->getDeclContext();
+}
 
 /**
  * Returns the first context of type T in which the specified context is in.

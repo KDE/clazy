@@ -22,6 +22,7 @@
 #include "returning-void-expression.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
+#include "ContextUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "checkmanager.h"
@@ -45,6 +46,15 @@ void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 
     QualType qt = ret->getRetValue()->getType();
     if (qt.isNull() || !qt->isVoidType())
+        return;
+
+    DeclContext *context = ContextUtils::contextForDecl(m_lastDecl);
+    if (!context)
+        return;
+
+    auto func = dyn_cast<FunctionDecl>(context);
+    // A function template returning T won't bailout in the void check above, do it properly now:
+    if (!func || !func->getReturnType()->isVoidType())
         return;
 
     emitWarning(stmt, "Returning a void expression");
