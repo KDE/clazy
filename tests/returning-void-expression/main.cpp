@@ -22,7 +22,15 @@ T test4()
 }
 
 template <typename T>
-void test5()
+constexpr T test5()
 {
+    return {}; // OK (bug #378677)
+}
+
+template <typename T>
+void test6()
+{
+    test4<int>(); // OK
+    test5<int>(); // OK
     return foo(); // Warning
 }
