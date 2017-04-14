@@ -1,0 +1,5 @@
+install-event-filter/main.cpp:21:9: warning: 'this' should usually be the filter object, not the monitored one. [-Wclazy-install-event-filter]
+install-event-filter/main.cpp:29:9: warning: 'this' should usually be the filter object, not the monitored one. [-Wclazy-install-event-filter]
+install-event-filter/main.cpp:30:9: warning: 'this' should usually be the filter object, not the monitored one. [-Wclazy-install-event-filter]
+install-event-filter/main.cpp:31:9: warning: 'this' should usually be the filter object, not the monitored one. [-Wclazy-install-event-filter]
+install-event-filter/main.cpp:42:9: warning: 'this' should usually be the filter object, not the monitored one. [-Wclazy-install-event-filter]

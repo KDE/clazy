@@ -25,3 +25,5 @@
 
 
 * v1.2 ()
+  - New checks:
+    install-event-filter
