@@ -27,8 +27,6 @@
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ASTContext.h>
-#include <clang/AST/StmtCXX.h>
-#include <clang/AST/DeclCXX.h>
 
 using namespace clang;
 
@@ -83,19 +81,6 @@ bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varD
     return true;
 }
 
-QualType TypeUtils::unrefQualType(QualType qualType)
-{
-    const Type *t = qualType.getTypePtrOrNull();
-    return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
-}
-
-QualType TypeUtils::pointeeQualType(QualType qualType)
-{
-    // TODO: Make this recursive when we need to remove more than one level of *
-    const Type *t = qualType.getTypePtrOrNull();
-    return (t && (t->isReferenceType() || t->isPointerType())) ? t->getPointeeType() : qualType;
-}
-
 void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
                                      const clang::LangOptions &lo,
                                      bool &isStack, bool &isHeap)
@@ -137,15 +122,6 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 }
 
-bool TypeUtils::isUndeducibleAuto(const Type *t)
-{
-    if (!t)
-        return false;
-
-    auto at = dyn_cast<AutoType>(t);
-    return at && at->getDeducedType().isNull();
-}
-
 bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
 {
     if (!derived || !possibleBase || derived == possibleBase)
@@ -185,15 +161,4 @@ bool TypeUtils::derivesFrom(QualType derivedQT, const std::string &possibleBase)
     derivedQT = pointeeQualType(derivedQT);
     const auto t = derivedQT.getTypePtrOrNull();
     return t ? derivesFrom(t->getAsCXXRecordDecl(), possibleBase) : false;
-}
-
-clang::CXXRecordDecl * TypeUtils::recordFromBaseSpecifier(const clang::CXXBaseSpecifier &base)
-{
-    const Type *t = base.getType().getTypePtrOrNull();
-    return t ? t->getAsCXXRecordDecl() : nullptr;
-}
-
-bool TypeUtils::valueIsConst(QualType qt)
-{
-    return pointeeQualType(qt).isConstQualified();
 }

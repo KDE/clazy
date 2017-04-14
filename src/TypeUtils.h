@@ -26,7 +26,8 @@
 
 #include <clang/AST/Type.h>
 #include <clang/AST/Expr.h>
-
+#include <clang/AST/StmtCXX.h>
+#include <clang/AST/DeclCXX.h>
 #include <string>
 
 namespace clang {
@@ -77,14 +78,22 @@ namespace TypeUtils
      * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
      * returns false. Must go through qualType->getPointeeType().isConstQualified().
      */
-    CLAZYLIB_EXPORT clang::QualType unrefQualType(clang::QualType qt);
-
+    inline clang::QualType unrefQualType(clang::QualType qualType)
+    {
+        const clang::Type *t = qualType.getTypePtrOrNull();
+        return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
+    }
 
     /**
      * If qt is a pointer or ref, return it without * or &.
      * Otherwise return qt unchanged.
      */
-    CLAZYLIB_EXPORT clang::QualType pointeeQualType(clang::QualType qt);
+    inline clang::QualType pointeeQualType(clang::QualType qualType)
+    {
+        // TODO: Make this recursive when we need to remove more than one level of *
+        const clang::Type *t = qualType.getTypePtrOrNull();
+        return (t && (t->isReferenceType() || t->isPointerType())) ? t->getPointeeType() : qualType;
+    }
 
     /**
      * Returns if @p arg is stack or heap allocated.
@@ -97,7 +106,14 @@ namespace TypeUtils
     /**
      * Returns true if t is an AutoType that can't be deduced.
      */
-    CLAZYLIB_EXPORT bool isUndeducibleAuto(const clang::Type *t);
+    inline bool isUndeducibleAuto(const clang::Type *t)
+    {
+        if (!t)
+            return false;
+
+        auto at = llvm::dyn_cast<clang::AutoType>(t);
+        return at && at->getDeducedType().isNull();
+    }
 
     /**
      * Returns true if childDecl is a descent from parentDecl
@@ -113,8 +129,11 @@ namespace TypeUtils
     /**
      * Returns the CXXRecordDecl represented by the CXXBaseSpecifier
      */
-    CLAZYLIB_EXPORT clang::CXXRecordDecl * recordFromBaseSpecifier(const clang::CXXBaseSpecifier &);
-
+    inline clang::CXXRecordDecl * recordFromBaseSpecifier(const clang::CXXBaseSpecifier &base)
+    {
+        const clang::Type *t = base.getType().getTypePtrOrNull();
+        return t ? t->getAsCXXRecordDecl() : nullptr;
+    }
     /**
      * Returns true if the value is const. This is usually equivalent to qt.isConstQualified() but
      * takes care of the special case where qt represents a pointer. Many times you don't care if the
@@ -126,7 +145,10 @@ namespace TypeUtils
      * const A* a; => true
      * A *const a; => false
      */
-    CLAZYLIB_EXPORT bool valueIsConst(clang::QualType qt);
+    inline bool valueIsConst(clang::QualType qt)
+    {
+        return pointeeQualType(qt).isConstQualified();
+    }
 
     inline clang::CXXRecordDecl* typeAsRecord(clang::QualType qt)
     {
