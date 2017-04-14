@@ -163,7 +163,7 @@ namespace TypeUtils
         if (!expr)
             return nullptr;
 
-        return typeAsRecord(expr->getType());
+        return typeAsRecord(pointeeQualType(expr->getType()));
     }
 }
 
