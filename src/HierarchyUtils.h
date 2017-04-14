@@ -24,16 +24,17 @@
 
 #ifndef CLAZY_HIERARCHY_UTILS_H
 #define CLAZY_HIERARCHY_UTILS_H
-#include "clazylib_export.h"
+
 // Contains utility classes to retrieve parents and childs from AST Nodes
+
+#include "clazylib_export.h"
 #include "clazy_stl.h"
+
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/ExprCXX.h>
+#include <clang/AST/ParentMap.h>
 
-namespace clang {
-class ParentMap;
-}
 
 namespace HierarchyUtils {
 
@@ -48,12 +49,37 @@ typedef int IgnoreStmts;
 /**
  * Returns true if child is a child of parent.
  */
-CLAZYLIB_EXPORT bool isChildOf(clang::Stmt *child, clang::Stmt *parent);
+inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
+{
+    if (!child || !parent)
+        return false;
+
+    return clazy_std::any_of(parent->children(), [child](clang::Stmt *c) {
+        return c == child || isChildOf(child, c);
+    });
+}
 
 /**
  * Returns true if stm is parent of a member function call named "name"
  */
-CLAZYLIB_EXPORT bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name);
+
+inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name)
+{
+    if (!stm)
+        return false;
+
+    if (auto expr = llvm::dyn_cast<clang::MemberExpr>(stm)) {
+        auto namedDecl = llvm::dyn_cast<clang::NamedDecl>(expr->getMemberDecl());
+        if (namedDecl && namedDecl->getNameAsString() == name)
+            return true;
+    }
+
+    return clazy_std::any_of(stm->children(), [name] (clang::Stmt *child) {
+        return isParentOfMemberFunctionCall(child, name);
+    });
+
+    return false;
+}
 
 /**
  * Returns the first child of stm of type T.
@@ -101,10 +127,18 @@ T* getFirstChildOfType2(clang::Stmt *stm)
     return nullptr;
 }
 
+
 // If depth = 0, return s
 // If depth = 1, returns parent of s
 // etc.
-CLAZYLIB_EXPORT clang::Stmt* parent(clang::ParentMap *, clang::Stmt *s, unsigned int depth = 1);
+inline clang::Stmt *parent(clang::ParentMap *map, clang::Stmt *s, unsigned int depth = 1)
+{
+    if (!s)
+        return nullptr;
+
+    return depth == 0 ? s
+                      : HierarchyUtils::parent(map, map->getParent(s), depth - 1);
+}
 
 // Returns the first parent of type T, with max depth depth
 template <typename T>
@@ -123,9 +157,23 @@ T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int dep
     return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
 }
 
-CLAZYLIB_EXPORT clang::Stmt * getFirstChild(clang::Stmt *parent);
+inline clang::Stmt *getFirstChild(clang::Stmt *parent)
+{
+    if (!parent)
+        return nullptr;
 
-CLAZYLIB_EXPORT clang::Stmt * getFirstChildAtDepth(clang::Stmt *parent, unsigned int depth);
+    auto it = parent->child_begin();
+    return it == parent->child_end() ? nullptr : *it;
+}
+
+inline clang::Stmt * getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
+{
+    if (depth == 0 || !s)
+        return s;
+
+    return clazy_std::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
+                                     : nullptr;
+}
 
 template <typename T>
 void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
@@ -146,8 +194,11 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
     }
 }
 
-CLAZYLIB_EXPORT bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options);
-
+inline bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options)
+{
+    return ((options & IgnoreImplicitCasts)    && llvm::isa<clang::ImplicitCastExpr>(s)) ||
+           ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(s));
+}
 
 /**
  * Returns all statements of type T in body, starting from startLocation, or from body->getLocStart() if
