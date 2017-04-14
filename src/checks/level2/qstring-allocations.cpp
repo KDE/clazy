@@ -27,7 +27,7 @@
 #include "clazy_stl.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
-#include "MethodSignatureUtils.h"
+#include "FunctionUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -180,7 +180,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
     bool isQLatin1String = false;
     string paramType;
-    if (hasCharPtrArgument(ctorDecl, 1)) {
+    if (FunctionUtils::hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
     } else if (ctorDecl->param_size() == 1 && StringUtils::hasArgumentOfType(ctorDecl, "QLatin1String", lo())) {
         paramType = "QLatin1String";
@@ -457,7 +457,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     if (!StringUtils::isOfClass(methodDecl, "QString"))
         return;
 
-    if (!hasCharPtrArgument(methodDecl))
+    if (!FunctionUtils::hasCharPtrArgument(methodDecl))
         return;
 
     vector<FixItHint> fixits;
@@ -498,7 +498,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (!StringUtils::isOfClass(methodDecl, "QString"))
         return;
 
-    if (!Utils::callHasDefaultArguments(callExpr) || !hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
+    if (!Utils::callHasDefaultArguments(callExpr) || !FunctionUtils::hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
         return;
 
     if (!containsStringLiteralNoCallExpr(callExpr))

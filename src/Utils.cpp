@@ -23,7 +23,6 @@
 */
 
 #include "Utils.h"
-#include "MethodSignatureUtils.h"
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"

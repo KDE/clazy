@@ -22,12 +22,17 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef METHOD_SIGNATURE_UTILS_H
-#define METHOD_SIGNATURE_UTILS_H
+#ifndef FUNCTION_UTILS_H
+#define FUNCTION_UTILS_H
+
+// Contains utility functions regarding functions and methods
 
 #include "Utils.h"
+
 #include <clang/AST/Decl.h>
 #include <string>
+
+namespace FunctionUtils {
 
 inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
 {
@@ -52,4 +57,5 @@ inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments
     return false;
 }
 
+}
 #endif
