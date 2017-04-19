@@ -27,7 +27,7 @@
 
 // Contains utility classes to retrieve parents and childs from AST Nodes
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 #include "clazy_stl.h"
 
 #include <clang/Frontend/CompilerInstance.h>

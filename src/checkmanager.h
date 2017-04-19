@@ -25,7 +25,7 @@
 #ifndef CLANG_LAZY_CHECK_MANAGER_H
 #define CLANG_LAZY_CHECK_MANAGER_H
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 #include "checkbase.h"
 #include "SuppressionManager.h"
 

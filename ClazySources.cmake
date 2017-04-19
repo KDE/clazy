@@ -76,3 +76,7 @@ set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
 )
+
+if (NOT CLAZY_BUILD_UTILS_LIB)
+  set(CLAZY_SRCS ${CLAZY_SRCS} ${CLAZY_LIB_SRC})
+endif()

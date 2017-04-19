@@ -22,7 +22,7 @@
 #ifndef CLAZY_TYPE_UTILS_H
 #define CLAZY_TYPE_UTILS_H
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 
 #include <clang/AST/Type.h>
 #include <clang/AST/Expr.h>

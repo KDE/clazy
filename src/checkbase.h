@@ -25,7 +25,7 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 
 #include "clazy_stl.h"
 #include <clang/Basic/SourceManager.h>
