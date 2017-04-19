@@ -6,7 +6,6 @@ set(CLAZY_LIB_SRC
   ${CMAKE_CURRENT_LIST_DIR}/src/ContextUtils.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/FixItUtils.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/LoopUtils.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/MacroUtils.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/PreProcessorVisitor.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/QtUtils.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/StringUtils.cpp

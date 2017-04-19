@@ -32,12 +32,6 @@
 using namespace clang;
 using namespace std;
 
-bool ContextUtils::isValueDeclInFunctionContext(const clang::ValueDecl *valueDecl)
-{
-    const DeclContext *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
-    return context && isa<FunctionDecl>(context) && !isa<ParmVarDecl>(valueDecl);
-}
-
 std::vector<DeclContext *> ContextUtils::contextsForDecl(DeclContext *currentScope)
 {
     std::vector<DeclContext *> decls;
@@ -52,7 +46,7 @@ std::vector<DeclContext *> ContextUtils::contextsForDecl(DeclContext *currentSco
 
 static string nameForContext(DeclContext *context)
 {
-    if (auto  *ns = dyn_cast<NamespaceDecl>(context)) {
+    if (auto *ns = dyn_cast<NamespaceDecl>(context)) {
         return ns->getNameAsString();
     } else if (auto rec = dyn_cast<CXXRecordDecl>(context)) {
         return rec->getNameAsString();

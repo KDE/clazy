@@ -23,6 +23,12 @@
 #define CLAZY_MACRO_UTILS_H
 
 #include "clazylib_export.h"
+#include "clazy_stl.h"
+
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/Lexer.h>
+#include <clang/Lex/PreprocessorOptions.h>
+#include <clang/Basic/SourceLocation.h>
 
 #include <string>
 #include <vector>
@@ -39,17 +45,40 @@ namespace MacroUtils
  * Returns true is macroName was defined via compiler invocation argument.
  * Like $ gcc -Dfoo main.cpp
  */
-CLAZYLIB_EXPORT bool isPredefined(const clang::CompilerInstance &, const std::string &macroName);
+inline bool isPredefined(const clang::CompilerInstance &ci, const std::string &macroName)
+{
+    const auto &macros = ci.getPreprocessorOpts().Macros;
+
+    for (const auto &macro : macros) {
+        if (macro.first == macroName)
+            return true;
+    }
+
+    return false;
+}
 
 /**
  * Returns true if the source location loc is inside a macro named macroName.
  */
-CLAZYLIB_EXPORT bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName);
+inline bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName)
+{
+    if (loc.isValid() && loc.isMacroID()) {
+        auto macro = clang::Lexer::getImmediateMacroName(loc, ci.getSourceManager(), ci.getLangOpts());
+        return macro == macroName;
+    }
+
+    return false;
+}
 
 /**
  * Returns true if the source location loc is inside any of the specified macros.
  */
-CLAZYLIB_EXPORT bool isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames);
+inline bool isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames)
+{
+    return clazy_std::any_of(macroNames, [&ci, loc](const std::string &macroName) {
+        return isInMacro(ci, loc, macroName);
+    });
+}
 
 }
 
