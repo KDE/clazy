@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
