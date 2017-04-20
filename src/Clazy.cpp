@@ -82,11 +82,11 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
     }
 }
 
-class LazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<LazyASTConsumer>
+class ClazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<ClazyASTConsumer>
 {
-    LazyASTConsumer(const LazyASTConsumer &) = delete;
+    ClazyASTConsumer(const ClazyASTConsumer &) = delete;
 public:
-    LazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
+    ClazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
                     const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
         , m_sm(ci.getSourceManager())
@@ -103,7 +103,7 @@ public:
             check->registerASTMatchers(m_matchFinder);
     }
 
-    ~LazyASTConsumer()
+    ~ClazyASTConsumer()
     {
         if (m_rewriter) {
             m_rewriter->WriteFixedFiles();
@@ -234,7 +234,7 @@ ClazyASTAction::ClazyASTAction()
 
 std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    return llvm::make_unique<LazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
+    return llvm::make_unique<ClazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)
