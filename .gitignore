@@ -26,3 +26,4 @@ output.log
 /bin/
 /build/
 clazy.1
+/dev-scripts/clazy-*.log
