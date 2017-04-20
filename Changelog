@@ -28,6 +28,7 @@
   - ASTMatchers based checks are now supported
   - New checks:
     install-event-filter
+    qcolor-from-literal
   - clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)
     gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if
     you're developing tools using clazy's convenience functions, which you're

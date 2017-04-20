@@ -1,0 +1,5 @@
+qcolor-from-literal/main.cpp:8:15: warning: The QColor ctor taking ints is much cheaper than the one taking string literals [-Wclazy-qcolor-from-literal]
+qcolor-from-literal/main.cpp:11:15: warning: The QColor ctor taking ints is much cheaper than the one taking string literals [-Wclazy-qcolor-from-literal]
+qcolor-from-literal/main.cpp:12:15: warning: The QColor ctor taking ints is much cheaper than the one taking string literals [-Wclazy-qcolor-from-literal]
+qcolor-from-literal/main.cpp:13:15: warning: The QColor ctor taking ints is much cheaper than the one taking string literals [-Wclazy-qcolor-from-literal]
+qcolor-from-literal/main.cpp:16:17: warning: The QColor ctor taking ints is much cheaper than the one taking string literals [-Wclazy-qcolor-from-literal]
