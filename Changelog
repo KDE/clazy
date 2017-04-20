@@ -25,6 +25,9 @@
 
 
 * v1.2 ()
+  - ASTMatchers based checks are now supported
+  - New checks:
+    install-event-filter
   - clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)
     gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if
     you're developing tools using clazy's convenience functions, which you're
@@ -32,5 +35,3 @@
   - CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library
     and headers or nothing at all. By default nothing is installed, except
     the plugin and man pages.
-  - New checks:
-    install-event-filter

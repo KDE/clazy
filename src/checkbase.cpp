@@ -36,6 +36,7 @@
 #include <chrono>
 
 using namespace clang;
+using namespace clang::ast_matchers;
 using namespace std;
 
 ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
@@ -154,12 +155,12 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
     });
 }
 
-void CheckBase::emitWarning(clang::Decl *d, const std::string &error, bool printWarningTag)
+void CheckBase::emitWarning(const clang::Decl *d, const std::string &error, bool printWarningTag)
 {
     emitWarning(d->getLocStart(), error, printWarningTag);
 }
 
-void CheckBase::emitWarning(clang::Stmt *s, const std::string &error, bool printWarningTag)
+void CheckBase::emitWarning(const clang::Stmt *s, const std::string &error, bool printWarningTag)
 {
     emitWarning(s->getLocStart(), error, printWarningTag);
 }
@@ -272,4 +273,11 @@ void CheckBase::setEnabledFixits(int fixits)
 bool CheckBase::isFixitEnabled(int fixit) const
 {
     return (m_enabledFixits & fixit) || m_checkManager->allFixitsEnabled();
+}
+
+ClazyAstMatcherCallback::ClazyAstMatcherCallback(CheckBase *check)
+    : MatchFinder::MatchCallback()
+    , m_check(check)
+{
+
 }

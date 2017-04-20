@@ -33,6 +33,9 @@
 #include <clang/Parse/Parser.h>
 #include <llvm/Config/llvm-config.h>
 
+#include "clang/ASTMatchers/ASTMatchers.h"
+#include "clang/ASTMatchers/ASTMatchFinder.h"
+
 #include <string>
 
 namespace clang {
@@ -77,6 +80,14 @@ private:
     CheckBase *const check;
 };
 
+class ClazyAstMatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback
+{
+public:
+    explicit ClazyAstMatcherCallback(CheckBase *check);
+protected:
+    CheckBase *const m_check;
+};
+
 class CLAZYLIB_EXPORT CheckBase
 {
 public:
@@ -95,11 +106,14 @@ public:
     void setEnabledFixits(int);
     bool isFixitEnabled(int fixit) const;
 
-    void emitWarning(clang::Decl *, const std::string &error, bool printWarningTag = true);
-    void emitWarning(clang::Stmt *, const std::string &error, bool printWarningTag = true);
+    void emitWarning(const clang::Decl *, const std::string &error, bool printWarningTag = true);
+    void emitWarning(const clang::Stmt *, const std::string &error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
     void emitInternalError(clang::SourceLocation loc, std::string error);
+
+    virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &) {};
+
     virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
 
 protected:
@@ -141,6 +155,7 @@ protected:
     std::vector<std::string> m_filesToIgnore;
 private:
     friend class ClazyPreprocessorCallbacks;
+    friend class ClazyAstMatcherCallback;
     ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;

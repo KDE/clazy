@@ -46,6 +46,7 @@
 
 using namespace clang;
 using namespace std;
+using namespace clang::ast_matchers;
 
 namespace {
 
@@ -96,6 +97,10 @@ public:
         m_createdChecks = checkManager->createChecks(requestedChecks, ci);
         if (checkManager->fixitsEnabled())
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
+
+        // Check if any of our checks uses ast matchers, and register them
+        for (CheckBase *check : m_createdChecks)
+            check->registerASTMatchers(m_matchFinder);
     }
 
     ~LazyASTConsumer()
@@ -112,7 +117,7 @@ public:
     {
         assert(map && !m_parentMap);
         m_parentMap = map;
-        for (auto &check : m_createdChecks)
+        for (CheckBase *check : m_createdChecks)
             check->setParentMap(map);
     }
 
@@ -123,7 +128,7 @@ public:
         if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
             a->VisitDeclaration(decl);
 
-        for (const auto &check : m_createdChecks) {
+        for (CheckBase *check : m_createdChecks) {
             if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
                 check->VisitDeclaration(decl);
         }
@@ -154,7 +159,7 @@ public:
             m_parentMap->addStmt(stm);
 
         const bool isInSystemHeader = m_sm.isInSystemHeader(stm->getLocStart());
-        for (const auto &check : m_createdChecks) {
+        for (CheckBase *check : m_createdChecks) {
             if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
                 check->VisitStatement(stm);
         }
@@ -164,7 +169,11 @@ public:
 
     void HandleTranslationUnit(ASTContext &ctx) override
     {
+        // Run our RecursiveAstVisitor based checks:
         TraverseDecl(ctx.getTranslationUnitDecl());
+
+        // Run our AstMatcher base checks:
+        m_matchFinder.matchAST(ctx);
     }
 
     Stmt *lastStm = nullptr;
@@ -174,6 +183,7 @@ public:
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
     CheckManager *const m_checkManager;
+    MatchFinder m_matchFinder;
 };
 
 }
