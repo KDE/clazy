@@ -13,4 +13,4 @@ Finds `QObject` derived classes that don't have a Q_OBJECT macro.
 - Templated QObjects
 - Compilation time
 
-Requires clang >= 3.7 and can't be used with pre-compiled headers support.
+Can't be used with pre-compiled headers support.

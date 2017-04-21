@@ -25,10 +25,12 @@
 
 
 * v1.2 ()
-  - ASTMatchers based checks are now supported
   - New checks:
     install-event-filter
     qcolor-from-literal
+  - ASTMatchers based checks are now supported
+  - clang 3.7 was dropped due to ASTMatchers source incompatibilities.
+    Use clazy v1.1 for clang >= 3.6 support
   - clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)
     gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if
     you're developing tools using clazy's convenience functions, which you're
