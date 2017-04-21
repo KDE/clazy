@@ -54,7 +54,8 @@ You can get clazy from:
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 3.7 are required.
+clang and LLVM >= 3.8 are required.
+Use clazy v1.1 if you need 3.7 support.
 
 If your distro provides clang then you can skip this step.
 
@@ -161,7 +162,7 @@ Compile your programs with it instead of clang++/g++.
 Note that this command is just a convenience wrapper which calls:
 `clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy`
 
-If you have multiple versions of clang installed (say clang++-3.7 and clang++-3.8)
+If you have multiple versions of clang installed (say clang++-3.8 and clang++-3.9)
 you can choose which one to use by setting the CLANGXX environment variable, like so:
 `export CLANGXX=clang++-3.8; clazy`
 

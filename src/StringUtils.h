@@ -25,7 +25,7 @@
 #ifndef CLANG_LAZY_STRING_UTILS_H
 #define CLANG_LAZY_STRING_UTILS_H
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "clazy_stl.h"

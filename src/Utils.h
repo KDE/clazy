@@ -25,7 +25,7 @@
 #ifndef MOREWARNINGS_UTILS_H
 #define MOREWARNINGS_UTILS_H
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>

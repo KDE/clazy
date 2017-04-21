@@ -21,7 +21,7 @@
 
 #ifndef CLAZY_SUPPRESSION_MANAGER_H
 #define CLAZY_SUPPRESSION_MANAGER_H
-#include "clazylib_export.h"
+#include "clazy_export.h"
 #include <set>
 #include <string>
 #include <unordered_map>

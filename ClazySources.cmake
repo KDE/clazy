@@ -15,6 +15,7 @@ set(CLAZY_LIB_SRC
 )
 
 set(CLAZY_SRCS
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qcolor-from-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/container-anti-pattern.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-in-connect.cpp
@@ -76,3 +77,7 @@ set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
 )
+
+if (NOT CLAZY_BUILD_UTILS_LIB)
+  set(CLAZY_SRCS ${CLAZY_SRCS} ${CLAZY_LIB_SRC})
+endif()

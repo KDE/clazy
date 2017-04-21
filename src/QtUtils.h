@@ -22,7 +22,7 @@
 #ifndef CLAZY_QT_UTILS_H
 #define CLAZY_QT_UTILS_H
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 
 #include <string>
 #include <vector>

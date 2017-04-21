@@ -26,7 +26,7 @@
 #define CLAZY_LOOP_UTILS_H
 
 #include "clazy_stl.h"
-#include "clazylib_export.h"
+#include "clazy_export.h"
 
 #include <clang/AST/StmtCXX.h>
 

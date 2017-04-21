@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -46,6 +46,7 @@
 
 using namespace clang;
 using namespace std;
+using namespace clang::ast_matchers;
 
 namespace {
 
@@ -81,11 +82,11 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
     }
 }
 
-class LazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<LazyASTConsumer>
+class ClazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<ClazyASTConsumer>
 {
-    LazyASTConsumer(const LazyASTConsumer &) = delete;
+    ClazyASTConsumer(const ClazyASTConsumer &) = delete;
 public:
-    LazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
+    ClazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
                     const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
         : m_ci(ci)
         , m_sm(ci.getSourceManager())
@@ -96,9 +97,13 @@ public:
         m_createdChecks = checkManager->createChecks(requestedChecks, ci);
         if (checkManager->fixitsEnabled())
             m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
+
+        // Check if any of our checks uses ast matchers, and register them
+        for (CheckBase *check : m_createdChecks)
+            check->registerASTMatchers(m_matchFinder);
     }
 
-    ~LazyASTConsumer()
+    ~ClazyASTConsumer()
     {
         if (m_rewriter) {
             m_rewriter->WriteFixedFiles();
@@ -112,7 +117,7 @@ public:
     {
         assert(map && !m_parentMap);
         m_parentMap = map;
-        for (auto &check : m_createdChecks)
+        for (CheckBase *check : m_createdChecks)
             check->setParentMap(map);
     }
 
@@ -123,7 +128,7 @@ public:
         if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
             a->VisitDeclaration(decl);
 
-        for (const auto &check : m_createdChecks) {
+        for (CheckBase *check : m_createdChecks) {
             if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
                 check->VisitDeclaration(decl);
         }
@@ -154,7 +159,7 @@ public:
             m_parentMap->addStmt(stm);
 
         const bool isInSystemHeader = m_sm.isInSystemHeader(stm->getLocStart());
-        for (const auto &check : m_createdChecks) {
+        for (CheckBase *check : m_createdChecks) {
             if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
                 check->VisitStatement(stm);
         }
@@ -164,7 +169,11 @@ public:
 
     void HandleTranslationUnit(ASTContext &ctx) override
     {
+        // Run our RecursiveAstVisitor based checks:
         TraverseDecl(ctx.getTranslationUnitDecl());
+
+        // Run our AstMatcher base checks:
+        m_matchFinder.matchAST(ctx);
     }
 
     Stmt *lastStm = nullptr;
@@ -174,6 +183,7 @@ public:
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
     CheckManager *const m_checkManager;
+    MatchFinder m_matchFinder;
 };
 
 }
@@ -224,7 +234,7 @@ ClazyASTAction::ClazyASTAction()
 
 std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    return llvm::make_unique<LazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
+    return llvm::make_unique<ClazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)

@@ -11,6 +11,7 @@ cmake_minimum_required(VERSION 3.0)
 include(FeatureSummary)
 include(GenerateExportHeader)
 include(ClazySources.cmake)
+include("GNUInstallDirs")
 
 # Version setup
 set(CLAZY_VERSION_MAJOR "1")
@@ -20,7 +21,7 @@ set(CLAZY_VERSION "${CLAZY_VERSION_MAJOR}.${CLAZY_VERSION_MINOR}.${CLAZY_VERSION
 set(CLAZY_PRINT_VERSION "${CLAZY_VERSION_MAJOR}.${CLAZY_VERSION_MINOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-find_package(Clang 3.7 MODULE REQUIRED)
+find_package(Clang 3.8 MODULE REQUIRED)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -29,7 +30,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
-option(CLAZY_INSTALL_NO_HEADERS "Enable this option to suppress installation of headers" OFF)
+option(CLAZY_BUILD_UTILS_LIB "Enable this option to build a library so you can reuse clazy's utility functions" OFF)
+
+if (CLAZY_BUILD_UTILS_LIB)
+  add_definitions(-DCLAZY_BUILD_UTILS_LIB)
+endif()
 
 if (MSVC AND NOT CLANG_LIBRARY_IMPORT)
   message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
@@ -119,32 +124,33 @@ macro(add_clang_plugin name)
     target_link_libraries(${name} ${CLANG_LIBRARY_IMPORT}) # Link against clang.exe to share the plugin registry
   endif()
 
-  target_link_libraries(${name} clazylib)
+  if(CLAZY_BUILD_UTILS_LIB)
+    target_link_libraries(${name} clazylib)
+  endif()
 endmacro()
-
-# clazylib version
-set(clazylib_VERSION_MAJOR 0)
-set(clazylib_VERSION_MINOR 1)
-# Enable the full x.y.z version only for release versions
-set(clazylib_VERSION_PATCH 0)
-set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
 
 include_directories(${CMAKE_BINARY_DIR})
 
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
-add_library(clazylib SHARED ${CLAZY_LIB_SRC})
-link_to_llvm(clazylib)
 
-generate_export_header(clazylib)
+if(CLAZY_BUILD_UTILS_LIB)
+  # clazylib version
+  set(clazylib_VERSION_MAJOR 0)
+  set(clazylib_VERSION_MINOR 1)
+  # Enable the full x.y.z version only for release versions
+  set(clazylib_VERSION_PATCH 0)
 
-set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
-include("GNUInstallDirs")
-
-install(TARGETS clazylib EXPORT LibClaryExport
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+  set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
+  add_library(clazylib SHARED ${CLAZY_LIB_SRC})
+  link_to_llvm(clazylib)
+  generate_export_header(clazylib)
+  set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
+  install(TARGETS clazylib EXPORT LibClaryExport
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
+endif()
 
 set(SYMBOL_FILE Lazy.exports)
 
@@ -200,13 +206,13 @@ install(FILES README.md LICENSE.GPL.txt DESTINATION ${DOC_INSTALL_DIR})
 set(MAN_INSTALL_DIR "man/man1")
 add_subdirectory(docs)
 
-if (NOT CLAZY_INSTALL_NO_HEADERS)
+if (CLAZY_BUILD_UTILS_LIB)
   # Install public headers
   set(CLAZY_LIB_INCLUDES
     src/AccessSpecifierManager.h
     src/checkbase.h
     src/checkmanager.h
-    ${CMAKE_BINARY_DIR}/clazylib_export.h
+    ${CMAKE_BINARY_DIR}/clazy_export.h
     src/clazy_stl.h
     src/ContextUtils.h
     src/FixItUtils.h

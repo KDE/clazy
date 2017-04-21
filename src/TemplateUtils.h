@@ -19,7 +19,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "clazylib_export.h"
+#include "clazy_export.h"
 #include <clang/AST/Type.h>
 
 #include <vector>
