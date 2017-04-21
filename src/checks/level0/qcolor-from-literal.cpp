@@ -60,9 +60,6 @@ public :
     }
 };
 
-static StatementMatcher s_matcher = cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
-                                                     hasArgument(0, stringLiteral().bind("myLiteral")));
-
 
 QColorFromLiteral::QColorFromLiteral(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
@@ -75,9 +72,10 @@ QColorFromLiteral::~QColorFromLiteral()
     delete m_astMatcherCallBack;
 }
 
-
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
 {
+    static StatementMatcher s_matcher = cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
+                                                         hasArgument(0, stringLiteral().bind("myLiteral")));
     finder.addMatcher(s_matcher, m_astMatcherCallBack);
 }
 
