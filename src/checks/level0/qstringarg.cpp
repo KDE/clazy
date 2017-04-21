@@ -135,6 +135,9 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee());
+    if (!method)
+        return;
+
     if (StringUtils::simpleArgTypeName(method, method->getNumParams() - 1, lo()) == "QChar") {
         // The second arg wasn't passed, so this is a safe and unambiguous use, like .arg(1)
         if (isa<CXXDefaultArgExpr>(memberCall->getArg(1)))
