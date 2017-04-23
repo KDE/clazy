@@ -50,7 +50,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     SourceLocation loc = stmt->getLocStart();
-    if (MacroUtils::isInMacro(m_ci, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
+    if (MacroUtils::isInMacro(&m_context, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
         return;
 
     CXXRecordDecl *record = ctorDecl->getParent();

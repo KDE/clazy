@@ -25,6 +25,7 @@
 #include "clazy_export.h"
 
 #include "TypeUtils.h"
+#include "MacroUtils.h"
 
 #include <string>
 #include <vector>
@@ -101,7 +102,10 @@ CLAZYLIB_EXPORT bool isQtContainer(clang::QualType, const clang::LangOptions &);
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler
  */
-CLAZYLIB_EXPORT bool isBootstrapping(const clang::CompilerInstance &);
+inline bool isBootstrapping(const clang::PreprocessorOptions &ppOpts)
+{
+    return MacroUtils::isPredefined(ppOpts, "QT_BOOTSTRAPPED");
+}
 
 /**
  * Returns if decl is or derives from QObject
@@ -121,7 +125,10 @@ CLAZYLIB_EXPORT bool isConvertibleTo(const clang::Type *source, const clang::Typ
 /**
  * Returns true if \a loc is in a foreach macro
  */
-CLAZYLIB_EXPORT bool isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc);
+inline bool isInForeach(const clang::ASTContext *context, clang::SourceLocation loc)
+{
+    return MacroUtils::isInAnyMacro(context, loc, { "Q_FOREACH", "foreach" });
+}
 
 /**
  * Returns true if \a record is a java-style iterator

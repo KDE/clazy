@@ -92,11 +92,6 @@ bool QtUtils::isQtAssociativeContainer(const string &className)
     return clazy_std::contains(classes, className);
 }
 
-bool QtUtils::isBootstrapping(const clang::CompilerInstance &ci)
-{
-    return MacroUtils::isPredefined(ci, "QT_BOOTSTRAPPED");
-}
-
 bool QtUtils::isQObject(CXXRecordDecl *decl)
 {
     return TypeUtils::derivesFrom(decl, "QObject");
@@ -130,11 +125,6 @@ bool QtUtils::isConvertibleTo(const Type *source, const Type *target)
         return true;
 
     return false;
-}
-
-bool QtUtils::isInForeach(const clang::CompilerInstance &ci, clang::SourceLocation loc)
-{
-    return MacroUtils::isInAnyMacro(ci, loc, { "Q_FOREACH", "foreach" });
 }
 
 bool QtUtils::isJavaIterator(CXXRecordDecl *record)

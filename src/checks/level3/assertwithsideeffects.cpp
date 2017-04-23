@@ -69,7 +69,7 @@ static bool methodIsOK(const string &name)
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = stm->getLocStart();
-    if (!MacroUtils::isInMacro(m_ci, stmStart, "Q_ASSERT"))
+    if (!MacroUtils::isInMacro(&m_context, stmStart, "Q_ASSERT"))
         return;
 
     bool warn = false;

@@ -75,7 +75,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 
     std::vector<FixItHint> fixits;
     if (isFixitEnabled(FixitAll)) {
-        const bool success = FixItUtils::transformTwoCallsIntoOneV2(m_ci, secondCall, replacement, fixits);
+        const bool success = FixItUtils::transformTwoCallsIntoOneV2(&m_context, secondCall, replacement, fixits);
         if (!success) {
             queueManualFixitWarning(secondCall->getLocStart(), FixitAll);
         }

@@ -37,7 +37,7 @@ QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &
 
 }
 
-static bool isMatchingClass(const std::string &name, const clang::CompilerInstance &ci)
+static bool isMatchingClass(const std::string &name)
 {
     static const vector<string> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
                                            "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
@@ -72,7 +72,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         matches = true;
     } else {
         CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-        matches = t->isClassType() && recordDecl && isMatchingClass(recordDecl->getNameAsString(), m_ci);
+        matches = t->isClassType() && recordDecl && isMatchingClass(recordDecl->getNameAsString());
     }
 
     string typeName = StringUtils::simpleTypeName(typeList[0], lo());

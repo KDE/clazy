@@ -326,12 +326,12 @@ void CheckManager::setRequestedLevel(CheckLevel level)
 
 void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
 {
-    if (!m_accessSpecifierManager && !usingPreCompiledHeaders(ci))
+    if (!m_accessSpecifierManager && !usingPreCompiledHeaders(ci.getPreprocessorOpts()))
         m_accessSpecifierManager = new AccessSpecifierManager(ci);
 }
 
 void CheckManager::enablePreprocessorVisitor(const CompilerInstance &ci)
 {
-    if (!m_preprocessorVisitor && !usingPreCompiledHeaders(ci))
+    if (!m_preprocessorVisitor && !usingPreCompiledHeaders(ci.getPreprocessorOpts()))
         m_preprocessorVisitor = new PreProcessorVisitor(ci);
 }

@@ -51,7 +51,7 @@ clang::FixItHint FixItUtils::createInsertion(clang::SourceLocation start, const 
     }
 }
 
-SourceRange FixItUtils::rangeForLiteral(const CompilerInstance& ci, StringLiteral *lt)
+SourceRange FixItUtils::rangeForLiteral(const ASTContext *context, StringLiteral *lt)
 {
     if (!lt)
         return {};
@@ -66,8 +66,8 @@ SourceRange FixItUtils::rangeForLiteral(const CompilerInstance& ci, StringLitera
     range.setBegin(lt->getLocStart());
 
     SourceLocation end = Lexer::getLocForEndOfToken(lastTokenLoc, 0,
-                                                    ci.getSourceManager(),
-                                                    ci.getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
+                                                    context->getSourceManager(),
+                                                    context->getLangOpts()); // For some reason lt->getLocStart() is == to lt->getLocEnd()
 
     if (!end.isValid()) {
         return {};
@@ -83,12 +83,15 @@ void FixItUtils::insertParentMethodCall(const std::string &method, SourceRange r
     fixits.push_back(FixItUtils::createInsertion(range.getBegin(), method + '('));
 }
 
-bool FixItUtils::insertParentMethodCallAroundStringLiteral(const CompilerInstance& ci, const std::string &method, StringLiteral *lt, std::vector<FixItHint> &fixits)
+bool FixItUtils::insertParentMethodCallAroundStringLiteral(const ASTContext *context,
+                                                           const std::string &method,
+                                                           StringLiteral *lt,
+                                                           std::vector<FixItHint> &fixits)
 {
     if (!lt)
         return false;
 
-    const SourceRange range = rangeForLiteral(ci, lt);
+    const SourceRange range = rangeForLiteral(context, lt);
     if (range.isInvalid())
         return false;
 
@@ -96,22 +99,22 @@ bool FixItUtils::insertParentMethodCallAroundStringLiteral(const CompilerInstanc
     return true;
 }
 
-SourceLocation FixItUtils::locForNextToken(const CompilerInstance &ci, SourceLocation start, tok::TokenKind kind)
+SourceLocation FixItUtils::locForNextToken(const ASTContext *context, SourceLocation start, tok::TokenKind kind)
 {
     if (!start.isValid())
         return {};
 
     Token result;
-    Lexer::getRawToken(start, result, ci.getSourceManager(), ci.getLangOpts());
+    Lexer::getRawToken(start, result, context->getSourceManager(), context->getLangOpts());
 
     if (result.getKind() == kind)
         return start;
 
-    auto nextStart = Lexer::getLocForEndOfToken(start, 0, ci.getSourceManager(), ci.getLangOpts());
+    auto nextStart = Lexer::getLocForEndOfToken(start, 0, context->getSourceManager(), context->getLangOpts());
     if (nextStart.getRawEncoding() == start.getRawEncoding())
         return {};
 
-    return locForNextToken(ci, nextStart, kind);
+    return locForNextToken(context, nextStart, kind);
 }
 
 SourceLocation FixItUtils::biggestSourceLocationInStmt(const SourceManager &sm, Stmt *stmt)
@@ -130,12 +133,12 @@ SourceLocation FixItUtils::biggestSourceLocationInStmt(const SourceManager &sm, 
     return biggestLoc;
 }
 
-SourceLocation FixItUtils::locForEndOfToken(const CompilerInstance &ci, SourceLocation start, int offset)
+SourceLocation FixItUtils::locForEndOfToken(const ASTContext *context, SourceLocation start, int offset)
 {
-    return Lexer::getLocForEndOfToken(start, offset, ci.getSourceManager(), ci.getLangOpts());
+    return Lexer::getLocForEndOfToken(start, offset, context->getSourceManager(), context->getLangOpts());
 }
 
-bool FixItUtils::transformTwoCallsIntoOne(const CompilerInstance &ci, CallExpr *call1, CXXMemberCallExpr *call2,
+bool FixItUtils::transformTwoCallsIntoOne(const ASTContext *context, CallExpr *call1, CXXMemberCallExpr *call2,
                                           const string &replacement, vector<FixItHint> &fixits)
 {
     Expr *implicitArgument = call2->getImplicitObjectArgument();
@@ -143,7 +146,7 @@ bool FixItUtils::transformTwoCallsIntoOne(const CompilerInstance &ci, CallExpr *
         return false;
 
     const SourceLocation start1 = call1->getLocStart();
-    const SourceLocation end1 = FixItUtils::locForEndOfToken(ci, start1, -1); // -1 of offset, so we don't need to insert '('
+    const SourceLocation end1 = FixItUtils::locForEndOfToken(context, start1, -1); // -1 of offset, so we don't need to insert '('
     if (end1.isInvalid())
         return false;
 
@@ -163,14 +166,15 @@ bool FixItUtils::transformTwoCallsIntoOne(const CompilerInstance &ci, CallExpr *
     return true;
 }
 
-bool FixItUtils::transformTwoCallsIntoOneV2(const CompilerInstance &ci, CXXMemberCallExpr *call2, const string &replacement, std::vector<FixItHint> &fixits)
+bool FixItUtils::transformTwoCallsIntoOneV2(const ASTContext *context, CXXMemberCallExpr *call2,
+                                            const string &replacement, std::vector<FixItHint> &fixits)
 {
     Expr *implicitArgument = call2->getImplicitObjectArgument();
     if (!implicitArgument)
         return false;
 
     SourceLocation start = implicitArgument->getLocStart();
-    start = FixItUtils::locForEndOfToken(ci, start, 0);
+    start = FixItUtils::locForEndOfToken(context, start, 0);
     const SourceLocation end = call2->getLocEnd();
     if (start.isInvalid() || end.isInvalid())
         return false;
@@ -179,12 +183,12 @@ bool FixItUtils::transformTwoCallsIntoOneV2(const CompilerInstance &ci, CXXMembe
     return true;
 }
 
-FixItHint FixItUtils::fixItReplaceWordWithWord(const clang::CompilerInstance &ci, clang::Stmt *begin,
+FixItHint FixItUtils::fixItReplaceWordWithWord(const ASTContext *context, clang::Stmt *begin,
                                                const string &replacement, const string &replacee)
 {
-    auto &sm = ci.getSourceManager();
+    auto &sm = context->getSourceManager();
     SourceLocation rangeStart = begin->getLocStart();
-    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm, ci.getLangOpts());
+    SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm, context->getLangOpts());
 
     if (rangeEnd.isInvalid()) {
         // Fallback. Have seen a case in the wild where the above would fail, it's very rare
@@ -192,7 +196,7 @@ FixItHint FixItUtils::fixItReplaceWordWithWord(const clang::CompilerInstance &ci
         if (rangeEnd.isInvalid()) {
             StringUtils::printLocation(sm, rangeStart);
             StringUtils::printLocation(sm, rangeEnd);
-            StringUtils::printLocation(sm, Lexer::getLocForEndOfToken(rangeStart, 0, sm, ci.getLangOpts()));
+            StringUtils::printLocation(sm, Lexer::getLocForEndOfToken(rangeStart, 0, sm, context->getLangOpts()));
             return {};
         }
     }
@@ -200,11 +204,11 @@ FixItHint FixItUtils::fixItReplaceWordWithWord(const clang::CompilerInstance &ci
     return FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), replacement);
 }
 
-vector<FixItHint> FixItUtils::fixItRemoveToken(const clang::CompilerInstance &ci, Stmt *stmt, bool removeParenthesis)
+vector<FixItHint> FixItUtils::fixItRemoveToken(const ASTContext *context, Stmt *stmt, bool removeParenthesis)
 {
     SourceLocation start = stmt->getLocStart();
     SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1,
-                                                    ci.getSourceManager(), ci.getLangOpts());
+                                                    context->getSourceManager(), context->getLangOpts());
 
     vector<FixItHint> fixits;
 

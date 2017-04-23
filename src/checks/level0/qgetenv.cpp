@@ -92,7 +92,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (!errorMsg.empty()) {
         std::vector<FixItHint> fixits;
         if (isFixitEnabled(FixitAll)) {
-            const bool success = FixItUtils::transformTwoCallsIntoOne(m_ci, qgetEnvCall, memberCall, replacement, fixits);
+            const bool success = FixItUtils::transformTwoCallsIntoOne(&m_context, qgetEnvCall, memberCall, replacement, fixits);
             if (!success) {
                 queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
             }

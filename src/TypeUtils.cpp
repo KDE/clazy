@@ -30,7 +30,7 @@
 
 using namespace clang;
 
-bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
+bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     if (!varDecl)
         return false;
@@ -43,7 +43,7 @@ bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varD
     if (isUndeducibleAuto(paramType))
         return false;
 
-    classif.size_of_T = ci.getASTContext().getTypeSize(qualType) / 8;
+    classif.size_of_T = context->getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());

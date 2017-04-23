@@ -57,7 +57,7 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
     if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates
         return;
 
-    if (m_checkManager->usingPreCompiledHeaders(m_ci))
+    if (m_checkManager->usingPreCompiledHeaders(m_preprocessorOpts))
         return;
 
     const SourceLocation startLoc = decl->getLocStart();

@@ -47,6 +47,7 @@ class TranslationUnitDecl;
 class FixItHint;
 class PresumedLoc;
 class SourceLocation;
+class PreprocessorOptions;
 }
 
 class CheckBase;
@@ -136,14 +137,13 @@ protected:
     bool isOptionSet(const std::string &optionName) const;
 
     // 3 shortcuts for stuff that litter the codebase all over.
-    const clang::CompilerInstance &ci() const { return m_ci; }
     const clang::SourceManager &sm() const { return m_sm; }
-    const clang::LangOptions &lo() const { return m_ci.getLangOpts(); }
+    const clang::LangOptions &lo() const { return m_context.getLangOpts(); }
 
-    const clang::CompilerInstance &m_ci;
     const clang::SourceManager &m_sm;
     const std::string m_name;
     clang::ASTContext &m_context;
+    const clang::PreprocessorOptions &m_preprocessorOpts;
     clang::TranslationUnitDecl *const m_tu;
     clang::ParentMap *m_parentMap;
 
@@ -160,7 +160,8 @@ private:
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
-    int m_enabledFixits;
+    int m_enabledFixits = 0;
+    const clang::CompilerInstance &m_ci;
 };
 
 #endif

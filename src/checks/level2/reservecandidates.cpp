@@ -141,7 +141,7 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
     if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
         return false;
 
-    if (LoopUtils::loopCanBeInterrupted(loopBody, m_ci, callExpr->getLocStart()))
+    if (LoopUtils::loopCanBeInterrupted(loopBody, m_sm, callExpr->getLocStart()))
         return false;
 
     return true;
@@ -156,7 +156,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (!body)
         return;
 
-    const bool isForeach = MacroUtils::isInMacro(m_ci, stm->getLocStart(), "Q_FOREACH");
+    const bool isForeach = MacroUtils::isInMacro(&m_context, stm->getLocStart(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body)))
@@ -299,7 +299,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             return true;
         }
 
-        if (QtUtils::isInForeach(m_ci, parentStart)) {
+        if (QtUtils::isInForeach(&m_context, parentStart)) {
             auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting

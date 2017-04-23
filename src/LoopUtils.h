@@ -32,7 +32,7 @@
 
 namespace clang {
 class Stmt;
-class CompilerInstance;
+class SourceManager;
 class SourceLocation;
 class Expr;
 class ParentMap;
@@ -49,7 +49,7 @@ namespace LoopUtils {
      * All child statements that are on a source code line <
      * If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before
      */
-    CLAZYLIB_EXPORT bool loopCanBeInterrupted(clang::Stmt *loop, const clang::CompilerInstance &ci,
+    CLAZYLIB_EXPORT bool loopCanBeInterrupted(clang::Stmt *loop, const clang::SourceManager &sm,
                                               clang::SourceLocation onlyBeforeThisLoc);
 
     /**

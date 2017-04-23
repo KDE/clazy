@@ -208,7 +208,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                     bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
-                        auto removalFixits = FixItUtils::fixItRemoveToken(ci(), ctorExpr, true);
+                        auto removalFixits = FixItUtils::fixItRemoveToken(&m_context, ctorExpr, true);
                         if (removalFixits.empty())  {
                             queueManualFixitWarning(ctorExpr->getLocStart(), QLatin1StringAllocations, "Internal error: invalid start or end location");
                         } else {
@@ -280,7 +280,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
     }
 
     vector<FixItHint> fixits;
-    FixItHint fixit = FixItUtils::fixItReplaceWordWithWord(ci(), begin, replacement, replacee);
+    FixItHint fixit = FixItUtils::fixItReplaceWordWithWord(&m_context, begin, replacement, replacee);
     if (fixit.isNull()) {
         queueManualFixitWarning(begin->getLocStart(), fixitType);
     } else {
@@ -406,7 +406,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
 {
     vector<FixItHint> fixits;
 
-    SourceRange range = FixItUtils::rangeForLiteral(m_ci, lt);
+    SourceRange range = FixItUtils::rangeForLiteral(&m_context, lt);
     if (range.isInvalid()) {
         if (lt) {
             queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Internal error: Can't calculate source location");

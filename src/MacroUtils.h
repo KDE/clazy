@@ -25,6 +25,7 @@
 #include "clazy_export.h"
 #include "clazy_stl.h"
 
+#include <clang/AST/ASTContext.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Lexer.h>
 #include <clang/Lex/PreprocessorOptions.h>
@@ -45,9 +46,9 @@ namespace MacroUtils
  * Returns true is macroName was defined via compiler invocation argument.
  * Like $ gcc -Dfoo main.cpp
  */
-inline bool isPredefined(const clang::CompilerInstance &ci, const std::string &macroName)
+inline bool isPredefined(const clang::PreprocessorOptions &ppOpts, const std::string &macroName)
 {
-    const auto &macros = ci.getPreprocessorOpts().Macros;
+    const auto &macros = ppOpts.Macros;
 
     for (const auto &macro : macros) {
         if (macro.first == macroName)
@@ -60,10 +61,10 @@ inline bool isPredefined(const clang::CompilerInstance &ci, const std::string &m
 /**
  * Returns true if the source location loc is inside a macro named macroName.
  */
-inline bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::string &macroName)
+inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::string &macroName)
 {
     if (loc.isValid() && loc.isMacroID()) {
-        auto macro = clang::Lexer::getImmediateMacroName(loc, ci.getSourceManager(), ci.getLangOpts());
+        auto macro = clang::Lexer::getImmediateMacroName(loc, context->getSourceManager(), context->getLangOpts());
         return macro == macroName;
     }
 
@@ -73,10 +74,10 @@ inline bool isInMacro(const clang::CompilerInstance &ci, clang::SourceLocation l
 /**
  * Returns true if the source location loc is inside any of the specified macros.
  */
-inline bool isInAnyMacro(const clang::CompilerInstance &ci, clang::SourceLocation loc, const std::vector<std::string> &macroNames)
+inline bool isInAnyMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::vector<std::string> &macroNames)
 {
-    return clazy_std::any_of(macroNames, [&ci, loc](const std::string &macroName) {
-        return isInMacro(ci, loc, macroName);
+    return clazy_std::any_of(macroNames, [context, loc](const std::string &macroName) {
+        return isInMacro(context, loc, macroName);
     });
 }
 

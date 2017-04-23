@@ -111,9 +111,9 @@ public:
     PreProcessorVisitor *preprocessorVisitor() const { return m_preprocessorVisitor; }
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
-    bool usingPreCompiledHeaders(const clang::CompilerInstance &ci) const
+    bool usingPreCompiledHeaders(const clang::PreprocessorOptions &ppOpts) const
     {
-        return !ci.getPreprocessorOpts().ImplicitPCHInclude.empty();
+        return !ppOpts.ImplicitPCHInclude.empty();
     }
 
     bool userDisabledWError() const

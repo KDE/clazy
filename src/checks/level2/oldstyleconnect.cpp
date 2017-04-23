@@ -403,7 +403,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = FixItUtils::locForNextToken(m_ci, arg->getLocStart(), tok::comma);
+                    auto endLoc = FixItUtils::locForNextToken(&m_context, arg->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

@@ -87,7 +87,7 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (QtUtils::isBootstrapping(m_ci))
+    if (QtUtils::isBootstrapping(m_preprocessorOpts))
         return;
 
     const string className = recordDecl->getName();

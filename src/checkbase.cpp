@@ -66,14 +66,14 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
 }
 
 CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
-    : m_ci(ci)
-    , m_sm(ci.getSourceManager())
+    : m_sm(ci.getSourceManager())
     , m_name(name)
-    , m_context(m_ci.getASTContext())
+    , m_context(ci.getASTContext())
+    , m_preprocessorOpts(ci.getPreprocessorOpts())
     , m_tu(m_context.getTranslationUnitDecl())
     , m_checkManager(CheckManager::instance())
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
-    , m_enabledFixits(0)
+    , m_ci(ci)
 {
 }
 

@@ -58,7 +58,7 @@ Stmt *LoopUtils::bodyFromLoop(Stmt *loop)
     return nullptr;
 }
 
-bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerInstance &ci,
+bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm,
                                      clang::SourceLocation onlyBeforeThisLoc)
 {
     if (!stmt)
@@ -66,8 +66,8 @@ bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerIns
 
     if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
         if (onlyBeforeThisLoc.isValid()) {
-            FullSourceLoc sourceLoc(stmt->getLocStart(), ci.getSourceManager());
-            FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, ci.getSourceManager());
+            FullSourceLoc sourceLoc(stmt->getLocStart(), sm);
+            FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, sm);
             if (sourceLoc.isBeforeInTranslationUnitThan(otherSourceLoc))
                 return true;
         } else {
@@ -75,8 +75,8 @@ bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::CompilerIns
         }
     }
 
-    return clazy_std::any_of(stmt->children(), [&ci, onlyBeforeThisLoc](Stmt *s) {
-        return LoopUtils::loopCanBeInterrupted(s, ci, onlyBeforeThisLoc);
+    return clazy_std::any_of(stmt->children(), [&sm, onlyBeforeThisLoc](Stmt *s) {
+        return LoopUtils::loopCanBeInterrupted(s, sm, onlyBeforeThisLoc);
     });
 }
 
