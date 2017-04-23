@@ -262,6 +262,10 @@ def print_usage():
     print "    --dump-ast is provided for debugging purposes.\n"
     print "Help for clang plugin:"
     print
+
+    if _verbose:
+        print "Running: " + _help_command
+
     run_command(_help_command)
 
 def files_are_equal(file1, file2):
