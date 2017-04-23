@@ -10,7 +10,6 @@ project(ClangLazy)
 cmake_minimum_required(VERSION 3.0)
 include(FeatureSummary)
 include(GenerateExportHeader)
-include(ClazySources.cmake)
 include("GNUInstallDirs")
 
 # Version setup
@@ -62,7 +61,12 @@ if(RUN_RESULT EQUAL 0)
   set(HAS_STD_REGEX TRUE)
 else()
   set(HAS_STD_REGEX FALSE)
+  add_definitions(-DNO_STD_REGEX)
+  message("old-style-connect check is disabled due to missing std::regex support")
+  message("Suppressions are disabled due to missing std::regex support")
 endif()
+
+include(ClazySources.cmake)
 
 string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
 
@@ -145,7 +149,7 @@ if(CLAZY_BUILD_UTILS_LIB)
   link_to_llvm(clazylib)
   generate_export_header(clazylib)
   set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
-  install(TARGETS clazylib EXPORT LibClaryExport
+  install(TARGETS clazylib EXPORT LibClazyExport
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -153,15 +157,6 @@ if(CLAZY_BUILD_UTILS_LIB)
 endif()
 
 set(SYMBOL_FILE Lazy.exports)
-
-if(HAS_STD_REGEX)
-  #level2
-  set(CLAZY_SRCS ${CLAZY_SRCS} src/checks/level2/oldstyleconnect.cpp)
-else()
-  add_definitions(-DNO_STD_REGEX)
-  message("old-style-connect check is disabled due to missing std::regex support")
-  message("Suppressions are disabled due to missing std::regex support")
-endif()
 
 add_clang_plugin(ClangLazy ${CLAZY_SRCS})
 

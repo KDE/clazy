@@ -78,6 +78,10 @@ set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
 )
 
+if(HAS_STD_REGEX)
+  set(CLAZY_SRCS ${CLAZY_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp)
+endif()
+
 if (NOT CLAZY_BUILD_UTILS_LIB)
   set(CLAZY_SRCS ${CLAZY_SRCS} ${CLAZY_LIB_SRC})
 endif()
