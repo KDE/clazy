@@ -24,6 +24,8 @@
 
 #include "clazy_export.h"
 
+#include "TypeUtils.h"
+
 #include <string>
 #include <vector>
 
@@ -132,7 +134,10 @@ CLAZYLIB_EXPORT bool isJavaIterator(clang::CXXMemberCallExpr *call);
  * Returns true if the call is on a java-style iterator class.
  * Returns if sizeof(T) > sizeof(void*), which would make QList<T> inefficient
  */
-CLAZYLIB_EXPORT bool isTooBigForQList(clang::QualType, const clang::CompilerInstance &ci);
+inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *context)
+{
+    return (int)context->getTypeSize(qt) <= TypeUtils::sizeOfPointer(context, qt);
+}
 
 CLAZYLIB_EXPORT clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
 

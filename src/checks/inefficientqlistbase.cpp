@@ -101,8 +101,8 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (!qt2.getTypePtrOrNull())
         return;
 
-    const int size_of_ptr = TypeUtils::sizeOfPointer(m_ci, qt2); // in bits
-    const int size_of_T = m_ci.getASTContext().getTypeSize(qt2);
+    const int size_of_ptr = TypeUtils::sizeOfPointer(&m_context, qt2); // in bits
+    const int size_of_T = m_context.getTypeSize(qt2);
 
     if (size_of_T > size_of_ptr) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");

@@ -61,8 +61,8 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     if (!record || !record->getDefinition() || typeHasClassification(qt2))
         return; // Don't crash if we only have a fwd decl
 
-    const bool isCopyable = qt2.isTriviallyCopyableType(m_ci.getASTContext());
-    const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, m_ci);
+    const bool isCopyable = qt2.isTriviallyCopyableType(m_context);
+    const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, &m_context);
 
     if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
         std::string typeName = record->getName();

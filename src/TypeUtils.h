@@ -47,7 +47,13 @@ namespace TypeUtils
     /**
      * Returns the sizeof(void*) for the platform we're compiling for, in bits.
      */
-    CLAZYLIB_EXPORT int sizeOfPointer(const clang::CompilerInstance &, clang::QualType qt);
+    inline int sizeOfPointer(const clang::ASTContext *context, clang::QualType qt)
+    {
+        if (!qt.getTypePtrOrNull())
+            return -1;
+        // HACK: What's a better way of getting the size of a pointer ?
+        return context->getTypeSize(context->getPointerType(qt));
+    }
 
     struct QualTypeClassification {
         bool isConst = false;

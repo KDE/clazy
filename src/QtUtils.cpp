@@ -169,11 +169,6 @@ clang::ValueDecl *QtUtils::signalSenderForConnect(clang::CallExpr *call)
     return declRef->getDecl();
 }
 
-bool QtUtils::isTooBigForQList(clang::QualType qt, const clang::CompilerInstance &ci)
-{
-    return (int)ci.getASTContext().getTypeSize(qt) <= TypeUtils::sizeOfPointer(ci, qt);
-}
-
 bool QtUtils::isQtContainer(QualType t, const LangOptions &lo)
 {
     const string typeName = StringUtils::simpleTypeName(t, lo);

@@ -30,15 +30,6 @@
 
 using namespace clang;
 
-int TypeUtils::sizeOfPointer(const clang::CompilerInstance &ci, clang::QualType qt)
-{
-    if (!qt.getTypePtrOrNull())
-        return -1;
-    // HACK: What's a better way of getting the size of a pointer ?
-    auto &astContext = ci.getASTContext();
-    return astContext.getTypeSize(astContext.getPointerType(qt));
-}
-
 bool TypeUtils::classifyQualType(const CompilerInstance &ci, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     if (!varDecl)
