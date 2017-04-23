@@ -53,6 +53,7 @@ using FactoryFunction = std::function<CheckBase*(const clang::CompilerInstance &
 struct CLAZYLIB_EXPORT RegisteredCheck {
     typedef std::vector<RegisteredCheck> List;
     std::string name;
+    std::string className;
     CheckLevel level;
     FactoryFunction factory;
     bool operator==(const RegisteredCheck &other) const { return name == other.name; }
@@ -67,7 +68,7 @@ public:
         return &s_instance;
     }
 
-    int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &);
+    int registerCheck(const std::string &name, const std::string &className, CheckLevel level, const FactoryFunction &);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
@@ -142,9 +143,11 @@ private:
     PreProcessorVisitor *m_preprocessorVisitor = nullptr;
 };
 
+#define CLAZY_STRINGIFY2(X) #X
+#define CLAZY_STRINGIFY(X) CLAZY_STRINGIFY2(X)
+
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
-    static int dummy = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](const clang::CompilerInstance &ci){ return new CLASS_NAME(CHECK_NAME, ci); }); \
-    inline void silence_warning() { (void)dummy; }
+    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](const clang::CompilerInstance &ci){ return new CLASS_NAME(CHECK_NAME, ci); });
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \
     static int dummy_##FIXIT_ID = CheckManager::instance()->registerFixIt(FIXIT_ID, FIXIT_NAME, CHECK_NAME); \

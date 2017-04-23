@@ -42,12 +42,20 @@ class CheckManager;
 class ClazyASTAction : public clang::PluginASTAction
 {
 public:
+
+    enum HelpMode {
+        HelpMode_Normal = 0,
+        HelpMode_AnchorHeader = 1
+    };
+
+
     ClazyASTAction();
 
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
     bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args_) override;
-    void PrintHelp(llvm::raw_ostream &ros);
+    void PrintHelp(llvm::raw_ostream &ros, HelpMode = HelpMode_Normal);
+    void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks);
 private:
     RegisteredCheck::List m_checks;
     bool m_inplaceFixits = true;

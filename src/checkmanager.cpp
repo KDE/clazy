@@ -78,8 +78,8 @@ bool CheckManager::isReservedCheckName(const string &name) const
     return false;
 }
 
-int CheckManager::registerCheck(const std::string &name, CheckLevel level,
-                                const FactoryFunction &factory)
+int CheckManager::registerCheck(const std::string &name, const string &className,
+                                CheckLevel level, const FactoryFunction &factory)
 {
     assert(factory != nullptr);
     assert(!name.empty());
@@ -88,7 +88,7 @@ int CheckManager::registerCheck(const std::string &name, CheckLevel level,
         llvm::errs() << "Check name not allowed" << name;
         assert(false);
     } else {
-        m_registeredChecks.push_back({name, level, factory});
+        m_registeredChecks.push_back({name, className, level, factory});
     }
 
     return 0;
