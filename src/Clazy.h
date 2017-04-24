@@ -72,6 +72,9 @@ public:
     bool VisitStmt(clang::Stmt *stm);
     void HandleTranslationUnit(clang::ASTContext &ctx) override;
     void addCheck(CheckBase *check);
+
+    ClazyContext *context() const { return m_context; }
+
 private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
     clang::Stmt *lastStm = nullptr;
