@@ -27,7 +27,6 @@
 #include "StringUtils.h"
 #include "clazy_stl.h"
 #include "checkbase.h"
-#include "checkmanager.h"
 #include "AccessSpecifierManager.h"
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
@@ -35,7 +34,6 @@
 
 #include "clang/Frontend/CompilerInstance.h"
 #include "llvm/Support/raw_ostream.h"
-#include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/AST/ParentMap.h"
 #include <llvm/Config/llvm-config.h>
 
@@ -46,8 +44,6 @@
 using namespace clang;
 using namespace std;
 using namespace clang::ast_matchers;
-
-namespace {
 
 
 static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
@@ -62,89 +58,77 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
     }
 }
 
-class ClazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<ClazyASTConsumer>
+ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
+                                   const RegisteredCheck::List &requestedChecks)
+    : m_context(context)
 {
-    ClazyASTConsumer(const ClazyASTConsumer &) = delete;
-public:
-    ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
-                     const RegisteredCheck::List &requestedChecks)
-        : m_context(context)
-    {
-        m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
+    m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
 
-        // Check if any of our checks uses ast matchers, and register them
-        for (CheckBase *check : m_createdChecks)
-            check->registerASTMatchers(m_matchFinder);
+    // Check if any of our checks uses ast matchers, and register them
+    for (CheckBase *check : m_createdChecks)
+        check->registerASTMatchers(m_matchFinder);
+}
+
+ClazyASTConsumer::~ClazyASTConsumer()
+{
+    delete m_context;
+}
+
+bool ClazyASTConsumer::VisitDecl(Decl *decl)
+{
+    const bool isInSystemHeader = m_context->sm.isInSystemHeader(decl->getLocStart());
+
+    if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
+        a->VisitDeclaration(decl);
+
+    for (CheckBase *check : m_createdChecks) {
+        if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
+            check->VisitDeclaration(decl);
     }
 
-    ~ClazyASTConsumer()
-    {
-        delete m_context;
+    return true;
+}
+
+bool ClazyASTConsumer::VisitStmt(Stmt *stm)
+{
+    if (!m_context->parentMap) {
+        if (m_context->ci.getDiagnostics().hasUnrecoverableErrorOccurred())
+            return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
+
+        m_context->parentMap = new ParentMap(stm);
     }
 
-    bool VisitDecl(Decl *decl)
-    {
-        const bool isInSystemHeader = m_context->sm.isInSystemHeader(decl->getLocStart());
+    ParentMap *parentMap = m_context->parentMap;
 
-        if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
-            a->VisitDeclaration(decl);
-
-        for (CheckBase *check : m_createdChecks) {
-            if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
-                check->VisitDeclaration(decl);
-        }
-
-        return true;
+    // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
+    if (lastStm && isa<CXXCatchStmt>(lastStm) && !parentMap->hasParent(stm)) {
+        parentMap->setParent(stm, lastStm);
+        manuallyPopulateParentMap(parentMap, stm);
     }
 
-    bool VisitStmt(Stmt *stm)
-    {
-        if (!m_context->parentMap) {
-            if (m_context->ci.getDiagnostics().hasUnrecoverableErrorOccurred())
-                return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
+    lastStm = stm;
 
-            m_context->parentMap = new ParentMap(stm);
-        }
+    // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
+    // So add to parent map each time we go into a different hierarchy
+    if (!parentMap->hasParent(stm))
+        parentMap->addStmt(stm);
 
-        ParentMap *parentMap = m_context->parentMap;
-
-        // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
-        if (lastStm && isa<CXXCatchStmt>(lastStm) && !parentMap->hasParent(stm)) {
-            parentMap->setParent(stm, lastStm);
-            manuallyPopulateParentMap(parentMap, stm);
-        }
-
-        lastStm = stm;
-
-        // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
-        // So add to parent map each time we go into a different hierarchy
-        if (!parentMap->hasParent(stm))
-            parentMap->addStmt(stm);
-
-        const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
-        for (CheckBase *check : m_createdChecks) {
-            if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
-                check->VisitStatement(stm);
-        }
-
-        return true;
+    const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
+    for (CheckBase *check : m_createdChecks) {
+        if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
+            check->VisitStatement(stm);
     }
 
-    void HandleTranslationUnit(ASTContext &ctx) override
-    {
-        // Run our RecursiveAstVisitor based checks:
-        TraverseDecl(ctx.getTranslationUnitDecl());
+    return true;
+}
 
-        // Run our AstMatcher base checks:
-        m_matchFinder.matchAST(ctx);
-    }
+void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
+{
+    // Run our RecursiveAstVisitor based checks:
+    TraverseDecl(ctx.getTranslationUnitDecl());
 
-    Stmt *lastStm = nullptr;
-    CheckBase::List m_createdChecks;
-    ClazyContext *const m_context;
-    MatchFinder m_matchFinder;
-};
-
+    // Run our AstMatcher base checks:
+    m_matchFinder.matchAST(ctx);
 }
 
 static bool parseArgument(const string &arg, vector<string> &args)

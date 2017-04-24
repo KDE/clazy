@@ -29,6 +29,8 @@
 
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
+#include "clang/AST/RecursiveASTVisitor.h"
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -36,8 +38,6 @@
 namespace clang {
     class CompilerInstance;
 }
-
-class CheckManager;
 
 class ClazyASTAction : public clang::PluginASTAction
 {
@@ -60,6 +60,26 @@ private:
     RegisteredCheck::List m_checks;
     bool m_inplaceFixits = true;
     CheckManager *const m_checkManager;
+};
+
+class ClazyASTConsumer : public clang::ASTConsumer,
+                         public clang::RecursiveASTVisitor<ClazyASTConsumer>
+{
+public:
+    ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
+                     const RegisteredCheck::List &requestedChecks);
+
+    ~ClazyASTConsumer();
+
+    bool VisitDecl(clang::Decl *decl);
+    bool VisitStmt(clang::Stmt *stm);
+    void HandleTranslationUnit(clang::ASTContext &ctx) override;
+private:
+    ClazyASTConsumer(const ClazyASTConsumer &) = delete;
+    clang::Stmt *lastStm = nullptr;
+    CheckBase::List m_createdChecks;
+    ClazyContext *const m_context;
+    clang::ast_matchers::MatchFinder m_matchFinder;
 };
 
 #endif
