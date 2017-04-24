@@ -54,7 +54,6 @@ class PreprocessorOptions;
 
 class CheckBase;
 class CheckManager;
-class SuppressionManager;
 
 enum CheckLevel {
     CheckLevelUndefined = -1,
@@ -154,12 +153,11 @@ protected:
     clang::CXXMethodDecl *m_lastMethodDecl = nullptr;
     clang::Decl *m_lastDecl = nullptr;
     clang::Stmt *m_lastStmt = nullptr;
-    SuppressionManager *m_suppressionManager = nullptr;
-    CheckManager *const m_checkManager;
     std::vector<std::string> m_filesToIgnore;
 private:
     friend class ClazyPreprocessorCallbacks;
     friend class ClazyAstMatcherCallback;
+    CheckManager *const m_checkManager;
     ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;

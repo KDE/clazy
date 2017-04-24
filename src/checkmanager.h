@@ -27,7 +27,6 @@
 
 #include "clazy_export.h"
 #include "checkbase.h"
-#include "SuppressionManager.h"
 
 #include <clang/Lex/PreprocessorOptions.h>
 
@@ -97,8 +96,6 @@ public:
     void setRequestedLevel(CheckLevel level);
     CheckLevel requestedLevel() const { return m_requestedLevel; }
 
-    SuppressionManager* suppressionManager() { return &m_suppressionManager; }
-
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
 private:
@@ -116,7 +113,6 @@ private:
     bool m_enableAllFixits;
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
-    SuppressionManager m_suppressionManager;
 };
 
 #define CLAZY_STRINGIFY2(X) #X

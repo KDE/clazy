@@ -22,6 +22,8 @@
 #ifndef CLAZY_CONTEXT_H
 #define CLAZY_CONTEXT_H
 
+#include "SuppressionManager.h"
+
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
 
@@ -62,6 +64,7 @@ public:
     clang::ASTContext &astContext;
     AccessSpecifierManager *accessSpecifierManager = nullptr;
     PreProcessorVisitor *preprocessorVisitor = nullptr;
+    SuppressionManager suppressionManager;
     const bool m_noWerror;
 };
 
