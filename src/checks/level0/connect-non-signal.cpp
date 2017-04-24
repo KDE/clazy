@@ -38,13 +38,12 @@ using namespace std;
 ConnectNonSignal::ConnectNonSignal(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-    m_checkManager->enableAccessSpecifierManager(ci);
 }
 
 void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 {
     auto call = dyn_cast<CallExpr>(stmt);
-    AccessSpecifierManager *accessSpecifierManager = m_checkManager->accessSpecifierManager();
+    AccessSpecifierManager *accessSpecifierManager = this->accessSpecifierManager();
     if (!call || !accessSpecifierManager)
         return;
 

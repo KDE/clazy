@@ -39,7 +39,6 @@ using namespace std;
 IncorrectEmit::IncorrectEmit(const std::string &name, const clang::CompilerInstance &ci)
     : CheckBase(name, ci)
 {
-    m_checkManager->enableAccessSpecifierManager(ci);
     enablePreProcessorCallbacks();
     m_emitLocations.reserve(30); // bootstrap it
     m_filesToIgnore = { "moc_", ".moc" };
@@ -58,7 +57,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (!methodCall || !methodCall->getCalleeDecl())
         return;
 
-    AccessSpecifierManager *accessSpecifierManager = m_checkManager->accessSpecifierManager();
+    AccessSpecifierManager *accessSpecifierManager = this->accessSpecifierManager();
     auto method = dyn_cast<CXXMethodDecl>(methodCall->getCalleeDecl());
     if (!method || !accessSpecifierManager)
         return;

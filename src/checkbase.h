@@ -53,6 +53,7 @@ class PreprocessorOptions;
 class CheckBase;
 class CheckManager;
 class SuppressionManager;
+class AccessSpecifierManager;
 
 enum CheckLevel {
     CheckLevelUndefined = -1,
@@ -124,8 +125,11 @@ protected:
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
     virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
     virtual void VisitIfdef(clang::SourceLocation, const clang::Token &macroNameTok);
+    virtual bool requiresAccessSpecifierManager() const { return false; }
 
+    AccessSpecifierManager * accessSpecifierManager() const;
     void enablePreProcessorCallbacks();
+
 
     bool shouldIgnoreFile(clang::SourceLocation) const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);

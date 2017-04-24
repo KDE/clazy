@@ -25,6 +25,7 @@
 #include "checkbase.h"
 #include "StringUtils.h"
 #include "checkmanager.h"
+#include "AccessSpecifierManager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -75,6 +76,8 @@ CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_ci(ci)
 {
+    if (requiresAccessSpecifierManager())
+        m_checkManager->enableAccessSpecifierManager(ci);
 }
 
 CheckBase::~CheckBase()
@@ -132,6 +135,11 @@ void CheckBase::VisitDefined(const Token &, const SourceRange &)
 void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
 {
     // Overriden in derived classes
+}
+
+AccessSpecifierManager *CheckBase::accessSpecifierManager() const
+{
+    return m_checkManager->accessSpecifierManager();
 }
 
 void CheckBase::enablePreProcessorCallbacks()
