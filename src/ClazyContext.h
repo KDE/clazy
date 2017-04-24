@@ -39,6 +39,7 @@ namespace clang {
     class ASTContext;
     class ParentMap;
     class SourceManager;
+    class FixItRewriter;
 }
 
 class AccessSpecifierManager;
@@ -101,6 +102,7 @@ public:
     clang::ParentMap *parentMap = nullptr;
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;
+    clang::FixItRewriter *const rewriter;
 };
 
 #endif

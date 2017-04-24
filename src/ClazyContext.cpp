@@ -25,6 +25,28 @@
 
 #include <clang/AST/ParentMap.h>
 #include <clang/Basic/SourceManager.h>
+#include "clang/Rewrite/Frontend/FixItRewriter.h"
+
+using namespace clang;
+
+class ClazyFixItOptions : public FixItOptions
+{
+public:
+    ClazyFixItOptions(const ClazyFixItOptions &other) = delete;
+    ClazyFixItOptions(bool inplace)
+    {
+        InPlace = inplace;
+        FixWhatYouCan = true;
+        FixOnlyWarnings = true;
+        Silent = false;
+    }
+
+    std::string RewriteFilename(const std::string &filename, int &fd) override
+    {
+        fd = -1;
+        return InPlace ? filename : filename + "_fixed.cpp";
+    }
+};
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions opts)
     : ci(compiler)
@@ -33,6 +55,9 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , options(opts)
     , extraOptions(clazy_std::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
+    , rewriter(fixitsEnabled() ? new FixItRewriter(ci.getDiagnostics(), sm,
+                                                   ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()))
+                               : nullptr)
 {
 }
 
@@ -41,6 +66,11 @@ ClazyContext::~ClazyContext()
     delete preprocessorVisitor;
     delete accessSpecifierManager;
     delete parentMap;
+
+    if (rewriter) {
+        rewriter->WriteFixedFiles();
+        delete rewriter;
+    }
 
     preprocessorVisitor = nullptr;
     accessSpecifierManager = nullptr;

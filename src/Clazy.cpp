@@ -36,7 +36,6 @@
 #include "clang/Frontend/CompilerInstance.h"
 #include "llvm/Support/raw_ostream.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/Rewrite/Frontend/FixItRewriter.h"
 #include "clang/AST/ParentMap.h"
 #include <llvm/Config/llvm-config.h>
 
@@ -50,25 +49,6 @@ using namespace clang::ast_matchers;
 
 namespace {
 
-
-class MyFixItOptions : public FixItOptions
-{
-public:
-    MyFixItOptions(const MyFixItOptions &other) = delete;
-    MyFixItOptions(bool inplace)
-    {
-        InPlace = inplace;
-        FixWhatYouCan = true;
-        FixOnlyWarnings = true;
-        Silent = false;
-    }
-
-    std::string RewriteFilename(const std::string &filename, int &fd) override
-    {
-        fd = -1;
-        return InPlace ? filename : filename + "_fixed.cpp";
-    }
-};
 
 static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 {
@@ -88,13 +68,9 @@ class ClazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<ClazyAST
 public:
     ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
                      const RegisteredCheck::List &requestedChecks)
-        : m_rewriter(nullptr)
-        , m_context(context)
+        : m_context(context)
     {
         m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
-        if (context->fixitsEnabled())
-            m_rewriter = new FixItRewriter(context->ci.getDiagnostics(), context->sm,
-                                           m_context->ci.getLangOpts(), new MyFixItOptions(context->fixitsAreInplace()));
 
         // Check if any of our checks uses ast matchers, and register them
         for (CheckBase *check : m_createdChecks)
@@ -103,11 +79,6 @@ public:
 
     ~ClazyASTConsumer()
     {
-        if (m_rewriter) {
-            m_rewriter->WriteFixedFiles();
-            delete m_rewriter;
-        }
-
         delete m_context;
     }
 
@@ -169,7 +140,6 @@ public:
     }
 
     Stmt *lastStm = nullptr;
-    FixItRewriter *m_rewriter;
     CheckBase::List m_createdChecks;
     ClazyContext *const m_context;
     MatchFinder m_matchFinder;
