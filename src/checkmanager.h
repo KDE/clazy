@@ -30,9 +30,7 @@
 
 #include <clang/Lex/PreprocessorOptions.h>
 
-#include <string>
 #include <functional>
-#include <vector>
 #include <unordered_map>
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
@@ -86,7 +84,6 @@ public:
     void enableAllFixIts();
 
     bool allFixitsEnabled() const { return m_enableAllFixits; }
-    bool isOptionSet(const std::string &optionName) const;
 
     /**
      * Enables all checks with level <= @p level.
@@ -112,7 +109,6 @@ private:
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
     CheckLevel m_requestedLevel;
-    const std::vector<std::string> m_extraOptions;
 };
 
 #define CLAZY_STRINGIFY2(X) #X

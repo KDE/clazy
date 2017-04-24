@@ -24,8 +24,13 @@
 
 #include "SuppressionManager.h"
 
+#include "clazy_stl.h"
+
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
+
+#include <string>
+#include <vector>
 
 // ClazyContext is just a struct to share data and code between all checks
 
@@ -74,6 +79,11 @@ public:
         return options & ClazyOption_FixitsAreInplace;
     }
 
+    bool isOptionSet(const std::string &optionName) const
+    {
+        return clazy_std::contains(extraOptions, optionName);
+    }
+
     /**
      * We only enable it if a check needs it, for performance reasons
      */
@@ -90,6 +100,7 @@ public:
     const bool m_noWerror;
     clang::ParentMap *parentMap = nullptr;
     const ClazyOptions options;
+    const std::vector<std::string> extraOptions;
 };
 
 #endif

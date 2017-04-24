@@ -32,6 +32,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
     , sm(ci.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , options(opts)
+    , extraOptions(clazy_std::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
 {
 }
 

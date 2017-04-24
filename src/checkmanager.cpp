@@ -38,7 +38,6 @@ static const char * s_levelPrefix = "level";
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
     , m_requestedLevel(CheckLevelUndefined)
-    , m_extraOptions(clazy_std::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
@@ -244,11 +243,6 @@ bool CheckManager::fixitsEnabled() const
 void CheckManager::enableAllFixIts()
 {
     m_enableAllFixits = true;
-}
-
-bool CheckManager::isOptionSet(const string &optionName) const
-{
-    return clazy_std::contains(m_extraOptions, optionName);
 }
 
 /*static */

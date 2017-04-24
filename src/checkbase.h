@@ -52,7 +52,6 @@ class PreprocessorOptions;
 }
 
 class CheckBase;
-class CheckManager;
 
 enum CheckLevel {
     CheckLevelUndefined = -1,
@@ -154,7 +153,6 @@ protected:
 private:
     friend class ClazyPreprocessorCallbacks;
     friend class ClazyAstMatcherCallback;
-    CheckManager *const m_checkManager;
     ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;

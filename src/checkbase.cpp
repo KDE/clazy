@@ -24,7 +24,6 @@
 
 #include "checkbase.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -71,7 +70,6 @@ CheckBase::CheckBase(const string &name, ClazyContext *context)
     , m_astContext(context->astContext)
     , m_preprocessorOpts(context->ci.getPreprocessorOpts())
     , m_tu(m_astContext.getTranslationUnitDecl())
-    , m_checkManager(CheckManager::instance())
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
 {
 }
@@ -256,7 +254,7 @@ std::vector<string> CheckBase::supportedOptions() const
 bool CheckBase::isOptionSet(const std::string &optionName) const
 {
     const string qualifiedName = name() + '-' + optionName;
-    return m_checkManager->isOptionSet(qualifiedName);
+    return m_context->isOptionSet(qualifiedName);
 }
 
 void CheckBase::setEnabledFixits(int fixits)
