@@ -91,7 +91,6 @@ public:
         : m_sm(ci.getSourceManager())
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
-        , m_checkManager(checkManager)
         , m_context(new ClazyContext(ci))
     {
         m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
@@ -181,7 +180,6 @@ public:
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
-    CheckManager *const m_checkManager;
     ClazyContext *const m_context;
     MatchFinder m_matchFinder;
 };
