@@ -48,7 +48,6 @@ public:
         HelpMode_AnchorHeader = 1
     };
 
-
     ClazyASTAction();
 
 protected:
@@ -66,9 +65,7 @@ class ClazyASTConsumer : public clang::ASTConsumer,
                          public clang::RecursiveASTVisitor<ClazyASTConsumer>
 {
 public:
-    ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
-                     const RegisteredCheck::List &requestedChecks);
-
+    explicit ClazyASTConsumer(ClazyContext *context, const CheckBase::List &createdChecks);
     ~ClazyASTConsumer();
 
     bool VisitDecl(clang::Decl *decl);
@@ -77,8 +74,8 @@ public:
 private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
     clang::Stmt *lastStm = nullptr;
-    CheckBase::List m_createdChecks;
     ClazyContext *const m_context;
+    CheckBase::List m_createdChecks;
     clang::ast_matchers::MatchFinder m_matchFinder;
 };
 

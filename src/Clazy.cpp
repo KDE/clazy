@@ -58,12 +58,10 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
     }
 }
 
-ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
-                                   const RegisteredCheck::List &requestedChecks)
+ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context, const CheckBase::List &createdChecks)
     : m_context(context)
+    , m_createdChecks(createdChecks)
 {
-    m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
-
     // Check if any of our checks uses ast matchers, and register them
     for (CheckBase *check : m_createdChecks)
         check->registerASTMatchers(m_matchFinder);
@@ -188,7 +186,10 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     if (m_checkManager->allFixitsEnabled())
         options |= ClazyContext::ClazyOption_AllFixitsEnabled;
 
-    return llvm::make_unique<ClazyASTConsumer>(new ClazyContext(ci, options), m_checkManager, m_checks);
+    auto context = new ClazyContext(ci, options);
+    CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, context);
+
+    return llvm::make_unique<ClazyASTConsumer>(context, createdChecks);
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)
