@@ -33,6 +33,7 @@ namespace clang {
     class CompilerInstance;
     class ASTContext;
     class ParentMap;
+    class SourceManager;
 }
 
 class AccessSpecifierManager;
@@ -41,7 +42,15 @@ class PreProcessorVisitor;
 class ClazyContext
 {
 public:
-    explicit ClazyContext(const clang::CompilerInstance &ci);
+
+    enum ClazyOption {
+        ClazyOption_None = 0,
+        ClazyOption_FixitsAreInplace = 1,
+        ClazyOption_FixitsEnabled = 2
+    };
+    typedef int ClazyOptions;
+
+    explicit ClazyContext(const clang::CompilerInstance &ci, ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
     bool usingPreCompiledHeaders() const
@@ -54,6 +63,16 @@ public:
         return m_noWerror;
     }
 
+    bool fixitsEnabled() const
+    {
+        return options & ClazyOption_FixitsEnabled;
+    }
+
+    bool fixitsAreInplace() const
+    {
+        return options & ClazyOption_FixitsAreInplace;
+    }
+
     /**
      * We only enable it if a check needs it, for performance reasons
      */
@@ -63,11 +82,13 @@ public:
     // TODO: More things will follow
     const clang::CompilerInstance &ci;
     clang::ASTContext &astContext;
+    clang::SourceManager &sm;
     AccessSpecifierManager *accessSpecifierManager = nullptr;
     PreProcessorVisitor *preprocessorVisitor = nullptr;
     SuppressionManager suppressionManager;
     const bool m_noWerror;
     clang::ParentMap *parentMap = nullptr;
+    const ClazyOptions options;
 };
 
 #endif

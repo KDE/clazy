@@ -86,15 +86,15 @@ class ClazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<ClazyAST
 {
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
 public:
-    ClazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
-                    const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
-        : m_sm(ci.getSourceManager())
-        , m_rewriter(nullptr)
-        , m_context(new ClazyContext(ci))
+    ClazyASTConsumer(ClazyContext *context, CheckManager *checkManager,
+                     const RegisteredCheck::List &requestedChecks)
+        : m_rewriter(nullptr)
+        , m_context(context)
     {
         m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
-        if (checkManager->fixitsEnabled())
-            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_sm, m_context->ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
+        if (context->fixitsEnabled())
+            m_rewriter = new FixItRewriter(context->ci.getDiagnostics(), context->sm,
+                                           m_context->ci.getLangOpts(), new MyFixItOptions(context->fixitsAreInplace()));
 
         // Check if any of our checks uses ast matchers, and register them
         for (CheckBase *check : m_createdChecks)
@@ -107,11 +107,13 @@ public:
             m_rewriter->WriteFixedFiles();
             delete m_rewriter;
         }
+
+        delete m_context;
     }
 
     bool VisitDecl(Decl *decl)
     {
-        const bool isInSystemHeader = m_sm.isInSystemHeader(decl->getLocStart());
+        const bool isInSystemHeader = m_context->sm.isInSystemHeader(decl->getLocStart());
 
         if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
             a->VisitDeclaration(decl);
@@ -148,7 +150,7 @@ public:
         if (!parentMap->hasParent(stm))
             parentMap->addStmt(stm);
 
-        const bool isInSystemHeader = m_sm.isInSystemHeader(stm->getLocStart());
+        const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
         for (CheckBase *check : m_createdChecks) {
             if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
                 check->VisitStatement(stm);
@@ -167,7 +169,6 @@ public:
     }
 
     Stmt *lastStm = nullptr;
-    SourceManager &m_sm;
     FixItRewriter *m_rewriter;
     CheckBase::List m_createdChecks;
     ClazyContext *const m_context;
@@ -222,7 +223,15 @@ ClazyASTAction::ClazyASTAction()
 
 std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    return llvm::make_unique<ClazyASTConsumer>(ci, m_checkManager, m_checks, m_inplaceFixits);
+    ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
+
+    if (m_inplaceFixits)
+        options |= ClazyContext::ClazyOption_FixitsAreInplace;
+
+    if (m_checkManager->fixitsEnabled())
+        options |= ClazyContext::ClazyOption_FixitsEnabled;
+
+    return llvm::make_unique<ClazyASTConsumer>(new ClazyContext(ci, options), m_checkManager, m_checks);
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)

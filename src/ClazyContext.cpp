@@ -24,11 +24,14 @@
 #include "ClazyContext.h"
 
 #include <clang/AST/ParentMap.h>
+#include <clang/Basic/SourceManager.h>
 
-ClazyContext::ClazyContext(const clang::CompilerInstance &compiler)
+ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
+    , sm(ci.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
+    , options(opts)
 {
 }
 
