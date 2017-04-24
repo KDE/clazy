@@ -231,6 +231,9 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     if (m_checkManager->fixitsEnabled())
         options |= ClazyContext::ClazyOption_FixitsEnabled;
 
+    if (m_checkManager->allFixitsEnabled())
+        options |= ClazyContext::ClazyOption_AllFixitsEnabled;
+
     return llvm::make_unique<ClazyASTConsumer>(new ClazyContext(ci, options), m_checkManager, m_checks);
 }
 

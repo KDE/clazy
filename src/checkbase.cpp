@@ -266,7 +266,7 @@ void CheckBase::setEnabledFixits(int fixits)
 
 bool CheckBase::isFixitEnabled(int fixit) const
 {
-    return (m_enabledFixits & fixit) || m_checkManager->allFixitsEnabled();
+    return (m_enabledFixits & fixit) || (m_context->options & ClazyContext::ClazyOption_AllFixitsEnabled);
 }
 
 ClazyAstMatcherCallback::ClazyAstMatcherCallback(CheckBase *check)

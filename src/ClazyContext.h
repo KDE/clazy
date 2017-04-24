@@ -46,7 +46,8 @@ public:
     enum ClazyOption {
         ClazyOption_None = 0,
         ClazyOption_FixitsAreInplace = 1,
-        ClazyOption_FixitsEnabled = 2
+        ClazyOption_FixitsEnabled = 2,
+        ClazyOption_AllFixitsEnabled = 4
     };
     typedef int ClazyOptions;
 
