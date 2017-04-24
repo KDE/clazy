@@ -96,7 +96,7 @@ public:
     {
         m_createdChecks = checkManager->createChecks(requestedChecks, ci);
         if (checkManager->fixitsEnabled())
-            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_ci.getSourceManager(), m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
+            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_sm, m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
 
         // Check if any of our checks uses ast matchers, and register them
         for (CheckBase *check : m_createdChecks)
@@ -178,7 +178,7 @@ public:
 
     Stmt *lastStm = nullptr;
     CompilerInstance &m_ci;
-    const SourceManager &m_sm;
+    SourceManager &m_sm;
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
