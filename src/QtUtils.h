@@ -27,6 +27,8 @@
 #include "TypeUtils.h"
 #include "MacroUtils.h"
 
+#include <clang/AST/ASTContext.h>
+
 #include <string>
 #include <vector>
 

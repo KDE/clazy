@@ -28,6 +28,7 @@
 #include <clang/AST/Expr.h>
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/ASTContext.h>
 #include <string>
 
 namespace clang {
