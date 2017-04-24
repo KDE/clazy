@@ -30,6 +30,14 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler)
 {
 }
 
+ClazyContext::~ClazyContext()
+{
+    delete preprocessorVisitor;
+    delete accessSpecifierManager;
+    preprocessorVisitor = nullptr;
+    accessSpecifierManager = nullptr;
+}
+
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders())

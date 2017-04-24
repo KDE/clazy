@@ -39,6 +39,7 @@ class ClazyContext
 {
 public:
     explicit ClazyContext(const clang::CompilerInstance &ci);
+    ~ClazyContext();
 
     bool usingPreCompiledHeaders() const
     {
