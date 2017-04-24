@@ -26,8 +26,6 @@
 #include "checkmanager.h"
 #include "Utils.h"
 #include "StringUtils.h"
-#include "AccessSpecifierManager.h"
-#include "PreProcessorVisitor.h"
 
 #include <stdlib.h>
 
@@ -51,9 +49,6 @@ CheckManager::CheckManager()
             m_requestedFixitName = string(fixitsEnv);
         }
     }
-
-    // Allows user to make clazy ignore -Werror
-    m_noWerror = getenv("CLAZY_NO_WERROR") != nullptr;
 }
 
 bool CheckManager::checkExists(const string &name) const
@@ -121,11 +116,11 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
     return 0;
 }
 
-CheckBase* CheckManager::createCheck(const string &name, const CompilerInstance &ci)
+CheckBase* CheckManager::createCheck(const string &name, ClazyContext *context)
 {
     for (const auto& rc : m_registeredChecks) {
         if (rc.name == name) {
-            return rc.factory(ci);
+            return rc.factory(context);
         }
     }
 
@@ -214,7 +209,7 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
 }
 
 CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
-                                           const CompilerInstance &ci)
+                                           ClazyContext *context)
 {
     const string fixitCheckName = checkNameForFixIt(m_requestedFixitName);
     RegisteredFixIt fixit = m_fixitByName[m_requestedFixitName];
@@ -222,7 +217,7 @@ CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requeste
     CheckBase::List checks;
     checks.reserve(requestedChecks.size() + 1);
     for (const auto& check : requestedChecks) {
-        checks.push_back(createCheck(check.name, ci));
+        checks.push_back(createCheck(check.name, context));
         if (check.name == fixitCheckName) {
             checks.back()->setEnabledFixits(fixit.id);
         }
@@ -232,7 +227,7 @@ CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requeste
         // We have one fixit enabled, we better have the check instance too.
         if (!fixitCheckName.empty()) {
             if (checkForName(requestedChecks, fixitCheckName) == requestedChecks.cend()) {
-                checks.push_back(createCheck(fixitCheckName, ci));
+                checks.push_back(createCheck(fixitCheckName, context));
                 checks.back()->setEnabledFixits(fixit.id);
             }
         }
@@ -322,16 +317,4 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
 void CheckManager::setRequestedLevel(CheckLevel level)
 {
     m_requestedLevel = level;
-}
-
-void CheckManager::enableAccessSpecifierManager(const CompilerInstance &ci)
-{
-    if (!m_accessSpecifierManager && !usingPreCompiledHeaders(ci.getPreprocessorOpts()))
-        m_accessSpecifierManager = new AccessSpecifierManager(ci);
-}
-
-void CheckManager::enablePreprocessorVisitor(const CompilerInstance &ci)
-{
-    if (!m_preprocessorVisitor && !usingPreCompiledHeaders(ci.getPreprocessorOpts()))
-        m_preprocessorVisitor = new PreProcessorVisitor(ci);
 }

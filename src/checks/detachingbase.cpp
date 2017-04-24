@@ -34,8 +34,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingBase::DetachingBase(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+DetachingBase::DetachingBase(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
     m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };

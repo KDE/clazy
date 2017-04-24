@@ -36,7 +36,7 @@ class Stmt;
 class LambdaInConnect : public CheckBase
 {
 public:
-    explicit LambdaInConnect(const std::string &name, const clang::CompilerInstance &ci);
+    explicit LambdaInConnect(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

@@ -38,8 +38,8 @@ enum Fixit {
     FixitUseQString = 0x1,
 };
 
-AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

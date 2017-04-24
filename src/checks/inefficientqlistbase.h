@@ -47,7 +47,7 @@ public:
         IgnoreIsInitializedByFunctionCall = 16
     };
 
-    explicit InefficientQListBase(const std::string &name, const clang::CompilerInstance &ci, int ignoreMode);
+    explicit InefficientQListBase(const std::string &name, ClazyContext *context, int ignoreMode);
     void VisitDecl(clang::Decl *decl) override;
 
 private:

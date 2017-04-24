@@ -33,8 +33,8 @@ using namespace clang;
 using namespace std;
 
 
-ChildEvent_qobject_cast::ChildEvent_qobject_cast(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+ChildEvent_qobject_cast::ChildEvent_qobject_cast(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

@@ -36,7 +36,7 @@ class CallExpr;
 class StringArg : public CheckBase
 {
 public:
-    StringArg(const std::string &name, const clang::CompilerInstance &ci);
+    StringArg(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 private:

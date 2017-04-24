@@ -36,9 +36,6 @@
 #include <vector>
 #include <unordered_map>
 
-class AccessSpecifierManager;
-class PreProcessorVisitor;
-
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
     RegisteredFixIt() : id(-1) {}
@@ -48,7 +45,7 @@ struct CLAZYLIB_EXPORT RegisteredFixIt {
     bool operator==(const RegisteredFixIt &other) const { return id == other.id; }
 };
 
-using FactoryFunction = std::function<CheckBase*(const clang::CompilerInstance &ci)>;
+using FactoryFunction = std::function<CheckBase*(ClazyContext *context)>;
 
 struct CLAZYLIB_EXPORT RegisteredCheck {
     typedef std::vector<RegisteredCheck> List;
@@ -84,7 +81,7 @@ public:
      */
     RegisteredCheck::List checksFromRequestedLevel() const;
 
-    CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, const clang::CompilerInstance &ci);
+    CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     bool fixitsEnabled() const;
     void enableAllFixIts();
@@ -102,25 +99,7 @@ public:
 
     SuppressionManager* suppressionManager() { return &m_suppressionManager; }
 
-    /**
-     * We only enable it if a check needs it, for performance reasons
-     */
-    void enableAccessSpecifierManager(const clang::CompilerInstance &ci);
-    void enablePreprocessorVisitor(const clang::CompilerInstance &ci);
-
-    AccessSpecifierManager *accessSpecifierManager() const { return m_accessSpecifierManager; }
-    PreProcessorVisitor *preprocessorVisitor() const { return m_preprocessorVisitor; }
-
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
-    bool usingPreCompiledHeaders(const clang::PreprocessorOptions &ppOpts) const
-    {
-        return !ppOpts.ImplicitPCHInclude.empty();
-    }
-
-    bool userDisabledWError() const
-    {
-        return m_noWerror;
-    }
 
 private:
     CheckManager();
@@ -128,26 +107,23 @@ private:
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;
-    CheckBase* createCheck(const std::string &name, const clang::CompilerInstance &ci);
+    CheckBase* createCheck(const std::string &name, ClazyContext *context);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
-    bool m_noWerror = false;
     CheckLevel m_requestedLevel;
     const std::vector<std::string> m_extraOptions;
     SuppressionManager m_suppressionManager;
-    AccessSpecifierManager *m_accessSpecifierManager = nullptr;
-    PreProcessorVisitor *m_preprocessorVisitor = nullptr;
 };
 
 #define CLAZY_STRINGIFY2(X) #X
 #define CLAZY_STRINGIFY(X) CLAZY_STRINGIFY2(X)
 
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](const clang::CompilerInstance &ci){ return new CLASS_NAME(CHECK_NAME, ci); });
+    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \
     static int dummy_##FIXIT_ID = CheckManager::instance()->registerFixIt(FIXIT_ID, FIXIT_NAME, CHECK_NAME); \

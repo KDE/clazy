@@ -39,10 +39,8 @@
 using namespace clang;
 using namespace std;
 
-InefficientQListBase::InefficientQListBase(const std::string &name,
-                                           const clang::CompilerInstance &ci,
-                                           int ignoreMode)
-    : CheckBase(name, ci)
+InefficientQListBase::InefficientQListBase(const std::string &name, ClazyContext *context, int ignoreMode)
+    : CheckBase(name, context)
     , m_ignoreMode(ignoreMode)
 {
 }
@@ -101,8 +99,8 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (!qt2.getTypePtrOrNull())
         return;
 
-    const int size_of_ptr = TypeUtils::sizeOfPointer(&m_context, qt2); // in bits
-    const int size_of_T = m_context.getTypeSize(qt2);
+    const int size_of_ptr = TypeUtils::sizeOfPointer(&m_astContext, qt2); // in bits
+    const int size_of_T = m_astContext.getTypeSize(qt2);
 
     if (size_of_T > size_of_ptr) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");

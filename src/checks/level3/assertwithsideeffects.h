@@ -30,7 +30,7 @@
 class AssertWithSideEffects : public CheckBase
 {
 public:
-    AssertWithSideEffects(const std::string &name, const clang::CompilerInstance &ci);
+    AssertWithSideEffects(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
 private:
     int m_aggressiveness;

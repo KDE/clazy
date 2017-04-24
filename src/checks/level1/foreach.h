@@ -45,7 +45,7 @@ class CXXForRangeStmt;
 class Foreach : public CheckBase
 {
 public:
-    Foreach(const std::string &name, const clang::CompilerInstance &ci);
+    Foreach(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void checkBigTypeMissingRef();

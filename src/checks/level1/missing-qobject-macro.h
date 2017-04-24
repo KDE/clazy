@@ -39,7 +39,7 @@ class SourceLocation;
 class MissingQ_OBJECT : public CheckBase
 {
 public:
-    explicit MissingQ_OBJECT(const std::string &name, const clang::CompilerInstance &ci);
+    explicit MissingQ_OBJECT(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,

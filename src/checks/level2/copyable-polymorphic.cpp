@@ -31,8 +31,8 @@ using namespace clang;
 using namespace std;
 
 
-CopyablePolymorphic::CopyablePolymorphic(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

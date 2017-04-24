@@ -31,7 +31,7 @@
 class InstallEventFilter : public CheckBase
 {
 public:
-    explicit InstallEventFilter(const std::string &name, const clang::CompilerInstance &ci);
+    explicit InstallEventFilter(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

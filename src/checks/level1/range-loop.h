@@ -40,7 +40,7 @@ class CXXForRangeStmt;
 class RangeLoop : public CheckBase
 {
 public:
-    RangeLoop(const std::string &name, const clang::CompilerInstance &ci);
+    RangeLoop(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void processForRangeLoop(clang::CXXForRangeStmt *rangeLoop);

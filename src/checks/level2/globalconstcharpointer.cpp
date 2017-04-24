@@ -30,8 +30,8 @@
 
 using namespace clang;
 
-GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     m_filesToIgnore = { "errno.h", "getopt.h", "StdHeader.h",
                         "3rdparty", "mysql.h", "qpicture.cpp" };

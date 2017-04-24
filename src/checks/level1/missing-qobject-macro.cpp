@@ -35,8 +35,8 @@
 using namespace clang;
 using namespace std;
 
-MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
 }
@@ -57,7 +57,7 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
     if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates
         return;
 
-    if (m_checkManager->usingPreCompiledHeaders(m_preprocessorOpts))
+    if (m_context->usingPreCompiledHeaders())
         return;
 
     const SourceLocation startLoc = decl->getLocStart();

@@ -70,8 +70,8 @@ static bool classIsOk(const string &className)
     return clazy_std::contains(okClasses, className);
 }
 
-OldStyleConnect::OldStyleConnect(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
 }
@@ -403,7 +403,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = FixItUtils::locForNextToken(&m_context, arg->getLocStart(), tok::comma);
+                    auto endLoc = FixItUtils::locForNextToken(&m_astContext, arg->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

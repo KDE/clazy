@@ -35,7 +35,7 @@
 class InefficientQList : public InefficientQListBase
 {
 public:
-    explicit InefficientQList(const std::string &name, const clang::CompilerInstance &ci);
+    explicit InefficientQList(const std::string &name, ClazyContext *context);
 };
 
 #endif

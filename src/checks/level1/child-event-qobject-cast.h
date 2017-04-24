@@ -31,7 +31,7 @@
 class ChildEvent_qobject_cast : public CheckBase
 {
 public:
-    explicit ChildEvent_qobject_cast(const std::string &name, const clang::CompilerInstance &ci);
+    explicit ChildEvent_qobject_cast(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
 };

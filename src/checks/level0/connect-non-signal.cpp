@@ -35,15 +35,16 @@ using namespace clang;
 using namespace std;
 
 
-ConnectNonSignal::ConnectNonSignal(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
+    context->enableAccessSpecifierManager();
 }
 
 void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 {
     auto call = dyn_cast<CallExpr>(stmt);
-    AccessSpecifierManager *accessSpecifierManager = this->accessSpecifierManager();
+    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
     if (!call || !accessSpecifierManager)
         return;
 

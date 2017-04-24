@@ -37,7 +37,7 @@ class Stmt;
 class ContainerInsideLoop : public CheckBase
 {
 public:
-    explicit ContainerInsideLoop(const std::string &name, const clang::CompilerInstance &ci);
+    explicit ContainerInsideLoop(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

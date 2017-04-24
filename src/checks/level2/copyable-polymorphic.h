@@ -36,7 +36,7 @@ class Stmt;
 class CopyablePolymorphic : public CheckBase
 {
 public:
-    explicit CopyablePolymorphic(const std::string &name, const clang::CompilerInstance &ci);
+    explicit CopyablePolymorphic(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
 };
 

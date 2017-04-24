@@ -33,8 +33,8 @@ using namespace clang;
 using namespace std;
 
 
-BaseClassEvent::BaseClassEvent(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

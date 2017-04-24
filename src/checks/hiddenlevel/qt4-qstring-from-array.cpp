@@ -37,8 +37,8 @@ enum FixIt {
     FixItToFromLatin1
 };
 
-Qt4_QStringFromArray::Qt4_QStringFromArray(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+Qt4_QStringFromArray::Qt4_QStringFromArray(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

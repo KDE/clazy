@@ -33,8 +33,8 @@ using namespace clang;
 using namespace std;
 
 
-PostEvent::PostEvent(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+PostEvent::PostEvent(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

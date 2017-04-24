@@ -46,7 +46,7 @@ class CallExpr;
 class ReserveCandidates : public CheckBase
 {
 public:
-    ReserveCandidates(const std::string &name, const clang::CompilerInstance &ci);
+    ReserveCandidates(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

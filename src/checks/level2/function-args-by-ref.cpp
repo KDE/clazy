@@ -83,8 +83,8 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
     return clazy_std::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
-FunctionArgsByRef::FunctionArgsByRef(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+FunctionArgsByRef::FunctionArgsByRef(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     m_filesToIgnore = {"/c++/",
                        "qimage.cpp", // TODO: Uncomment in Qt6
@@ -129,7 +129,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
             continue;
 
         TypeUtils::QualTypeClassification classif;
-        bool success = TypeUtils::classifyQualType(&m_context, param, classif, body);
+        bool success = TypeUtils::classifyQualType(&m_astContext, param, classif, body);
         if (!success)
             continue;
 

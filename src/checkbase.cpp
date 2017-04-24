@@ -25,7 +25,6 @@
 #include "checkbase.h"
 #include "StringUtils.h"
 #include "checkmanager.h"
-#include "AccessSpecifierManager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -66,18 +65,16 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
-CheckBase::CheckBase(const string &name, const CompilerInstance &ci)
-    : m_sm(ci.getSourceManager())
+CheckBase::CheckBase(const string &name, ClazyContext *context)
+    : m_sm(context->ci.getSourceManager())
     , m_name(name)
-    , m_context(ci.getASTContext())
-    , m_preprocessorOpts(ci.getPreprocessorOpts())
-    , m_tu(m_context.getTranslationUnitDecl())
+    , m_context(context)
+    , m_astContext(context->astContext)
+    , m_preprocessorOpts(context->ci.getPreprocessorOpts())
+    , m_tu(m_astContext.getTranslationUnitDecl())
     , m_checkManager(CheckManager::instance())
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
-    , m_ci(ci)
 {
-    if (requiresAccessSpecifierManager())
-        m_checkManager->enableAccessSpecifierManager(ci);
 }
 
 CheckBase::~CheckBase()
@@ -137,14 +134,9 @@ void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
     // Overriden in derived classes
 }
 
-AccessSpecifierManager *CheckBase::accessSpecifierManager() const
-{
-    return m_checkManager->accessSpecifierManager();
-}
-
 void CheckBase::enablePreProcessorCallbacks()
 {
-    Preprocessor &pi = m_ci.getPreprocessor();
+    Preprocessor &pi = m_context->ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 }
 
@@ -217,9 +209,9 @@ void CheckBase::emitInternalError(SourceLocation loc, string error)
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
-    auto &engine = m_ci.getDiagnostics();
-    auto severity = (engine.getWarningsAsErrors() && !m_checkManager->userDisabledWError()) ? DiagnosticIDs::Error
-                                                                                            : DiagnosticIDs::Warning;
+    auto &engine = m_context->ci.getDiagnostics();
+    auto severity = (engine.getWarningsAsErrors() && !m_context->userDisabledWError()) ? DiagnosticIDs::Error
+                                                                                       : DiagnosticIDs::Warning;
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
     DiagnosticBuilder B = engine.Report(full, id);
     for (const FixItHint& fixit : fixits) {

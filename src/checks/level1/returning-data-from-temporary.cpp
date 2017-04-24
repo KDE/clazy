@@ -32,8 +32,8 @@ using namespace clang;
 using namespace std;
 
 
-ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

@@ -36,7 +36,7 @@ class Stmt;
 class InefficientQListSoft : public InefficientQListBase
 {
 public:
-    explicit InefficientQListSoft(const std::string &name, const clang::CompilerInstance &ci);
+    explicit InefficientQListSoft(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

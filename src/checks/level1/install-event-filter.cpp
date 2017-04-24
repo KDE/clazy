@@ -32,8 +32,8 @@ using namespace clang;
 using namespace std;
 
 
-InstallEventFilter::InstallEventFilter(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

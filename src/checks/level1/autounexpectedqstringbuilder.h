@@ -36,7 +36,7 @@ class Stmt;
 class AutoUnexpectedQStringBuilder : public CheckBase
 {
 public:
-    explicit AutoUnexpectedQStringBuilder(const std::string &name, const clang::CompilerInstance &ci);
+    explicit AutoUnexpectedQStringBuilder(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 };
 

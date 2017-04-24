@@ -59,7 +59,7 @@ enum FromFunction {
 class QStringAllocations : public CheckBase
 {
 public:
-    QStringAllocations(const std::string &name, const clang::CompilerInstance &ci);
+    QStringAllocations(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 
 protected:

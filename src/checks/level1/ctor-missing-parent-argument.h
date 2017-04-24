@@ -31,7 +31,7 @@
 class CtorMissingParentArgument : public CheckBase
 {
 public:
-    explicit CtorMissingParentArgument(const std::string &name, const clang::CompilerInstance &ci);
+    explicit CtorMissingParentArgument(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
 };

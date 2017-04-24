@@ -36,8 +36,8 @@
 using namespace std;
 using namespace clang;
 
-MissingTypeinfo::MissingTypeinfo(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+MissingTypeinfo::MissingTypeinfo(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 
@@ -61,8 +61,8 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     if (!record || !record->getDefinition() || typeHasClassification(qt2))
         return; // Don't crash if we only have a fwd decl
 
-    const bool isCopyable = qt2.isTriviallyCopyableType(m_context);
-    const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, &m_context);
+    const bool isCopyable = qt2.isTriviallyCopyableType(m_astContext);
+    const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, &m_astContext);
 
     if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
         std::string typeName = record->getName();

@@ -38,7 +38,7 @@ class CXXMemberCallExpr;
 class StringRefCandidates : public CheckBase
 {
 public:
-    StringRefCandidates(const std::string &name, const clang::CompilerInstance &ci);
+    StringRefCandidates(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     bool processCase1(clang::CXXMemberCallExpr*);

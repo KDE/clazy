@@ -34,7 +34,7 @@ class CXXRecordDecl;
 class RuleOfBase : public CheckBase
 {
 public:
-    explicit RuleOfBase(const std::string &name, const clang::CompilerInstance &ci);
+    explicit RuleOfBase(const std::string &name, ClazyContext *context);
 protected:
     bool isBlacklisted(clang::CXXRecordDecl *record) const;
 };

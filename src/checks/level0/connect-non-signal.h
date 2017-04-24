@@ -31,11 +31,8 @@
 class ConnectNonSignal : public CheckBase
 {
 public:
-    explicit ConnectNonSignal(const std::string &name, const clang::CompilerInstance &ci);
+    explicit ConnectNonSignal(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
-protected:
-    bool requiresAccessSpecifierManager() const override { return true; }
-private:
 };
 
 #endif

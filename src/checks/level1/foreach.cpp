@@ -60,16 +60,15 @@ const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
     return methodsMap;
 }
 
-Foreach::Foreach(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+Foreach::Foreach(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
-    m_checkManager->enablePreprocessorVisitor(ci);
+    context->enablePreprocessorVisitor();
 }
-
 
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
-    PreProcessorVisitor *preProcessorVisitor = m_checkManager->preprocessorVisitor();
+    PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
     if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50900)
         return;
 
@@ -158,7 +157,7 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     TypeUtils::QualTypeClassification classif;
-    bool success = TypeUtils::classifyQualType(&m_context, varDecl, /*by-ref*/classif, forStatements.at(0));
+    bool success = TypeUtils::classifyQualType(&m_astContext, varDecl, /*by-ref*/classif, forStatements.at(0));
     if (!success)
         return;
 

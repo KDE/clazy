@@ -76,6 +76,7 @@ set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/requiredresults.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ClazyContext.cpp
 )
 
 if(HAS_STD_REGEX)

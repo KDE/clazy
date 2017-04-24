@@ -39,7 +39,7 @@ class CXXConstructExpr;
 class ContainerAntiPattern : public CheckBase
 {
 public:
-    explicit ContainerAntiPattern(const std::string &name, const clang::CompilerInstance &ci);
+    explicit ContainerAntiPattern(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     bool VisitQSet(clang::Stmt *stmt);

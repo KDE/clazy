@@ -41,7 +41,7 @@ class CXXRecordDecl;
 class MissingTypeinfo : public CheckBase
 {
 public:
-    MissingTypeinfo(const std::string &name, const clang::CompilerInstance &ci);
+    MissingTypeinfo(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);

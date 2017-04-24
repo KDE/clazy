@@ -31,7 +31,7 @@
 class QStringLeft : public CheckBase
 {
 public:
-    QStringLeft(const std::string &name, const clang::CompilerInstance &ci);
+    QStringLeft(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
 };

@@ -36,7 +36,7 @@
 class GlobalConstCharPointer : public CheckBase
 {
 public:
-    GlobalConstCharPointer(const std::string &name, const clang::CompilerInstance &ci);
+    GlobalConstCharPointer(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 };
 

@@ -61,8 +61,8 @@ public :
 };
 
 
-QColorFromLiteral::QColorFromLiteral(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+QColorFromLiteral::QColorFromLiteral(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
     , m_astMatcherCallBack(new QColorFromLiteral_Callback(this))
 {
 }

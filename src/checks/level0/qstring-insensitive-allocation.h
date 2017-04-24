@@ -36,7 +36,7 @@ class Stmt;
 class QStringInsensitiveAllocation : public CheckBase
 {
 public:
-    explicit QStringInsensitiveAllocation(const std::string &name, const clang::CompilerInstance &ci);
+    explicit QStringInsensitiveAllocation(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

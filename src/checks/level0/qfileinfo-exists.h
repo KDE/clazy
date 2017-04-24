@@ -36,7 +36,7 @@ class Stmt;
 class QFileInfoExists : public CheckBase
 {
 public:
-    explicit QFileInfoExists(const std::string &name, const clang::CompilerInstance &ci);
+    explicit QFileInfoExists(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

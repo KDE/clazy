@@ -33,8 +33,8 @@
 
 using namespace clang;
 
-BogusDynamicCast::BogusDynamicCast(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+BogusDynamicCast::BogusDynamicCast(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

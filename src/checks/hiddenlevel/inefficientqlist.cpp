@@ -36,8 +36,8 @@
 using namespace clang;
 using namespace std;
 
-InefficientQList::InefficientQList(const std::string &name, const clang::CompilerInstance &ci)
-    : InefficientQListBase(name, ci, IgnoreNone)
+InefficientQList::InefficientQList(const std::string &name, ClazyContext *context)
+    : InefficientQListBase(name, context, IgnoreNone)
 {
 }
 

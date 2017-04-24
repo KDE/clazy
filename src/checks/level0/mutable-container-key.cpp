@@ -39,8 +39,8 @@ static bool isInterestingContainer(const string &name)
     return clazy_std::contains(containers, name);
 }
 
-MutableContainerKey::MutableContainerKey(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

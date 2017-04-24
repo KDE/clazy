@@ -42,7 +42,7 @@ class CallExpr;
 class ImplicitCasts : public CheckBase
 {
 public:
-    ImplicitCasts(const std::string &name, const clang::CompilerInstance &ci);
+    ImplicitCasts(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     bool isMacroToIgnore(clang::SourceLocation loc) const;

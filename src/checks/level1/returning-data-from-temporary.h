@@ -34,7 +34,7 @@ namespace clang {
 class ReturningDataFromTemporary : public CheckBase
 {
 public:
-    explicit ReturningDataFromTemporary(const std::string &name, const clang::CompilerInstance &ci);
+    explicit ReturningDataFromTemporary(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void handleDataCall(clang::CXXMemberCallExpr *memberCall);

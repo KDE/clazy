@@ -31,7 +31,7 @@
 class PostEvent : public CheckBase
 {
 public:
-    explicit PostEvent(const std::string &name, const clang::CompilerInstance &ci);
+    explicit PostEvent(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
 };

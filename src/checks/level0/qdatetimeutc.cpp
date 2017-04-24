@@ -39,8 +39,8 @@ enum Fixit {
     FixitAll = 0x1 // More granularity isn't needed I guess
 };
 
-QDateTimeUtc::QDateTimeUtc(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 
@@ -75,7 +75,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 
     std::vector<FixItHint> fixits;
     if (isFixitEnabled(FixitAll)) {
-        const bool success = FixItUtils::transformTwoCallsIntoOneV2(&m_context, secondCall, replacement, fixits);
+        const bool success = FixItUtils::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
         if (!success) {
             queueManualFixitWarning(secondCall->getLocStart(), FixitAll);
         }

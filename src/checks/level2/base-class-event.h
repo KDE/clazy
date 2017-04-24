@@ -31,7 +31,7 @@
 class BaseClassEvent : public CheckBase
 {
 public:
-    explicit BaseClassEvent(const std::string &name, const clang::CompilerInstance &ci);
+    explicit BaseClassEvent(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
 };
 

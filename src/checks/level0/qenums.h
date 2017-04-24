@@ -30,7 +30,7 @@
 class Qenums : public CheckBase
 {
 public:
-    explicit Qenums(const std::string &name, const clang::CompilerInstance &ci);
+    explicit Qenums(const std::string &name, ClazyContext *context);
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,
                            const clang::SourceRange &range) override;

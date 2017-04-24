@@ -38,8 +38,8 @@ enum Fixit {
     FixitUseQStringRef = 0x1,
 };
 
-StringRefCandidates::StringRefCandidates(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+StringRefCandidates::StringRefCandidates(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

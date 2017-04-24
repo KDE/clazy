@@ -28,6 +28,8 @@
 #include "clazy_export.h"
 
 #include "clazy_stl.h"
+#include "ClazyContext.h"
+
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Parse/Parser.h>
@@ -53,7 +55,6 @@ class PreprocessorOptions;
 class CheckBase;
 class CheckManager;
 class SuppressionManager;
-class AccessSpecifierManager;
 
 enum CheckLevel {
     CheckLevelUndefined = -1,
@@ -94,7 +95,7 @@ class CLAZYLIB_EXPORT CheckBase
 {
 public:
     typedef std::vector<CheckBase*> List;
-    explicit CheckBase(const std::string &name, const clang::CompilerInstance &ci);
+    explicit CheckBase(const std::string &name, ClazyContext *context);
     CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
@@ -125,9 +126,7 @@ protected:
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
     virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
     virtual void VisitIfdef(clang::SourceLocation, const clang::Token &macroNameTok);
-    virtual bool requiresAccessSpecifierManager() const { return false; }
 
-    AccessSpecifierManager * accessSpecifierManager() const;
     void enablePreProcessorCallbacks();
 
 
@@ -142,11 +141,12 @@ protected:
 
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::SourceManager &sm() const { return m_sm; }
-    const clang::LangOptions &lo() const { return m_context.getLangOpts(); }
+    const clang::LangOptions &lo() const { return m_astContext.getLangOpts(); }
 
     const clang::SourceManager &m_sm;
     const std::string m_name;
-    clang::ASTContext &m_context;
+    ClazyContext *const m_context;
+    clang::ASTContext &m_astContext;
     const clang::PreprocessorOptions &m_preprocessorOpts;
     clang::TranslationUnitDecl *const m_tu;
     clang::ParentMap *m_parentMap;
@@ -165,7 +165,6 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits = 0;
-    const clang::CompilerInstance &m_ci;
 };
 
 #endif

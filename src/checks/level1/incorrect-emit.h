@@ -36,10 +36,8 @@ namespace clang {
 class IncorrectEmit : public CheckBase
 {
 public:
-    explicit IncorrectEmit(const std::string &name, const clang::CompilerInstance &ci);
+    explicit IncorrectEmit(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
-protected:
-    bool requiresAccessSpecifierManager() const override { return true; }
 private:
     void checkCallSignalInsideCTOR(clang::CXXMemberCallExpr *);
     void VisitMacroExpands(const clang::Token &MacroNameTok,

@@ -36,7 +36,7 @@
 class RequiredResults : public CheckBase
 {
 public:
-    RequiredResults(const std::string &name, const clang::CompilerInstance &ci);
+    RequiredResults(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 private:
     bool shouldIgnoreMethod(const std::string &qualifiedName);

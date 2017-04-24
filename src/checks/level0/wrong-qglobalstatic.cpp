@@ -34,8 +34,8 @@ using namespace clang;
 using namespace std;
 
 
-WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 
@@ -50,7 +50,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     SourceLocation loc = stmt->getLocStart();
-    if (MacroUtils::isInMacro(&m_context, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
+    if (MacroUtils::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
         return;
 
     CXXRecordDecl *record = ctorDecl->getParent();

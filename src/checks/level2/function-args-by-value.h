@@ -40,7 +40,7 @@ struct QualTypeClassification;
 class FunctionArgsByValue : public CheckBase
 {
 public:
-    explicit FunctionArgsByValue(const std::string &name, const clang::CompilerInstance &ci);
+    explicit FunctionArgsByValue(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 private:

@@ -35,7 +35,7 @@
 class NonPodStatic : public CheckBase
 {
 public:
-    NonPodStatic(const std::string &name, const clang::CompilerInstance &ci);
+    NonPodStatic(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

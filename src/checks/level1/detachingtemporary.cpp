@@ -34,8 +34,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingTemporary::DetachingTemporary(const std::string &name, const clang::CompilerInstance &ci)
-    : DetachingBase(name, ci)
+DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *context)
+    : DetachingBase(name, context)
 {
     // Extra stuff that isn't really related to detachments but doesn't make sense to call on temporaries
     m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};

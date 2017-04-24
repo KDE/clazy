@@ -31,8 +31,8 @@
 using namespace clang;
 using namespace std;
 
-RuleOfThree::RuleOfThree(const std::string &name, const clang::CompilerInstance &ci)
-    : RuleOfBase(name, ci)
+RuleOfThree::RuleOfThree(const std::string &name, ClazyContext *context)
+    : RuleOfBase(name, context)
 {
     m_filesToIgnore = { "qrc_" };
 }
@@ -52,7 +52,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const SourceLocation recordStart = record->getLocStart();
     if (recordStart.isMacroID()) {
-        if (MacroUtils::isInMacro(&m_context, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
+        if (MacroUtils::isInMacro(&m_astContext, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
             return;
     }
 

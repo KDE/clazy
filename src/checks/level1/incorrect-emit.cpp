@@ -36,9 +36,10 @@
 using namespace clang;
 using namespace std;
 
-IncorrectEmit::IncorrectEmit(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
+    context->enableAccessSpecifierManager();
     enablePreProcessorCallbacks();
     m_emitLocations.reserve(30); // bootstrap it
     m_filesToIgnore = { "moc_", ".moc" };
@@ -57,7 +58,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (!methodCall || !methodCall->getCalleeDecl())
         return;
 
-    AccessSpecifierManager *accessSpecifierManager = this->accessSpecifierManager();
+    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
     auto method = dyn_cast<CXXMethodDecl>(methodCall->getCalleeDecl());
     if (!method || !accessSpecifierManager)
         return;

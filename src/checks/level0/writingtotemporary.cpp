@@ -34,8 +34,8 @@ using namespace clang;
 using namespace std;
 
 
-WritingToTemporary::WritingToTemporary(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
     , m_widenCriteria(isOptionSet("widen-criteria"))
 {
     m_filesToIgnore = { "qstring.h" };

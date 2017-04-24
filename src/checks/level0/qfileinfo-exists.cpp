@@ -31,8 +31,8 @@ using namespace clang;
 using namespace std;
 
 
-QFileInfoExists::QFileInfoExists(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

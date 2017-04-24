@@ -33,8 +33,8 @@
 using namespace clang;
 using namespace std;
 
-Qenums::Qenums(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+Qenums::Qenums(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
 }

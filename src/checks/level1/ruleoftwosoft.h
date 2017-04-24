@@ -37,7 +37,7 @@ class Stmt;
 class RuleOfTwoSoft : public RuleOfBase
 {
 public:
-    explicit RuleOfTwoSoft(const std::string &name, const clang::CompilerInstance &ci);
+    explicit RuleOfTwoSoft(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *s) override;
 };
 

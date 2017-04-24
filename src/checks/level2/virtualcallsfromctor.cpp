@@ -33,8 +33,8 @@
 using namespace std;
 using namespace clang;
 
-VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 
 }

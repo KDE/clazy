@@ -32,7 +32,7 @@ class QColorFromLiteral_Callback;
 class QColorFromLiteral : public CheckBase
 {
 public:
-    explicit QColorFromLiteral(const std::string &name, const clang::CompilerInstance &ci);
+    explicit QColorFromLiteral(const std::string &name, ClazyContext *context);
     ~QColorFromLiteral();
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 private:

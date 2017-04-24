@@ -37,7 +37,7 @@
 class BogusDynamicCast : public CheckBase
 {
 public:
-    BogusDynamicCast(const std::string &name, const clang::CompilerInstance &ci);
+    BogusDynamicCast(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

@@ -31,7 +31,7 @@
 class MutableContainerKey : public CheckBase
 {
 public:
-    explicit MutableContainerKey(const std::string &name, const clang::CompilerInstance &ci);
+    explicit MutableContainerKey(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
 };

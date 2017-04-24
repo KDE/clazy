@@ -88,15 +88,15 @@ class ClazyASTConsumer : public ASTConsumer, public RecursiveASTVisitor<ClazyAST
 public:
     ClazyASTConsumer(CompilerInstance &ci, CheckManager *checkManager,
                     const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
-        : m_ci(ci)
-        , m_sm(ci.getSourceManager())
+        : m_sm(ci.getSourceManager())
         , m_rewriter(nullptr)
         , m_parentMap(nullptr)
         , m_checkManager(checkManager)
+        , m_context(new ClazyContext(ci))
     {
-        m_createdChecks = checkManager->createChecks(requestedChecks, ci);
+        m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
         if (checkManager->fixitsEnabled())
-            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_sm, m_ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
+            m_rewriter = new FixItRewriter(ci.getDiagnostics(), m_sm, m_context->ci.getLangOpts(), new MyFixItOptions(inplaceFixits));
 
         // Check if any of our checks uses ast matchers, and register them
         for (CheckBase *check : m_createdChecks)
@@ -125,7 +125,7 @@ public:
     {
         const bool isInSystemHeader = m_sm.isInSystemHeader(decl->getLocStart());
 
-        if (AccessSpecifierManager *a = m_checkManager->accessSpecifierManager())
+        if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
             a->VisitDeclaration(decl);
 
         for (CheckBase *check : m_createdChecks) {
@@ -139,7 +139,7 @@ public:
     bool VisitStmt(Stmt *stm)
     {
         if (!m_parentMap) {
-            if (m_ci.getDiagnostics().hasUnrecoverableErrorOccurred())
+            if (m_context->ci.getDiagnostics().hasUnrecoverableErrorOccurred())
                 return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
 
             setParentMap(new ParentMap(stm));
@@ -177,12 +177,12 @@ public:
     }
 
     Stmt *lastStm = nullptr;
-    CompilerInstance &m_ci;
     SourceManager &m_sm;
     FixItRewriter *m_rewriter;
     ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
     CheckManager *const m_checkManager;
+    ClazyContext *const m_context;
     MatchFinder m_matchFinder;
 };
 

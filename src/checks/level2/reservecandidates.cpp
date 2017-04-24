@@ -45,8 +45,8 @@
 using namespace clang;
 using namespace std;
 
-ReserveCandidates::ReserveCandidates(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+ReserveCandidates::ReserveCandidates(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 
@@ -156,7 +156,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (!body)
         return;
 
-    const bool isForeach = MacroUtils::isInMacro(&m_context, stm->getLocStart(), "Q_FOREACH");
+    const bool isForeach = MacroUtils::isInMacro(&m_astContext, stm->getLocStart(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body)))
@@ -299,7 +299,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             return true;
         }
 
-        if (QtUtils::isInForeach(&m_context, parentStart)) {
+        if (QtUtils::isInForeach(&m_astContext, parentStart)) {
             auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting

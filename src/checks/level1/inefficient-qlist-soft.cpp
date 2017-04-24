@@ -31,10 +31,10 @@ using namespace clang;
 using namespace std;
 
 
-InefficientQListSoft::InefficientQListSoft(const std::string &name, const clang::CompilerInstance &ci)
-    : InefficientQListBase(name, ci, IgnoreNonLocalVariable | IgnoreInFunctionWithSameReturnType |
-                                     IgnoreIsAssignedToInFunction | IgnoreIsPassedToFunctions|
-                                     IgnoreIsInitializedByFunctionCall)
+InefficientQListSoft::InefficientQListSoft(const std::string &name, ClazyContext *context)
+    : InefficientQListBase(name, context, IgnoreNonLocalVariable | IgnoreInFunctionWithSameReturnType |
+                                          IgnoreIsAssignedToInFunction | IgnoreIsPassedToFunctions|
+                                          IgnoreIsInitializedByFunctionCall)
 {
 }
 

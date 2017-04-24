@@ -32,7 +32,7 @@
 class QLatin1StringNonAscii : public CheckBase
 {
 public:
-    explicit QLatin1StringNonAscii(const std::string &name, const clang::CompilerInstance &ci);
+    explicit QLatin1StringNonAscii(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
 };

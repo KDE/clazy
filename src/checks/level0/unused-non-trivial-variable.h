@@ -39,7 +39,7 @@ class VarDecl;
 class UnusedNonTrivialVariable : public CheckBase
 {
 public:
-    explicit UnusedNonTrivialVariable(const std::string &name, const clang::CompilerInstance &ci);
+    explicit UnusedNonTrivialVariable(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void handleVarDecl(clang::VarDecl *varDecl);

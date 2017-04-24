@@ -36,7 +36,7 @@ class Stmt;
 class IsEmptyVSCount : public CheckBase
 {
 public:
-    explicit IsEmptyVSCount(const std::string &name, const clang::CompilerInstance &ci);
+    explicit IsEmptyVSCount(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

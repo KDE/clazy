@@ -1,10 +1,7 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
-  Author: Sérgio Martins <sergio.martins@kdab.com>
-
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,21 +19,25 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef VARIANT_SANITIZER_H
-#define VARIANT_SANITIZER_H
+#include "AccessSpecifierManager.h"
+#include "PreProcessorVisitor.h"
+#include "ClazyContext.h"
 
-#include "checkbase.h"
-
-/**
- * Detects when you're using QVariant::value<Foo>() instead of QVariant::toFoo().
- *
- * TODO: Missing QVariants of QHash<QString,QVariant>, QList<QVariant> and QMap<QString, QVariant>
- */
-class QVariantTemplateInstantiation : public CheckBase
+ClazyContext::ClazyContext(const clang::CompilerInstance &compiler)
+    : ci(compiler)
+    , astContext(ci.getASTContext())
+    , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
 {
-public:
-    QVariantTemplateInstantiation(const std::string &name, ClazyContext *context);
-    void VisitStmt(clang::Stmt *stm) override;
-};
+}
 
-#endif
+void ClazyContext::enableAccessSpecifierManager()
+{
+    if (!accessSpecifierManager && !usingPreCompiledHeaders())
+        accessSpecifierManager = new AccessSpecifierManager(ci);
+}
+
+void ClazyContext::enablePreprocessorVisitor()
+{
+    if (!preprocessorVisitor && !usingPreCompiledHeaders())
+        preprocessorVisitor = new PreProcessorVisitor(ci);
+}

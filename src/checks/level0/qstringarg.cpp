@@ -30,8 +30,8 @@
 using namespace clang;
 using namespace std;
 
-StringArg::StringArg(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+StringArg::StringArg(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     m_filesToIgnore = { "qstring.h" };
 }

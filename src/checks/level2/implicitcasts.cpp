@@ -35,8 +35,8 @@ using namespace clang;
 using namespace std;
 
 
-ImplicitCasts::ImplicitCasts(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
     m_filesToIgnore = { "/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
                         "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp" };

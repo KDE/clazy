@@ -32,7 +32,7 @@ class QtMacrosPreprocessorCallbacks;
 class QtMacros : public CheckBase
 {
 public:
-    explicit QtMacros(const std::string &name, const clang::CompilerInstance &ci);
+    explicit QtMacros(const std::string &name, ClazyContext *context);
 private:
     void checkIfDef(const clang::Token &MacroNameTok, clang::SourceLocation Loc);
     void VisitMacroDefined(const clang::Token &MacroNameTok) override;

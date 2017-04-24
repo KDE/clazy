@@ -37,7 +37,7 @@ class Decl;
 class RuleOfThree : public RuleOfBase
 {
 public:
-    explicit RuleOfThree(const std::string &name, const clang::CompilerInstance &ci);
+    explicit RuleOfThree(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *d) override;
 private:
     bool shouldIgnoreType(const std::string &className) const;

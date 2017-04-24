@@ -32,8 +32,8 @@ using namespace clang;
 using namespace std;
 
 
-CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, const clang::CompilerInstance &ci)
-    : CheckBase(name, ci)
+CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
 {
 }
 

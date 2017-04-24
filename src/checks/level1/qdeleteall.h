@@ -33,7 +33,7 @@
 class QDeleteAll : public CheckBase
 {
 public:
-    QDeleteAll(const std::string &name, const clang::CompilerInstance &ci);
+    QDeleteAll(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 
