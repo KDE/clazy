@@ -63,7 +63,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         if (!method || method->getNameAsString() != "operator[]")
             return;
 
-        auto memberExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, operatorExpr);
+        auto memberExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, operatorExpr);
         CXXMethodDecl *parentMemberDecl = memberExpr ? memberExpr->getMethodDecl() : nullptr;
         if (parentMemberDecl && !parentMemberDecl->isConst()) {
             // Don't warn for s.m_listOfValues[0].nonConstMethod();
@@ -85,13 +85,13 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
 
     // Catch cases like m_foo[0] = .. , which is fine
 
-    auto parentUnaryOp = HierarchyUtils::getFirstParentOfType<UnaryOperator>(m_parentMap, callExpr);
+    auto parentUnaryOp = HierarchyUtils::getFirstParentOfType<UnaryOperator>(m_context->parentMap, callExpr);
     if (parentUnaryOp) {
         // m_foo[0]++ is OK
         return;
     }
 
-    auto parentOp = HierarchyUtils::getFirstParentOfType<CXXOperatorCallExpr>(m_parentMap, HierarchyUtils::parent(m_parentMap, callExpr));
+    auto parentOp = HierarchyUtils::getFirstParentOfType<CXXOperatorCallExpr>(m_context->parentMap, HierarchyUtils::parent(m_context->parentMap, callExpr));
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
         const string parentFuncName = parentFunc ? parentFunc->getNameAsString() : "";
@@ -101,7 +101,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    auto parentBinaryOp = HierarchyUtils::getFirstParentOfType<BinaryOperator>(m_parentMap, callExpr);
+    auto parentBinaryOp = HierarchyUtils::getFirstParentOfType<BinaryOperator>(m_context->parentMap, callExpr);
     if (parentBinaryOp && parentBinaryOp->isAssignmentOp()) {
         // m_foo[0] += .. is OK
         Expr *lhs = parentBinaryOp->getLHS();
@@ -113,7 +113,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (returnsNonConstIterator) {
         // If we're calling begin()/end() as arguments to a function taking non-const iterators it's fine
         // Such as qSort(list.begin(), list.end());
-        auto parentCall = HierarchyUtils::getFirstParentOfType<CallExpr>(m_parentMap, HierarchyUtils::parent(m_parentMap, memberCall));
+        auto parentCall = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap, HierarchyUtils::parent(m_context->parentMap, memberCall));
         FunctionDecl *parentFunc = parentCall ? parentCall->getDirectCallee() : nullptr;
         if (parentFunc && parentFunc->getNumParams() == parentCall->getNumArgs()) {
             int i = 0;

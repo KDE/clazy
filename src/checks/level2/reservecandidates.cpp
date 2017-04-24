@@ -286,7 +286,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     Stmt *parent = s;
     PresumedLoc lastForeachForStm;
-    while ((parent = HierarchyUtils::parent(m_parentMap, parent))) {
+    while ((parent = HierarchyUtils::parent(m_context->parentMap, parent))) {
         const SourceLocation parentStart = parent->getLocStart();
         if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);

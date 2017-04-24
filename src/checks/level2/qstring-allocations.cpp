@@ -162,13 +162,13 @@ void QStringAllocations::VisitCtor(Stmt *stm)
         return;
 
     static const vector<string> blacklistedParentCtors = { "QRegExp", "QIcon" };
-    if (Utils::insideCTORCall(m_parentMap, stm, blacklistedParentCtors)) {
+    if (Utils::insideCTORCall(m_context->parentMap, stm, blacklistedParentCtors)) {
         // https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
         return;
     }
 
     if (!isOptionSet("no-msvc-compat")) {
-        InitListExpr *initializerList = HierarchyUtils::getFirstParentOfType<InitListExpr>(m_parentMap, ctorExpr);
+        InitListExpr *initializerList = HierarchyUtils::getFirstParentOfType<InitListExpr>(m_context->parentMap, ctorExpr);
         if (initializerList != nullptr)
             return; // Nothing to do here, MSVC doesn't like it
 
@@ -205,7 +205,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             if (!qlatin1Ctor->getLocStart().isMacroID()) {
                 if (!ternary) {
                     fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String", QLatin1StringAllocations);
-                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_parentMap, ctorExpr));
+                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_context->parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
                         auto removalFixits = FixItUtils::fixItRemoveToken(&m_astContext, ctorExpr, true);
@@ -231,14 +231,14 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             if (clazy_std::hasChildren(pointerDecay)) {
                 StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt && isFixitEnabled(CharPtrAllocations)) {
-                    Stmt *grandParent = HierarchyUtils::parent(m_parentMap, lt, 2);
-                    Stmt *grandGrandParent = HierarchyUtils::parent(m_parentMap, lt, 3);
-                    Stmt *grandGrandGrandParent = HierarchyUtils::parent(m_parentMap, lt, 4);
+                    Stmt *grandParent = HierarchyUtils::parent(m_context->parentMap, lt, 2);
+                    Stmt *grandGrandParent = HierarchyUtils::parent(m_context->parentMap, lt, 3);
+                    Stmt *grandGrandGrandParent = HierarchyUtils::parent(m_context->parentMap, lt, 4);
                     if (grandParent == ctorExpr && grandGrandParent && isa<CXXBindTemporaryExpr>(grandGrandParent) && grandGrandGrandParent && isa<CXXFunctionalCastExpr>(grandGrandGrandParent)) {
                         // This is the case of QString("foo"), replace QString
 
                         const bool literalIsEmpty = lt->getLength() == 0;
-                        if (literalIsEmpty && HierarchyUtils::getFirstParentOfType<MemberExpr>(m_parentMap, ctorExpr) == nullptr)
+                        if (literalIsEmpty && HierarchyUtils::getFirstParentOfType<MemberExpr>(m_context->parentMap, ctorExpr) == nullptr)
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString", CharPtrAllocations);
                         else if (!ctorExpr->getLocStart().isMacroID())
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString", CharPtrAllocations);
@@ -246,7 +246,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                             queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro.");
                     } else {
 
-                        auto parentMemberCallExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
+                        auto parentMemberCallExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
 
                         string replacement = "QStringLiteral";
                         if (parentMemberCallExpr) {
@@ -369,7 +369,7 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
 {
     vector<FixItHint> fixits;
 
-    std::string replacement = isQStringLiteralCandidate(callExpr, m_parentMap, lo(), sm()) ? "QStringLiteral"
+    std::string replacement = isQStringLiteralCandidate(callExpr, m_context->parentMap, lo(), sm()) ? "QStringLiteral"
                                                                                : "QLatin1String";
 
     if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {

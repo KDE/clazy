@@ -56,7 +56,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
         if (QtUtils::isQtAssociativeContainer(offendingClassName)) {
             // Once found see if the first parent call is qDeleteAll
             int i = 1;
-            Stmt *p = HierarchyUtils::parent(m_parentMap, stmt, i);
+            Stmt *p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
             while (p) {
                 CallExpr *pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
@@ -72,7 +72,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                     break;
                 }
                 ++i;
-                p = HierarchyUtils::parent(m_parentMap, stmt, i);
+                p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
             }
         }
     }

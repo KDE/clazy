@@ -114,7 +114,7 @@ bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt* s) const
     if (!s)
         return false;
 
-    auto constr = HierarchyUtils::getFirstParentOfType<CXXConstructExpr>(m_parentMap, s);
+    auto constr = HierarchyUtils::getFirstParentOfType<CXXConstructExpr>(m_context->parentMap, s);
     if (!constr || constr->getNumArgs() == 0)
         return false;
 

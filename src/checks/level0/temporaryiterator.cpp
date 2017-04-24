@@ -85,7 +85,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 
 
     // Catch getList().cbegin().value(), which is ok
-    if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_parentMap, m_parentMap->getParent(memberExpr)))
+    if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, m_context->parentMap->getParent(memberExpr)))
         return;
 
     // Catch variant.toList().cbegin(), which is ok
@@ -109,7 +109,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     }
 
     // If we deref it within the expression, then we'll copy the value before the iterator becomes invalid, so it's safe
-    if (Utils::isInDerefExpression(memberExpr, m_parentMap))
+    if (Utils::isInDerefExpression(memberExpr, m_context->parentMap))
         return;
 
     Expr *expr = memberExpr->getImplicitObjectArgument();

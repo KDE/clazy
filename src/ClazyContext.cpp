@@ -23,6 +23,8 @@
 #include "PreProcessorVisitor.h"
 #include "ClazyContext.h"
 
+#include <clang/AST/ParentMap.h>
+
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler)
     : ci(compiler)
     , astContext(ci.getASTContext())
@@ -34,8 +36,11 @@ ClazyContext::~ClazyContext()
 {
     delete preprocessorVisitor;
     delete accessSpecifierManager;
+    delete parentMap;
+
     preprocessorVisitor = nullptr;
     accessSpecifierManager = nullptr;
+    parentMap = nullptr;
 }
 
 void ClazyContext::enableAccessSpecifierManager()

@@ -163,8 +163,8 @@ void Qt4_QStringFromArray::VisitStmt(clang::Stmt *stm)
 
 std::vector<FixItHint> Qt4_QStringFromArray::fixCtorCall(CXXConstructExpr *ctorExpr)
 {
-    Stmt *parent = HierarchyUtils::parent(m_parentMap, ctorExpr); // CXXBindTemporaryExpr
-    Stmt *grandParent = HierarchyUtils::parent(m_parentMap, parent); //CXXFunctionalCastExpr
+    Stmt *parent = HierarchyUtils::parent(m_context->parentMap, ctorExpr); // CXXBindTemporaryExpr
+    Stmt *grandParent = HierarchyUtils::parent(m_context->parentMap, parent); //CXXFunctionalCastExpr
 
     if (parent && grandParent && isa<CXXBindTemporaryExpr>(parent) && isa<CXXFunctionalCastExpr>(grandParent)) {
         return fixitReplaceWithFromLatin1(ctorExpr);

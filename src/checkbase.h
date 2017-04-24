@@ -44,7 +44,6 @@ namespace clang {
 class CXXMethodDecl;
 class Stmt;
 class Decl;
-class ParentMap;
 class TranslationUnitDecl;
 class FixItHint;
 class PresumedLoc;
@@ -104,7 +103,6 @@ public:
 
     std::string name() const { return m_name; }
 
-    void setParentMap(clang::ParentMap *parentMap);
     void setEnabledFixits(int);
     bool isFixitEnabled(int fixit) const;
 
@@ -148,7 +146,6 @@ protected:
     clang::ASTContext &m_astContext;
     const clang::PreprocessorOptions &m_preprocessorOpts;
     clang::TranslationUnitDecl *const m_tu;
-    clang::ParentMap *m_parentMap;
 
     clang::CXXMethodDecl *m_lastMethodDecl = nullptr;
     clang::Decl *m_lastDecl = nullptr;

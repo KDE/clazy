@@ -44,7 +44,7 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
     if (!lambda)
         return;
 
-    auto callExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_parentMap, lambda);
+    auto callExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap, lambda);
     if (StringUtils::qualifiedMethodName(callExpr) != "QObject::connect")
         return;
 

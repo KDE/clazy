@@ -90,7 +90,6 @@ public:
                     const RegisteredCheck::List &requestedChecks, bool inplaceFixits)
         : m_sm(ci.getSourceManager())
         , m_rewriter(nullptr)
-        , m_parentMap(nullptr)
         , m_context(new ClazyContext(ci))
     {
         m_createdChecks = checkManager->createChecks(requestedChecks, m_context);
@@ -108,16 +107,6 @@ public:
             m_rewriter->WriteFixedFiles();
             delete m_rewriter;
         }
-
-        delete m_parentMap;
-    }
-
-    void setParentMap(ParentMap *map)
-    {
-        assert(map && !m_parentMap);
-        m_parentMap = map;
-        for (CheckBase *check : m_createdChecks)
-            check->setParentMap(map);
     }
 
     bool VisitDecl(Decl *decl)
@@ -137,25 +126,27 @@ public:
 
     bool VisitStmt(Stmt *stm)
     {
-        if (!m_parentMap) {
+        if (!m_context->parentMap) {
             if (m_context->ci.getDiagnostics().hasUnrecoverableErrorOccurred())
                 return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
 
-            setParentMap(new ParentMap(stm));
+            m_context->parentMap = new ParentMap(stm);
         }
 
+        ParentMap *parentMap = m_context->parentMap;
+
         // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
-        if (lastStm && isa<CXXCatchStmt>(lastStm) && !m_parentMap->hasParent(stm)) {
-            m_parentMap->setParent(stm, lastStm);
-            manuallyPopulateParentMap(m_parentMap, stm);
+        if (lastStm && isa<CXXCatchStmt>(lastStm) && !parentMap->hasParent(stm)) {
+            parentMap->setParent(stm, lastStm);
+            manuallyPopulateParentMap(parentMap, stm);
         }
 
         lastStm = stm;
 
         // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
         // So add to parent map each time we go into a different hierarchy
-        if (!m_parentMap->hasParent(stm))
-            m_parentMap->addStmt(stm);
+        if (!parentMap->hasParent(stm))
+            parentMap->addStmt(stm);
 
         const bool isInSystemHeader = m_sm.isInSystemHeader(stm->getLocStart());
         for (CheckBase *check : m_createdChecks) {
@@ -178,7 +169,6 @@ public:
     Stmt *lastStm = nullptr;
     SourceManager &m_sm;
     FixItRewriter *m_rewriter;
-    ParentMap *m_parentMap;
     CheckBase::List m_createdChecks;
     ClazyContext *const m_context;
     MatchFinder m_matchFinder;

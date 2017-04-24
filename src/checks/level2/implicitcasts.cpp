@@ -169,8 +169,8 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
         iterateCallExpr<CXXConstructExpr>(ctorExpr, this);
     } else if (isInterestingFunction2(func)) {
         // Check bool->int implicit casts
-        iterateCallExpr2<CallExpr>(callExpr, this, m_parentMap);
-        iterateCallExpr2<CXXConstructExpr>(ctorExpr, this, m_parentMap);
+        iterateCallExpr2<CallExpr>(callExpr, this, m_context->parentMap);
+        iterateCallExpr2<CXXConstructExpr>(ctorExpr, this, m_context->parentMap);
     }
 }
 

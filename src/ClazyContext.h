@@ -32,6 +32,7 @@
 namespace clang {
     class CompilerInstance;
     class ASTContext;
+    class ParentMap;
 }
 
 class AccessSpecifierManager;
@@ -66,6 +67,7 @@ public:
     PreProcessorVisitor *preprocessorVisitor = nullptr;
     SuppressionManager suppressionManager;
     const bool m_noWerror;
+    clang::ParentMap *parentMap = nullptr;
 };
 
 #endif

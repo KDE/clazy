@@ -29,7 +29,6 @@
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ASTContext.h>
-#include <clang/AST/ParentMap.h>
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
 
 #include <vector>
@@ -97,11 +96,6 @@ void CheckBase::VisitDeclaration(Decl *decl)
 
         VisitDecl(decl);
     }
-}
-
-void CheckBase::setParentMap(ParentMap *parentMap)
-{
-    m_parentMap = parentMap;
 }
 
 void CheckBase::VisitStmt(Stmt *)
