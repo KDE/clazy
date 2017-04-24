@@ -65,12 +65,13 @@ class ClazyASTConsumer : public clang::ASTConsumer,
                          public clang::RecursiveASTVisitor<ClazyASTConsumer>
 {
 public:
-    explicit ClazyASTConsumer(ClazyContext *context, const CheckBase::List &createdChecks);
+    explicit ClazyASTConsumer(ClazyContext *context);
     ~ClazyASTConsumer();
 
     bool VisitDecl(clang::Decl *decl);
     bool VisitStmt(clang::Stmt *stm);
     void HandleTranslationUnit(clang::ASTContext &ctx) override;
+    void addCheck(CheckBase *check);
 private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
     clang::Stmt *lastStm = nullptr;
