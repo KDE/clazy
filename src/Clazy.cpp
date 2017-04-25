@@ -190,12 +190,13 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
 
     auto context = new ClazyContext(ci, options);
 
-    auto astConsumer = llvm::make_unique<ClazyASTConsumer>(context);
+    auto astConsumer = new ClazyASTConsumer(context);
     CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, context);
-    for (CheckBase *check : createdChecks)
+    for (CheckBase *check : createdChecks) {
         astConsumer->addCheck(check);
+    }
 
-    return astConsumer;
+   return std::unique_ptr<ASTConsumer>(astConsumer);
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)
