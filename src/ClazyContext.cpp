@@ -63,7 +63,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
 
 ClazyContext::~ClazyContext()
 {
-    delete preprocessorVisitor;
+    //delete preprocessorVisitor; // we don't own it
     delete accessSpecifierManager;
     delete parentMap;
 
