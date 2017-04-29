@@ -182,14 +182,41 @@ def link_flags():
         flags += " -lstdc++"
     return flags
 
+def clazy_cpp_args():
+    return "-Wno-unused-value -Qunused-arguments -std=c++14 "
+
 def more_clazy_args():
-    return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits -Wno-unused-value -Qunused-arguments "
+    return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + clazy_cpp_args()
 
-def compiler_command(qt):
+def clazy_standalone_command(test, qt):
+    result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
+    result = " -no-inplace-fixits -checks=" + string.join(test.checks, ',') + " " + result
+
+    if not test.isFixedFile:
+        result = " -enable-all-fixits " + result
+
+    return result
+
+def clazy_command(qt, test, filename):
+    if test.isScript():
+        return "./" + filename
+
     if 'CLAZY_CXX' in os.environ:
-        return os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
+        result = os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
+    else:
+        result = "clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
 
-    return "clang -std=c++14 -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
+    if test.link:
+        result = result + " " + link_flags()
+    else:
+        result = result + " -c "
+
+    result = result + test.flags + " -Xclang -plugin-arg-clang-lazy -Xclang " + string.join(test.checks, ',') + " "
+    if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
+        result += _enable_fixits_argument + " "
+    result += filename
+
+    return result
 
 def dump_ast_command(test):
     return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
@@ -220,6 +247,8 @@ _help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclan
 _dump_ast = "--dump-ast" in sys.argv
 _verbose = "--verbose" in sys.argv
 _help = "--help" in sys.argv
+_no_standalone = "--no-standalone" in sys.argv
+_only_standalone = "--only-standalone" in sys.argv
 _num_threads = multiprocessing.cpu_count()
 _lock = threading.Lock()
 _was_successful = True
@@ -244,6 +273,10 @@ def run_command(cmd, output_file = "", test_env = os.environ):
         print lines
         return False
 
+    if _verbose:
+        print "Running: " + cmd
+        print "output_file=" + output_file
+
     lines = lines.replace('\r\n', '\n')
     if output_file:
         f = open(output_file, 'w')
@@ -262,9 +295,6 @@ def print_usage():
     print "    --dump-ast is provided for debugging purposes.\n"
     print "Help for clang plugin:"
     print
-
-    if _verbose:
-        print "Running: " + _help_command
 
     run_command(_help_command)
 
@@ -297,11 +327,12 @@ def extract_word(word, in_file, out_file):
     out_f = open(out_file, 'w')
     for line in in_f:
         if word in line:
+            line = line.replace(os.getcwd() + "/", "") # clazy-standalone prints the complete cpp file path for some reason. Normalize it so it compares OK with the expected output.
             out_f.write(line)
     in_f.close()
     out_f.close()
 
-def run_unit_test(test):
+def run_unit_test(test, is_standalone):
     qt = qt_installation(test.qt_major_version)
 
     if _verbose:
@@ -322,20 +353,13 @@ def run_unit_test(test):
     result_file = filename + ".result"
     expected_file = filename + ".expected"
 
-    compiler_cmd = compiler_command(qt)
+    if is_standalone and test.isScript():
+        return True
 
-    if test.link:
-        cmd = compiler_cmd + " " + link_flags()
+    if is_standalone:
+        cmd_to_run = "clazy-standalone " + filename + " " + clazy_standalone_command(test, qt)
     else:
-        cmd = compiler_cmd + " -c "
-
-    if test.isScript():
-        clazy_cmd = "./" + filename
-    else:
-        clazy_cmd = cmd + test.flags + " -Xclang -plugin-arg-clang-lazy -Xclang " + string.join(test.checks, ',') + " "
-        if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
-            clazy_cmd += _enable_fixits_argument + " "
-        clazy_cmd += filename
+        cmd_to_run = clazy_command(qt, test, filename)
 
     if test.compare_everything:
         result_file = output_file
@@ -343,12 +367,9 @@ def run_unit_test(test):
     if test.isFixedFile:
         result_file = filename
 
-    if _verbose:
-        print "Running: " + clazy_cmd
-
     must_fail = test.must_fail
 
-    cmd_success = run_command(clazy_cmd, output_file, test.env)
+    cmd_success = run_command(cmd_to_run, output_file, test.env)
 
     if (not cmd_success and not must_fail) or (cmd_success and must_fail):
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
@@ -362,6 +383,9 @@ def run_unit_test(test):
     printableName = checkname
     if len(test.check.tests) > 1:
         printableName += "/" + test.filename
+
+    if is_standalone:
+        printableName += " (standalone)"
 
     success = files_are_equal(expected_file, result_file)
 
@@ -385,7 +409,11 @@ def run_unit_test(test):
 def run_unit_tests(tests):
     result = True
     for test in tests:
-        result = result and run_unit_test(test)
+        if not _only_standalone:
+            result = result and run_unit_test(test, False)
+
+        if not _no_standalone:
+            result = result and run_unit_test(test, True)
 
     global _was_successful, _lock
     with _lock:
@@ -416,7 +444,7 @@ if _help:
 
 args = sys.argv[1:]
 
-switches = ["--verbose", "--dump-ast", "--help"]
+switches = ["--verbose", "--dump-ast", "--help", "--no-standalone", "--only-standalone"]
 
 if _dump_ast:
     del(args[args.index("--dump-ast")])

@@ -27,6 +27,7 @@ Table of contents
    * [Selecting which checks to enable](#selecting-which-checks-to-enable)
       * [Example via env variable](#example-via-env-variable)
       * [Example via compiler argument](#example-via-compiler-argument)
+   * [clang-standalone and JSON database support](#clang-standalone-and-json-database-support)
    * [Enabling Fixits](#enabling-fixits)
    * [Troubleshooting](#troubleshooting)
    * [Reducing warning noise](#reducing-warning-noise)
@@ -155,6 +156,7 @@ $ brew install --with-clang llvm
 # Setting up your project to build with clazy
 
 Note: Wherever `clazy` it mentioned, replace with `clazy-cl.bat` if you're on Windows.
+Note: If you prefer running clazy over a JSON compilation database instead of using it as a plugin, jump to [clazy-standalone](#clang-standalone-and-json-database-support).
 
 You should now have the clazy command available to you, in `<prefix>/bin/`.
 Compile your programs with it instead of clang++/g++.
@@ -269,6 +271,32 @@ export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and a
 `clazy -Xclang -plugin-arg-clang-lazy -Xclang level0,detaching-temporary`
 Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.
 
+# clang-standalone and JSON database support
+
+The `clazy-standalone` binary allows you to run clazy over a compilation database JSON file, in the same
+way you would use `clang-tidy` or other clang tooling. This way you don't need to build your application,
+only the static analysis is performed.
+
+`clazy-standalone` supports the same env variables as the clazy plugin. You can also specify a list of checks via
+the `-checks` argument.
+
+
+Running on one cpp file:  
+`clazy-standalone -checks=install-event-filter,qmap-with-pointer-key,level0 -p compile_commands.json my.file.cpp`
+
+Running on all cpp files:  
+`find . -name "*cpp" | xargs clazy-standalone -checks=level2 -p default/compile_commands.json`
+
+See https://clang.llvm.org/docs/JSONCompilationDatabase.html for how to generate the compile_commands.json file. Basically it's generated
+by passing `-DCMAKE_EXPORT_COMPILE_COMMANDS` to CMake, or using [Bear](https://github.com/rizsotto/Bear) to intercept compiler commands, or, if you're using `qbs`:
+
+`qbs generate --generator clangdb`
+
+Note: Be sure the clazy-standalone binary is located in the same folder as the clang binary. Otherwise it might have trouble
+finding headers.
+
+`clang-tidy` support will be added after <https://bugs.llvm.org//show_bug.cgi?id=32739> is fixed.
+
 # Enabling Fixits
 
 Some checks support fixits, in which clazy will re-write your source files whenever it can fix something.
@@ -298,6 +326,9 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 - Some checks are mysteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off.
+
+- fatal error: 'stddef.h' file not found, while using `clazy-standalone`
+  Be sure the clazy-standalone binary is located in the same folder as the clang binary.
 
 # Reducing warning noise
 

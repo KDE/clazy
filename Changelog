@@ -25,6 +25,9 @@
 
 
 * v1.2 ()
+  - clazy-standalone executable. Allows to run clazy against a JSON compilation database
+    instead of as a plugin. clang-tidy doesn't support loading external modules (https://bugs.llvm.org/show_bug.cgi?id=32739)
+    so this is a good workaround.
   - New checks:
     install-event-filter
     qcolor-from-literal
