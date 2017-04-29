@@ -80,6 +80,10 @@ if (MSVC)
   list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
 endif()
 
+include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
+link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
+
 macro(link_to_llvm name)
   foreach(clang_lib ${CLANG_LIBS})
     if (MSVC)
@@ -112,9 +116,6 @@ endmacro()
 macro(add_clang_plugin name)
   set(srcs ${ARGN})
 
-  include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
-  link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
-
   add_library(${name} SHARED ${srcs})
 
   if(SYMBOL_FILE)
@@ -132,10 +133,6 @@ macro(add_clang_plugin name)
     target_link_libraries(${name} clazylib)
   endif()
 endmacro()
-
-include_directories(${CMAKE_BINARY_DIR})
-
-link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
 if(CLAZY_BUILD_UTILS_LIB)
   # clazylib version
