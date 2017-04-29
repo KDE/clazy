@@ -53,6 +53,19 @@ struct CLAZYLIB_EXPORT RegisteredCheck {
     bool operator==(const RegisteredCheck &other) const { return name == other.name; }
 };
 
+inline bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
+{
+    return c1.name < c2.name;
+}
+
+inline bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredCheck &c2)
+{
+    if (c1.level == c2.level)
+        return checkLessThan(c1, c2);
+
+    return c1.level < c2.level;
+}
+
 class CLAZYLIB_EXPORT CheckManager
 {
 public:
@@ -66,17 +79,21 @@ public:
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
+    RegisteredCheck::List requestedChecksThroughEnv() const;
     RegisteredCheck::List requestedChecksThroughEnv(std::vector<std::string> &userDisabledChecks) const;
 
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
+    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str,
                                                         std::vector<std::string> &userDisabledChecks) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
 
+
     /**
-     * Returns all checks with level <= requested level.
+     * Returns all the requested checks.
+     * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
-    RegisteredCheck::List checksFromRequestedLevel() const;
+    RegisteredCheck::List requestedChecks(std::vector<std::string> &args);
 
     CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
@@ -84,14 +101,6 @@ public:
     void enableAllFixIts();
 
     bool allFixitsEnabled() const { return m_enableAllFixits; }
-
-    /**
-     * Enables all checks with level <= @p level.
-     * A high level will enable checks known to have false positives, while a low level is more
-     * conservative and emits less warnings.
-     */
-    void setRequestedLevel(CheckLevel level);
-    CheckLevel requestedLevel() const { return m_requestedLevel; }
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
@@ -108,7 +117,6 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
     std::string m_requestedFixitName;
     bool m_enableAllFixits;
-    CheckLevel m_requestedLevel;
 };
 
 #define CLAZY_STRINGIFY2(X) #X

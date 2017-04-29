@@ -37,7 +37,6 @@ static const char * s_levelPrefix = "level";
 
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
-    , m_requestedLevel(CheckLevelUndefined)
 {
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
@@ -157,6 +156,12 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv() const
+{
+    vector<string> dummy;
+    return requestedChecksThroughEnv(dummy);
+}
+
 RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;
@@ -190,9 +195,60 @@ RegisteredFixIt::List CheckManager::availableFixIts(const string &checkName) con
     return it == m_fixitsByCheckName.end() ? RegisteredFixIt::List() : (*it).second;
 }
 
-RegisteredCheck::List CheckManager::checksFromRequestedLevel() const
+static bool takeArgument(const string &arg, vector<string> &args)
 {
-   return checksForLevel(m_requestedLevel);
+    auto it = clazy_std::find(args, arg);
+    if (it != args.end()) {
+        args.erase(it, it + 1);
+        return true;
+    }
+
+    return false;
+}
+
+RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &args)
+{
+    RegisteredCheck::List result;
+
+    // #1 Check if a level was specified
+    static const vector<string> levels = { "level0", "level1", "level2", "level3", "level4" };
+    const int numLevels = levels.size();
+    CheckLevel requestedLevel = CheckLevelUndefined;
+    for (int i = 0; i < numLevels; ++i) {
+        if (takeArgument(levels.at(i), args)) {
+            requestedLevel = static_cast<CheckLevel>(i);
+            break;
+        }
+    }
+
+    if (args.size() > 1) // we only expect a level and a comma separated list of arguments
+        return {};
+
+    if (args.size() == 1) {
+        // #2 Process list of comma separated checks that were passed to compiler
+        result = checksForCommaSeparatedString(args[0]);
+        if (result.empty()) // User passed inexisting checks.
+            return {};
+    }
+
+    // #3 Append checks specified from env variable
+
+    vector<string> userDisabledChecks;
+    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(/*by-ref*/userDisabledChecks);
+    copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(result));
+
+    if (result.empty() && requestedLevel == CheckLevelUndefined) {
+        // No checks or level specified, lets use the default level
+        requestedLevel = DefaultCheckLevel;
+    }
+
+    // #4 Add checks from requested level
+    RegisteredCheck::List checksFromRequestedLevel = checksForLevel(requestedLevel);
+    clazy_std::append(checksFromRequestedLevel, result);
+    clazy_std::sort_and_remove_dups(result, checkLessThan);
+    CheckManager::removeChecksFromList(result, userDisabledChecks);
+
+    return result;
 }
 
 RegisteredCheck::List CheckManager::checksForLevel(int level) const
@@ -255,6 +311,12 @@ void CheckManager::removeChecksFromList(RegisteredCheck::List &list, vector<stri
     }
 }
 
+RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str) const
+{
+    vector<string> byRefDummy;
+    return checksForCommaSeparatedString(str, byRefDummy);
+}
+
 RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &str,
                                                                   vector<string> &userDisabledChecks) const
 {
@@ -306,9 +368,4 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
     removeChecksFromList(result, userDisabledChecks);
 
     return result;
-}
-
-void CheckManager::setRequestedLevel(CheckLevel level)
-{
-    m_requestedLevel = level;
 }

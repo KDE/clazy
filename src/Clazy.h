@@ -39,6 +39,9 @@ namespace clang {
     class CompilerInstance;
 }
 
+/**
+ * This is the FrontendAction that is run with clazy is used as a plugin.
+ */
 class ClazyASTAction : public clang::PluginASTAction
 {
 public:
@@ -56,11 +59,30 @@ protected:
     void PrintHelp(llvm::raw_ostream &ros, HelpMode = HelpMode_Normal);
     void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks);
 private:
+    void printRequestedChecks();
     RegisteredCheck::List m_checks;
     bool m_inplaceFixits = true;
     CheckManager *const m_checkManager;
 };
 
+/**
+ * This is the FrontendAction that is run with clazy is used standalone instead of as a plugin.
+ * i.e: when you run clazy-standalone, this is the invoked FrontendAction
+ */
+class ClazyStandaloneASTAction : public clang::ASTFrontendAction
+{
+public:
+    explicit ClazyStandaloneASTAction(const std::string &checkList, ClazyContext::ClazyOptions = ClazyContext::ClazyOption_None);
+protected:
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
+private:
+    std::string m_checkList;
+    const ClazyContext::ClazyOptions m_options;
+};
+
+/**
+ * Clazy's AST Consumer.
+ */
 class ClazyASTConsumer : public clang::ASTConsumer,
                          public clang::RecursiveASTVisitor<ClazyASTConsumer>
 {
