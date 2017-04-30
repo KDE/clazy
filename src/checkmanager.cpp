@@ -38,7 +38,7 @@ static const char * s_levelPrefix = "level";
 CheckManager::CheckManager()
     : m_enableAllFixits(false)
 {
-    m_registeredChecks.reserve(30);
+    m_registeredChecks.reserve(100);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
     if (fixitsEnv) {
         const string fixitsEnvStr = clazy_std::unquoteString(fixitsEnv);
