@@ -30,7 +30,6 @@ add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
 option(CLAZY_BUILD_UTILS_LIB "Enable this option to build a library so you can reuse clazy's utility functions" OFF)
-option(CLAZY_BUILD_STANDALONE "Enable this option to build clazy-standalone too" OFF)
 
 if (CLAZY_BUILD_UTILS_LIB)
   add_definitions(-DCLAZY_BUILD_UTILS_LIB)
@@ -224,11 +223,9 @@ if (CLAZY_BUILD_UTILS_LIB)
 endif()
 
 
-if (CLAZY_BUILD_STANDALONE)
-  # Build clazy-standalone
-  add_executable(clazy-standalone src/ClazyStandaloneMain.cpp)
-  link_to_llvm(clazy-standalone)
-  target_link_libraries(clazy-standalone ClangLazy)
-  target_link_libraries(clazy-standalone LLVMSupport)
-  install(FILES ${CMAKE_BINARY_DIR}/bin/clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
-endif()
+# Build clazy-standalone
+add_executable(clazy-standalone src/ClazyStandaloneMain.cpp)
+link_to_llvm(clazy-standalone)
+target_link_libraries(clazy-standalone ClangLazy)
+target_link_libraries(clazy-standalone LLVMSupport)
+install(FILES ${CMAKE_BINARY_DIR}/bin/clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
