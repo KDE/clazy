@@ -23,7 +23,7 @@ compile_fixed.output
 clazylib_export.h
 output.log
 /clazy.bat
-/bin/
+/bin/*
 /build/
 clazy.1
 /dev-scripts/clazy-*.log
