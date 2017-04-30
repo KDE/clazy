@@ -61,4 +61,4 @@ void QStringLeft::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("qstring-left", QStringLeft, CheckLevel1)
+REGISTER_CHECK("qstring-left", QStringLeft, CheckLevel1)

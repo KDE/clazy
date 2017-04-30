@@ -69,4 +69,4 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("mutable-container-key", MutableContainerKey, CheckLevel0)
+REGISTER_CHECK("mutable-container-key", MutableContainerKey, CheckLevel0)

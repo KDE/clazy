@@ -92,4 +92,4 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("unused-non-trivial-variable", UnusedNonTrivialVariable, CheckLevel0)
+REGISTER_CHECK("unused-non-trivial-variable", UnusedNonTrivialVariable, CheckLevel0)

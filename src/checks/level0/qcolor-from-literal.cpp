@@ -79,4 +79,4 @@ void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
     finder.addMatcher(s_matcher, m_astMatcherCallBack);
 }
 
-REGISTER_CHECK_WITH_FLAGS("qcolor-from-literal", QColorFromLiteral, CheckLevel0)
+REGISTER_CHECK("qcolor-from-literal", QColorFromLiteral, CheckLevel0)

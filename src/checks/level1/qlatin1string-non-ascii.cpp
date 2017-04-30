@@ -51,4 +51,4 @@ void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
         emitWarning(stmt, "QStringLiteral with non-ascii literal");
 }
 
-REGISTER_CHECK_WITH_FLAGS("qlatin1string-non-ascii", QLatin1StringNonAscii, CheckLevel1)
+REGISTER_CHECK("qlatin1string-non-ascii", QLatin1StringNonAscii, CheckLevel1)

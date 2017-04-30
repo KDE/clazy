@@ -64,4 +64,4 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("rule-of-two-soft", RuleOfTwoSoft, CheckLevel1)
+REGISTER_CHECK("rule-of-two-soft", RuleOfTwoSoft, CheckLevel1)

@@ -221,4 +221,4 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
     });
 }
 
-REGISTER_CHECK_WITH_FLAGS("foreach", Foreach, CheckLevel1)
+REGISTER_CHECK("foreach", Foreach, CheckLevel1)

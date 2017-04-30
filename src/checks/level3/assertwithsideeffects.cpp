@@ -129,4 +129,4 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("assert-with-side-effects", AssertWithSideEffects, CheckLevel3)
+REGISTER_CHECK("assert-with-side-effects", AssertWithSideEffects, CheckLevel3)

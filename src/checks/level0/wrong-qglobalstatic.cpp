@@ -72,4 +72,4 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("wrong-qglobalstatic", WrongQGlobalStatic, CheckLevel0)
+REGISTER_CHECK("wrong-qglobalstatic", WrongQGlobalStatic, CheckLevel0)

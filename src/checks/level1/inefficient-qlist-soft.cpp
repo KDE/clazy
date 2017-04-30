@@ -43,4 +43,4 @@ void InefficientQListSoft::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("inefficient-qlist-soft", InefficientQListSoft, CheckLevel1)
+REGISTER_CHECK("inefficient-qlist-soft", InefficientQListSoft, CheckLevel1)

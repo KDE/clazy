@@ -41,4 +41,4 @@ InefficientQList::InefficientQList(const std::string &name, ClazyContext *contex
 {
 }
 
-REGISTER_CHECK_WITH_FLAGS("inefficient-qlist", InefficientQList, HiddenCheckLevel)
+REGISTER_CHECK("inefficient-qlist", InefficientQList, HiddenCheckLevel)

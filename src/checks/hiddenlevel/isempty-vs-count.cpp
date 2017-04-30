@@ -56,4 +56,4 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("isempty-vs-count", IsEmptyVSCount, HiddenCheckLevel)
+REGISTER_CHECK("isempty-vs-count", IsEmptyVSCount, HiddenCheckLevel)

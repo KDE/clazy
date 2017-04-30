@@ -84,4 +84,4 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("qvariant-template-instantiation", QVariantTemplateInstantiation, CheckLevel0)
+REGISTER_CHECK("qvariant-template-instantiation", QVariantTemplateInstantiation, CheckLevel0)

@@ -85,5 +85,5 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 }
 
 const char *const s_checkName = "qdatetime-utc";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, QDateTimeUtc, CheckLevel0)
+REGISTER_CHECK(s_checkName, QDateTimeUtc, CheckLevel0)
 REGISTER_FIXIT(FixitAll, "fix-qdatetime-utc", s_checkName)

@@ -69,4 +69,4 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     emitWarning(stmt, "'this' should usually be the filter object, not the monitored one.");
 }
 
-REGISTER_CHECK_WITH_FLAGS("install-event-filter", InstallEventFilter, CheckLevel1)
+REGISTER_CHECK("install-event-filter", InstallEventFilter, CheckLevel1)

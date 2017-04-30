@@ -265,5 +265,5 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixitInsertFromLatin1(CXXConstructE
 }
 
 const char *const s_checkName = "qt4-qstring-from-array";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, Qt4_QStringFromArray, HiddenCheckLevel)
+REGISTER_CHECK(s_checkName, Qt4_QStringFromArray, HiddenCheckLevel)
 REGISTER_FIXIT(FixItToFromLatin1, "fix-qt4-qstring-from-array", s_checkName)

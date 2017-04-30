@@ -98,4 +98,4 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("range-loop", RangeLoop, CheckLevel1)
+REGISTER_CHECK("range-loop", RangeLoop, CheckLevel1)

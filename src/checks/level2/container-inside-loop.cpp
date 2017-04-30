@@ -68,4 +68,4 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("container-inside-loop", ContainerInsideLoop, CheckLevel2)
+REGISTER_CHECK("container-inside-loop", ContainerInsideLoop, CheckLevel2)

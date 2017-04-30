@@ -83,4 +83,4 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("ctor-missing-parent-argument", CtorMissingParentArgument, CheckLevel2)
+REGISTER_CHECK("ctor-missing-parent-argument", CtorMissingParentArgument, CheckLevel2)

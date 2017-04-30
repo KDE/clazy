@@ -190,4 +190,4 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
     return false;
 }
 
-REGISTER_CHECK_WITH_FLAGS("detaching-temporary", DetachingTemporary, CheckLevel1)
+REGISTER_CHECK("detaching-temporary", DetachingTemporary, CheckLevel1)

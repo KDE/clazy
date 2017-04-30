@@ -63,4 +63,4 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
         emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
 }
 
-REGISTER_CHECK_WITH_FLAGS("connect-non-signal", ConnectNonSignal, CheckLevel0)
+REGISTER_CHECK("connect-non-signal", ConnectNonSignal, CheckLevel0)

@@ -147,4 +147,4 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     emitWarning(stm->getLocStart(), error.c_str());
 }
 
-REGISTER_CHECK_WITH_FLAGS("temporary-iterator", TemporaryIterator, CheckLevel0)
+REGISTER_CHECK("temporary-iterator", TemporaryIterator, CheckLevel0)

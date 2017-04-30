@@ -182,4 +182,4 @@ bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("implicit-casts", ImplicitCasts, CheckLevel2)
+REGISTER_CHECK("implicit-casts", ImplicitCasts, CheckLevel2)

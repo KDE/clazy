@@ -137,4 +137,4 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
 
-REGISTER_CHECK_WITH_FLAGS("detaching-member", DetachingMember, CheckLevel3)
+REGISTER_CHECK("detaching-member", DetachingMember, CheckLevel3)

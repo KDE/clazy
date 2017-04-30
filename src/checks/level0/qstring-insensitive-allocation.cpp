@@ -73,4 +73,4 @@ void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("qstring-insensitive-allocation", QStringInsensitiveAllocation, CheckLevel0)
+REGISTER_CHECK("qstring-insensitive-allocation", QStringInsensitiveAllocation, CheckLevel0)

@@ -118,4 +118,4 @@ bool ContainerAntiPattern::handleLoop(Stmt *stm)
 
 
 
-REGISTER_CHECK_WITH_FLAGS("container-anti-pattern", ContainerAntiPattern, CheckLevel0)
+REGISTER_CHECK("container-anti-pattern", ContainerAntiPattern, CheckLevel0)

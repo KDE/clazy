@@ -80,4 +80,4 @@ void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
 
 
 
-REGISTER_CHECK_WITH_FLAGS("child-event-qobject-cast", ChildEvent_qobject_cast, CheckLevel1)
+REGISTER_CHECK("child-event-qobject-cast", ChildEvent_qobject_cast, CheckLevel1)

@@ -184,4 +184,4 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
     return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
 }
 
-REGISTER_CHECK_WITH_FLAGS("function-args-by-value", FunctionArgsByValue, CheckLevel2)
+REGISTER_CHECK("function-args-by-value", FunctionArgsByValue, CheckLevel2)

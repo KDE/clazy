@@ -228,5 +228,5 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 }
 
 const char *const s_checkName = "qstring-ref";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, StringRefCandidates, CheckLevel0)
+REGISTER_CHECK(s_checkName, StringRefCandidates, CheckLevel0)
 REGISTER_FIXIT(FixitUseQStringRef, "fix-missing-qstringref", s_checkName)

@@ -74,5 +74,5 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 }
 
 const char *const s_checkName = "auto-unexpected-qstringbuilder";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, AutoUnexpectedQStringBuilder, CheckLevel1)
+REGISTER_CHECK(s_checkName, AutoUnexpectedQStringBuilder, CheckLevel1)
 REGISTER_FIXIT(FixitUseQString, "fix-auto-unexpected-qstringbuilder", s_checkName)

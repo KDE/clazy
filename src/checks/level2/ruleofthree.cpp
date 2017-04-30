@@ -153,4 +153,4 @@ bool RuleOfThree::shouldIgnoreType(const std::string &className) const
     return clazy_std::contains(types, className);
 }
 
-REGISTER_CHECK_WITH_FLAGS("rule-of-three", RuleOfThree, CheckLevel2)
+REGISTER_CHECK("rule-of-three", RuleOfThree, CheckLevel2)

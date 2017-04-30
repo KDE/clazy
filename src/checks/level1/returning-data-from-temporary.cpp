@@ -114,4 +114,4 @@ void ReturningDataFromTemporary::handleConstDataCall()
     // TODO
 }
 
-REGISTER_CHECK_WITH_FLAGS("returning-data-from-temporary", ReturningDataFromTemporary, CheckLevel1)
+REGISTER_CHECK("returning-data-from-temporary", ReturningDataFromTemporary, CheckLevel1)

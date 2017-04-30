@@ -72,4 +72,4 @@ void QtMacros::VisitIfdef(SourceLocation loc, const Token &macroNameTok)
         checkIfDef(macroNameTok, loc);
 }
 
-REGISTER_CHECK_WITH_FLAGS("qt-macros", QtMacros, CheckLevel0)
+REGISTER_CHECK("qt-macros", QtMacros, CheckLevel0)

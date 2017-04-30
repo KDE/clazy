@@ -73,4 +73,4 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-REGISTER_CHECK_WITH_FLAGS("post-event", PostEvent, CheckLevel1)
+REGISTER_CHECK("post-event", PostEvent, CheckLevel1)

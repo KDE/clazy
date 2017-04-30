@@ -60,4 +60,4 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
     emitWarning(decl->getLocStart(), "non const global char *");
 }
 
-REGISTER_CHECK_WITH_FLAGS("global-const-char-pointer", GlobalConstCharPointer, CheckLevel2)
+REGISTER_CHECK("global-const-char-pointer", GlobalConstCharPointer, CheckLevel2)

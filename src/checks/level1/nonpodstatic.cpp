@@ -98,4 +98,4 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
 
 }
 
-REGISTER_CHECK_WITH_FLAGS("non-pod-global-static", NonPodStatic, CheckLevel1)
+REGISTER_CHECK("non-pod-global-static", NonPodStatic, CheckLevel1)

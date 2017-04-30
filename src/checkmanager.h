@@ -122,7 +122,7 @@ private:
 #define CLAZY_STRINGIFY2(X) #X
 #define CLAZY_STRINGIFY(X) CLAZY_STRINGIFY2(X)
 
-#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL) \
+#define REGISTER_CHECK(CHECK_NAME, CLASS_NAME, LEVEL) \
     volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \

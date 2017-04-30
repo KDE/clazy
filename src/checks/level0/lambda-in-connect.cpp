@@ -62,4 +62,4 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("lambda-in-connect", LambdaInConnect, CheckLevel0)
+REGISTER_CHECK("lambda-in-connect", LambdaInConnect, CheckLevel0)

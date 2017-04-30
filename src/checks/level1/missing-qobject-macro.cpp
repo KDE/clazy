@@ -78,4 +78,4 @@ void MissingQ_OBJECT::registerQ_OBJECT(SourceLocation loc)
     m_qobjectMacroLocations.push_back(loc);
 }
 
-REGISTER_CHECK_WITH_FLAGS("missing-qobject-macro", MissingQ_OBJECT, CheckLevel1)
+REGISTER_CHECK("missing-qobject-macro", MissingQ_OBJECT, CheckLevel1)

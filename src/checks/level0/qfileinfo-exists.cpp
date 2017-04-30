@@ -51,4 +51,4 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("qfileinfo-exists", QFileInfoExists, CheckLevel0)
+REGISTER_CHECK("qfileinfo-exists", QFileInfoExists, CheckLevel0)

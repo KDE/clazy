@@ -172,5 +172,5 @@ clang::FixItHint FunctionArgsByRef::fixit(const ParmVarDecl *, TypeUtils::QualTy
 }
 
 const char *const s_checkName = "function-args-by-ref";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, FunctionArgsByRef, CheckLevel2)
+REGISTER_CHECK(s_checkName, FunctionArgsByRef, CheckLevel2)
 // REGISTER_FIXIT(FixitAll, "fix-func-args", s_checkName)

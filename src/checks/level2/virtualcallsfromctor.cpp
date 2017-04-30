@@ -101,4 +101,4 @@ SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *c
     return {};
 }
 
-REGISTER_CHECK_WITH_FLAGS("virtual-call-ctor", VirtualCallsFromCTOR, CheckLevel2)
+REGISTER_CHECK("virtual-call-ctor", VirtualCallsFromCTOR, CheckLevel2)

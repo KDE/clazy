@@ -60,4 +60,4 @@ void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
     emitWarning(stmt, "Returning a void expression");
 }
 
-REGISTER_CHECK_WITH_FLAGS("returning-void-expression", ReturningVoidExpression, CheckLevel2)
+REGISTER_CHECK("returning-void-expression", ReturningVoidExpression, CheckLevel2)

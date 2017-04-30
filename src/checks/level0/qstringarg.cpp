@@ -181,4 +181,4 @@ std::vector<string> StringArg::supportedOptions() const
 }
 
 
-REGISTER_CHECK_WITH_FLAGS("qstring-arg", StringArg, CheckLevel0)
+REGISTER_CHECK("qstring-arg", StringArg, CheckLevel0)
