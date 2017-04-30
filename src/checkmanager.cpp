@@ -41,10 +41,11 @@ CheckManager::CheckManager()
     m_registeredChecks.reserve(30);
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
     if (fixitsEnv) {
-        if (string(fixitsEnv) == string("all_fixits")) {
+        const string fixitsEnvStr = clazy_std::unquoteString(fixitsEnv);
+        if (fixitsEnvStr == "all_fixits") {
             m_enableAllFixits = true;
         } else {
-            m_requestedFixitName = string(fixitsEnv);
+            m_requestedFixitName = fixitsEnvStr;
         }
     }
 }
@@ -168,8 +169,9 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &us
     if (requestedChecksThroughEnv.empty()) {
         const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv) {
-            requestedChecksThroughEnv = string(checksEnv) == "all_checks" ? availableChecks(CheckLevel2)
-                                                                          : checksForCommaSeparatedString(checksEnv, /*by-ref=*/ userDisabledChecks);
+            const string checksEnvStr = clazy_std::unquoteString(checksEnv);
+            requestedChecksThroughEnv = checksEnvStr == "all_checks" ? availableChecks(CheckLevel2)
+                                                                     : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ userDisabledChecks);
         }
 
         const string checkName = checkNameForFixIt(m_requestedFixitName);

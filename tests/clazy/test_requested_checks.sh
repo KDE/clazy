@@ -73,6 +73,11 @@ echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,fo
 export CLAZY_CHECKS="level1"
 echo | $CLAZY_COMMAND_STDIN
 
+# Should also work with quotes. Users sometimes add quotes in QtCreator.
+echo Test9
+export CLAZY_CHECKS=\"level1\"
+echo | $CLAZY_COMMAND_STDIN
+
 # Use a level in env-variable + another check
 export CLAZY_CHECKS="level0,reserve-candidates"
 echo | $CLAZY_COMMAND_STDIN

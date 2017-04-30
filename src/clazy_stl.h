@@ -248,6 +248,15 @@ void sort_and_remove_dups(Container &c, LessThan lessThan)
     c.erase(std::unique(c.begin(), c.end()), c.end());
 }
 
+inline std::string unquoteString(const std::string &str)
+{
+    // If first and last are ", return what's in between quotes:
+    if (str.size() >= 3 && str[0] == '"' && str.at(str.size() - 1) == '"')
+        return str.substr(1, str.size() - 2);
+
+    return str;
+}
+
 }
 
 #endif
