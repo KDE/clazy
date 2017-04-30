@@ -150,18 +150,13 @@ ClazyASTAction::ClazyASTAction()
 
 std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
-
-    if (m_inplaceFixits)
-        options |= ClazyContext::ClazyOption_FixitsAreInplace;
-
     if (m_checkManager->fixitsEnabled())
-        options |= ClazyContext::ClazyOption_FixitsEnabled;
+        m_options |= ClazyContext::ClazyOption_FixitsEnabled;
 
     if (m_checkManager->allFixitsEnabled())
-        options |= ClazyContext::ClazyOption_AllFixitsEnabled;
+        m_options |= ClazyContext::ClazyOption_AllFixitsEnabled;
 
-    auto context = new ClazyContext(ci, options);
+    auto context = new ClazyContext(ci, m_options);
 
     auto astConsumer = new ClazyASTConsumer(context);
     CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, context);
@@ -188,7 +183,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::
 
     if (parseArgument("no-inplace-fixits", args)) {
         // Unit-tests don't use inplace fixits
-        m_inplaceFixits = false;
+        m_options &= ~ClazyContext::ClazyOption_FixitsAreInplace;
     }
 
     if (parseArgument("enable-all-fixits", args)) {

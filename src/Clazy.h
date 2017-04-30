@@ -61,7 +61,7 @@ protected:
 private:
     void printRequestedChecks();
     RegisteredCheck::List m_checks;
-    bool m_inplaceFixits = true;
+    ClazyContext::ClazyOptions m_options = ClazyContext::ClazyOption_FixitsAreInplace;
     CheckManager *const m_checkManager;
 };
 
