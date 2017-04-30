@@ -86,14 +86,11 @@ void CheckBase::VisitStatement(Stmt *stm)
 
 void CheckBase::VisitDeclaration(Decl *decl)
 {
-    if (!(ignoresAstNodesInSystemHeaders() && sm().isInSystemHeader(decl->getLocStart())))
-    {
-        m_lastDecl = decl;
-        if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
-            m_lastMethodDecl = mdecl;
+    m_lastDecl = decl;
+    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
+        m_lastMethodDecl = mdecl;
 
-        VisitDecl(decl);
-    }
+    VisitDecl(decl);
 }
 
 void CheckBase::VisitStmt(Stmt *)
