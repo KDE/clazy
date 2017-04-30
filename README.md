@@ -1,3 +1,5 @@
+*WARNING:* master is the development branch. Please use branch 1.1 for production.
+
 clazy v1.2
 ===========
 
