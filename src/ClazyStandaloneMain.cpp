@@ -43,6 +43,9 @@ static cl::opt<bool> s_noInplaceFixits("no-inplace-fixits", cl::desc("Fixits wil
 static cl::opt<bool> s_enableAllFixits("enable-all-fixits", cl::desc("Enables all fixits"),
                                        cl::init(""), cl::cat(s_clazyCategory));
 
+static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not compatible with Qt 4"),
+                                 cl::init(false), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolAction : public clang::tooling::FrontendActionFactory
@@ -59,6 +62,9 @@ public:
 
         if (s_enableAllFixits.getValue())
             options |= ClazyContext::ClazyOption_AllFixitsEnabled;
+
+        if (s_qt4Compat.getValue())
+            options |= ClazyContext::ClazyOption_Qt4Compat;
 
         return new ClazyStandaloneASTAction(s_checks.getValue(), options);
     }

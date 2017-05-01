@@ -32,6 +32,7 @@ Table of contents
    * [clang-standalone and JSON database support](#clang-standalone-and-json-database-support)
    * [Enabling Fixits](#enabling-fixits)
    * [Troubleshooting](#troubleshooting)
+   * [Qt4 compatibility mode](#qt4-compatibility-mode)
    * [Reducing warning noise](#reducing-warning-noise)
    * [Reporting bugs and wishes](#reporting-bugs-and-wishes)
    * [Authors](#authors)
@@ -331,6 +332,11 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 - fatal error: 'stddef.h' file not found, while using `clazy-standalone`
   Be sure the clazy-standalone binary is located in the same folder as the clang binary.
+
+# Qt4 compatibility mode
+
+When running on codebases that must still compile with Qt4, you can pass `-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat`
+to disable checks that only make sense with Qt5.
 
 # Reducing warning noise
 

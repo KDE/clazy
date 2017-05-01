@@ -53,7 +53,8 @@ public:
         ClazyOption_None = 0,
         ClazyOption_FixitsAreInplace = 1,
         ClazyOption_FixitsEnabled = 2,
-        ClazyOption_AllFixitsEnabled = 4
+        ClazyOption_AllFixitsEnabled = 4,
+        ClazyOption_Qt4Compat = 8
     };
     typedef int ClazyOptions;
 

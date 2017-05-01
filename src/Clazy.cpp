@@ -191,10 +191,13 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::
         m_checkManager->enableAllFixIts();
     }
 
+    if (parseArgument("qt4-compat", args))
+        m_options |= ClazyContext::ClazyOption_Qt4Compat;
+
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
 
-    m_checks = m_checkManager->requestedChecks(args);
+    m_checks = m_checkManager->requestedChecks(args, m_options);
 
     if (args.size() > 1) {
         // Too many arguments.
@@ -341,7 +344,7 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
         cm->enableAllFixIts();
 
     vector<string> checks; checks.push_back(m_checkList);
-    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks);
+    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks, m_options);
 
     if (requestedChecks.size() == 0) {
         llvm::errs() << "No checks were requested!\n" << "\n";

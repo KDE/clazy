@@ -45,11 +45,19 @@ struct CLAZYLIB_EXPORT RegisteredFixIt {
 using FactoryFunction = std::function<CheckBase*(ClazyContext *context)>;
 
 struct CLAZYLIB_EXPORT RegisteredCheck {
+    enum Option {
+        Option_None = 0,
+        Option_Qt4Incompatible
+    };
+
     typedef std::vector<RegisteredCheck> List;
+    typedef int Options;
+
     std::string name;
     std::string className;
     CheckLevel level;
     FactoryFunction factory;
+    Options options;
     bool operator==(const RegisteredCheck &other) const { return name == other.name; }
 };
 
@@ -75,7 +83,8 @@ public:
         return &s_instance;
     }
 
-    int registerCheck(const std::string &name, const std::string &className, CheckLevel level, const FactoryFunction &);
+    int registerCheck(const std::string &name, const std::string &className,
+                      CheckLevel level, const FactoryFunction &, RegisteredCheck::Options = RegisteredCheck::Option_None);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
@@ -93,7 +102,7 @@ public:
      * Returns all the requested checks.
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
-    RegisteredCheck::List requestedChecks(std::vector<std::string> &args);
+    RegisteredCheck::List requestedChecks(std::vector<std::string> &args, ClazyContext::ClazyOptions options);
 
     CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
@@ -121,6 +130,9 @@ private:
 
 #define CLAZY_STRINGIFY2(X) #X
 #define CLAZY_STRINGIFY(X) CLAZY_STRINGIFY2(X)
+
+#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL, OPTIONS) \
+    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); }, OPTIONS);
 
 #define REGISTER_CHECK(CHECK_NAME, CLASS_NAME, LEVEL) \
     volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });

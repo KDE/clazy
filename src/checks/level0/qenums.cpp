@@ -54,4 +54,4 @@ void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
     emitWarning(range.getBegin(), "Use Q_ENUM instead of Q_ENUMS");
 }
 
-REGISTER_CHECK("qenums", Qenums, CheckLevel0)
+REGISTER_CHECK_WITH_FLAGS("qenums", Qenums, CheckLevel0, RegisteredCheck::Option_Qt4Incompatible)

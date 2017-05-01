@@ -26,6 +26,15 @@
             "flags"    : "-Werror",
             "checks"   : ["foreach"],
             "env"      : { "CLAZY_NO_WERROR" : "1" }
+        },
+        {
+            "filename" : "qt4compat1.cpp",
+            "checks"   : ["old-style-connect"]
+        },
+        {
+            "filename" : "qt4compat2.cpp",
+            "checks"   : ["old-style-connect"],
+            "qt4compat": true
         }
     ]
 }

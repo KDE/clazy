@@ -105,5 +105,5 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
 
 
 const char *const s_checkName = "qgetenv";
-REGISTER_CHECK(s_checkName, QGetEnv, CheckLevel0)
+REGISTER_CHECK_WITH_FLAGS(s_checkName, QGetEnv, CheckLevel0, RegisteredCheck::Option_Qt4Incompatible)
 REGISTER_FIXIT(FixitAll, "fix-qgetenv", s_checkName)

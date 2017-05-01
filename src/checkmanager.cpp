@@ -73,7 +73,8 @@ bool CheckManager::isReservedCheckName(const string &name) const
 }
 
 int CheckManager::registerCheck(const std::string &name, const string &className,
-                                CheckLevel level, const FactoryFunction &factory)
+                                CheckLevel level, const FactoryFunction &factory,
+                                RegisteredCheck::Options options)
 {
     assert(factory != nullptr);
     assert(!name.empty());
@@ -82,7 +83,7 @@ int CheckManager::registerCheck(const std::string &name, const string &className
         llvm::errs() << "Check name not allowed" << name;
         assert(false);
     } else {
-        m_registeredChecks.push_back({name, className, level, factory});
+        m_registeredChecks.push_back({name, className, level, factory, options});
     }
 
     return 0;
@@ -208,7 +209,8 @@ static bool takeArgument(const string &arg, vector<string> &args)
     return false;
 }
 
-RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &args)
+RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &args,
+                                                    ClazyContext::ClazyOptions options)
 {
     RegisteredCheck::List result;
 
@@ -249,6 +251,13 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
     clazy_std::append(checksFromRequestedLevel, result);
     clazy_std::sort_and_remove_dups(result, checkLessThan);
     CheckManager::removeChecksFromList(result, userDisabledChecks);
+
+    if (options & ClazyContext::ClazyOption_Qt4Compat) {
+        // #5 Remove Qt4 incompatible checks
+        result.erase(remove_if(result.begin(), result.end(), [](const RegisteredCheck &c){
+           return c.options & RegisteredCheck::Option_Qt4Incompatible;
+        }));
+    }
 
     return result;
 }
