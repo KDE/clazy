@@ -430,7 +430,9 @@ def run_unit_tests(tests):
 
 def dump_ast(check):
     for test in check.tests:
-        run_command(dump_ast_command(test) + " > " + test.filename + ".ast")
+        ast_filename = test.filename + ".ast"
+        run_command(dump_ast_command(test) + " > " + ast_filename)
+        print "Dumped AST to " + os.getcwd() + "/" + ast_filename
 #-------------------------------------------------------------------------------
 def load_checks(all_check_names):
     checks = []
