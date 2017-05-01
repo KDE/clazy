@@ -91,8 +91,15 @@ protected:
 class CLAZYLIB_EXPORT CheckBase
 {
 public:
+
+    enum Option {
+        Option_None = 0,
+        Option_WarnsInSystemHeaders = 1
+    };
+    typedef int Options;
+
     typedef std::vector<CheckBase*> List;
-    explicit CheckBase(const std::string &name, ClazyContext *context);
+    explicit CheckBase(const std::string &name, ClazyContext *context, Options = Option_None);
     CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
@@ -113,7 +120,7 @@ public:
 
     virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &) {};
 
-    virtual bool ignoresAstNodesInSystemHeaders() const { return true; }
+    bool warnsInSystemHeaders() const { return m_options & Option_WarnsInSystemHeaders; }
 
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
@@ -158,6 +165,7 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits = 0;
+    const Options m_options;
 };
 
 #endif

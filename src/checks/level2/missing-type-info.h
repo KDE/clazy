@@ -45,7 +45,6 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);
-    bool ignoresAstNodesInSystemHeaders() const override { return false; } // So we visit Q_DECL_TYPEINFO in Qt headers
     bool typeHasClassification(clang::QualType) const;
     std::set<std::string> m_typeInfos;
 };

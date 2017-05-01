@@ -37,7 +37,7 @@ using namespace std;
 using namespace clang;
 
 MissingTypeinfo::MissingTypeinfo(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_WarnsInSystemHeaders) // So we visit Q_DECL_TYPEINFO in Qt headers
 {
 }
 

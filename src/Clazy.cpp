@@ -82,7 +82,7 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
         a->VisitDeclaration(decl);
 
     for (CheckBase *check : m_createdChecks) {
-        if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
+        if (!(isInSystemHeader && !check->warnsInSystemHeaders()))
             check->VisitDeclaration(decl);
     }
 
@@ -115,7 +115,7 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 
     const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
     for (CheckBase *check : m_createdChecks) {
-        if (!(isInSystemHeader && check->ignoresAstNodesInSystemHeaders()))
+        if (!(isInSystemHeader && !check->warnsInSystemHeaders()))
             check->VisitStatement(stm);
     }
 
