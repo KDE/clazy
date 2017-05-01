@@ -28,6 +28,7 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "checkmanager.h"
+#include "NormalizedSignatureUtils.h"
 
 #include <clang/AST/AST.h>
 

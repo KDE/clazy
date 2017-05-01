@@ -18,6 +18,7 @@ if (NOT CLAZY_BUILD_IS_MINIMAL)
   set(CLAZY_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qcolor-from-literal.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-not-normalized.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/container-anti-pattern.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-in-connect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qdatetimeutc.cpp

@@ -33,6 +33,7 @@
     install-event-filter
     qcolor-from-literal
     strict-iterators
+    connect-not-normalized
   - returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned
   - returning-data-from-temporary now checks for assignment too, not only return statements
   - ASTMatchers based checks are now supported
