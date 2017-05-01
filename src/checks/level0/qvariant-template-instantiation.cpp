@@ -72,13 +72,12 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         matches = true;
     } else {
         CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-        matches = t->isClassType() && recordDecl && isMatchingClass(recordDecl->getNameAsString());
+        matches = recordDecl && t->isClassType() && isMatchingClass(recordDecl->getNameAsString());
     }
 
-    string typeName = StringUtils::simpleTypeName(typeList[0], lo());
-    typeName[0] = toupper(typeName[0]);
-
     if (matches) {
+        string typeName = StringUtils::simpleTypeName(typeList[0], lo());
+        typeName[0] = toupper(typeName[0]);
         std::string error = std::string("Use QVariant::to" + typeName + "() instead of QVariant::value<" + typeName + ">()");
         emitWarning(stm->getLocStart(), error.c_str());
     }
