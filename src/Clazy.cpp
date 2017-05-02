@@ -148,18 +148,10 @@ ClazyASTAction::ClazyASTAction()
 {
 }
 
-std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
+std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &, llvm::StringRef)
 {
-    if (m_checkManager->fixitsEnabled())
-        m_options |= ClazyContext::ClazyOption_FixitsEnabled;
-
-    if (m_checkManager->allFixitsEnabled())
-        m_options |= ClazyContext::ClazyOption_AllFixitsEnabled;
-
-    auto context = new ClazyContext(ci, m_options);
-
-    auto astConsumer = new ClazyASTConsumer(context);
-    CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, context);
+    auto astConsumer = new ClazyASTConsumer(m_context);
+    CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, m_context);
     for (CheckBase *check : createdChecks) {
         astConsumer->addCheck(check);
     }
@@ -167,7 +159,7 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
    return std::unique_ptr<ASTConsumer>(astConsumer);
 }
 
-bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &args_)
+bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_)
 {
     std::vector<std::string> args = args_;
 
@@ -183,21 +175,23 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::
 
     if (parseArgument("no-inplace-fixits", args)) {
         // Unit-tests don't use inplace fixits
-        m_options &= ~ClazyContext::ClazyOption_FixitsAreInplace;
+        m_options |= ClazyContext::ClazyOption_NoFixitsInplace;
     }
 
     if (parseArgument("enable-all-fixits", args)) {
         // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
-        m_checkManager->enableAllFixIts();
+        m_options |= ClazyContext::ClazyOption_AllFixitsEnabled;
     }
 
     if (parseArgument("qt4-compat", args))
         m_options |= ClazyContext::ClazyOption_Qt4Compat;
 
+    m_context = new ClazyContext(ci, m_options);
+
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
 
-    m_checks = m_checkManager->requestedChecks(args, m_options);
+    m_checks = m_checkManager->requestedChecks(m_context, args);
 
     if (args.size() > 1) {
         // Too many arguments.
@@ -340,11 +334,9 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
     auto astConsumer = new ClazyASTConsumer(context);
 
     auto cm = CheckManager::instance();
-    if (m_options & ClazyContext::ClazyOption_AllFixitsEnabled)
-        cm->enableAllFixIts();
 
     vector<string> checks; checks.push_back(m_checkList);
-    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks, m_options);
+    const RegisteredCheck::List requestedChecks = cm->requestedChecks(context, checks);
 
     if (requestedChecks.size() == 0) {
         llvm::errs() << "No checks were requested!\n" << "\n";

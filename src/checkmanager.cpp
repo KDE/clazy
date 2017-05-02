@@ -36,18 +36,8 @@ static const char * s_fixitNamePrefix = "fix-";
 static const char * s_levelPrefix = "level";
 
 CheckManager::CheckManager()
-    : m_enableAllFixits(false)
 {
     m_registeredChecks.reserve(100);
-    const char *fixitsEnv = getenv("CLAZY_FIXIT");
-    if (fixitsEnv) {
-        const string fixitsEnvStr = clazy_std::unquoteString(fixitsEnv);
-        if (fixitsEnvStr == "all_fixits") {
-            m_enableAllFixits = true;
-        } else {
-            m_requestedFixitName = fixitsEnvStr;
-        }
-    }
 }
 
 bool CheckManager::checkExists(const string &name) const
@@ -158,13 +148,13 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv() const
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(ClazyContext *context) const
 {
     vector<string> dummy;
-    return requestedChecksThroughEnv(dummy);
+    return requestedChecksThroughEnv(context, dummy);
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &userDisabledChecks) const
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(ClazyContext *context, vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;
     if (requestedChecksThroughEnv.empty()) {
@@ -175,7 +165,7 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &us
                                                                      : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ userDisabledChecks);
         }
 
-        const string checkName = checkNameForFixIt(m_requestedFixitName);
+        const string checkName = checkNameForFixIt(context->requestedFixitName);
         if (!checkName.empty() && checkForName(requestedChecksThroughEnv, checkName) == requestedChecksThroughEnv.cend()) {
             requestedChecksThroughEnv.push_back(*checkForName(m_registeredChecks, checkName));
         }
@@ -209,8 +199,7 @@ static bool takeArgument(const string &arg, vector<string> &args)
     return false;
 }
 
-RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &args,
-                                                    ClazyContext::ClazyOptions options)
+RegisteredCheck::List CheckManager::requestedChecks(ClazyContext *context, std::vector<std::string> &args)
 {
     RegisteredCheck::List result;
 
@@ -238,7 +227,7 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
     // #3 Append checks specified from env variable
 
     vector<string> userDisabledChecks;
-    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(/*by-ref*/userDisabledChecks);
+    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(context, /*by-ref*/userDisabledChecks);
     copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(result));
 
     if (result.empty() && requestedLevel == CheckLevelUndefined) {
@@ -252,7 +241,7 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
     clazy_std::sort_and_remove_dups(result, checkLessThan);
     CheckManager::removeChecksFromList(result, userDisabledChecks);
 
-    if (options & ClazyContext::ClazyOption_Qt4Compat) {
+    if (context->options & ClazyContext::ClazyOption_Qt4Compat) {
         // #5 Remove Qt4 incompatible checks
         result.erase(remove_if(result.begin(), result.end(), [](const RegisteredCheck &c){
            return c.options & RegisteredCheck::Option_Qt4Incompatible;
@@ -277,8 +266,8 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
 CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
                                            ClazyContext *context)
 {
-    const string fixitCheckName = checkNameForFixIt(m_requestedFixitName);
-    RegisteredFixIt fixit = m_fixitByName[m_requestedFixitName];
+    const string fixitCheckName = checkNameForFixIt(context->requestedFixitName);
+    RegisteredFixIt fixit = m_fixitByName[context->requestedFixitName];
 
     CheckBase::List checks;
     checks.reserve(requestedChecks.size() + 1);
@@ -289,7 +278,7 @@ CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requeste
         }
     }
 
-    if (!m_requestedFixitName.empty()) {
+    if (!context->requestedFixitName.empty()) {
         // We have one fixit enabled, we better have the check instance too.
         if (!fixitCheckName.empty()) {
             if (checkForName(requestedChecks, fixitCheckName) == requestedChecks.cend()) {
@@ -300,16 +289,6 @@ CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requeste
     }
 
     return checks;
-}
-
-bool CheckManager::fixitsEnabled() const
-{
-    return !m_requestedFixitName.empty() || m_enableAllFixits;
-}
-
-void CheckManager::enableAllFixIts()
-{
-    m_enableAllFixits = true;
 }
 
 /*static */

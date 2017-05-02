@@ -27,6 +27,7 @@
 #include <clang/Basic/SourceManager.h>
 #include "clang/Rewrite/Frontend/FixItRewriter.h"
 
+using namespace std;
 using namespace clang;
 
 class ClazyFixItOptions : public FixItOptions
@@ -59,6 +60,15 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
                                                    ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()))
                                : nullptr)
 {
+    const char *fixitsEnv = getenv("CLAZY_FIXIT");
+    if (fixitsEnv) {
+        const string fixitsEnvStr = clazy_std::unquoteString(fixitsEnv);
+        if (fixitsEnvStr == "all_fixits") {
+            allFixitsEnabled = true;
+        } else {
+            requestedFixitName = fixitsEnvStr;
+        }
+    }
 }
 
 ClazyContext::~ClazyContext()

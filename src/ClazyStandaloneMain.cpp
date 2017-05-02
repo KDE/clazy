@@ -58,7 +58,7 @@ public:
     {
         ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
         if (s_noInplaceFixits.getValue())
-            options |= ClazyContext::ClazyOption_FixitsAreInplace;
+            options |= ClazyContext::ClazyOption_NoFixitsInplace;
 
         if (s_enableAllFixits.getValue())
             options |= ClazyContext::ClazyOption_AllFixitsEnabled;

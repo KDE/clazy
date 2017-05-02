@@ -51,10 +51,9 @@ public:
 
     enum ClazyOption {
         ClazyOption_None = 0,
-        ClazyOption_FixitsAreInplace = 1,
-        ClazyOption_FixitsEnabled = 2,
-        ClazyOption_AllFixitsEnabled = 4,
-        ClazyOption_Qt4Compat = 8
+        ClazyOption_NoFixitsInplace = 1,
+        ClazyOption_AllFixitsEnabled = 2,
+        ClazyOption_Qt4Compat = 4
     };
     typedef int ClazyOptions;
 
@@ -71,15 +70,16 @@ public:
         return m_noWerror;
     }
 
-    bool fixitsEnabled() const
-    {
-        return options & ClazyOption_FixitsEnabled;
-    }
-
     bool fixitsAreInplace() const
     {
-        return options & ClazyOption_FixitsAreInplace;
+        return !(options & ClazyOption_NoFixitsInplace);
     }
+
+    bool fixitsEnabled() const
+    {
+        return allFixitsEnabled || !requestedFixitName.empty();
+    }
+
 
     bool isOptionSet(const std::string &optionName) const
     {
@@ -104,6 +104,8 @@ public:
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;
     clang::FixItRewriter *const rewriter;
+    bool allFixitsEnabled = false;
+    std::string requestedFixitName;
 };
 
 #endif

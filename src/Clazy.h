@@ -39,6 +39,8 @@ namespace clang {
     class CompilerInstance;
 }
 
+class ClazyContext;
+
 /**
  * This is the FrontendAction that is run with clazy is used as a plugin.
  */
@@ -61,8 +63,9 @@ protected:
 private:
     void printRequestedChecks();
     RegisteredCheck::List m_checks;
-    ClazyContext::ClazyOptions m_options = ClazyContext::ClazyOption_FixitsAreInplace;
+    ClazyContext::ClazyOptions m_options = 0;
     CheckManager *const m_checkManager;
+    ClazyContext *m_context = nullptr;
 };
 
 /**
