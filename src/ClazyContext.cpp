@@ -56,9 +56,6 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , options(opts)
     , extraOptions(clazy_std::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
-    , rewriter(fixitsEnabled() ? new FixItRewriter(ci.getDiagnostics(), sm,
-                                                   ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()))
-                               : nullptr)
 {
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
     if (fixitsEnv) {
@@ -69,6 +66,10 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
             requestedFixitName = fixitsEnvStr;
         }
     }
+
+    if (fixitsEnabled())
+        rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
+                                     ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()));
 }
 
 ClazyContext::~ClazyContext()
