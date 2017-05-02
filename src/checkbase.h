@@ -99,7 +99,7 @@ public:
     typedef int Options;
 
     typedef std::vector<CheckBase*> List;
-    explicit CheckBase(const std::string &name, ClazyContext *context, Options = Option_None);
+    explicit CheckBase(const std::string &name, const ClazyContext *context, Options = Option_None);
     CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
@@ -148,7 +148,7 @@ protected:
 
     const clang::SourceManager &m_sm;
     const std::string m_name;
-    ClazyContext *const m_context;
+    const ClazyContext *const m_context;
     clang::ASTContext &m_astContext;
     const clang::PreprocessorOptions &m_preprocessorOpts;
     clang::TranslationUnitDecl *const m_tu;

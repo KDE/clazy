@@ -54,13 +54,13 @@ public:
     SuppressionManager();
 
     bool isSuppressed(const std::string &checkName, clang::SourceLocation,
-                      const clang::SourceManager &, const clang::LangOptions &);
+                      const clang::SourceManager &, const clang::LangOptions &) const;
 
 private:
-    void parseFile(clang::FileID, const clang::SourceManager &, const clang::LangOptions &lo);
+    void parseFile(clang::FileID, const clang::SourceManager &, const clang::LangOptions &lo) const;
     SuppressionManager(const SuppressionManager &) = delete;
     SuppressionManager& operator=(const SuppressionManager &) = delete;
-    std::unordered_map<SourceFileID, Suppressions> m_processedFileIDs;
+    mutable std::unordered_map<SourceFileID, Suppressions> m_processedFileIDs;
 };
 
 #endif

@@ -38,7 +38,7 @@ SuppressionManager::SuppressionManager()
 }
 
 bool SuppressionManager::isSuppressed(const std::string &checkName, clang::SourceLocation loc,
-                                      const clang::SourceManager &sm, const clang::LangOptions &lo)
+                                      const clang::SourceManager &sm, const clang::LangOptions &lo) const
 {
 #ifdef NO_STD_REGEX
     return false;
@@ -78,7 +78,7 @@ bool SuppressionManager::isSuppressed(const std::string &checkName, clang::Sourc
     return checkIsSuppressedByLine;
 }
 
-void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const clang::LangOptions &lo)
+void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const clang::LangOptions &lo) const
 {
 #ifndef NO_STD_REGEX
     const unsigned hash = id.getHashValue();

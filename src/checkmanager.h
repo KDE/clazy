@@ -88,8 +88,8 @@ public:
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
-    RegisteredCheck::List requestedChecksThroughEnv(ClazyContext *context) const;
-    RegisteredCheck::List requestedChecksThroughEnv(ClazyContext *context, std::vector<std::string> &userDisabledChecks) const;
+    RegisteredCheck::List requestedChecksThroughEnv(const ClazyContext *context) const;
+    RegisteredCheck::List requestedChecksThroughEnv(const ClazyContext *context, std::vector<std::string> &userDisabledChecks) const;
 
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
@@ -102,7 +102,7 @@ public:
      * Returns all the requested checks.
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
-    RegisteredCheck::List requestedChecks(ClazyContext *context, std::vector<std::string> &args);
+    RegisteredCheck::List requestedChecks(const ClazyContext *context, std::vector<std::string> &args);
     CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);

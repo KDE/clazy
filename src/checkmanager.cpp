@@ -148,13 +148,13 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv(ClazyContext *context) const
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext *context) const
 {
     vector<string> dummy;
     return requestedChecksThroughEnv(context, dummy);
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv(ClazyContext *context, vector<string> &userDisabledChecks) const
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext *context, vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;
     if (requestedChecksThroughEnv.empty()) {
@@ -199,7 +199,7 @@ static bool takeArgument(const string &arg, vector<string> &args)
     return false;
 }
 
-RegisteredCheck::List CheckManager::requestedChecks(ClazyContext *context, std::vector<std::string> &args)
+RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context, std::vector<std::string> &args)
 {
     RegisteredCheck::List result;
 
