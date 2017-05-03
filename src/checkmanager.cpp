@@ -245,7 +245,7 @@ RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context,
         // #5 Remove Qt4 incompatible checks
         result.erase(remove_if(result.begin(), result.end(), [](const RegisteredCheck &c){
            return c.options & RegisteredCheck::Option_Qt4Incompatible;
-        }));
+        }), result.end());
     }
 
     return result;
