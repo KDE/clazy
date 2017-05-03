@@ -284,10 +284,10 @@ only the static analysis is performed.
 the `-checks` argument.
 
 
-Running on one cpp file:  
+Running on one cpp file:
 `clazy-standalone -checks=install-event-filter,qmap-with-pointer-key,level0 -p compile_commands.json my.file.cpp`
 
-Running on all cpp files:  
+Running on all cpp files:
 `find . -name "*cpp" | xargs clazy-standalone -checks=level2 -p default/compile_commands.json`
 
 See https://clang.llvm.org/docs/JSONCompilationDatabase.html for how to generate the compile_commands.json file. Basically it's generated
@@ -335,7 +335,8 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 # Qt4 compatibility mode
 
-When running on codebases that must still compile with Qt4, you can pass `-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat`
+When running on codebases that must still compile with Qt4, you can pass `--qt4compat`
+(a convenience option equivalent to passing `-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat`)
 to disable checks that only make sense with Qt5.
 
 # Reducing warning noise

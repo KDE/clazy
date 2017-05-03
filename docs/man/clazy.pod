@@ -43,7 +43,21 @@ Print explanations for the checkers matching the specified regular expression.
 =back
 
 Any of the options above will print the requested information and then exit.
-Otherwise, options are passed directly to clang++ and handled from there.
+
+=over 4
+
+=item B<--qt4compat>
+
+This option runs clazy in Qt4 compatibility mode.
+Use this when your source code can build with Qt4 and Qt5 in order to easily
+suppress issues that cannot be fixed due to the requirement of the Qt4 API.
+
+This is a convenience option which is identical to directly passing:
+  "-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat"
+
+=back
+
+All other options are passed directly to clang++ and handled from there.
 
 See the clang manual for a list of the very large set of options available,
 but in normal operation you "compile" your code with clazy just as you

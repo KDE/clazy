@@ -17,7 +17,12 @@ HELP() {
   echo "  --explain          print explanations for all checkers"
   echo
   echo "Any of the options above will print the requested information and then exit."
-  echo "Otherwise, options are passed directly to clang++ and handled from there."
+  echo
+  echo "Convenience Options:"
+  echo "  --qt4compat        Qt4 compatibility mode. useful for source code that can build with Qt4"
+  echo "  (this is the same as passing \"-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat\")"
+  echo
+  echo "All other options are passed directly to clang++ and handled from there."
   echo
   echo "See the clang++ manual for a list of the very large set of options available"
   echo
@@ -76,6 +81,13 @@ then
   exit
 fi
 
+ExtraClangOptions=""
+if ( test $# -gt 0 -a "$1" = "--qt4compat" )
+then
+  shift
+  ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat"
+fi
+
 ClangLazyLib=ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@
 
 if ( test -f "$libdir/$ClangLazyLib" )
@@ -90,4 +102,4 @@ then
     export DYLD_LIBRARY_PATH=$(dirname $0)/lib:$DYLD_LIBRARY_PATH
 fi
 
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClangLazyLib -Xclang -add-plugin -Xclang clang-lazy "$@"
+${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClangLazyLib -Xclang -add-plugin -Xclang clang-lazy $ExtraClangOptions "$@"
