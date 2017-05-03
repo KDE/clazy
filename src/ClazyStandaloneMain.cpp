@@ -20,7 +20,6 @@
 */
 
 #include "Clazy.h"
-#include "ClazyAnchorHeader.h"
 
 #include <clang/Frontend/FrontendActions.h>
 #include <clang/Tooling/CommonOptionsParser.h>
