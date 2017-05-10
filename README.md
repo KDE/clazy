@@ -339,6 +339,10 @@ When running on codebases that must still compile with Qt4, you can pass `--qt4c
 (a convenience option equivalent to passing `-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat`)
 to disable checks that only make sense with Qt5.
 
+For example, to build a CMake project with Qt4 compatibility use:
+ `CXX="clazy --qt4compat"; cmake .`
+and rebuild.
+
 # Reducing warning noise
 
 If you think you found a false-positive, file a bug report.
