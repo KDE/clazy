@@ -57,16 +57,17 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     if (!record || !record->hasDefinition() ||
         record->getDefinition() != record || // Means fwd decl
         !QtUtils::isQObject(record)) {
-
         return;
     }
 
     bool foundParentArgument = false;
     const string parentType = expectedParentTypeFor(record);
+    int numCtors = 0;
     for (auto ctor : record->ctors()) {
         if (ctor->isCopyOrMoveConstructor())
             continue;
 
+        ++numCtors;
         for (auto param : ctor->parameters()) {
             QualType qt = TypeUtils::pointeeQualType(param->getType());
             if (!qt.isConstQualified() && TypeUtils::derivesFrom(qt, parentType)) {
@@ -76,7 +77,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
         }
     }
 
-    if (!foundParentArgument) {
+    if (numCtors > 0 && !foundParentArgument) {
         emitWarning(decl, record->getQualifiedNameAsString() +
                           string(" should take ") +
                           parentType + string(" parent argument in CTOR"));
