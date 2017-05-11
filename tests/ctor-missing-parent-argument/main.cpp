@@ -47,7 +47,7 @@ public:
 };
 
 namespace Qt3DCore {
-    class QNode : public QObject {};
+    class QNode : public QObject { QNode(); };
     // This is just a dummy so we don't have to depend on Qt3D
     class QEntity : public QNode // clazy:exclude=ctor-missing-parent-argument
     {
@@ -69,3 +69,8 @@ namespace Qt3DCore
     MyEntity3(QNode*);
 };
 }
+
+class Test6 : public QObject // OK
+{
+public:
+};
