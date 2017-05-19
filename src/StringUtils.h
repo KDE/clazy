@@ -85,20 +85,27 @@ inline std::string classNameFor(clang::CXXOperatorCallExpr *call)
     return call ? classNameFor(llvm::dyn_cast_or_null<clang::CXXMethodDecl>(call->getDirectCallee())) : std::string();
 }
 
+inline std::string classNameFor(clang::QualType qt)
+{
+    qt = qt.getNonReferenceType().getUnqualifiedType();
+    const clang::Type *t = qt.getTypePtrOrNull();
+    if (!t)
+        return {};
+
+    if (clang::ElaboratedType::classof(t))
+        return classNameFor(static_cast<const clang::ElaboratedType*>(t)->getNamedType());
+
+    const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl()
+                                                           : t->getPointeeCXXRecordDecl();
+    return classNameFor(record);
+}
+
 inline std::string classNameFor(clang::ParmVarDecl *param)
 {
     if (!param)
         return {};
 
-    clang::QualType qt = param->getType();
-    const clang::Type *t = qt.getTypePtrOrNull();
-    if (!t)
-        return {};
-
-    const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl()
-                                                           : t->getPointeeCXXRecordDecl();
-
-    return classNameFor(record);
+    return classNameFor(param->getType());
 }
 
 template <typename T>
@@ -208,6 +215,13 @@ inline std::string accessString(clang::AccessSpecifier s)
  */
 inline std::string simpleTypeName(clang::QualType qt, const clang::LangOptions &lo)
 {
+    auto t = qt.getTypePtrOrNull();
+    if (!t)
+        return {};
+
+    if (clang::ElaboratedType::classof(t))
+        qt = static_cast<const clang::ElaboratedType*>(t)->getNamedType();
+
     return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
 }
 
