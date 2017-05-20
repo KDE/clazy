@@ -52,8 +52,8 @@ const vector<string> & QtUtils::qtContainers()
 
 const vector<string> & QtUtils::qtCOWContainers()
 {
-    static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
-                                            "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
+    static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QMap", "QHash",
+                                            "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
                                             "QByteArray", "QJsonArray", "QLinkedList" };
     return classes;
 }

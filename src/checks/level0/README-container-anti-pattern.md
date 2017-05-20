@@ -18,7 +18,7 @@ Matches code like:
     set.toList()[0]; // use set.constFirst() instead
     hash.values().size(); // Use hash.size() instead
     hash.keys().contains(); // Use hash.contains() instead
-    hash.values().contains(); // Use hash.find instead
+    hash.values().contains(); // Use std::find(hash.cbegin(), hash.cend(), myValue) instead
     map.values(k).foo ; // Use QMap::equal_range(k) instead
     for (auto i : hash.values()) {} // Iterate the hash directly instead: for (auto i : hash) {}
     QSet::intersect(other).isEmpty() // Use QSet::intersects() instead, avoiding memory allocations and iterations, since Qt 5.6
