@@ -32,6 +32,7 @@
   - New checks:
     install-event-filter
     qcolor-from-literal
+    strict-iterators
   - ASTMatchers based checks are now supported
   - clang 3.7 was dropped due to ASTMatchers source incompatibilities.
     Use clazy v1.1 for clang >= 3.6 support

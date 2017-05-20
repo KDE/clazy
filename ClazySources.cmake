@@ -31,6 +31,7 @@ if (NOT CLAZY_BUILD_IS_MINIMAL)
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qt-macros.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qvariant-template-instantiation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/mutable-container-key.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/strict-iterators.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/temporaryiterator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/unused-non-trivial-variable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/writingtotemporary.cpp

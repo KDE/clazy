@@ -172,6 +172,31 @@ namespace TypeUtils
 
         return typeAsRecord(pointeeQualType(expr->getType()));
     }
+
+    /**
+     * Returns the class that the typedef refered by qt is in.
+     *
+     * class Foo {
+     *     typedef A B;
+     * };
+     *
+     * For the above example Foo would be returned.
+     */
+    inline clang::CXXRecordDecl* parentRecordForTypedef(clang::QualType qt)
+    {
+        auto t = qt.getTypePtrOrNull();
+        if (!t)
+            return nullptr;
+
+        if (t->getTypeClass() == clang::Type::Typedef) {
+            auto tdt = static_cast<const clang::TypedefType*>(t);
+            clang::TypedefNameDecl *tdnd = tdt->getDecl();
+            return llvm::dyn_cast_or_null<clang::CXXRecordDecl>(tdnd->getDeclContext());
+
+        }
+
+        return nullptr;
+    }
 }
 
 #endif

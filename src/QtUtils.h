@@ -76,6 +76,15 @@ CLAZYLIB_EXPORT bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
 CLAZYLIB_EXPORT bool isQtCOWIterableClass(const std::string &className);
 
 /**
+ * Returns if the iterators belongs to a COW container
+ */
+inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
+{
+    auto parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
+    return parent && QtUtils::isQtCOWIterableClass(parent);
+}
+
+/**
  * Returns true if the class is a Qt class which is an associative container (QHash, QMap, QSet)
  */
 CLAZYLIB_EXPORT bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
