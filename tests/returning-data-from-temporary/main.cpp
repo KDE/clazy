@@ -88,3 +88,8 @@ const char * returnsFromTemporary3()
     QString s;
     return s.toUtf8().constData(); // Warn
 }
+
+const char * returnsByteArrayCasted()
+{
+    return returnsByteArray(); // Warn
+}

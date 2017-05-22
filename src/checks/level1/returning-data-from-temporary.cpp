@@ -52,14 +52,11 @@ void ReturningDataFromTemporary::VisitStmt(clang::Stmt *stmt)
     CXXMethodDecl *method = memberCall->getMethodDecl();
     if (!method)
         return;
-
     const auto methodName = method->getQualifiedNameAsString();
-    const bool isData = methodName == "QByteArray::data";
-    const bool isConstData = methodName == "QByteArray::constData";
 
-    if (isData) {
+    if (methodName == "QByteArray::data" || methodName == "QByteArray::operator const char *") {
         handleDataCall(memberCall);
-    } else if (isConstData) {
+    } else if (methodName == "QByteArray::constData") {
         handleConstDataCall();
     }
 }

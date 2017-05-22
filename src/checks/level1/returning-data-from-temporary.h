@@ -29,7 +29,7 @@ namespace clang {
 }
 
 /**
- * See README-returning-data-from-temporary for more info.
+ * See README-returning-data-from-temporary.md for more info.
  */
 class ReturningDataFromTemporary : public CheckBase
 {
