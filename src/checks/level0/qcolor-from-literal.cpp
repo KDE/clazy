@@ -74,9 +74,8 @@ QColorFromLiteral::~QColorFromLiteral()
 
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
 {
-    static StatementMatcher s_matcher = cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
-                                                         hasArgument(0, stringLiteral().bind("myLiteral")));
-    finder.addMatcher(s_matcher, m_astMatcherCallBack);
+    finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
+                                       hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
 }
 
 REGISTER_CHECK("qcolor-from-literal", QColorFromLiteral, CheckLevel0)
