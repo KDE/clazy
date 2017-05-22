@@ -62,6 +62,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (recordTo && !QtUtils::isQtCOWIterableClass(recordTo))
         return false;
 
+    assert(implicitCast->getSubExpr());
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = TypeUtils::parentRecordForTypedef(typeFrom);
     if (recordFrom && !QtUtils::isQtCOWIterableClass(recordFrom))
@@ -113,7 +114,7 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
         return false;
 
     ParmVarDecl *p = method->getParamDecl(0);
-    CXXRecordDecl *paramClass = TypeUtils::typeAsRecord(TypeUtils::pointeeQualType(p->getType()));
+    CXXRecordDecl *paramClass = p ? TypeUtils::typeAsRecord(TypeUtils::pointeeQualType(p->getType())) : nullptr;
     if (!paramClass || paramClass->getNameAsString() != "const_iterator")
         return false;
 

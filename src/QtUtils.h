@@ -80,6 +80,9 @@ CLAZYLIB_EXPORT bool isQtCOWIterableClass(const std::string &className);
  */
 inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
 {
+    if (!itRecord)
+        return false;
+
     auto parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
     return parent && QtUtils::isQtCOWIterableClass(parent);
 }
