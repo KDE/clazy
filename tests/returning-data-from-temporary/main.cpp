@@ -87,9 +87,21 @@ const char * returnsFromTemporary3()
 {
     QString s;
     return s.toUtf8().constData(); // Warn
+    return s.toUtf8().data(); // Warn
+    return s.toLatin1().data(); // Warn
+    return s.toLatin1().constData(); // Warn
 }
 
 const char * returnsByteArrayCasted()
 {
     return returnsByteArray(); // Warn
+}
+
+QString getString() { return QString(); }
+const char * returnsFromTemporary4()
+{
+    return getString().toUtf8().constData(); // Warn
+    return getString().toUtf8().data(); // Warn
+    return getString().toLatin1().data(); // Warn
+    return getString().toLatin1().constData(); // Warn
 }
