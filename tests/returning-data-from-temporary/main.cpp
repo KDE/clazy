@@ -34,7 +34,7 @@ const char * returnsFromLocal()
 const char * returnsFromLocal2()
 {
     QByteArray b;
-    return b.constData(); // OK
+    return b.constData(); // Warning
 }
 
 const char * returnsFromConstLocal()

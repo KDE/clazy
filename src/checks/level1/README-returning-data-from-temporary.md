@@ -9,6 +9,7 @@ return b.data();
 ```
 ```
 return funcReturningByteArray().data();
+return funcReturningByteArray().constData();
 ```
 
 

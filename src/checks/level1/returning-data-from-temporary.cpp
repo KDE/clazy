@@ -54,20 +54,18 @@ void ReturningDataFromTemporary::VisitStmt(clang::Stmt *stmt)
         return;
     const auto methodName = method->getQualifiedNameAsString();
 
-    if (methodName == "QByteArray::data" || methodName == "QByteArray::operator const char *") {
+    if (methodName == "QByteArray::data" ||
+        methodName == "QByteArray::operator const char *" ||
+        methodName == "QByteArray::constData") {
         handleDataCall(memberCall);
-    } else if (methodName == "QByteArray::constData") {
-        handleConstDataCall();
     }
 }
 
 void ReturningDataFromTemporary::handleDataCall(CXXMemberCallExpr *memberCall)
 {
     // Handles:
-    // return myLocalByteArray.data();
-    // return myTemporaryByteArray().data();
-
-    // Doesn't care about constData() calls, since the byte array might be shared.
+    // return myLocalByteArray.data(); // or constData()
+    // return myTemporaryByteArray().data(); // or constData()
 
     Expr *obj = memberCall->getImplicitObjectArgument();
     Stmt *t = obj;
@@ -104,11 +102,6 @@ void ReturningDataFromTemporary::handleDataCall(CXXMemberCallExpr *memberCall)
     }
 
     emitWarning(memberCall, "Returning data of local QByteArray");
-}
-
-void ReturningDataFromTemporary::handleConstDataCall()
-{
-    // TODO
 }
 
 REGISTER_CHECK("returning-data-from-temporary", ReturningDataFromTemporary, CheckLevel1)

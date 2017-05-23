@@ -38,7 +38,6 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void handleDataCall(clang::CXXMemberCallExpr *memberCall);
-    void handleConstDataCall();
 };
 
 #endif
