@@ -105,3 +105,13 @@ const char * returnsFromTemporary4()
     return getString().toLatin1().data(); // Warn
     return getString().toLatin1().constData(); // Warn
 }
+
+QByteArray castBackToByteArray()
+{
+    QByteArray b;
+    return b.data(); // OK
+    return getString().toUtf8().constData(); // OK
+    return getString().toUtf8().data(); // OK
+    return getString().toLatin1().data(); // OK
+    return getString().toLatin1().constData(); // OK
+}
