@@ -37,15 +37,26 @@ ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, 
 {
 }
 
-
 void ReturningDataFromTemporary::VisitStmt(clang::Stmt *stmt)
 {
-    auto returnStmt = dyn_cast<ReturnStmt>(stmt);
-    if (!returnStmt)
+    if (handleReturn(dyn_cast<ReturnStmt>(stmt)))
         return;
+}
 
-    CXXMemberCallExpr *memberCall = HierarchyUtils::unpeal<CXXMemberCallExpr>(HierarchyUtils::getFirstChild(returnStmt), HierarchyUtils::IgnoreExprWithCleanups |
-                                                                                                                         HierarchyUtils::IgnoreImplicitCasts);
+bool ReturningDataFromTemporary::handleReturn(ReturnStmt *ret)
+{
+    if (!ret)
+        return false;
+
+    auto memberCall = HierarchyUtils::unpeal<CXXMemberCallExpr>(HierarchyUtils::getFirstChild(ret), HierarchyUtils::IgnoreExprWithCleanups |
+                                                                HierarchyUtils::IgnoreImplicitCasts);
+    handleMemberCall(memberCall);
+    return true;
+}
+
+void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall)
+{
+
     if (!memberCall)
         return;
 

@@ -37,6 +37,8 @@ public:
     explicit ReturningDataFromTemporary(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    bool handleReturn(clang::ReturnStmt *);
+    void handleMemberCall(clang::CXXMemberCallExpr *);
     void handleDataCall(clang::CXXMemberCallExpr *memberCall);
 };
 
