@@ -1,7 +1,7 @@
 /*
   This file is part of the clazy static checker.
 
-  Copyright (C) 2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 
 namespace clang {
     class CXXMemberCallExpr;
+    class DeclStmt;
 }
 
 /**
@@ -38,8 +39,8 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     bool handleReturn(clang::ReturnStmt *);
-    void handleMemberCall(clang::CXXMemberCallExpr *);
-    void handleDataCall(clang::CXXMemberCallExpr *memberCall);
+    void handleDeclStmt(clang::DeclStmt *);
+    void handleMemberCall(clang::CXXMemberCallExpr *, bool onlyTemporaries);
 };
 
 #endif

@@ -34,6 +34,7 @@
     qcolor-from-literal
     strict-iterators
   - returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned
+  - returning-data-from-temporary now checks for assignment too, not only return statements
   - ASTMatchers based checks are now supported
   - clang 3.7 was dropped due to ASTMatchers source incompatibilities.
     Use clazy v1.1 for clang >= 3.6 support

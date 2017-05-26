@@ -115,3 +115,20 @@ QByteArray castBackToByteArray()
     return getString().toLatin1().data(); // OK
     return getString().toLatin1().constData(); // OK
 }
+
+
+void testAssignment()
+{
+    QByteArray b;
+    QString str;
+    const char *c1 = b.data(); // OK
+    const char *c2 = b.constData(); // OK
+    const char *c3 = b; // OK
+    const char *c4 = str.toUtf8().data(); // Warn
+    const char *c5 = str.toLatin1().data(); // Warn
+    const char *c6 = str.toUtf8().constData(); // Warn
+    const char *c7 = str.toLatin1().constData(); // Warn
+    const char *c8 = str.toUtf8(); // Warn
+    const char *c9 = str.toLatin1(); // Warn
+    const char *c10 = returnsByteArray(); // Warn
+}

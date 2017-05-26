@@ -20,3 +20,8 @@ const char * getFoo()
     return b; // QByteArray can implicitly cast to char*
 }
 ```
+
+```
+    const char *c1 = getByteArray();
+    const char *c2 = str.toUtf8().data();
+```
