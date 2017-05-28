@@ -132,3 +132,12 @@ void testAssignment()
     const char *c9 = str.toLatin1(); // Warn
     const char *c10 = returnsByteArray(); // Warn
 }
+
+const char * testByParam(QByteArray &ba, QString &foo, QByteArray ba2)
+{
+    return ba.data(); // OK
+    return ba.constData(); // OK
+    return ba; // OK
+    return ba2; // Warn
+    return foo.toLatin1().data(); // Warn
+}

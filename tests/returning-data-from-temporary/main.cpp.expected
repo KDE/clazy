@@ -18,3 +18,5 @@ returning-data-from-temporary/main.cpp:130:22: warning: Returning data of tempor
 returning-data-from-temporary/main.cpp:131:22: warning: Returning data of temporary QByteArray [-Wclazy-returning-data-from-temporary]
 returning-data-from-temporary/main.cpp:132:22: warning: Returning data of temporary QByteArray [-Wclazy-returning-data-from-temporary]
 returning-data-from-temporary/main.cpp:133:23: warning: Returning data of temporary QByteArray [-Wclazy-returning-data-from-temporary]
+returning-data-from-temporary/main.cpp:141:12: warning: Returning data of temporary QByteArray [-Wclazy-returning-data-from-temporary]
+returning-data-from-temporary/main.cpp:142:12: warning: Returning data of temporary QByteArray [-Wclazy-returning-data-from-temporary]

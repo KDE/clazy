@@ -128,6 +128,10 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
         VarDecl *varDecl = dyn_cast<VarDecl>(declRef->getDecl());
         if (!varDecl || varDecl->isStaticLocal() || TypeUtils::valueIsConst(varDecl->getType()))
             return;
+
+        QualType qt = varDecl->getType();
+        if (qt.isNull() || qt->isReferenceType())
+            return;
     } else if (temporaryExpr) {
         if (TypeUtils::valueIsConst(temporaryExpr->getType()))
             return;
