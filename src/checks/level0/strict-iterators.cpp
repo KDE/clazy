@@ -62,6 +62,10 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (recordTo && !QtUtils::isQtCOWIterableClass(recordTo))
         return false;
 
+    recordTo = TypeUtils::typeAsRecord(typeTo);
+    if (recordTo && !QtUtils::isQtCOWIterator(recordTo))
+        return false;
+
     assert(implicitCast->getSubExpr());
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = TypeUtils::parentRecordForTypedef(typeFrom);
@@ -73,10 +77,6 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
 
     if (implicitCast->getCastKind() == CK_ConstructorConversion) {
-        CXXRecordDecl *record = TypeUtils::typeAsRecord(typeTo);
-        if (!QtUtils::isQtCOWIterator(record))
-            return false;
-
         emitWarning(implicitCast, "Mixing iterators with const_iterators");
         return true;
     }

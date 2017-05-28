@@ -5,7 +5,7 @@
 #include <QtCore/QList>
 #include <QtCore/QSet>
 #include <QtCore/QVarLengthArray>
-
+#include <vector>
 void testTypedefedIterators()
 {
     QVector<int> vec;
@@ -71,4 +71,11 @@ void test2()
     QVarLengthArray<int, 5> vla;
     vla.erase(std::remove_if(vla.begin(), vla.end(), [](int){ return false; }),
               vla.end()); // OK, not implicit shared
+}
+
+
+void testStdVector()
+{
+    std::vector<int> v;
+    std::vector<int>::const_iterator it = v.begin(); // OK
 }
