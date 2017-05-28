@@ -57,7 +57,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 
     const string nameTo = StringUtils::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
 
-    QualType typeTo = implicitCast->getType();
+    const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = TypeUtils::parentRecordForTypedef(typeTo);
     if (recordTo && !QtUtils::isQtCOWIterableClass(recordTo))
         return false;
@@ -85,8 +85,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (nameFrom != "iterator")
         return false;
 
-    CXXRecordDecl *record = TypeUtils::typeAsRecord(typeTo);
-    if (record && clazy_std::startsWith(record->getQualifiedNameAsString(), "OrderedSet")) {
+    if (recordTo && clazy_std::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
         string filename = m_sm.getFilename(implicitCast->getLocStart());
         if (filename == "lalr.cpp") // Lots of false positives here, because of const_iterator -> iterator typedefs
             return false;
