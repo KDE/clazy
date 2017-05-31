@@ -78,8 +78,12 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     string typeName = StringUtils::simpleTypeName(typeList[0], lo());
     typeName[0] = toupper(typeName[0]);
 
+    string typeName2 = typeName;
+    if (typeName[0] == 'Q')
+        typeName2.erase(0, 1); // Remove first letter
+
     if (matches) {
-        std::string error = std::string("Use QVariant::to" + typeName + "() instead of QVariant::value<" + typeName + ">()");
+        std::string error = std::string("Use QVariant::to" + typeName2 + "() instead of QVariant::value<" + typeName + ">()");
         emitWarning(stm->getLocStart(), error.c_str());
     }
 }
