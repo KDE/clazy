@@ -1,5 +1,13 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
+#include <QtCore/QVector>
+#include <QtCore/QByteArray>
+#include <QtCore/QRect>
+
+
+
+
+
 
 extern void external(QString);
 
@@ -33,4 +41,13 @@ void testFor()
 
     foreach (QString s,  l) // OK
         s;
+}
+
+
+void test4()
+{
+    QList<int> l; //Warn
+    QVector<int> v; //Warn
+    QByteArray b; //Warn
+    QRect r; // Warn
 }

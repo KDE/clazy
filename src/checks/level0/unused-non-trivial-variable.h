@@ -1,7 +1,7 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@ class VarDecl;
  * Compilers usually only warn when trivial classes are unused and don't emit warnings for non-trivial classes.
  * This check has a whitelist of common Qt classes such as containers, QFont, QUrl, etc and warns for those too.
  *
- * See README-unused-non-trivial-variable for more information
+ * See README-unused-non-trivial-variable.md for more information
  */
 class UnusedNonTrivialVariable : public CheckBase
 {

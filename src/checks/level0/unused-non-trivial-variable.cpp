@@ -1,7 +1,7 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -59,9 +59,18 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
                                                     "QImage", "QPixmap", "QPicture", "QBitmap", "QBrush",
                                                     "QPen", "QBuffer", "QCache", "QDateTime", "QDir", "QEvent",
                                                     "QFileInfo", "QFontInfo", "QFontMetrics", "QJSValue", "QLocale",
-                                                    "QRegularExpression", "QRegExp"};
+                                                    "QRegularExpression", "QRegExp", "QUrlQuery", "QStorageInfo",
+                                                    "QPersistentModelIndex", "QJsonArray", "QJsonDocument",
+                                                    "QMimeType", "QBitArray", "QCollator",
+                                                    "QByteArrayList", "QCollatorSortKey",
+                                                    "QCursor", "QPalette", "QPainterPath", "QRegion", "QFontInfo", "QTextCursor",
+                                                    "QStaticText", "QFontMetricsF", "QTextFrameFormat", "QTextImageFormat",
+                                                    "QNetworkCookie", "QNetworkRequest", "QNetworkConfiguration",
+                                                    "QHostAddress", "QSqlQuery", "QSqlRecord", "QSqlField",
+                                                    "QLine", "QLineF", "QRect", "QRectF"
+                                                  };
 
-    if (QtUtils::isQtContainer(t, lo()))
+    if (QtUtils::isQtContainer(t))
         return true;
 
     const string typeName = StringUtils::simpleTypeName(t, lo());
