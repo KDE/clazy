@@ -159,9 +159,13 @@ clang::ValueDecl *QtUtils::signalSenderForConnect(clang::CallExpr *call)
     return declRef->getDecl();
 }
 
-bool QtUtils::isQtContainer(QualType t, const LangOptions &lo)
+bool QtUtils::isQtContainer(QualType t)
 {
-    const string typeName = StringUtils::simpleTypeName(t, lo);
+    CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
+    if (!record)
+        return false;
+
+    const string typeName = record->getNameAsString();
     return clazy_std::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
         return container == typeName;
     });

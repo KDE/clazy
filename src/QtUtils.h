@@ -110,7 +110,7 @@ CLAZYLIB_EXPORT const std::vector<std::string> & qtCOWContainers();
 /**
  * Returns true if a type represents a Qt container class.
  */
-CLAZYLIB_EXPORT bool isQtContainer(clang::QualType, const clang::LangOptions &);
+CLAZYLIB_EXPORT bool isQtContainer(clang::QualType);
 
 
 /**
