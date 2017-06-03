@@ -3,12 +3,12 @@ Help on how to create a new check or a fixit
 --------------------------------------------------------------------------------
 Files to create or modify
 
-checks/my-check.cpp
-checks/my-check.h
-checks/README-my-check
+checks/levelX/my-check.cpp
+checks/levelX/my-check.h
+checks/README-my-check.md
 tests/my-check/config.json
 tests/my-check/main.cpp
-CMakeLists.txt
+ClazySources.cmake
 --------------------------------------------------------------------------------
 Tips
 
@@ -31,8 +31,12 @@ Tips
   llvm::errs() << record->getNameAsString() << "\n";
   llvm::errs() << stmt->getLocStart().printToString(m_ci.getSourceManager()) << "\n";
 
-- Look in Utils.h, StringUtils.h, QtUtils.h and FixitUtils.h for helper functions you might need.
+- Look in Utils.h, StringUtils.h, QtUtils.h, FixitUtils.h, etc for helper functions you might need.
 
+--------------------------------------------------------------------------------
+Using ASTMatchers
+
+- See the qcolor-from-literal check for how to use ASTMatchers with clazy
 --------------------------------------------------------------------------------
 Tips for fixits
 
