@@ -333,6 +333,10 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 - fatal error: 'stddef.h' file not found, while using `clazy-standalone`
   Be sure the clazy-standalone binary is located in the same folder as the clang binary.
 
+- Be sure to disble pch.
+
+- macOS: Be sure you're not using Apple Clang
+
 # Qt4 compatibility mode
 
 When running on codebases that must still compile with Qt4, you can pass `--qt4compat`
