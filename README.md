@@ -337,6 +337,10 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 - macOS: Be sure you're not using Apple Clang
 
+- Windows: fatal error LNK1112: module machine type ‘X86’ conflicts with target machine type ‘x64’
+  If you're building in 32-bit, open clazy-cl.bat and insert a -m32 argument.
+  Should read: %~dp0\clang\clang.exe –driver-mode=cl -m32 (...)
+
 # Qt4 compatibility mode
 
 When running on codebases that must still compile with Qt4, you can pass `--qt4compat`
