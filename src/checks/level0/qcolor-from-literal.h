@@ -34,6 +34,7 @@ class QColorFromLiteral : public CheckBase
 public:
     explicit QColorFromLiteral(const std::string &name, ClazyContext *context);
     ~QColorFromLiteral();
+    void VisitStmt(clang::Stmt *stmt) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 private:
     ClazyAstMatcherCallback *const m_astMatcherCallBack;

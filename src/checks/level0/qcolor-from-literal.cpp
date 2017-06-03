@@ -19,6 +19,7 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include "StringUtils.h"
 #include "qcolor-from-literal.h"
 #include "checkmanager.h"
 
@@ -28,20 +29,20 @@ using namespace std;
 
 // TODO: setNameFromString()
 
-static void handleStringLiteral(const StringLiteral *literal, CheckBase *check)
+static bool handleStringLiteral(const StringLiteral *literal)
 {
     if (!literal)
-        return;
+        return false;
 
     int length = literal->getLength();
     if (length != 4 && length != 7 && length != 9 && length != 13)
-        return;
+        return false;
 
     llvm::StringRef str = literal->getString();
     if (!str.startswith("#"))
-        return;
+        return false;
 
-    check->emitWarning(literal, "The QColor ctor taking ints is much cheaper than the one taking string literals");
+    return true;
 }
 
 class QColorFromLiteral_Callback : public ClazyAstMatcherCallback
@@ -56,7 +57,9 @@ public :
 
     void run(const MatchFinder::MatchResult &result) override
     {
-        handleStringLiteral(result.Nodes.getNodeAs<StringLiteral>("myLiteral"), m_check);
+        const StringLiteral *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
+        if (handleStringLiteral(lt))
+            m_check->emitWarning(lt, "The QColor ctor taking ints is much cheaper than the one taking string literals");
     }
 };
 
@@ -70,6 +73,21 @@ QColorFromLiteral::QColorFromLiteral(const std::string &name, ClazyContext *cont
 QColorFromLiteral::~QColorFromLiteral()
 {
     delete m_astMatcherCallBack;
+}
+
+void QColorFromLiteral::VisitStmt(Stmt *stmt)
+{
+    auto call = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!call || call->getNumArgs() != 1)
+        return;
+
+    string name = StringUtils::qualifiedMethodName(call);
+    if (name != "QColor::setNamedColor")
+        return;
+
+    StringLiteral *lt = HierarchyUtils::getFirstChildOfType2<StringLiteral>(call->getArg(0));
+    if (handleStringLiteral(lt))
+        emitWarning(lt, "The ctor taking ints is much cheaper than QColor::setNamedColor(QString)");
 }
 
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
