@@ -161,11 +161,25 @@ inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *contex
     return (int)context->getTypeSize(qt) <= TypeUtils::sizeOfPointer(context, qt);
 }
 
+/**
+ * Returns the varDecl for the 1st argument in a connect call
+ */
 inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
 {
     return FunctionUtils::valueDeclForCallArgument(call, 0);
 }
 
+/**
+ * Returns the varDecl for 3rd argument in connects that are passed an explicit
+ * receiver or context QObject.
+ */
+inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
+{
+    if (!call || call->getNumArgs() < 5)
+        return nullptr;
+
+    return FunctionUtils::valueDeclForCallArgument(call, 3);
+}
 
 /**
  * Returns true if we can prove the container doesn't detach.
