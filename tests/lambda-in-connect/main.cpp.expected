@@ -3,3 +3,4 @@ lambda-in-connect/main.cpp:16:48: warning: capturing local variable by reference
 lambda-in-connect/main.cpp:17:54: warning: capturing local variable by reference in lambda [-Wclazy-lambda-in-connect]
 lambda-in-connect/main.cpp:17:57: warning: capturing local variable by reference in lambda [-Wclazy-lambda-in-connect]
 lambda-in-connect/main.cpp:22:48: warning: capturing local variable by reference in lambda [-Wclazy-lambda-in-connect]
+lambda-in-connect/main.cpp:37:52: warning: capturing local variable by reference in lambda [-Wclazy-lambda-in-connect]

@@ -1,7 +1,7 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -59,9 +59,14 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
             return;
     }
 
+    ValueDecl *receiverDecl = QtUtils::signalReceiverForConnect(callExpr);
+
     for (auto capture : captures) {
-        if (capture.getCaptureKind() == clang::LCK_ByRef && ContextUtils::isValueDeclInFunctionContext(capture.getCapturedVar()))
-            emitWarning(capture.getLocation(), "capturing local variable by reference in lambda");
+        if (capture.getCaptureKind() == clang::LCK_ByRef) {
+            VarDecl *declForCapture = capture.getCapturedVar();
+            if (declForCapture && declForCapture != receiverDecl && ContextUtils::isValueDeclInFunctionContext(declForCapture))
+                emitWarning(capture.getLocation(), "capturing local variable by reference in lambda");
+        }
     }
 }
 

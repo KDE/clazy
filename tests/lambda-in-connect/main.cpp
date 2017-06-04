@@ -31,12 +31,17 @@ struct C
     void foo()
     {
         QObject *o;
+        int m;
         QObject::connect(o, &QObject::destroyed, [this]() { }); // OK
         QObject::connect(o, &QObject::destroyed, []() { s; }); // OK
+        QObject::connect(o, &QObject::destroyed, [&m]() { m; }); // Warn
 
-        int m;
         QObject o2;
-        QObject::connect(&o2, &QObject::destroyed, [&m]() { m; }); // OK
+        QObject::connect(&o2, &QObject::destroyed, [&m]() { m; }); // OK, o is on the stack
+
+        QObject *o3;
+        QObject::connect(o3, &QObject::destroyed,
+                         o3, [&o3] { o3; }); // OK, the captured variable is on the 3rd parameter too. It will get destroyed
     }
 
     int m;
