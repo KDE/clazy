@@ -26,6 +26,7 @@
 
 #include "TypeUtils.h"
 #include "MacroUtils.h"
+#include "FunctionUtils.h"
 
 #include <clang/AST/ASTContext.h>
 
@@ -160,7 +161,10 @@ inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *contex
     return (int)context->getTypeSize(qt) <= TypeUtils::sizeOfPointer(context, qt);
 }
 
-CLAZYLIB_EXPORT clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
+inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
+{
+    return FunctionUtils::valueDeclForCallArgument(call, 0);
+}
 
 
 /**

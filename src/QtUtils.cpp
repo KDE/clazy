@@ -146,19 +146,6 @@ bool QtUtils::isJavaIterator(CXXMemberCallExpr *call)
     return isJavaIterator(call->getRecordDecl());
 }
 
-clang::ValueDecl *QtUtils::signalSenderForConnect(clang::CallExpr *call)
-{
-    if (!call || call->getNumArgs() < 1)
-        return nullptr;
-
-    Expr *firstArg = call->getArg(0);
-    auto declRef = isa<DeclRefExpr>(firstArg) ? cast<DeclRefExpr>(firstArg) : HierarchyUtils::getFirstChildOfType2<DeclRefExpr>(firstArg);
-    if (!declRef)
-        return nullptr;
-
-    return declRef->getDecl();
-}
-
 bool QtUtils::isQtContainer(QualType t)
 {
     CXXRecordDecl *record = TypeUtils::typeAsRecord(t);

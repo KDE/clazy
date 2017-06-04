@@ -28,6 +28,7 @@
 // Contains utility functions regarding functions and methods
 
 #include "Utils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <string>
@@ -56,6 +57,21 @@ inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments
 
     return false;
 }
+
+inline clang::ValueDecl *valueDeclForCallArgument(clang::CallExpr *call, unsigned int argIndex)
+{
+    if (!call || call->getNumArgs() <= argIndex)
+        return nullptr;
+
+    clang::Expr *firstArg = call->getArg(argIndex);
+    auto declRef = llvm::isa<clang::DeclRefExpr>(firstArg) ? llvm::cast<clang::DeclRefExpr>(firstArg)
+                                                           : HierarchyUtils::getFirstChildOfType2<clang::DeclRefExpr>(firstArg);
+    if (!declRef)
+        return nullptr;
+
+    return declRef->getDecl();
+}
+
 
 }
 #endif
