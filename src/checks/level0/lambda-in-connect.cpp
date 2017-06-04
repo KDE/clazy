@@ -44,6 +44,10 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
     if (!lambda)
         return;
 
+    auto captures = lambda->captures();
+    if (captures.begin() == captures.end())
+        return;
+
     auto callExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap, lambda);
     if (StringUtils::qualifiedMethodName(callExpr) != "QObject::connect")
         return;
@@ -55,7 +59,7 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
             return;
     }
 
-    for (auto capture : lambda->captures()) {
+    for (auto capture : captures) {
         if (capture.getCaptureKind() == clang::LCK_ByRef && ContextUtils::isValueDeclInFunctionContext(capture.getCapturedVar()))
             emitWarning(capture.getLocation(), "capturing local variable by reference in lambda");
     }
