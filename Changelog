@@ -47,3 +47,9 @@
   - CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library
     and headers or nothing at all. By default nothing is installed, except
     the plugin and man pages.
+
+* v1.3 ()
+
+
+
+
