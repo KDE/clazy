@@ -18,3 +18,4 @@ run_test ubuntu-17.04
 run_test ubuntu-16.04
 run_test opensuse-tumbleweed
 run_test archlinux
+run_test fedora-25
