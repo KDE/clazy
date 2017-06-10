@@ -219,7 +219,7 @@ def clazy_command(qt, test, filename):
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt4-compat "
 
-    if test.link:
+    if test.link and _platform.startswith('linux'): # Linking on one platform is enough. Won't waste time on macOS and Windows.
         result = result + " " + link_flags()
     else:
         result = result + " -c "
