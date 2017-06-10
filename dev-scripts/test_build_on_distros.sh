@@ -10,7 +10,7 @@ fi
 function run_test
 {
     echo "Testing $1..."
-    docker run -i -t iamsergio/clazy-$1 sh $BUILD_SCRIPT $BRANCH $J_FLAG &> clazy-$1.log
+    docker run -i -t iamsergio/clazy-$1 sh $BUILD_SCRIPT $BRANCH $J_FLAG &> $1.log
     echo $?
 }
 
