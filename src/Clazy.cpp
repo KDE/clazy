@@ -164,11 +164,13 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::vector<std::string> args = args_;
 
     if (parseArgument("help", args)) {
+        m_context = new ClazyContext(ci, ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs(), HelpMode_Normal);
         return true;
     }
 
     if (parseArgument("generateAnchorHeader", args)) {
+        m_context = new ClazyContext(ci, ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs(), HelpMode_AnchorHeader);
         return true;
     }

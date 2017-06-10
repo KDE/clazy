@@ -266,6 +266,7 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
 CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
                                            ClazyContext *context)
 {
+    assert(context);
     const string fixitCheckName = checkNameForFixIt(context->requestedFixitName);
     RegisteredFixIt fixit = m_fixitByName[context->requestedFixitName];
 
