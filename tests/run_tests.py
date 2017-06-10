@@ -150,6 +150,10 @@ def load_json(check_name):
                 test.checks.append(test.check.name)
 
             check.tests.append(test)
+            if test.isFixedFile:
+                fileToDelete = check_name + "/" + test.filename
+                if os.path.exists(fileToDelete):
+                    os.remove(fileToDelete)
 
     return check
 
