@@ -19,12 +19,12 @@
             "filename" : "werror.cpp",
             "flags"    : "-Werror",
             "must_fail": true,
-            "checks"   : ["foreach"]
+            "checks"   : ["qgetenv"]
         },
         {
             "filename" : "werror2.cpp",
             "flags"    : "-Werror",
-            "checks"   : ["foreach"],
+            "checks"   : ["qgetenv"],
             "env"      : { "CLAZY_NO_WERROR" : "1" }
         },
         {
