@@ -84,7 +84,7 @@ See troubleshooting section if you have problems.
 
 ### Pre-built msvc2015 clang and clazy binaries
 
-The easiest way is to download the binaries from <http://download.kde.org/stable/clazy/1.1/clazy_v1.1-msvc2015.zip.mirrorlist>. Unzip it somewhere, add bin to PATH and you're ready to go. Use clazy-cl.bat as a drop-in replacement for cl.exe.
+The easiest way is to download the binaries from <http://download.kde.org/stable/clazy/1.2/clazy_v1.2-msvc2015.zip.mirrorlist>. Unzip it somewhere, add bin to PATH and you're ready to go. Use clazy-cl.bat as a drop-in replacement for cl.exe.
 
 If you really want to build clang and clazy yourself then read on, otherwise skip the building topic.
 
