@@ -71,6 +71,8 @@ include(ClazySources.cmake)
 
 string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
 
+set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS_LIST})
+
 if(NOT APPLE)
   # Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
   list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
@@ -84,7 +86,7 @@ include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
-macro(link_to_llvm name)
+macro(link_to_llvm name llvm_libs)
   foreach(clang_lib ${CLANG_LIBS})
     if (MSVC)
         get_filename_component(LIB_FILENAME ${clang_lib} NAME)
@@ -99,7 +101,7 @@ macro(link_to_llvm name)
     target_link_libraries(${name} ${clang_lib})
   endforeach()
 
-  foreach(llvm_lib ${LLVM_LIBS_LIST})
+  foreach(llvm_lib ${llvm_libs})
     target_link_libraries(${name} ${llvm_lib})
   endforeach()
 
@@ -122,7 +124,7 @@ macro(add_clang_plugin name)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
   endif()
 
-  link_to_llvm(${name})
+  link_to_llvm(${name} "${LLVM_LIBS_LIST}")
 
   if(MSVC)
     target_link_libraries(${name} version.lib)
@@ -225,7 +227,8 @@ endif()
 
 # Build clazy-standalone
 add_executable(clazy-standalone src/ClazyStandaloneMain.cpp)
-link_to_llvm(clazy-standalone)
 target_link_libraries(clazy-standalone ClangLazy)
-target_link_libraries(clazy-standalone LLVMSupport)
+link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
+
+
 install(FILES ${CMAKE_BINARY_DIR}/bin/clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
