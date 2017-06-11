@@ -77,7 +77,6 @@ if(NOT APPLE)
 endif()
 
 if (MSVC)
-  message("REMOVES ${CLANG_LIBS}" )
   list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
 endif()
 
