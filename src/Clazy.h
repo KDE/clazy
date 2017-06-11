@@ -25,6 +25,7 @@
 #ifndef CLAZY_AST_ACTION_H
 #define CLAZY_AST_ACTION_H
 
+#include "clanglazy_export.h"
 #include "checkmanager.h"
 
 #include <clang/AST/ASTConsumer.h>
@@ -44,7 +45,7 @@ class ClazyContext;
 /**
  * This is the FrontendAction that is run with clazy is used as a plugin.
  */
-class ClazyASTAction : public clang::PluginASTAction
+class CLANGLAZY_EXPORT ClazyASTAction : public clang::PluginASTAction
 {
 public:
 
@@ -72,7 +73,7 @@ private:
  * This is the FrontendAction that is run with clazy is used standalone instead of as a plugin.
  * i.e: when you run clazy-standalone, this is the invoked FrontendAction
  */
-class ClazyStandaloneASTAction : public clang::ASTFrontendAction
+class CLANGLAZY_EXPORT ClazyStandaloneASTAction : public clang::ASTFrontendAction
 {
 public:
     explicit ClazyStandaloneASTAction(const std::string &checkList, ClazyContext::ClazyOptions = ClazyContext::ClazyOption_None);

@@ -69,6 +69,10 @@ endif()
 
 include(ClazySources.cmake)
 
+if (MSVC)
+  string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
+endif()
+
 string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
 
 set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS_LIST})
@@ -134,6 +138,8 @@ macro(add_clang_plugin name)
   if(CLAZY_BUILD_UTILS_LIB)
     target_link_libraries(${name} clazylib)
   endif()
+
+  generate_export_header(${name})
 endmacro()
 
 if(CLAZY_BUILD_UTILS_LIB)
