@@ -1,1 +1,1 @@
-clazy/werror2.cpp:12:14: warning: Missing reference in foreach with sizeof(T) = 20 bytes (struct BigTrivial) [-Wclazy-foreach]
+clazy/werror2.cpp:5:5: warning: qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsEmpty() instead [-Wclazy-qgetenv]

@@ -150,6 +150,10 @@ def load_json(check_name):
                 test.checks.append(test.check.name)
 
             check.tests.append(test)
+            if test.isFixedFile:
+                fileToDelete = check_name + "/" + test.filename
+                if os.path.exists(fileToDelete):
+                    os.remove(fileToDelete)
 
     return check
 
@@ -215,7 +219,7 @@ def clazy_command(qt, test, filename):
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt4-compat "
 
-    if test.link:
+    if test.link and _platform.startswith('linux'): # Linking on one platform is enough. Won't waste time on macOS and Windows.
         result = result + " " + link_flags()
     else:
         result = result + " -c "
@@ -277,6 +281,7 @@ def qt_installation(major_version):
 def run_command(cmd, output_file = "", test_env = os.environ):
     lines,success = get_command_output(cmd, test_env)
     lines = lines.replace("std::_Container_base0", "std::_Vector_base") # Hack for Windows, we have std::_Vector_base in the expected data
+    lines = lines.replace("std::__1::__vector_base_common", "std::_Vector_base") # Hack for macOS
     lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
     if not success and not output_file:
         print lines

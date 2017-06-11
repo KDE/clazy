@@ -52,7 +52,7 @@ You can get clazy from:
 
 ### Install dependencies
 - OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
-- Ubuntu-16.04: `apt-get install g++ cmake clang llvm git-core libclang-3.8-dev qtbase5-dev`
+- Ubuntu-16.04: `apt-get install g++ cmake clang llvm-dev git-core libclang-3.8-dev qtbase5-dev`
 - Archlinux: `pacman -S make llvm clang python2 cmake qt5-base git gcc`
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
@@ -200,9 +200,11 @@ clazy runs all checks from level1 by default.
 
 - Checks from level0:
     - [connect-non-signal](src/checks/level0/README-connect-non-signal.md)
+    - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
     - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
     - [lambda-in-connect](src/checks/level0/README-lambda-in-connect.md)
     - [mutable-container-key](src/checks/level0/README-mutable-container-key.md)
+    - [qcolor-from-literal](src/checks/level0/README-qcolor-from-literal.md)
     - [qdatetime-utc](src/checks/level0/README-qdatetime-utc.md)    (fix-qdatetime-utc)
     - [qenums](src/checks/level0/README-qenums.md)
     - [qfileinfo-exists](src/checks/level0/README-qfileinfo-exists.md)
@@ -213,6 +215,7 @@ clazy runs all checks from level1 by default.
     - [qstring-ref](src/checks/level0/README-qstring-ref.md)    (fix-missing-qstringref)
     - [qt-macros](src/checks/level0/README-qt-macros.md)
     - [qvariant-template-instantiation](src/checks/level0/README-qvariant-template-instantiation.md)
+    - [strict-iterators](src/checks/level0/README-strict-iterators.md)
     - [temporary-iterator](src/checks/level0/README-temporary-iterator.md)
     - [unused-non-trivial-variable](src/checks/level0/README-unused-non-trivial-variable.md)
     - [writing-to-temporary](src/checks/level0/README-writing-to-temporary.md)
@@ -225,6 +228,7 @@ clazy runs all checks from level1 by default.
     - [foreach](src/checks/level1/README-foreach.md)
     - [incorrect-emit](src/checks/level1/README-incorrect-emit.md)
     - [inefficient-qlist-soft](src/checks/level1/README-inefficient-qlist-soft.md)
+    - [install-event-filter](src/checks/level1/README-install-event-filter.md)
     - [missing-qobject-macro](src/checks/level1/README-missing-qobject-macro.md)
     - [non-pod-global-static](src/checks/level1/README-non-pod-global-static.md)
     - [post-event](src/checks/level1/README-post-event.md)

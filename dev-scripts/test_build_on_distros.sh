@@ -10,11 +10,12 @@ fi
 function run_test
 {
     echo "Testing $1..."
-    docker run -i -t iamsergio/clazy-$1 sh $BUILD_SCRIPT $BRANCH $J_FLAG &> clazy-$1.log
+    docker run -i -t iamsergio/clazy-$1 sh $BUILD_SCRIPT $BRANCH $J_FLAG &> $1.log
     echo $?
 }
 
-run_test ubuntu-15.10
+run_test ubuntu-17.04
 run_test ubuntu-16.04
 run_test opensuse-tumbleweed
 run_test archlinux
+run_test fedora-25

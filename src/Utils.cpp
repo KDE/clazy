@@ -821,7 +821,8 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
 
     for (auto call : calls) {
         if (FunctionDecl *funcDecl = call->getDirectCallee()) {
-            if (funcDecl->getQualifiedNameAsString() == "std::move")
+            auto name = funcDecl->getQualifiedNameAsString();
+            if (name == "std::move" || name == "std::__1::move")
                 return true;
         }
     }

@@ -58,7 +58,8 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
     , extraOptions(clazy_std::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
 {
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
-    if (fixitsEnv) {
+    allFixitsEnabled = (options & ClazyOption_AllFixitsEnabled);
+    if (!allFixitsEnabled && fixitsEnv) {
         const string fixitsEnvStr = clazy_std::unquoteString(fixitsEnv);
         if (fixitsEnvStr == "all_fixits") {
             allFixitsEnabled = true;
