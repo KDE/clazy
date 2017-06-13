@@ -27,3 +27,4 @@ output.log
 /build/
 clazy.1
 /dev-scripts/*.log
+clanglazy_export.h
