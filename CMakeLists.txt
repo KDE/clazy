@@ -77,7 +77,7 @@ string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
 
 set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS_LIST})
 
-if(NOT APPLE)
+if(NOT APPLE AND NOT MINGW)
   # Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
   list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
 endif()
