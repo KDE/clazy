@@ -1,0 +1,5 @@
+implicit-casts/bool2int.cpp:20:9: warning: Implicit bool to int cast (argument 1) [-Wclazy-implicit-casts]
+implicit-casts/bool2int.cpp:21:9: warning: Implicit bool to int cast (argument 1) [-Wclazy-implicit-casts]
+implicit-casts/bool2int.cpp:22:9: warning: Implicit bool to int cast (argument 1) [-Wclazy-implicit-casts]
+implicit-casts/bool2int.cpp:24:11: warning: Implicit bool to int cast (argument 1) [-Wclazy-implicit-casts]
+implicit-casts/bool2int.cpp:27:18: warning: Implicit bool to int cast (argument 1) [-Wclazy-implicit-casts]

@@ -14,5 +14,6 @@ Finds places with unwanted implicit casts in function calls.
         void func(int duration);
         func(someBool);
 
-This case is disabled due to false positives when calling C code.
-You can uncomment it and recompile clazy as it usually finds bugs.
+This last case is disabled due to false positives when calling C code.
+You can enable it by with:
+`export CLAZY_EXTRA_OPTIONS=implicit-casts-bool-to-int`

@@ -32,6 +32,7 @@ class ImplicitCastExpr;
 class SourceLocation;
 class Stmt;
 class CallExpr;
+class FunctionDecl;
 }
 
 /**
@@ -45,6 +46,8 @@ public:
     ImplicitCasts(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    std::vector<std::string> supportedOptions() const override;
+    bool isBoolToInt(clang::FunctionDecl *func) const;
     bool isMacroToIgnore(clang::SourceLocation loc) const;
 };
 

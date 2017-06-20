@@ -2,6 +2,10 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "bool2int.cpp",
+            "env" : { "CLAZY_EXTRA_OPTIONS" : "implicit-casts-bool-to-int" }
         }
     ]
 }

@@ -65,17 +65,6 @@ static bool isInterestingFunction(FunctionDecl *func)
     return false;
 }
 
-static bool isInterestingFunction2(FunctionDecl *func)
-{
-    return false; // Disabled for now, too many false-positives when interacting with C code
-
-    if (!func)
-        return false;
-
-    static const vector<string> functions = {"QString::arg"};
-    return !clazy_std::contains(functions, func->getQualifiedNameAsString());
-}
-
 // Checks for pointer->bool implicit casts
 template <typename T>
 static bool iterateCallExpr(T* callExpr, CheckBase *check)
@@ -153,6 +142,9 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     if (!callExpr && !ctorExpr)
         return;
 
+    if (isa<CXXOperatorCallExpr>(stmt))
+        return;
+
     if (isMacroToIgnore(stmt->getLocStart()))
         return;
 
@@ -167,11 +159,23 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
         // Check pointer->bool implicit casts
         iterateCallExpr<CallExpr>(callExpr, this);
         iterateCallExpr<CXXConstructExpr>(ctorExpr, this);
-    } else if (isInterestingFunction2(func)) {
+    } else if (isBoolToInt(func)) {
         // Check bool->int implicit casts
         iterateCallExpr2<CallExpr>(callExpr, this, m_context->parentMap);
         iterateCallExpr2<CXXConstructExpr>(ctorExpr, this, m_context->parentMap);
     }
+}
+
+bool ImplicitCasts::isBoolToInt(FunctionDecl *func) const
+{
+    if (!func || !isOptionSet("bool-to-int"))
+        return false;
+
+    if (func->getLanguageLinkage() != CXXLanguageLinkage || func->isVariadic())
+        return false; // Disabled for now, too many false-positives when interacting with C code
+
+    static const vector<string> functions = {"QString::arg"};
+    return !clazy_std::contains(functions, func->getQualifiedNameAsString());
 }
 
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
@@ -181,5 +185,10 @@ bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
     return clazy_std::contains(macros, macro);
 }
 
+std::vector<string> ImplicitCasts::supportedOptions() const
+{
+    static const vector<string> options = { "bool-to-int" };
+    return options;
+}
 
 REGISTER_CHECK("implicit-casts", ImplicitCasts, CheckLevel2)
