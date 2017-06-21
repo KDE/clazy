@@ -404,4 +404,5 @@ and thanks to:
 
 # Contributing patches
 
-<https://git.reviewboard.kde.org>
+<https://community.kde.org/Infrastructure/Phabricator>
+<https://phabricator.kde.org/differential/>
