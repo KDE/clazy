@@ -59,10 +59,10 @@ public:
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
     bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args_) override;
-    void PrintHelp(llvm::raw_ostream &ros, HelpMode = HelpMode_Normal);
-    void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks);
+    void PrintHelp(llvm::raw_ostream &ros, HelpMode = HelpMode_Normal) const;
+    void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks) const;
 private:
-    void printRequestedChecks();
+    void printRequestedChecks() const;
     RegisteredCheck::List m_checks;
     ClazyContext::ClazyOptions m_options = 0;
     CheckManager *const m_checkManager;
