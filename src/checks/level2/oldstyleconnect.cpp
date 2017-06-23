@@ -168,7 +168,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 
 bool OldStyleConnect::isPrivateSlot(const string &name) const
 {
-    return clazy_std::contains_if(m_privateSlots, [name](const PrivateSlot &slot) {
+    return clazy_std::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
         return slot.name == name;
     });
 }
