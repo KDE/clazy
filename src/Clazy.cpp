@@ -217,7 +217,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     return true;
 }
 
-void ClazyASTAction::printRequestedChecks()
+void ClazyASTAction::printRequestedChecks() const
 {
     llvm::errs() << "Requested checks: ";
     const unsigned int numChecks = m_checks.size();
@@ -232,7 +232,7 @@ void ClazyASTAction::printRequestedChecks()
     llvm::errs() << "\n";
 }
 
-void ClazyASTAction::PrintAnchorHeader(llvm::raw_ostream &ros, RegisteredCheck::List &checks)
+void ClazyASTAction::PrintAnchorHeader(llvm::raw_ostream &ros, RegisteredCheck::List &checks) const
 {
     // Generates ClazyAnchorHeader.h.
     // Needed so we can support a static build of clazy without the linker discarding our checks.
@@ -260,7 +260,7 @@ void ClazyASTAction::PrintAnchorHeader(llvm::raw_ostream &ros, RegisteredCheck::
     ros << "#endif\n";
 }
 
-void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros, HelpMode helpMode)
+void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros, HelpMode helpMode) const
 {
     RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
     clazy_std::sort(checks, checkLessThanByLevel);
