@@ -19,6 +19,8 @@
   Boston, MA 02110-1301, USA.
 */
 
+// clazy:excludeall=non-pod-global-static
+
 #include "Clazy.h"
 
 #include <clang/Frontend/FrontendActions.h>
