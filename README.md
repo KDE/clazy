@@ -52,7 +52,7 @@ You can get clazy from:
 
 ### Install dependencies
 - OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
-- Ubuntu-16.04: `apt-get install g++ cmake clang llvm-dev git-core libclang-3.8-dev qtbase5-dev`
+- Ubuntu-16.04: `apt install g++ cmake clang llvm-dev git-core libclang-3.8-dev qtbase5-dev`
 - Archlinux: `pacman -S make llvm clang python2 cmake qt5-base git gcc`
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
@@ -404,5 +404,10 @@ and thanks to:
 
 # Contributing patches
 
-<https://community.kde.org/Infrastructure/Phabricator>
-<https://phabricator.kde.org/differential/>
+New features go to master and bug fixes go to 1.2 branch. 
+The prefered way to contributing is by using KDE's phabricator, see:
+- <https://community.kde.org/Infrastructure/Phabricator>
+- <https://phabricator.kde.org/differential/>
+
+If you rather just create a pull request in https://github.com/KDE/clazy for a drive-by change, it's also fine, but beware that
+the maintainer might forget to check on github and the KDE bot will close the PR. In that case just send a reminder to the maintainer (<smartins at kde.org>).
