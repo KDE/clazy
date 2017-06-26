@@ -402,5 +402,10 @@ and thanks to:
 
 # Contributing patches
 
-<https://community.kde.org/Infrastructure/Phabricator>
-<https://phabricator.kde.org/differential/>
+New features go to master and bug fixes go to 1.2 branch. 
+The prefered way to contributing is by using KDE's phabricator, see:
+- <https://community.kde.org/Infrastructure/Phabricator>
+- <https://phabricator.kde.org/differential/>
+
+If you rather just create a pull request in https://github.com/KDE/clazy for a drive-by change, it's also fine, but beware that
+the maintainer might forget to check on github and the KDE bot will close the PR. In that case just send a reminder to the maintainer (<smartins at kde.org>).
