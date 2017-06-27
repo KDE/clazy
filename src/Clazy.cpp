@@ -156,7 +156,7 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
         astConsumer->addCheck(check);
     }
 
-   return astConsumer;
+    return std::unique_ptr<clang::ASTConsumer>(astConsumer.release());
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_)
