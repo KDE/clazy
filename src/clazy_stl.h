@@ -43,12 +43,6 @@ inline bool contains(const std::string &haystack, const std::string &needle)
    return haystack.find(needle) != std::string::npos;
 }
 
-template<typename C, typename Pred>
-bool contains_if(const C &container, Pred pred)
-{
-   return std::find_if(container.begin(), container.end(), pred) != container.end();
-}
-
 template<typename C>
 typename C::iterator find(C &container, const typename C::value_type &value)
 {

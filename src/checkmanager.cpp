@@ -62,6 +62,12 @@ bool CheckManager::isReservedCheckName(const string &name) const
     return false;
 }
 
+CheckManager *CheckManager::instance()
+{
+    static CheckManager s_instance;
+    return &s_instance;
+}
+
 int CheckManager::registerCheck(const std::string &name, const string &className,
                                 CheckLevel level, const FactoryFunction &factory,
                                 RegisteredCheck::Options options)

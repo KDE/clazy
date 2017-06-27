@@ -77,11 +77,7 @@ inline bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
 class CLAZYLIB_EXPORT CheckManager
 {
 public:
-    static CheckManager *instance()
-    {
-        static CheckManager s_instance;
-        return &s_instance;
-    }
+    static CheckManager *instance();
 
     int registerCheck(const std::string &name, const std::string &className,
                       CheckLevel level, const FactoryFunction &, RegisteredCheck::Options = RegisteredCheck::Option_None);
