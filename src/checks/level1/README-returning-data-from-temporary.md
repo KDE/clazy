@@ -25,3 +25,7 @@ const char * getFoo()
     const char *c1 = getByteArray();
     const char *c2 = str.toUtf8().data();
 ```
+
+Note that in some cases it might be fine, since the method can return the data
+of a global static QByteArray. However such code is brittle, it could start crashing
+if it ceased to be static.
