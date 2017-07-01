@@ -25,6 +25,7 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "checkmanager.h"
+#include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Token.h>
@@ -37,10 +38,15 @@ Qenums::Qenums(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
+    context->enablePreprocessorVisitor();
 }
 
 void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
 {
+    PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 50500)
+        return;
+
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (!ii || ii->getName() != "Q_ENUMS")
         return;
