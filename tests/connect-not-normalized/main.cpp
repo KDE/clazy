@@ -30,3 +30,18 @@ void testConnect()
 
     o.disconnect(&o, SLOT(void foo(const int))); // OK
 }
+
+
+class MyObj :public QObject
+{
+public:
+    MyObj()
+    {
+        // volker mentioned this not working, but I can't reproduce
+        connect(ui->host, SIGNAL(textChanged(QString)), // OK
+                SLOT(validateHostAddress(const QString&))); // OK
+    }
+
+    MyObj *ui;
+    MyObj *host;
+};
