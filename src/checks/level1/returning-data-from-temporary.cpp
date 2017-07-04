@@ -91,9 +91,9 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
         return;
     const auto methodName = method->getQualifiedNameAsString();
 
-    if (methodName != "QByteArray::data" &&
-        methodName != "QByteArray::operator const char *" &&
-        methodName != "QByteArray::constData")
+    if (!CLAZY_CHECK_FUNC_NAME(method, QByteArray, data) &&
+        !CLAZY_CHECK_FUNC_NAME(method, QByteArray, operator const char *) &&
+        !CLAZY_CHECK_FUNC_NAME(method, QByteArray, constData))
         return;
 
 
