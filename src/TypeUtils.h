@@ -43,6 +43,12 @@ class CXXRecordDecl;
 class CXXBaseSpecifier;
 }
 
+// this is the recommended way to check for a fully-qualified function name.
+// it avoids building a std::string for getQualifiedNameAsString() in the likely case
+// that the method name already does not match:
+#define CLAZY_CHECK_FUNC_NAME(func, class, method) \
+  (func->getName() == #method && func->getQualifiedNameAsString() == #class "::" #method)
+
 namespace TypeUtils
 {
     /**
