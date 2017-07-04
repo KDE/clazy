@@ -43,7 +43,7 @@ void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
     auto constructExpr = dyn_cast<CXXConstructExpr>(stmt);
     CXXConstructorDecl *ctor = constructExpr ? constructExpr->getConstructor() : nullptr;
 
-    if (!ctor || ctor->getQualifiedNameAsString() != "QLatin1String::QLatin1String")
+    if (!ctor || !CLAZY_CHECK_FUNC_NAME(ctor, QLatin1String, QLatin1String))
         return;
 
     StringLiteral *lt = HierarchyUtils::getFirstChildOfType2<StringLiteral>(stmt);
