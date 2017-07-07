@@ -417,4 +417,4 @@ The prefered way to contributing is by using KDE's phabricator, see:
 - <https://phabricator.kde.org/differential/>
 
 If you rather just create a pull request in https://github.com/KDE/clazy for a drive-by change, it's also fine, but beware that
-the maintainer might forget to check on github and the KDE bot will close the PR. In that case just send a reminder to the maintainer (<smartins at kde.org>).
+the maintainer might forget to check on github and the KDE bot will close the PR. In that case just send a reminder to the maintainer (smartins at kde.org).
