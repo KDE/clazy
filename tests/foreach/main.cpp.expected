@@ -4,3 +4,6 @@ foreach/main.cpp:67:14: warning: Missing reference in foreach with sizeof(T) = 2
 foreach/main.cpp:89:14: warning: Missing reference in foreach with sizeof(T) = 20 bytes (struct BigTrivial) [-Wclazy-foreach]
 foreach/main.cpp:102:5: warning: foreach with STL container causes deep-copy (std::_Vector_base) [-Wclazy-foreach]
 foreach/main.cpp:121:5: warning: foreach container detached [-Wclazy-foreach]
+foreach/main.cpp:137:5: warning: foreach with QVarLengthArray causes deep-copy [-Wclazy-foreach]
+foreach/main.cpp:141:9: warning: foreach with QVarLengthArray causes deep-copy [-Wclazy-foreach]
+foreach/main.cpp:145:9: warning: foreach with QVarLengthArray causes deep-copy [-Wclazy-foreach]

@@ -129,10 +129,21 @@ void testQRegionRects()
     foreach (const QRect &rect, r.rects()) {}
 }
 
+using Foo = QVarLengthArray<QString>;
+
 void varLengthArray()
 {
     QVarLengthArray<int, 1> varray;
     foreach (auto i, varray) {}
+
+    {
+        Foo foo;
+        Q_FOREACH(auto &&s, foo) {}
+    }
+    {
+        const Foo foo;
+        Q_FOREACH(auto &&s, foo) {}
+    }
 }
 
 void testQSequentialIterable()

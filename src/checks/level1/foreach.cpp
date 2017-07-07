@@ -119,6 +119,9 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         if (!isQtContainer) {
             emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy (" + rootBaseClass->getQualifiedNameAsString() + ')');
             return;
+        } else if (containerClassName == "QVarLengthArray") {
+            emitWarning(stmt->getLocStart(), "foreach with QVarLengthArray causes deep-copy");
+            return;
         }
     }
 
