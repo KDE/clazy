@@ -1,5 +1,6 @@
 {
     "minimum_clang_version" : 370,
+    "minimum_qt_version" : 550,
     "tests" : [
         {
             "filename" : "main.cpp"
