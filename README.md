@@ -297,15 +297,17 @@ by passing `-DCMAKE_EXPORT_COMPILE_COMMANDS` to CMake, or using [Bear](https://g
 
 `qbs generate --generator clangdb`
 
-Note: Be sure the clazy-standalone binary is located in the same folder as the clang binary, otherwise it will have trouble
+**Note:** Be sure the clazy-standalone binary is located in the same folder as the clang binary, otherwise it will have trouble
 finding builtin headers, like stddef.h. Alternatively, you can symlink to the folder containing the builtin headers:
 
 (Assuming clazy was built with `-DCMAKE_INSTALL_PREFIX=/myprefix/`)
 
-`$ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource`
-`  "-resource-dir"`
-`  "/usr/bin/../lib/clang/4.0.1"` this is the interesting path (without the version)
-`$ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang`
+```
+$ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
+  "-resource-dir"
+  "/usr/bin/../lib/clang/4.0.1" # this is the interesting path (without the version)
+$ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
+```
 
 `clang-tidy` support will be added after <https://bugs.llvm.org//show_bug.cgi?id=32739> is fixed.
 
