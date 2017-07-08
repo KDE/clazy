@@ -116,6 +116,9 @@ macro(link_to_llvm name llvm_libs)
     target_link_libraries(${name} ${llvm_system_lib})
   endforeach()
 
+  if(MSVC)
+    target_link_libraries(${name} version.lib)
+  endif()
 endmacro()
 
 macro(add_clang_plugin name)
@@ -130,15 +133,12 @@ macro(add_clang_plugin name)
   link_to_llvm(${name} "${LLVM_LIBS_LIST}")
 
   if(MSVC)
-    target_link_libraries(${name} version.lib)
     target_link_libraries(${name} ${CLANG_LIBRARY_IMPORT}) # Link against clang.exe to share the plugin registry
   endif()
 
   if(CLAZY_BUILD_UTILS_LIB)
     target_link_libraries(${name} clazylib)
   endif()
-
-  generate_export_header(${name})
 endmacro()
 
 if(CLAZY_BUILD_UTILS_LIB)
@@ -162,7 +162,7 @@ endif()
 
 set(SYMBOL_FILE Lazy.exports)
 
-add_clang_plugin(ClangLazy ${CLAZY_SRCS})
+add_clang_plugin(ClangLazy ${CLAZY_PLUGIN_SRCS})
 
 set_target_properties(ClangLazy PROPERTIES
   LINKER_LANGUAGE CXX
@@ -233,9 +233,14 @@ endif()
 
 
 # Build clazy-standalone
-add_executable(clazy-standalone src/ClazyStandaloneMain.cpp)
-target_link_libraries(clazy-standalone ClangLazy)
+add_definitions(-DBUILDING_CLAZY_STANDALONE)
+add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
 link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
-
+if (MSVC)
+  # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClangLazy.dll
+  target_link_libraries(clazy-standalone clangFrontend)
+else()
+  target_link_libraries(clazy-standalone ClangLazy)
+endif()
 
 install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)

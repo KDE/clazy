@@ -14,7 +14,7 @@ set(CLAZY_LIB_SRC
   ${CMAKE_CURRENT_LIST_DIR}/src/Utils.cpp
 )
 
-set(CLAZY_SRCS
+set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qcolor-from-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-not-normalized.cpp
@@ -79,16 +79,31 @@ set(CLAZY_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
 )
 
-
-set(CLAZY_SRCS ${CLAZY_SRCS}
-  ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/ClazyContext.cpp
-)
-
 if(HAS_STD_REGEX)
-  set(CLAZY_SRCS ${CLAZY_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp)
+  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp)
 endif()
 
+set(CLAZY_SHARED_SRCS # sources shared between clazy-standalone and clazy plugin
+  ${CLAZY_CHECKS_SRCS}
+  ${CMAKE_CURRENT_LIST_DIR}/src/ClazyContext.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
+)
+
 if (NOT CLAZY_BUILD_UTILS_LIB)
-  set(CLAZY_SRCS ${CLAZY_SRCS} ${CLAZY_LIB_SRC})
+  set(CLAZY_SHARED_SRCS ${CLAZY_SHARED_SRCS} ${CLAZY_LIB_SRC})
+endif()
+
+set(CLAZY_PLUGIN_SRCS # Sources for the plugin
+  ${CLAZY_SHARED_SRCS}
+)
+
+if (MSVC)
+  set(CLAZY_STANDALONE_SRCS
+    ${CLAZY_SHARED_SRCS}
+    ${CMAKE_CURRENT_LIST_DIR}/src/ClazyStandaloneMain.cpp
+  )
+else()
+  set(CLAZY_STANDALONE_SRCS
+    ${CMAKE_CURRENT_LIST_DIR}/src/ClazyStandaloneMain.cpp
+  )
 endif()
