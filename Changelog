@@ -24,7 +24,7 @@
   - Fixed many false positives
 
 
-* v1.2 ()
+* v1.2 (July 8th, 2017)
   - clazy-standalone executable. Allows to run clazy against a JSON compilation database
     instead of as a plugin. clang-tidy doesn't support loading external modules (https://bugs.llvm.org/show_bug.cgi?id=32739)
     so this is a good workaround.
