@@ -234,12 +234,14 @@ endif()
 
 # Build clazy-standalone
 add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
-link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
+
 if (MSVC)
   # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClangLazy.dll
   target_link_libraries(clazy-standalone clangFrontend)
 else()
   target_link_libraries(clazy-standalone ClangLazy)
 endif()
+
+link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
 
 install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
