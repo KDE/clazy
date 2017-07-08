@@ -336,12 +336,16 @@ def get_fixed_files():
 def print_differences(file1, file2):
     return run_command("diff -Naur {} {}".format(file1, file2))
 
+def normalizedCwd():
+    return os.getcwd().replace('\\', '/')
+
 def extract_word(word, in_file, out_file):
     in_f = open(in_file, 'r')
     out_f = open(out_file, 'w')
     for line in in_f:
         if word in line:
-            line = line.replace(os.getcwd() + "/", "") # clazy-standalone prints the complete cpp file path for some reason. Normalize it so it compares OK with the expected output.
+            line = line.replace('\\', '/')
+            line = line.replace(normalizedCwd() + '/', "") # clazy-standalone prints the complete cpp file path for some reason. Normalize it so it compares OK with the expected output.
             out_f.write(line)
     in_f.close()
     out_f.close()
