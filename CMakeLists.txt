@@ -233,7 +233,6 @@ endif()
 
 
 # Build clazy-standalone
-add_definitions(-DBUILDING_CLAZY_STANDALONE)
 add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
 link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
 if (MSVC)
