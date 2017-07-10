@@ -101,8 +101,11 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     std::string original = sl->getString().str();
     std::string normalized = NormalizedSignatureUtils::normalizedSignature(original.c_str());
 
-    // Using c_str() because the string has embedded null characters
-    if (strcmp(original.c_str(), normalized.c_str()) == 0)
+    // discard the junk after '\0'
+    normalized = string(normalized.c_str());
+    original = string(original.c_str());
+
+    if (original == normalized)
         return false;
 
     // Remove first digit
