@@ -193,7 +193,7 @@ There are many checks and they are divided in levels:
 clazy runs all checks from level1 by default.
 
 - Checks from level0:
-    - [connect-non-signal](./src/checks/level0/README-connect-non-signal.md)
+    - [connect-non-signal](src/checks/level0/README-connect-non-signal.md)
     - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
     - [lambda-in-connect](src/checks/level0/README-lambda-in-connect.md)
     - [mutable-container-key](src/checks/level0/README-mutable-container-key.md)
