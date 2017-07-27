@@ -352,10 +352,6 @@ For better results don't use parallel builds, otherwise a fixit being applied in
   If you're building in 32-bit, open clazy-cl.bat and insert a -m32 argument.
   Should read: %~dp0\clang\clang.exe –driver-mode=cl -m32 (...)
 
-- clazy-standalone: error while loading shared libraries: ClangLazy.so: cannot open shared object file: No such file or directory
-  You need to add the folder where you installed ClangLazy.so to your LD_LIBRARY_PATH (example /usr/local/lib/)
-  export LD_LIBRARY_PATH=/path/to/folder/containing/library/:$LD_LIBRARY_PATH
-
 # Qt4 compatibility mode
 
 When running on codebases that must still compile with Qt4, you can pass `--qt4compat`
