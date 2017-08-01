@@ -21,6 +21,7 @@
 */
 
 #include "qt4-qstring-from-array.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"

@@ -23,6 +23,7 @@
 */
 
 #include "foreach.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"

@@ -24,6 +24,7 @@
 */
 
 #include "checkmanager.h"
+#include "ClazyContext.h"
 #include "temporaryiterator.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"

@@ -23,6 +23,7 @@
 */
 
 #include "reservecandidates.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 #include "MacroUtils.h"
