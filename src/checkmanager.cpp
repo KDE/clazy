@@ -22,8 +22,9 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "clazy_stl.h"
 #include "checkmanager.h"
+#include "clazy_stl.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "StringUtils.h"
 
