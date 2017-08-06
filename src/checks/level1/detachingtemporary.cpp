@@ -127,7 +127,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     const std::string className = classDecl->getNameAsString();
 
-    const std::map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    const std::unordered_map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
     auto it = methodsByType.find(className);
     auto it2 = m_writeMethodsByType.find(className);
 

@@ -59,9 +59,9 @@ const vector<string> & QtUtils::qtCOWContainers()
 }
 
 
-std::map<string, std::vector<string> > QtUtils::detachingMethods()
+std::unordered_map<string, std::vector<string> > QtUtils::detachingMethods()
 {
-    static std::map<string, std::vector<string> > map;
+    static std::unordered_map<string, std::vector<string> > map;
     if (map.empty()) {
         map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
         map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]", "fill" };

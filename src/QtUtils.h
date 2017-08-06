@@ -32,6 +32,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace clang {
 class CXXRecordDecl;
@@ -111,7 +112,7 @@ CLAZYLIB_EXPORT const std::vector<std::string> & qtCOWContainers();
 /**
  * Returns a map with the list of method names that detach each container.
  */
-CLAZYLIB_EXPORT std::map<std::string, std::vector<std::string>> detachingMethods();
+CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<std::string>> detachingMethods();
 
 /**
  * Returns true if a type represents a Qt container class.
