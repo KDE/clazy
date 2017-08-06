@@ -109,6 +109,11 @@ CLAZYLIB_EXPORT const std::vector<std::string> & qtContainers();
 CLAZYLIB_EXPORT const std::vector<std::string> & qtCOWContainers();
 
 /**
+ * Returns a map with the list of method names that detach each container.
+ */
+CLAZYLIB_EXPORT std::map<std::string, std::vector<std::string>> detachingMethods();
+
+/**
  * Returns true if a type represents a Qt container class.
  */
 CLAZYLIB_EXPORT bool isQtContainer(clang::QualType);

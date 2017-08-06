@@ -26,6 +26,7 @@
 #include "detachingtemporary.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "QtUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -126,12 +127,13 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     const std::string className = classDecl->getNameAsString();
 
-    auto it = m_methodsByType.find(className);
+    const std::map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    auto it = methodsByType.find(className);
     auto it2 = m_writeMethodsByType.find(className);
 
     std::vector<std::string> allowedFunctions;
     std::vector<std::string> allowedWriteFunctions;
-    if (it != m_methodsByType.end()) {
+    if (it != methodsByType.end()) {
         allowedFunctions = it->second;
     }
 
