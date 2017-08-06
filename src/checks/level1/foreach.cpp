@@ -23,6 +23,7 @@
 */
 
 #include "foreach.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
@@ -34,31 +35,6 @@
 
 using namespace clang;
 using namespace std;
-
-const std::map<std::string, std::vector<std::string> > & detachingMethodsMap()
-{
-    // List of methods causing detach
-    static std::map<std::string, std::vector<std::string> > methodsMap;
-    if (methodsMap.empty()) {
-        methodsMap["QListSpecialMethods"] = {"first", "last", "begin", "end", "front", "back"};
-        methodsMap["QList"] = methodsMap["QListSpecialMethods"];
-        methodsMap["QVarLengthArray"] = methodsMap["QListSpecialMethods"];
-        methodsMap["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "fill"};
-        methodsMap["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound"};
-        methodsMap["QHash"] = {"begin", "end", "find"};
-        methodsMap["QLinkedList"] = {"first", "last", "begin", "end", "front", "back"};
-        methodsMap["QSet"] = {"begin", "end", "find"};
-        methodsMap["QStack"] = methodsMap["QVector"];
-        methodsMap["QStack"].push_back({"top"});
-        methodsMap["QQueue"] = methodsMap["QVector"];
-        methodsMap["QQueue"].push_back({"head"});
-        methodsMap["QString"] = {"begin", "end", "data"};
-        methodsMap["QByteArray"] = {"data"};
-        methodsMap["QImage"] = {"bits", "scanLine"};
-    }
-
-    return methodsMap;
-}
 
 Foreach::Foreach(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -195,9 +171,10 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
             if (recordDecl) {
                 const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
-                if (detachingMethodsMap().find(className) != detachingMethodsMap().end()) {
+                const std::map<string, std::vector<string> > &detachingMethodsMap = QtUtils::detachingMethods();
+                if (detachingMethodsMap.find(className) != detachingMethodsMap.end()) {
                     const std::string functionName = valDecl->getNameAsString();
-                    const auto &allowedFunctions = detachingMethodsMap().at(className);
+                    const auto &allowedFunctions = detachingMethodsMap.at(className);
                     if (clazy_std::contains(allowedFunctions, functionName)) {
                         Expr *expr = memberExpr->getBase();
 

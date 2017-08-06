@@ -28,7 +28,6 @@
 #include "clazy_export.h"
 
 #include "clazy_stl.h"
-#include "ClazyContext.h"
 
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
@@ -52,6 +51,7 @@ class PreprocessorOptions;
 }
 
 class CheckBase;
+class ClazyContext;
 
 enum CheckLevel {
     CheckLevelUndefined = -1,

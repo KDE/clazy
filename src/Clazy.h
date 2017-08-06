@@ -26,6 +26,7 @@
 #define CLAZY_AST_ACTION_H
 
 #include "checkmanager.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
@@ -38,8 +39,6 @@
 namespace clang {
     class CompilerInstance;
 }
-
-class ClazyContext;
 
 /**
  * This is the FrontendAction that is run with clazy is used as a plugin.

@@ -22,6 +22,7 @@
 
 #include "connect-non-signal.h"
 
+#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"

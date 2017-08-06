@@ -21,6 +21,7 @@
 */
 
 #include "connect-not-normalized.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "NormalizedSignatureUtils.h"

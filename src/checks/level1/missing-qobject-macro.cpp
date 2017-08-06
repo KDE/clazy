@@ -23,6 +23,7 @@
 
 #include "missing-qobject-macro.h"
 
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "QtUtils.h"
 #include "checkmanager.h"

@@ -22,8 +22,9 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
 #include "detachingmember.h"
+#include "ClazyContext.h"
+#include "checkmanager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"

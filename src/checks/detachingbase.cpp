@@ -26,6 +26,7 @@
 #include "detachingbase.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "QtUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -37,19 +38,6 @@ using namespace std;
 DetachingBase::DetachingBase(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_methodsByType["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
-    m_methodsByType["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };
-    m_methodsByType["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound", "operator[]" };
-    m_methodsByType["QHash"] = {"begin", "end", "find", "operator[]" };
-    m_methodsByType["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]" };
-    m_methodsByType["QSet"] = {"begin", "end", "find", "operator[]" };
-    m_methodsByType["QStack"] = {"top"};
-    m_methodsByType["QQueue"] = {"head"};
-    m_methodsByType["QMultiMap"] = m_methodsByType["QMap"];
-    m_methodsByType["QMultiHash"] = m_methodsByType["QHash"];
-    m_methodsByType["QString"] = {"begin", "end", "data", "operator[]"};
-    m_methodsByType["QByteArray"] = {"data", "operator[]"};
-    m_methodsByType["QImage"] = {"bits", "scanLine"};
 }
 
 bool DetachingBase::isDetachingMethod(CXXMethodDecl *method) const
@@ -63,8 +51,9 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method) const
 
     const string className = record->getNameAsString();
 
-    auto it = m_methodsByType.find(className);
-    if (it != m_methodsByType.cend()) {
+    const std::map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    auto it = methodsByType.find(className);
+    if (it != methodsByType.cend()) {
         const auto &methods = it->second;
         if (clazy_std::contains(methods, method->getNameAsString()))
             return true;

@@ -22,6 +22,7 @@
 #include "incorrect-emit.h"
 
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"

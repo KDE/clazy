@@ -23,6 +23,8 @@
 */
 
 #include "checkbase.h"
+
+#include "ClazyContext.h"
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>

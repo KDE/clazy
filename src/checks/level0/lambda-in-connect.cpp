@@ -20,6 +20,7 @@
 */
 
 #include "lambda-in-connect.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "checkmanager.h"
 #include "StringUtils.h"

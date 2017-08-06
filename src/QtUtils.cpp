@@ -58,6 +58,32 @@ const vector<string> & QtUtils::qtCOWContainers()
     return classes;
 }
 
+
+std::map<string, std::vector<string> > QtUtils::detachingMethods()
+{
+    static std::map<string, std::vector<string> > map;
+    if (map.empty()) {
+        map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
+        map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]", "fill" };
+        map["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound", "operator[]" };
+        map["QHash"] = {"begin", "end", "find", "operator[]" };
+        map["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]" };
+        map["QSet"] = {"begin", "end", "find", "operator[]" };
+        map["QStack"] = map["QVector"];
+        map["QStack"].push_back({"top"});
+        map["QQueue"] = map["QVector"];
+        map["QQueue"].push_back({"head"});
+        map["QMultiMap"] = map["QMap"];
+        map["QMultiHash"] = map["QHash"];
+        map["QString"] = {"begin", "end", "data", "operator[]"};
+        map["QByteArray"] = {"data", "operator[]"};
+        map["QImage"] = {"bits", "scanLine"};
+    }
+
+    return map;
+}
+
+
 bool QtUtils::isQtCOWIterableClass(clang::CXXRecordDecl *record)
 {
     if (!record)
@@ -297,5 +323,3 @@ CXXMethodDecl *QtUtils::pmfFromUnary(UnaryOperator *uo)
 
     return nullptr;
 }
-
-

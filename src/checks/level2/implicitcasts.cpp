@@ -23,6 +23,7 @@
 */
 
 #include "implicitcasts.h"
+#include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "checkmanager.h"
