@@ -43,7 +43,6 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/inefficient-qlist-soft.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/install-event-filter.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/ctor-missing-parent-argument.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/missing-qobject-macro.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/nonpodstatic.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qdeleteall.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qstring-left.cpp
@@ -59,6 +58,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-value.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/globalconstcharpointer.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/implicitcasts.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-qobject-macro.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-type-info.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/qstring-allocations.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/reservecandidates.cpp

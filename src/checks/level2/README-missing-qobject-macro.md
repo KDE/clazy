@@ -13,4 +13,5 @@ Finds `QObject` derived classes that don't have a Q_OBJECT macro.
 - Templated QObjects
 - Compilation time
 
-Can't be used with pre-compiled headers support.
+This check can't be used with pre-compiled headers support.
+This check doesn't have false positives, but it's not included in level <= 1 because the missing Q_OBJECT might be intentional.

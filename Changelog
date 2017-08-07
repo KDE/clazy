@@ -49,7 +49,5 @@
     the plugin and man pages.
 
 * v1.3 ()
-
-
-
-
+  - missing-qobject-macro is now a level2 check, instead of level1. Because,
+    people can omit Q_OBJECT intentionally.
