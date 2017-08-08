@@ -1,4 +1,4 @@
-*WARNING:* master is the development branch. Please use branch 1.2 for production.
+*WARNING:* master is the development branch. Please use the v1.2 tag.
 
 clazy v1.3
 ===========
