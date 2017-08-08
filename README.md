@@ -43,7 +43,6 @@ You can get clazy from:
 - <https://github.com/KDE/clazy>
 - git@git.kde.org:clazy
 - git://anongit.kde.org/clazy
-- Source for the v1.1-msvc2015 binary package: <http://download.kde.org/stable/clazy/1.1/clazy_v1.1-src.zip.mirrorlist>
 
 # Build Instructions
 ## Linux
