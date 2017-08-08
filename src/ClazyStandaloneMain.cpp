@@ -49,10 +49,10 @@ static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not co
 
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
-class ClazyToolAction : public clang::tooling::FrontendActionFactory
+class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
-    ClazyToolAction()
+    ClazyToolActionFactory()
         : FrontendActionFactory() {}
 
     FrontendAction *create() override
@@ -76,5 +76,5 @@ int main(int argc, const char **argv)
     CommonOptionsParser optionsParser(argc, argv, s_clazyCategory);
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
-    return tool.run(new ClazyToolAction());
+    return tool.run(new ClazyToolActionFactory());
 }
