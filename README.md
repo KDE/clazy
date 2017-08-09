@@ -140,19 +140,16 @@ $ sudo port select --set clang mp-clang-3.9
 
 ## macOS with Homebrew
 
-### Install clang
+### Option one: stable
 
 ```
-$ brew install --with-clang llvm
+$ brew install haraldf/kf5/clazy
 ```
 
-### Build clazy
+### Option two: master
+
 ```
-  $ export CXX=clang++
-  $ export LLVM_ROOT=/usr/local/opt/llvm
-  $ cmake
-  $ make
-  $ make install
+$ brew install haraldf/kf5/clazy --HEAD
 ```
 
 # Setting up your project to build with clazy
