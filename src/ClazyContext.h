@@ -52,8 +52,9 @@ public:
     enum ClazyOption {
         ClazyOption_None = 0,
         ClazyOption_NoFixitsInplace = 1,
-        ClazyOption_AllFixitsEnabled = 2,
-        ClazyOption_Qt4Compat = 4
+        ClazyOption_NoFixitsAutoWrite = 2, // If enabled then fixits are reported, but not applied
+        ClazyOption_AllFixitsEnabled = 4,
+        ClazyOption_Qt4Compat = 8
     };
     typedef int ClazyOptions;
 

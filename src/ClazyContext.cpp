@@ -68,7 +68,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
         }
     }
 
-    if (fixitsEnabled())
+    if (fixitsEnabled() && !(options & ClazyOption_NoFixitsAutoWrite))
         rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
                                      ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()));
 }

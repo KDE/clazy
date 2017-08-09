@@ -185,6 +185,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         m_options |= ClazyContext::ClazyOption_AllFixitsEnabled;
     }
 
+    if (parseArgument("no-autowrite-fixits", args))
+        m_options |= ClazyContext::ClazyOption_NoFixitsAutoWrite;
+
     if (parseArgument("qt4-compat", args))
         m_options |= ClazyContext::ClazyOption_Qt4Compat;
 
