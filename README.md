@@ -152,6 +152,8 @@ $ brew install haraldf/kf5/clazy --HEAD
 
 As these are not verified or tested by the clazy developers please don't report bugs to us.
 
+For building yourself, read on. You'll have to install clang and build clazy from source.
+
 ### Install clang
 
 ```
