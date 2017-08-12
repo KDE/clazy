@@ -1,0 +1,3 @@
+connect-3arg-lambda/main.cpp:9:5: warning: Pass a context object as 3rd connect parameter [-Wclazy-connect-3arg-lambda]
+connect-3arg-lambda/main.cpp:30:9: warning: Pass 'this' as the 3rd connect parameter [-Wclazy-connect-3arg-lambda]
+connect-3arg-lambda/main.cpp:38:9: warning: Pass a context object as 3rd connect parameter [-Wclazy-connect-3arg-lambda]
