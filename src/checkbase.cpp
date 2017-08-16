@@ -65,7 +65,7 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
-CheckBase::CheckBase(const string &name, const ClazyContext *context, Options options)
+CheckBase::CheckBase(const string &name, const ClazyContext *context, Options)
     : m_sm(context->ci.getSourceManager())
     , m_name(name)
     , m_context(context)
@@ -73,7 +73,6 @@ CheckBase::CheckBase(const string &name, const ClazyContext *context, Options op
     , m_preprocessorOpts(context->ci.getPreprocessorOpts())
     , m_tu(m_astContext.getTranslationUnitDecl())
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
-    , m_options(options)
 {
 }
 

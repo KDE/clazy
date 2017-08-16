@@ -81,8 +81,8 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
         a->VisitDeclaration(decl);
 
-    for (CheckBase *check : m_createdChecks) {
-        if (!(isInSystemHeader && !check->warnsInSystemHeaders()))
+    if (!isInSystemHeader) {
+        for (CheckBase *check : m_createdChecks)
             check->VisitDeclaration(decl);
     }
 
@@ -114,8 +114,8 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
         parentMap->addStmt(stm);
 
     const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
-    for (CheckBase *check : m_createdChecks) {
-        if (!(isInSystemHeader && !check->warnsInSystemHeaders()))
+    if (!isInSystemHeader) {
+        for (CheckBase *check : m_createdChecks)
             check->VisitStatement(stm);
     }
 

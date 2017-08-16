@@ -93,8 +93,7 @@ class CLAZYLIB_EXPORT CheckBase
 public:
 
     enum Option {
-        Option_None = 0,
-        Option_WarnsInSystemHeaders = 1
+        Option_None = 0
     };
     typedef int Options;
 
@@ -119,8 +118,6 @@ public:
     void emitInternalError(clang::SourceLocation loc, std::string error);
 
     virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &) {};
-
-    bool warnsInSystemHeaders() const { return m_options & Option_WarnsInSystemHeaders; }
 
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
@@ -165,7 +162,6 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits = 0;
-    const Options m_options;
 };
 
 #endif

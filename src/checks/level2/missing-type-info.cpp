@@ -37,7 +37,7 @@ using namespace std;
 using namespace clang;
 
 MissingTypeinfo::MissingTypeinfo(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_WarnsInSystemHeaders) // So we visit Q_DECL_TYPEINFO in Qt headers
+    : CheckBase(name, context)
 {
 }
 
@@ -65,6 +65,9 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     const bool isTooBigForQList = isQList && QtUtils::isTooBigForQList(qt2, &m_astContext);
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
+        if (sm().isInSystemHeader(record->getLocStart()))
+            return;
+
         std::string typeName = record->getName();
         if (typeName == "QPair") // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
             return;
