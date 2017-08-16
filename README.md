@@ -140,6 +140,22 @@ $ sudo port select --set clang mp-clang-3.9
 
 ## macOS with Homebrew
 
+The recommended way is to build clazy yourself, but alternatively you can try user recipes, such as:
+
+```
+$ brew install haraldf/kf5/clazy
+```
+
+for stable branch, or for master:
+
+```
+$ brew install haraldf/kf5/clazy --HEAD
+```
+
+As these are not verified or tested by the clazy developers please don't report bugs to us.
+
+For building yourself, read on. You'll have to install clang and build clazy from source.
+
 ### Install clang
 
 ```
@@ -309,6 +325,8 @@ $ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
   "/usr/bin/../lib/clang/4.0.1" # this is the interesting path (without the version)
 $ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
 ```
+
+If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
 
 `clang-tidy` support will be added after <https://bugs.llvm.org//show_bug.cgi?id=32739> is fixed.
 
