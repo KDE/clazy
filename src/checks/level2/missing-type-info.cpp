@@ -48,7 +48,7 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
         return;
 
     const bool isQList = tstdecl->getName() == "QList";
-    const bool isQVector = tstdecl->getName() == "QVector";
+    const bool isQVector = isQList ? false : tstdecl->getName() == "QVector";
 
     if (!isQList && !isQVector) {
         registerQTypeInfo(tstdecl);
@@ -62,9 +62,9 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
         return; // Don't crash if we only have a fwd decl
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_astContext);
-    const bool isTooBigForQList = QtUtils::isTooBigForQList(qt2, &m_astContext);
+    const bool isTooBigForQList = isQList && QtUtils::isTooBigForQList(qt2, &m_astContext);
 
-    if (isCopyable && (isQVector || (isQList && isTooBigForQList))) {
+    if ((isQVector || isTooBigForQList) && isCopyable) {
         std::string typeName = record->getName();
         if (typeName == "QPair") // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
             return;
