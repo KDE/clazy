@@ -324,6 +324,8 @@ $ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
 $ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
 ```
 
+If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
+
 `clang-tidy` support will be added after <https://bugs.llvm.org//show_bug.cgi?id=32739> is fixed.
 
 # Enabling Fixits
