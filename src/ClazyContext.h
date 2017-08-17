@@ -54,7 +54,8 @@ public:
         ClazyOption_NoFixitsInplace = 1,
         ClazyOption_NoFixitsAutoWrite = 2, // If enabled then fixits are reported, but not applied
         ClazyOption_AllFixitsEnabled = 4,
-        ClazyOption_Qt4Compat = 8
+        ClazyOption_Qt4Compat = 8,
+        ClazyOption_OnlyQt = 16 // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
     };
     typedef int ClazyOptions;
 
@@ -92,6 +93,7 @@ public:
      */
     void enableAccessSpecifierManager();
     void enablePreprocessorVisitor();
+    bool isQt() const;
 
     // TODO: More things will follow
     const clang::CompilerInstance &ci;

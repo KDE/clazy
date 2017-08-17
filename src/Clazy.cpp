@@ -124,6 +124,9 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 
 void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
 {
+    if ((m_context->options & ClazyContext::ClazyOption_OnlyQt) && !m_context->isQt())
+        return;
+
     // Run our RecursiveAstVisitor based checks:
     TraverseDecl(ctx.getTranslationUnitDecl());
 
@@ -190,6 +193,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     if (parseArgument("qt4-compat", args))
         m_options |= ClazyContext::ClazyOption_Qt4Compat;
+
+    if (parseArgument("only-qt", args))
+        m_options |= ClazyContext::ClazyOption_OnlyQt;
 
     m_context = new ClazyContext(ci, m_options);
 

@@ -100,3 +100,16 @@ void ClazyContext::enablePreprocessorVisitor()
     if (!preprocessorVisitor && !usingPreCompiledHeaders())
         preprocessorVisitor = new PreProcessorVisitor(ci);
 }
+
+bool ClazyContext::isQt() const
+{
+    static const bool s_isQt = [this] {
+        for (auto s : ci.getPreprocessorOpts().Macros) {
+            if (s.first == "QT_CORE_LIB")
+                return true;
+        }
+        return false;
+    }();
+
+    return s_isQt;
+}

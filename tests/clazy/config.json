@@ -35,6 +35,16 @@
             "filename" : "qt4compat2.cpp",
             "checks"   : ["old-style-connect"],
             "qt4compat": true
+        },
+        {
+            "filename" : "onlyQt1.cpp",
+            "checks"   : ["old-style-connect"],
+            "only_qt"  : false
+        },
+        {
+            "filename" : "onlyQt2.cpp",
+            "checks"   : ["old-style-connect"],
+            "only_qt"  : true
         }
     ]
 }

@@ -47,6 +47,9 @@ static cl::opt<bool> s_enableAllFixits("enable-all-fixits", cl::desc("Enables al
 static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not compatible with Qt 4"),
                                  cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<bool> s_onlyQt("only-qt", cl::desc("Won't emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing."),
+                              cl::init(false), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
@@ -66,6 +69,9 @@ public:
 
         if (s_qt4Compat.getValue())
             options |= ClazyContext::ClazyOption_Qt4Compat;
+
+        if (s_onlyQt.getValue())
+            options |= ClazyContext::ClazyOption_OnlyQt;
 
         return new ClazyStandaloneASTAction(s_checks.getValue(), options);
     }
