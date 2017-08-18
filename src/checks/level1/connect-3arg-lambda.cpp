@@ -51,7 +51,6 @@ void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
     auto lambda = HierarchyUtils::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
     if (!lambda)
         return;
-    callExpr->getArg(0)->dump();
 
     // The sender can be: this
     auto senderThis = HierarchyUtils::unpeal<CXXThisExpr>(callExpr->getArg(0), HierarchyUtils::IgnoreImplicitCasts);
