@@ -1,0 +1,241 @@
+{
+    "checks" : [
+        {
+            "name"  : "inefficientqlist",
+            "level" : -1
+        },
+        {
+            "name"  : "isempty-vs-count",
+            "level" : -1
+        },
+        {
+            "name"  : "qt4-qstring-from-array",
+            "level" : -1
+        },
+        {
+            "name"  : "connect-non-signal",
+            "level" : 0
+        },
+        {
+            "name"  : "lambda-in-connect",
+            "level" : 0
+        },
+        {
+            "name"  : "qdatetimeutc",
+            "level" : 0
+        },
+        {
+            "name"  : "qgetenv",
+            "level" : 0
+        },
+        {
+            "name"  : "qstring-insensitive-allocation",
+            "level" : 0
+        },
+        {
+            "name"  : "qvariant-template-instantiation",
+            "level" : 0
+        },
+        {
+            "name"  : "unused-non-trivial-variable",
+            "level" : 0
+        },
+        {
+            "name"  : "connect-not-normalized",
+            "level" : 0
+        },
+        {
+            "name"  : "mutable-container-key",
+            "level" : 0
+        },
+        {
+            "name"  : "qenums",
+            "level" : 0
+        },
+        {
+            "name"  : "qmap-with-pointer-key",
+            "level" : 0
+        },
+        {
+            "name"  : "qstringref",
+            "level" : 0
+        },
+        {
+            "name"  : "strict-iterators",
+            "level" : 0
+        },
+        {
+            "name"  : "writingtotemporary",
+            "level" : 0
+        },
+        {
+            "name"  : "container-anti-pattern",
+            "level" : 0
+        },
+        {
+            "name"  : "qcolor-from-literal",
+            "level" : 0
+        },
+        {
+            "name"  : "qfileinfo-exists",
+            "level" : 0
+        },
+        {
+            "name"  : "qstringarg",
+            "level" : 0
+        },
+        {
+            "name"  : "qt-macros",
+            "level" : 0
+        },
+        {
+            "name"  : "temporaryiterator",
+            "level" : 0
+        },
+        {
+            "name"  : "wrong-qglobalstatic",
+            "level" : 0
+        },
+
+        {
+            "name"  : "autounexpectedqstringbuilder",
+            "level" : 1
+        },
+        {
+            "name"  : "connect-3arg-lambda",
+            "level" : 1
+        },
+        {
+            "name"  : "ctor-missing-parent-argument",
+            "level" : 1
+        },
+        {
+            "name"  : "detachingtemporary",
+            "level" : 1
+        },
+        {
+            "name"  : "foreach",
+            "level" : 1
+        },
+        {
+            "name"  : "incorrect-emit",
+            "level" : 1
+        },
+        {
+            "name"  : "inefficient-qlist-soft",
+            "level" : 1
+        },
+        {
+            "name"  : "install-event-filter",
+            "level" : 1
+        },
+        {
+            "name"  : "nonpodstatic",
+            "level" : 1
+        },
+        {
+            "name"  : "post-event",
+            "level" : 1
+        },
+        {
+            "name"  : "qdeleteall",
+            "level" : 1
+        },
+        {
+            "name"  : "qlatin1string-non-ascii",
+            "level" : 1
+        },
+        {
+            "name"  : "qstring-left",
+            "level" : 1
+        },
+        {
+            "name"  : "range-loop",
+            "level" : 1
+        },
+        {
+            "name"  : "returning-data-from-temporary",
+            "level" : 1
+        },
+        {
+            "name"  : "ruleoftwosoft",
+            "level" : 1
+        },
+        {
+            "name"  : "child-event-qobject-cast",
+            "level" : 1
+        },
+        {
+            "name"  : "base-class-event",
+            "level" : 2
+        },
+        {
+            "name"  : "container-inside-loop",
+            "level" : 2
+        },
+        {
+            "name"  : "copyable-polymorphic",
+            "level" : 2
+        },
+        {
+            "name"  : "function-args-by-ref",
+            "level" : 2
+        },
+        {
+            "name"  : "function-args-by-value",
+            "level" : 2
+        },
+        {
+            "name"  : "globalconstcharpointer",
+            "level" : 2
+        },
+        {
+            "name"  : "implicitcasts",
+            "level" : 2
+        },
+        {
+            "name"  : "missing-qobject-macro",
+            "level" : 2
+        },
+        {
+            "name"  : "missing-type-info",
+            "level" : 2
+        },
+        {
+            "name"  : "oldstyleconnect",
+            "level" : 2
+        },
+        {
+            "name"  : "qstring-allocations",
+            "level" : 2
+        },
+        {
+            "name"  : "reservecandidates",
+            "level" : 2
+        },
+        {
+            "name"  : "returning-void-expression",
+            "level" : 2
+        },
+        {
+            "name"  : "ruleofthree",
+            "level" : 2
+        },
+        {
+            "name"  : "virtualcallsfromctor",
+            "level" : 2
+        },
+        {
+            "name"  : "assertwithsideeffects",
+            "level" : 3
+        },
+        {
+            "name"  : "detachingmember",
+            "level" : 3
+        },
+        {
+            "name"  : "dynamic_cast",
+            "level" : 3
+        }
+    ]
+}
