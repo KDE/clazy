@@ -14,7 +14,12 @@
         {
             "name"  : "qt4-qstring-from-array",
             "level" : -1,
-            "categories" : ["qt4", "qstring"]
+            "categories" : ["qt4", "qstring"],
+            "fixits" : [
+                {
+                    "name" : "qt4-qstring-from-array"
+                }
+            ]
         },
         {
             "name"  : "connect-non-signal",
@@ -29,12 +34,22 @@
         {
             "name"  : "qdatetimeutc",
             "level" : 0,
-            "categories" : ["performance"]
+            "categories" : ["performance"],
+            "fixits" : [
+                {
+                    "name" : "qdatetime-utc"
+                }
+            ]
         },
         {
             "name"  : "qgetenv",
             "level" : 0,
-            "categories" : ["performance"]
+            "categories" : ["performance"],
+            "fixits" : [
+                {
+                    "name" : "qgetenv"
+                }
+            ]
         },
         {
             "name"  : "qstring-insensitive-allocation",
@@ -73,7 +88,12 @@
         {
             "name"  : "qstringref",
             "level" : 0,
-            "categories" : ["performance", "qstring"]
+            "categories" : ["performance", "qstring"],
+            "fixits" : [
+                {
+                    "name" : "missing-qstringref"
+                }
+            ]
         },
         {
             "name"  : "strict-iterators",
@@ -124,7 +144,12 @@
         {
             "name"  : "autounexpectedqstringbuilder",
             "level" : 1,
-            "categories" : ["bug", "qstring"]
+            "categories" : ["bug", "qstring"],
+            "fixits" : [
+                {
+                    "name" : "auto-unexpected-qstringbuilder"
+                }
+            ]
         },
         {
             "name"  : "connect-3arg-lambda",
@@ -252,12 +277,28 @@
         {
             "name"  : "oldstyleconnect",
             "level" : 2,
-            "categories" : ["performance"]
+            "categories" : ["performance"],
+            "fixits" : [
+                {
+                    "name" : "old-style-connect"
+                }
+            ]
         },
         {
             "name"  : "qstring-allocations",
             "level" : 2,
-            "categories" : ["performance", "qstring"]
+            "categories" : ["performance", "qstring"],
+            "fixits" : [
+                {
+                    "name" : "qlatin1string-allocations"
+                },
+                {
+                    "name" : "fromLatin1_fromUtf8-allocations"
+                },
+                {
+                    "name" : "fromCharPtrAllocations"
+                }
+            ]
         },
         {
             "name"  : "reservecandidates",
