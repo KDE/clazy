@@ -1,36 +1,45 @@
 {
+    "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance"],
     "checks" : [
         {
             "name"  : "inefficientqlist",
-            "level" : -1
+            "level" : -1,
+            "categories" : ["containers", "performance"]
         },
         {
-            "name"  : "isempty-vs-count",
-            "level" : -1
+            "name"   : "isempty-vs-count",
+            "level"  : -1,
+            "categories" : ["readability"]
         },
         {
             "name"  : "qt4-qstring-from-array",
-            "level" : -1
+            "level" : -1,
+            "categories" : ["qt4", "qstring"]
         },
         {
             "name"  : "connect-non-signal",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["bug"]
         },
         {
             "name"  : "lambda-in-connect",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["bug"]
         },
         {
             "name"  : "qdatetimeutc",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
         {
             "name"  : "qgetenv",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
         {
             "name"  : "qstring-insensitive-allocation",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance", "qstring"]
         },
         {
             "name"  : "qvariant-template-instantiation",
@@ -38,72 +47,89 @@
         },
         {
             "name"  : "unused-non-trivial-variable",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["readability"]
         },
         {
             "name"  : "connect-not-normalized",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
         {
             "name"  : "mutable-container-key",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["containers", "bug"]
         },
         {
             "name"  : "qenums",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["deprecation"]
         },
         {
             "name"  : "qmap-with-pointer-key",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "qstringref",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance", "qstring"]
         },
         {
             "name"  : "strict-iterators",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["containers", "performance", "bug"]
         },
         {
             "name"  : "writingtotemporary",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["bug"]
         },
         {
             "name"  : "container-anti-pattern",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "qcolor-from-literal",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
         {
             "name"  : "qfileinfo-exists",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
         {
             "name"  : "qstringarg",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance", "qstring"]
         },
         {
             "name"  : "qt-macros",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["bug"]
         },
         {
             "name"  : "temporaryiterator",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["containers", "bug"]
         },
         {
             "name"  : "wrong-qglobalstatic",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
 
         {
             "name"  : "autounexpectedqstringbuilder",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug", "qstring"]
         },
         {
             "name"  : "connect-3arg-lambda",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug"]
         },
         {
             "name"  : "ctor-missing-parent-argument",
@@ -111,87 +137,108 @@
         },
         {
             "name"  : "detachingtemporary",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "foreach",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "incorrect-emit",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["readability"]
         },
         {
             "name"  : "inefficient-qlist-soft",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "install-event-filter",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug"]
         },
         {
             "name"  : "nonpodstatic",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["performance"]
         },
         {
             "name"  : "post-event",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug"]
         },
         {
             "name"  : "qdeleteall",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "qlatin1string-non-ascii",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug", "qstring"]
         },
         {
             "name"  : "qstring-left",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug", "performance", "qstring"]
         },
         {
             "name"  : "range-loop",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "returning-data-from-temporary",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug"]
         },
         {
             "name"  : "ruleoftwosoft",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["cpp", "bug"]
         },
         {
             "name"  : "child-event-qobject-cast",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug"]
         },
         {
             "name"  : "base-class-event",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["bug"]
         },
         {
             "name"  : "container-inside-loop",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "copyable-polymorphic",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "bug"]
         },
         {
             "name"  : "function-args-by-ref",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "performance"]
         },
         {
             "name"  : "function-args-by-value",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "performance"]
         },
         {
             "name"  : "globalconstcharpointer",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "performance"]
         },
         {
             "name"  : "implicitcasts",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "bug"]
         },
         {
             "name"  : "missing-qobject-macro",
@@ -199,43 +246,53 @@
         },
         {
             "name"  : "missing-type-info",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "oldstyleconnect",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["performance"]
         },
         {
             "name"  : "qstring-allocations",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["performance", "qstring"]
         },
         {
             "name"  : "reservecandidates",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["containers"]
         },
         {
             "name"  : "returning-void-expression",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["readability", "cpp"]
         },
         {
             "name"  : "ruleofthree",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "bug"]
         },
         {
             "name"  : "virtualcallsfromctor",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["cpp", "bug"]
         },
         {
             "name"  : "assertwithsideeffects",
-            "level" : 3
+            "level" : 3,
+            "categories" : ["bug"]
         },
         {
             "name"  : "detachingmember",
-            "level" : 3
+            "level" : 3,
+            "categories" : ["containers", "performance"]
         },
         {
             "name"  : "dynamic_cast",
-            "level" : 3
+            "level" : 3,
+            "categories" : ["performance"]
         }
     ]
 }
