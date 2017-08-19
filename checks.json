@@ -2,7 +2,7 @@
     "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance"],
     "checks" : [
         {
-            "name"  : "inefficientqlist",
+            "name"  : "inefficient-qlist",
             "level" : -1,
             "categories" : ["containers", "performance"]
         },
@@ -32,7 +32,7 @@
             "categories" : ["bug"]
         },
         {
-            "name"  : "qdatetimeutc",
+            "name"  : "qdatetime-utc",
             "level" : 0,
             "categories" : ["performance"],
             "fixits" : [
@@ -86,7 +86,7 @@
             "categories" : ["containers", "performance"]
         },
         {
-            "name"  : "qstringref",
+            "name"  : "qstring-ref",
             "level" : 0,
             "categories" : ["performance", "qstring"],
             "fixits" : [
@@ -101,7 +101,7 @@
             "categories" : ["containers", "performance", "bug"]
         },
         {
-            "name"  : "writingtotemporary",
+            "name"  : "writing-to-temporary",
             "level" : 0,
             "categories" : ["bug"],
             "options" : [
@@ -126,7 +126,7 @@
             "categories" : ["performance"]
         },
         {
-            "name"  : "qstringarg",
+            "name"  : "qstring-arg",
             "level" : 0,
             "categories" : ["performance", "qstring"],
             "options" : [
@@ -141,7 +141,7 @@
             "categories" : ["bug"]
         },
         {
-            "name"  : "temporaryiterator",
+            "name"  : "temporary-iterator",
             "level" : 0,
             "categories" : ["containers", "bug"]
         },
@@ -152,7 +152,7 @@
         },
 
         {
-            "name"  : "autounexpectedqstringbuilder",
+            "name"  : "auto-unexpected-qstringbuilder",
             "level" : 1,
             "categories" : ["bug", "qstring"],
             "fixits" : [
@@ -171,7 +171,7 @@
             "level" : 1
         },
         {
-            "name"  : "detachingtemporary",
+            "name"  : "detaching-temporary",
             "level" : 1,
             "categories" : ["containers", "performance"]
         },
@@ -196,7 +196,7 @@
             "categories" : ["bug"]
         },
         {
-            "name"  : "nonpodstatic",
+            "name"  : "non-pod-global-static",
             "level" : 1,
             "categories" : ["performance"]
         },
@@ -231,7 +231,7 @@
             "categories" : ["bug"]
         },
         {
-            "name"  : "ruleoftwosoft",
+            "name"  : "rule-of-two-soft",
             "level" : 1,
             "categories" : ["cpp", "bug"]
         },
@@ -266,12 +266,12 @@
             "categories" : ["cpp", "performance"]
         },
         {
-            "name"  : "globalconstcharpointer",
+            "name"  : "global-const-char-pointer",
             "level" : 2,
             "categories" : ["cpp", "performance"]
         },
         {
-            "name"  : "implicitcasts",
+            "name"  : "implicit-casts",
             "level" : 2,
             "categories" : ["cpp", "bug"],
             "options" : [
@@ -290,7 +290,7 @@
             "categories" : ["containers", "performance"]
         },
         {
-            "name"  : "oldstyleconnect",
+            "name"  : "old-style-connect",
             "level" : 2,
             "categories" : ["performance"],
             "fixits" : [
@@ -321,7 +321,7 @@
             ]
         },
         {
-            "name"  : "reservecandidates",
+            "name"  : "reserve-candidates",
             "level" : 2,
             "categories" : ["containers"]
         },
@@ -331,27 +331,27 @@
             "categories" : ["readability", "cpp"]
         },
         {
-            "name"  : "ruleofthree",
+            "name"  : "rule-of-three",
             "level" : 2,
             "categories" : ["cpp", "bug"]
         },
         {
-            "name"  : "virtualcallsfromctor",
+            "name"  : "virtual-call-ctor",
             "level" : 2,
             "categories" : ["cpp", "bug"]
         },
         {
-            "name"  : "assertwithsideeffects",
+            "name"  : "assert-with-side-effects",
             "level" : 3,
             "categories" : ["bug"]
         },
         {
-            "name"  : "detachingmember",
+            "name"  : "detaching-member",
             "level" : 3,
             "categories" : ["containers", "performance"]
         },
         {
-            "name"  : "dynamic_cast",
+            "name"  : "bogus-dynamic-cast",
             "level" : 3,
             "categories" : ["performance"],
             "options" : [
