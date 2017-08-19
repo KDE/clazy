@@ -103,7 +103,12 @@
         {
             "name"  : "writingtotemporary",
             "level" : 0,
-            "categories" : ["bug"]
+            "categories" : ["bug"],
+            "options" : [
+                {
+                    "name" : "widen-criteria"
+                }
+            ]
         },
         {
             "name"  : "container-anti-pattern",
@@ -123,7 +128,12 @@
         {
             "name"  : "qstringarg",
             "level" : 0,
-            "categories" : ["performance", "qstring"]
+            "categories" : ["performance", "qstring"],
+            "options" : [
+                {
+                    "name" : "fillChar-overloads"
+                }
+            ]
         },
         {
             "name"  : "qt-macros",
@@ -263,7 +273,12 @@
         {
             "name"  : "implicitcasts",
             "level" : 2,
-            "categories" : ["cpp", "bug"]
+            "categories" : ["cpp", "bug"],
+            "options" : [
+                {
+                    "name" : "bool-to-int"
+                }
+            ]
         },
         {
             "name"  : "missing-qobject-macro",
@@ -297,6 +312,11 @@
                 },
                 {
                     "name" : "fromCharPtrAllocations"
+                }
+            ],
+            "options" : [
+                {
+                    "name" : "no-msvc-compat"
                 }
             ]
         },
@@ -333,7 +353,12 @@
         {
             "name"  : "dynamic_cast",
             "level" : 3,
-            "categories" : ["performance"]
+            "categories" : ["performance"],
+            "options" : [
+                {
+                    "name" : "qobject"
+                }
+            ]
         }
     ]
 }
