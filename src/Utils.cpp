@@ -852,10 +852,9 @@ SourceLocation Utils::locForNextToken(SourceLocation loc, const clang::SourceMan
     std::pair<FileID, unsigned> locInfo = sm.getDecomposedLoc(loc);
     bool InvalidTemp = false;
     StringRef File = sm.getBufferData(locInfo.first, &InvalidTemp);
-    if (InvalidTemp) {
-        llvm::errs() << "Failed to get buffer data\n";
+    if (InvalidTemp)
         return {};
-    }
+
     const char *TokenBegin = File.data() + locInfo.second;
     Lexer lexer(sm.getLocForStartOfFile(locInfo.first), lo, File.begin(),
                 TokenBegin, File.end());
