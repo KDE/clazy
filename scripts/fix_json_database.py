@@ -32,7 +32,7 @@ import json, sys, string
 
 # Removes arguments starting with -include
 def filter_no_pch(str):
-    return not str.startswith("-include")
+    return not (str.startswith("-include") or str.startswith(".pch/"))
 
 def remove_pch(c_splitted):
     return filter(filter_no_pch, c_splitted)
@@ -41,6 +41,12 @@ def fix_command(c):
     c_splitted = c.split()
     c_splitted = remove_pch(c_splitted)
     return string.join(c_splitted)
+
+
+def fix_arguments(args):
+    args = remove_pch(args)
+    return args
+
 #-------------------------------------------------------------------------------
 # Main:
 
@@ -50,13 +56,14 @@ f.close()
 
 decoded = json.loads(contents)
 new_decoded = []
-
 for cmd in decoded:
-    if 'command' not in cmd:
-        continue
+    if 'command' in cmd or 'arguments' in cmd:
+        if 'command' in cmd:
+            cmd['command'] = fix_command(cmd['command'])
+        if 'arguments' in cmd:
+            cmd['arguments'] = fix_arguments(cmd['arguments'])
 
-    cmd['command'] = fix_command(cmd['command'])
-    new_decoded.append(cmd)
+        new_decoded.append(cmd)
 
 new_contents = json.dumps(new_decoded)
 print new_contents
