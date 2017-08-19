@@ -35,7 +35,7 @@ using namespace clang::tooling;
 using namespace llvm;
 
 static llvm::cl::OptionCategory s_clazyCategory("clazy options");
-static cl::opt<std::string> s_checks("checks", cl::desc("Comma-separated list of clazy checks"),
+static cl::opt<std::string> s_checks("checks", cl::desc("Comma-separated list of clazy checks. Default is level1"),
                                      cl::init(""), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_noInplaceFixits("no-inplace-fixits", cl::desc("Fixits will be applied to a separate file (for unit-test use only)"),

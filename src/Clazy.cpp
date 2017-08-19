@@ -337,6 +337,8 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList,
     , m_checkList(checkList)
     , m_options(options)
 {
+    if (m_checkList.empty())
+        m_checkList = "level1";
 }
 
 unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
