@@ -94,19 +94,14 @@ void FunctionArgsByValue::VisitDecl(Decl *decl)
 
 void FunctionArgsByValue::VisitStmt(Stmt *stmt)
 {
-    if (LambdaExpr *lambda = dyn_cast<LambdaExpr>(stmt)) {
-        if (!shouldIgnoreFile(stmt->getLocStart()))
-            processFunction(lambda->getCallOperator());
-    }
+    if (LambdaExpr *lambda = dyn_cast<LambdaExpr>(stmt))
+        processFunction(lambda->getCallOperator());
 }
 
 void FunctionArgsByValue::processFunction(FunctionDecl *func)
 {
     if (!func || shouldIgnoreFunction(func) ||
         !func->isThisDeclarationADefinition() || func->isDeleted())
-        return;
-
-    if (shouldIgnoreFile(func->getLocStart()))
         return;
 
     Stmt *body = func->getBody();

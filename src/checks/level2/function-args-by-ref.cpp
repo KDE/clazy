@@ -100,9 +100,6 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         !func->isThisDeclarationADefinition() || func->isDeleted())
         return;
 
-    if (shouldIgnoreFile(func->getLocStart()))
-        return;
-
     Stmt *body = func->getBody();
 
     int i = -1;
