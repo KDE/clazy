@@ -86,18 +86,6 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
 FunctionArgsByRef::FunctionArgsByRef(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_filesToIgnore = {"/c++/",
-                       "qimage.cpp", // TODO: Uncomment in Qt6
-                       "qimage.h",    // TODO: Uncomment in Qt6
-                       "qevent.h", // TODO: Uncomment in Qt6
-                       "avxintrin.h",
-                       "avx2intrin.h",
-                       "qnoncontiguousbytedevice.cpp",
-                       "qlocale_unix.cpp",
-                       "/clang/",
-                       "qmetatype.h", // TODO: fix in Qt
-                       "qbytearray.h" // TODO: fix in Qt
-                      };
 }
 
 static std::string warningMsgForSmallType(int sizeOf, const std::string &typeName)

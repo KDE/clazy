@@ -33,8 +33,7 @@ using namespace clang;
 GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_filesToIgnore = { "errno.h", "getopt.h", "StdHeader.h",
-                        "3rdparty", "mysql.h", "qpicture.cpp" };
+    m_filesToIgnore = { "3rdparty", "mysql.h", "qpicture.cpp" };
 }
 
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)

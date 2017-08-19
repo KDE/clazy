@@ -39,8 +39,8 @@ using namespace std;
 ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_filesToIgnore = { "/gcc/", "/c++/", "functional_hash.h", "qobject_impl.h", "qdebug.h",
-                        "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp" };
+    m_filesToIgnore = { "qobject_impl.h", "qdebug.h", "hb-", "qdbusintegrator.cpp",
+                        "harfbuzz-", "qunicodetools.cpp" };
 }
 
 static bool isInterestingFunction(FunctionDecl *func)
