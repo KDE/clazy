@@ -37,10 +37,10 @@ static cl::opt<std::string> s_checks("checks", cl::desc("Comma-separated list of
                                      cl::init(""), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_noInplaceFixits("no-inplace-fixits", cl::desc("Fixits will be applied to a separate file (for unit-test use only)"),
-                                       cl::init(""), cl::cat(s_clazyCategory));
+                                       cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_enableAllFixits("enable-all-fixits", cl::desc("Enables all fixits"),
-                                       cl::init(""), cl::cat(s_clazyCategory));
+                                       cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not compatible with Qt 4"),
                                  cl::init(false), cl::cat(s_clazyCategory));
