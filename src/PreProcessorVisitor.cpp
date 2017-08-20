@@ -73,6 +73,9 @@ static int stringToNumber(const string &str)
 void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDefinition &def,
                                        SourceRange, const MacroArgs *)
 {
+    if (m_qtVersion != -1)
+        return;
+
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (!ii)
         return;
