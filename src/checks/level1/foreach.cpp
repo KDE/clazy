@@ -45,8 +45,11 @@ Foreach::Foreach(const std::string &name, ClazyContext *context)
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
     PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
-    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50900)
+    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50900) {
+        // Disabled since 5.9 because the Q_FOREACH internals changed.
+        // Not worth fixing it because range-loop is recommended
         return;
+    }
 
     auto forStm = dyn_cast<ForStmt>(stmt);
     if (forStm) {
