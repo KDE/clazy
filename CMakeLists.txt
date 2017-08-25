@@ -31,11 +31,11 @@ add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
 option(CLAZY_BUILD_UTILS_LIB "Enable this option to build a library so you can reuse clazy's utility functions" OFF)
 
-if (CLAZY_BUILD_UTILS_LIB)
+if(CLAZY_BUILD_UTILS_LIB)
   add_definitions(-DCLAZY_BUILD_UTILS_LIB)
 endif()
 
-if (MSVC AND NOT CLANG_LIBRARY_IMPORT)
+if(MSVC AND NOT CLANG_LIBRARY_IMPORT)
   message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
 endif()
 
@@ -48,7 +48,7 @@ endif()
 
 set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
 if(WIN32)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
@@ -68,7 +68,7 @@ endif()
 
 include(ClazySources.cmake)
 
-if (MSVC)
+if(MSVC)
   string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
 endif()
 
@@ -81,7 +81,7 @@ if(NOT APPLE AND NOT MINGW)
   list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
 endif()
 
-if (MSVC)
+if(MSVC)
   list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
 endif()
 
@@ -91,14 +91,14 @@ link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
 macro(link_to_llvm name llvm_libs)
   foreach(clang_lib ${CLANG_LIBS})
-    if (MSVC)
-        get_filename_component(LIB_FILENAME ${clang_lib} NAME)
-        if (LIB_FILENAME STREQUAL "clangFrontend.lib")
-            # On MSVC we don't link against clangFrontend.lib, instead we link against clang.exe (via clang.lib)
-            # Otherwise the clazy plugin would have it's own plugin registry and clang wouldn't see it.
-            # This way clazy registers with clang.
-            continue()
-        endif()
+    if(MSVC)
+      get_filename_component(LIB_FILENAME ${clang_lib} NAME)
+      if(LIB_FILENAME STREQUAL "clangFrontend.lib")
+        # On MSVC we don't link against clangFrontend.lib, instead we link against clang.exe (via clang.lib)
+        # Otherwise the clazy plugin would have it's own plugin registry and clang wouldn't see it.
+        # This way clazy registers with clang.
+        continue()
+      endif()
     endif()
 
     target_link_libraries(${name} ${clang_lib})
@@ -182,7 +182,7 @@ if(NOT WIN32)
   install(FILES ${CMAKE_BINARY_DIR}/clazy DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 else()
   install(FILES ${CMAKE_SOURCE_DIR}/clazy.bat DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
-  if (MSVC)
+  if(MSVC)
     install(FILES ${CMAKE_SOURCE_DIR}/clazy-cl.bat DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
   endif()
 endif()
@@ -207,7 +207,7 @@ install(FILES README.md COPYING-LGPL2.txt checks.json DESTINATION ${DOC_INSTALL_
 set(MAN_INSTALL_DIR "man/man1")
 add_subdirectory(docs)
 
-if (CLAZY_BUILD_UTILS_LIB)
+if(CLAZY_BUILD_UTILS_LIB)
   # Install public headers
   set(CLAZY_LIB_INCLUDES
     src/AccessSpecifierManager.h
@@ -231,21 +231,20 @@ if (CLAZY_BUILD_UTILS_LIB)
   install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
 endif()
 
-
 # rpath
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
-IF("${isSystemDir}" STREQUAL "-1")
-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-ENDIF("${isSystemDir}" STREQUAL "-1")
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+endif("${isSystemDir}" STREQUAL "-1")
 
 # Build clazy-standalone
 add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
 
-if (MSVC)
+if(MSVC)
   # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClangLazy.dll
   target_link_libraries(clazy-standalone clangFrontend)
 else()
