@@ -285,7 +285,7 @@
             "level" : 2
         },
         {
-            "name"  : "missing-type-info",
+            "name"  : "missing-typeinfo",
             "level" : 2,
             "categories" : ["containers", "performance"]
         },
