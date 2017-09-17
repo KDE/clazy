@@ -1,7 +1,7 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016-2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -103,6 +103,11 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
     if (!func || !func->isThisDeclarationADefinition() ||
         func->isDeleted() || shouldIgnoreFunction(func))
         return;
+
+    if (auto ctor = dyn_cast<CXXConstructorDecl>(func)) {
+        if (ctor->isCopyConstructor())
+            return; // copy-ctor must take by ref
+    }
 
     Stmt *body = func->getBody();
 

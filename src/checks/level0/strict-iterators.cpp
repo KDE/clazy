@@ -82,8 +82,14 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return true;
     }
 
+    // TODO: some util function to get the name of a nested class
+    const  bool nameToIsIterator = nameTo == "iterator" || clazy_std::endsWith(nameTo, "::iterator");
+    if (nameToIsIterator)
+        return false;
+
     const string nameFrom = StringUtils::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
-    if (nameFrom != "iterator")
+    const  bool nameFromIsIterator = nameFrom == "iterator" || clazy_std::endsWith(nameFrom, "::iterator");
+    if (!nameFromIsIterator)
         return false;
 
     if (recordTo && clazy_std::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
@@ -91,6 +97,11 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         if (filename == "lalr.cpp") // Lots of false positives here, because of const_iterator -> iterator typedefs
             return false;
     }
+
+    auto p = m_context->parentMap->getParent(implicitCast);
+    if (dyn_cast<CXXOperatorCallExpr>(p))
+        return false;
+
 
     emitWarning(implicitCast, "Mixing iterators with const_iterators");
 
