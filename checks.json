@@ -216,6 +216,11 @@
             "categories" : ["bug", "qstring"]
         },
         {
+            "name"  : "qproperty-without-notify",
+            "level" : 1,
+            "categories" : ["bug"]
+        },
+        {
             "name"  : "qstring-left",
             "level" : 1,
             "categories" : ["bug", "performance", "qstring"]
