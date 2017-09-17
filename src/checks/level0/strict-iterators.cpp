@@ -82,6 +82,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return true;
     }
 
+    // TODO: some util function to get the name of a nested class
     const  bool nameToIsIterator = nameTo == "iterator" || clazy_std::endsWith(nameTo, "::iterator");
     if (nameToIsIterator)
         return false;
