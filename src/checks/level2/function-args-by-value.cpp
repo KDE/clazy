@@ -100,8 +100,8 @@ void FunctionArgsByValue::VisitStmt(Stmt *stmt)
 
 void FunctionArgsByValue::processFunction(FunctionDecl *func)
 {
-    if (!func || shouldIgnoreFunction(func) ||
-        !func->isThisDeclarationADefinition() || func->isDeleted())
+    if (!func || !func->isThisDeclarationADefinition() ||
+        func->isDeleted() || shouldIgnoreFunction(func))
         return;
 
     Stmt *body = func->getBody();
