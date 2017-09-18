@@ -1,8 +1,7 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp",
-            "expects_failure": true
+            "filename" : "main.cpp"
         },
         {
             "filename" : "main.cpp_fixed.cpp",
@@ -13,6 +12,9 @@
         },
         {
             "filename" : "sharedptrs.cpp"
+        },
+        {
+            "filename" : "bug379342.cpp"
         }
     ]
 }
