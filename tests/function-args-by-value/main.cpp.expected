@@ -4,3 +4,4 @@ function-args-by-value/main.cpp:170:11: warning: Pass small and trivially-copyab
 function-args-by-value/main.cpp:174:11: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
 function-args-by-value/main.cpp:184:16: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
 function-args-by-value/main.cpp:193:19: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/main.cpp:217:24: warning: Pass small and trivially-copyable type by value (const int &) [-Wclazy-function-args-by-value]
