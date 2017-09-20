@@ -15,10 +15,10 @@ struct NonTrivial {
     int a;
 };
 
-extern void by_pointer(NonTrivial*);
-extern void by_const_pointer(const NonTrivial*);
-extern void by_ref(NonTrivial&);
-extern void by_constRef(const NonTrivial&);
+void by_pointer(NonTrivial*) {}
+void by_const_pointer(const NonTrivial*) {}
+void by_ref(NonTrivial&) {}
+void by_constRef(const NonTrivial&) {}
 
 int foo1(const Trivial nt) // Test #1: No warning
 {
@@ -213,3 +213,6 @@ struct Ctors
 {
     Ctors (NonTrivial) {}
 };
+
+void trivialByConstRef(const int &t) {} // Warn
+void trivialByRef(int &t) {} // OK

@@ -12,6 +12,9 @@
         },
         {
             "filename" : "sharedptrs.cpp"
+        },
+        {
+            "filename" : "bug379342.cpp"
         }
     ]
 }

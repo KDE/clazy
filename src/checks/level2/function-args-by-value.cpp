@@ -104,7 +104,8 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
         func->isDeleted() || shouldIgnoreFunction(func))
         return;
 
-    if (auto ctor = dyn_cast<CXXConstructorDecl>(func)) {
+    auto ctor = dyn_cast<CXXConstructorDecl>(func);
+    if (ctor) {
         if (ctor->isCopyConstructor())
             return; // copy-ctor must take by ref
     }
@@ -128,6 +129,27 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
             continue;
 
         if (classif.passSmallTrivialByValue) {
+            if (ctor) { // Implements fix for Bug #379342
+                vector<CXXCtorInitializer *> initializers = Utils::ctorInitializer(ctor, param);
+                bool found_by_ref_member_init = false;
+                for (auto initializer : initializers) {
+                    if (!initializer->isMemberInitializer())
+                        continue; // skip base class initializer
+                    FieldDecl *field = initializer->getMember();
+                    if (!field)
+                        continue;
+
+                    QualType type = field->getType();
+                    if (type.isNull() || type->isReferenceType()) {
+                        found_by_ref_member_init = true;
+                        break;
+                    }
+                }
+
+                if (found_by_ref_member_init)
+                    continue;
+            }
+
             std::vector<FixItHint> fixits;
             if (isFixitEnabled(FixitAll)) {
                 for (auto redecl : func->redecls()) { // Fix in both header and .cpp

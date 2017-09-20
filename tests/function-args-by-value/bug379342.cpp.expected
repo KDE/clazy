@@ -1,0 +1,1 @@
+function-args-by-value/bug379342.cpp:11:17: warning: Pass small and trivially-copyable type by value (const int &) [-Wclazy-function-args-by-value]
