@@ -1,0 +1,1 @@
+virtual-signal/main.cpp:10:5: warning: signal is virtual [-Wclazy-virtual-signal]

@@ -246,6 +246,11 @@
             "categories" : ["bug"]
         },
         {
+            "name"  : "virtual-signal",
+            "level" : 1,
+            "categories" : ["bug", "readability"]
+        },
+        {
             "name"  : "base-class-event",
             "level" : 2,
             "categories" : ["bug"]
