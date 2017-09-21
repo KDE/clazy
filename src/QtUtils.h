@@ -187,6 +187,14 @@ inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
 }
 
 /**
+ * Returns true if a class has a ctor that has a parameter of type paramType.
+ * ok will be false if an error occurred, or if the record is a fwd declaration, which isn't enough
+ * for we to find out the signature.
+ * numCtors will have the number of constructors analyized.
+ */
+bool recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &paramType, bool &ok, int &numCtors);
+
+/**
  * Returns true if we can prove the container doesn't detach.
  * Returns false otherwise, meaning that you can't conclude anything if false is returned.
  *

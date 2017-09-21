@@ -53,33 +53,25 @@ static string expectedParentTypeFor(CXXRecordDecl *decl)
 void CtorMissingParentArgument::VisitDecl(Decl *decl)
 {
     auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() ||
-        record->getDefinition() != record || // Means fwd decl
-        !QtUtils::isQObject(record)) {
-        return;
-    }
+    bool ok = false;
 
-    bool foundParentArgument = false;
+    if (!QtUtils::isQObject(record))
+        return;
+
+    const bool hasCtors = record->ctor_begin() != record->ctor_end();
+    if (!hasCtors)
+        return;
+
     const string parentType = expectedParentTypeFor(record);
     int numCtors = 0;
-    for (auto ctor : record->ctors()) {
-        if (ctor->isCopyOrMoveConstructor())
-            continue;
+    const bool hasQObjectParam = QtUtils::recordHasCtorWithParam(record, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
+    if (!ok)
+        return;
 
-        ++numCtors;
-        for (auto param : ctor->parameters()) {
-            QualType qt = TypeUtils::pointeeQualType(param->getType());
-            if (!qt.isConstQualified() && TypeUtils::derivesFrom(qt, parentType)) {
-                foundParentArgument = true;
-                break;
-            }
-        }
-    }
-
-    if (numCtors > 0 && !foundParentArgument) {
+    if (numCtors > 0 && !hasQObjectParam) {
         emitWarning(decl, record->getQualifiedNameAsString() +
-                          string(" should take ") +
-                          parentType + string(" parent argument in CTOR"));
+                    string(" should take ") +
+                    parentType + string(" parent argument in CTOR"));
     }
 }
 
