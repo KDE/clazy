@@ -323,3 +323,28 @@ CXXMethodDecl *QtUtils::pmfFromUnary(UnaryOperator *uo)
 
     return nullptr;
 }
+
+bool QtUtils::recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &paramType, bool &ok, int &numCtors)
+{
+    ok = true;
+    numCtors = 0;
+    if (!record || !record->hasDefinition() ||
+        record->getDefinition() != record) { // Means fwd decl
+        ok = false;
+        return false;
+    }
+
+    for (auto ctor : record->ctors()) {
+        if (ctor->isCopyOrMoveConstructor())
+            continue;
+        numCtors++;
+        for (auto param : ctor->parameters()) {
+            QualType qt = TypeUtils::pointeeQualType(param->getType());
+            if (!qt.isConstQualified() && TypeUtils::derivesFrom(qt, paramType)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}

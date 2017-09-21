@@ -74,3 +74,10 @@ class Test6 : public QObject // OK
 {
 public:
 };
+
+#include <QtCore/QCoreApplication>
+class MyApplication : public QCoreApplication
+{
+public:
+    MyApplication(int a, char **b) : QCoreApplication(a, b) {} // OK. Bug 384926
+};
