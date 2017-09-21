@@ -69,6 +69,16 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
         return;
 
     if (numCtors > 0 && !hasQObjectParam) {
+        clang::CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
+        const bool baseHasQObjectParam = QtUtils::recordHasCtorWithParam(baseClass, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
+        if (ok && !baseHasQObjectParam && sm().isInSystemHeader(baseClass->getLocStart())) {
+            // If the base class ctors don't accept QObject, and it's declared in a system header don't warn
+            return;
+        }
+
+        if (baseClass->getNameAsString() == "QCoreApplication")
+            return;
+
         emitWarning(decl, record->getQualifiedNameAsString() +
                     string(" should take ") +
                     parentType + string(" parent argument in CTOR"));
