@@ -1,0 +1,6 @@
+overridden-signal/main.cpp:24:5: warning: Overriding signal with signal: MyObject_derived::signal1 [-Wclazy-overridden-signal]
+overridden-signal/main.cpp:32:5: warning: Overriding signal with non-signal: MyObject_derived_derived::signal1 [-Wclazy-overridden-signal]
+overridden-signal/main.cpp:33:5: warning: Overriding signal with non-signal: MyObject_derived_derived::signal4 [-Wclazy-overridden-signal]
+overridden-signal/main.cpp:35:5: warning: Overriding signal with signal: MyObject_derived_derived::signal2 [-Wclazy-overridden-signal]
+overridden-signal/main.cpp:36:5: warning: Overriding non-signal with signal: MyObject_derived_derived::non_signal [-Wclazy-overridden-signal]
+overridden-signal/main.cpp:37:5: warning: Overriding signal with signal: MyObject_derived_derived::signal_with_params [-Wclazy-overridden-signal]

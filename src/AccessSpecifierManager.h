@@ -78,13 +78,13 @@ public:
     /**
      * Returns if a method is a signal, a slot, or neither.
      */
-    QtAccessSpecifierType qtAccessSpecifierType(clang::CXXMethodDecl*) const;
+    QtAccessSpecifierType qtAccessSpecifierType(const clang::CXXMethodDecl*) const;
 
 private:
     ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl*);
     const clang::CompilerInstance &m_ci;
-    clang::CXXRecordDecl *classDefinitionForLoc(clang::SourceLocation loc) const;
-    std::unordered_map<clang::CXXRecordDecl*, ClazySpecifierList> m_specifiersMap;
+    const clang::CXXRecordDecl *classDefinitionForLoc(clang::SourceLocation loc) const;
+    std::unordered_map<const clang::CXXRecordDecl*, ClazySpecifierList> m_specifiersMap;
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
 };
 

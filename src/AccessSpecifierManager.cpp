@@ -130,10 +130,10 @@ ClazySpecifierList& AccessSpecifierManager::entryForClassDefinition(CXXRecordDec
     return specifiers;
 }
 
-CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocation loc) const
+const CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocation loc) const
 {
     for (const auto &it : m_specifiersMap) {
-        CXXRecordDecl *record = it.first;
+        const CXXRecordDecl *record = it.first;
         if (record->getLocStart() < loc && loc < record->getLocEnd())
             return record;
     }
@@ -172,7 +172,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
     }
 }
 
-QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDecl *method) const
+QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMethodDecl *method) const
 {
     if (!method || method->getLocStart().isMacroID())
         return QtAccessSpecifier_Unknown;
@@ -197,7 +197,7 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(CXXMethodDec
 
     // Process Q_SLOTS and Q_SIGNALS:
 
-    CXXRecordDecl *record = method->getParent();
+    const CXXRecordDecl *record = method->getParent();
     if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
         return QtAccessSpecifier_None;
 

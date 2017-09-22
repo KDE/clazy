@@ -73,5 +73,28 @@ inline clang::ValueDecl *valueDeclForCallArgument(clang::CallExpr *call, unsigne
 }
 
 
+inline bool parametersMatch(clang::FunctionDecl *f1, clang::FunctionDecl *f2)
+{
+    if (!f1 || !f2)
+        return false;
+
+    auto params1 = f1->parameters();
+    auto params2 = f2->parameters();
+
+    if (params1.size() != params2.size())
+        return false;
+
+    for (int i = 0, e = params1.size(); i < e; ++i) {
+        clang::ParmVarDecl *p1 = params1[i];
+        clang::ParmVarDecl *p2 = params2[i];
+
+        if (p1->getType() != p2->getType())
+            return false;
+    }
+
+    return true;
+}
+
+
 }
 #endif

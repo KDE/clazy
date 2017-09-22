@@ -251,6 +251,11 @@
             "categories" : ["bug", "readability"]
         },
         {
+            "name"  : "overridden-signal",
+            "level" : 1,
+            "categories" : ["bug", "readability"]
+        },
+        {
             "name"  : "base-class-event",
             "level" : 2,
             "categories" : ["bug"]
