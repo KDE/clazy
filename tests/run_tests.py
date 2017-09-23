@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-import sys, os, subprocess, string, re, json, threading, multiprocessing
+import sys, os, subprocess, string, re, json, threading, multiprocessing, argparse
 from threading import Thread
 from sys import platform as _platform
 
@@ -263,15 +263,29 @@ except:
 CLANG_VERSION = int(version.replace('.', ''))
 
 #-------------------------------------------------------------------------------
+# Setup argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--verbose", action='store_true')
+parser.add_argument("--no-standalone", action='store_true', help="Don\'t run clazy-standalone")
+parser.add_argument("--only-standalone", action='store_true', help='Only run clazy-standalone')
+parser.add_argument("--dump-ast", action='store_true', help='Dump a unit-test AST to file')
+parser.add_argument("check_names", nargs='*', help="The name of the check who's unit-tests will be run. Defaults to running all checks.")
+args = parser.parse_args()
+
+if args.only_standalone and args.no_standalone:
+    print "Error: --only-standalone is incompatible with --no-standalone"
+    sys.exit(1)
+
+#-------------------------------------------------------------------------------
 # Global variables
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
 _help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
-_dump_ast = "--dump-ast" in sys.argv
-_verbose = "--verbose" in sys.argv
-_help = "--help" in sys.argv
-_no_standalone = "--no-standalone" in sys.argv
-_only_standalone = "--only-standalone" in sys.argv
+_dump_ast = args.dump_ast
+_verbose = args.verbose
+_no_standalone = args.no_standalone
+_only_standalone = args.only_standalone
 _num_threads = multiprocessing.cpu_count()
 _lock = threading.Lock()
 _was_successful = True
@@ -310,17 +324,6 @@ def run_command(cmd, output_file = "", test_env = os.environ):
         print lines
 
     return success
-
-def print_usage():
-    print "Usage for " + sys.argv[0].strip("./") + ":\n"
-    print "    " + sys.argv[0] + " [--help] [--dump-ast] [check1,check2,check3]"
-    print
-    print "    Without any check supplied, all checks will be run."
-    print "    --dump-ast is provided for debugging purposes.\n"
-    print "Help for clang plugin:"
-    print
-
-    run_command(_help_command)
 
 def files_are_equal(file1, file2):
     try:
@@ -468,22 +471,11 @@ def load_checks(all_check_names):
 #-------------------------------------------------------------------------------
 # main
 
-if _help:
-    print_usage()
-    sys.exit(0)
-
-args = sys.argv[1:]
-
-switches = ["--verbose", "--dump-ast", "--help", "--no-standalone", "--only-standalone"]
-
-if _dump_ast:
-    del(args[args.index("--dump-ast")])
-
 os.environ['CLAZY_CHECKS'] = ''
 
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)
-requested_check_names = filter(lambda x: x not in switches, args)
+requested_check_names = args.check_names
 requested_check_names = map(lambda x: x.strip("/\\"), requested_check_names)
 
 for check_name in requested_check_names:
