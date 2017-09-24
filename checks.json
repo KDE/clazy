@@ -256,6 +256,11 @@
             "categories" : ["bug", "readability"]
         },
         {
+            "name"  : "qhash-namespace",
+            "level" : 1,
+            "categories" : ["bug"]
+        },
+        {
             "name"  : "base-class-event",
             "level" : 2,
             "categories" : ["bug"]

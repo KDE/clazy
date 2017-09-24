@@ -23,6 +23,7 @@
 #define CLAZY_CONTEXT_UTILS_H
 
 #include "clazy_export.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/Decl.h>
@@ -73,6 +74,51 @@ inline clang::DeclContext * contextForDecl(clang::Decl *decl)
         return context;
 
     return decl->getDeclContext();
+}
+
+inline clang::NamespaceDecl *namespaceForDecl(clang::Decl *decl)
+{
+    if (!decl)
+        return nullptr;
+
+    clang::DeclContext *declContext = decl->getDeclContext();
+    while (declContext) {
+        if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(declContext))
+            return ns;
+
+        declContext = declContext->getParent();
+    }
+
+    return nullptr;
+}
+
+inline clang::NamespaceDecl *namespaceForType(clang::QualType q)
+{
+    if (q.isNull())
+        return nullptr;
+
+    q = TypeUtils::pointeeQualType(q);
+    // Check if it's a class, struct or union
+    clang::CXXRecordDecl *rec = q->getAsCXXRecordDecl();
+    if (rec)
+        return namespaceForDecl(rec);
+
+    // Or maybe it's a typedef to a builtin type:
+    auto typeDefType = q->getAs<clang::TypedefType>();
+    if (typeDefType) {
+        clang::TypedefNameDecl* typedeff = typeDefType->getDecl();
+        return namespaceForDecl(typedeff);
+    }
+
+    return nullptr;
+}
+
+inline clang::NamespaceDecl *namespaceForFunction(clang::FunctionDecl *func)
+{
+    if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(func->getDeclContext()))
+        return ns;
+
+    return namespaceForDecl(func);
 }
 
 /**

@@ -54,6 +54,7 @@
     qproperty-without-notify
     virtual-signal
     overridden-signal
+    qhash-namespace
   - missing-qobject-macro is now a level2 check, instead of level1. Because,
     people can omit Q_OBJECT intentionally.
   - Added -only-qt option, which will make clazy bailout early on non-Qt files.
