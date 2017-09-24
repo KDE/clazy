@@ -197,6 +197,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     if (parseArgument("only-qt", args))
         m_options |= ClazyContext::ClazyOption_OnlyQt;
 
+    if (parseArgument("qt-developer", args))
+        m_options |= ClazyContext::ClazyOption_QtDeveloper;
+
     m_context = new ClazyContext(ci, m_options);
 
     // This argument is for debugging purposes

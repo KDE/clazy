@@ -34,6 +34,7 @@ class Test:
         self.blacklist_platforms = []
         self.qt4compat = False
         self.only_qt = False
+        self.qt_developer = False
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -148,7 +149,8 @@ def load_json(check_name):
                 test.qt4compat = t['qt4compat']
             if 'only_qt' in t:
                 test.only_qt = t['only_qt']
-
+            if 'qt_developer' in t:
+                test.qt_developer = t['qt_developer']
 
             if not test.checks:
                 test.checks.append(test.check.name)
@@ -212,6 +214,9 @@ def clazy_standalone_command(test, qt):
     if test.only_qt:
         result = " -only-qt " + result
 
+    if test.qt_developer:
+        result = " -qt-developer " + result
+
     return result
 
 def clazy_command(qt, test, filename):
@@ -228,6 +233,9 @@ def clazy_command(qt, test, filename):
 
     if test.only_qt:
         result = result + " -Xclang -plugin-arg-clang-lazy -Xclang only-qt "
+
+    if test.qt_developer:
+        result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt-developer "
 
     if test.link and _platform.startswith('linux'): # Linking on one platform is enough. Won't waste time on macOS and Windows.
         result = result + " " + link_flags()

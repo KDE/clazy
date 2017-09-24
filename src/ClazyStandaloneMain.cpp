@@ -50,6 +50,9 @@ static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not co
 static cl::opt<bool> s_onlyQt("only-qt", cl::desc("Won't emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing."),
                               cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<bool> s_qtDeveloper("qt-developer", cl::desc("For running clazy on Qt itself, optional, but honours specific guidelines"),
+                              cl::init(false), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
@@ -69,6 +72,9 @@ public:
 
         if (s_qt4Compat.getValue())
             options |= ClazyContext::ClazyOption_Qt4Compat;
+
+        if (s_qtDeveloper.getValue())
+            options |= ClazyContext::ClazyOption_QtDeveloper;
 
         if (s_onlyQt.getValue())
             options |= ClazyContext::ClazyOption_OnlyQt;

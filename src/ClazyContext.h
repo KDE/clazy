@@ -55,7 +55,8 @@ public:
         ClazyOption_NoFixitsAutoWrite = 2, // If enabled then fixits are reported, but not applied
         ClazyOption_AllFixitsEnabled = 4,
         ClazyOption_Qt4Compat = 8,
-        ClazyOption_OnlyQt = 16 // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
+        ClazyOption_OnlyQt = 16, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
+        ClazyOption_QtDeveloper = 32 // For running clazy on Qt itself, optional, but honours specific guidelines
     };
     typedef int ClazyOptions;
 
@@ -82,6 +83,10 @@ public:
         return allFixitsEnabled || !requestedFixitName.empty();
     }
 
+    bool isQtDeveloper() const
+    {
+        return options & ClazyOption_QtDeveloper;
+    }
 
     bool isOptionSet(const std::string &optionName) const
     {
