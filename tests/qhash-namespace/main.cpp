@@ -1,8 +1,8 @@
 #include <QtCore/QString>
-
+QT_BEGIN_NAMESPACE
 struct A { };
+struct E { };
 uint qHash(A) { return 0; }; // OK
-
 namespace NS {
     typedef int IntFoo;
     struct B { struct B2 {}; struct B3 {}; };
@@ -20,3 +20,6 @@ uint qHash(NS::B) { return 0; } // Warn
 uint qHash(NS::B *) { return 0; } // Warn
 uint qHash(NS::B::B3) { return 0; }; // Warn
 uint qHash(NS::IntFoo) { return 0; }
+
+QT_END_NAMESPACE
+uint qHash(E) { return 0; } // Warn

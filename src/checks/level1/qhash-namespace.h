@@ -33,7 +33,6 @@ class qhash_namespace : public CheckBase
 public:
     explicit qhash_namespace(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
-private:
 };
 
 #endif

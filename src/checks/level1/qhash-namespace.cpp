@@ -26,7 +26,9 @@
 #include "TypeUtils.h"
 #include "ContextUtils.h"
 #include "StringUtils.h"
+#include "ClazyContext.h"
 #include "checkmanager.h"
+#include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
 
@@ -37,6 +39,8 @@ using namespace std;
 qhash_namespace::qhash_namespace(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
+    if (context->isQtDeveloper())
+        context->enablePreprocessorVisitor();
 }
 
 void qhash_namespace::VisitDecl(clang::Decl *decl)
@@ -63,6 +67,13 @@ void qhash_namespace::VisitDecl(clang::Decl *decl)
 
     if (!msg.empty())
         emitWarning(decl, msg);
+
+    if (m_context->isQtDeveloper()) {
+        PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+        if (preProcessorVisitor && !preProcessorVisitor->isBetweenQtNamespaceMacros(func->getLocStart())) {
+            emitWarning(decl, "qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") must be declared before QT_END_NAMESPACE");
+        }
+    }
 }
 
 REGISTER_CHECK("qhash-namespace", qhash_namespace, CheckLevel1)

@@ -4,3 +4,4 @@ qhash-namespace/main.cpp:19:1: warning: Move qHash(NS::B) into NS namespace for 
 qhash-namespace/main.cpp:20:1: warning: Move qHash(NS::B *) into NS namespace for ADL lookup [-Wclazy-qhash-namespace]
 qhash-namespace/main.cpp:21:1: warning: Move qHash(NS::B::B3) into NS namespace for ADL lookup [-Wclazy-qhash-namespace]
 qhash-namespace/main.cpp:22:1: warning: Move qHash(NS::IntFoo) into NS namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:25:1: warning: qHash(E) must be declared before QT_END_NAMESPACE [-Wclazy-qhash-namespace]

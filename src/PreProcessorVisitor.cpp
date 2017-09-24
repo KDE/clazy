@@ -31,9 +31,35 @@ using namespace std;
 PreProcessorVisitor::PreProcessorVisitor(const clang::CompilerInstance &ci)
     : clang::PPCallbacks()
     , m_ci(ci)
+    , m_sm(ci.getSourceManager())
 {
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(this));
+}
+
+bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
+{
+    if (loc.isInvalid())
+        return false;
+
+    if (loc.isMacroID())
+        loc = m_sm.getExpansionLoc(loc);
+
+    uint fileId = m_sm.getFileID(loc).getHashValue();
+
+    vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
+    for (SourceRange &pair : pairs) {
+        if (pair.getBegin().isInvalid() || pair.getEnd().isInvalid()) {
+            //llvm::errs() << "PreProcessorVisitor::isBetweenQtNamespaceMacros Found invalid location\n";
+            continue; // shouldn't happen
+        }
+
+        if (m_sm.isBeforeInSLocAddrSpace(pair.getBegin(), loc) &&
+            m_sm.isBeforeInSLocAddrSpace(loc, pair.getEnd()))
+            return true;
+    }
+
+    return false;
 }
 
 std::string PreProcessorVisitor::getTokenSpelling(const MacroDefinition &def) const
@@ -62,6 +88,28 @@ void PreProcessorVisitor::updateQtVersion()
     }
 }
 
+void PreProcessorVisitor::handleQtNamespaceMacro(SourceLocation loc, StringRef name)
+{
+    const bool isBegin = name == "QT_BEGIN_NAMESPACE";
+    uint fileId = m_sm.getFileID(loc).getHashValue();
+    vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
+
+    if (isBegin) {
+        pairs.push_back(SourceRange(loc, {}));
+    } else {
+        if (pairs.empty()) {
+            // llvm::errs() << "FOO Received end!!";
+        } else {
+            SourceRange &range = pairs[pairs.size() - 1];
+            if (range.getBegin().isInvalid()) {
+                // llvm::errs() << "FOO Error received end before a begin\n";
+            } else {
+                range.setEnd(loc);
+            }
+        }
+    }
+}
+
 static int stringToNumber(const string &str)
 {
     if (str.empty())
@@ -71,13 +119,18 @@ static int stringToNumber(const string &str)
 }
 
 void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDefinition &def,
-                                       SourceRange, const MacroArgs *)
+                                       SourceRange range, const MacroArgs *)
 {
-    if (m_qtVersion != -1)
-        return;
-
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (!ii)
+        return;
+
+    if (ii->getName() == "QT_BEGIN_NAMESPACE" || ii->getName() == "QT_END_NAMESPACE") {
+        handleQtNamespaceMacro(range.getBegin(), ii->getName());
+        return;
+    }
+
+    if (m_qtVersion != -1)
         return;
 
     auto name = ii->getName();
