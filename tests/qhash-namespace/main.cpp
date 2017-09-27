@@ -15,6 +15,11 @@ namespace NS {
     uint qHash(NS2::C) { return 0; }; // Warn
     uint qHash(::A) { return 0; } // Warn
     uint qHash(B::B3) { return 0; }; // OK
+    enum class EnumClass
+    {
+        One
+    };
+    uint qHash(EnumClass) { return 0; } // OK
 }
 uint qHash(NS::B) { return 0; } // Warn
 uint qHash(NS::B *) { return 0; } // Warn

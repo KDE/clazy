@@ -98,8 +98,8 @@ inline clang::NamespaceDecl *namespaceForType(clang::QualType q)
         return nullptr;
 
     q = TypeUtils::pointeeQualType(q);
-    // Check if it's a class, struct or union
-    clang::CXXRecordDecl *rec = q->getAsCXXRecordDecl();
+    // Check if it's a class, struct, union or enum
+    clang::TagDecl *rec = q->getAsTagDecl();
     if (rec)
         return namespaceForDecl(rec);
 
