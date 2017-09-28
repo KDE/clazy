@@ -1,25 +1,21 @@
 {
+    "minimum_clang_version" : 370,
     "tests" : [
         {
-            "filename" : "main.cpp",
-            "minimum_clang_version" : 370
+            "filename" : "main.cpp"
         },
         {
             "filename" : "bug374951.cpp",
-            "minimum_clang_version" : 370,
             "minimum_qt_version" : 570
         },
         {
-            "filename" : "bug375239.cpp",
-            "minimum_clang_version" : 370
+            "filename" : "bug375239.cpp"
         },
         {
-            "filename" : "bug375748.cpp",
-            "minimum_clang_version" : 370
+            "filename" : "bug375748.cpp"
         },
         {
-            "filename" : "bug376137.cpp",
-            "minimum_clang_version" : 370
+            "filename" : "bug376137.cpp"
         }
     ]
 }
