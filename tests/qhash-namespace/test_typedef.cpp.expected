@@ -1,0 +1,1 @@
+qhash-namespace/test_typedef.cpp:6:1: warning: Move qHash(NS::IntFoo) into NS namespace for ADL lookup [-Wclazy-qhash-namespace]
