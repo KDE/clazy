@@ -57,6 +57,18 @@ This is a convenience option which is identical to directly passing:
 
 =back
 
+=over 4
+
+=item B<--qtdeveloper>
+
+B<For Qt developers only.>  This option is special for running clazy on Qt itself.
+Will result in fewer false positives being reported in Qt code.
+
+This is a convenience option which is identical to directly passing:
+  "-Xclang -plugin-arg-clang-lazy -Xclang qt-developer"
+
+=back
+
 All other options are passed directly to clang++ and handled from there.
 
 See the clang manual for a list of the very large set of options available,

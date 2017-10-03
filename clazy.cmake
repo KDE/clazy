@@ -21,6 +21,8 @@ HELP() {
   echo "Convenience Options:"
   echo "  --qt4compat        Qt4 compatibility mode. useful for source code that can build with Qt4"
   echo "  (this is the same as passing \"-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat\")"
+  echo "  --qtdeveloper      Special option for building Qt5 itself resulting in fewer false positives"
+  echo "  (this is the same as passing \"-Xclang -plugin-arg-clang-lazy -Xclang qt-developer\")"
   echo
   echo "All other options are passed directly to clang++ and handled from there."
   echo
@@ -86,6 +88,11 @@ if ( test $# -gt 0 -a "$1" = "--qt4compat" )
 then
   shift
   ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat"
+fi
+if ( test $# -gt 0 -a "$1" = "--qtdeveloper" )
+then
+  shift
+  ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang qt-developer"
 fi
 
 ClangLazyLib=ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@
