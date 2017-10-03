@@ -70,7 +70,7 @@ QStringAllocations::QStringAllocations(const std::string &name, ClazyContext *co
 
 void QStringAllocations::VisitStmt(clang::Stmt *stm)
 {
-    if (QtUtils::isBootstrapping(m_preprocessorOpts)) {
+    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_preprocessorOpts)) {
         // During bootstrap many QString::fromLatin1() are used instead of tr(), which causes
         // much noise
         return;

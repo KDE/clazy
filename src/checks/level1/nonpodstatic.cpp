@@ -28,6 +28,7 @@
 #include "MacroUtils.h"
 #include "QtUtils.h"
 #include "checkmanager.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/Lex/Lexer.h>
@@ -87,7 +88,7 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (QtUtils::isBootstrapping(m_preprocessorOpts))
+    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_preprocessorOpts))
         return;
 
     const string className = recordDecl->getName();
