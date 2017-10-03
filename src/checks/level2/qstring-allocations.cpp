@@ -29,6 +29,7 @@
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include "FunctionUtils.h"
+#include "QtUtils.h"
 #include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -69,6 +70,12 @@ QStringAllocations::QStringAllocations(const std::string &name, ClazyContext *co
 
 void QStringAllocations::VisitStmt(clang::Stmt *stm)
 {
+    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_preprocessorOpts)) {
+        // During bootstrap many QString::fromLatin1() are used instead of tr(), which causes
+        // much noise
+        return;
+    }
+
     VisitCtor(stm);
     VisitOperatorCall(stm);
     VisitFromLatin1OrUtf8(stm);
