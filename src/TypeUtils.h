@@ -173,6 +173,14 @@ namespace TypeUtils
         return typeAsRecord(pointeeQualType(expr->getType()));
     }
 
+    inline clang::CXXRecordDecl* typeAsRecord(clang::ValueDecl *value)
+    {
+        if (!value)
+            return nullptr;
+
+        return typeAsRecord(pointeeQualType(value->getType()));
+    }
+
     /**
      * Returns the class that the typedef refered by qt is in.
      *

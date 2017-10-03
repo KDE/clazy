@@ -168,26 +168,6 @@ inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *contex
 }
 
 /**
- * Returns the varDecl for the 1st argument in a connect call
- */
-inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
-{
-    return FunctionUtils::valueDeclForCallArgument(call, 0);
-}
-
-/**
- * Returns the varDecl for 3rd argument in connects that are passed an explicit
- * receiver or context QObject.
- */
-inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
-{
-    if (!call || call->getNumArgs() < 5)
-        return nullptr;
-
-    return FunctionUtils::valueDeclForCallArgument(call, 3);
-}
-
-/**
  * Returns true if a class has a ctor that has a parameter of type paramType.
  * ok will be false if an error occurred, or if the record is a fwd declaration, which isn't enough
  * for we to find out the signature.
@@ -240,6 +220,41 @@ CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromConnect(clang::CallExpr *funcCall, 
 
 CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::Expr *e);
 CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
+
+/**
+ * Returns the varDecl for the 1st argument in a connect call
+ */
+inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
+{
+    return FunctionUtils::valueDeclForCallArgument(call, 0);
+}
+
+/**
+ * Returns the varDecl for 3rd argument in connects that are passed an explicit
+ * receiver or context QObject.
+ */
+inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
+{
+    if (!call || call->getNumArgs() < 5)
+        return nullptr;
+
+    return FunctionUtils::valueDeclForCallArgument(call, 3);
+}
+
+/**
+ * Returns the receiver method, in a PMF connect statement.
+ * The method can be a slot or a signal. If it's a lambda or functor nullptr is returned
+ */
+inline clang::CXXMethodDecl* receiverMethodForConnect(clang::CallExpr *call)
+{
+
+    clang::CXXMethodDecl *receiverMethod = QtUtils::pmfFromConnect(call, 2);
+    if (receiverMethod)
+        return receiverMethod;
+
+    // It's either third or fourth argument
+    return QtUtils::pmfFromConnect(call, 3);
+}
 
 }
 

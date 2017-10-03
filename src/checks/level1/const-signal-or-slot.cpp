@@ -51,10 +51,7 @@ void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)
     if (!QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *slot = QtUtils::pmfFromConnect(call, 2);
-    if (!slot) // The slot is either third or fourth argument
-        slot = QtUtils::pmfFromConnect(call, 3);
-
+    CXXMethodDecl *slot =  QtUtils::receiverMethodForConnect(call);
     if (!slot || !slot->isConst() || slot->getReturnType()->isVoidType()) // const and returning void must do something, so not a getter
         return;
 

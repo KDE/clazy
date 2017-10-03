@@ -75,6 +75,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assertwithsideeffects.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detachingmember.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/dynamic_cast.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/thread-with-slots.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/inefficientqlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/tr-non-literal.cpp

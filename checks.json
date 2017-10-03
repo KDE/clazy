@@ -384,6 +384,11 @@
                     "name" : "qobject"
                 }
             ]
+        },
+        {
+            "name"  : "thread-with-slots",
+            "level" : 3,
+            "categories" : ["bug"]
         }
     ]
 }

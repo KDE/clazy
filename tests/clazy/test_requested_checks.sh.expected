@@ -95,6 +95,7 @@ Available checks and FixIts:
     - assert-with-side-effects
     - bogus-dynamic-cast
     - detaching-member
+    - thread-with-slots
 
 If nothing is specified, all checks from level0 and level1 will be run.
 
