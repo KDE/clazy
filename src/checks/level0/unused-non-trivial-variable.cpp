@@ -90,6 +90,7 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
         return;
 
     SourceLocation locStart = varDecl->getLocStart();
+    locStart = sm().getExpansionLoc(locStart);
     auto declRefs = HierarchyUtils::getStatements<DeclRefExpr>(body, &sm(), locStart);
 
     auto pred = [varDecl] (DeclRefExpr *declRef) {
