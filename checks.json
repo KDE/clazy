@@ -167,6 +167,11 @@
             "categories" : ["bug"]
         },
         {
+            "name"  : "const-signal-or-slot",
+            "level" : 1,
+            "categories" : ["readability", "bug"]
+        },
+        {
             "name"  : "ctor-missing-parent-argument",
             "level" : 1
         },

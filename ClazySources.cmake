@@ -39,6 +39,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/autounexpectedqstringbuilder.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/child-event-qobject-cast.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/connect-3arg-lambda.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/const-signal-or-slot.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/detachingtemporary.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/foreach.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/inefficient-qlist-soft.cpp
