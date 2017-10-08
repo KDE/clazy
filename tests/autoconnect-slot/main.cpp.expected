@@ -1,0 +1,4 @@
+autoconnect-slot/main.cpp:14:5: warning: Use of autoconnected UI slot: on_mButton_clicked [-Wclazy-autoconnect-slot]
+autoconnect-slot/main.cpp:15:5: warning: Use of autoconnected UI slot: on_button_clicked [-Wclazy-autoconnect-slot]
+autoconnect-slot/main.cpp:16:5: warning: Use of autoconnected UI slot: on_mButton_enabled [-Wclazy-autoconnect-slot]
+autoconnect-slot/main.cpp:17:5: warning: Use of autoconnected UI slot: on_mButton_released [-Wclazy-autoconnect-slot]
