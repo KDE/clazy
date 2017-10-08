@@ -152,6 +152,11 @@
         },
 
         {
+            "name"  : "autoconnect-slot",
+            "level" : 1,
+            "categories" : ["readability"]
+        },
+        {
             "name"  : "auto-unexpected-qstringbuilder",
             "level" : 1,
             "categories" : ["bug", "qstring"],
