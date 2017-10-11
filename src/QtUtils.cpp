@@ -150,6 +150,12 @@ bool QtUtils::isConvertibleTo(const Type *source, const Type *target)
     if (source->isFloatingType() && target->isFloatingType())
         return true;
 
+    // "QString" can convert to "const QString &" and vice versa
+    if (source->isReferenceType() && source->getPointeeType().isConstQualified() && source->getPointeeType().getTypePtrOrNull() == target)
+        return true;
+    if (target->isReferenceType() && target->getPointeeType().isConstQualified() && target->getPointeeType().getTypePtrOrNull() == source)
+        return true;
+
     return false;
 }
 
