@@ -241,7 +241,9 @@ class TestTypes : public QObject
         connect(this, SIGNAL(s27(const S1 *)), SIGNAL(s23(const S1)));              // Warning && no-fixit
         connect(this, SIGNAL(s22(const S1)), SIGNAL(s27(const S1 *)));              // Warning && no-fixit
         connect(this, SIGNAL(s31(const S1 &)), SIGNAL(s31(const S1 &)));            // Warning && fixit
-        connect(this, SIGNAL(s31(const S1 &)), SIGNAL(s23(const S1)));              // Warning && no-fixit // although we could make it work
+        connect(this, SIGNAL(s31(const S1 &)), SIGNAL(s23(const S1)));              // Warning && fixit
+        connect(this, SIGNAL(s11(S1)), SIGNAL(s31(S1)));                            // Warning && fixit
+        connect(this, SIGNAL(s31(S1)), SIGNAL(s11(S1)));                            // Warning && fixit
     }
 
 signals:
