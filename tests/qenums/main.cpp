@@ -1,5 +1,13 @@
 #include <QtCore/QObject>
 
+class B
+{
+public:
+    enum BB {
+
+    };
+};
+
 class A : public QObject
 {
 public:
@@ -12,5 +20,7 @@ public:
 
     };
     Q_ENUM(E2)
+
+    Q_ENUMS(B::BB) // OK
 
 };

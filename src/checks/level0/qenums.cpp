@@ -52,6 +52,16 @@ void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
     if (!ii || ii->getName() != "Q_ENUMS")
         return;
 
+    {
+        // Don't warn when importing enums of other classes, because Q_ENUM doesn't support it.
+        // We simply check if :: is present because it's very cumbersome to to check for different classes when dealing with the pre-processor
+
+        CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
+        string text = Lexer::getSourceText(crange, sm(), lo());
+        if (clazy_std::contains(text, "::"))
+            return;
+    }
+
     if (range.getBegin().isMacroID())
         return;
 
