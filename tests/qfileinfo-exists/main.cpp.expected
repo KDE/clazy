@@ -1,1 +1,1 @@
-qfileinfo-exists/main.cpp:5:9: warning: Use the static QFileInfo::exists() instead [-Wclazy-qfileinfo-exists]
+qfileinfo-exists/main.cpp:5:9: warning: Use the static QFileInfo::exists() instead. It's documented to be faster. [-Wclazy-qfileinfo-exists]

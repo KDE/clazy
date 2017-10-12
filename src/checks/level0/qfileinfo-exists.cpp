@@ -47,7 +47,7 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
     if (!ctorExpr || StringUtils::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
         return;
 
-    emitWarning(stmt->getLocStart(), "Use the static QFileInfo::exists() instead");
+    emitWarning(stmt->getLocStart(), "Use the static QFileInfo::exists() instead. It's documented to be faster.");
 }
 
 
