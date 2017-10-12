@@ -205,6 +205,12 @@ namespace TypeUtils
 
         return nullptr;
     }
+
+    // Example: const QString &
+    inline bool isConstRef(const clang::Type *t)
+    {
+        return t && t->isReferenceType() && t->getPointeeType().isConstQualified();
+    }
 }
 
 #endif
