@@ -35,6 +35,8 @@ public:
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,
                            const clang::SourceRange &range) override;
+
+    bool m_lastIsGadget = false;
 };
 
 #endif

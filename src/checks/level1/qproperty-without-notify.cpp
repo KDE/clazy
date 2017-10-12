@@ -41,7 +41,20 @@ QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyCon
 void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (!ii || ii->getName() != "Q_PROPERTY")
+    if (!ii)
+        return;
+
+    if (ii->getName() == "Q_GADGET") {
+        m_lastIsGadget = true;
+        return;
+    }
+
+    if (ii->getName() == "Q_OBJECT") {
+        m_lastIsGadget = false;
+        return;
+    }
+
+    if (m_lastIsGadget || ii->getName() != "Q_PROPERTY")
         return;
 
     if (sm().isInSystemHeader(range.getBegin()))
