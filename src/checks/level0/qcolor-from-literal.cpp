@@ -59,7 +59,7 @@ public :
     {
         const StringLiteral *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
         if (handleStringLiteral(lt))
-            m_check->emitWarning(lt, "The QColor ctor taking ints is much cheaper than the one taking string literals");
+            m_check->emitWarning(lt, "The QColor ctor taking ints is cheaper than the one taking string literals");
     }
 };
 
@@ -87,7 +87,7 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
 
     StringLiteral *lt = HierarchyUtils::getFirstChildOfType2<StringLiteral>(call->getArg(0));
     if (handleStringLiteral(lt))
-        emitWarning(lt, "The ctor taking ints is much cheaper than QColor::setNamedColor(QString)");
+        emitWarning(lt, "The ctor taking ints is cheaper than QColor::setNamedColor(QString)");
 }
 
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)

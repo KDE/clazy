@@ -66,7 +66,7 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
         if (capture.getCaptureKind() == clang::LCK_ByRef) {
             VarDecl *declForCapture = capture.getCapturedVar();
             if (declForCapture && declForCapture != receiverDecl && ContextUtils::isValueDeclInFunctionContext(declForCapture))
-                emitWarning(capture.getLocation(), "capturing local variable by reference in lambda");
+                emitWarning(capture.getLocation(), "captured local variable by reference might go out of scope before lambda is called");
         }
     }
 }
