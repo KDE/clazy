@@ -4,7 +4,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QFile>
 #include <QtCore/QHash>
-
+#include <QtCore/QSet>
 
 QList<int> getList()
 {
@@ -158,3 +158,12 @@ QString getStr() { return QString(); }
 static auto bar = [] {
         return initializers().insert(getStr(), 1); // OK
     }();
+
+
+QSet<int> getSet() { return {}; }
+
+void testIntersect()
+{
+    QSet<int> other;
+    auto s = getSet().intersect(other); // OK
+}

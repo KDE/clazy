@@ -42,12 +42,12 @@ DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *co
     m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};
     m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
     m_writeMethodsByType["QVector"] = { "fill", "insert"};
-    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take", "unite" };
-    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take", "unite"};
+    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take"};
+    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take"};
     m_writeMethodsByType["QMultiHash"] = m_writeMethodsByType["QHash"];
     m_writeMethodsByType["QMultiMap"] = m_writeMethodsByType["QMap"];
     m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_writeMethodsByType["QSet"] = {"erase", "insert", "intersect", "unite", "subtract"};
+    m_writeMethodsByType["QSet"] = {"erase", "insert"};
     m_writeMethodsByType["QStack"] = {"push", "swap"};
     m_writeMethodsByType["QQueue"] = {"enqueue", "swap"};
     m_writeMethodsByType["QListSpecialMethods"] = {"sort", "replaceInStrings", "removeDuplicates"};
