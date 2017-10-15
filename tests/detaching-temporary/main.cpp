@@ -3,7 +3,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
 #include <QtCore/QFile>
-
+#include <QtCore/QHash>
 
 
 QList<int> getList()
@@ -151,3 +151,10 @@ void testQString()
     getString().begin(); // Warning
     getString()[1]; // Warning
 }
+
+extern QHash<QString, int> &initializers();
+QString getStr() { return QString(); }
+
+static auto bar = [] {
+        return initializers().insert(getStr(), 1); // OK
+    }();
