@@ -3,8 +3,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
 #include <QtCore/QFile>
-
-
+#include <QtCore/QHash>
+#include <QtCore/QSet>
 
 QList<int> getList()
 {
@@ -150,4 +150,20 @@ void testQString()
 {
     getString().begin(); // Warning
     getString()[1]; // Warning
+}
+
+extern QHash<QString, int> &initializers();
+QString getStr() { return QString(); }
+
+static auto bar = [] {
+        return initializers().insert(getStr(), 1); // OK
+    }();
+
+
+QSet<int> getSet() { return {}; }
+
+void testIntersect()
+{
+    QSet<int> other;
+    auto s = getSet().intersect(other); // OK
 }

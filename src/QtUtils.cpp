@@ -271,7 +271,7 @@ CXXMethodDecl *QtUtils::pmfFromConnect(CallExpr *funcCall, int argIndex)
     }
 
     if (argIndex >= numArgs) {
-        llvm::errs() << "error, invalid argIndex " << argIndex << " number of arguments " << numArgs << " ";
+        llvm::errs() << "error, invalid argIndex " << argIndex << " number of arguments " << numArgs << "\n";
         return nullptr;
     }
 

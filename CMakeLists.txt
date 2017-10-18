@@ -150,7 +150,7 @@ if(CLAZY_BUILD_UTILS_LIB)
 
   set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
   add_library(clazylib SHARED ${CLAZY_LIB_SRC})
-  link_to_llvm(clazylib)
+  link_to_llvm(clazylib "${LLVM_LIBS_LIST}")
   generate_export_header(clazylib)
   set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
   install(TARGETS clazylib EXPORT LibClazyExport
@@ -213,7 +213,7 @@ if(CLAZY_BUILD_UTILS_LIB)
     src/AccessSpecifierManager.h
     src/checkbase.h
     src/checkmanager.h
-    ${CMAKE_BINARY_DIR}/clazy_export.h
+    ${CMAKE_BINARY_DIR}/src/clazy_export.h
     src/clazy_stl.h
     src/ContextUtils.h
     src/FixItUtils.h
