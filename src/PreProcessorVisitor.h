@@ -42,6 +42,8 @@ namespace clang {
     class MacroArgs;
 }
 
+using uint = unsigned;
+
 class PreProcessorVisitor : public clang::PPCallbacks
 {
     PreProcessorVisitor(const PreProcessorVisitor &) = delete;
