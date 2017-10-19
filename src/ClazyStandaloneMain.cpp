@@ -53,6 +53,9 @@ static cl::opt<bool> s_onlyQt("only-qt", cl::desc("Won't emit warnings for non-Q
 static cl::opt<bool> s_qtDeveloper("qt-developer", cl::desc("For running clazy on Qt itself, optional, but honours specific guidelines"),
                               cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<bool> s_visitImplicitCode("visit-implicit-code", cl::desc("Should clazy visit implicit code like compiler generated construktors"),
+                              cl::init(false), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
@@ -78,6 +81,9 @@ public:
 
         if (s_onlyQt.getValue())
             options |= ClazyContext::ClazyOption_OnlyQt;
+
+        if (s_visitImplicitCode.getValue())
+            options |= ClazyContext::ClazyOption_VisitImplicitCode;
 
         return new ClazyStandaloneASTAction(s_checks.getValue(), options);
     }
