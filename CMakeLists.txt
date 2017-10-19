@@ -213,7 +213,7 @@ if(CLAZY_BUILD_UTILS_LIB)
     src/AccessSpecifierManager.h
     src/checkbase.h
     src/checkmanager.h
-    ${CMAKE_BINARY_DIR}/src/clazy_export.h
+    src/clazy_export.h
     src/clazy_stl.h
     src/ContextUtils.h
     src/FixItUtils.h
@@ -227,6 +227,7 @@ if(CLAZY_BUILD_UTILS_LIB)
     src/TemplateUtils.h
     src/TypeUtils.h
     src/Utils.h
+    src/ClazyContext.h
   )
   install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
 endif()
