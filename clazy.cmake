@@ -94,6 +94,11 @@ then
   shift
   ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang qt-developer"
 fi
+if ( test $# -gt 0 -a "$1" = "--visit-implicit-code" )
+then
+  shift
+  ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang visit-implicit-code"
+fi
 
 ClangLazyLib=ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@
 
