@@ -53,7 +53,7 @@ static cl::opt<bool> s_onlyQt("only-qt", cl::desc("Won't emit warnings for non-Q
 static cl::opt<bool> s_qtDeveloper("qt-developer", cl::desc("For running clazy on Qt itself, optional, but honours specific guidelines"),
                               cl::init(false), cl::cat(s_clazyCategory));
 
-static cl::opt<bool> s_visitImplicitCode("visit-implicit-code", cl::desc("Should clazy visit implicit code like compiler generated construktors"),
+static cl::opt<bool> s_visitImplicitCode("visit-implicit-code", cl::desc("For visiting implicit code like compiler generated constructors. None of the built-in checks benefit from this, but can be useful for custom checks"),
                               cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);

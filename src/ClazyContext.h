@@ -57,7 +57,7 @@ public:
         ClazyOption_Qt4Compat = 8,
         ClazyOption_OnlyQt = 16, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
         ClazyOption_QtDeveloper = 32, // For running clazy on Qt itself, optional, but honours specific guidelines
-        ClazyOption_VisitImplicitCode = 64, // Inspect compiler generated code aswell.
+        ClazyOption_VisitImplicitCode = 64 // Inspect compiler generated code aswell, useful for custom checks, if then need it
     };
     typedef int ClazyOptions;
 
