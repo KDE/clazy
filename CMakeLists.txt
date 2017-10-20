@@ -116,15 +116,22 @@ macro(link_to_llvm name llvm_libs)
     target_link_libraries(${name} ${llvm_system_lib})
   endforeach()
 
-  if(MSVC)
+  if(WIN32)
     target_link_libraries(${name} version.lib)
   endif()
 endmacro()
 
+option(CLAZY_STATIC_PLUGIN_LIB "Build plugin into static library" OFF)
+set(PLUGIN_LINK_TYPE SHARED)
+
+if (CLAZY_STATIC_PLUGIN_LIB)
+  set(PLUGIN_LINK_TYPE STATIC)
+endif()
+
 macro(add_clang_plugin name)
   set(srcs ${ARGN})
 
-  add_library(${name} SHARED ${srcs})
+  add_library(${name} ${PLUGIN_LINK_TYPE} ${srcs})
 
   if(SYMBOL_FILE)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
