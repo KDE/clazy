@@ -77,7 +77,14 @@ inline bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
 class CLAZYLIB_EXPORT CheckManager
 {
 public:
+    /**
+     * @note You must hold the CheckManager lock when operating on the instance
+     *
+     * @sa lock()
+     */
     static CheckManager *instance();
+
+    static std::mutex &lock() { return m_lock; }
 
     int registerCheck(const std::string &name, const std::string &className,
                       CheckLevel level, const FactoryFunction &, RegisteredCheck::Options = RegisteredCheck::Option_None);
@@ -105,6 +112,7 @@ public:
 
 private:
     CheckManager();
+    static std::mutex m_lock;
 
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;

@@ -36,6 +36,8 @@ using namespace std;
 static const char * s_fixitNamePrefix = "fix-";
 static const char * s_levelPrefix = "level";
 
+std::mutex CheckManager::m_lock;
+
 CheckManager::CheckManager()
 {
     m_registeredChecks.reserve(100);

@@ -37,6 +37,7 @@
 #include "clang/AST/ParentMap.h"
 #include <llvm/Config/llvm-config.h>
 
+#include <mutex>
 #include <stdio.h>
 #include <sstream>
 #include <iostream>
@@ -153,6 +154,11 @@ ClazyASTAction::ClazyASTAction()
 
 std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &, llvm::StringRef)
 {
+    // NOTE: This method needs to be kept reentrant (but not necessarily thread-safe)
+    // Might be called from multiple threads via libclang, each thread operates on a different instance though
+
+    std::lock_guard<std::mutex> lock(CheckManager::lock());
+
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
     CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, m_context);
     for (CheckBase *check : createdChecks) {
@@ -164,6 +170,9 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_)
 {
+    // NOTE: This method needs to be kept reentrant (but not necessarily thread-safe)
+    // Might be called from multiple threads via libclang, each thread operates on a different instance though
+
     std::vector<std::string> args = args_;
 
     if (parseArgument("help", args)) {
@@ -208,7 +217,10 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
 
-    m_checks = m_checkManager->requestedChecks(m_context, args);
+    {
+        std::lock_guard<std::mutex> lock(CheckManager::lock());
+        m_checks = m_checkManager->requestedChecks(m_context, args);
+    }
 
     if (args.size() > 1) {
         // Too many arguments.
@@ -277,7 +289,9 @@ void ClazyASTAction::PrintAnchorHeader(llvm::raw_ostream &ros, RegisteredCheck::
 
 void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros, HelpMode helpMode) const
 {
+    std::lock_guard<std::mutex> lock(CheckManager::lock());
     RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
+
     clazy_std::sort(checks, checkLessThanByLevel);
 
     if (helpMode == HelpMode_AnchorHeader) {
