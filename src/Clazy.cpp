@@ -384,5 +384,7 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
    return unique_ptr<ASTConsumer>(astConsumer);
 }
 
+volatile int ClazyPluginAnchorSource = 0;
+
 static FrontendPluginRegistry::Add<ClazyASTAction>
 X("clang-lazy", "clang lazy plugin");
