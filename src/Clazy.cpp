@@ -37,7 +37,6 @@
 #include "clang/AST/ParentMap.h"
 #include <llvm/Config/llvm-config.h>
 
-#include <mutex>
 #include <stdio.h>
 #include <sstream>
 #include <iostream>
