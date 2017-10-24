@@ -31,6 +31,7 @@
 #include <clang/Lex/PreprocessorOptions.h>
 
 #include <functional>
+#include <mutex>
 #include <unordered_map>
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
