@@ -7,11 +7,15 @@ class MyObj : public QObject
     {
         connect(this, SIGNAL(destroyed()), SLOT(privSlot()));
         connect(this, SIGNAL(destroyed()), this, SLOT(privSlot()));
+        connect(this, SIGNAL(destroyed()), this, SLOT(privSlot2()));
     }
 public:
     class Private;
     Private * d;
     Q_PRIVATE_SLOT(d, void privSlot())
+    Q_PRIVATE_SLOT(d, void privSlot2())
+signals:
+    void privSlot2(); // Signal with the same name as private slot
 };
 
 class MyObj::Private
@@ -25,14 +29,11 @@ public:
         q->connect(other, SIGNAL(destroyed()), SLOT(privSlot()));
     }
 
-
-
-
-
     void somePrivFunction();
 
 public Q_SLOTS:
     void privSlot();
+    void privSlot2();
 private:
     MyObj *q;
 };

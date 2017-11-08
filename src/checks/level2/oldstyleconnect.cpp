@@ -30,6 +30,8 @@
 #include "FixItUtils.h"
 #include "ContextUtils.h"
 #include "QtUtils.h"
+#include "ClazyContext.h"
+#include "AccessSpecifierManager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -74,6 +76,7 @@ OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
+    context->enableAccessSpecifierManager();
 }
 
 int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connectCall)
@@ -175,7 +178,7 @@ bool OldStyleConnect::isPrivateSlot(const string &name) const
 
 void OldStyleConnect::VisitStmt(Stmt *s)
 {
-    CallExpr *call = dyn_cast<CallExpr>(s);
+    auto call = dyn_cast<CallExpr>(s);
     if (!call)
         return;
 
@@ -186,7 +189,7 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!function)
         return;
 
-    CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(function);
+    auto method = dyn_cast<CXXMethodDecl>(function);
     if (!method)
         return;
 
@@ -331,12 +334,24 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                              + methodName + " for record " + lastRecordDecl->getNameAsString();
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
+            } else {
+                AccessSpecifierManager *a = m_context->accessSpecifierManager;
+                if (!a)
+                    return {};
+
+                const bool isSignal = a->qtAccessSpecifierType(methods[0]) == QtAccessSpecifier_Signal;
+                if (isSignal && macroName == "SLOT") {
+                    // The method is actually a signal and the user used SLOT()
+                    // bail out with the fixing.
+                    string msg = string("Can't fix. SLOT macro used but method " + methodName + " is a signal");
+                    queueManualFixitWarning(s, FixItConnects, msg);
+                    return {};
+                }
             }
 
             auto methodDecl = methods[0];
-            if (methodDecl->isStatic()) {
+            if (methodDecl->isStatic())
                 return {};
-            }
 
             if (macroNum == 1) {
                 // Save the number of parameters of the signal. The slot should not have more arguments.
