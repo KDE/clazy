@@ -71,5 +71,6 @@ old-style-connect/main.cpp:320:9: warning: Old Style Connect [-Wclazy-old-style-
 old-style-connect/main.cpp:321:9: warning: Old Style Connect [-Wclazy-old-style-connect]
 old-style-connect/main.cpp:322:9: warning: Old Style Connect [-Wclazy-old-style-connect]
 old-style-connect/main.cpp:341:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/main.cpp:341:43: warning: FixIt failed, requires manual intervention:  No such method foo in class QDBusInterface [-Wclazy-old-style-connect]
 old-style-connect/main.cpp:365:5: warning: Old Style Connect [-Wclazy-old-style-connect]
 old-style-connect/main.cpp:366:5: warning: Old Style Connect [-Wclazy-old-style-connect]

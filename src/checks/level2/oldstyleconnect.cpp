@@ -182,7 +182,8 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!call)
         return;
 
-    if (m_lastMethodDecl && m_lastMethodDecl->getParent() && m_lastMethodDecl->getParent()->getNameAsString() == "QObject") // Don't warn of stuff inside qobject.h
+    if (m_lastMethodDecl && m_context->isQtDeveloper() && m_lastMethodDecl->getParent() &&
+        m_lastMethodDecl->getParent()->getNameAsString() == "QObject") // Don't warn of stuff inside qobject.h
         return;
 
     FunctionDecl *function = call->getDirectCallee();
@@ -319,7 +320,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 if (isPrivateSlot(methodName)) {
                     msg = "Converting Q_PRIVATE_SLOTS not implemented yet\n";
                 } else {
-                    if (classIsOk(lastRecordDecl->getNameAsString())) {
+                    if (m_context->isQtDeveloper() && classIsOk(lastRecordDecl->getNameAsString())) {
                         // This is OK
                         return {};
                     } else {
