@@ -38,3 +38,9 @@ void test()
     o.connect(&o, &MyObject::signal1, &MyObject::nonGetter1); // OK
     o.connect(&o, &MyObject::signal1, &MyObject::nonGetter2); // OK
 }
+
+void bug386940()
+{
+    MyObject o;
+    QObject::connect(&o, &MyObject::signal1, []{}); // OK
+}

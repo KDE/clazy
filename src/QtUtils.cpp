@@ -270,10 +270,8 @@ CXXMethodDecl *QtUtils::pmfFromConnect(CallExpr *funcCall, int argIndex)
         return nullptr;
     }
 
-    if (argIndex >= numArgs) {
-        llvm::errs() << "error, invalid argIndex " << argIndex << " number of arguments " << numArgs << "\n";
+    if (argIndex >= numArgs)
         return nullptr;
-    }
 
     Expr *expr = funcCall->getArg(argIndex);
     return pmfFromUnary(expr);
