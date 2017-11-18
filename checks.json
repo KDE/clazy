@@ -32,6 +32,11 @@
             "categories" : ["bug"]
         },
         {
+            "name"  : "lambda-unique-connection",
+            "level" : 0,
+            "categories" : ["bug"]
+        },
+        {
             "name"  : "qdatetime-utc",
             "level" : 0,
             "categories" : ["performance"],

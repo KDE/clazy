@@ -1,0 +1,91 @@
+/*
+  This file is part of the clazy static checker.
+
+  Copyright (C) 2017 Sergio Martins <smartins@kde.org>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+  Boston, MA 02110-1301, USA.
+*/
+
+#include "lambda-unique-connection.h"
+#include "Utils.h"
+#include "HierarchyUtils.h"
+#include "QtUtils.h"
+#include "TypeUtils.h"
+#include "checkmanager.h"
+#include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
+
+#include <clang/AST/AST.h>
+
+using namespace clang;
+using namespace std;
+
+
+LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
+{
+}
+
+void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
+{
+    auto call = dyn_cast<CallExpr>(stmt);
+    if (!call)
+        return;
+
+    // We want this signature:
+    // connect(const QObject *sender, PointerToMemberFunction signal, const QObject *context, Functor functor, Qt::ConnectionType type)
+
+    FunctionDecl *func = call->getDirectCallee();
+    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
+        return;
+
+    Expr *typeArg = call->getArg(4); // The type
+
+    vector<DeclRefExpr*> result;
+    HierarchyUtils::getChilds(typeArg, result);
+
+    bool found = false;
+    for (auto declRef : result) {
+        if (auto enumConstant = dyn_cast<EnumConstantDecl>(declRef->getDecl())) {
+            if (enumConstant->getName() == "UniqueConnection") {
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if (!found)
+        return;
+
+    FunctionTemplateSpecializationInfo *tsi = func->getTemplateSpecializationInfo();
+    if (!tsi)
+        return;
+    FunctionTemplateDecl *temp = tsi->getTemplate();
+    const TemplateParameterList *tempParams = temp->getTemplateParameters();
+    if (tempParams->size() != 2)
+        return;
+
+    CXXMethodDecl *method = QtUtils::pmfFromConnect(call, 3);
+    if (method) {
+        // How else to detect if it's the right overload ? It's all templated stuff with the same
+        // names for all the template arguments
+        return;
+    }
+
+    emitWarning(typeArg, "UniqueConnection is not supported with non-member functions");
+}
+
+REGISTER_CHECK("lambda-unique-connection", LambdaUniqueConnection, CheckLevel0)

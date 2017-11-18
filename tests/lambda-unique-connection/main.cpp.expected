@@ -1,0 +1,4 @@
+lambda-unique-connection/main.cpp:8:49: warning: UniqueConnection is not supported with non-member functions [-Wclazy-lambda-unique-connection]
+lambda-unique-connection/main.cpp:9:49: warning: UniqueConnection is not supported with non-member functions [-Wclazy-lambda-unique-connection]
+lambda-unique-connection/main.cpp:12:55: warning: UniqueConnection is not supported with non-member functions [-Wclazy-lambda-unique-connection]
+lambda-unique-connection/main.cpp:13:55: warning: UniqueConnection is not supported with non-member functions [-Wclazy-lambda-unique-connection]
