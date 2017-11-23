@@ -324,6 +324,7 @@ $ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
   "-resource-dir"
   "/usr/bin/../lib/clang/4.0.1" # this is the interesting path (without the version)
 $ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
+$ ln -sf /usr/bin/../include/c++/ /myprefix/include/c++ # Required on macOS
 ```
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
