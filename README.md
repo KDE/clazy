@@ -1,4 +1,4 @@
-*WARNING:* master is the development branch. Please use the v1.2 tag.
+*WARNING:* master is the development branch. Please use the v1.3 tag.
 
 clazy v1.3
 ===========
@@ -83,9 +83,10 @@ See troubleshooting section if you have problems.
 
 ## Windows
 
-### Pre-built msvc2015 clang and clazy binaries
+### 3rdparty pre-built msvc2015 clang and clazy binaries
 
-The easiest way is to download the binaries from <http://download.kde.org/stable/clazy/1.2/clazy_v1.2-msvc2015.zip.mirrorlist>. Unzip it somewhere, add bin to PATH and you're ready to go. Use clazy-cl.bat as a drop-in replacement for cl.exe.
+Building for Windows is a lengthy and tedious task, therefore the maintainer won't be creating them anymore on his free/KDE time.
+KDAB however has offered to produce these binaries and they will appear on their website.
 
 If you really want to build clang and clazy yourself then read on, otherwise skip the building topic.
 
@@ -431,7 +432,7 @@ and thanks to:
 
 # Contributing patches
 
-New features go to master and bug fixes go to 1.2 branch. 
+New features go to master and bug fixes go to 1.3 branch.
 The prefered way to contributing is by using KDE's phabricator, see:
 - <https://community.kde.org/Infrastructure/Phabricator>
 - <https://phabricator.kde.org/differential/>
