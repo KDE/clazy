@@ -223,10 +223,11 @@ def clazy_command(qt, test, filename):
     if test.isScript():
         return "./" + filename
 
-    if 'CLAZY_CXX' in os.environ:
+    if 'CLAZY_CXX' in os.environ: # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
     else:
-        result = "clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
+        clang = os.getenv('CLANG_CXX', 'clang')
+        result = clang + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
 
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt4-compat "
