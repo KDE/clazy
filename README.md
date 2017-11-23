@@ -1,5 +1,3 @@
-*WARNING:* master is the development branch. Please use the v1.3 tag.
-
 clazy v1.3
 ===========
 
