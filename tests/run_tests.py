@@ -256,7 +256,7 @@ def dump_ast_command(test):
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
         return os.environ['CLAZY_CXX'] # so we can set clazy.bat instead
-    return 'clang'
+    return os.getenv('CLANG_CXX', 'clang')
 
 #-------------------------------------------------------------------------------
 # Get clang version
