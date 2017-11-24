@@ -479,6 +479,9 @@ def load_checks(all_check_names):
 #-------------------------------------------------------------------------------
 # main
 
+if 'CLAZY_NO_WERROR' in os.environ:
+    del os.environ['CLAZY_NO_WERROR']
+
 os.environ['CLAZY_CHECKS'] = ''
 
 all_check_names = get_check_names()
