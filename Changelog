@@ -49,7 +49,7 @@
     and headers or nothing at all. By default nothing is installed, except
     the plugin and man pages.
 
-* v1.3 ()
+* v1.3 (November 26th, 2017)
   - New checks:
     connect-3arg-lambda
     qproperty-without-notify

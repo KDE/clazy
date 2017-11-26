@@ -1,4 +1,4 @@
-*WARNING:* master is the development branch. Please use the v1.2 tag.
+*WARNING:* master is the development branch. Please use the v1.3 tag.
 
 clazy v1.3
 ===========
@@ -83,9 +83,10 @@ See troubleshooting section if you have problems.
 
 ## Windows
 
-### Pre-built msvc2015 clang and clazy binaries
+### 3rdparty pre-built msvc2015 clang and clazy binaries
 
-The easiest way is to download the binaries from <http://download.kde.org/stable/clazy/1.2/clazy_v1.2-msvc2015.zip.mirrorlist>. Unzip it somewhere, add bin to PATH and you're ready to go. Use clazy-cl.bat as a drop-in replacement for cl.exe.
+Building for Windows is a lengthy and tedious task, therefore the maintainer won't be creating them anymore on his free/KDE time.
+KDAB however has offered to produce these binaries and they will appear on their website.
 
 If you really want to build clang and clazy yourself then read on, otherwise skip the building topic.
 
@@ -218,6 +219,7 @@ clazy runs all checks from level1 by default.
     - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
     - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
     - [lambda-in-connect](src/checks/level0/README-lambda-in-connect.md)
+    - [lambda-unique-connection](src/checks/level0/README-lambda-unique-connection.md)
     - [mutable-container-key](src/checks/level0/README-mutable-container-key.md)
     - [qcolor-from-literal](src/checks/level0/README-qcolor-from-literal.md)
     - [qdatetime-utc](src/checks/level0/README-qdatetime-utc.md)    (fix-qdatetime-utc)
@@ -239,20 +241,25 @@ clazy runs all checks from level1 by default.
 - Checks from level1:
     - [auto-unexpected-qstringbuilder](src/checks/level1/README-auto-unexpected-qstringbuilder.md)    (fix-auto-unexpected-qstringbuilder)
     - [child-event-qobject-cast](src/checks/level1/README-child-event-qobject-cast.md)
+    - [connect-3arg-lambda](src/checks/level1/README-connect-3arg-lambda.md)
+    - [const-signal-or-slot](src/checks/level1/README-const-signal-or-slot.md)
     - [detaching-temporary](src/checks/level1/README-detaching-temporary.md)
     - [foreach](src/checks/level1/README-foreach.md)
     - [incorrect-emit](src/checks/level1/README-incorrect-emit.md)
     - [inefficient-qlist-soft](src/checks/level1/README-inefficient-qlist-soft.md)
     - [install-event-filter](src/checks/level1/README-install-event-filter.md)
-    - [missing-qobject-macro](src/checks/level1/README-missing-qobject-macro.md)
     - [non-pod-global-static](src/checks/level1/README-non-pod-global-static.md)
+    - [overridden-signal](src/checks/level1/README-overridden-signal.md)
     - [post-event](src/checks/level1/README-post-event.md)
     - [qdeleteall](src/checks/level1/README-qdeleteall.md)
+    - [qhash-namespace](src/checks/level1/README-qhash-namespace.md)
     - [qlatin1string-non-ascii](src/checks/level1/README-qlatin1string-non-ascii.md)
+    - [qproperty-without-notify](src/checks/level1/README-qproperty-without-notify.md)
     - [qstring-left](src/checks/level1/README-qstring-left.md)
     - [range-loop](src/checks/level1/README-range-loop.md)
     - [returning-data-from-temporary](src/checks/level1/README-returning-data-from-temporary.md)
     - [rule-of-two-soft](src/checks/level1/README-rule-of-two-soft.md)
+    - [virtual-signal](src/checks/level1/README-virtual-signal.md)
 
 - Checks from level2:
     - [base-class-event](src/checks/level2/README-base-class-event.md)
@@ -263,6 +270,7 @@ clazy runs all checks from level1 by default.
     - [function-args-by-value](src/checks/level2/README-function-args-by-value.md)
     - [global-const-char-pointer](src/checks/level2/README-global-const-char-pointer.md)
     - [implicit-casts](src/checks/level2/README-implicit-casts.md)
+    - [missing-qobject-macro](src/checks/level2/README-missing-qobject-macro.md)
     - [missing-typeinfo](src/checks/level2/README-missing-typeinfo.md)
     - [old-style-connect](src/checks/level2/README-old-style-connect.md)    (fix-old-style-connect)
     - [qstring-allocations](src/checks/level2/README-qstring-allocations.md)    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
@@ -275,6 +283,7 @@ clazy runs all checks from level1 by default.
     - [assert-with-side-effects](src/checks/level3/README-assert-with-side-effects.md)
     - [bogus-dynamic-cast](src/checks/level3/README-bogus-dynamic-cast.md)
     - [detaching-member](src/checks/level3/README-detaching-member.md)
+    - [thread-with-slots](src/checks/level3/README-thread-with-slots.md)
 
 # Selecting which checks to enable
 
@@ -324,6 +333,7 @@ $ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
   "-resource-dir"
   "/usr/bin/../lib/clang/4.0.1" # this is the interesting path (without the version)
 $ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
+$ ln -sf /usr/bin/../include/c++/ /myprefix/include/c++ # Required on macOS
 ```
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
@@ -430,7 +440,7 @@ and thanks to:
 
 # Contributing patches
 
-New features go to master and bug fixes go to 1.2 branch. 
+New features go to master and bug fixes go to 1.3 branch.
 The prefered way to contributing is by using KDE's phabricator, see:
 - <https://community.kde.org/Infrastructure/Phabricator>
 - <https://phabricator.kde.org/differential/>
