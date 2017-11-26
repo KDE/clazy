@@ -355,6 +355,7 @@ def get_fixed_files():
     return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
 
 def print_differences(file1, file2):
+    # Returns true if the the files are equal
     return run_command("diff -Naur {} {}".format(file1, file2))
 
 def normalizedCwd():
@@ -431,17 +432,17 @@ def run_unit_test(test, is_standalone):
     if test.expects_failure:
         if success:
             print "[XOK]   " + printableName
+            return False
         else:
             print "[XFAIL] " + printableName
-            if not print_differences(expected_file, result_file):
-                return False
+            print_differences(expected_file, result_file)
     else:
         if success:
             print "[OK]   " + printableName
         else:
             print "[FAIL] " + printableName
-            if not print_differences(expected_file, result_file):
-                return False
+            print_differences(expected_file, result_file)
+            return False
 
     return True
 
