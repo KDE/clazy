@@ -289,7 +289,6 @@ if args.only_standalone and args.no_standalone:
 # Global variables
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
-_help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone
