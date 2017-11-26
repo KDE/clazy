@@ -217,6 +217,7 @@ clazy runs all checks from level1 by default.
     - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
     - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
     - [lambda-in-connect](src/checks/level0/README-lambda-in-connect.md)
+    - [lambda-unique-connection](src/checks/level0/README-lambda-unique-connection.md)
     - [mutable-container-key](src/checks/level0/README-mutable-container-key.md)
     - [qcolor-from-literal](src/checks/level0/README-qcolor-from-literal.md)
     - [qdatetime-utc](src/checks/level0/README-qdatetime-utc.md)    (fix-qdatetime-utc)
@@ -238,20 +239,25 @@ clazy runs all checks from level1 by default.
 - Checks from level1:
     - [auto-unexpected-qstringbuilder](src/checks/level1/README-auto-unexpected-qstringbuilder.md)    (fix-auto-unexpected-qstringbuilder)
     - [child-event-qobject-cast](src/checks/level1/README-child-event-qobject-cast.md)
+    - [connect-3arg-lambda](src/checks/level1/README-connect-3arg-lambda.md)
+    - [const-signal-or-slot](src/checks/level1/README-const-signal-or-slot.md)
     - [detaching-temporary](src/checks/level1/README-detaching-temporary.md)
     - [foreach](src/checks/level1/README-foreach.md)
     - [incorrect-emit](src/checks/level1/README-incorrect-emit.md)
     - [inefficient-qlist-soft](src/checks/level1/README-inefficient-qlist-soft.md)
     - [install-event-filter](src/checks/level1/README-install-event-filter.md)
-    - [missing-qobject-macro](src/checks/level1/README-missing-qobject-macro.md)
     - [non-pod-global-static](src/checks/level1/README-non-pod-global-static.md)
+    - [overridden-signal](src/checks/level1/README-overridden-signal.md)
     - [post-event](src/checks/level1/README-post-event.md)
     - [qdeleteall](src/checks/level1/README-qdeleteall.md)
+    - [qhash-namespace](src/checks/level1/README-qhash-namespace.md)
     - [qlatin1string-non-ascii](src/checks/level1/README-qlatin1string-non-ascii.md)
+    - [qproperty-without-notify](src/checks/level1/README-qproperty-without-notify.md)
     - [qstring-left](src/checks/level1/README-qstring-left.md)
     - [range-loop](src/checks/level1/README-range-loop.md)
     - [returning-data-from-temporary](src/checks/level1/README-returning-data-from-temporary.md)
     - [rule-of-two-soft](src/checks/level1/README-rule-of-two-soft.md)
+    - [virtual-signal](src/checks/level1/README-virtual-signal.md)
 
 - Checks from level2:
     - [base-class-event](src/checks/level2/README-base-class-event.md)
@@ -262,6 +268,7 @@ clazy runs all checks from level1 by default.
     - [function-args-by-value](src/checks/level2/README-function-args-by-value.md)
     - [global-const-char-pointer](src/checks/level2/README-global-const-char-pointer.md)
     - [implicit-casts](src/checks/level2/README-implicit-casts.md)
+    - [missing-qobject-macro](src/checks/level2/README-missing-qobject-macro.md)
     - [missing-typeinfo](src/checks/level2/README-missing-typeinfo.md)
     - [old-style-connect](src/checks/level2/README-old-style-connect.md)    (fix-old-style-connect)
     - [qstring-allocations](src/checks/level2/README-qstring-allocations.md)    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
@@ -274,6 +281,7 @@ clazy runs all checks from level1 by default.
     - [assert-with-side-effects](src/checks/level3/README-assert-with-side-effects.md)
     - [bogus-dynamic-cast](src/checks/level3/README-bogus-dynamic-cast.md)
     - [detaching-member](src/checks/level3/README-detaching-member.md)
+    - [thread-with-slots](src/checks/level3/README-thread-with-slots.md)
 
 # Selecting which checks to enable
 
