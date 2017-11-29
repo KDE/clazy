@@ -174,11 +174,4 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-std::vector<string> StringArg::supportedOptions() const
-{
-    static const vector<string> options = { "fillChar-overloads" };
-    return options;
-}
-
-
 REGISTER_CHECK("qstring-arg", StringArg, CheckLevel0)

@@ -41,12 +41,6 @@ WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *co
     m_filesToIgnore = { "qstring.h" };
 }
 
-vector<string> WritingToTemporary::supportedOptions() const
-{
-    static const vector<string> options = { "widen-criteria" };
-    return options;
-}
-
 static bool isDisallowedClass(const string &className)
 {
     static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",

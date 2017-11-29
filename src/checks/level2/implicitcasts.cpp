@@ -186,10 +186,4 @@ bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
     return clazy_std::contains(macros, macro);
 }
 
-std::vector<string> ImplicitCasts::supportedOptions() const
-{
-    static const vector<string> options = { "bool-to-int" };
-    return options;
-}
-
 REGISTER_CHECK("implicit-casts", ImplicitCasts, CheckLevel2)

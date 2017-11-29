@@ -62,8 +62,6 @@ public:
     QStringAllocations(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 
-protected:
-    std::vector<std::string> supportedOptions() const override;
 private:
     void VisitCtor(clang::Stmt *);
     void VisitOperatorCall(clang::Stmt *);

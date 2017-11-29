@@ -136,7 +136,6 @@ protected:
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
-    virtual std::vector<std::string> supportedOptions() const;
     bool isOptionSet(const std::string &optionName) const;
 
     // 3 shortcuts for stuff that litter the codebase all over.

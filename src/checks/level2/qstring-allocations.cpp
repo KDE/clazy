@@ -569,14 +569,6 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
 
-vector<string> QStringAllocations::supportedOptions() const
-{
-    // no-msvc-compat - use QStringLiteral inside arrays, which is fine if you don't use MSVC
-
-    static const vector<string> options = { "no-msvc-compat" };
-    return options;
-}
-
 const char *const s_checkName = "qstring-allocations";
 REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringAllocations, CheckLevel2, RegisteredCheck::Option_Qt4Incompatible)
 REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)

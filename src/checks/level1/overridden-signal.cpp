@@ -52,9 +52,6 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
         return;
 
     CXXRecordDecl *record = method->getParent();
-    if (!QtUtils::isQObject(record))
-        return;
-
     CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
     if (!baseClass)
         return;
