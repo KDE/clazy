@@ -212,6 +212,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     if (parseArgument("visit-implicit-code", args))
         m_options |= ClazyContext::ClazyOption_VisitImplicitCode;
 
+    if (parseArgument("ignore-included-files", args))
+        m_options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
+
     m_context = new ClazyContext(ci, m_options);
 
     // This argument is for debugging purposes

@@ -273,6 +273,18 @@ namespace Utils {
     CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(clang::SourceLocation loc,
                                                           const clang::SourceManager &sm,
                                                           const clang::LangOptions &lo);
+
+    inline bool isMainFile(const clang::SourceManager &sm, clang::SourceLocation loc)
+    {
+        if (loc.isMacroID())
+            loc = sm.getExpansionLoc(loc);
+
+        clang::FileID fileID = sm.getFileID(loc);
+        if (fileID.isInvalid())
+            return false;
+
+        return sm.getMainFileID() == fileID;
+    }
 }
 
 #endif
