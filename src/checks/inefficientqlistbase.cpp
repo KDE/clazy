@@ -85,11 +85,8 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (!t)
         return;
 
-    if (shouldIgnoreVariable(varDecl))
-        return;
-
     CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-    if (!recordDecl || recordDecl->getNameAsString() != "QList")
+    if (!recordDecl || recordDecl->getName() != "QList")
         return;
 
     const std::vector<clang::QualType> types = TemplateUtils::getTemplateArgumentsTypes(recordDecl);
@@ -102,7 +99,7 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     const int size_of_ptr = TypeUtils::sizeOfPointer(&m_astContext, qt2); // in bits
     const int size_of_T = m_astContext.getTypeSize(qt2);
 
-    if (size_of_T > size_of_ptr) {
+    if (size_of_T > size_of_ptr && !shouldIgnoreVariable(varDecl)) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");
         emitWarning(decl->getLocStart(), s.c_str());
     }
