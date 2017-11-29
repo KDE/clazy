@@ -55,11 +55,13 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
     if (!QtUtils::isQObject(record))
         return;
 
+    CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
+    if (!baseClass)
+        return;
+
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
     const std::string methodName = method->getNameAsString();
 
-
-    CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
     std::string warningMsg;
     while (baseClass) {
         for (auto baseMethod : baseClass->methods()) {
