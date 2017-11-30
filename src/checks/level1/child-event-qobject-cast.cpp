@@ -64,7 +64,7 @@ void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
 
         FunctionDecl *fdecl = callExpr->getDirectCallee();
         if (fdecl && fdecl->getNameAsString() == "qobject_cast")  {
-            CXXMemberCallExpr *childCall = dyn_cast<CXXMemberCallExpr>(callExpr->getArg(0));
+            auto childCall = dyn_cast<CXXMemberCallExpr>(callExpr->getArg(0));
             // The call to event->child()
             if (!childCall)
                 continue;
