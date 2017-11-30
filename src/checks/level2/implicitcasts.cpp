@@ -138,10 +138,13 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     // Lets check only in function calls. Otherwise there are too many false positives, it's common
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
-    CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
-    auto ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
-    if (!callExpr && !ctorExpr)
-        return;
+    auto callExpr = dyn_cast<CallExpr>(stmt);
+    CXXConstructExpr* ctorExpr = nullptr;
+    if (!callExpr) {
+        ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
+        if (!ctorExpr)
+            return;
+    }
 
     if (isa<CXXOperatorCallExpr>(stmt))
         return;
