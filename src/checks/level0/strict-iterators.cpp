@@ -121,12 +121,12 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
     if (!QtUtils::isQtCOWIterator(record))
         return false;
 
-    if (record->getNameAsString() != "iterator")
+    if (record->getName() != "iterator")
         return false;
 
     ParmVarDecl *p = method->getParamDecl(0);
     CXXRecordDecl *paramClass = p ? TypeUtils::typeAsRecord(TypeUtils::pointeeQualType(p->getType())) : nullptr;
-    if (!paramClass || paramClass->getNameAsString() != "const_iterator")
+    if (!paramClass || paramClass->getName() != "const_iterator")
         return false;
 
     emitWarning(op, "Mixing iterators with const_iterators");

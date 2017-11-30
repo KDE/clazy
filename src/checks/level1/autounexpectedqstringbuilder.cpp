@@ -55,7 +55,7 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
         return;
 
     CXXRecordDecl *record = type->getAsCXXRecordDecl();
-    if (record && record->getNameAsString() == "QStringBuilder") {
+    if (record && record->getName() == "QStringBuilder") {
         std::vector<FixItHint> fixits;
 
         if (isFixitEnabled(FixitUseQString)) {
