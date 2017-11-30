@@ -35,8 +35,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingBase::DetachingBase(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Options options)
+    : CheckBase(name, context, options)
 {
 }
 

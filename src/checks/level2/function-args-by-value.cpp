@@ -25,6 +25,7 @@
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "FixItUtils.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -61,10 +62,16 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
     return clazy_std::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
-static bool shouldIgnoreFunction(clang::FunctionDecl *function)
+static bool shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
     static const vector<string> ignoreList = {"operator<<"};
+
+    return clazy_std::contains(ignoreList, function->getNameAsString());
+}
+
+static bool shouldIgnoreFunction(clang::FunctionDecl *function)
+{
     static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
                                                        "QMenu::exec", // Fixed in Qt6
                                                        "QTextFrame::iterator", // Fixed in Qt6
@@ -76,14 +83,12 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
                                                        "QSslCertificate::verify", // Fixed in Qt6
                                                        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
                                                       };
-    if (clazy_std::contains(ignoreList, function->getNameAsString()))
-        return true;
 
     return clazy_std::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
 FunctionArgsByValue::FunctionArgsByValue(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -101,7 +106,7 @@ void FunctionArgsByValue::VisitStmt(Stmt *stmt)
 void FunctionArgsByValue::processFunction(FunctionDecl *func)
 {
     if (!func || !func->isThisDeclarationADefinition() ||
-        func->isDeleted() || shouldIgnoreFunction(func))
+        func->isDeleted())
         return;
 
     auto ctor = dyn_cast<CXXConstructorDecl>(func);
@@ -109,6 +114,12 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
         if (ctor->isCopyConstructor())
             return; // copy-ctor must take by ref
     }
+
+    if (shouldIgnoreOperator(func))
+        return;
+
+    if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
+        return;
 
     Stmt *body = func->getBody();
 

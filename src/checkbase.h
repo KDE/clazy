@@ -93,12 +93,14 @@ class CLAZYLIB_EXPORT CheckBase
 public:
 
     enum Option {
-        Option_None = 0
+        Option_None = 0,
+        Option_CanIgnoreIncludes = 1
     };
     typedef int Options;
 
     typedef std::vector<CheckBase*> List;
-    explicit CheckBase(const std::string &name, const ClazyContext *context, Options = Option_None);
+    explicit CheckBase(const std::string &name, const ClazyContext *context,
+                       Options = Option_None);
     CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
@@ -118,6 +120,11 @@ public:
     void emitInternalError(clang::SourceLocation loc, std::string error);
 
     virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &) {};
+
+    bool canIgnoreIncludes() const
+    {
+        return m_options & Option_CanIgnoreIncludes;
+    }
 
 protected:
     virtual void VisitStmt(clang::Stmt *stm);
@@ -161,6 +168,7 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits = 0;
+    const Options m_options;
 };
 
 #endif

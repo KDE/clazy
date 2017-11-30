@@ -279,11 +279,7 @@ namespace Utils {
         if (loc.isMacroID())
             loc = sm.getExpansionLoc(loc);
 
-        clang::FileID fileID = sm.getFileID(loc);
-        if (fileID.isInvalid())
-            return false;
-
-        return sm.getMainFileID() == fileID;
+        return sm.isInFileID(loc, sm.getMainFileID());
     }
 }
 

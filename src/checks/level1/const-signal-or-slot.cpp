@@ -35,7 +35,7 @@ using namespace std;
 
 
 ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enableAccessSpecifierManager();
 }

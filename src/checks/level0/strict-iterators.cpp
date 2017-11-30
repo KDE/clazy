@@ -37,7 +37,7 @@ using namespace std;
 // QVector::iterator isn't even a class, it's a typedef.
 
 StrictIterators::StrictIterators(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

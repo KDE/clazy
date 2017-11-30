@@ -34,7 +34,7 @@ using namespace std;
 
 
 ChildEvent_qobject_cast::ChildEvent_qobject_cast(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

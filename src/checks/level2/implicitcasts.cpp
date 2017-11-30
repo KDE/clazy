@@ -37,7 +37,7 @@ using namespace std;
 
 
 ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "qobject_impl.h", "qdebug.h", "hb-", "qdbusintegrator.cpp",
                         "harfbuzz-", "qunicodetools.cpp" };

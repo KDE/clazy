@@ -83,8 +83,11 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
         a->VisitDeclaration(decl);
 
     if (!isInSystemHeader) {
-        for (CheckBase *check : m_createdChecks)
-            check->VisitDeclaration(decl);
+        const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, decl->getLocStart());
+        for (CheckBase *check : m_createdChecks) {
+            if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
+                check->VisitDeclaration(decl);
+        }
     }
 
     return true;
@@ -116,8 +119,11 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 
     const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
     if (!isInSystemHeader) {
-        for (CheckBase *check : m_createdChecks)
-            check->VisitStatement(stm);
+        const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, stm->getLocStart());
+        for (CheckBase *check : m_createdChecks) {
+            if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
+                check->VisitStatement(stm);
+        }
     }
 
     return true;
