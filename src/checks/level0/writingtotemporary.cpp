@@ -35,7 +35,7 @@ using namespace std;
 
 
 WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
     , m_widenCriteria(isOptionSet("widen-criteria"))
 {
     m_filesToIgnore = { "qstring.h" };
