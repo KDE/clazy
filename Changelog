@@ -64,3 +64,6 @@
     For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed, which is usually the case in most build systems.
   - Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the
     list will grow.
+
+* v1.4 ()
+  - auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder

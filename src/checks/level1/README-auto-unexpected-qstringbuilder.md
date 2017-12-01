@@ -1,6 +1,7 @@
 # auto-unexpected-qstringbuilder
 
 Finds places where auto is deduced to be `QStringBuilder` instead of `QString`, which introduces crashes.
+Also warns for lambdas returning `QStringBuilder`.
 
 #### Example
 
