@@ -52,31 +52,30 @@ void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
     if (!lambda)
         return;
 
+    DeclRefExpr *senderDeclRef = nullptr;
+    MemberExpr *senderMemberExpr = nullptr;
+
+    Stmt *s = callExpr->getArg(0);
+    while (s) {
+        if ((senderDeclRef = dyn_cast<DeclRefExpr>(s)))
+            break;
+
+        if ((senderMemberExpr = dyn_cast<MemberExpr>(s)))
+            break;
+
+        s = HierarchyUtils::getFirstChild(s);
+    }
+
+
     // The sender can be: this
-    auto senderThis = HierarchyUtils::unpeal<CXXThisExpr>(callExpr->getArg(0), HierarchyUtils::IgnoreImplicitCasts);
-
-    // Or it can be: a declref (variable)
-    DeclRefExpr *senderDeclRef = senderThis ? nullptr : HierarchyUtils::getFirstChildOfType2<DeclRefExpr>(callExpr->getArg(0));
-
-
-    // If this is referenced inside the lambda body, for example, by calling a member function
-    auto thisExprs = HierarchyUtils::getStatements<CXXThisExpr>(lambda->getBody());
-    const bool lambdaHasThis = !thisExprs.empty();
+    CXXThisExpr* senderThis = HierarchyUtils::unpeal<CXXThisExpr>(callExpr->getArg(0), HierarchyUtils::IgnoreImplicitCasts);
 
     // The variables used inside the lambda
     auto declrefs = HierarchyUtils::getStatements<DeclRefExpr>(lambda->getBody());
 
-    // If lambda doesn't do anything interesting, don't warn
-    if (declrefs.empty() && !lambdaHasThis)
-        return;
-
-    if (lambdaHasThis && !senderThis && QtUtils::isQObject(thisExprs[0]->getType())) {
-        emitWarning(stmt->getLocStart(), "Pass 'this' as the 3rd connect parameter");
-        return;
-    }
-
     ValueDecl *senderDecl = senderDeclRef ? senderDeclRef->getDecl() : nullptr;
-    // We'll only warn if the lambda is dereferencing another QObject (besides the sender).
+
+    // We'll only warn if the lambda is dereferencing another QObject (besides the sender)
     bool found = false;
     for (auto declref : declrefs) {
         ValueDecl *decl = declref->getDecl();
@@ -87,6 +86,12 @@ void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
             found = true;
             break;
         }
+    }
+
+    if (!found) {
+        auto thisexprs = HierarchyUtils::getStatements<CXXThisExpr>(lambda->getBody());
+        if (!thisexprs.empty() && !senderThis)
+            found = true;
     }
 
     if (found)
