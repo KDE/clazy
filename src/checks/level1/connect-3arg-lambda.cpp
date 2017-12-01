@@ -45,7 +45,7 @@ void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *fdecl = callExpr->getDirectCallee();
-    if (!QtUtils::isConnect(fdecl) || fdecl->getNumParams() != 3)
+    if (!fdecl || fdecl->getNumParams() != 3 || !QtUtils::isConnect(fdecl))
         return;
 
     auto lambda = HierarchyUtils::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
