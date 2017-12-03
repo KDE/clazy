@@ -28,6 +28,7 @@
 #include "ContextUtils.h"
 #include "StmtBodyRange.h"
 
+#include <clang/AST/Expr.h>
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
@@ -884,4 +885,25 @@ SourceLocation Utils::locForNextToken(SourceLocation loc, const clang::SourceMan
     }
 
     return loc.getLocWithOffset(Tok.getLength() + NumWhitespaceChars);
+}
+
+bool Utils::literalContainsEscapedBytes(StringLiteral *lt, const SourceManager &sm, const LangOptions &lo)
+{
+    if (!lt)
+        return false;
+
+    // The AST doesn't have the info, we need to ask the Lexer
+    SourceRange sr = lt->getSourceRange();
+    CharSourceRange cr = Lexer::getAsCharRange(sr, sm, lo);
+    const StringRef str = Lexer::getSourceText(cr, sm, lo);
+
+    for (int i = 0, size = str.size(); i < size - 1; ++i) {
+        if (str[i] == '\\') {
+            auto next = str[i+1];
+            if (next == 'U' || next == 'u' || next == 'x' || std::isdigit(next))
+                return true;
+        }
+    }
+
+    return false;
 }
