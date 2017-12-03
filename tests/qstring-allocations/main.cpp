@@ -244,3 +244,7 @@ void testQLatin1String2Args()
 {
     QString s2 = QLatin1String("foo", 3);
 }
+
+QString s = QString::fromUtf8("ö");
+QString s2 = QString::fromUtf8("\xc3\xb6");
+QString s3 = true ? "ö" : "\xc3\xb6";

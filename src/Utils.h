@@ -273,6 +273,11 @@ namespace Utils {
     CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(clang::SourceLocation loc,
                                                           const clang::SourceManager &sm,
                                                           const clang::LangOptions &lo);
+
+    /**
+     * Returns true if the string literal contains escaped bytes, such as \x12, \123, \u00F6.
+     */
+    bool literalContainsEscapedBytes(clang::StringLiteral *lt, const clang::SourceManager &sm, const clang::LangOptions &lo);
 }
 
 #endif

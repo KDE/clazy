@@ -279,13 +279,16 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
 vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee, int fixitType)
 {
+    StringLiteral *lt = stringLiteralForCall(begin);
     if (replacee == "QLatin1String") {
-        StringLiteral *lt = stringLiteralForCall(begin);
         if (lt && !Utils::isAscii(lt)) {
             emitWarning(lt->getLocStart(), "Don't use QLatin1String with non-latin1 literals");
             return {};
         }
     }
+
+    if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
+        return {};
 
     vector<FixItHint> fixits;
     FixItHint fixit = FixItUtils::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
@@ -387,6 +390,8 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
 
     StringLiteral *literal = stringLiteralForCall(callExpr);
     if (literal) {
+        if (Utils::literalContainsEscapedBytes(literal, sm(), lo()))
+            return {};
         if (!Utils::isAscii(literal)) {
             // QString::fromLatin1() to QLatin1String() is fine
             // QString::fromUtf8() to QStringLiteral() is fine
@@ -426,6 +431,9 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
     if (start.isMacroID()) {
         queueManualFixitWarning(start, CharPtrAllocations, "Can't use QStringLiteral in macro..");
     } else {
+        if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
+            return {};
+
         string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
         if (revisedReplacement == "QStringLiteral" && lt->getLocStart().isMacroID()) {
             queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro...");
