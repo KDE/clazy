@@ -40,6 +40,7 @@
 #include <clang/AST/ParentMap.h>
 #include <clang/Lex/Lexer.h>
 
+#include <cctype>
 #include <sstream>
 
 using namespace clang;
