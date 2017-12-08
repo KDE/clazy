@@ -232,41 +232,40 @@ clang::ValueDecl * Utils::valueDeclForCallExpr(clang::CallExpr *expr)
     return nullptr;
 }
 
-
-bool Utils::containsNonConstMemberCall(Stmt *body, const VarDecl *varDecl)
+bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const VarDecl *varDecl)
 {
-    std::vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds<CXXMemberCallExpr>(body, memberCalls);
+    if (!varDecl)
+        return false;
 
-    for (CXXMemberCallExpr *memberCall : memberCalls) {
-        CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
-        if (!methodDecl || methodDecl->isConst())
-            continue;
+    std::vector<MemberExpr*> memberExprs;
+    HierarchyUtils::getChilds<MemberExpr>(body, memberExprs);
 
-        ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
-        if (!valueDecl)
-            continue;
+    for (MemberExpr *memberExpr : memberExprs) {
+        auto memberCall = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(map, memberExpr);
+        if (memberCall) {
+            CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
+            if (methodDecl && !methodDecl->isConst()) {
+                ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
+                if (valueDecl == varDecl)
+                    return true;
+            }
+        }
 
-        if (valueDecl == varDecl)
-            return true;
-    }
+        auto operatorExpr = HierarchyUtils::getFirstParentOfType<CXXOperatorCallExpr>(map, memberExpr);
+        if (operatorExpr) {
+            FunctionDecl *fDecl = operatorExpr->getDirectCallee();
+            if (fDecl) {
+                auto methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
+                if (methodDecl && methodDecl->isConst()) {
+                    ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
+                    if (valueDecl == varDecl)
+                        return true;
+                }
+            }
+        }
 
-    // Check for operator calls:
-    std::vector<CXXOperatorCallExpr*> operatorCalls;
-    HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
-    for (CXXOperatorCallExpr *operatorExpr : operatorCalls) {
-        FunctionDecl *fDecl = operatorExpr->getDirectCallee();
-        if (!fDecl)
-            continue;
-        CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
-        if (methodDecl == nullptr || methodDecl->isConst())
-            continue;
-
-        ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
-        if (!valueDecl)
-            continue;
-
-        if (valueDecl == varDecl)
+        auto binaryOperator = HierarchyUtils::getFirstParentOfType<BinaryOperator>(map, memberExpr);
+        if (binaryOperator && binaryOperator->isAssignmentOp())
             return true;
     }
 

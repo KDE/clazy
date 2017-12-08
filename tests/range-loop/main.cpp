@@ -176,3 +176,21 @@ void testBug367485()
     foreach (auto a, list4) {} // OK
     receivingList(list4);
 }
+
+
+struct Foo
+{
+    int bar = 1;
+    QString s;
+};
+
+std::vector<Foo> doSomething(const std::vector<Foo> &fooVec)
+{
+    std::vector<Foo> ret;
+    for (Foo foo : fooVec) // OK
+    {
+        foo.bar = 2;
+        ret.push_back(foo);
+    }
+    return ret;
+}

@@ -34,7 +34,6 @@
     qcolor-from-literal
     strict-iterators
     connect-not-normalized
-    thread-with-slots
   - returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned
   - returning-data-from-temporary now checks for assignment too, not only return statements
   - unused-non-trivial-variable now warns for unused QList, QVector and many more types
@@ -51,6 +50,7 @@
 
 * v1.3 (November 26th, 2017)
   - New checks:
+    thread-with-slots
     connect-3arg-lambda
     qproperty-without-notify
     virtual-signal

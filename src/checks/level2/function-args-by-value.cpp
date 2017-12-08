@@ -135,7 +135,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
             continue;
 
         TypeUtils::QualTypeClassification classif;
-        bool success = TypeUtils::classifyQualType(&m_astContext, param, classif, body);
+        bool success = TypeUtils::classifyQualType(m_context, param, classif, body);
         if (!success)
             continue;
 

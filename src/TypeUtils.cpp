@@ -22,6 +22,7 @@
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "StmtBodyRange.h"
+#include "ClazyContext.h"
 #include <HierarchyUtils.h>
 #include <StringUtils.h>
 
@@ -30,7 +31,7 @@
 
 using namespace clang;
 
-bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
+bool TypeUtils::classifyQualType(const ClazyContext *context, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     if (!varDecl)
         return false;
@@ -43,7 +44,7 @@ bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDe
     if (isUndeducibleAuto(paramType))
         return false;
 
-    classif.size_of_T = context->getTypeSize(qualType) / 8;
+    classif.size_of_T = context->astContext.getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
@@ -61,8 +62,9 @@ bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDe
     } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
         classif.passSmallTrivialByValue = true;
     } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
-        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
+        if (body && (Utils::containsNonConstMemberCall(context->parentMap, body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
             return true;
+
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
         if (classif.isBig) {
             classif.passBigTypeByConstRef = true;

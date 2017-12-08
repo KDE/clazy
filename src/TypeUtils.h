@@ -43,6 +43,8 @@ class CXXRecordDecl;
 class CXXBaseSpecifier;
 }
 
+class ClazyContext;
+
 namespace TypeUtils
 {
     /**
@@ -74,9 +76,9 @@ namespace TypeUtils
      * The optional parameter body is in order to advise non-const-ref -> value, since the body
      * needs to be inspected to see if we that would compile.
      */
-    CLAZYLIB_EXPORT bool classifyQualType(const clang::ASTContext *context, const clang::VarDecl *varDecl,
-                          QualTypeClassification &classification,
-                          clang::Stmt *body = nullptr);
+    CLAZYLIB_EXPORT bool classifyQualType(const ClazyContext *context, const clang::VarDecl *varDecl,
+                                          QualTypeClassification &classification,
+                                          clang::Stmt *body = nullptr);
 
     /**
      * If qt is a reference, return it without a reference.
