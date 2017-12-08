@@ -103,7 +103,7 @@ namespace Utils {
     // For example:
     // Foo foo; // this is the varDecl
     // while (bar) { foo.setValue(); // non-const call }
-    CLAZYLIB_EXPORT bool containsNonConstMemberCall(clang::Stmt *body, const clang::VarDecl *varDecl);
+    CLAZYLIB_EXPORT bool containsNonConstMemberCall(clang::ParentMap *map, clang::Stmt *body, const clang::VarDecl *varDecl);
 
     // Returns true if there's an assignment to varDecl in body
     // Example: our_var = something_else

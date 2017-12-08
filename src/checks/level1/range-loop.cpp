@@ -83,7 +83,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 {
     TypeUtils::QualTypeClassification classif;
     auto varDecl = rangeLoop->getLoopVariable();
-    bool success = TypeUtils::classifyQualType(&m_astContext, varDecl, /*by-ref*/classif, rangeLoop);
+    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/classif, rangeLoop);
     if (!success)
         return;
 
