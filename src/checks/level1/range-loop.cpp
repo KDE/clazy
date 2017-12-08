@@ -88,13 +88,13 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         return;
 
     if (classif.passNonTriviallyCopyableByConstRef) {
-        string error;
+        string msg;
         const string paramStr = StringUtils::simpleTypeName(varDecl->getType(), lo());
-        error = "Missing reference in range-for with non trivial type (" + paramStr + ')';
+        msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(varDecl->getLocStart(), error.c_str());
+        emitWarning(varDecl->getLocStart(), msg.c_str());
     }
 }
 
