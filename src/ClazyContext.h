@@ -126,6 +126,8 @@ public:
     clang::FixItRewriter *rewriter = nullptr;
     bool allFixitsEnabled = false;
     std::string requestedFixitName;
+    clang::CXXMethodDecl *lastMethodDecl = nullptr;
+    clang::Decl *lastDecl = nullptr;
 };
 
 #endif

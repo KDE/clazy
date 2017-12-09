@@ -70,8 +70,6 @@ CheckBase::CheckBase(const string &name, const ClazyContext *context, Options op
     , m_name(name)
     , m_context(context)
     , m_astContext(context->astContext)
-    , m_preprocessorOpts(context->ci.getPreprocessorOpts())
-    , m_tu(m_astContext.getTranslationUnitDecl())
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
 {
@@ -79,21 +77,6 @@ CheckBase::CheckBase(const string &name, const ClazyContext *context, Options op
 
 CheckBase::~CheckBase()
 {
-}
-
-void CheckBase::VisitStatement(Stmt *stm)
-{
-    m_lastStmt = stm;
-    VisitStmt(stm);
-}
-
-void CheckBase::VisitDeclaration(Decl *decl)
-{
-    m_lastDecl = decl;
-    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
-        m_lastMethodDecl = mdecl;
-
-    VisitDecl(decl);
 }
 
 void CheckBase::VisitStmt(Stmt *)

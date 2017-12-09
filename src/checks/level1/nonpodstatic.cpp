@@ -51,7 +51,7 @@ NonPodStatic::NonPodStatic(const std::string &name, ClazyContext *context)
 
 void NonPodStatic::VisitStmt(clang::Stmt *stm)
 {
-    VarDecl *varDecl = m_lastDecl ? dyn_cast<VarDecl>(m_lastDecl) : nullptr;
+    VarDecl *varDecl = m_context->lastDecl ? dyn_cast<VarDecl>(m_context->lastDecl) : nullptr;
     if (!varDecl || varDecl->isConstexpr() || varDecl->isExternallyVisible() || !varDecl->isFileVarDecl())
         return;
 
@@ -88,7 +88,7 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_preprocessorOpts))
+    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_context->ci.getPreprocessorOpts()))
         return;
 
     const string className = recordDecl->getName();

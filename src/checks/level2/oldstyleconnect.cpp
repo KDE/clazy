@@ -182,8 +182,8 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!call)
         return;
 
-    if (m_lastMethodDecl && m_context->isQtDeveloper() && m_lastMethodDecl->getParent() &&
-        m_lastMethodDecl->getParent()->getNameAsString() == "QObject") // Don't warn of stuff inside qobject.h
+    if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent() &&
+        m_context->lastMethodDecl->getParent()->getNameAsString() == "QObject") // Don't warn of stuff inside qobject.h
         return;
 
     FunctionDecl *function = call->getDirectCallee();
@@ -382,7 +382,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 return {};
             }
 
-            DeclContext *context = m_lastDecl->getDeclContext();
+            DeclContext *context = m_context->lastDecl->getDeclContext();
 
             bool isSpecialProtectedCase = false;
             if (!ContextUtils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
@@ -392,7 +392,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             }
 
             string qualifiedName;
-            auto contextRecord = ContextUtils::firstContextOfType<CXXRecordDecl>(m_lastDecl->getDeclContext());
+            auto contextRecord = ContextUtils::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
             const bool isInInclude = sm().getMainFileID() != sm().getFileID(call->getLocStart());
 
             if (isSpecialProtectedCase && contextRecord) {

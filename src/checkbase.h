@@ -105,9 +105,6 @@ public:
 
     virtual ~CheckBase();
 
-    void VisitStatement(clang::Stmt *stm);
-    void VisitDeclaration(clang::Decl *stm);
-
     std::string name() const { return m_name; }
 
     void setEnabledFixits(int);
@@ -126,9 +123,9 @@ public:
         return m_options & Option_CanIgnoreIncludes;
     }
 
-protected:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
+protected:
     virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &);
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
     virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
@@ -153,12 +150,6 @@ protected:
     const std::string m_name;
     const ClazyContext *const m_context;
     clang::ASTContext &m_astContext;
-    const clang::PreprocessorOptions &m_preprocessorOpts;
-    clang::TranslationUnitDecl *const m_tu;
-
-    clang::CXXMethodDecl *m_lastMethodDecl = nullptr;
-    clang::Decl *m_lastDecl = nullptr;
-    clang::Stmt *m_lastStmt = nullptr;
     std::vector<std::string> m_filesToIgnore;
 private:
     friend class ClazyPreprocessorCallbacks;

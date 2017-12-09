@@ -93,10 +93,10 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
 
 void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
 {
-    if (!m_lastMethodDecl)
+    if (!m_context->lastMethodDecl)
         return;
 
-    auto ctorDecl = dyn_cast<CXXConstructorDecl>(m_lastMethodDecl);
+    auto ctorDecl = dyn_cast<CXXConstructorDecl>(m_context->lastMethodDecl);
     if (!ctorDecl)
         return;
 

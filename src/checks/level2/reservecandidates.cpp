@@ -33,6 +33,7 @@
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "LoopUtils.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -119,11 +120,11 @@ bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
     // human inspection, if such member function would be called in a loop we would be constantly calling reserve
     // and in that case the built-in exponential growth is better.
 
-    if (!m_lastMethodDecl || !(isa<CXXConstructorDecl>(m_lastMethodDecl) || isa<CXXDestructorDecl>(m_lastMethodDecl)))
+    if (!m_context->lastMethodDecl || !(isa<CXXConstructorDecl>(m_context->lastMethodDecl) || isa<CXXDestructorDecl>(m_context->lastMethodDecl)))
         return false;
 
     CXXRecordDecl *record = Utils::isMemberVariable(valueDecl);
-    if (record && m_lastMethodDecl->getParent() == record)
+    if (record && m_context->lastMethodDecl->getParent() == record)
         return true;
 
     return false;
@@ -142,7 +143,7 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
     if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
         return false;
 
-    if (LoopUtils::loopCanBeInterrupted(loopBody, m_sm, callExpr->getLocStart()))
+    if (LoopUtils::loopCanBeInterrupted(loopBody, m_context->sm, callExpr->getLocStart()))
         return false;
 
     return true;
