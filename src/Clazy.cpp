@@ -100,6 +100,9 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 {
+    if (m_context->sm.isInSystemHeader(stm->getLocStart()))
+        return true;
+
     if (!m_context->parentMap) {
         if (m_context->ci.getDiagnostics().hasUnrecoverableErrorOccurred())
             return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
@@ -122,13 +125,10 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
     if (!parentMap->hasParent(stm))
         parentMap->addStmt(stm);
 
-    const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
-    if (!isInSystemHeader) {
-        const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, stm->getLocStart());
-        for (CheckBase *check : m_createdChecks) {
-            if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
-                check->VisitStmt(stm);
-        }
+    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, stm->getLocStart());
+    for (CheckBase *check : m_createdChecks) {
+        if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
+            check->VisitStmt(stm);
     }
 
     return true;
