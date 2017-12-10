@@ -77,22 +77,21 @@ ClazyASTConsumer::~ClazyASTConsumer()
 
 bool ClazyASTConsumer::VisitDecl(Decl *decl)
 {
-    const bool isInSystemHeader = m_context->sm.isInSystemHeader(decl->getLocStart());
-
-    if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
+    if (AccessSpecifierManager *a = m_context->accessSpecifierManager) // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
 
-    if (!isInSystemHeader) {
-        const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, decl->getLocStart());
+    if (m_context->sm.isInSystemHeader(decl->getLocStart()))
+        return true;
 
-        m_context->lastDecl = decl;
-        if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
-            m_context->lastMethodDecl = mdecl;
+    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, decl->getLocStart());
 
-        for (CheckBase *check : m_createdChecks) {
-            if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
-                check->VisitDecl(decl);
-        }
+    m_context->lastDecl = decl;
+    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
+        m_context->lastMethodDecl = mdecl;
+
+    for (CheckBase *check : m_createdChecks) {
+        if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
+            check->VisitDecl(decl);
     }
 
     return true;
