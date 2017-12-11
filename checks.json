@@ -1,5 +1,5 @@
 {
-    "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance"],
+    "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance", "deprecation"],
     "checks" : [
         {
             "name"  : "inefficient-qlist",
