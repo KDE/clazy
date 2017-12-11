@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "dynamic_cast.h"
+#include "bogus-dynamic-cast.h"
 #include "Utils.h"
 #include "QtUtils.h"
 #include "checkmanager.h"

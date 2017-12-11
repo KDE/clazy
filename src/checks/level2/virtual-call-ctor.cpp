@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "virtualcallsfromctor.h"
+#include "virtual-call-ctor.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "checkmanager.h"

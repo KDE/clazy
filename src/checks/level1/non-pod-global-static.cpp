@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "nonpodstatic.h"
+#include "non-pod-global-static.h"
 #include "Utils.h"
 #include "StringUtils.h"
 #include "MacroUtils.h"
