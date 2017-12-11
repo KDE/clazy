@@ -71,9 +71,8 @@ CheckManager *CheckManager::instance()
     return &s_instance;
 }
 
-int CheckManager::registerCheck(const std::string &name, const string &className,
-                                CheckLevel level, const FactoryFunction &factory,
-                                RegisteredCheck::Options options)
+int CheckManager::registerCheck(const std::string &name, CheckLevel level,
+                                const FactoryFunction &factory, RegisteredCheck::Options options)
 {
     assert(factory != nullptr);
     assert(!name.empty());
@@ -82,7 +81,7 @@ int CheckManager::registerCheck(const std::string &name, const string &className
         llvm::errs() << "Check name not allowed" << name;
         assert(false);
     } else {
-        m_registeredChecks.push_back({name, className, level, factory, options});
+        m_registeredChecks.push_back({name, level, factory, options});
     }
 
     return 0;

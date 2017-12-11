@@ -55,7 +55,6 @@ struct CLAZYLIB_EXPORT RegisteredCheck {
     typedef int Options;
 
     std::string name;
-    std::string className;
     CheckLevel level;
     FactoryFunction factory;
     Options options;
@@ -87,8 +86,8 @@ public:
 
     static std::mutex &lock() { return m_lock; }
 
-    int registerCheck(const std::string &name, const std::string &className,
-                      CheckLevel level, const FactoryFunction &, RegisteredCheck::Options = RegisteredCheck::Option_None);
+    int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &,
+                      RegisteredCheck::Options = RegisteredCheck::Option_None);
     int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
 
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
@@ -125,14 +124,11 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
 };
 
-#define CLAZY_STRINGIFY2(X) #X
-#define CLAZY_STRINGIFY(X) CLAZY_STRINGIFY2(X)
-
 #define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL, OPTIONS) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); }, OPTIONS);
+    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); }, OPTIONS);
 
 #define REGISTER_CHECK(CHECK_NAME, CLASS_NAME, LEVEL) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });
+    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \
     static int dummy_##FIXIT_ID = CheckManager::instance()->registerFixIt(FIXIT_ID, FIXIT_NAME, CHECK_NAME); \

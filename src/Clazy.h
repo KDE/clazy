@@ -46,12 +46,6 @@ namespace clang {
 class ClazyASTAction : public clang::PluginASTAction
 {
 public:
-
-    enum HelpMode {
-        HelpMode_Normal = 0,
-        HelpMode_AnchorHeader = 1
-    };
-
     ClazyASTAction();
 
 protected:
@@ -60,7 +54,7 @@ protected:
     /// @note This function is reentrant
     bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args_) override;
 
-    void PrintHelp(llvm::raw_ostream &ros, HelpMode = HelpMode_Normal) const;
+    void PrintHelp(llvm::raw_ostream &ros) const;
     void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks) const;
 private:
     void printRequestedChecks() const;
