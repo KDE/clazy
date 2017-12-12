@@ -74,7 +74,8 @@
         },
         {
             "name"  : "qvariant-template-instantiation",
-            "level" : 0
+            "level" : 0,
+            "categories" : ["performance"]
         },
         {
             "name"  : "unused-non-trivial-variable",
@@ -195,7 +196,8 @@
         },
         {
             "name"  : "ctor-missing-parent-argument",
-            "level" : 1
+            "level" : 1,
+            "categories" : ["bug"]
         },
         {
             "name"  : "detaching-temporary",
