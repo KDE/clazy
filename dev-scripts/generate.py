@@ -77,6 +77,15 @@ class Check:
 
         return classname
 
+    def valid_name(self):
+        if self.name in ['clazy']:
+            return False
+        if self.name.startswith('level'):
+            return False
+        if self.name.startswith('fix'):
+            return False
+        return True
+
 if not os.path.exists(CHECKS_FILENAME):
     print("File doesn't exist: " + CHECKS_FILENAME)
     exit(1)
@@ -124,6 +133,9 @@ def load_json(filename):
                     return False
                 c.fixits.append(fixit['name'])
 
+        if not c.valid_name():
+            print "Invalid check name: %s" % (c.name())
+            return False
         _checks.append(c)
 
     return True

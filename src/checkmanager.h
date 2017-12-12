@@ -114,7 +114,6 @@ private:
     void registerCheck(const RegisteredCheck &check);
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
-    bool isReservedCheckName(const std::string &name) const;
     CheckBase* createCheck(const std::string &name, ClazyContext *context);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;

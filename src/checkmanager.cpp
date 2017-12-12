@@ -50,23 +50,6 @@ bool CheckManager::checkExists(const string &name) const
     return checkForName(m_registeredChecks, name) != m_registeredChecks.cend();
 }
 
-bool CheckManager::isReservedCheckName(const string &name) const
-{
-    static const vector<string> names = { "clazy" };
-    if (clazy_std::contains(names, name))
-        return true;
-
-    // level0, level1, etc are not allowed
-    if (clazy_std::startsWith(name, s_levelPrefix))
-        return true;
-
-    // These are fixit names
-    if (clazy_std::startsWith(name, s_fixitNamePrefix))
-        return true;
-
-    return false;
-}
-
 CheckManager *CheckManager::instance()
 {
     static CheckManager s_instance;
@@ -75,12 +58,7 @@ CheckManager *CheckManager::instance()
 
 void CheckManager::registerCheck(const RegisteredCheck &check)
 {
-    if (isReservedCheckName(check.name)) {
-        llvm::errs() << "Check name not allowed" << check.name;
-        assert(false);
-    } else {
-        m_registeredChecks.push_back(check);
-    }
+    m_registeredChecks.push_back(check);
 }
 
 void CheckManager::registerFixIt(int id, const string &fixitName, const string &checkName)
