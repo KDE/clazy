@@ -24,6 +24,11 @@
             ]
         },
         {
+            "name"   : "tr-non-literal",
+            "level"  : -1,
+            "categories" : ["bug"]
+        },
+        {
             "name"  : "connect-non-signal",
             "level" : 0,
             "categories" : ["bug"]
