@@ -83,7 +83,6 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/qt4-qstring-from-array.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/detachingbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/inefficientqlistbase.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/requiredresults.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
 )
 
