@@ -73,24 +73,21 @@ CheckManager *CheckManager::instance()
     return &s_instance;
 }
 
-int CheckManager::registerCheck(const std::string &name, CheckLevel level,
-                                const FactoryFunction &factory, RegisteredCheck::Options options)
+void CheckManager::registerCheck(const RegisteredCheck &check)
 {
-    if (isReservedCheckName(name)) {
-        llvm::errs() << "Check name not allowed" << name;
+    if (isReservedCheckName(check.name)) {
+        llvm::errs() << "Check name not allowed" << check.name;
         assert(false);
     } else {
-        m_registeredChecks.push_back({name, level, factory, options});
+        m_registeredChecks.push_back(check);
     }
-
-    return 0;
 }
 
-int CheckManager::registerFixIt(int id, const string &fixitName, const string &checkName)
+void CheckManager::registerFixIt(int id, const string &fixitName, const string &checkName)
 {
     if (!clazy_std::startsWith(fixitName, s_fixitNamePrefix)) {
         assert(false);
-        return 0;
+        return;
     }
 
     auto &fixits = m_fixitsByCheckName[checkName];
@@ -98,14 +95,12 @@ int CheckManager::registerFixIt(int id, const string &fixitName, const string &c
         if (fixit.name == fixitName) {
             // It can't exist
             assert(false);
-            return 0;
+            return;
         }
     }
     RegisteredFixIt fixit = {id, fixitName};
     fixits.push_back(fixit);
     m_fixitByName.insert({fixitName, fixit});
-
-    return 0;
 }
 
 CheckBase* CheckManager::createCheck(const string &name, ClazyContext *context)

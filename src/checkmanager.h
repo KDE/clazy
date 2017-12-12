@@ -110,9 +110,8 @@ private:
     static std::mutex m_lock;
 
     void registerChecks();
-    int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
-    int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &,
-                      RegisteredCheck::Options = RegisteredCheck::Option_None);
+    void registerFixIt(int id, const std::string &fititName, const std::string &checkName);
+    void registerCheck(const RegisteredCheck &check);
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;

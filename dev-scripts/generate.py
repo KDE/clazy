@@ -133,16 +133,27 @@ def print_checks(checks):
         print(c.name + " " + str(c.level) + " " + str(c.categories))
 
 def generate_register_checks(checks):
-    text = ""
+    text = '#include "checkmanager.h"\n'
     for c in checks:
         text += '#include "' + c.include() + '"\n'
-    text += "\nvoid CheckManager::registerChecks()\n{\n"
+    text += \
+"""
+template <typename T>
+RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options = RegisteredCheck::Option_None)
+{
+    auto factoryFuntion = [name](ClazyContext *context){ return new T(name, context); };
+    return RegisteredCheck{name, level, factoryFuntion, options};
+}
+
+void CheckManager::registerChecks()
+{
+"""
 
     for c in checks:
         qt4flag = ""
         if not c.supportsQt4():
             qt4flag = ", RegisteredCheck::Option_Qt4Incompatible"
-        text += '    registerCheck("%s", %s, [](ClazyContext *context){ return new %s("%s", context); }%s);\n' % (c.name, level_num_to_enum(c.level), c.get_class_name(), c.name, qt4flag)
+        text += '    registerCheck(check<%s>("%s", %s%s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), qt4flag)
 
         fixitID = 1
         for fixit in c.fixits:
