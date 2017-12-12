@@ -195,11 +195,6 @@
             "categories" : ["readability", "bug"]
         },
         {
-            "name"  : "ctor-missing-parent-argument",
-            "level" : 1,
-            "categories" : ["bug"]
-        },
-        {
             "name"  : "detaching-temporary",
             "level" : 1,
             "categories" : ["containers", "performance"]
@@ -299,6 +294,11 @@
             "name"  : "container-inside-loop",
             "level" : 2,
             "categories" : ["containers", "performance"]
+        },
+        {
+            "name"  : "ctor-missing-parent-argument",
+            "level" : 2,
+            "categories" : ["bug"]
         },
         {
             "name"  : "copyable-polymorphic",

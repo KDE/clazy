@@ -55,7 +55,6 @@
 #include "checks/level1/autounexpectedqstringbuilder.h"
 #include "checks/level1/connect-3arg-lambda.h"
 #include "checks/level1/const-signal-or-slot.h"
-#include "checks/level1/ctor-missing-parent-argument.h"
 #include "checks/level1/detachingtemporary.h"
 #include "checks/level1/foreach.h"
 #include "checks/level1/incorrect-emit.h"
@@ -76,6 +75,7 @@
 #include "checks/level1/qhash-namespace.h"
 #include "checks/level2/base-class-event.h"
 #include "checks/level2/container-inside-loop.h"
+#include "checks/level2/ctor-missing-parent-argument.h"
 #include "checks/level2/copyable-polymorphic.h"
 #include "checks/level2/function-args-by-ref.h"
 #include "checks/level2/function-args-by-value.h"
@@ -130,7 +130,6 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-auto-unexpected-qstringbuilder", "auto-unexpected-qstringbuilder");
     registerCheck("connect-3arg-lambda", CheckLevel1, [](ClazyContext *context){ return new Connect3ArgLambda("connect-3arg-lambda", context); });
     registerCheck("const-signal-or-slot", CheckLevel1, [](ClazyContext *context){ return new ConstSignalOrSlot("const-signal-or-slot", context); });
-    registerCheck("ctor-missing-parent-argument", CheckLevel1, [](ClazyContext *context){ return new CtorMissingParentArgument("ctor-missing-parent-argument", context); });
     registerCheck("detaching-temporary", CheckLevel1, [](ClazyContext *context){ return new DetachingTemporary("detaching-temporary", context); });
     registerCheck("foreach", CheckLevel1, [](ClazyContext *context){ return new Foreach("foreach", context); });
     registerCheck("incorrect-emit", CheckLevel1, [](ClazyContext *context){ return new IncorrectEmit("incorrect-emit", context); });
@@ -151,6 +150,7 @@ void CheckManager::registerChecks()
     registerCheck("qhash-namespace", CheckLevel1, [](ClazyContext *context){ return new QHashNamespace("qhash-namespace", context); });
     registerCheck("base-class-event", CheckLevel2, [](ClazyContext *context){ return new BaseClassEvent("base-class-event", context); });
     registerCheck("container-inside-loop", CheckLevel2, [](ClazyContext *context){ return new ContainerInsideLoop("container-inside-loop", context); });
+    registerCheck("ctor-missing-parent-argument", CheckLevel2, [](ClazyContext *context){ return new CtorMissingParentArgument("ctor-missing-parent-argument", context); });
     registerCheck("copyable-polymorphic", CheckLevel2, [](ClazyContext *context){ return new CopyablePolymorphic("copyable-polymorphic", context); });
     registerCheck("function-args-by-ref", CheckLevel2, [](ClazyContext *context){ return new FunctionArgsByRef("function-args-by-ref", context); });
     registerCheck("function-args-by-value", CheckLevel2, [](ClazyContext *context){ return new FunctionArgsByValue("function-args-by-value", context); });

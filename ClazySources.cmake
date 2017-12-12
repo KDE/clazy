@@ -45,7 +45,6 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/foreach.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/inefficient-qlist-soft.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/install-event-filter.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/ctor-missing-parent-argument.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/non-pod-global-static.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qdeleteall.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qproperty-without-notify.cpp
@@ -59,6 +58,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/overridden-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qhash-namespace.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/virtual-signal.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ctor-missing-parent-argument.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/base-class-event.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/container-inside-loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-ref.cpp
