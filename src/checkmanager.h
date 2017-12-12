@@ -123,8 +123,4 @@ private:
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
 };
 
-#define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \
-    static int dummy_##FIXIT_ID = CheckManager::instance()->registerFixIt(FIXIT_ID, FIXIT_NAME, CHECK_NAME); \
-    inline void silence_warning_dummy_##FIXIT_ID() { (void)dummy_##FIXIT_ID; }
-
 #endif
