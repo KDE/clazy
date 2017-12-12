@@ -76,9 +76,6 @@ CheckManager *CheckManager::instance()
 int CheckManager::registerCheck(const std::string &name, CheckLevel level,
                                 const FactoryFunction &factory, RegisteredCheck::Options options)
 {
-    assert(factory != nullptr);
-    assert(!name.empty());
-
     if (isReservedCheckName(name)) {
         llvm::errs() << "Check name not allowed" << name;
         assert(false);
@@ -91,11 +88,6 @@ int CheckManager::registerCheck(const std::string &name, CheckLevel level,
 
 int CheckManager::registerFixIt(int id, const string &fixitName, const string &checkName)
 {
-    if (fixitName.empty() || checkName.empty()) {
-        assert(false);
-        return 0;
-    }
-
     if (!clazy_std::startsWith(fixitName, s_fixitNamePrefix)) {
         assert(false);
         return 0;
