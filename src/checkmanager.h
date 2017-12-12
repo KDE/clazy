@@ -33,6 +33,8 @@
 #include <functional>
 #include <mutex>
 #include <unordered_map>
+#include <vector>
+#include <utility>
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
@@ -48,7 +50,9 @@ using FactoryFunction = std::function<CheckBase*(ClazyContext *context)>;
 struct CLAZYLIB_EXPORT RegisteredCheck {
     enum Option {
         Option_None = 0,
-        Option_Qt4Incompatible
+        Option_Qt4Incompatible = 1,
+        Option_VisitsStmts = 2,
+        Option_VisitsDecls = 4
     };
 
     typedef std::vector<RegisteredCheck> List;
@@ -101,7 +105,7 @@ public:
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
     RegisteredCheck::List requestedChecks(const ClazyContext *context, std::vector<std::string> &args);
-    CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
+    std::vector<std::pair<CheckBase*, RegisteredCheck>> createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 

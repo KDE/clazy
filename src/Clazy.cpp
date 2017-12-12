@@ -64,10 +64,19 @@ ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
 {
 }
 
-void ClazyASTConsumer::addCheck(CheckBase *check)
+void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &check)
 {
-    check->registerASTMatchers(m_matchFinder);
-    m_createdChecks.push_back(check);
+    CheckBase *checkBase = check.first;
+    checkBase->registerASTMatchers(m_matchFinder);
+    //m_createdChecks.push_back(checkBase);
+
+    const RegisteredCheck &rcheck = check.second;
+
+    if (rcheck.options & RegisteredCheck::Option_VisitsStmts)
+        m_checksToVisitStmts.push_back(checkBase);
+
+    if (rcheck.options & RegisteredCheck::Option_VisitsDecls)
+        m_checksToVisitDecls.push_back(checkBase);
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
@@ -89,7 +98,7 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
         m_context->lastMethodDecl = mdecl;
 
-    for (CheckBase *check : m_createdChecks) {
+    for (CheckBase *check : m_checksToVisitDecls) {
         if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
             check->VisitDecl(decl);
     }
@@ -125,7 +134,7 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
         parentMap->addStmt(stm);
 
     const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, stm->getLocStart());
-    for (CheckBase *check : m_createdChecks) {
+    for (CheckBase *check : m_checksToVisitStmts) {
         if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
             check->VisitStmt(stm);
     }
@@ -170,8 +179,8 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     std::lock_guard<std::mutex> lock(CheckManager::lock());
 
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
-    CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, m_context);
-    for (CheckBase *check : createdChecks) {
+    auto createdChecks = m_checkManager->createChecks(m_checks, m_context);
+    for (auto check : createdChecks) {
         astConsumer->addCheck(check);
     }
 
@@ -350,8 +359,8 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
         return nullptr;
     }
 
-    CheckBase::List createdChecks = cm->createChecks(requestedChecks, context);
-    for (CheckBase *check : createdChecks) {
+    auto createdChecks = cm->createChecks(requestedChecks, context);
+    for (const auto &check : createdChecks) {
         astConsumer->addCheck(check);
     }
 

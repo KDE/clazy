@@ -238,19 +238,19 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
     return result;
 }
 
-CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
-                                           ClazyContext *context)
+std::vector<std::pair<CheckBase*, RegisteredCheck>> CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
+                                                                               ClazyContext *context)
 {
     assert(context);
     const string fixitCheckName = checkNameForFixIt(context->requestedFixitName);
     RegisteredFixIt fixit = m_fixitByName[context->requestedFixitName];
 
-    CheckBase::List checks;
+    std::vector<std::pair<CheckBase*, RegisteredCheck>> checks;
     checks.reserve(requestedChecks.size() + 1);
     for (const auto& check : requestedChecks) {
-        checks.push_back(createCheck(check.name, context));
+        checks.push_back({createCheck(check.name, context), check });
         if (check.name == fixitCheckName) {
-            checks.back()->setEnabledFixits(fixit.id);
+            checks.back().first->setEnabledFixits(fixit.id);
         }
     }
 
@@ -258,8 +258,8 @@ CheckBase::List CheckManager::createChecks(const RegisteredCheck::List &requeste
         // We have one fixit enabled, we better have the check instance too.
         if (!fixitCheckName.empty()) {
             if (checkForName(requestedChecks, fixitCheckName) == requestedChecks.cend()) {
-                checks.push_back(createCheck(fixitCheckName, context));
-                checks.back()->setEnabledFixits(fixit.id);
+                checks.push_back({createCheck(fixitCheckName, context), {} });
+                checks.back().first->setEnabledFixits(fixit.id);
             }
         }
     }

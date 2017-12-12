@@ -46,6 +46,8 @@ class Check:
         self.categories = []
         self.minimum_qt_version = 40000 # Qt 4.0.0
         self.fixits = []
+        self.visits_stmts = False
+        self.visits_decls = False
 
     def include(self):
         level = 'level' + str(self.level)
@@ -126,6 +128,12 @@ def load_json(filename):
         if 'minimum_qt_version' in check:
             c.minimum_qt_version = check['minimum_qt_version']
 
+        if 'visits_stmts' in check:
+            c.visits_stmts = check['visits_stmts']
+
+        if 'visits_decls' in check:
+            c.visits_decls = check['visits_decls']
+
         if 'fixits' in check:
             for fixit in check['fixits']:
                 if 'name' not in fixit:
@@ -134,7 +142,7 @@ def load_json(filename):
                 c.fixits.append(fixit['name'])
 
         if not c.valid_name():
-            print "Invalid check name: %s" % (c.name())
+            print("Invalid check name: %s" % (c.name()))
             return False
         _checks.append(c)
 
@@ -162,10 +170,18 @@ void CheckManager::registerChecks()
 """
 
     for c in checks:
-        qt4flag = ""
+        qt4flag = "RegisteredCheck::Option_None"
         if not c.supportsQt4():
-            qt4flag = ", RegisteredCheck::Option_Qt4Incompatible"
-        text += '    registerCheck(check<%s>("%s", %s%s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), qt4flag)
+            qt4flag = "RegisteredCheck::Option_Qt4Incompatible"
+
+        if c.visits_stmts:
+            qt4flag += " | RegisteredCheck::Option_VisitsStmts"
+        if c.visits_decls:
+            qt4flag += " | RegisteredCheck::Option_VisitsDecls"
+
+        qt4flag = qt4flag.replace("RegisteredCheck::Option_None |", "")
+
+        text += '    registerCheck(check<%s>("%s", %s, %s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), qt4flag)
 
         fixitID = 1
         for fixit in c.fixits:

@@ -93,7 +93,7 @@ public:
     bool VisitDecl(clang::Decl *decl);
     bool VisitStmt(clang::Stmt *stm);
     void HandleTranslationUnit(clang::ASTContext &ctx) override;
-    void addCheck(CheckBase *check);
+    void addCheck(const std::pair<CheckBase *, RegisteredCheck> &check);
 
     ClazyContext *context() const { return m_context; }
 
@@ -101,7 +101,9 @@ private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
     clang::Stmt *lastStm = nullptr;
     ClazyContext *const m_context;
-    CheckBase::List m_createdChecks;
+    //CheckBase::List m_createdChecks;
+    CheckBase::List m_checksToVisitStmts;
+    CheckBase::List m_checksToVisitDecls;
     clang::ast_matchers::MatchFinder m_matchFinder;
 };
 
