@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
+
 #include "detachingtemporary.h"
 #include "Utils.h"
 #include "StringUtils.h"
@@ -191,5 +191,3 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
 
     return false;
 }
-
-REGISTER_CHECK("detaching-temporary", DetachingTemporary, CheckLevel1)

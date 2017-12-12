@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
@@ -82,5 +81,3 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         emitWarning(returnStmt->getLocStart(), "Return " + baseClassName + "::" + methodName + "() instead of false");
     }
 }
-
-REGISTER_CHECK("base-class-event", BaseClassEvent, CheckLevel2)

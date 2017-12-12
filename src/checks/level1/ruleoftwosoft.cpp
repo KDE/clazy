@@ -21,7 +21,6 @@
 
 #include "ruleoftwosoft.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -63,5 +62,3 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
         }
     }
 }
-
-REGISTER_CHECK("rule-of-two-soft", RuleOfTwoSoft, CheckLevel1)

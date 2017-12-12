@@ -21,7 +21,6 @@
 
 #include "isempty-vs-count.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "QtUtils.h"
 
@@ -54,6 +53,3 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "use isEmpty() instead");
 }
-
-
-REGISTER_CHECK("isempty-vs-count", IsEmptyVSCount, HiddenCheckLevel)

@@ -22,7 +22,6 @@
 #include "ruleofthree.h"
 #include "Utils.h"
 #include "MacroUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 
@@ -152,5 +151,3 @@ bool RuleOfThree::shouldIgnoreType(const std::string &className) const
 
     return clazy_std::contains(types, className);
 }
-
-REGISTER_CHECK("rule-of-three", RuleOfThree, CheckLevel2)

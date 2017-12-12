@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
 
@@ -122,4 +121,4 @@ void ThreadWithSlots::VisitDecl(Decl *decl)
     emitWarning(method, "Slot " + method->getQualifiedNameAsString() + " might not run in the expected thread");
 }
 
-REGISTER_CHECK("thread-with-slots", ThreadWithSlots, CheckLevel3)
+

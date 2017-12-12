@@ -26,7 +26,6 @@
 #include "Utils.h"
 #include "TemplateUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 using namespace std;
 using namespace clang;
@@ -86,5 +85,3 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         emitWarning(stm->getLocStart(), error.c_str());
     }
 }
-
-REGISTER_CHECK("qvariant-template-instantiation", QVariantTemplateInstantiation, CheckLevel0)

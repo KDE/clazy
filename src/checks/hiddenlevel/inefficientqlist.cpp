@@ -26,7 +26,6 @@
 #include "Utils.h"
 #include "TypeUtils.h"
 #include "TemplateUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -40,5 +39,3 @@ InefficientQList::InefficientQList(const std::string &name, ClazyContext *contex
     : InefficientQListBase(name, context, IgnoreNone)
 {
 }
-
-REGISTER_CHECK("inefficient-qlist", InefficientQList, HiddenCheckLevel)

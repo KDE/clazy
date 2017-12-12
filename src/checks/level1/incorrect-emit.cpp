@@ -20,14 +20,12 @@
 */
 
 #include "incorrect-emit.h"
-
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
@@ -134,5 +132,3 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
 
     return false;
 }
-
-REGISTER_CHECK("incorrect-emit", IncorrectEmit, CheckLevel1)

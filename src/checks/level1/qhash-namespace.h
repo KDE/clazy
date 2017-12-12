@@ -28,10 +28,10 @@
 /**
  * See README-qhash-namespace.md for more info.
  */
-class qhash_namespace : public CheckBase
+class QHashNamespace : public CheckBase
 {
 public:
-    explicit qhash_namespace(const std::string &name, ClazyContext *context);
+    explicit QHashNamespace(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 };
 

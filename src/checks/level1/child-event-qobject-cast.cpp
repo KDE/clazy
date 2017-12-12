@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
@@ -33,12 +32,12 @@ using namespace clang;
 using namespace std;
 
 
-ChildEvent_qobject_cast::ChildEvent_qobject_cast(const std::string &name, ClazyContext *context)
+ChildEventQObjectCast::ChildEventQObjectCast(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
-void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
+void ChildEventQObjectCast::VisitDecl(Decl *decl)
 {
     auto childEventMethod = dyn_cast<CXXMethodDecl>(decl);
     if (!childEventMethod)
@@ -77,7 +76,3 @@ void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
         }
     }
 }
-
-
-
-REGISTER_CHECK("child-event-qobject-cast", ChildEvent_qobject_cast, CheckLevel1)

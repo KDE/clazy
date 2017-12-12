@@ -21,14 +21,12 @@
 */
 
 #include "connect-non-signal.h"
-
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "NormalizedSignatureUtils.h"
 
 #include <clang/AST/AST.h>
@@ -64,5 +62,3 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
     if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
         emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
 }
-
-REGISTER_CHECK("connect-non-signal", ConnectNonSignal, CheckLevel0)

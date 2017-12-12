@@ -26,7 +26,6 @@
 #include "ClazyContext.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -60,5 +59,3 @@ void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt, "Returning a void expression");
 }
-
-REGISTER_CHECK("returning-void-expression", ReturningVoidExpression, CheckLevel2)

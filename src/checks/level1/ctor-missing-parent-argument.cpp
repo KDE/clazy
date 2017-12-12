@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -84,6 +83,3 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
                     parentType + string(" parent argument in CTOR"));
     }
 }
-
-
-REGISTER_CHECK("ctor-missing-parent-argument", CtorMissingParentArgument, CheckLevel2)

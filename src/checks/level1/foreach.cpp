@@ -28,7 +28,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
@@ -203,5 +202,3 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
         return this->containsDetachments(child, containerValueDecl);
     });
 }
-
-REGISTER_CHECK("foreach", Foreach, CheckLevel1)

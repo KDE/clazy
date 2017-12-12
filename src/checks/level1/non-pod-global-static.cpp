@@ -27,7 +27,6 @@
 #include "StringUtils.h"
 #include "MacroUtils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -43,13 +42,13 @@ static bool shouldIgnoreType(const std::string &name)
     return clazy_std::contains(blacklist, name);
 }
 
-NonPodStatic::NonPodStatic(const std::string &name, ClazyContext *context)
+NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     m_filesToIgnore = { "main.cpp", "qrc_", "qdbusxml2cpp" };
 }
 
-void NonPodStatic::VisitStmt(clang::Stmt *stm)
+void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
 {
     VarDecl *varDecl = m_context->lastDecl ? dyn_cast<VarDecl>(m_context->lastDecl) : nullptr;
     if (!varDecl || varDecl->isConstexpr() || varDecl->isExternallyVisible() || !varDecl->isFileVarDecl())
@@ -98,5 +97,3 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
     }
 
 }
-
-REGISTER_CHECK("non-pod-global-static", NonPodStatic, CheckLevel1)

@@ -25,7 +25,6 @@
 #include "bogus-dynamic-cast.h"
 #include "Utils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 #include "TypeUtils.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -62,5 +61,3 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
         emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary");
     }
 }
-
-REGISTER_CHECK("bogus-dynamic-cast", BogusDynamicCast, CheckLevel3)

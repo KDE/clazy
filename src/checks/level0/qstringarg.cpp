@@ -21,7 +21,6 @@
 
 #include "qstringarg.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -30,7 +29,7 @@
 using namespace clang;
 using namespace std;
 
-StringArg::StringArg(const std::string &name, ClazyContext *context)
+QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     m_filesToIgnore = { "qstring.h" };
@@ -85,7 +84,7 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
     return isa<CXXDefaultArgExpr>(callExpr->getArg(1));
 }
 
-bool StringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls)
+bool QStringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls)
 {
     const int size = calls.size();
     for (int i = 1; i < size; ++i) {
@@ -99,7 +98,7 @@ bool StringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls)
     return false;
 }
 
-void StringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
+void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
 {
     if (!isArgFuncWithOnlyQString(memberCall))
         return;
@@ -120,7 +119,7 @@ void StringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
     checkMultiArgWarningCase(argCalls);
 }
 
-void StringArg::VisitStmt(clang::Stmt *stmt)
+void QStringArg::VisitStmt(clang::Stmt *stmt)
 {
     CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!memberCall)
@@ -173,5 +172,3 @@ void StringArg::VisitStmt(clang::Stmt *stmt)
         emitWarning(stmt->getLocStart(), "Using QString::arg() with fillChar overload");
     }
 }
-
-REGISTER_CHECK("qstring-arg", StringArg, CheckLevel0)

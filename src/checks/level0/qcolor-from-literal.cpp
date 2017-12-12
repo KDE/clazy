@@ -21,7 +21,6 @@
 
 #include "StringUtils.h"
 #include "qcolor-from-literal.h"
-#include "checkmanager.h"
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -95,5 +94,3 @@ void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
     finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
                                        hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
 }
-
-REGISTER_CHECK("qcolor-from-literal", QColorFromLiteral, CheckLevel0)

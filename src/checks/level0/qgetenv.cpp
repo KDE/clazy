@@ -24,7 +24,6 @@
 
 #include "qgetenv.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include <clang/AST/AST.h>
@@ -41,10 +40,7 @@ enum Fixit {
 QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-
 }
-
-
 
 void QGetEnv::VisitStmt(clang::Stmt *stmt)
 {
@@ -102,8 +98,3 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         emitWarning(memberCall->getLocStart(), errorMsg.c_str(), fixits);
     }
 }
-
-
-const char *const s_checkName = "qgetenv";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, QGetEnv, CheckLevel0, RegisteredCheck::Option_Qt4Incompatible)
-REGISTER_FIXIT(FixitAll, "fix-qgetenv", s_checkName)

@@ -21,7 +21,6 @@
 
 #include "function-args-by-value.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "FixItUtils.h"
@@ -204,5 +203,3 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
 
     return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
 }
-
-REGISTER_CHECK("function-args-by-value", FunctionArgsByValue, CheckLevel2)

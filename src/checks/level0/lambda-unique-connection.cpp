@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 
@@ -87,5 +86,3 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(typeArg, "UniqueConnection is not supported with non-member functions");
 }
-
-REGISTER_CHECK("lambda-unique-connection", LambdaUniqueConnection, CheckLevel0)

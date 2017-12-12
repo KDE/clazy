@@ -25,7 +25,6 @@
 #include "virtual-call-ctor.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -33,18 +32,12 @@
 using namespace std;
 using namespace clang;
 
-VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name, ClazyContext *context)
+VirtualCallCtor::VirtualCallCtor(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-
 }
 
-void VirtualCallsFromCTOR::VisitStmt(clang::Stmt *stm)
-{
-
-}
-
-void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
+void VirtualCallCtor::VisitDecl(Decl *decl)
 {
     CXXConstructorDecl *ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
     CXXDestructorDecl *dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
@@ -69,7 +62,7 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
     }
 }
 
-SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
+SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
 {
     if (stmt == nullptr)
         return {};
@@ -100,5 +93,3 @@ SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *c
 
     return {};
 }
-
-REGISTER_CHECK("virtual-call-ctor", VirtualCallsFromCTOR, CheckLevel2)

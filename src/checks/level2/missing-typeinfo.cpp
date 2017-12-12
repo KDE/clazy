@@ -27,7 +27,6 @@
 #include "TemplateUtils.h"
 #include "TypeUtils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -36,12 +35,12 @@
 using namespace std;
 using namespace clang;
 
-MissingTypeinfo::MissingTypeinfo(const std::string &name, ClazyContext *context)
+MissingTypeInfo::MissingTypeInfo(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
 
-void MissingTypeinfo::VisitDecl(clang::Decl *decl)
+void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 {
     ClassTemplateSpecializationDecl *tstdecl = TemplateUtils::templateDecl(decl);
     if (!tstdecl)
@@ -77,7 +76,7 @@ void MissingTypeinfo::VisitDecl(clang::Decl *decl)
     }
 }
 
-void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
+void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (decl->getName() == "QTypeInfo") {
         const string typeName = TemplateUtils::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
@@ -86,9 +85,7 @@ void MissingTypeinfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
     }
 }
 
-bool MissingTypeinfo::typeHasClassification(QualType qt) const
+bool MissingTypeInfo::typeHasClassification(QualType qt) const
 {
     return m_typeInfos.find(StringUtils::simpleTypeName(qt, lo())) != m_typeInfos.end();
 }
-
-REGISTER_CHECK("missing-typeinfo", MissingTypeinfo, CheckLevel2)

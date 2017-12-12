@@ -28,7 +28,6 @@
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "TemplateUtils.h"
-#include "checkmanager.h"
 #include "StmtBodyRange.h"
 
 #include <clang/AST/Decl.h>

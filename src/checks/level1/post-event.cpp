@@ -25,7 +25,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -72,5 +71,3 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
         // It's something else, like an rvalue, ignore it
     }
 }
-
-REGISTER_CHECK("post-event", PostEvent, CheckLevel1)

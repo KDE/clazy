@@ -23,7 +23,6 @@
 */
 
 #include "globalconstcharpointer.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -58,5 +57,3 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 
     emitWarning(decl->getLocStart(), "non const global char *");
 }
-
-REGISTER_CHECK("global-const-char-pointer", GlobalConstCharPointer, CheckLevel2)

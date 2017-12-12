@@ -43,11 +43,10 @@ class SourceLocation;
  * This plugin only checks for pure virtuals, ignoring non-pure, which in theory you shouldn't call,
  * but seems common practice.
  */
-class VirtualCallsFromCTOR : public CheckBase
+class VirtualCallCtor : public CheckBase
 {
 public:
-    VirtualCallsFromCTOR(const std::string &name, ClazyContext *context);
-    void VisitStmt(clang::Stmt *stm) override;
+    VirtualCallCtor(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 
 private:

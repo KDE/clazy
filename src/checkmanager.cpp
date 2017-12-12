@@ -27,6 +27,7 @@
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "Checks.h"
 
 #include <stdlib.h>
 
@@ -41,6 +42,7 @@ std::mutex CheckManager::m_lock;
 CheckManager::CheckManager()
 {
     m_registeredChecks.reserve(100);
+    registerChecks();
 }
 
 bool CheckManager::checkExists(const string &name) const

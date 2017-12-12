@@ -22,7 +22,6 @@
 #include "container-inside-loop.h"
 #include "ClazyContext.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
@@ -67,6 +66,3 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "container inside loop causes unneeded allocations");
 }
-
-
-REGISTER_CHECK("container-inside-loop", ContainerInsideLoop, CheckLevel2)

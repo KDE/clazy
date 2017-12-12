@@ -38,10 +38,10 @@ class CXXRecordDecl;
  *
  * See README-missing-type-info for more info.
  */
-class MissingTypeinfo : public CheckBase
+class MissingTypeInfo : public CheckBase
 {
 public:
-    MissingTypeinfo(const std::string &name, ClazyContext *context);
+    MissingTypeInfo(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);

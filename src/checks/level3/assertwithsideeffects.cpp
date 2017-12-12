@@ -26,7 +26,6 @@
 #include "Utils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
@@ -128,5 +127,3 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
         emitWarning(stmStart, "Code inside Q_ASSERT has side-effects but won't be built in release mode");
     }
 }
-
-REGISTER_CHECK("assert-with-side-effects", AssertWithSideEffects, CheckLevel3)

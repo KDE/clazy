@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
 
@@ -55,6 +54,3 @@ void VirtualSignal::VisitDecl(Decl *stmt)
     if (qst == QtAccessSpecifier_Signal && method->isVirtual())
         emitWarning(method, "signal is virtual");
 }
-
-
-REGISTER_CHECK("virtual-signal", VirtualSignal, CheckLevel1)

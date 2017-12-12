@@ -22,7 +22,6 @@
 #include "lambda-in-connect.h"
 #include "ClazyContext.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
@@ -70,6 +69,3 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
         }
     }
 }
-
-
-REGISTER_CHECK("lambda-in-connect", LambdaInConnect, CheckLevel0)

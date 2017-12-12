@@ -24,10 +24,8 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-
 #include <clang/AST/AST.h>
 
 using namespace clang;
@@ -91,5 +89,3 @@ void ConstSignalOrSlot::VisitDecl(Decl *decl)
         emitWarning(decl, "signal " + method->getQualifiedNameAsString() + " shouldn't be const");
     }
 }
-
-REGISTER_CHECK("const-signal-or-slot", ConstSignalOrSlot, CheckLevel1)

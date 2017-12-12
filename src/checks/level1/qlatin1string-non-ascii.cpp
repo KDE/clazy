@@ -25,7 +25,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -50,5 +49,3 @@ void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
     if (lt && !Utils::isAscii(lt))
         emitWarning(stmt, "QStringLiteral with non-ascii literal");
 }
-
-REGISTER_CHECK("qlatin1string-non-ascii", QLatin1StringNonAscii, CheckLevel1)

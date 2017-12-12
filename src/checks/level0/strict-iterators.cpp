@@ -26,7 +26,6 @@
 #include "QtUtils.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -132,5 +131,3 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
     emitWarning(op, "Mixing iterators with const_iterators");
     return true;
 }
-
-REGISTER_CHECK("strict-iterators", StrictIterators, CheckLevel0)

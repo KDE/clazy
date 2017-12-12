@@ -25,7 +25,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -59,6 +58,3 @@ void QStringLeft::VisitStmt(clang::Stmt *stmt)
         }
     }
 }
-
-
-REGISTER_CHECK("qstring-left", QStringLeft, CheckLevel1)

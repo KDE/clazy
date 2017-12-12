@@ -26,7 +26,6 @@
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -188,5 +187,3 @@ bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
     auto macro = Lexer::getImmediateMacroName(loc, sm(), lo());
     return clazy_std::contains(macros, macro);
 }
-
-REGISTER_CHECK("implicit-casts", ImplicitCasts, CheckLevel2)

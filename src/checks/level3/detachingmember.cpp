@@ -24,7 +24,6 @@
 
 #include "detachingmember.h"
 #include "ClazyContext.h"
-#include "checkmanager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
@@ -137,5 +136,3 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
 
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
-
-REGISTER_CHECK("detaching-member", DetachingMember, CheckLevel3)

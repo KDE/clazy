@@ -24,7 +24,6 @@
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -78,5 +77,3 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
         }
     }
 }
-
-REGISTER_CHECK("qdeleteall", QDeleteAll, CheckLevel1)

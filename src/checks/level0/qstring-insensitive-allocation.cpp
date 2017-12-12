@@ -21,7 +21,6 @@
 
 #include "qstring-insensitive-allocation.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -71,6 +70,3 @@ void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "unneeded allocation");
 }
-
-
-REGISTER_CHECK("qstring-insensitive-allocation", QStringInsensitiveAllocation, CheckLevel0)

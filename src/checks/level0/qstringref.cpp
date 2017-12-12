@@ -23,7 +23,6 @@
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 
@@ -227,7 +226,3 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
     return fixits;
 
 }
-
-const char *const s_checkName = "qstring-ref";
-REGISTER_CHECK(s_checkName, StringRefCandidates, CheckLevel0)
-REGISTER_FIXIT(FixitUseQStringRef, "fix-missing-qstringref", s_checkName)

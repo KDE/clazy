@@ -21,7 +21,6 @@
 
 #include "qfileinfo-exists.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -49,6 +48,3 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "Use the static QFileInfo::exists() instead. It's documented to be faster.");
 }
-
-
-REGISTER_CHECK("qfileinfo-exists", QFileInfoExists, CheckLevel0)

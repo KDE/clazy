@@ -22,7 +22,6 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
 #include "detachingbase.h"
 #include "Utils.h"
 #include "StringUtils.h"

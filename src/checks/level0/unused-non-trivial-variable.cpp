@@ -21,7 +21,7 @@
 
 #include "unused-non-trivial-variable.h"
 #include "Utils.h"
-#include "checkmanager.h"
+
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
@@ -100,6 +100,3 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
     if (!clazy_std::any_of(declRefs, pred))
         emitWarning(locStart, "unused " + StringUtils::simpleTypeName(varDecl->getType(), lo()));
 }
-
-
-REGISTER_CHECK("unused-non-trivial-variable", UnusedNonTrivialVariable, CheckLevel0)

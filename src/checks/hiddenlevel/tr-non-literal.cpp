@@ -25,7 +25,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -37,7 +36,6 @@ TrNonLiteral::TrNonLiteral(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
-
 
 void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
 {
@@ -53,5 +51,3 @@ void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
     if (HierarchyUtils::getFirstChildOfType2<StringLiteral>(arg1) == nullptr)
         emitWarning(stmt, "tr() without a literal string");
 }
-
-REGISTER_CHECK("tr-non-literal", TrNonLiteral, HiddenCheckLevel)

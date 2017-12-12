@@ -25,7 +25,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -67,6 +66,3 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
 
     emitWarning(decl->getLocStart(), "Associative container key might be modified externally");
 }
-
-
-REGISTER_CHECK("mutable-container-key", MutableContainerKey, CheckLevel0)

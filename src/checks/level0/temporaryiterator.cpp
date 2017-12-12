@@ -23,7 +23,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
+
 #include "ClazyContext.h"
 #include "temporaryiterator.h"
 #include "Utils.h"
@@ -147,5 +147,3 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(methodDecl) + std::string("() on temporary");
     emitWarning(stm->getLocStart(), error.c_str());
 }
-
-REGISTER_CHECK("temporary-iterator", TemporaryIterator, CheckLevel0)

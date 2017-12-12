@@ -28,10 +28,10 @@
 /**
  * See README-child-event-qobject-cast for more info.
  */
-class ChildEvent_qobject_cast : public CheckBase
+class ChildEventQObjectCast : public CheckBase
 {
 public:
-    explicit ChildEvent_qobject_cast(const std::string &name, ClazyContext *context);
+    explicit ChildEventQObjectCast(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
 };

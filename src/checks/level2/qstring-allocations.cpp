@@ -30,7 +30,6 @@
 #include "FixItUtils.h"
 #include "FunctionUtils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -576,9 +575,3 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
-
-const char *const s_checkName = "qstring-allocations";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, QStringAllocations, CheckLevel2, RegisteredCheck::Option_Qt4Incompatible)
-REGISTER_FIXIT(QLatin1StringAllocations, "fix-qlatin1string-allocations", s_checkName)
-REGISTER_FIXIT(FromLatin1_FromUtf8Allocations, "fix-fromLatin1_fromUtf8-allocations", s_checkName)
-REGISTER_FIXIT(CharPtrAllocations, "fix-fromCharPtrAllocations", s_checkName)

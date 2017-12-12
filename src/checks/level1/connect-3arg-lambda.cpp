@@ -24,21 +24,18 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
 using namespace std;
 
-
-Connect3argLambda::Connect3argLambda(const std::string &name, ClazyContext *context)
+Connect3ArgLambda::Connect3ArgLambda(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
 
-
-void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
+void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 {
     auto callExpr = dyn_cast<CallExpr>(stmt);
     if (!callExpr)
@@ -97,6 +94,3 @@ void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
     if (found)
         emitWarning(stmt->getLocStart(), "Pass a context object as 3rd connect parameter");
 }
-
-
-REGISTER_CHECK("connect-3arg-lambda", Connect3argLambda, CheckLevel1)

@@ -27,7 +27,6 @@
 #include "NormalizedSignatureUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -116,5 +115,3 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     emitWarning(callExpr->getLocStart(), "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
 }
-
-REGISTER_CHECK("connect-not-normalized", ConnectNotNormalized, CheckLevel0)

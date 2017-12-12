@@ -22,7 +22,6 @@
 #include "wrong-qglobalstatic.h"
 #include "Utils.h"
 #include "TemplateUtils.h"
-#include "checkmanager.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
 #include "Utils.h"
@@ -71,5 +70,3 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         emitWarning(loc, error.c_str());
     }
 }
-
-REGISTER_CHECK("wrong-qglobalstatic", WrongQGlobalStatic, CheckLevel0)

@@ -28,10 +28,10 @@
 /**
  * See README-connect-3arg-lambda.md for more info.
  */
-class Connect3argLambda : public CheckBase
+class Connect3ArgLambda : public CheckBase
 {
 public:
-    explicit Connect3argLambda(const std::string &name, ClazyContext *context);
+    explicit Connect3ArgLambda(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
 };

@@ -21,7 +21,6 @@
 
 #include "inefficient-qlist-soft.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -30,17 +29,9 @@
 using namespace clang;
 using namespace std;
 
-
 InefficientQListSoft::InefficientQListSoft(const std::string &name, ClazyContext *context)
     : InefficientQListBase(name, context, IgnoreNonLocalVariable | IgnoreInFunctionWithSameReturnType |
                                           IgnoreIsAssignedToInFunction | IgnoreIsPassedToFunctions|
                                           IgnoreIsInitializedByFunctionCall)
 {
 }
-
-void InefficientQListSoft::VisitStmt(clang::Stmt *stmt)
-{
-}
-
-
-REGISTER_CHECK("inefficient-qlist-soft", InefficientQListSoft, CheckLevel1)

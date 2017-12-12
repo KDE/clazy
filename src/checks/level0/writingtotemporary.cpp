@@ -24,7 +24,6 @@
 
 #include "writingtotemporary.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -117,5 +116,3 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + methodName);
 }
-
-REGISTER_CHECK("writing-to-temporary", WritingToTemporary, CheckLevel0)

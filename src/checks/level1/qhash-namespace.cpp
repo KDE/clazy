@@ -27,7 +27,6 @@
 #include "ContextUtils.h"
 #include "StringUtils.h"
 #include "ClazyContext.h"
-#include "checkmanager.h"
 #include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
@@ -36,14 +35,14 @@ using namespace clang;
 using namespace std;
 
 
-qhash_namespace::qhash_namespace(const std::string &name, ClazyContext *context)
+QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     if (context->isQtDeveloper())
         context->enablePreprocessorVisitor();
 }
 
-void qhash_namespace::VisitDecl(clang::Decl *decl)
+void QHashNamespace::VisitDecl(clang::Decl *decl)
 {
     auto func = dyn_cast<FunctionDecl>(decl);
     if (!func || isa<CXXMethodDecl>(func) || func->getNumParams() == 0 || func->getNameAsString() != "qHash")
@@ -75,5 +74,3 @@ void qhash_namespace::VisitDecl(clang::Decl *decl)
         }
     }
 }
-
-REGISTER_CHECK("qhash-namespace", qhash_namespace, CheckLevel1)

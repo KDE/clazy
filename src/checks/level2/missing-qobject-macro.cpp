@@ -22,11 +22,9 @@
 #include <llvm/Config/llvm-config.h>
 
 #include "missing-qobject-macro.h"
-
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -36,20 +34,20 @@
 using namespace clang;
 using namespace std;
 
-MissingQ_OBJECT::MissingQ_OBJECT(const std::string &name, ClazyContext *context)
+MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
 }
 
-void MissingQ_OBJECT::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range)
+void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (ii && ii->getName() == "Q_OBJECT")
         registerQ_OBJECT(range.getBegin());
 }
 
-void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
+void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
 {
     CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(decl);
     if (!record || !record->hasDefinition() || record->getDefinition() != record || !QtUtils::isQObject(record))
@@ -74,9 +72,7 @@ void MissingQ_OBJECT::VisitDecl(clang::Decl *decl)
     emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro");
 }
 
-void MissingQ_OBJECT::registerQ_OBJECT(SourceLocation loc)
+void MissingQObjectMacro::registerQ_OBJECT(SourceLocation loc)
 {
     m_qobjectMacroLocations.push_back(loc);
 }
-
-REGISTER_CHECK("missing-qobject-macro", MissingQ_OBJECT, CheckLevel2)

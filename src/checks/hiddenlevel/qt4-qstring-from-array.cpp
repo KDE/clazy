@@ -23,7 +23,6 @@
 #include "qt4-qstring-from-array.h"
 #include "ClazyContext.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 
@@ -38,7 +37,7 @@ enum FixIt {
     FixItToFromLatin1
 };
 
-Qt4_QStringFromArray::Qt4_QStringFromArray(const std::string &name, ClazyContext *context)
+Qt4QStringFromArray::Qt4QStringFromArray(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
@@ -111,7 +110,7 @@ static bool isInterestingOperatorCall(CXXOperatorCallExpr *op, string &operatorN
     return isInterestingMethodCall(dyn_cast<CXXMethodDecl>(func), operatorName, is_char_array, is_byte_array);
 }
 
-void Qt4_QStringFromArray::VisitStmt(clang::Stmt *stm)
+void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
 {
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
     CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
@@ -162,7 +161,7 @@ void Qt4_QStringFromArray::VisitStmt(clang::Stmt *stm)
     emitWarning(stm->getLocStart(), message, fixits);
 }
 
-std::vector<FixItHint> Qt4_QStringFromArray::fixCtorCall(CXXConstructExpr *ctorExpr)
+std::vector<FixItHint> Qt4QStringFromArray::fixCtorCall(CXXConstructExpr *ctorExpr)
 {
     Stmt *parent = HierarchyUtils::parent(m_context->parentMap, ctorExpr); // CXXBindTemporaryExpr
     Stmt *grandParent = HierarchyUtils::parent(m_context->parentMap, parent); //CXXFunctionalCastExpr
@@ -174,7 +173,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixCtorCall(CXXConstructExpr *ctorE
     }
 }
 
-std::vector<FixItHint> Qt4_QStringFromArray::fixOperatorCall(CXXOperatorCallExpr *op)
+std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr *op)
 {
     vector<FixItHint> fixits;
     if (op->getNumArgs() == 2) {
@@ -198,7 +197,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixOperatorCall(CXXOperatorCallExpr
     return fixits;
 }
 
-std::vector<FixItHint> Qt4_QStringFromArray::fixMethodCallCall(clang::CXXMemberCallExpr *memberExpr)
+std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCallExpr *memberExpr)
 {
     vector<FixItHint> fixits;
 
@@ -222,7 +221,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixMethodCallCall(clang::CXXMemberC
     return fixits;
 }
 
-std::vector<FixItHint> Qt4_QStringFromArray::fixitReplaceWithFromLatin1(CXXConstructExpr *ctorExpr)
+std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstructExpr *ctorExpr)
 {
     const string replacement = "QString::fromLatin1";
     const string replacee = "QString";
@@ -247,7 +246,7 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixitReplaceWithFromLatin1(CXXConst
     return fixits;
 }
 
-std::vector<FixItHint> Qt4_QStringFromArray::fixitInsertFromLatin1(CXXConstructExpr *ctorExpr)
+std::vector<FixItHint> Qt4QStringFromArray::fixitInsertFromLatin1(CXXConstructExpr *ctorExpr)
 {
     vector<FixItHint> fixits;
     SourceRange range;
@@ -264,7 +263,3 @@ std::vector<FixItHint> Qt4_QStringFromArray::fixitInsertFromLatin1(CXXConstructE
 
     return fixits;
 }
-
-const char *const s_checkName = "qt4-qstring-from-array";
-REGISTER_CHECK(s_checkName, Qt4_QStringFromArray, HiddenCheckLevel)
-REGISTER_FIXIT(FixItToFromLatin1, "fix-qt4-qstring-from-array", s_checkName)

@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FunctionUtils.h"
@@ -87,6 +86,3 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
         baseClass = QtUtils::getQObjectBaseClass(baseClass);
     }
 }
-
-
-REGISTER_CHECK("overridden-signal", OverriddenSignal, CheckLevel1)

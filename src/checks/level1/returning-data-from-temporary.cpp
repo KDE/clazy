@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -139,5 +138,3 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
 
     emitWarning(memberCall, "Returning data of temporary QByteArray");
 }
-
-REGISTER_CHECK("returning-data-from-temporary", ReturningDataFromTemporary, CheckLevel1)

@@ -24,7 +24,7 @@
 
 #include "requiredresults.h"
 #include "Utils.h"
-#include "checkmanager.h"
+
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -130,5 +130,3 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
         }
     }
 }
-
-// REGISTER_CHECK("unused-result", RequiredResults)

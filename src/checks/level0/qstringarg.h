@@ -33,10 +33,10 @@ class CallExpr;
 /**
  * Finds misuse of QString::arg()
  */
-class StringArg : public CheckBase
+class QStringArg : public CheckBase
 {
 public:
-    StringArg(const std::string &name, ClazyContext *context);
+    QStringArg(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 private:

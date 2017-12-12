@@ -22,7 +22,6 @@
 
 #include "autounexpectedqstringbuilder.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include "TypeUtils.h"
@@ -88,7 +87,3 @@ void AutoUnexpectedQStringBuilder::VisitStmt(Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "lambda return type deduced to be QStringBuilder instead of QString. Possible crash.");
 }
-
-const char *const s_checkName = "auto-unexpected-qstringbuilder";
-REGISTER_CHECK(s_checkName, AutoUnexpectedQStringBuilder, CheckLevel1)
-REGISTER_FIXIT(FixitUseQString, "fix-auto-unexpected-qstringbuilder", s_checkName)

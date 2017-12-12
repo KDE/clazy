@@ -25,7 +25,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -72,5 +71,3 @@ void QtMacros::VisitIfdef(SourceLocation loc, const Token &macroNameTok)
     if (!m_context->usingPreCompiledHeaders())
         checkIfDef(macroNameTok, loc);
 }
-
-REGISTER_CHECK("qt-macros", QtMacros, CheckLevel0)

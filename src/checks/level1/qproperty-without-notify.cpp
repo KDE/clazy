@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -90,5 +89,3 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
 
     emitWarning(range.getBegin(), "Q_PROPERTY should have either NOTIFY or CONSTANT");
 }
-
-REGISTER_CHECK("qproperty-without-notify", QPropertyWithoutNotify, CheckLevel1)

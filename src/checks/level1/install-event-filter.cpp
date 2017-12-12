@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -68,5 +67,3 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt, "'this' should usually be the filter object, not the monitored one.");
 }
-
-REGISTER_CHECK("install-event-filter", InstallEventFilter, CheckLevel1)

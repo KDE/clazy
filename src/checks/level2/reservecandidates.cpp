@@ -27,7 +27,6 @@
 #include "Utils.h"
 #include "clazy_stl.h"
 #include "MacroUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "QtUtils.h"
 #include "ContextUtils.h"
@@ -325,5 +324,3 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     nonComplexOnesCache.push_back(rawLoc);
     return false;
 }
-
-REGISTER_CHECK("reserve-candidates", ReserveCandidates, CheckLevel2)

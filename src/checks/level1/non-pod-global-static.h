@@ -32,10 +32,10 @@
  *
  * See README-non-pod-global-static.
  */
-class NonPodStatic : public CheckBase
+class NonPodGlobalStatic : public CheckBase
 {
 public:
-    NonPodStatic(const std::string &name, ClazyContext *context);
+    explicit NonPodGlobalStatic(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

@@ -27,7 +27,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
 
@@ -97,5 +96,3 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         emitWarning(varDecl->getLocStart(), msg.c_str());
     }
 }
-
-REGISTER_CHECK("range-loop", RangeLoop, CheckLevel1)

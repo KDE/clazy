@@ -26,7 +26,6 @@
 #include "Utils.h"
 #include "FixItUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 
 #include <clang/AST/AST.h>
@@ -162,7 +161,3 @@ clang::FixItHint FunctionArgsByRef::fixit(const ParmVarDecl *, TypeUtils::QualTy
     FixItHint fixit;
     return fixit;
 }
-
-const char *const s_checkName = "function-args-by-ref";
-REGISTER_CHECK(s_checkName, FunctionArgsByRef, CheckLevel2)
-// REGISTER_FIXIT(FixitAll, "fix-func-args", s_checkName)

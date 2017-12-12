@@ -21,7 +21,6 @@
 
 #include "container-anti-pattern.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "MacroUtils.h"
 #include "LoopUtils.h"
@@ -115,7 +114,3 @@ bool ContainerAntiPattern::handleLoop(Stmt *stm)
 
     return false;
 }
-
-
-
-REGISTER_CHECK("container-anti-pattern", ContainerAntiPattern, CheckLevel0)

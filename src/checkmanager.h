@@ -85,11 +85,6 @@ public:
     static CheckManager *instance();
 
     static std::mutex &lock() { return m_lock; }
-
-    int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &,
-                      RegisteredCheck::Options = RegisteredCheck::Option_None);
-    int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
-
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv(const ClazyContext *context) const;
     RegisteredCheck::List requestedChecksThroughEnv(const ClazyContext *context, std::vector<std::string> &userDisabledChecks) const;
@@ -114,6 +109,10 @@ private:
     CheckManager();
     static std::mutex m_lock;
 
+    void registerChecks();
+    int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
+    int registerCheck(const std::string &name, CheckLevel level, const FactoryFunction &,
+                      RegisteredCheck::Options = RegisteredCheck::Option_None);
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
     bool isReservedCheckName(const std::string &name) const;
@@ -123,12 +122,6 @@ private:
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
 };
-
-#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL, OPTIONS) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); }, OPTIONS);
-
-#define REGISTER_CHECK(CHECK_NAME, CLASS_NAME, LEVEL) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });
 
 #define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \
     static int dummy_##FIXIT_ID = CheckManager::instance()->registerFixIt(FIXIT_ID, FIXIT_NAME, CHECK_NAME); \
