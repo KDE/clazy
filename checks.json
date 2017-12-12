@@ -30,6 +30,7 @@
         },
         {
             "name"  : "connect-non-signal",
+            "minimum_qt_version" : 50700,
             "level" : 0,
             "categories" : ["bug"]
         },
@@ -58,6 +59,7 @@
             "name"  : "qgetenv",
             "class_name" : "QGetEnv",
             "level" : 0,
+            "minimum_qt_version" : 50500,
             "categories" : ["performance"],
             "fixits" : [
                 {
@@ -92,6 +94,7 @@
         {
             "name"  : "qenums",
             "level" : 0,
+            "minimum_qt_version" : 50500,
             "categories" : ["deprecation"]
         },
         {
@@ -327,16 +330,19 @@
         },
         {
             "name"  : "missing-qobject-macro",
-            "level" : 2
+            "level" : 2,
+            "categories" : ["bug"]
         },
         {
             "name"  : "missing-typeinfo",
+            "class_name" : "MissingTypeInfo",
             "level" : 2,
             "categories" : ["containers", "performance"]
         },
         {
             "name"  : "old-style-connect",
             "level" : 2,
+            "minimum_qt_version" : 50500,
             "categories" : ["performance"],
             "fixits" : [
                 {
@@ -347,6 +353,7 @@
         {
             "name"  : "qstring-allocations",
             "level" : 2,
+            "minimum_qt_version" : 50000,
             "categories" : ["performance", "qstring"],
             "fixits" : [
                 {
