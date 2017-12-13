@@ -44,8 +44,7 @@ ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *contex
 void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 {
     auto call = dyn_cast<CallExpr>(stmt);
-    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!call || !accessSpecifierManager)
+    if (!call)
         return;
 
     FunctionDecl *func = call->getDirectCallee();
@@ -57,6 +56,10 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
         emitInternalError(func->getLocStart(), "couldn't find method from pmf connect");
         return;
     }
+
+    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
+    if (!accessSpecifierManager)
+        return;
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
     if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
