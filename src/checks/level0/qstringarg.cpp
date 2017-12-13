@@ -52,7 +52,7 @@ static CXXMethodDecl* isArgMethod(FunctionDecl *func)
     if (!func)
         return nullptr;
 
-    CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(func);
+    auto method = dyn_cast<CXXMethodDecl>(func);
     if (!method || method->getNameAsString() != "arg")
         return nullptr;
 

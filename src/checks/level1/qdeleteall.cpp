@@ -45,7 +45,7 @@ static bool isInterestingMethod(const string &name)
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values/keys
-    CXXMemberCallExpr *offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
     FunctionDecl *func = offendingCall ? offendingCall->getDirectCallee() : nullptr;
     if (!func)
         return;
@@ -58,7 +58,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
             int i = 1;
             Stmt *p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
             while (p) {
-                CallExpr *pc = dyn_cast<CallExpr>(p);
+                auto pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
                     if (f->getNameAsString() == "qDeleteAll") {

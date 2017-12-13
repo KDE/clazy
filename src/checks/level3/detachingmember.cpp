@@ -47,8 +47,8 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (!callExpr)
         return;
 
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(callExpr);
-    CXXOperatorCallExpr *operatorExpr = dyn_cast<CXXOperatorCallExpr>(callExpr);
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(callExpr);
+    auto operatorExpr = dyn_cast<CXXOperatorCallExpr>(callExpr);
     if (!memberCall && !operatorExpr)
         return;
 
