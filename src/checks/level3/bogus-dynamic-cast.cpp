@@ -33,7 +33,7 @@
 using namespace clang;
 
 BogusDynamicCast::BogusDynamicCast(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

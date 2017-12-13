@@ -33,7 +33,7 @@ using namespace std;
 
 
 PostEvent::PostEvent(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

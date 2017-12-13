@@ -43,7 +43,7 @@ static bool shouldIgnoreType(const std::string &name)
 }
 
 NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "main.cpp", "qrc_", "qdbusxml2cpp" };
 }

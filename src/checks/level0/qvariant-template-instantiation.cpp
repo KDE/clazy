@@ -31,9 +31,8 @@ using namespace std;
 using namespace clang;
 
 QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-
 }
 
 static bool isMatchingClass(const std::string &name)

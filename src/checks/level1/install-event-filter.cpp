@@ -32,10 +32,9 @@ using namespace std;
 
 
 InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
-
 
 void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
 {

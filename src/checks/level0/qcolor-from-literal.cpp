@@ -64,7 +64,7 @@ public :
 
 
 QColorFromLiteral::QColorFromLiteral(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
     , m_astMatcherCallBack(new QColorFromLiteral_Callback(this))
 {
 }

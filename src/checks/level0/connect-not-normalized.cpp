@@ -34,7 +34,7 @@ using namespace clang;
 using namespace std;
 
 ConnectNotNormalized::ConnectNotNormalized(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

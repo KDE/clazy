@@ -33,7 +33,7 @@ using namespace std;
 
 
 QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

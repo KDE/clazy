@@ -33,10 +33,9 @@ using namespace std;
 
 
 QStringLeft::QStringLeft(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
-
 
 void QStringLeft::VisitStmt(clang::Stmt *stmt)
 {

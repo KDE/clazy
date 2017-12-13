@@ -32,7 +32,7 @@ using namespace clang;
 using namespace std;
 
 QDeleteAll::QDeleteAll(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 

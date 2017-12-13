@@ -30,7 +30,7 @@ using namespace clang;
 using namespace std;
 
 QStringArg::QStringArg(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "qstring.h" };
 }

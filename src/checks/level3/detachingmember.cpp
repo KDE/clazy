@@ -36,7 +36,7 @@ using namespace clang;
 using namespace std;
 
 DetachingMember::DetachingMember(const std::string &name, ClazyContext *context)
-    : DetachingBase(name, context)
+    : DetachingBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "qstring.h" };
 }

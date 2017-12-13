@@ -72,7 +72,7 @@ static bool classIsOk(const string &className)
 }
 
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     enablePreProcessorCallbacks();
     context->enableAccessSpecifierManager();
