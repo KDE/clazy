@@ -33,6 +33,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "connect-by-name",
+            "level" : 0,
+            "categories" : ["bug", "readability"],
+            "visits_decls" : true
+        },
+        {
             "name"  : "connect-non-signal",
             "minimum_qt_version" : 50700,
             "level" : 0,

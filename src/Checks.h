@@ -31,6 +31,7 @@
 #include "checks/hiddenlevel/isempty-vs-count.h"
 #include "checks/hiddenlevel/qt4-qstring-from-array.h"
 #include "checks/hiddenlevel/tr-non-literal.h"
+#include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/lambda-in-connect.h"
 #include "checks/level0/lambda-unique-connection.h"
@@ -109,6 +110,7 @@ void CheckManager::registerChecks()
     registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<TrNonLiteral>("tr-non-literal", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaUniqueConnection>("lambda-unique-connection", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));

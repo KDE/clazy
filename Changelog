@@ -66,4 +66,7 @@
     list will grow.
 
 * v1.4 ()
+  - New Checks:
+    connect-by-name
   - auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder
+  - performance optimizations
