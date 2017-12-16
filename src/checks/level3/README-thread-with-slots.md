@@ -1,6 +1,6 @@
 # thread-with-slots
 
-slots in a `QThread` derived classe are usually a code smell, because
+slots in a `QThread` derived class are usually a code smell, because
 they'll run in the thread where the `QThread` `QObject` lives and not in
 the thread itself.
 
