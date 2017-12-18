@@ -172,13 +172,12 @@ inline std::string qualifiedMethodName(clang::CallExpr *call)
     return call ? qualifiedMethodName(call->getDirectCallee()) : std::string();
 }
 
-inline std::string methodName(clang::CallExpr *call)
+inline llvm::StringRef methodName(const clang::CXXMethodDecl *method)
 {
-    if (!call)
-        return {};
+    if (method->getDeclName().isIdentifier()) // Otherwise crashes
+        return method->getName();
 
-    clang::FunctionDecl *func = call->getDirectCallee();
-    return func ? func->getNameAsString() : std::string();
+    return "";
 }
 
 inline void printParents(clang::ParentMap *map, clang::Stmt *s)
