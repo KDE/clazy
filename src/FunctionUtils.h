@@ -34,7 +34,7 @@
 #include <clang/AST/Decl.h>
 #include <string>
 
-namespace FunctionUtils {
+namespace clazy {
 
 inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
 {
@@ -66,7 +66,7 @@ inline clang::ValueDecl *valueDeclForCallArgument(clang::CallExpr *call, unsigne
 
     clang::Expr *firstArg = call->getArg(argIndex);
     auto declRef = llvm::isa<clang::DeclRefExpr>(firstArg) ? llvm::cast<clang::DeclRefExpr>(firstArg)
-                                                           : HierarchyUtils::getFirstChildOfType2<clang::DeclRefExpr>(firstArg);
+                                                           : clazy::getFirstChildOfType2<clang::DeclRefExpr>(firstArg);
     if (!declRef)
         return nullptr;
 
@@ -106,7 +106,7 @@ inline bool classImplementsMethod(const clang::CXXRecordDecl *record, const clan
 
     StringRef methodName = method->getName();
     for (auto m : record->methods()) {
-        if (!m->isPure() && StringUtils::methodName(m) == methodName && parametersMatch(m, method))
+        if (!m->isPure() && clazy::methodName(m) == methodName && parametersMatch(m, method))
             return true;
     }
 

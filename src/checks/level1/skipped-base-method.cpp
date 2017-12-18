@@ -44,7 +44,7 @@ void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
         return;
 
     auto expr = memberCall->getImplicitObjectArgument();
-    auto thisExpr = HierarchyUtils::unpeal<CXXThisExpr>(expr, HierarchyUtils::IgnoreImplicitCasts);
+    auto thisExpr = clazy::unpeal<CXXThisExpr>(expr, clazy::IgnoreImplicitCasts);
     if (!thisExpr)
         return;
 
@@ -58,7 +58,7 @@ void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
     // We're calling a grand-base method, so check if a more direct base also implements it
     for (int i = baseClasses.size() - 1; i > 0; --i) { // the higher indexes have the most derived classes
         CXXRecordDecl *moreDirectBaseClass = baseClasses[i];
-        if (FunctionUtils::classImplementsMethod(moreDirectBaseClass, memberCall->getMethodDecl())) {
+        if (clazy::classImplementsMethod(moreDirectBaseClass, memberCall->getMethodDecl())) {
             std::string msg = "Maybe you meant to call " + moreDirectBaseClass->getNameAsString() + "::" + memberCall->getMethodDecl()->getNameAsString() + "() instead";
             emitWarning(stmt, msg);
         }

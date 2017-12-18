@@ -68,7 +68,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     vector<DeclRefExpr*> declRefExprs;
-    HierarchyUtils::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
+    clazy::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
     if (declRefExprs.empty())
         return;
 
@@ -89,7 +89,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 
     auto rootBaseClass = Utils::rootBaseClass(containerRecord);
     const string containerClassName = rootBaseClass->getNameAsString();
-    const bool isQtContainer = QtUtils::isQtIterableClass(containerClassName);
+    const bool isQtContainer = clazy::isQtIterableClass(containerClassName);
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
         return;
@@ -122,13 +122,13 @@ void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
     vector<ForStmt*> forStatements;
-    HierarchyUtils::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
+    clazy::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
     if (forStatements.empty())
         return;
 
     // Get the variable declaration (lhs of foreach)
     vector<DeclStmt*> varDecls;
-    HierarchyUtils::getChilds<DeclStmt>(forStatements.at(0), varDecls);
+    clazy::getChilds<DeclStmt>(forStatements.at(0), varDecls);
     if (varDecls.empty())
         return;
 
@@ -173,7 +173,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
             if (recordDecl) {
                 const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
-                const std::unordered_map<string, std::vector<string> > &detachingMethodsMap = QtUtils::detachingMethods();
+                const std::unordered_map<string, std::vector<string> > &detachingMethodsMap = clazy::detachingMethods();
                 if (detachingMethodsMap.find(className) != detachingMethodsMap.end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap.at(className);
@@ -183,7 +183,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
                         if (expr) {
                             DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(expr);
                             if (!refExpr) {
-                                auto s = HierarchyUtils::getFirstChildAtDepth(expr, 1);
+                                auto s = clazy::getFirstChildAtDepth(expr, 1);
                                 refExpr = dyn_cast<DeclRefExpr>(s);
                                 if (refExpr) {
                                     if (refExpr->getDecl() == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating

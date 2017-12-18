@@ -49,7 +49,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
     DeclContext *context = varDecl->getDeclContext();
     FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
 
-    if ((m_ignoreMode & IgnoreNonLocalVariable) && !ContextUtils::isValueDeclInFunctionContext(varDecl)) {
+    if ((m_ignoreMode & IgnoreNonLocalVariable) && !clazy::isValueDeclInFunctionContext(varDecl)) {
         return true;
     }
 
@@ -88,7 +88,7 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (!recordDecl || recordDecl->getName() != "QList")
         return;
 
-    const std::vector<clang::QualType> types = TemplateUtils::getTemplateArgumentsTypes(recordDecl);
+    const std::vector<clang::QualType> types = clazy::getTemplateArgumentsTypes(recordDecl);
     if (types.empty())
         return;
     QualType qt2 = types[0];

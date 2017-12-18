@@ -38,7 +38,7 @@
 #include <vector>
 #include <string>
 
-namespace NormalizedSignatureUtils
+namespace clazy
 {
 
 inline bool is_space(char s)

@@ -68,11 +68,11 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    if (!QtUtils::isQtCOWIterableClass(Utils::rootBaseClass(record)))
+    if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record)))
         return;
 
     StmtBodyRange bodyRange(nullptr, &sm(), rangeLoop->getLocStart());
-    if (QtUtils::containerNeverDetaches(LoopUtils::containerDeclForLoop(rangeLoop), bodyRange))
+    if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange))
         return;
 
     emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
@@ -88,7 +88,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 
     if (classif.passNonTriviallyCopyableByConstRef) {
         string msg;
-        const string paramStr = StringUtils::simpleTypeName(varDecl->getType(), lo());
+        const string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able

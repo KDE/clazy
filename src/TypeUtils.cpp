@@ -86,7 +86,7 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 
     std::vector<DeclRefExpr*> declrefs;
-    HierarchyUtils::getChilds(arg, declrefs, 3);
+    clazy::getChilds(arg, declrefs, 3);
 
     std::vector<DeclRefExpr*> interestingDeclRefs;
     for (auto declref : declrefs) {
@@ -98,7 +98,7 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
         QualType qt = t->isPointerType() ? t->getPointeeType()
                                          : declref->getType();
 
-        if (t && type == StringUtils::simpleTypeName(qt, lo)) {
+        if (t && type == clazy::simpleTypeName(qt, lo)) {
             interestingDeclRefs.push_back(declref);
         }
     }

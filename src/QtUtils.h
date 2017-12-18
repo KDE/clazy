@@ -53,7 +53,7 @@ class Expr;
 
 struct StmtBodyRange;
 
-namespace QtUtils
+namespace clazy
 {
 
 /**
@@ -86,7 +86,7 @@ inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
         return false;
 
     auto parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
-    return parent && QtUtils::isQtCOWIterableClass(parent);
+    return parent && clazy::isQtCOWIterableClass(parent);
 }
 
 /**
@@ -125,7 +125,7 @@ CLAZYLIB_EXPORT bool isQtContainer(clang::QualType);
  */
 inline bool isBootstrapping(const clang::PreprocessorOptions &ppOpts)
 {
-    return MacroUtils::isPredefined(ppOpts, "QT_BOOTSTRAPPED");
+    return clazy::isPredefined(ppOpts, "QT_BOOTSTRAPPED");
 }
 
 /**
@@ -148,7 +148,7 @@ CLAZYLIB_EXPORT bool isConvertibleTo(const clang::Type *source, const clang::Typ
  */
 inline bool isInForeach(const clang::ASTContext *context, clang::SourceLocation loc)
 {
-    return MacroUtils::isInAnyMacro(context, loc, { "Q_FOREACH", "foreach" });
+    return clazy::isInAnyMacro(context, loc, { "Q_FOREACH", "foreach" });
 }
 
 /**
@@ -226,7 +226,7 @@ CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
  */
 inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
 {
-    return FunctionUtils::valueDeclForCallArgument(call, 0);
+    return clazy::valueDeclForCallArgument(call, 0);
 }
 
 /**
@@ -238,7 +238,7 @@ inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
     if (!call || call->getNumArgs() < 5)
         return nullptr;
 
-    return FunctionUtils::valueDeclForCallArgument(call, 3);
+    return clazy::valueDeclForCallArgument(call, 3);
 }
 
 /**
@@ -248,12 +248,12 @@ inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
 inline clang::CXXMethodDecl* receiverMethodForConnect(clang::CallExpr *call)
 {
 
-    clang::CXXMethodDecl *receiverMethod = QtUtils::pmfFromConnect(call, 2);
+    clang::CXXMethodDecl *receiverMethod = clazy::pmfFromConnect(call, 2);
     if (receiverMethod)
         return receiverMethod;
 
     // It's either third or fourth argument
-    return QtUtils::pmfFromConnect(call, 3);
+    return clazy::pmfFromConnect(call, 3);
 }
 
 }

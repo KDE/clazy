@@ -35,7 +35,7 @@ using namespace std;
 
 static bool hasMutexes(Stmt *body)
 {
-    auto declrefs = HierarchyUtils::getStatements<DeclRefExpr>(body);
+    auto declrefs = clazy::getStatements<DeclRefExpr>(body);
     for (auto declref : declrefs) {
         ValueDecl *valueDecl = declref->getDecl();
         if (CXXRecordDecl *record = TypeUtils::typeAsRecord(valueDecl->getType())) {
@@ -63,10 +63,10 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *connectFunc = callExpr->getDirectCallee();
-    if (!QtUtils::isConnect(connectFunc))
+    if (!clazy::isConnect(connectFunc))
         return;
 
-    CXXMethodDecl *slot =  QtUtils::receiverMethodForConnect(callExpr);
+    CXXMethodDecl *slot =  clazy::receiverMethodForConnect(callExpr);
     if (!slot || !TypeUtils::derivesFrom(slot->getParent(), "QThread"))
         return;
 
@@ -104,7 +104,7 @@ void ThreadWithSlots::VisitDecl(Decl *decl)
 
     // If we use member mutexes, let's not warn either
     bool accessesNonMutexMember = false;
-    auto memberexprs = HierarchyUtils::getStatements<MemberExpr>(body);
+    auto memberexprs = clazy::getStatements<MemberExpr>(body);
     for (auto memberexpr : memberexprs) {
         ValueDecl *valueDecl = memberexpr->getMemberDecl();
         if (CXXRecordDecl *record = TypeUtils::typeAsRecord(valueDecl->getType())) {

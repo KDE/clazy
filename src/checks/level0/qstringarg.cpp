@@ -38,7 +38,7 @@ QStringArg::QStringArg(const std::string &name, ClazyContext *context)
 static string variableNameFromArg(Expr *arg)
 {
     vector<DeclRefExpr*> declRefs;
-    HierarchyUtils::getChilds<DeclRefExpr>(arg, declRefs);
+    clazy::getChilds<DeclRefExpr>(arg, declRefs);
     if (declRefs.size() == 1) {
         ValueDecl *decl = declRefs.at(0)->getDecl();
         return decl ? decl->getNameAsString() : string();
@@ -73,11 +73,11 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
         return false;
 
     ParmVarDecl *secondParam = method->getParamDecl(1);
-    if (StringUtils::classNameFor(secondParam) == "QString")
+    if (clazy::classNameFor(secondParam) == "QString")
         return true;
 
     ParmVarDecl *firstParam = method->getParamDecl(0);
-    if (StringUtils::classNameFor(firstParam) != "QString")
+    if (clazy::classNameFor(firstParam) != "QString")
         return false;
 
     // This is a arg(QString, int, QChar) call, it's good if the second parameter is a default param
@@ -137,7 +137,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
     if (!method)
         return;
 
-    if (StringUtils::simpleArgTypeName(method, method->getNumParams() - 1, lo()) == "QChar") {
+    if (clazy::simpleArgTypeName(method, method->getNumParams() - 1, lo()) == "QChar") {
         // The second arg wasn't passed, so this is a safe and unambiguous use, like .arg(1)
         if (isa<CXXDefaultArgExpr>(memberCall->getArg(1)))
             return;
@@ -146,7 +146,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         if (p && p->getNameAsString() == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
             vector<IntegerLiteral*> literals;
-            HierarchyUtils::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
+            clazy::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
             if (!literals.empty())
                 return;
 
@@ -159,7 +159,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         if (p && p->getNameAsString() == "fieldWidth") {
             // He specified a literal, so he knows what he's doing, otherwise he would have put it directly in the string
             vector<IntegerLiteral*> literals;
-            HierarchyUtils::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);
+            clazy::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);
             if (!literals.empty())
                 return;
 

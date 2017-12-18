@@ -50,7 +50,7 @@ void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, co
 void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
 {
     CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !QtUtils::isQObject(record))
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record))
         return;
 
     if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates

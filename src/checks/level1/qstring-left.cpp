@@ -40,7 +40,7 @@ QStringLeft::QStringLeft(const std::string &name, ClazyContext *context)
 void QStringLeft::VisitStmt(clang::Stmt *stmt)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall || StringUtils::qualifiedMethodName(memberCall) != "QString::left")
+    if (!memberCall || clazy::qualifiedMethodName(memberCall) != "QString::left")
         return;
 
     if (memberCall->getNumArgs() == 0) // Doesn't happen

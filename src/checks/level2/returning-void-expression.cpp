@@ -48,7 +48,7 @@ void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
     if (qt.isNull() || !qt->isVoidType())
         return;
 
-    DeclContext *context = ContextUtils::contextForDecl(m_context->lastDecl);
+    DeclContext *context = clazy::contextForDecl(m_context->lastDecl);
     if (!context)
         return;
 

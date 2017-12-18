@@ -53,10 +53,10 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
     const string funcName = func->getNameAsString();
     if (isInterestingMethod(funcName)) {
         const std::string offendingClassName = offendingCall->getMethodDecl()->getParent()->getNameAsString();
-        if (QtUtils::isQtAssociativeContainer(offendingClassName)) {
+        if (clazy::isQtAssociativeContainer(offendingClassName)) {
             // Once found see if the first parent call is qDeleteAll
             int i = 1;
-            Stmt *p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
+            Stmt *p = clazy::parent(m_context->parentMap, stmt, i);
             while (p) {
                 auto pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
@@ -72,7 +72,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                     break;
                 }
                 ++i;
-                p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
+                p = clazy::parent(m_context->parentMap, stmt, i);
             }
         }
     }

@@ -60,7 +60,7 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor, bool &is_char_array,
 {
     is_char_array = false;
     is_byte_array = false;
-    if (!ctor || !StringUtils::isOfClass(ctor, "QString"))
+    if (!ctor || !clazy::isOfClass(ctor, "QString"))
         return false;
 
     for (auto param : Utils::functionParameters(ctor)) {
@@ -163,8 +163,8 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
 
 std::vector<FixItHint> Qt4QStringFromArray::fixCtorCall(CXXConstructExpr *ctorExpr)
 {
-    Stmt *parent = HierarchyUtils::parent(m_context->parentMap, ctorExpr); // CXXBindTemporaryExpr
-    Stmt *grandParent = HierarchyUtils::parent(m_context->parentMap, parent); //CXXFunctionalCastExpr
+    Stmt *parent = clazy::parent(m_context->parentMap, ctorExpr); // CXXBindTemporaryExpr
+    Stmt *grandParent = clazy::parent(m_context->parentMap, parent); //CXXFunctionalCastExpr
 
     if (parent && grandParent && isa<CXXBindTemporaryExpr>(parent) && isa<CXXFunctionalCastExpr>(grandParent)) {
         return fixitReplaceWithFromLatin1(ctorExpr);
@@ -179,7 +179,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
     if (op->getNumArgs() == 2) {
         Expr *e = op->getArg(1);
         SourceLocation start = e->getLocStart();
-        SourceLocation end = Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
+        SourceLocation end = Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
 
         SourceRange range = { start, end };
         if (range.isInvalid()) {
@@ -187,7 +187,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
             return {};
         }
 
-        FixItUtils::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/fixits);
+        clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/fixits);
 
     } else {
         emitWarning(op->getLocStart(), "internal error");
@@ -204,7 +204,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
     if (memberExpr->getNumArgs() == 1) {
         Expr *e = *(memberExpr->arg_begin());
         SourceLocation start = e->getLocStart();
-        SourceLocation end = Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
+        SourceLocation end = Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
 
         SourceRange range = { start, end };
         if (range.isInvalid()) {
@@ -212,7 +212,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
             return {};
         }
 
-        FixItUtils::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/fixits);
+        clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/fixits);
     } else {
         emitWarning(memberExpr->getLocStart(), "internal error");
     }
@@ -234,9 +234,9 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstr
         // Fallback. Have seen a case in the wild where the above would fail, it's very rare
         rangeEnd = rangeStart.getLocWithOffset(replacee.size() - 2);
         if (rangeEnd.isInvalid()) {
-            StringUtils::printLocation(sm(), rangeStart);
-            StringUtils::printLocation(sm(), rangeEnd);
-            StringUtils::printLocation(sm(), Lexer::getLocForEndOfToken(rangeStart, 0, sm(), lo()));
+            clazy::printLocation(sm(), rangeStart);
+            clazy::printLocation(sm(), rangeEnd);
+            clazy::printLocation(sm(), Lexer::getLocForEndOfToken(rangeStart, 0, sm(), lo()));
             queueManualFixitWarning(ctorExpr->getLocStart(), FixItToFromLatin1);
             return {};
         }
@@ -253,13 +253,13 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitInsertFromLatin1(CXXConstructEx
 
     Expr *arg = *(ctorExpr->arg_begin());
     range.setBegin(arg->getLocStart());
-    range.setEnd(Lexer::getLocForEndOfToken(FixItUtils::biggestSourceLocationInStmt(sm(), ctorExpr), 0, sm(), lo()));
+    range.setEnd(Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), ctorExpr), 0, sm(), lo()));
     if (range.isInvalid()) {
         emitWarning(ctorExpr->getLocStart(), "Internal error");
         return {};
     }
 
-    FixItUtils::insertParentMethodCall("QString::fromLatin1", range, fixits);
+    clazy::insertParentMethodCall("QString::fromLatin1", range, fixits);
 
     return fixits;
 }

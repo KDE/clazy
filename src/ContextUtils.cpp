@@ -32,7 +32,7 @@
 using namespace clang;
 using namespace std;
 
-std::vector<DeclContext *> ContextUtils::contextsForDecl(DeclContext *currentScope)
+std::vector<DeclContext *> clazy::contextsForDecl(DeclContext *currentScope)
 {
     std::vector<DeclContext *> decls;
     decls.reserve(20); // jump-start
@@ -61,7 +61,7 @@ static string nameForContext(DeclContext *context)
     return {};
 }
 
-string ContextUtils::getMostNeededQualifiedName(const SourceManager &sourceManager,
+string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
                                                 CXXMethodDecl *method,
                                                 DeclContext *currentScope,
                                                 SourceLocation usageLoc, bool honourUsingDirectives)
@@ -70,10 +70,10 @@ string ContextUtils::getMostNeededQualifiedName(const SourceManager &sourceManag
         return method->getQualifiedNameAsString();
 
     // All namespaces, classes, inner class qualifications
-    auto methodContexts = ContextUtils::contextsForDecl(method->getDeclContext());
+    auto methodContexts = clazy::contextsForDecl(method->getDeclContext());
 
     // Visible scopes in current scope
-    auto visibleContexts = ContextUtils::contextsForDecl(currentScope);
+    auto visibleContexts = clazy::contextsForDecl(currentScope);
 
     // Collect using directives
     vector<UsingDirectiveDecl*> usings;
@@ -119,7 +119,7 @@ string ContextUtils::getMostNeededQualifiedName(const SourceManager &sourceManag
     return result;
 }
 
-bool ContextUtils::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &isSpecialProtectedCase)
+bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &isSpecialProtectedCase)
 {
     isSpecialProtectedCase = false;
     if (!method || !method->getParent())

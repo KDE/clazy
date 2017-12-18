@@ -35,7 +35,7 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
     if (!record || clazy::startsWith(record->getQualifiedNameAsString(), "std::"))
         return true;
 
-    const auto qualifiedName = StringUtils::classNameFor(record);
+    const auto qualifiedName = clazy::classNameFor(record);
 
     static const vector<string> blacklisted = { "QAtomicInt", "QBasicAtomicInteger", "QAtomicInteger", "QBasicAtomicPointer",
                                                 "QList::iterator", "QList::const_iterator", "QTextBlock::iterator",

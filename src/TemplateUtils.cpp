@@ -42,7 +42,7 @@ static vector<QualType> typesFromTemplateArguments(const TemplateArgumentList *t
     return result;
 }
 
-vector<QualType> TemplateUtils::getTemplateArgumentsTypes(CXXMethodDecl *method)
+vector<QualType> clazy::getTemplateArgumentsTypes(CXXMethodDecl *method)
 {
     if (!method)
         return {};
@@ -54,7 +54,7 @@ vector<QualType> TemplateUtils::getTemplateArgumentsTypes(CXXMethodDecl *method)
     return typesFromTemplateArguments(specializationInfo->TemplateArguments);
 }
 
-std::vector<clang::QualType> TemplateUtils::getTemplateArgumentsTypes(CXXRecordDecl *record)
+std::vector<clang::QualType> clazy::getTemplateArgumentsTypes(CXXRecordDecl *record)
 {
     if (!record)
         return {};
@@ -66,7 +66,7 @@ std::vector<clang::QualType> TemplateUtils::getTemplateArgumentsTypes(CXXRecordD
     return typesFromTemplateArguments(&(templateDecl->getTemplateInstantiationArgs()));
 }
 
-ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)
+ClassTemplateSpecializationDecl *clazy::templateDecl(Decl *decl)
 {
     if (isa<ClassTemplateSpecializationDecl>(decl))
         return dyn_cast<ClassTemplateSpecializationDecl>(decl);
@@ -81,7 +81,7 @@ ClassTemplateSpecializationDecl *TemplateUtils::templateDecl(Decl *decl)
     return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
 }
 
-string TemplateUtils::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
+string clazy::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
                                                  unsigned int index, const LangOptions &lo, bool recordOnly)
 {
     if (!specialization)
@@ -98,10 +98,10 @@ string TemplateUtils::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl
             return {};
     }
 
-    return StringUtils::simpleTypeName(args[index].getAsType(), lo);
+    return clazy::simpleTypeName(args[index].getAsType(), lo);
 }
 
-clang::QualType TemplateUtils::getTemplateArgumentType(ClassTemplateSpecializationDecl *specialization, unsigned int index)
+clang::QualType clazy::getTemplateArgumentType(ClassTemplateSpecializationDecl *specialization, unsigned int index)
 {
     if (!specialization)
         return {};

@@ -49,11 +49,11 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     SourceLocation loc = stmt->getLocStart();
-    if (MacroUtils::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
+    if (clazy::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
         return;
 
     CXXRecordDecl *record = ctorDecl->getParent();
-    vector<QualType> typeList = TemplateUtils::getTemplateArgumentsTypes(record);
+    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(record);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
     if (!t)
         return;

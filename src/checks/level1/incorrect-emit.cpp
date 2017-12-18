@@ -65,10 +65,10 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (shouldIgnoreFile(stmt->getLocStart()))
         return;
 
-    if (Stmt *parent = HierarchyUtils::parent(m_context->parentMap, methodCall)) {
+    if (Stmt *parent = clazy::parent(m_context->parentMap, methodCall)) {
         // Check if we're inside a chained call, such as: emit d_func()->mySignal()
         // We're not interested in the d_func() call, so skip it
-        if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, parent))
+        if (clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, parent))
             return;
     }
 
@@ -102,7 +102,7 @@ void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
     if (!implicitArg || !isa<CXXThisExpr>(implicitArg)) // emit other->sig() is ok
         return;
 
-    if (HierarchyUtils::getFirstParentOfType<LambdaExpr>(m_context->parentMap, callExpr) != nullptr)
+    if (clazy::getFirstParentOfType<LambdaExpr>(m_context->parentMap, callExpr) != nullptr)
         return; // Emit is inside a lambda, it's fine
 
     emitWarning(callExpr->getLocStart(), "Emitting inside constructor has no effect");

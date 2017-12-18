@@ -49,19 +49,19 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
         return;
 
     ParmVarDecl *firstArg = func->getParamDecl(0);
-    NamespaceDecl *argumentNS = ContextUtils::namespaceForType(firstArg->getType());
-    NamespaceDecl *qHashNS =  ContextUtils::namespaceForFunction(func);
+    NamespaceDecl *argumentNS = clazy::namespaceForType(firstArg->getType());
+    NamespaceDecl *qHashNS =  clazy::namespaceForFunction(func);
 
     std::string msg;
     if (qHashNS && argumentNS) {
         const string argumentNSstr = argumentNS->getQualifiedNameAsString();
         const string qhashNSstr = qHashNS->getQualifiedNameAsString();
         if (argumentNSstr != qhashNSstr)
-            msg = "Move qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") to " + argumentNSstr + " namespace for ADL lookup";
+            msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") to " + argumentNSstr + " namespace for ADL lookup";
     } else if (qHashNS && !argumentNS) {
-        msg = "Move qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
+        msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
     } else if (!qHashNS && argumentNS) {
-        msg = "Move qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
+        msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
     }
 
     if (!msg.empty())
@@ -70,7 +70,7 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
     if (m_context->isQtDeveloper()) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (preProcessorVisitor && !preProcessorVisitor->isBetweenQtNamespaceMacros(func->getLocStart())) {
-            emitWarning(decl, "qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") must be declared before QT_END_NAMESPACE");
+            emitWarning(decl, "qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") must be declared before QT_END_NAMESPACE");
         }
     }
 }

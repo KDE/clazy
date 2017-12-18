@@ -87,7 +87,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_context->ci.getPreprocessorOpts()))
+    if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->ci.getPreprocessorOpts()))
         return;
 
     const string className = recordDecl->getName();

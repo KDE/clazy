@@ -48,6 +48,6 @@ void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
         return;
 
     Expr *arg1 = callExpr->getArg(0);
-    if (HierarchyUtils::getFirstChildOfType2<StringLiteral>(arg1) == nullptr)
+    if (clazy::getFirstChildOfType2<StringLiteral>(arg1) == nullptr)
         emitWarning(stmt, "tr() without a literal string");
 }

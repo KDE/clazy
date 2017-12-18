@@ -103,7 +103,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     }
 
     CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (isAllowedChainedMethod(StringUtils::qualifiedMethodName(firstFunc))) {
+    if (isAllowedChainedMethod(clazy::qualifiedMethodName(firstFunc))) {
         return;
     }
 
@@ -127,7 +127,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     const std::string className = classDecl->getNameAsString();
 
-    const std::unordered_map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    const std::unordered_map<string, std::vector<string> > &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(className);
     auto it2 = m_writeMethodsByType.find(className);
 
@@ -159,7 +159,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         if (isWriteFunction && (detachingMethodReturnType->isVoidType() || returnTypeIsIterator)) {
             error = std::string("Modifying temporary container is pointless and it also detaches");
         } else {
-            error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
+            error = std::string("Don't call ") + clazy::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
         }
     }
 

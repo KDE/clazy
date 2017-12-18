@@ -182,8 +182,8 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
     }
 
     // Maybe there's an implicit cast in between..
-    auto memberExprs = HierarchyUtils::getStatements<MemberExpr>(implicitObject, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
-    auto declRefs = HierarchyUtils::getStatements<DeclRefExpr>(implicitObject, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
+    auto memberExprs = clazy::getStatements<MemberExpr>(implicitObject, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
+    auto declRefs = clazy::getStatements<DeclRefExpr>(implicitObject, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
 
     if (!memberExprs.empty()) {
         return memberExprs.at(0)->getMemberDecl();
@@ -212,7 +212,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
         return memberExpr->getMemberDecl();
     } else {
         vector<DeclRefExpr*> refs;
-        HierarchyUtils::getChilds<DeclRefExpr>(child2, refs);
+        clazy::getChilds<DeclRefExpr>(child2, refs);
         if (refs.size() == 1) {
             return refs[0]->getDecl();
         }
@@ -255,7 +255,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const 
         return false;
 
     std::vector<CXXMemberCallExpr*> memberCallExprs;
-    HierarchyUtils::getChilds<CXXMemberCallExpr>(body, memberCallExprs);
+    clazy::getChilds<CXXMemberCallExpr>(body, memberCallExprs);
     for (auto memberCall : memberCallExprs) {
         CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
         if (methodDecl && !methodDecl->isConst()) {
@@ -266,7 +266,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const 
     }
 
     std::vector<CXXOperatorCallExpr*> operatorCalls;
-    HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
+    clazy::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto operatorCall : operatorCalls) {
         FunctionDecl *fDecl = operatorCall->getDirectCallee();
         if (fDecl) {
@@ -280,7 +280,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const 
     }
 
     std::vector<BinaryOperator*> assignmentOperators;
-    HierarchyUtils::getChilds<BinaryOperator>(body, assignmentOperators);
+    clazy::getChilds<BinaryOperator>(body, assignmentOperators);
     for (auto op : assignmentOperators) {
         if (!op->isAssignmentOp())
             continue;
@@ -345,7 +345,7 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
 
     Stmt *body = bodyRange.body;
     std::vector<CallExpr*> callExprs;
-    HierarchyUtils::getChilds<CallExpr>(body, callExprs);
+    clazy::getChilds<CallExpr>(body, callExprs);
     for (CallExpr *callexpr : callExprs) {
         if (bodyRange.isOutsideRange(callexpr))
             continue;
@@ -359,7 +359,7 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
     }
 
     std::vector<CXXConstructExpr*> constructExprs;
-    HierarchyUtils::getChilds<CXXConstructExpr>(body, constructExprs);
+    clazy::getChilds<CXXConstructExpr>(body, constructExprs);
     for (CXXConstructExpr *constructExpr : constructExprs) {
         if (bodyRange.isOutsideRange(constructExpr))
             continue;
@@ -376,12 +376,12 @@ bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const 
     if (!body || !valDecl)
         return false;
 
-    auto unaries = HierarchyUtils::getStatements<UnaryOperator>(body);
+    auto unaries = clazy::getStatements<UnaryOperator>(body);
     return clazy::any_of(unaries, [valDecl](UnaryOperator *op) {
         if (op->getOpcode() != clang::UO_AddrOf)
             return false;
 
-        auto declRef = HierarchyUtils::getFirstChildOfType<DeclRefExpr>(op);
+        auto declRef = clazy::getFirstChildOfType<DeclRefExpr>(op);
         return declRef && declRef->getDecl() == valDecl;
     });
 }
@@ -392,7 +392,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
         return false;
 
     std::vector<CXXOperatorCallExpr*> operatorCalls;
-    HierarchyUtils::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
+    clazy::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
     for (CXXOperatorCallExpr *operatorExpr : operatorCalls) {
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
         if (!fDecl)
@@ -412,7 +412,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 {
     std::vector<clang::CXXDefaultArgExpr*> exprs;
-    HierarchyUtils::getChilds<clang::CXXDefaultArgExpr>(expr, exprs, 1);
+    clazy::getChilds<clang::CXXDefaultArgExpr>(expr, exprs, 1);
     return !exprs.empty();
 }
 
@@ -422,7 +422,7 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
         return false;
 
     std::vector<StringLiteral*> stringLiterals;
-    HierarchyUtils::getChilds<StringLiteral>(stm, stringLiterals, depth);
+    clazy::getChilds<StringLiteral>(stm, stringLiterals, depth);
 
     if (allowEmpty)
         return !stringLiterals.empty();
@@ -466,13 +466,13 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &classNa
         return false;
 
     CXXMethodDecl *methodDecl = dyn_cast<clang::CXXMethodDecl>(functionDecl);
-    if (!className.empty() && !StringUtils::isOfClass(methodDecl, className))
+    if (!className.empty() && !clazy::isOfClass(methodDecl, className))
         return false;
 
     if (functionDecl->getNameAsString() != "operator=" || functionDecl->param_size() != 1)
         return false;
 
-    if (!argumentType.empty() && !StringUtils::hasArgumentOfType(functionDecl, argumentType, lo)) {
+    if (!argumentType.empty() && !clazy::hasArgumentOfType(functionDecl, argumentType, lo)) {
         return false;
     }
 
@@ -512,7 +512,7 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
         }
     }
 
-    return isInsideOperatorCall(map, HierarchyUtils::parent(map, s), anyOf);
+    return isInsideOperatorCall(map, clazy::parent(map, s), anyOf);
 }
 
 
@@ -526,7 +526,7 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
         return true;
     }
 
-    return insideCTORCall(map, HierarchyUtils::parent(map, s), anyOf);
+    return insideCTORCall(map, clazy::parent(map, s), anyOf);
 }
 
 bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2)
@@ -615,7 +615,7 @@ bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
 
     Stmt *p = s;
     do {
-        p = HierarchyUtils::parent(map, p);
+        p = clazy::parent(map, p);
         CXXOperatorCallExpr *op = p ? dyn_cast<CXXOperatorCallExpr>(p) : nullptr;
         if (op && op->getDirectCallee() && op->getDirectCallee()->getNameAsString() == "operator*") {
             return op;
@@ -725,18 +725,18 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
         return false;
 
     vector<DeclStmt*> declStmts;
-    HierarchyUtils::getChilds<DeclStmt>(body, declStmts);
+    clazy::getChilds<DeclStmt>(body, declStmts);
     for (DeclStmt *declStmt : declStmts) {
         if (referencesVarDecl(declStmt, varDecl)) {
             vector<DeclRefExpr*> declRefs;
 
-            HierarchyUtils::getChilds<DeclRefExpr>(declStmt, declRefs);
+            clazy::getChilds<DeclRefExpr>(declStmt, declRefs);
             if (!declRefs.empty()) {
                 return true;
             }
 
             vector<CallExpr*> callExprs;
-            HierarchyUtils::getChilds<CallExpr>(declStmt, callExprs);
+            clazy::getChilds<CallExpr>(declStmt, callExprs);
             if (!callExprs.empty()) {
                 return true;
             }
@@ -789,9 +789,9 @@ UserDefinedLiteral *Utils::userDefinedLiteral(Stmt *stm, const std::string &type
 {
     auto udl = dyn_cast<UserDefinedLiteral>(stm);
     if (!udl)
-        udl = HierarchyUtils::getFirstChildOfType<UserDefinedLiteral>(stm);
+        udl = clazy::getFirstChildOfType<UserDefinedLiteral>(stm);
 
-    if (udl && StringUtils::returnTypeName(udl, lo) == type) {
+    if (udl && clazy::returnTypeName(udl, lo) == type) {
         return udl;
     }
 
@@ -820,7 +820,7 @@ vector<CXXCtorInitializer *> Utils::ctorInitializer(CXXConstructorDecl *ctor, cl
     for (auto it = ctor->init_begin(), end = ctor->init_end(); it != end; ++it) {
         auto ctorInit = *it;
         vector<DeclRefExpr*> declRefs;
-        HierarchyUtils::getChilds(ctorInit->getInit(), declRefs);
+        clazy::getChilds(ctorInit->getInit(), declRefs);
         for (auto declRef : declRefs) {
             if (declRef->getDecl() == param) {
                 result.push_back(ctorInit);
@@ -838,7 +838,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
         return false;
 
     vector<CallExpr*> calls;
-    HierarchyUtils::getChilds(init->getInit(), calls);
+    clazy::getChilds(init->getInit(), calls);
 
     for (auto call : calls) {
         if (FunctionDecl *funcDecl = call->getDirectCallee()) {

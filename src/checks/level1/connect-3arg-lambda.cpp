@@ -42,10 +42,10 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *fdecl = callExpr->getDirectCallee();
-    if (!fdecl || fdecl->getNumParams() != 3 || !QtUtils::isConnect(fdecl))
+    if (!fdecl || fdecl->getNumParams() != 3 || !clazy::isConnect(fdecl))
         return;
 
-    auto lambda = HierarchyUtils::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
+    auto lambda = clazy::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
     if (!lambda)
         return;
 
@@ -60,15 +60,15 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         if ((senderMemberExpr = dyn_cast<MemberExpr>(s)))
             break;
 
-        s = HierarchyUtils::getFirstChild(s);
+        s = clazy::getFirstChild(s);
     }
 
 
     // The sender can be: this
-    CXXThisExpr* senderThis = HierarchyUtils::unpeal<CXXThisExpr>(callExpr->getArg(0), HierarchyUtils::IgnoreImplicitCasts);
+    CXXThisExpr* senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
 
     // The variables used inside the lambda
-    auto declrefs = HierarchyUtils::getStatements<DeclRefExpr>(lambda->getBody());
+    auto declrefs = clazy::getStatements<DeclRefExpr>(lambda->getBody());
 
     ValueDecl *senderDecl = senderDeclRef ? senderDeclRef->getDecl() : nullptr;
 
@@ -79,14 +79,14 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         if (decl == senderDecl)
             continue; // It's the sender, continue.
 
-        if (QtUtils::isQObject(decl->getType())) {
+        if (clazy::isQObject(decl->getType())) {
             found = true;
             break;
         }
     }
 
     if (!found) {
-        auto thisexprs = HierarchyUtils::getStatements<CXXThisExpr>(lambda->getBody());
+        auto thisexprs = clazy::getStatements<CXXThisExpr>(lambda->getBody());
         if (!thisexprs.empty() && !senderThis)
             found = true;
     }

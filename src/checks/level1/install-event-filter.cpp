@@ -50,7 +50,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     if (!expr)
         return;
 
-    if (!isa<CXXThisExpr>(HierarchyUtils::getFirstChildAtDepth(expr, 1)))
+    if (!isa<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1)))
         return;
 
     Expr *arg1 = memberCallExpr->getArg(0);

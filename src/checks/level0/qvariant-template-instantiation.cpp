@@ -60,7 +60,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     if (!decl || decl->getNameAsString() != "QVariant")
         return;
 
-    vector<QualType> typeList = TemplateUtils::getTemplateArgumentsTypes(methodDecl);
+    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
     if (!t)
         return;
@@ -74,7 +74,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     if (matches) {
-        string typeName = StringUtils::simpleTypeName(typeList[0], lo());
+        string typeName = clazy::simpleTypeName(typeList[0], lo());
         typeName[0] = toupper(typeName[0]);
 
         string typeName2 = typeName;

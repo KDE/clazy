@@ -34,7 +34,7 @@
 using namespace std;
 using namespace clang;
 
-bool QtUtils::isQtIterableClass(clang::CXXRecordDecl *record)
+bool clazy::isQtIterableClass(clang::CXXRecordDecl *record)
 {
     if (!record)
         return false;
@@ -42,7 +42,7 @@ bool QtUtils::isQtIterableClass(clang::CXXRecordDecl *record)
     return isQtIterableClass(record->getQualifiedNameAsString());
 }
 
-const vector<string> & QtUtils::qtContainers()
+const vector<string> & clazy::qtContainers()
 {
     static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
                                             "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
@@ -50,7 +50,7 @@ const vector<string> & QtUtils::qtContainers()
     return classes;
 }
 
-const vector<string> & QtUtils::qtCOWContainers()
+const vector<string> & clazy::qtCOWContainers()
 {
     static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QMap", "QHash",
                                             "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
@@ -59,7 +59,7 @@ const vector<string> & QtUtils::qtCOWContainers()
 }
 
 
-std::unordered_map<string, std::vector<string> > QtUtils::detachingMethods()
+std::unordered_map<string, std::vector<string> > clazy::detachingMethods()
 {
     static std::unordered_map<string, std::vector<string> > map;
     if (map.empty()) {
@@ -84,7 +84,7 @@ std::unordered_map<string, std::vector<string> > QtUtils::detachingMethods()
 }
 
 
-bool QtUtils::isQtCOWIterableClass(clang::CXXRecordDecl *record)
+bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record)
 {
     if (!record)
         return false;
@@ -92,19 +92,19 @@ bool QtUtils::isQtCOWIterableClass(clang::CXXRecordDecl *record)
     return isQtCOWIterableClass(record->getQualifiedNameAsString());
 }
 
-bool QtUtils::isQtCOWIterableClass(const string &className)
+bool clazy::isQtCOWIterableClass(const string &className)
 {
     const auto &classes = qtCOWContainers();
     return clazy::contains(classes, className);
 }
 
-bool QtUtils::isQtIterableClass(const string &className)
+bool clazy::isQtIterableClass(const string &className)
 {
     const auto &classes = qtContainers();
     return clazy::contains(classes, className);
 }
 
-bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
+bool clazy::isQtAssociativeContainer(clang::CXXRecordDecl *record)
 {
     if (!record)
         return false;
@@ -112,25 +112,25 @@ bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
     return isQtAssociativeContainer(record->getNameAsString());
 }
 
-bool QtUtils::isQtAssociativeContainer(const string &className)
+bool clazy::isQtAssociativeContainer(const string &className)
 {
     static const vector<string> classes = { "QSet", "QMap", "QHash" };
     return clazy::contains(classes, className);
 }
 
-bool QtUtils::isQObject(CXXRecordDecl *decl)
+bool clazy::isQObject(CXXRecordDecl *decl)
 {
     return TypeUtils::derivesFrom(decl, "QObject");
 }
 
-bool QtUtils::isQObject(clang::QualType qt)
+bool clazy::isQObject(clang::QualType qt)
 {
     qt = TypeUtils::pointeeQualType(qt);
     const auto t = qt.getTypePtrOrNull();
     return t ? isQObject(t->getAsCXXRecordDecl()) : false;
 }
 
-bool QtUtils::isConvertibleTo(const Type *source, const Type *target)
+bool clazy::isConvertibleTo(const Type *source, const Type *target)
 {
     if (!source || !target)
         return false;
@@ -159,7 +159,7 @@ bool QtUtils::isConvertibleTo(const Type *source, const Type *target)
     return false;
 }
 
-bool QtUtils::isJavaIterator(CXXRecordDecl *record)
+bool clazy::isJavaIterator(CXXRecordDecl *record)
 {
     if (!record)
         return false;
@@ -170,7 +170,7 @@ bool QtUtils::isJavaIterator(CXXRecordDecl *record)
     return clazy::contains(names, record->getNameAsString());
 }
 
-bool QtUtils::isJavaIterator(CXXMemberCallExpr *call)
+bool clazy::isJavaIterator(CXXMemberCallExpr *call)
 {
     if (!call)
         return false;
@@ -178,19 +178,19 @@ bool QtUtils::isJavaIterator(CXXMemberCallExpr *call)
     return isJavaIterator(call->getRecordDecl());
 }
 
-bool QtUtils::isQtContainer(QualType t)
+bool clazy::isQtContainer(QualType t)
 {
     CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
     if (!record)
         return false;
 
     const string typeName = record->getNameAsString();
-    return clazy::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
+    return clazy::any_of(clazy::qtContainers(), [typeName] (const string &container) {
         return container == typeName;
     });
 }
 
-bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange) // clazy:exclude=function-args-by-value
+bool clazy::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange) // clazy:exclude=function-args-by-value
 {
     if (!valDecl)
         return false;
@@ -210,7 +210,7 @@ bool QtUtils::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRang
     return true;
 }
 
-bool QtUtils::isAReserveClass(CXXRecordDecl *recordDecl)
+bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
 {
     if (!recordDecl)
         return false;
@@ -222,7 +222,7 @@ bool QtUtils::isAReserveClass(CXXRecordDecl *recordDecl)
     });
 }
 
-clang::CXXRecordDecl *QtUtils::getQObjectBaseClass(clang::CXXRecordDecl *recordDecl)
+clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDecl)
 {
     if (!recordDecl)
         return nullptr;
@@ -237,12 +237,12 @@ clang::CXXRecordDecl *QtUtils::getQObjectBaseClass(clang::CXXRecordDecl *recordD
 }
 
 
-bool QtUtils::isConnect(FunctionDecl *func)
+bool clazy::isConnect(FunctionDecl *func)
 {
     return func && func->getQualifiedNameAsString() == "QObject::connect";
 }
 
-bool QtUtils::connectHasPMFStyle(FunctionDecl *func)
+bool clazy::connectHasPMFStyle(FunctionDecl *func)
 {
     // Look for char* arguments
     for (auto parm : Utils::functionParameters(func)) {
@@ -259,7 +259,7 @@ bool QtUtils::connectHasPMFStyle(FunctionDecl *func)
     return true;
 }
 
-CXXMethodDecl *QtUtils::pmfFromConnect(CallExpr *funcCall, int argIndex)
+CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex)
 {
     if (!funcCall)
         return nullptr;
@@ -278,7 +278,7 @@ CXXMethodDecl *QtUtils::pmfFromConnect(CallExpr *funcCall, int argIndex)
 }
 
 
-CXXMethodDecl *QtUtils::pmfFromUnary(Expr *expr)
+CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
 {
     if (auto uo = dyn_cast<UnaryOperator>(expr)) {
         return pmfFromUnary(uo);
@@ -311,7 +311,7 @@ CXXMethodDecl *QtUtils::pmfFromUnary(Expr *expr)
     return nullptr;
 }
 
-CXXMethodDecl *QtUtils::pmfFromUnary(UnaryOperator *uo)
+CXXMethodDecl *clazy::pmfFromUnary(UnaryOperator *uo)
 {
     if (!uo)
         return nullptr;
@@ -328,7 +328,7 @@ CXXMethodDecl *QtUtils::pmfFromUnary(UnaryOperator *uo)
     return nullptr;
 }
 
-bool QtUtils::recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &paramType, bool &ok, int &numCtors)
+bool clazy::recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &paramType, bool &ok, int &numCtors)
 {
     ok = true;
     numCtors = 0;

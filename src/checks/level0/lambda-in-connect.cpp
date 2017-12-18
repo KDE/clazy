@@ -48,23 +48,23 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
     if (captures.begin() == captures.end())
         return;
 
-    auto callExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap, lambda);
-    if (StringUtils::qualifiedMethodName(callExpr) != "QObject::connect")
+    auto callExpr = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap, lambda);
+    if (clazy::qualifiedMethodName(callExpr) != "QObject::connect")
         return;
 
-    ValueDecl *senderDecl = QtUtils::signalSenderForConnect(callExpr);
+    ValueDecl *senderDecl = clazy::signalSenderForConnect(callExpr);
     if (senderDecl) {
         const Type *t = senderDecl->getType().getTypePtrOrNull();
         if (t && !t->isPointerType())
             return;
     }
 
-    ValueDecl *receiverDecl = QtUtils::signalReceiverForConnect(callExpr);
+    ValueDecl *receiverDecl = clazy::signalReceiverForConnect(callExpr);
 
     for (auto capture : captures) {
         if (capture.getCaptureKind() == clang::LCK_ByRef) {
             VarDecl *declForCapture = capture.getCapturedVar();
-            if (declForCapture && declForCapture != receiverDecl && ContextUtils::isValueDeclInFunctionContext(declForCapture))
+            if (declForCapture && declForCapture != receiverDecl && clazy::isValueDeclInFunctionContext(declForCapture))
                 emitWarning(capture.getLocation(), "captured local variable by reference might go out of scope before lambda is called");
         }
     }

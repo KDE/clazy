@@ -96,7 +96,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     if (classification == ConnectFlag_None)
         return classification;
 
-    if (QtUtils::connectHasPMFStyle(connectFunc))
+    if (clazy::connectHasPMFStyle(connectFunc))
         return classification;
     else
         classification |= ConnectFlag_OldStyle;
@@ -150,7 +150,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
 bool OldStyleConnect::isQPointer(Expr *expr) const
 {
     vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds<CXXMemberCallExpr>(expr, memberCalls);
+    clazy::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
     for (auto callExpr : memberCalls) {
         if (!callExpr->getDirectCallee())
@@ -367,7 +367,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 for (unsigned int i = 0; i < numReceiverParams; ++i) {
                     ParmVarDecl *receiverParm = methodDecl->getParamDecl(i);
                     ParmVarDecl *senderParm = senderMethod->getParamDecl(i);
-                    if (!QtUtils::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
+                    if (!clazy::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
                         string msg = string("Sender's parameters are incompatible with the receiver's");
                         queueManualFixitWarning(s, FixItConnects, msg);
                         return {};
@@ -384,21 +384,21 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             DeclContext *context = m_context->lastDecl->getDeclContext();
 
             bool isSpecialProtectedCase = false;
-            if (!ContextUtils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
-                string msg = "Can't fix " + StringUtils::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
+            if (!clazy::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
+                string msg = "Can't fix " + clazy::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
             }
 
             string qualifiedName;
-            auto contextRecord = ContextUtils::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
+            auto contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
             const bool isInInclude = sm().getMainFileID() != sm().getFileID(call->getLocStart());
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = ContextUtils::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
             auto expansionRange = sm().getImmediateExpansionRange(s);
@@ -418,7 +418,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = FixItUtils::locForNextToken(&m_astContext, arg->getLocStart(), tok::comma);
+                    auto endLoc = clazy::locForNextToken(&m_astContext, arg->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

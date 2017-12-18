@@ -113,10 +113,10 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
         if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
             continue;
 
-        if (HierarchyUtils::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
+        if (clazy::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
             continue;
 
-        if (HierarchyUtils::getFirstChildOfType<CStyleCastExpr>(implicitCast))
+        if (clazy::getFirstChildOfType<CStyleCastExpr>(implicitCast))
             continue;
 
         if (Utils::isInsideOperatorCall(parentMap, implicitCast, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))

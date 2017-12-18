@@ -51,7 +51,7 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
         return;
 
     CXXRecordDecl *record = method->getParent();
-    CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
+    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
     if (!baseClass)
         return;
 
@@ -63,7 +63,7 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
         for (auto baseMethod : baseClass->methods()) {
             if (baseMethod->getNameAsString() == methodName) {
 
-                if (!FunctionUtils::parametersMatch(method, baseMethod)) // overloading is permitted.
+                if (!clazy::parametersMatch(method, baseMethod)) // overloading is permitted.
                     continue;
 
                 const bool baseMethodIsSignal = accessSpecifierManager->qtAccessSpecifierType(baseMethod) == QtAccessSpecifier_Signal;
@@ -83,6 +83,6 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
             }
         }
 
-        baseClass = QtUtils::getQObjectBaseClass(baseClass);
+        baseClass = clazy::getQObjectBaseClass(baseClass);
     }
 }

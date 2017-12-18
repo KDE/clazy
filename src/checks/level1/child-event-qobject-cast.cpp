@@ -51,11 +51,11 @@ void ChildEventQObjectCast::VisitDecl(Decl *decl)
     if (!clazy::equalsAny(methodName, {"event", "childEvent", "eventFilter"}))
         return;
 
-    if (!QtUtils::isQObject(childEventMethod->getParent()))
+    if (!clazy::isQObject(childEventMethod->getParent()))
         return;
 
 
-    auto callExprs = HierarchyUtils::getStatements<CallExpr>(body, &(sm()));
+    auto callExprs = clazy::getStatements<CallExpr>(body, &(sm()));
     for (auto callExpr : callExprs) {
 
         if (callExpr->getNumArgs() != 1)

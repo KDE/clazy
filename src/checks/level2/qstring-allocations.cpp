@@ -69,7 +69,7 @@ QStringAllocations::QStringAllocations(const std::string &name, ClazyContext *co
 
 void QStringAllocations::VisitStmt(clang::Stmt *stm)
 {
-    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_context->ci.getPreprocessorOpts())) {
+    if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->ci.getPreprocessorOpts())) {
         // During bootstrap many QString::fromLatin1() are used instead of tr(), which causes
         // much noise
         return;
@@ -86,7 +86,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
     static const vector<string> methods = {"append", "compare", "endsWith", "startsWith", "insert",
                                            "lastIndexOf", "prepend", "replace", "contains", "indexOf" };
 
-    if (!StringUtils::isOfClass(method, "QString"))
+    if (!clazy::isOfClass(method, "QString"))
         return false;
 
     return (!lt || Utils::isAscii(lt)) && clazy::contains(methods, method->getNameAsString());
@@ -102,7 +102,7 @@ Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator * 
     if (constructExpr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
         const int numArgs = ctor->getNumParams();
-        if (StringUtils::isOfClass(ctor, "QLatin1String")) {
+        if (clazy::isOfClass(ctor, "QLatin1String")) {
 
             if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/ false, 2))
                 return {constructExpr, /*enableFixits=*/ numArgs == 1};
@@ -154,7 +154,7 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
         return nullptr;
 
     vector<StringLiteral*> literals;
-    HierarchyUtils::getChilds(call, literals, 2);
+    clazy::getChilds(call, literals, 2);
     return literals.empty() ? nullptr : literals[0];
 }
 
@@ -165,7 +165,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    if (!StringUtils::isOfClass(ctorDecl, "QString"))
+    if (!clazy::isOfClass(ctorDecl, "QString"))
         return;
 
     static const vector<string> blacklistedParentCtors = { "QRegExp", "QIcon" };
@@ -175,7 +175,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
     }
 
     if (!isOptionSet("no-msvc-compat")) {
-        InitListExpr *initializerList = HierarchyUtils::getFirstParentOfType<InitListExpr>(m_context->parentMap, ctorExpr);
+        InitListExpr *initializerList = clazy::getFirstParentOfType<InitListExpr>(m_context->parentMap, ctorExpr);
         if (initializerList != nullptr)
             return; // Nothing to do here, MSVC doesn't like it
 
@@ -187,9 +187,9 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
     bool isQLatin1String = false;
     string paramType;
-    if (FunctionUtils::hasCharPtrArgument(ctorDecl, 1)) {
+    if (clazy::hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
-    } else if (ctorDecl->param_size() == 1 && StringUtils::hasArgumentOfType(ctorDecl, "QLatin1String", lo())) {
+    } else if (ctorDecl->param_size() == 1 && clazy::hasArgumentOfType(ctorDecl, "QLatin1String", lo())) {
         paramType = "QLatin1String";
         isQLatin1String = true;
     } else {
@@ -212,10 +212,10 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             if (!qlatin1Ctor->getLocStart().isMacroID()) {
                 if (!ternary) {
                     fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String", QLatin1StringAllocations);
-                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(HierarchyUtils::parent(m_context->parentMap, ctorExpr));
+                    bool shouldRemoveQString = qlatin1Ctor->getLocStart().getRawEncoding() != stm->getLocStart().getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(clazy::parent(m_context->parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
-                        auto removalFixits = FixItUtils::fixItRemoveToken(&m_astContext, ctorExpr, true);
+                        auto removalFixits = clazy::fixItRemoveToken(&m_astContext, ctorExpr, true);
                         if (removalFixits.empty())  {
                             queueManualFixitWarning(ctorExpr->getLocStart(), QLatin1StringAllocations, "Internal error: invalid start or end location");
                         } else {
@@ -238,14 +238,14 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             if (clazy::hasChildren(pointerDecay)) {
                 StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt && isFixitEnabled(CharPtrAllocations)) {
-                    Stmt *grandParent = HierarchyUtils::parent(m_context->parentMap, lt, 2);
-                    Stmt *grandGrandParent = HierarchyUtils::parent(m_context->parentMap, lt, 3);
-                    Stmt *grandGrandGrandParent = HierarchyUtils::parent(m_context->parentMap, lt, 4);
+                    Stmt *grandParent = clazy::parent(m_context->parentMap, lt, 2);
+                    Stmt *grandGrandParent = clazy::parent(m_context->parentMap, lt, 3);
+                    Stmt *grandGrandGrandParent = clazy::parent(m_context->parentMap, lt, 4);
                     if (grandParent == ctorExpr && grandGrandParent && isa<CXXBindTemporaryExpr>(grandGrandParent) && grandGrandGrandParent && isa<CXXFunctionalCastExpr>(grandGrandGrandParent)) {
                         // This is the case of QString("foo"), replace QString
 
                         const bool literalIsEmpty = lt->getLength() == 0;
-                        if (literalIsEmpty && HierarchyUtils::getFirstParentOfType<MemberExpr>(m_context->parentMap, ctorExpr) == nullptr)
+                        if (literalIsEmpty && clazy::getFirstParentOfType<MemberExpr>(m_context->parentMap, ctorExpr) == nullptr)
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString", CharPtrAllocations);
                         else if (!ctorExpr->getLocStart().isMacroID())
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString", CharPtrAllocations);
@@ -253,7 +253,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                             queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro.");
                     } else {
 
-                        auto parentMemberCallExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
+                        auto parentMemberCallExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
 
                         string replacement = "QStringLiteral";
                         if (parentMemberCallExpr) {
@@ -290,7 +290,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
         return {};
 
     vector<FixItHint> fixits;
-    FixItHint fixit = FixItUtils::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
+    FixItHint fixit = clazy::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
     if (fixit.isNull()) {
         queueManualFixitWarning(begin->getLocStart(), fixitType);
     } else {
@@ -303,7 +303,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
 vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
 {
     vector<CXXConstructExpr*> constructExprs;
-    HierarchyUtils::getChilds<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
+    clazy::getChilds<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
 
     vector<FixItHint> fixits;
     fixits.reserve(2);
@@ -337,7 +337,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
         return true;
 
     auto constructExpr = dyn_cast<CXXConstructExpr>(s);
-    if (StringUtils::isOfClass(constructExpr, "QString"))
+    if (clazy::isOfClass(constructExpr, "QString"))
         return true;
 
     if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QLatin1String", lo))
@@ -349,14 +349,14 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
     CallExpr *callExpr = dyn_cast<CallExpr>(s);
     StringLiteral *literal = stringLiteralForCall(callExpr);
     auto operatorCall = dyn_cast<CXXOperatorCallExpr>(s);
-    if (operatorCall && StringUtils::returnTypeName(operatorCall, lo) != "QTestData") {
+    if (operatorCall && clazy::returnTypeName(operatorCall, lo) != "QTestData") {
         // QTest::newRow will static_assert when using QLatin1String
         // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
 
-        string className = StringUtils::classNameFor(operatorCall);
+        string className = clazy::classNameFor(operatorCall);
         if (className == "QString") {
             return false;
-        } else if (className.empty() && StringUtils::hasArgumentOfType(operatorCall->getDirectCallee(), "QString", lo)) {
+        } else if (className.empty() && clazy::hasArgumentOfType(operatorCall->getDirectCallee(), "QString", lo)) {
             return false;
         }
     }
@@ -370,7 +370,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
     }
 
     if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) // skip this cruft
-        return isQStringLiteralCandidate(HierarchyUtils::parent(map, s), map, lo, sm, currentCall + 1);
+        return isQStringLiteralCandidate(clazy::parent(map, s), map, lo, sm, currentCall + 1);
 
     return false;
 }
@@ -418,7 +418,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
 {
     vector<FixItHint> fixits;
 
-    SourceRange range = FixItUtils::rangeForLiteral(&m_astContext, lt);
+    SourceRange range = clazy::rangeForLiteral(&m_astContext, lt);
     if (range.isInvalid()) {
         if (lt) {
             queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Internal error: Can't calculate source location");
@@ -439,7 +439,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
             return {};
         }
 
-        FixItUtils::insertParentMethodCall(revisedReplacement, range, /**by-ref*/fixits);
+        clazy::insertParentMethodCall(revisedReplacement, range, /**by-ref*/fixits);
     }
 
     return fixits;
@@ -451,14 +451,14 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     if (!operatorCall)
         return;
 
-    if (StringUtils::returnTypeName(operatorCall, lo()) == "QTestData") {
+    if (clazy::returnTypeName(operatorCall, lo()) == "QTestData") {
         // QTest::newRow will static_assert when using QLatin1String
         // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
         return;
     }
 
     std::vector<StringLiteral*> stringLiterals;
-    HierarchyUtils::getChilds<StringLiteral>(operatorCall, stringLiterals);
+    clazy::getChilds<StringLiteral>(operatorCall, stringLiterals);
 
     //  We're only after string literals, str.contains(some_method_returning_const_char_is_fine())
     if (stringLiterals.empty())
@@ -469,16 +469,16 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
-    if (!StringUtils::isOfClass(methodDecl, "QString"))
+    if (!clazy::isOfClass(methodDecl, "QString"))
         return;
 
-    if (!FunctionUtils::hasCharPtrArgument(methodDecl))
+    if (!clazy::hasCharPtrArgument(methodDecl))
         return;
 
     vector<FixItHint> fixits;
 
     vector<StringLiteral*> literals;
-    HierarchyUtils::getChilds<StringLiteral>(stm, literals, 2);
+    clazy::getChilds<StringLiteral>(stm, literals, 2);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
         if (literals[0]->getNumConcatenated() > 1) {
@@ -506,14 +506,14 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
 
     FunctionDecl *functionDecl = callExpr->getDirectCallee();
-    if (!StringUtils::functionIsOneOf(functionDecl, {"fromLatin1", "fromUtf8"}))
+    if (!clazy::functionIsOneOf(functionDecl, {"fromLatin1", "fromUtf8"}))
         return;
 
     CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (!StringUtils::isOfClass(methodDecl, "QString"))
+    if (!clazy::isOfClass(methodDecl, "QString"))
         return;
 
-    if (!Utils::callHasDefaultArguments(callExpr) || !FunctionUtils::hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
+    if (!Utils::callHasDefaultArguments(callExpr) || !clazy::hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
         return;
 
     if (!containsStringLiteralNoCallExpr(callExpr))
@@ -527,7 +527,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     }
 
     vector<ConditionalOperator*> ternaries;
-    HierarchyUtils::getChilds(callExpr, ternaries, 2);
+    clazy::getChilds(callExpr, ternaries, 2);
     if (!ternaries.empty()) {
         auto ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {

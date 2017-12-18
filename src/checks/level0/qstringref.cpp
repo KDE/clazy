@@ -64,7 +64,7 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
     if (!clazy::contains(list, method->getNameAsString()))
         return false;
 
-    return !StringUtils::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
+    return !clazy::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
 }
 
 static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
@@ -114,7 +114,7 @@ bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt* s) const
     if (!s)
         return false;
 
-    auto constr = HierarchyUtils::getFirstParentOfType<CXXConstructExpr>(m_context->parentMap, s);
+    auto constr = clazy::getFirstParentOfType<CXXConstructExpr>(m_context->parentMap, s);
     if (!constr || constr->getNumArgs() == 0)
         return false;
 
@@ -188,7 +188,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
             return false;
     }
 
-    CallExpr *innerCall = HierarchyUtils::getFirstChildOfType2<CallExpr>(temp);
+    CallExpr *innerCall = clazy::getFirstChildOfType2<CallExpr>(temp);
     auto innerMemberCall = innerCall ? dyn_cast<CXXMemberCallExpr>(innerCall) : nullptr;
     if (!innerMemberCall)
         return false;
@@ -208,7 +208,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
 
 std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
-    MemberExpr *memberExpr = HierarchyUtils::getFirstChildOfType<MemberExpr>(call);
+    MemberExpr *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
         queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 1");
         return {};
@@ -222,7 +222,7 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
     }
 
     std::vector<FixItHint> fixits;
-    fixits.push_back(FixItUtils::createInsertion(insertionLoc, "Ref"));
+    fixits.push_back(clazy::createInsertion(insertionLoc, "Ref"));
     return fixits;
 
 }

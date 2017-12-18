@@ -36,7 +36,7 @@
 #include <clang/AST/ParentMap.h>
 
 
-namespace HierarchyUtils {
+namespace clazy {
 
 enum IgnoreStmt {
     IgnoreNone             = 0,
@@ -137,7 +137,7 @@ inline clang::Stmt *parent(clang::ParentMap *map, clang::Stmt *s, unsigned int d
         return nullptr;
 
     return depth == 0 ? s
-                      : HierarchyUtils::parent(map, map->getParent(s), depth - 1);
+                      : clazy::parent(map, map->getParent(s), depth - 1);
 }
 
 // Returns the first parent of type T, with max depth depth
@@ -256,10 +256,10 @@ T* unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
         return tt;
 
     if ((options & IgnoreImplicitCasts) && llvm::isa<clang::ImplicitCastExpr>(stmt))
-        return unpeal<T>(HierarchyUtils::getFirstChild(stmt), options);
+        return unpeal<T>(clazy::getFirstChild(stmt), options);
 
     if ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(stmt))
-        return unpeal<T>(HierarchyUtils::getFirstChild(stmt), options);
+        return unpeal<T>(clazy::getFirstChild(stmt), options);
 
     return nullptr;
 }

@@ -70,10 +70,10 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
                                                     "QLine", "QLineF", "QRect", "QRectF"
                                                   };
 
-    if (QtUtils::isQtContainer(t))
+    if (clazy::isQtContainer(t))
         return true;
 
-    const string typeName = StringUtils::simpleTypeName(t, lo());
+    const string typeName = clazy::simpleTypeName(t, lo());
     return clazy::any_of(nonTrivialTypes, [typeName] (const string &container) {
         return container == typeName;
     });
@@ -84,19 +84,19 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
     if (!varDecl || !isInterestingType(varDecl->getType()))
         return;
 
-    auto currentFunc = ContextUtils::firstContextOfType<FunctionDecl>(varDecl->getDeclContext());
+    auto currentFunc = clazy::firstContextOfType<FunctionDecl>(varDecl->getDeclContext());
     Stmt *body = currentFunc ? currentFunc->getBody() : nullptr;
     if (!body)
         return;
 
     SourceLocation locStart = varDecl->getLocStart();
     locStart = sm().getExpansionLoc(locStart);
-    auto declRefs = HierarchyUtils::getStatements<DeclRefExpr>(body, &sm(), locStart);
+    auto declRefs = clazy::getStatements<DeclRefExpr>(body, &sm(), locStart);
 
     auto pred = [varDecl] (DeclRefExpr *declRef) {
         return declRef->getDecl() == varDecl;
     };
 
     if (!clazy::any_of(declRefs, pred))
-        emitWarning(locStart, "unused " + StringUtils::simpleTypeName(varDecl->getType(), lo()));
+        emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()));
 }

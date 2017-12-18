@@ -34,7 +34,7 @@
 using namespace std;
 using namespace clang;
 
-Stmt *LoopUtils::bodyFromLoop(Stmt *loop)
+Stmt *clazy::bodyFromLoop(Stmt *loop)
 {
     if (!loop)
         return nullptr;
@@ -58,7 +58,7 @@ Stmt *LoopUtils::bodyFromLoop(Stmt *loop)
     return nullptr;
 }
 
-bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm,
+bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm,
                                      clang::SourceLocation onlyBeforeThisLoc)
 {
     if (!stmt)
@@ -76,11 +76,11 @@ bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManag
     }
 
     return clazy::any_of(stmt->children(), [&sm, onlyBeforeThisLoc](Stmt *s) {
-        return LoopUtils::loopCanBeInterrupted(s, sm, onlyBeforeThisLoc);
+        return clazy::loopCanBeInterrupted(s, sm, onlyBeforeThisLoc);
     });
 }
 
-clang::Expr *LoopUtils::containerExprForLoop(Stmt *loop)
+clang::Expr *clazy::containerExprForLoop(Stmt *loop)
 {
     if (!loop)
         return nullptr;
@@ -104,7 +104,7 @@ clang::Expr *LoopUtils::containerExprForLoop(Stmt *loop)
     return nullptr;
 }
 
-VarDecl* LoopUtils::containerDeclForLoop(clang::Stmt *loop)
+VarDecl* clazy::containerDeclForLoop(clang::Stmt *loop)
 {
     Expr *expr = containerExprForLoop(loop);
     if (!expr)
@@ -118,14 +118,14 @@ VarDecl* LoopUtils::containerDeclForLoop(clang::Stmt *loop)
     return valueDecl ? dyn_cast<VarDecl>(valueDecl) : nullptr;
 }
 
-Stmt* LoopUtils::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
+Stmt* clazy::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
 {
     if (!stmt)
         return nullptr;
 
     Stmt *p = pmap->getParent(stmt);
     while (p) {
-        if (LoopUtils::isLoop(p))
+        if (clazy::isLoop(p))
             return p;
         p = pmap->getParent(p);
     }

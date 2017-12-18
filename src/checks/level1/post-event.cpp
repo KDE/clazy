@@ -43,7 +43,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
     if (!callexpr)
         return;
 
-    auto name = StringUtils::qualifiedMethodName(callexpr);
+    auto name = clazy::qualifiedMethodName(callexpr);
 
     const bool isPostEvent = name == "QCoreApplication::postEvent";
     const bool isSendEvent = name == "QCoreApplication::sendEvent";
@@ -54,7 +54,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
         return;
 
     Expr *event = callexpr->getNumArgs() > 1 ? callexpr->getArg(1) : nullptr;
-    if (!event || StringUtils::simpleTypeName(event->getType(), lo()) != "QEvent *")
+    if (!event || clazy::simpleTypeName(event->getType(), lo()) != "QEvent *")
         return;
 
     bool isStack = false;

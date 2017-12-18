@@ -49,8 +49,8 @@ bool ReturningDataFromTemporary::handleReturn(ReturnStmt *ret)
     if (!ret)
         return false;
 
-    auto memberCall = HierarchyUtils::unpeal<CXXMemberCallExpr>(HierarchyUtils::getFirstChild(ret), HierarchyUtils::IgnoreExprWithCleanups |
-                                                                HierarchyUtils::IgnoreImplicitCasts);
+    auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups |
+                                                                clazy::IgnoreImplicitCasts);
     handleMemberCall(memberCall, false);
     return true;
 }
@@ -72,8 +72,8 @@ void ReturningDataFromTemporary::handleDeclStmt(DeclStmt *declStmt)
         if (!init)
             continue;
 
-        auto memberCall = HierarchyUtils::unpeal<CXXMemberCallExpr>(HierarchyUtils::getFirstChild(init), HierarchyUtils::IgnoreExprWithCleanups |
-                                                                    HierarchyUtils::IgnoreImplicitCasts);
+        auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups |
+                                                                    clazy::IgnoreImplicitCasts);
 
 
         handleMemberCall(memberCall, true);
@@ -103,7 +103,7 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
 
     while (t) {
         if (dyn_cast<ImplicitCastExpr>(t) || dyn_cast<MaterializeTemporaryExpr>(t)) {
-            t = HierarchyUtils::getFirstChild(t);
+            t = clazy::getFirstChild(t);
             continue;
         }
 

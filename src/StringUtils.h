@@ -42,7 +42,7 @@ class LangOpts;
 }
 
 
-namespace StringUtils {
+namespace clazy {
 
 // Returns the class name.
 // The name will not include any templates, so  "QVector::iterator" would be returned for QVector<int>::iterator
@@ -185,7 +185,7 @@ inline void printParents(clang::ParentMap *map, clang::Stmt *s)
     int level = 0;
     llvm::errs() << (s ? s->getStmtClassName() : nullptr) << "\n";
 
-    while (clang::Stmt *parent = HierarchyUtils::parent(map, s)) {
+    while (clang::Stmt *parent = clazy::parent(map, s)) {
         ++level;
         llvm::errs() << std::string(level, ' ') << parent->getStmtClassName() << "\n";
         s = parent;
@@ -246,14 +246,14 @@ inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOption
         return {};
 
     clang::FunctionDecl *func = call->getDirectCallee();
-    return func ? StringUtils::typeName(func->getReturnType(), lo, simpleName) : std::string();
+    return func ? clazy::typeName(func->getReturnType(), lo, simpleName) : std::string();
 }
 
 inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName,
                               const clang::LangOptions &lo, bool simpleName = true)
 {
     return clazy::any_of(Utils::functionParameters(func), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
-        return StringUtils::typeName(param->getType(), lo, simpleName) == typeName;
+        return clazy::typeName(param->getType(), lo, simpleName) == typeName;
     });
 }
 

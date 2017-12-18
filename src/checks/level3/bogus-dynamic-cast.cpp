@@ -48,7 +48,7 @@ void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
     if (!castFrom)
         return;
 
-    if (isOptionSet("qobject") && QtUtils::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
+    if (isOptionSet("qobject") && clazy::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
         emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);

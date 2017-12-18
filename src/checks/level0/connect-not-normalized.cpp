@@ -59,12 +59,12 @@ bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
     if (name != "QArgument" && name != "QReturnArgument")
         return false;
 
-    StringLiteral *sl = HierarchyUtils::getFirstChildOfType2<StringLiteral>(expr->getArg(0));
+    StringLiteral *sl = clazy::getFirstChildOfType2<StringLiteral>(expr->getArg(0));
     if (!sl)
         return false;
 
     const std::string original = sl->getString().str();
-    const std::string normalized = NormalizedSignatureUtils::normalizedType(original.c_str());
+    const std::string normalized = clazy::normalizedType(original.c_str());
 
     if (original == normalized)
         return false;
@@ -84,7 +84,7 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
 
     {
         // Only warn in connect statements, not disconnect, since there there's no optimization in Qt's side
-        auto parentCallExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap,
+        auto parentCallExpr = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap,
                                                                              m_context->parentMap->getParent(callExpr), -1);
         if (!parentCallExpr)
             return false;
@@ -95,11 +95,11 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     }
 
     Expr *arg1 = callExpr->getArg(0);
-    StringLiteral *sl = HierarchyUtils::getFirstChildOfType2<StringLiteral>(arg1);
+    StringLiteral *sl = clazy::getFirstChildOfType2<StringLiteral>(arg1);
     if (!sl)
         return false;
     std::string original = sl->getString().str();
-    std::string normalized = NormalizedSignatureUtils::normalizedSignature(original.c_str());
+    std::string normalized = clazy::normalizedSignature(original.c_str());
 
     // discard the junk after '\0'
     normalized = string(normalized.c_str());

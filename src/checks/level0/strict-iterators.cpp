@@ -55,21 +55,21 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (!implicitCast)
         return false;
 
-    const string nameTo = StringUtils::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
+    const string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
 
     const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = TypeUtils::parentRecordForTypedef(typeTo);
-    if (recordTo && !QtUtils::isQtCOWIterableClass(recordTo))
+    if (recordTo && !clazy::isQtCOWIterableClass(recordTo))
         return false;
 
     recordTo = TypeUtils::typeAsRecord(typeTo);
-    if (recordTo && !QtUtils::isQtCOWIterator(recordTo))
+    if (recordTo && !clazy::isQtCOWIterator(recordTo))
         return false;
 
     assert(implicitCast->getSubExpr());
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = TypeUtils::parentRecordForTypedef(typeFrom);
-    if (recordFrom && !QtUtils::isQtCOWIterableClass(recordFrom))
+    if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom))
         return false;
 
     // const_iterator might be a typedef to pointer, like const T *, instead of a class, so just check for const qualification in that case
@@ -86,7 +86,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (nameToIsIterator)
         return false;
 
-    const string nameFrom = StringUtils::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
+    const string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
     const  bool nameFromIsIterator = nameFrom == "iterator" || clazy::endsWith(nameFrom, "::iterator");
     if (!nameFromIsIterator)
         return false;
@@ -117,7 +117,7 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
         return false;
 
     CXXRecordDecl *record = method->getParent();
-    if (!QtUtils::isQtCOWIterator(record))
+    if (!clazy::isQtCOWIterator(record))
         return false;
 
     if (record->getName() != "iterator")

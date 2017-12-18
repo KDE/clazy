@@ -48,10 +48,10 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
+    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *method = QtUtils::pmfFromConnect(call, /*argIndex=*/ 1);
+    CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/ 1);
     if (!method) {
         emitInternalError(func->getLocStart(), "couldn't find method from pmf connect");
         return;

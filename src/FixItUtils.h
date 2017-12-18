@@ -39,7 +39,7 @@ class CallExpr;
 class CXXMemberCallExpr;
 }
 
-namespace FixItUtils {
+namespace clazy {
 
 /**
  * Replaces whatever is in range, with replacement
@@ -82,7 +82,7 @@ CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(const clang::ASTContext *c
  *
  * ^              // expr->getLocStart()
  *             ^  // expr->getLocEnd()
- *      ^         // FixItUtils::locForEndOfToken(expr->getLocStart())
+ *      ^         // clazy::locForEndOfToken(expr->getLocStart())
  */
 CLAZYLIB_EXPORT clang::SourceLocation locForEndOfToken(const clang::ASTContext *context, clang::SourceLocation start, int offset = 0);
 

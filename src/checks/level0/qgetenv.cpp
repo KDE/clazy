@@ -88,7 +88,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (!errorMsg.empty()) {
         std::vector<FixItHint> fixits;
         if (isFixitEnabled(FixitAll)) {
-            const bool success = FixItUtils::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
+            const bool success = clazy::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
             if (!success) {
                 queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
             }

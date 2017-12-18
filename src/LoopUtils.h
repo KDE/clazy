@@ -38,7 +38,7 @@ class Expr;
 class ParentMap;
 }
 
-namespace LoopUtils {
+namespace clazy {
     /**
      * Returns the body of a for, range-foor, while or do-while loop
      */

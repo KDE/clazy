@@ -39,7 +39,7 @@ class CompilerInstance;
 class SourceLocation;
 }
 
-namespace MacroUtils
+namespace clazy
 {
 
 /**

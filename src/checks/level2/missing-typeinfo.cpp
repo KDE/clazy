@@ -42,7 +42,7 @@ MissingTypeInfo::MissingTypeInfo(const std::string &name, ClazyContext *context)
 
 void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 {
-    ClassTemplateSpecializationDecl *tstdecl = TemplateUtils::templateDecl(decl);
+    ClassTemplateSpecializationDecl *tstdecl = clazy::templateDecl(decl);
     if (!tstdecl)
         return;
 
@@ -54,14 +54,14 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    QualType qt2 = TemplateUtils::getTemplateArgumentType(tstdecl, 0);
+    QualType qt2 = clazy::getTemplateArgumentType(tstdecl, 0);
     const Type *t = qt2.getTypePtrOrNull();
     CXXRecordDecl *record = t ? t->getAsCXXRecordDecl() : nullptr;
     if (!record || !record->getDefinition() || typeHasClassification(qt2))
         return; // Don't crash if we only have a fwd decl
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_astContext);
-    const bool isTooBigForQList = isQList && QtUtils::isTooBigForQList(qt2, &m_astContext);
+    const bool isTooBigForQList = isQList && clazy::isTooBigForQList(qt2, &m_astContext);
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
         if (sm().isInSystemHeader(record->getLocStart()))
@@ -79,7 +79,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (decl->getName() == "QTypeInfo") {
-        const string typeName = TemplateUtils::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
+        const string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
         if (!typeName.empty())
             m_typeInfos.insert(typeName);
     }
@@ -87,5 +87,5 @@ void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 
 bool MissingTypeInfo::typeHasClassification(QualType qt) const
 {
-    return m_typeInfos.find(StringUtils::simpleTypeName(qt, lo())) != m_typeInfos.end();
+    return m_typeInfos.find(clazy::simpleTypeName(qt, lo())) != m_typeInfos.end();
 }

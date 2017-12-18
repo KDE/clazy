@@ -68,7 +68,7 @@ static bool methodIsOK(const string &name)
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = stm->getLocStart();
-    if (!MacroUtils::isInMacro(&m_astContext, stmStart, "Q_ASSERT"))
+    if (!clazy::isInMacro(&m_astContext, stmStart, "Q_ASSERT"))
         return;
 
     bool warn = false;
@@ -78,8 +78,8 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
     if (memberCall) {
         if (checkfunctions) {
             CXXMethodDecl *method = memberCall->getMethodDecl();
-            if (!method->isConst() && !methodIsOK(StringUtils::qualifiedMethodName(method)) && !functionIsOk(method->getNameAsString())) {
-                // llvm::errs() << "reason1 " << StringUtils::qualifiedMethodName(method) << "\n";
+            if (!method->isConst() && !methodIsOK(clazy::qualifiedMethodName(method)) && !functionIsOk(method->getNameAsString())) {
+                // llvm::errs() << "reason1 " << clazy::qualifiedMethodName(method) << "\n";
                 warn = true;
             }
         }

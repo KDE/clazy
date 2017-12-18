@@ -45,10 +45,10 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
     auto memberCall = dyn_cast<CXXMemberCallExpr>(*(cast->child_begin()));
     CXXMethodDecl *method = memberCall ? memberCall->getMethodDecl() : nullptr;
 
-    if (!StringUtils::functionIsOneOf(method, {"size", "count", "length"}))
+    if (!clazy::functionIsOneOf(method, {"size", "count", "length"}))
         return;
 
-    if (!StringUtils::classIsOneOf(method->getParent(), QtUtils::qtContainers()))
+    if (!clazy::classIsOneOf(method->getParent(), clazy::qtContainers()))
         return;
 
     emitWarning(stmt->getLocStart(), "use isEmpty() instead");

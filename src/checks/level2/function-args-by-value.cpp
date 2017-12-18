@@ -201,5 +201,5 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
         return {};
     }
 
-    return FixItUtils::createReplacement({ startLoc, endLoc }, replacement);
+    return clazy::createReplacement({ startLoc, endLoc }, replacement);
 }

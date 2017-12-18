@@ -80,11 +80,11 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
     if (!call || call->getNumArgs() != 1)
         return;
 
-    string name = StringUtils::qualifiedMethodName(call);
+    string name = clazy::qualifiedMethodName(call);
     if (name != "QColor::setNamedColor")
         return;
 
-    StringLiteral *lt = HierarchyUtils::getFirstChildOfType2<StringLiteral>(call->getArg(0));
+    StringLiteral *lt = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(0));
     if (handleStringLiteral(lt))
         emitWarning(lt, "The ctor taking ints is cheaper than QColor::setNamedColor(QString)");
 }

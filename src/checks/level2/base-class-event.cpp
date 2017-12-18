@@ -51,14 +51,14 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         return;
 
     CXXRecordDecl *classDecl = method->getParent();
-    if (!QtUtils::isQObject(classDecl))
+    if (!clazy::isQObject(classDecl))
         return;
 
     const string className = classDecl->getQualifiedNameAsString();
     if (clazy::contains(vector<string>({"QObject", "QWidget"}), className))
         return;
 
-    CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(classDecl);
+    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
     const string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
                                            : string("BaseClass");
 
@@ -69,7 +69,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
 
     Stmt *body = method->getBody();
     std::vector<ReturnStmt*> returns;
-    HierarchyUtils::getChilds<ReturnStmt>(body, /*by-ref*/returns);
+    clazy::getChilds<ReturnStmt>(body, /*by-ref*/returns);
     for (ReturnStmt *returnStmt : returns) {
         Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);
         if (!maybeBoolExpr)

@@ -46,10 +46,10 @@ void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
+    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *slot =  QtUtils::receiverMethodForConnect(call);
+    CXXMethodDecl *slot =  clazy::receiverMethodForConnect(call);
     if (!slot || !slot->isConst() || slot->getReturnType()->isVoidType()) // const and returning void must do something, so not a getter
         return;
 

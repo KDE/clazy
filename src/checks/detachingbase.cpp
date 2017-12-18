@@ -50,7 +50,7 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method) const
 
     const string className = record->getNameAsString();
 
-    const std::unordered_map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    const std::unordered_map<string, std::vector<string> > &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(className);
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;

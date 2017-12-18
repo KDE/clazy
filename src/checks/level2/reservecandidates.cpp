@@ -75,7 +75,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     if (!clazy::equalsAny(methodDecl->getNameAsString(), { "append", "push_back", "push", "operator<<", "operator+=" }))
         return false;
 
-    if (!QtUtils::isAReserveClass(classDecl))
+    if (!clazy::isAReserveClass(classDecl))
         return false;
 
     // Catch cases like: QList<T>::append(const QList<T> &), which don't make sense to reserve.
@@ -111,7 +111,7 @@ bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
     if (!valueDecl || isa<ParmVarDecl>(valueDecl) || containerWasReserved(valueDecl))
         return false;
 
-    if (ContextUtils::isValueDeclInFunctionContext(valueDecl))
+    if (clazy::isValueDeclInFunctionContext(valueDecl))
         return true;
 
     // Actually, lets allow for some member variables containers if they are being used inside CTORs or DTORs
@@ -142,7 +142,7 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
     if (isInComplexLoop(callExpr, valueDecl->getLocStart(), isMemberVariable))
         return false;
 
-    if (LoopUtils::loopCanBeInterrupted(loopBody, m_context->sm, callExpr->getLocStart()))
+    if (clazy::loopCanBeInterrupted(loopBody, m_context->sm, callExpr->getLocStart()))
         return false;
 
     return true;
@@ -153,11 +153,11 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     if (registerReserveStatement(stm))
         return;
 
-    auto body = LoopUtils::bodyFromLoop(stm);
+    auto body = clazy::bodyFromLoop(stm);
     if (!body)
         return;
 
-    const bool isForeach = MacroUtils::isInMacro(&m_astContext, stm->getLocStart(), "Q_FOREACH");
+    const bool isForeach = clazy::isInMacro(&m_astContext, stm->getLocStart(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body)))
@@ -169,9 +169,9 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
-    auto callExprs = HierarchyUtils::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1,
+    auto callExprs = clazy::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1,
                                                              /*includeParent=*/ true,
-                                                             HierarchyUtils::IgnoreExprWithCleanups);
+                                                             clazy::IgnoreExprWithCleanups);
 
 
     for (CallExpr *callExpr : callExprs) {
@@ -196,7 +196,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
         return false;
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!QtUtils::isAReserveClass(decl))
+    if (!clazy::isAReserveClass(decl))
         return false;
 
     ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
@@ -215,10 +215,10 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
         return false;
 
     vector<CallExpr*> callExprs;
-    HierarchyUtils::getChilds<CallExpr>(expr, callExprs);
+    clazy::getChilds<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
-        if (QtUtils::isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr)))
+        if (clazy::isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr)))
             continue;
 
         QualType qt = callExpr->getType();
@@ -228,7 +228,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     }
 
     vector<ArraySubscriptExpr*> subscriptExprs;
-    HierarchyUtils::getChilds<ArraySubscriptExpr>(expr, subscriptExprs);
+    clazy::getChilds<ArraySubscriptExpr>(expr, subscriptExprs);
     if (!subscriptExprs.empty())
         return true;
 
@@ -236,7 +236,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     if (binary && binary->isAssignmentOp()) { // Filter things like for ( ...; ...; next = node->next)
 
         Expr *rhs = binary->getRHS();
-        if (isa<MemberExpr>(rhs) || (isa<ImplicitCastExpr>(rhs) && dyn_cast_or_null<MemberExpr>(HierarchyUtils::getFirstChildAtDepth(rhs, 1))))
+        if (isa<MemberExpr>(rhs) || (isa<ImplicitCastExpr>(rhs) && dyn_cast_or_null<MemberExpr>(clazy::getFirstChildAtDepth(rhs, 1))))
             return true;
     }
 
@@ -287,7 +287,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     Stmt *parent = s;
     PresumedLoc lastForeachForStm;
-    while ((parent = HierarchyUtils::parent(m_context->parentMap, parent))) {
+    while ((parent = clazy::parent(m_context->parentMap, parent))) {
         const SourceLocation parentStart = parent->getLocStart();
         if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
@@ -300,7 +300,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             return true;
         }
 
-        if (QtUtils::isInForeach(&m_astContext, parentStart)) {
+        if (clazy::isInForeach(&m_astContext, parentStart)) {
             auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting

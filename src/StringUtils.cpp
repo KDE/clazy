@@ -29,7 +29,7 @@
 using namespace std;
 using namespace clang;
 
-std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &lo)
+std::string clazy::simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &lo)
 {
     if (!func || index >= func->getNumParams())
         return {};
@@ -38,7 +38,7 @@ std::string StringUtils::simpleArgTypeName(clang::FunctionDecl *func, unsigned i
     return simpleTypeName(parm, lo);
 }
 
-bool StringUtils::anyArgIsOfSimpleType(clang::FunctionDecl *func,
+bool clazy::anyArgIsOfSimpleType(clang::FunctionDecl *func,
                                        const std::string &simpleType,
                                        const clang::LangOptions &lo)
 {
@@ -50,7 +50,7 @@ bool StringUtils::anyArgIsOfSimpleType(clang::FunctionDecl *func,
     });
 }
 
-bool StringUtils::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
+bool clazy::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
                                           const vector<string> &simpleTypes,
                                           const clang::LangOptions &lo)
 {
@@ -58,6 +58,6 @@ bool StringUtils::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
         return false;
 
     return clazy::any_of(simpleTypes, [func,lo](const string &simpleType) {
-        return StringUtils::anyArgIsOfSimpleType(func, simpleType, lo);
+        return clazy::anyArgIsOfSimpleType(func, simpleType, lo);
     });
 }

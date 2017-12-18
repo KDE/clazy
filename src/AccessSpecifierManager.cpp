@@ -143,7 +143,7 @@ const CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocatio
 void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 {
     auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!QtUtils::isQObject(record))
+    if (!clazy::isQObject(record))
         return;
 
     const auto &sm = m_ci.getSourceManager();

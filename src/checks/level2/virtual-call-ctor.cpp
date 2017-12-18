@@ -75,7 +75,7 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
     processedStmts.push_back(stmt);
 
     std::vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds<CXXMemberCallExpr>(stmt, memberCalls);
+    clazy::getChilds<CXXMemberCallExpr>(stmt, memberCalls);
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {
         CXXMethodDecl *memberDecl = callExpr->getMethodDecl();
