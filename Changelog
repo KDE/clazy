@@ -68,5 +68,6 @@
 * v1.4 ()
   - New Checks:
     connect-by-name
+    skipped-base-class
   - auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder
   - performance optimizations

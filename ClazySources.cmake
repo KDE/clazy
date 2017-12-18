@@ -58,6 +58,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/incorrect-emit.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/overridden-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qhash-namespace.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/skipped-base-method.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/virtual-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ctor-missing-parent-argument.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/base-class-event.cpp

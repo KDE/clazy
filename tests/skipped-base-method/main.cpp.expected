@@ -1,0 +1,1 @@
+skipped-base-method/main.cpp:20:9: warning: Maybe you meant to call Derived::method1() instead [-Wclazy-skipped-base-method]

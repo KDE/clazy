@@ -339,6 +339,12 @@
             "visits_decls" : true
         },
         {
+            "name"  : "skipped-base-method",
+            "level" : 1,
+            "categories" : ["bug", "cpp"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "ctor-missing-parent-argument",
             "level" : 2,
             "categories" : ["bug"],

@@ -75,6 +75,7 @@
 #include "checks/level1/virtual-signal.h"
 #include "checks/level1/overridden-signal.h"
 #include "checks/level1/qhash-namespace.h"
+#include "checks/level1/skipped-base-method.h"
 #include "checks/level2/ctor-missing-parent-argument.h"
 #include "checks/level2/base-class-event.h"
 #include "checks/level2/container-inside-loop.h"
@@ -158,6 +159,7 @@ void CheckManager::registerChecks()
     registerCheck(check<VirtualSignal>("virtual-signal", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QHashNamespace>("qhash-namespace", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<SkippedBaseMethod>("skipped-base-method", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<CtorMissingParentArgument>("ctor-missing-parent-argument", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<BaseClassEvent>("base-class-event", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
