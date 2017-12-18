@@ -29,6 +29,7 @@
 
 #include "Utils.h"
 #include "HierarchyUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <string>
@@ -72,8 +73,7 @@ inline clang::ValueDecl *valueDeclForCallArgument(clang::CallExpr *call, unsigne
     return declRef->getDecl();
 }
 
-
-inline bool parametersMatch(clang::FunctionDecl *f1, clang::FunctionDecl *f2)
+inline bool parametersMatch(const clang::FunctionDecl *f1, const clang::FunctionDecl *f2)
 {
     if (!f1 || !f2)
         return false;
@@ -95,6 +95,23 @@ inline bool parametersMatch(clang::FunctionDecl *f1, clang::FunctionDecl *f2)
     return true;
 }
 
+/**
+ * Returns true if a class contains a method with a specific signature.
+ * (method->getParent() doesn't need to equal record)
+ */
+inline bool classImplementsMethod(const clang::CXXRecordDecl *record, const clang::CXXMethodDecl *method)
+{
+    if (!method->getDeclName().isIdentifier())
+        return false;
+
+    StringRef methodName = method->getName();
+    for (auto m : record->methods()) {
+        if (!m->isPure() && StringUtils::methodName(m) == methodName && parametersMatch(m, method))
+            return true;
+    }
+
+    return false;
+}
 
 }
 #endif
