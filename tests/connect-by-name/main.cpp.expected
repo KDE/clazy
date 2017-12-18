@@ -1,0 +1,1 @@
+connect-by-name/main.cpp:8:5: warning: Slots named on_foo_bar are error prone [-Wclazy-connect-by-name]
