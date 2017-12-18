@@ -39,13 +39,13 @@ VirtualCallCtor::VirtualCallCtor(const std::string &name, ClazyContext *context)
 
 void VirtualCallCtor::VisitDecl(Decl *decl)
 {
-    CXXConstructorDecl *ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
-    CXXDestructorDecl *dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
-    if (ctorDecl == nullptr && dtorDecl == nullptr)
+    auto ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
+    auto dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
+    if (!ctorDecl && !dtorDecl)
         return;
 
     Stmt *ctorOrDtorBody = ctorDecl ? ctorDecl->getBody() : dtorDecl->getBody();
-    if (ctorOrDtorBody == nullptr)
+    if (!ctorOrDtorBody)
         return;
 
     CXXRecordDecl *classDecl = ctorDecl ? ctorDecl->getParent() : dtorDecl->getParent();
@@ -53,7 +53,7 @@ void VirtualCallCtor::VisitDecl(Decl *decl)
     std::vector<Stmt*> processedStmts;
     SourceLocation loc = containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts);
     if (loc.isValid()) {
-        if (ctorDecl != nullptr) {
+        if (ctorDecl) {
             emitWarning(decl->getLocStart(), "Calling pure virtual function in CTOR");
         } else {
             emitWarning(decl->getLocStart(), "Calling pure virtual function in DTOR");
@@ -62,9 +62,10 @@ void VirtualCallCtor::VisitDecl(Decl *decl)
     }
 }
 
-SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
+SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt,
+                                                    std::vector<Stmt*> &processedStmts)
 {
-    if (stmt == nullptr)
+    if (!stmt)
         return {};
 
     // already processed ? we don't want recurring calls
@@ -78,7 +79,7 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {
         CXXMethodDecl *memberDecl = callExpr->getMethodDecl();
-        if (!memberDecl || dyn_cast<CXXThisExpr>(callExpr->getImplicitObjectArgument()) == nullptr)
+        if (!memberDecl || !isa<CXXThisExpr>(callExpr->getImplicitObjectArgument()))
             continue;
 
         if (memberDecl->getParent() == classDecl) {

@@ -50,7 +50,8 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 
 private:
-    clang::SourceLocation containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<clang::Stmt*> &processedStmts);
+    clang::SourceLocation containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt,
+                                              std::vector<clang::Stmt*> &processedStmts);
 };
 
 
