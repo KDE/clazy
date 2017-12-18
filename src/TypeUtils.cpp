@@ -115,7 +115,8 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 }
 
-bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
+bool TypeUtils::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase,
+                            std::vector<CXXRecordDecl*> *baseClasses)
 {
     if (!derived || !possibleBase || derived == possibleBase)
         return false;
@@ -125,7 +126,9 @@ bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
         if (!type) continue;
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
 
-        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase)) {
+        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase, baseClasses)) {
+            if (baseClasses)
+                baseClasses->push_back(baseDecl);
             return true;
         }
     }
@@ -133,7 +136,7 @@ bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
     return false;
 }
 
-bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
+bool TypeUtils::derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
     if (!derived || !derived->hasDefinition())
         return false;

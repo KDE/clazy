@@ -127,10 +127,11 @@ namespace TypeUtils
     /**
      * Returns true if childDecl is a descent from parentDecl
      **/
-    CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, clang::CXXRecordDecl *possibleBase);
+    CLAZYLIB_EXPORT bool derivesFrom(const clang::CXXRecordDecl *derived, const clang::CXXRecordDecl *possibleBase,
+                                     std::vector<clang::CXXRecordDecl*> *baseClasses = nullptr);
 
     // Overload
-    CLAZYLIB_EXPORT bool derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase);
+    CLAZYLIB_EXPORT bool derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase);
 
     // Overload
     CLAZYLIB_EXPORT bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
