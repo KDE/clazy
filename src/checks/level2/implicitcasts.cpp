@@ -178,12 +178,12 @@ bool ImplicitCasts::isBoolToInt(FunctionDecl *func) const
         return false; // Disabled for now, too many false-positives when interacting with C code
 
     static const vector<string> functions = {"QString::arg"};
-    return !clazy_std::contains(functions, func->getQualifiedNameAsString());
+    return !clazy::contains(functions, func->getQualifiedNameAsString());
 }
 
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
     static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
     auto macro = Lexer::getImmediateMacroName(loc, sm(), lo());
-    return clazy_std::contains(macros, macro);
+    return clazy::contains(macros, macro);
 }

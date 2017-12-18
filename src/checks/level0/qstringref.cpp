@@ -49,7 +49,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
         return false;
 
     static const vector<string> list = { "left", "mid", "right" };
-    return clazy_std::contains(list, method->getNameAsString());
+    return clazy::contains(list, method->getNameAsString());
 }
 
 static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOptions &lo)
@@ -61,7 +61,7 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
                                          "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
                                          "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" };
 
-    if (!clazy_std::contains(list, method->getNameAsString()))
+    if (!clazy::contains(list, method->getNameAsString()))
         return false;
 
     return !StringUtils::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
@@ -74,7 +74,7 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
     if (!method || method->getParent()->getNameAsString() != "QString")
         return false;
 
-    return clazy_std::contains(list, method->getNameAsString());
+    return clazy::contains(list, method->getNameAsString());
 }
 
 void StringRefCandidates::VisitStmt(clang::Stmt *stmt)

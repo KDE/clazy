@@ -72,7 +72,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     if (!classDecl)
         return false;
 
-    if (!clazy_std::equalsAny(methodDecl->getNameAsString(), { "append", "push_back", "push", "operator<<", "operator+=" }))
+    if (!clazy::equalsAny(methodDecl->getNameAsString(), { "append", "push_back", "push", "operator<<", "operator+=" }))
         return false;
 
     if (!QtUtils::isAReserveClass(classDecl))
@@ -97,7 +97,7 @@ static bool isCandidate(CallExpr *oper)
 
 bool ReserveCandidates::containerWasReserved(clang::ValueDecl *valueDecl) const
 {
-    return valueDecl && clazy_std::contains(m_foundReserves, valueDecl);
+    return valueDecl && clazy::contains(m_foundReserves, valueDecl);
 }
 
 bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
@@ -203,7 +203,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
     if (!valueDecl)
         return false;
 
-    if (!clazy_std::contains(m_foundReserves, valueDecl))
+    if (!clazy::contains(m_foundReserves, valueDecl))
         m_foundReserves.push_back(valueDecl);
 
     return true;
@@ -282,7 +282,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     // For some reason we generate two warnings on some foreaches, so cache the ones we processed
     // and return true so we don't trigger a warning
-    if (clazy_std::contains(nonComplexOnesCache, rawLoc) || clazy_std::contains(complexOnesCache, rawLoc))
+    if (clazy::contains(nonComplexOnesCache, rawLoc) || clazy::contains(complexOnesCache, rawLoc))
         return true;
 
     Stmt *parent = s;

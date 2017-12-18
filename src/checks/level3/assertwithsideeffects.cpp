@@ -52,7 +52,7 @@ static bool functionIsOk(const string &name)
                                              "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-"
                                              "q_func", "d_func", "isEmptyHelper"
                                              "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
-    return clazy_std::contains(whitelist, name);
+    return clazy::contains(whitelist, name);
 }
 
 static bool methodIsOK(const string &name)
@@ -62,7 +62,7 @@ static bool methodIsOK(const string &name)
                                              "QByteArray::data", "QBasicMutex::isRecursive",
                                              "QLinkedList::begin", "QLinkedList::end", "QDataBuffer::first",
                                             "QOpenGLFunctions::glIsRenderbuffer"};
-    return clazy_std::contains(whitelist, name);
+    return clazy::contains(whitelist, name);
 }
 
 void AssertWithSideEffects::VisitStmt(Stmt *stm)

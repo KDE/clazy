@@ -89,7 +89,7 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
     if (!StringUtils::isOfClass(method, "QString"))
         return false;
 
-    return (!lt || Utils::isAscii(lt)) && clazy_std::contains(methods, method->getNameAsString());
+    return (!lt || Utils::isAscii(lt)) && clazy::contains(methods, method->getNameAsString());
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
@@ -219,7 +219,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                         if (removalFixits.empty())  {
                             queueManualFixitWarning(ctorExpr->getLocStart(), QLatin1StringAllocations, "Internal error: invalid start or end location");
                         } else {
-                            clazy_std::append(removalFixits, fixits);
+                            clazy::append(removalFixits, fixits);
                         }
                     }
                 } else {
@@ -233,9 +233,9 @@ void QStringAllocations::VisitCtor(Stmt *stm)
         emitWarning(stm->getLocStart(), msg, fixits);
     } else {
         vector<FixItHint> fixits;
-        if (clazy_std::hasChildren(ctorExpr)) {
+        if (clazy::hasChildren(ctorExpr)) {
             auto pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
-            if (clazy_std::hasChildren(pointerDecay)) {
+            if (clazy::hasChildren(pointerDecay)) {
                 StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt && isFixitEnabled(CharPtrAllocations)) {
                     Stmt *grandParent = HierarchyUtils::parent(m_context->parentMap, lt, 2);

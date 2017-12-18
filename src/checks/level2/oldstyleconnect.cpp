@@ -68,7 +68,7 @@ static bool classIsOk(const string &className)
 {
     // List of classes we usually use Qt4 syntax
     static const vector<string> okClasses = { "QDBusInterface" };
-    return clazy_std::contains(okClasses, className);
+    return clazy::contains(okClasses, className);
 }
 
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
@@ -170,7 +170,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 
 bool OldStyleConnect::isPrivateSlot(const string &name) const
 {
-    return clazy_std::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
+    return clazy::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
         return slot.name == name;
     });
 }

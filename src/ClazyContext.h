@@ -102,7 +102,7 @@ public:
 
     bool isOptionSet(const std::string &optionName) const
     {
-        return clazy_std::contains(extraOptions, optionName);
+        return clazy::contains(extraOptions, optionName);
     }
 
     /**

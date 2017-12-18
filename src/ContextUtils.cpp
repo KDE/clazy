@@ -79,7 +79,7 @@ string ContextUtils::getMostNeededQualifiedName(const SourceManager &sourceManag
     vector<UsingDirectiveDecl*> usings;
     if (honourUsingDirectives) {
         for (DeclContext *context : visibleContexts) {;
-            clazy_std::append(context->using_directives(), usings);
+            clazy::append(context->using_directives(), usings);
         }
     }
 
@@ -96,7 +96,7 @@ string ContextUtils::getMostNeededQualifiedName(const SourceManager &sourceManag
     for (DeclContext *context : visibleContexts) {
 
         if (context != method->getParent()) { // Don't remove the most immediate
-            auto it = clazy_std::find_if(methodContexts, [context](DeclContext *c) {
+            auto it = clazy::find_if(methodContexts, [context](DeclContext *c) {
                     if (c == context)
                         return true;
                     auto ns1 = dyn_cast<NamespaceDecl>(c);

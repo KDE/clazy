@@ -156,7 +156,7 @@ void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
 
 static bool parseArgument(const string &arg, vector<string> &args)
 {
-    auto it = clazy_std::find(args, arg);
+    auto it = clazy::find(args, arg);
     if (it != args.end()) {
         args.erase(it);
         return true;
@@ -280,7 +280,7 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     std::lock_guard<std::mutex> lock(CheckManager::lock());
     RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
 
-    clazy_std::sort(checks, checkLessThanByLevel);
+    clazy::sort(checks, checkLessThanByLevel);
 
     ros << "Available checks and FixIts:\n\n";
     const bool useMarkdown = getenv("CLAZY_HELP_USE_MARKDOWN");

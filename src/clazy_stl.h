@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <sstream>
 
-namespace clazy_std {
+namespace clazy {
 
 // Don't use .begin() or cend(), clang's ranges don't have them
 // Don't use .size(), clang's ranges doesn't have it
@@ -109,14 +109,14 @@ size_t count(const Range &r)
 template<typename SrcContainer, typename DstContainer>
 void append(const SrcContainer &src, DstContainer &dst)
 {
-    dst.reserve(clazy_std::count(dst) + clazy_std::count(src));
+    dst.reserve(clazy::count(dst) + clazy::count(src));
     std::copy(src.begin(), src.end(), std::back_inserter(dst));
 }
 
 template<typename SrcContainer, typename DstContainer, typename Pred>
 void append_if(const SrcContainer &src, DstContainer &dst, Pred pred)
 {
-    dst.reserve(clazy_std::count(dst) + clazy_std::count(src));
+    dst.reserve(clazy::count(dst) + clazy::count(src));
     std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);
 }
 
@@ -135,7 +135,7 @@ void append_if(const SrcContainer &src, DstContainer &dst, Pred pred)
 
 inline bool hasChildren(clang::Stmt *s)
 {
-    return s && !clazy_std::isEmpty(s->children());
+    return s && !clazy::isEmpty(s->children());
 }
 
 inline clang::Stmt* childAt(clang::Stmt *s, int index)
@@ -166,8 +166,8 @@ inline bool startsWith(const std::string &target, const std::string &maybeBeginn
  */
 inline bool startsWithAny(const std::string &target, const std::vector<std::string> &beginningCandidates)
 {
-    return clazy_std::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
-        return clazy_std::startsWith(target, maybeBeginning);
+    return clazy::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
+        return clazy::startsWith(target, maybeBeginning);
     });
 }
 
@@ -176,7 +176,7 @@ inline bool startsWithAny(const std::string &target, const std::vector<std::stri
  */
 inline bool equalsAny(const std::string &target, const std::vector<std::string> &candidates)
 {
-    return clazy_std::any_of(candidates, [target](const std::string &candidate) {
+    return clazy::any_of(candidates, [target](const std::string &candidate) {
         return candidate == target;
     });
 }
@@ -195,8 +195,8 @@ inline bool endsWith(const std::string &target, const std::string &maybeEnding)
  */
 inline bool endsWithAny(const std::string &target, const std::vector<std::string> &endingCandidates)
 {
-    return clazy_std::any_of(endingCandidates, [target](const std::string &maybeEnding) {
-        return clazy_std::endsWith(target, maybeEnding);
+    return clazy::any_of(endingCandidates, [target](const std::string &maybeEnding) {
+        return clazy::endsWith(target, maybeEnding);
     });
 }
 
@@ -226,7 +226,7 @@ inline std::vector<std::string> splitString(const char *str, char separator)
     if (!str)
         return {};
 
-    return clazy_std::splitString(std::string(str), separator);
+    return clazy::splitString(std::string(str), separator);
 }
 
 template<typename Container, typename LessThan>

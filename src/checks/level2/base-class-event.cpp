@@ -55,14 +55,14 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         return;
 
     const string className = classDecl->getQualifiedNameAsString();
-    if (clazy_std::contains(vector<string>({"QObject", "QWidget"}), className))
+    if (clazy::contains(vector<string>({"QObject", "QWidget"}), className))
         return;
 
     CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(classDecl);
     const string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
                                            : string("BaseClass");
 
-    if (isEventFilter && clazy_std::contains(vector<string>({"QObject", "QWidget"}), baseClassName)) {
+    if (isEventFilter && clazy::contains(vector<string>({"QObject", "QWidget"}), baseClassName)) {
         // This is fine, QObject and QWidget eventFilter() don't do anything
         return;
     }
@@ -71,7 +71,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     std::vector<ReturnStmt*> returns;
     HierarchyUtils::getChilds<ReturnStmt>(body, /*by-ref*/returns);
     for (ReturnStmt *returnStmt : returns) {
-        Stmt *maybeBoolExpr = clazy_std::childAt(returnStmt, 0);
+        Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);
         if (!maybeBoolExpr)
             continue;
         auto boolExpr = dyn_cast<CXXBoolLiteralExpr>(maybeBoolExpr);

@@ -48,7 +48,7 @@ using namespace std;
 
 bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 {
-    return clazy_std::any_of(decl->ctors(), [](CXXConstructorDecl *ctor) {
+    return clazy::any_of(decl->ctors(), [](CXXConstructorDecl *ctor) {
         return ctor->isConstexpr();
     });
 }
@@ -89,7 +89,7 @@ bool Utils::allChildrenMemberCallsConst(Stmt *stm)
             return false;
     }
 
-    return clazy_std::all_of(stm->children(), [](Stmt *child) {
+    return clazy::all_of(stm->children(), [](Stmt *child) {
         return allChildrenMemberCallsConst(child);
     });
 }
@@ -124,7 +124,7 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
     if (memberCall) {
         auto methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
         if (methodDecl && !methodDecl->isConst() && !methodDecl->isStatic() &&
-                !clazy_std::contains(method_blacklist, methodDecl->getNameAsString()))
+                !clazy::contains(method_blacklist, methodDecl->getNameAsString()))
             return true;
     }
 
@@ -136,7 +136,7 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
             return true;
     }*/
 
-    return clazy_std::any_of(stm->children(), [](Stmt *s) {
+    return clazy::any_of(stm->children(), [](Stmt *s) {
         return childsHaveSideEffects(s);
     });
 }
@@ -204,7 +204,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     // CXXOperatorCallExpr doesn't have API to access the value decl.
     // By inspecting several ASTs I noticed it's always in the 2nd child
 
-    Stmt *child2 = clazy_std::childAt(operatorCall, 1);
+    Stmt *child2 = clazy::childAt(operatorCall, 1);
     if (!child2)
         return nullptr;
 
@@ -300,7 +300,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
         ++param;
         DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(arg);
         if (!refExpr)  {
-            if (clazy_std::hasChildren(arg)) {
+            if (clazy::hasChildren(arg)) {
                 Stmt* firstChild = *(arg->child_begin()); // Can be null (bug #362236)
                 refExpr = firstChild ? dyn_cast<DeclRefExpr>(firstChild) : nullptr;
                 if (!refExpr)
@@ -377,7 +377,7 @@ bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const 
         return false;
 
     auto unaries = HierarchyUtils::getStatements<UnaryOperator>(body);
-    return clazy_std::any_of(unaries, [valDecl](UnaryOperator *op) {
+    return clazy::any_of(unaries, [valDecl](UnaryOperator *op) {
         if (op->getOpcode() != clang::UO_AddrOf)
             return false;
 
@@ -506,7 +506,7 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
             auto method = dyn_cast<CXXMethodDecl>(func);
             if (method) {
                 auto record = method->getParent();
-                if (record && clazy_std::contains(anyOf, record->getNameAsString()))
+                if (record && clazy::contains(anyOf, record->getNameAsString()))
                     return true;
             }
         }
@@ -522,7 +522,7 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
         return false;
 
     CXXConstructExpr *expr = dyn_cast<CXXConstructExpr>(s);
-    if (expr && expr->getConstructor() && clazy_std::contains(anyOf, expr->getConstructor()->getNameAsString())) {
+    if (expr && expr->getConstructor() && clazy::contains(anyOf, expr->getConstructor()->getNameAsString())) {
         return true;
     }
 
@@ -547,7 +547,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
         return {};
 
     vector<CXXMethodDecl *> methods;
-    clazy_std::append_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
+    clazy::append_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
         return m->getNameAsString() == methodName;
     });
 
@@ -557,7 +557,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
         if (t) {
             auto baseMethods = methodsFromString(t->getAsCXXRecordDecl(), methodName);
             if (!baseMethods.empty())
-                clazy_std::append(baseMethods, methods);
+                clazy::append(baseMethods, methods);
         }
     }
 
@@ -710,7 +710,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
 bool Utils::isSharedPointer(CXXRecordDecl *record)
 {
     static const vector<string> names = { "std::shared_ptr", "QSharedPointer", "boost::shared_ptr" };
-    return record ? clazy_std::contains(names, record->getQualifiedNameAsString()) : false;
+    return record ? clazy::contains(names, record->getQualifiedNameAsString()) : false;
 }
 
 bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
@@ -749,7 +749,7 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
 bool Utils::functionHasEmptyBody(clang::FunctionDecl *func)
 {
     Stmt *body = func ? func->getBody() : nullptr;
-    return !clazy_std::hasChildren(body);
+    return !clazy::hasChildren(body);
 }
 
 clang::Expr *Utils::isWriteOperator(Stmt *stm)
@@ -780,7 +780,7 @@ bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl
     if (declStmt->isSingleDecl() && declStmt->getSingleDecl() == varDecl)
         return true;
 
-    return clazy_std::any_of(declStmt->getDeclGroup(), [varDecl](Decl *decl) {
+    return clazy::any_of(declStmt->getDeclGroup(), [varDecl](Decl *decl) {
         return varDecl == decl;
     });
 }
@@ -853,7 +853,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
 
 bool Utils::ctorInitializerContainsMove(const vector<CXXCtorInitializer*> &ctorInits)
 {
-    return clazy_std::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
+    return clazy::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
         return Utils::ctorInitializerContainsMove(ctorInit);
     });
 }
@@ -861,7 +861,7 @@ bool Utils::ctorInitializerContainsMove(const vector<CXXCtorInitializer*> &ctorI
 string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
 {
     string filename = sm.getFilename(loc);
-    auto splitted = clazy_std::splitString(filename, '/');
+    auto splitted = clazy::splitString(filename, '/');
     if (splitted.empty())
         return {};
 

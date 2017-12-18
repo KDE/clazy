@@ -75,7 +75,7 @@ bool LoopUtils::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManag
         }
     }
 
-    return clazy_std::any_of(stmt->children(), [&sm, onlyBeforeThisLoc](Stmt *s) {
+    return clazy::any_of(stmt->children(), [&sm, onlyBeforeThisLoc](Stmt *s) {
         return LoopUtils::loopCanBeInterrupted(s, sm, onlyBeforeThisLoc);
     });
 }

@@ -54,7 +54,7 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method) const
     auto it = methodsByType.find(className);
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy_std::contains(methods, method->getNameAsString()))
+        if (clazy::contains(methods, method->getNameAsString()))
             return true;
     }
 

@@ -73,7 +73,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
 
     // const_iterator might be a typedef to pointer, like const T *, instead of a class, so just check for const qualification in that case
-    if (!(TypeUtils::pointeeQualType(typeTo).isConstQualified() || clazy_std::endsWith(nameTo, "const_iterator")))
+    if (!(TypeUtils::pointeeQualType(typeTo).isConstQualified() || clazy::endsWith(nameTo, "const_iterator")))
         return false;
 
     if (implicitCast->getCastKind() == CK_ConstructorConversion) {
@@ -82,16 +82,16 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     }
 
     // TODO: some util function to get the name of a nested class
-    const  bool nameToIsIterator = nameTo == "iterator" || clazy_std::endsWith(nameTo, "::iterator");
+    const  bool nameToIsIterator = nameTo == "iterator" || clazy::endsWith(nameTo, "::iterator");
     if (nameToIsIterator)
         return false;
 
     const string nameFrom = StringUtils::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
-    const  bool nameFromIsIterator = nameFrom == "iterator" || clazy_std::endsWith(nameFrom, "::iterator");
+    const  bool nameFromIsIterator = nameFrom == "iterator" || clazy::endsWith(nameFrom, "::iterator");
     if (!nameFromIsIterator)
         return false;
 
-    if (recordTo && clazy_std::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
+    if (recordTo && clazy::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
         string filename = m_sm.getFilename(implicitCast->getLocStart());
         if (filename == "lalr.cpp") // Lots of false positives here, because of const_iterator -> iterator typedefs
             return false;

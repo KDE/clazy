@@ -95,7 +95,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
         const string parentFuncName = parentFunc ? parentFunc->getNameAsString() : "";
-        if (clazy_std::startsWith(parentFuncName, "operator")) {
+        if (clazy::startsWith(parentFuncName, "operator")) {
             // m_foo[0] = ... is OK
             return;
         }
@@ -109,7 +109,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
             return;
     }
 
-    const bool returnsNonConstIterator = clazy_std::endsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
+    const bool returnsNonConstIterator = clazy::endsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
     if (returnsNonConstIterator) {
         // If we're calling begin()/end() as arguments to a function taking non-const iterators it's fine
         // Such as qSort(list.begin(), list.end());

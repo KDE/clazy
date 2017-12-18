@@ -47,7 +47,7 @@ static bool isInterestingCall(CallExpr *call)
                                             "QMap::keys", "QSet::toList", "QSet::values",
                                             "QHash::values", "QHash::keys" };
 
-    return clazy_std::contains(methods, StringUtils::qualifiedMethodName(func));
+    return clazy::contains(methods, StringUtils::qualifiedMethodName(func));
 }
 
 void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)

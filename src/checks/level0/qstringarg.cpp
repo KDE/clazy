@@ -106,7 +106,7 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
     vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
     vector<clang::CallExpr *> argCalls;
     for (auto call : callExprs) {
-        if (!clazy_std::contains(m_alreadyProcessedChainedCalls, call) && isArgFuncWithOnlyQString(call)) {
+        if (!clazy::contains(m_alreadyProcessedChainedCalls, call) && isArgFuncWithOnlyQString(call)) {
             argCalls.push_back(call);
             m_alreadyProcessedChainedCalls.push_back(call);
         } else {
@@ -150,8 +150,8 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
             if (!literals.empty())
                 return;
 
-            string variableName = clazy_std::toLower(variableNameFromArg(memberCall->getArg(2)));
-            if (clazy_std::contains(variableName, "base"))
+            string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(2)));
+            if (clazy::contains(variableName, "base"))
                 return;
         }
 
@@ -164,8 +164,8 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
                 return;
 
             // the variable is named "width", user knows what he's doing
-            string variableName = clazy_std::toLower(variableNameFromArg(memberCall->getArg(1)));
-            if (clazy_std::contains(variableName, "width"))
+            string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(1)));
+            if (clazy::contains(variableName, "width"))
                 return;
         }
 

@@ -41,7 +41,7 @@ ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyC
 void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 {
     auto ret = dyn_cast<ReturnStmt>(stmt);
-    if (!ret || !clazy_std::hasChildren(ret))
+    if (!ret || !clazy::hasChildren(ret))
         return;
 
     QualType qt = ret->getRetValue()->getType();

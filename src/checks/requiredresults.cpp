@@ -80,7 +80,7 @@ bool RequiredResults::shouldIgnoreMethod(const std::string &qualifiedName)
         files.push_back("ImapResourceBase::settings");
     }
 
-    return clazy_std::contains(files, qualifiedName);
+    return clazy::contains(files, qualifiedName);
 }
 
 void RequiredResults::VisitStmt(clang::Stmt *stm)
@@ -118,7 +118,7 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
             }
 
             // qt.isConstQualified() not working !? TODO: Replace this string parsing when I figure it out
-            if (type->isReferenceType() && !clazy_std::contains(qt.getAsString(), "const ")) {
+            if (type->isReferenceType() && !clazy::contains(qt.getAsString(), "const ")) {
                 bailout = true;
                 break;
             }

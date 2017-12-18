@@ -35,7 +35,7 @@ using namespace std;
 static bool isInterestingContainer(const string &name)
 {
     static const vector<string> containers = { "QMap", "QHash" };
-    return clazy_std::contains(containers, name);
+    return clazy::contains(containers, name);
 }
 
 MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *context)

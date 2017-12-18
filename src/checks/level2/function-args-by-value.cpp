@@ -58,7 +58,7 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
                                               "QVariantComparisonHelper",
                                               "QHashDummyValue", "QCharRef", "QString::Null"
                                              };
-    return clazy_std::contains(ignoreList, record->getQualifiedNameAsString());
+    return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
 static bool shouldIgnoreOperator(FunctionDecl *function)
@@ -66,7 +66,7 @@ static bool shouldIgnoreOperator(FunctionDecl *function)
     // Too many warnings in operator<<
     static const vector<string> ignoreList = {"operator<<"};
 
-    return clazy_std::contains(ignoreList, function->getNameAsString());
+    return clazy::contains(ignoreList, function->getNameAsString());
 }
 
 static bool shouldIgnoreFunction(clang::FunctionDecl *function)
@@ -83,7 +83,7 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
                                                        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
                                                       };
 
-    return clazy_std::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
+    return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
 FunctionArgsByValue::FunctionArgsByValue(const std::string &name, ClazyContext *context)

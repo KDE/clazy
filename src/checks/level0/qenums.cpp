@@ -57,7 +57,7 @@ void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
 
         CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
         string text = Lexer::getSourceText(crange, sm(), lo());
-        if (clazy_std::contains(text, "::"))
+        if (clazy::contains(text, "::"))
             return;
     }
 

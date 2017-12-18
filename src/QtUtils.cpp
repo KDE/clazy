@@ -95,13 +95,13 @@ bool QtUtils::isQtCOWIterableClass(clang::CXXRecordDecl *record)
 bool QtUtils::isQtCOWIterableClass(const string &className)
 {
     const auto &classes = qtCOWContainers();
-    return clazy_std::contains(classes, className);
+    return clazy::contains(classes, className);
 }
 
 bool QtUtils::isQtIterableClass(const string &className)
 {
     const auto &classes = qtContainers();
-    return clazy_std::contains(classes, className);
+    return clazy::contains(classes, className);
 }
 
 bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
@@ -115,7 +115,7 @@ bool QtUtils::isQtAssociativeContainer(clang::CXXRecordDecl *record)
 bool QtUtils::isQtAssociativeContainer(const string &className)
 {
     static const vector<string> classes = { "QSet", "QMap", "QHash" };
-    return clazy_std::contains(classes, className);
+    return clazy::contains(classes, className);
 }
 
 bool QtUtils::isQObject(CXXRecordDecl *decl)
@@ -167,7 +167,7 @@ bool QtUtils::isJavaIterator(CXXRecordDecl *record)
     static const vector<string> names = { "QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
                                          "QVectorIterator", "QLinkedListIterator", "QStringListIterator" };
 
-    return clazy_std::contains(names, record->getNameAsString());
+    return clazy::contains(names, record->getNameAsString());
 }
 
 bool QtUtils::isJavaIterator(CXXMemberCallExpr *call)
@@ -185,7 +185,7 @@ bool QtUtils::isQtContainer(QualType t)
         return false;
 
     const string typeName = record->getNameAsString();
-    return clazy_std::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
+    return clazy::any_of(QtUtils::qtContainers(), [typeName] (const string &container) {
         return container == typeName;
     });
 }
@@ -217,7 +217,7 @@ bool QtUtils::isAReserveClass(CXXRecordDecl *recordDecl)
 
     static const std::vector<std::string> classes = {"QVector", "std::vector", "QList", "QSet"};
 
-    return clazy_std::any_of(classes, [recordDecl](const string &className) {
+    return clazy::any_of(classes, [recordDecl](const string &className) {
         return TypeUtils::derivesFrom(recordDecl, className);
     });
 }

@@ -69,7 +69,7 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
         return {};
 
     // already processed ? we don't want recurring calls
-    if (clazy_std::contains(processedStmts, stmt))
+    if (clazy::contains(processedStmts, stmt))
         return {};
 
     processedStmts.push_back(stmt);

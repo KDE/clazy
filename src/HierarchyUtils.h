@@ -54,7 +54,7 @@ inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
     if (!child || !parent)
         return false;
 
-    return clazy_std::any_of(parent->children(), [child](clang::Stmt *c) {
+    return clazy::any_of(parent->children(), [child](clang::Stmt *c) {
         return c == child || isChildOf(child, c);
     });
 }
@@ -74,7 +74,7 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
             return true;
     }
 
-    return clazy_std::any_of(stm->children(), [name] (clang::Stmt *child) {
+    return clazy::any_of(stm->children(), [name] (clang::Stmt *child) {
         return isParentOfMemberFunctionCall(child, name);
     });
 
@@ -115,7 +115,7 @@ T* getFirstChildOfType2(clang::Stmt *stm)
     if (!stm)
         return nullptr;
 
-    if (clazy_std::hasChildren(stm)) {
+    if (clazy::hasChildren(stm)) {
         auto child = *(stm->child_begin());
         if (auto s = clang::dyn_cast<T>(child))
             return s;
@@ -171,7 +171,7 @@ inline clang::Stmt * getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
     if (depth == 0 || !s)
         return s;
 
-    return clazy_std::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
+    return clazy::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
                                      : nullptr;
 }
 
@@ -232,7 +232,7 @@ std::vector<T*> getStatements(clang::Stmt *body,
             --depth;
 
         auto childStatements = getStatements<T>(child, sm, startLocation, depth, false, ignoreOptions);
-        clazy_std::append(childStatements, statements);
+        clazy::append(childStatements, statements);
     }
 
     return statements;

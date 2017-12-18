@@ -43,7 +43,7 @@ static bool isMatchingClass(const std::string &name)
                                            "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
                                            "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
 
-    return clazy_std::contains(classes, name);
+    return clazy::contains(classes, name);
 }
 
 void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)

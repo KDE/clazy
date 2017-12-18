@@ -116,12 +116,12 @@ inline bool isOfClass(T *node, const std::string &className)
 
 inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::string> &functionNames)
 {
-    return func && clazy_std::contains(functionNames, func->getNameAsString());
+    return func && clazy::contains(functionNames, func->getNameAsString());
 }
 
 inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<std::string> &classNames)
 {
-    return record && clazy_std::contains(classNames, record->getNameAsString());
+    return record && clazy::contains(classNames, record->getNameAsString());
 }
 
 inline void printLocation(const clang::SourceManager &sm, clang::SourceLocation loc, bool newLine = true)
@@ -252,7 +252,7 @@ inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOption
 inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName,
                               const clang::LangOptions &lo, bool simpleName = true)
 {
-    return clazy_std::any_of(Utils::functionParameters(func), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
+    return clazy::any_of(Utils::functionParameters(func), [simpleName,lo,typeName](clang::ParmVarDecl *param) {
         return StringUtils::typeName(param->getType(), lo, simpleName) == typeName;
     });
 }

@@ -177,7 +177,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
                 if (detachingMethodsMap.find(className) != detachingMethodsMap.end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap.at(className);
-                    if (clazy_std::contains(allowedFunctions, functionName)) {
+                    if (clazy::contains(allowedFunctions, functionName)) {
                         Expr *expr = memberExpr->getBase();
 
                         if (expr) {
@@ -198,7 +198,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
         }
     }
 
-    return clazy_std::any_of(stm->children(), [this, containerValueDecl](Stmt *child) {
+    return clazy::any_of(stm->children(), [this, containerValueDecl](Stmt *child) {
         return this->containsDetachments(child, containerValueDecl);
     });
 }

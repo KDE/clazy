@@ -74,7 +74,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
         return true;
 
     const string typeName = StringUtils::simpleTypeName(t, lo());
-    return clazy_std::any_of(nonTrivialTypes, [typeName] (const string &container) {
+    return clazy::any_of(nonTrivialTypes, [typeName] (const string &container) {
         return container == typeName;
     });
 }
@@ -97,6 +97,6 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
         return declRef->getDecl() == varDecl;
     };
 
-    if (!clazy_std::any_of(declRefs, pred))
+    if (!clazy::any_of(declRefs, pred))
         emitWarning(locStart, "unused " + StringUtils::simpleTypeName(varDecl->getType(), lo()));
 }

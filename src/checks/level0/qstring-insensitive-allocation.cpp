@@ -42,7 +42,7 @@ static bool isInterestingCall1(CallExpr *call)
         return false;
 
     static const vector<string> methods = { "QString::toUpper", "QString::toLower" };
-    return clazy_std::contains(methods, StringUtils::qualifiedMethodName(func));
+    return clazy::contains(methods, StringUtils::qualifiedMethodName(func));
 }
 
 static bool isInterestingCall2(CallExpr *call)
@@ -53,7 +53,7 @@ static bool isInterestingCall2(CallExpr *call)
 
     static const vector<string> methods = { "QString::endsWith", "QString::startsWith",
                                             "QString::contains", "QString::compare" };
-    return clazy_std::contains(methods, StringUtils::qualifiedMethodName(func));
+    return clazy::contains(methods, StringUtils::qualifiedMethodName(func));
 }
 
 void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)

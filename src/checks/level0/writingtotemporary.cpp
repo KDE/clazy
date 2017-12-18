@@ -45,13 +45,13 @@ static bool isDisallowedClass(const string &className)
     static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
                                                "QScriptValue", "QTextLine", "QTextBlock", "QDomNode",
                                                "QJSValue", "QTextTableCell" };
-    return clazy_std::contains(disallowed, className);
+    return clazy::contains(disallowed, className);
 }
 
 static bool isDisallowedMethod(const string &name)
 {
     static const vector<string> disallowed = { "QColor::getCmyk", "QColor::getCmykF" };
-    return clazy_std::contains(disallowed, name);
+    return clazy::contains(disallowed, name);
 }
 
 static bool isKnownType(const string &className)
@@ -62,7 +62,7 @@ static bool isKnownType(const string &className)
                                           "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
                                           "QPointF", "QColor" };
 
-    return clazy_std::contains(types, className);
+    return clazy::contains(types, className);
 }
 
 void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
@@ -107,7 +107,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!secondFuncReturnType || !secondFuncReturnType->isVoidType())
         return;
 
-    if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy_std::startsWith(secondFunc->getNameAsString(), "set"))
+    if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy::startsWith(secondFunc->getNameAsString(), "set"))
         return;
 
     const string &methodName = secondMethod->getQualifiedNameAsString();

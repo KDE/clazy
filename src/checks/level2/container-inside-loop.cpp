@@ -46,7 +46,7 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *ctor = ctorExpr->getConstructor();
-    if (!ctor || !clazy_std::equalsAny(StringUtils::classNameFor(ctor), { "QVector", "std::vector", "QList" }))
+    if (!ctor || !clazy::equalsAny(StringUtils::classNameFor(ctor), { "QVector", "std::vector", "QList" }))
         return;
 
     DeclStmt *declStm = dyn_cast_or_null<DeclStmt>(m_context->parentMap->getParent(stmt));

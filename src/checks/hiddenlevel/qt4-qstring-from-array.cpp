@@ -76,7 +76,7 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor, bool &is_char_array,
 static bool isInterestingMethod(const string &methodName)
 {
     static const vector<string> methods = { "append", "prepend", "operator=", "operator==", "operator!=", "operator<", "operator<=", "operator>", "operator>=", "operator+=" };
-    return clazy_std::contains(methods, methodName);
+    return clazy::contains(methods, methodName);
 }
 
 static bool isInterestingMethodCall(CXXMethodDecl *method, string &methodName, bool &is_char_array, bool &is_byte_array)

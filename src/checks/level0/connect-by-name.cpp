@@ -51,10 +51,10 @@ void ConnectByName::VisitDecl(clang::Decl *decl)
 
     for (auto method : record->methods()) {
         std::string name = method->getNameAsString();
-        if (clazy_std::startsWith(name, "on_")) {
+        if (clazy::startsWith(name, "on_")) {
             QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
             if (qst == QtAccessSpecifier_Slot) {
-                auto tokens = clazy_std::splitString(name, '_');
+                auto tokens = clazy::splitString(name, '_');
                 if (tokens.size() == 3) {
                     emitWarning(method->getLocStart(), "Slots named on_foo_bar are error prone");
                 }

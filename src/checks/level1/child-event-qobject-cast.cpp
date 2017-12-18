@@ -48,7 +48,7 @@ void ChildEventQObjectCast::VisitDecl(Decl *decl)
         return;
 
     auto methodName = childEventMethod->getNameAsString();
-    if (!clazy_std::equalsAny(methodName, {"event", "childEvent", "eventFilter"}))
+    if (!clazy::equalsAny(methodName, {"event", "childEvent", "eventFilter"}))
         return;
 
     if (!QtUtils::isQObject(childEventMethod->getParent()))

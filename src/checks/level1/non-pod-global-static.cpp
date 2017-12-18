@@ -39,7 +39,7 @@ static bool shouldIgnoreType(const std::string &name)
 {
     // Q_GLOBAL_STATIC and such
     static vector<string> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage"};
-    return clazy_std::contains(blacklist, name);
+    return clazy::contains(blacklist, name);
 }
 
 NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name, ClazyContext *context)
@@ -63,7 +63,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
 
     const SourceLocation declStart = varDecl->getLocStart();
     auto macroName = Lexer::getImmediateMacroName(declStart, sm(), lo());
-    if (clazy_std::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
+    if (clazy::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
         return;
 
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);

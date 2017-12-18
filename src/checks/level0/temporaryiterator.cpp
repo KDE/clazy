@@ -58,7 +58,7 @@ static bool isBlacklistedFunction(const string &name)
 {
     // These are fine
     static const vector<string> list = {"QVariant::toList", "QHash::operator[]", "QMap::operator[]", "QSet::operator[]"};
-    return clazy_std::contains(list, name);
+    return clazy::contains(list, name);
 }
 
 void TemporaryIterator::VisitStmt(clang::Stmt *stm)
@@ -81,7 +81,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     // Check if it's a method returning an iterator
     const std::string functionName = methodDecl->getNameAsString();
     const auto &allowedFunctions = it->second;
-    if (!clazy_std::contains(allowedFunctions, functionName))
+    if (!clazy::contains(allowedFunctions, functionName))
         return;
 
 

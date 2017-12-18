@@ -43,7 +43,7 @@ void QtMacros::VisitMacroDefined(const Token &MacroNameTok)
         return;
 
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (ii && clazy_std::startsWith(ii->getName(), "Q_OS_"))
+    if (ii && clazy::startsWith(ii->getName(), "Q_OS_"))
         m_OSMacroExists = true;
 }
 
@@ -55,7 +55,7 @@ void QtMacros::checkIfDef(const Token &macroNameTok, SourceLocation Loc)
 
     if (ii->getName() == "Q_OS_WINDOWS") {
         emitWarning(Loc, "Q_OS_WINDOWS is wrong, use Q_OS_WIN instead");
-    } else if (!m_OSMacroExists && clazy_std::startsWith(ii->getName(), "Q_OS_")) {
+    } else if (!m_OSMacroExists && clazy::startsWith(ii->getName(), "Q_OS_")) {
         emitWarning(Loc, "Include qglobal.h before testing Q_OS_ macros");
     }
 }
