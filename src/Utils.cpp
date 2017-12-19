@@ -644,10 +644,10 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
         }
 
         if (s) {
-            CallExpr *callExpr = dyn_cast<CallExpr>(s);
+            auto callExpr = dyn_cast<CallExpr>(s);
             if (callExpr && callExpr->getCalleeDecl()) {
                 callexprs.push_back(callExpr);
-            } else if (MemberExpr *memberExpr = dyn_cast<MemberExpr>(s)) {
+            } else if (auto memberExpr = dyn_cast<MemberExpr>(s)) {
                 if (isa<FieldDecl>(memberExpr->getMemberDecl()))
                     break; // accessing a public member via . or -> breaks the chain
             }
@@ -719,7 +719,7 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
         return false;
 
     DeclContext *context = varDecl->getDeclContext();
-    FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
+    auto fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
     Stmt *body = fDecl ? fDecl->getBody() : nullptr;
     if (!body)
         return false;
@@ -731,15 +731,13 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
             vector<DeclRefExpr*> declRefs;
 
             clazy::getChilds<DeclRefExpr>(declStmt, declRefs);
-            if (!declRefs.empty()) {
+            if (!declRefs.empty())
                 return true;
-            }
 
             vector<CallExpr*> callExprs;
             clazy::getChilds<CallExpr>(declStmt, callExprs);
-            if (!callExprs.empty()) {
+            if (!callExprs.empty())
                 return true;
-            }
         }
     }
 
@@ -766,7 +764,7 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
         return up->getSubExpr();
     }
 
-    if (BinaryOperator *bp = dyn_cast<BinaryOperator>(stm))
+    if (auto bp = dyn_cast<BinaryOperator>(stm))
         return bp->getLHS();
 
     return nullptr;
