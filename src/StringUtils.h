@@ -155,7 +155,7 @@ inline std::string qualifiedMethodName(clang::FunctionDecl *func)
     if (!func)
         return {};
 
-    clang::CXXMethodDecl *method = clang::dyn_cast<clang::CXXMethodDecl>(func);
+    auto method = clang::dyn_cast<clang::CXXMethodDecl>(func);
     if (!method)
         return func->getQualifiedNameAsString();
 

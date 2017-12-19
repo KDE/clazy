@@ -40,27 +40,25 @@ Stmt *clazy::bodyFromLoop(Stmt *loop)
     if (!loop)
         return nullptr;
 
-    if (auto forstm = dyn_cast<ForStmt>(loop)) {
+    if (auto forstm = dyn_cast<ForStmt>(loop))
         return forstm->getBody();
-    }
 
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
+    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop))
         return rangeLoop->getBody();
-    }
 
-    if (auto whilestm = dyn_cast<WhileStmt>(loop)) {
+
+    if (auto whilestm = dyn_cast<WhileStmt>(loop))
         return whilestm->getBody();
-    }
 
-    if (auto dostm = dyn_cast<DoStmt>(loop)) {
+
+    if (auto dostm = dyn_cast<DoStmt>(loop))
         return dostm->getBody();
-    }
 
     return nullptr;
 }
 
 bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm,
-                                     clang::SourceLocation onlyBeforeThisLoc)
+                                 clang::SourceLocation onlyBeforeThisLoc)
 {
     if (!stmt)
         return false;
@@ -86,9 +84,8 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
     if (!loop)
         return nullptr;
 
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
+    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop))
         return rangeLoop->getRangeInit();
-    }
 
     if (auto constructExpr = dyn_cast<CXXConstructExpr>(loop)) {
         if (constructExpr->getNumArgs() < 1)
