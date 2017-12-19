@@ -20,6 +20,7 @@
 */
 
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 #include "qcolor-from-literal.h"
 
 using namespace clang;

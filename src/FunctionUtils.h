@@ -106,7 +106,7 @@ inline bool classImplementsMethod(const clang::CXXRecordDecl *record, const clan
 
     StringRef methodName = method->getName();
     for (auto m : record->methods()) {
-        if (!m->isPure() && clazy::methodName(m) == methodName && parametersMatch(m, method))
+        if (!m->isPure() && clazy::name(m) == methodName && parametersMatch(m, method))
             return true;
     }
 

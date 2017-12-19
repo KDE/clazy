@@ -22,6 +22,7 @@
 #include "qstringarg.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -53,11 +54,11 @@ static CXXMethodDecl* isArgMethod(FunctionDecl *func)
         return nullptr;
 
     auto method = dyn_cast<CXXMethodDecl>(func);
-    if (!method || method->getNameAsString() != "arg")
+    if (!method || clazy::name(method) != "arg")
         return nullptr;
 
     CXXRecordDecl *record = method->getParent();
-    if (!record || record->getNameAsString() != "QString")
+    if (!record || clazy::name(record) != "QString")
         return nullptr;
 
     return method;
@@ -143,7 +144,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
             return;
 
         ParmVarDecl *p = method->getParamDecl(2);
-        if (p && p->getNameAsString() == "base") {
+        if (p && clazy::name(p) == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
             vector<IntegerLiteral*> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
@@ -156,7 +157,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         }
 
         p = method->getParamDecl(1);
-        if (p && p->getNameAsString() == "fieldWidth") {
+        if (p && clazy::name(p) == "fieldWidth") {
             // He specified a literal, so he knows what he's doing, otherwise he would have put it directly in the string
             vector<IntegerLiteral*> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);

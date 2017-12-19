@@ -192,7 +192,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
         return false;
 
     CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
-    if (!methodDecl || methodDecl->getNameAsString() != "reserve")
+    if (!methodDecl || clazy::name(methodDecl) != "reserve")
         return false;
 
     CXXRecordDecl *decl = methodDecl->getParent();

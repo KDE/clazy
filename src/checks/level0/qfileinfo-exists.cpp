@@ -22,6 +22,7 @@
 #include "qfileinfo-exists.h"
 #include "Utils.h"
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>

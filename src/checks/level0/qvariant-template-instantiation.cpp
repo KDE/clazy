@@ -53,11 +53,11 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         return;
 
     CXXMethodDecl *methodDecl = callExpr->getMethodDecl();
-    if (!methodDecl || methodDecl->getNameAsString() != "value")
+    if (!methodDecl || clazy::name(methodDecl) != "value")
         return;
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!decl || decl->getNameAsString() != "QVariant")
+    if (!decl || clazy::name(decl) != "QVariant")
         return;
 
     vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);

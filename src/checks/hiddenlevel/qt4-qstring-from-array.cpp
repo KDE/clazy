@@ -25,6 +25,7 @@
 #include "Utils.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -86,7 +87,7 @@ static bool isInterestingMethodCall(CXXMethodDecl *method, string &methodName, b
     if (!method)
         return false;
 
-    if (method->getParent()->getNameAsString() != "QString" || method->getNumParams() != 1)
+    if (clazy::name(method->getParent()) != "QString" || method->getNumParams() != 1)
         return false;
 
     methodName = method->getNameAsString();

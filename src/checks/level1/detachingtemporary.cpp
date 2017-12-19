@@ -112,7 +112,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     }
 
     // Check if this is a QGlobalStatic
-    if (firstMethod && firstMethod->getParent()->getNameAsString() == "QGlobalStatic") {
+    if (firstMethod && clazy::name(firstMethod->getParent()) == "QGlobalStatic") {
         return;
     }
 
@@ -152,9 +152,8 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     if (isReadFunction || isWriteFunction) {
         bool returnTypeIsIterator = false;
         CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
-        if (returnRecord) {
-            returnTypeIsIterator = returnRecord->getNameAsString() == "iterator";
-        }
+        if (returnRecord)
+            returnTypeIsIterator = clazy::name(returnRecord) == "iterator";
 
         if (isWriteFunction && (detachingMethodReturnType->isVoidType() || returnTypeIsIterator)) {
             error = std::string("Modifying temporary container is pointless and it also detaches");

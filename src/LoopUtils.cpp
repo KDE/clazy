@@ -23,6 +23,7 @@
 */
 
 #include "LoopUtils.h"
+#include "StringUtils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/ParentMap.h>
@@ -94,7 +95,7 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
             return nullptr;
 
         CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-        if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
+        if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
             return nullptr;
 
 

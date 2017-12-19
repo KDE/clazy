@@ -56,12 +56,12 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
         return;
 
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
-    const std::string methodName = method->getNameAsString();
+    const StringRef methodName = clazy::name(method);
 
     std::string warningMsg;
     while (baseClass) {
         for (auto baseMethod : baseClass->methods()) {
-            if (baseMethod->getNameAsString() == methodName) {
+            if (clazy::name(baseMethod) == methodName) {
 
                 if (!clazy::parametersMatch(method, baseMethod)) // overloading is permitted.
                     continue;

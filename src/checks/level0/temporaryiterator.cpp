@@ -63,7 +63,7 @@ static bool isBlacklistedFunction(const string &name)
 
 void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 {
-    CXXMemberCallExpr *memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
+    auto memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
     if (!memberExpr)
         return;
 
@@ -90,7 +90,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         return;
 
     // Catch variant.toList().cbegin(), which is ok
-    CXXMemberCallExpr *chainedMemberCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
+    auto chainedMemberCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
     if (chainedMemberCall) {
         if (isBlacklistedFunction(clazy::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
             return;
@@ -101,7 +101,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     if (chainedOperatorCall) {
         FunctionDecl *func = chainedOperatorCall->getDirectCallee();
         if (func) {
-            CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(func);
+            auto method = dyn_cast<CXXMethodDecl>(func);
             if (method) {
                 if (isBlacklistedFunction(clazy::qualifiedMethodName(method)))
                     return;

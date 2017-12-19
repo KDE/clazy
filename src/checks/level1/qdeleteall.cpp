@@ -61,7 +61,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                 auto pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
-                    if (f->getNameAsString() == "qDeleteAll") {
+                    if (clazy::name(f) == "qDeleteAll") {
                         string msg = "Calling qDeleteAll with " + offendingClassName + "::" + funcName;
                         if (func->getNumParams() == 0) {
                             msg += ", call qDeleteAll on the container itself";

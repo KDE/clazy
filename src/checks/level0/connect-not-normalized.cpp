@@ -79,7 +79,7 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
         return false;
 
     FunctionDecl *func = callExpr->getDirectCallee();
-    if (!func || func->getNumParams() != 1 || func->getNameAsString() != "qFlagLocation")
+    if (!func || func->getNumParams() != 1 || clazy::name(func) != "qFlagLocation")
         return false;
 
     {
@@ -90,7 +90,7 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
             return false;
 
         FunctionDecl *parentFunc = parentCallExpr->getDirectCallee();
-        if (!parentFunc || parentFunc->getNameAsString() != "connect")
+        if (!parentFunc || clazy::name(parentFunc) != "connect")
             return false;
     }
 

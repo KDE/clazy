@@ -56,7 +56,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXRecordDecl *record = method->getParent();
-    if (!record || record->getNameAsString() != "QByteArray") {
+    if (!record || clazy::name(record) != "QByteArray") {
         return;
     }
 
@@ -68,10 +68,10 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
 
     FunctionDecl *func = qgetEnvCall->getDirectCallee();
 
-    if (!func || func->getNameAsString() != "qgetenv")
+    if (!func || clazy::name(func) != "qgetenv")
         return;
 
-    string methodname = method->getNameAsString();
+    StringRef methodname = clazy::name(method);
     string errorMsg;
     std::string replacement;
     if (methodname == "isEmpty") {

@@ -75,7 +75,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
             return;
         }
 
-        if (baseClass->getNameAsString() == "QCoreApplication")
+        if (clazy::name(baseClass) == "QCoreApplication")
             return;
 
         emitWarning(decl, record->getQualifiedNameAsString() +

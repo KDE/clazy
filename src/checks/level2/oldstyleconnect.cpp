@@ -182,7 +182,7 @@ void OldStyleConnect::VisitStmt(Stmt *s)
         return;
 
     if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent() &&
-        m_context->lastMethodDecl->getParent()->getNameAsString() == "QObject") // Don't warn of stuff inside qobject.h
+        clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") // Don't warn of stuff inside qobject.h
         return;
 
     FunctionDecl *function = call->getDirectCallee();

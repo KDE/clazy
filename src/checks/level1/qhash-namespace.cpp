@@ -45,7 +45,7 @@ QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
 void QHashNamespace::VisitDecl(clang::Decl *decl)
 {
     auto func = dyn_cast<FunctionDecl>(decl);
-    if (!func || isa<CXXMethodDecl>(func) || func->getNumParams() == 0 || func->getNameAsString() != "qHash")
+    if (!func || isa<CXXMethodDecl>(func) || func->getNumParams() == 0 || clazy::name(func) != "qHash")
         return;
 
     ParmVarDecl *firstArg = func->getParamDecl(0);

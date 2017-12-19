@@ -29,6 +29,7 @@
 
 #include "clazy_export.h"
 #include "clazy_stl.h"
+#include "StringUtils.h"
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/Stmt.h>
@@ -70,7 +71,7 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
 
     if (auto expr = llvm::dyn_cast<clang::MemberExpr>(stm)) {
         auto namedDecl = llvm::dyn_cast<clang::NamedDecl>(expr->getMemberDecl());
-        if (namedDecl && namedDecl->getNameAsString() == name)
+        if (namedDecl && clazy::name(namedDecl) == name)
             return true;
     }
 

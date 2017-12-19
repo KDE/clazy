@@ -540,11 +540,11 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     std::vector<FixItHint> fixits;
 
     if (isFixitEnabled(FromLatin1_FromUtf8Allocations)) {
-        const FromFunction fromFunction = functionDecl->getNameAsString() == "fromLatin1" ? FromLatin1 : FromUtf8;
+        const FromFunction fromFunction = clazy::name(functionDecl) == "fromLatin1" ? FromLatin1 : FromUtf8;
         fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr, fromFunction);
     }
 
-    if (functionDecl->getNameAsString() == "fromLatin1") {
+    if (clazy::name(functionDecl) == "fromLatin1") {
         emitWarning(stmt->getLocStart(), string("QString::fromLatin1() being passed a literal"), fixits);
     } else {
         emitWarning(stmt->getLocStart(), string("QString::fromUtf8() being passed a literal"), fixits);

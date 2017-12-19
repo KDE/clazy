@@ -64,7 +64,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-    if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
+    if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
         return;
 
     vector<DeclRefExpr*> declRefExprs;

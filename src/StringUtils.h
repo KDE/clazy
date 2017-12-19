@@ -27,7 +27,6 @@
 
 #include "clazy_export.h"
 #include "Utils.h"
-#include "HierarchyUtils.h"
 #include "clazy_stl.h"
 
 #include "clang/AST/PrettyPrinter.h"
@@ -172,24 +171,22 @@ inline std::string qualifiedMethodName(clang::CallExpr *call)
     return call ? qualifiedMethodName(call->getDirectCallee()) : std::string();
 }
 
-inline llvm::StringRef methodName(const clang::CXXMethodDecl *method)
+inline llvm::StringRef name(const clang::NamedDecl *decl)
 {
-    if (method->getDeclName().isIdentifier()) // Otherwise crashes
-        return method->getName();
+    if (decl->getDeclName().isIdentifier())
+        return decl->getName();
 
     return "";
 }
 
-inline void printParents(clang::ParentMap *map, clang::Stmt *s)
+inline llvm::StringRef name(const clang::CXXConstructorDecl *decl)
 {
-    int level = 0;
-    llvm::errs() << (s ? s->getStmtClassName() : nullptr) << "\n";
+    return name(decl->getParent());
+}
 
-    while (clang::Stmt *parent = clazy::parent(map, s)) {
-        ++level;
-        llvm::errs() << std::string(level, ' ') << parent->getStmtClassName() << "\n";
-        s = parent;
-    }
+inline llvm::StringRef name(const clang::CXXDestructorDecl *decl)
+{
+    return name(decl->getParent());
 }
 
 inline std::string accessString(clang::AccessSpecifier s)

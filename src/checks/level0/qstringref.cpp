@@ -45,7 +45,7 @@ StringRefCandidates::StringRefCandidates(const std::string &name, ClazyContext *
 
 static bool isInterestingFirstMethod(CXXMethodDecl *method)
 {
-    if (!method || method->getParent()->getNameAsString() != "QString")
+    if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
     static const vector<string> list = { "left", "mid", "right" };
@@ -54,7 +54,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
 
 static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOptions &lo)
 {
-    if (!method || method->getParent()->getNameAsString() != "QString")
+    if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
@@ -71,7 +71,7 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
 {
     static const vector<string> list = { "append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth", "operator+=" };
 
-    if (!method || method->getParent()->getNameAsString() != "QString")
+    if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
     return clazy::contains(list, method->getNameAsString());

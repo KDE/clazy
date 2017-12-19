@@ -487,7 +487,7 @@ bool Utils::isImplicitCastTo(Stmt *s, const string &className)
         return false;
 
     auto record = expr->getBestDynamicClassType();
-    return record && record->getNameAsString() == className;
+    return record && clazy::name(record) == className;
 }
 
 
@@ -548,7 +548,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
 
     vector<CXXMethodDecl *> methods;
     clazy::append_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
-        return m->getNameAsString() == methodName;
+        return clazy::name(m) == methodName;
     });
 
     // Also include the base classes
@@ -617,7 +617,7 @@ bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
     do {
         p = clazy::parent(map, p);
         CXXOperatorCallExpr *op = p ? dyn_cast<CXXOperatorCallExpr>(p) : nullptr;
-        if (op && op->getDirectCallee() && op->getDirectCallee()->getNameAsString() == "operator*") {
+        if (op && op->getOperator() == OO_Star) {
             return op;
         }
     } while (p);
@@ -699,7 +699,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
         const Type *t = qt.getTypePtrOrNull();
         if (t && t->getAsCXXRecordDecl()) {
             CXXRecordDecl *rec = t->getAsCXXRecordDecl();
-            if (rec->getNameAsString() == memberTypeName)
+            if (clazy::name(rec) == memberTypeName)
                 return true;
         }
     }

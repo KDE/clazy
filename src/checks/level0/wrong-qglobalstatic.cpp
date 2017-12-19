@@ -45,7 +45,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    if (!ctorDecl || ctorDecl->getNameAsString() != "QGlobalStatic")
+    if (!ctorDecl || clazy::name(ctorDecl) != "QGlobalStatic")
         return;
 
     SourceLocation loc = stmt->getLocStart();

@@ -24,6 +24,7 @@
 #include "StringUtils.h"
 #include "MacroUtils.h"
 #include "LoopUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
