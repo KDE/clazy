@@ -226,7 +226,7 @@ def clazy_command(qt, test, filename):
     if 'CLAZY_CXX' in os.environ: # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
     else:
-        clang = os.getenv('CLANG_CXX', 'clang')
+        clang = os.getenv('CLANGXX', 'clang')
         result = clang + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
 
     if test.qt4compat:
@@ -256,7 +256,7 @@ def dump_ast_command(test):
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
         return os.environ['CLAZY_CXX'] # so we can set clazy.bat instead
-    return os.getenv('CLANG_CXX', 'clang')
+    return os.getenv('CLANGXX', 'clang')
 
 #-------------------------------------------------------------------------------
 # Get clang version
