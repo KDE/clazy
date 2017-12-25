@@ -137,8 +137,8 @@ namespace Utils {
     CLAZYLIB_EXPORT bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
 
     CLAZYLIB_EXPORT bool isAssignOperator(clang::CXXOperatorCallExpr *op,
-                          const std::string &className,
-                          const std::string &argumentType, const clang::LangOptions &lo);
+                                          llvm::StringRef className,
+                                          llvm::StringRef argumentType, const clang::LangOptions &lo);
 
     CLAZYLIB_EXPORT bool isImplicitCastTo(clang::Stmt *, const std::string &);
 

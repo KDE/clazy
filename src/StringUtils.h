@@ -108,7 +108,7 @@ inline std::string classNameFor(clang::ParmVarDecl *param)
 }
 
 template <typename T>
-inline bool isOfClass(T *node, const std::string &className)
+inline bool isOfClass(T *node, llvm::StringRef className)
 {
     return node && classNameFor(node) == className;
 }
@@ -246,7 +246,7 @@ inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOption
     return func ? clazy::typeName(func->getReturnType(), lo, simpleName) : std::string();
 }
 
-inline bool hasArgumentOfType(clang::FunctionDecl *func, const std::string &typeName,
+inline bool hasArgumentOfType(clang::FunctionDecl *func, llvm::StringRef typeName,
                               const clang::LangOptions &lo, bool simpleName = true)
 {
     return clazy::any_of(Utils::functionParameters(func), [simpleName,lo,typeName](clang::ParmVarDecl *param) {

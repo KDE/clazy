@@ -455,26 +455,28 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
     return true;
 }
 
-bool Utils::isAssignOperator(CXXOperatorCallExpr *op, const std::string &className,
-                             const std::string &argumentType, const clang::LangOptions &lo)
+bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className,
+                             StringRef argumentType, const clang::LangOptions &lo)
 {
     if (!op)
         return false;
 
     FunctionDecl *functionDecl = op->getDirectCallee();
-    if (!functionDecl)
+    if (!functionDecl || functionDecl->param_size() != 1 )
         return false;
 
-    CXXMethodDecl *methodDecl = dyn_cast<clang::CXXMethodDecl>(functionDecl);
-    if (!className.empty() && !clazy::isOfClass(methodDecl, className))
-        return false;
-
-    if (functionDecl->getNameAsString() != "operator=" || functionDecl->param_size() != 1)
-        return false;
-
-    if (!argumentType.empty() && !clazy::hasArgumentOfType(functionDecl, argumentType, lo)) {
-        return false;
+    if (!className.empty()) {
+        auto methodDecl = dyn_cast<clang::CXXMethodDecl>(functionDecl);
+        if (!clazy::isOfClass(methodDecl, className))
+            return false;
     }
+
+    if (functionDecl->getNameAsString() != "operator=")
+        return false;
+
+    if (!argumentType.empty() && !clazy::hasArgumentOfType(functionDecl, argumentType, lo))
+        return false;
+
 
     return true;
 }
