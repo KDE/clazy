@@ -298,7 +298,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
     unsigned int param = -1;
     for (auto arg : expr->arguments()) {
         ++param;
-        DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(arg);
+        auto refExpr = dyn_cast<DeclRefExpr>(arg);
         if (!refExpr)  {
             if (clazy::hasChildren(arg)) {
                 Stmt* firstChild = *(arg->child_begin()); // Can be null (bug #362236)
@@ -398,7 +398,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
         if (!fDecl)
             continue;
 
-        CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
+        auto methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
         if (methodDecl && methodDecl->isCopyAssignmentOperator()) {
             ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
             if (valueDecl == varDecl)
@@ -484,7 +484,7 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className,
 
 bool Utils::isImplicitCastTo(Stmt *s, const string &className)
 {
-    ImplicitCastExpr *expr = dyn_cast<ImplicitCastExpr>(s);
+    auto expr = dyn_cast<ImplicitCastExpr>(s);
     if (!expr)
         return false;
 
@@ -498,7 +498,7 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
     if (!s)
         return false;
 
-    CXXOperatorCallExpr *oper = dyn_cast<CXXOperatorCallExpr>(s);
+    auto oper = dyn_cast<CXXOperatorCallExpr>(s);
     if (oper) {
         auto func = oper->getDirectCallee();
         if (func) {
@@ -523,7 +523,7 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &a
     if (!s)
         return false;
 
-    CXXConstructExpr *expr = dyn_cast<CXXConstructExpr>(s);
+    auto expr = dyn_cast<CXXConstructExpr>(s);
     if (expr && expr->getConstructor() && clazy::contains(anyOf, expr->getConstructor()->getNameAsString())) {
         return true;
     }
@@ -618,7 +618,7 @@ bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)
     Stmt *p = s;
     do {
         p = clazy::parent(map, p);
-        CXXOperatorCallExpr *op = p ? dyn_cast<CXXOperatorCallExpr>(p) : nullptr;
+        auto op = p ? dyn_cast<CXXOperatorCallExpr>(p) : nullptr;
         if (op && op->getOperator() == OO_Star) {
             return op;
         }
@@ -757,8 +757,7 @@ clang::Expr *Utils::isWriteOperator(Stmt *stm)
     if (!stm)
         return nullptr;
 
-    if (UnaryOperator *up = dyn_cast<UnaryOperator>(stm)) {
-
+    if (auto up = dyn_cast<UnaryOperator>(stm)) {
         auto opcode = up->getOpcode();
         if (opcode == clang::UO_AddrOf || opcode == clang::UO_Deref)
             return nullptr;
