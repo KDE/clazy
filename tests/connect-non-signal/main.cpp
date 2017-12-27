@@ -48,6 +48,6 @@ public:
 void test3()
 {
     auto *o = new MyDerivedObj();
-    QObject::connect(o, &MyDerivedObj::myVirtualSig, o, &MyObj::foo); // Warn, overriden but not a signal now
+    QObject::connect(o, &MyDerivedObj::myVirtualSig, o, &MyObj::foo); // Warn, overridden but not a signal now
     QObject::connect(o, &MyObj::myVirtualSig, o, &MyObj::foo); // OK
 }
