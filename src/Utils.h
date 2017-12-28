@@ -27,6 +27,7 @@
 
 #include "clazy_export.h"
 
+#include <clang/Basic/SourceManager.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
