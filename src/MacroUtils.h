@@ -39,7 +39,7 @@ class CompilerInstance;
 class SourceLocation;
 }
 
-namespace MacroUtils
+namespace clazy
 {
 
 /**
@@ -76,7 +76,7 @@ inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation lo
  */
 inline bool isInAnyMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::vector<std::string> &macroNames)
 {
-    return clazy_std::any_of(macroNames, [context, loc](const std::string &macroName) {
+    return clazy::any_of(macroNames, [context, loc](const std::string &macroName) {
         return isInMacro(context, loc, macroName);
     });
 }

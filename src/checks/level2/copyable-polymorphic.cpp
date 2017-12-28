@@ -21,7 +21,6 @@
 
 #include "copyable-polymorphic.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -54,6 +53,3 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 
     emitWarning(record->getLocStart(), "Polymorphic class is copyable. Potential slicing.");
 }
-
-
-REGISTER_CHECK("copyable-polymorphic", CopyablePolymorphic, CheckLevel2)

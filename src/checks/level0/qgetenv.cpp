@@ -24,7 +24,6 @@
 
 #include "qgetenv.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include <clang/AST/AST.h>
@@ -39,19 +38,16 @@ enum Fixit {
 };
 
 QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-
 }
-
-
 
 void QGetEnv::VisitStmt(clang::Stmt *stmt)
 {
     // Lets check only in function calls. Otherwise there are too many false positives, it's common
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!memberCall)
         return;
 
@@ -60,7 +56,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXRecordDecl *record = method->getParent();
-    if (!record || record->getNameAsString() != "QByteArray") {
+    if (!record || clazy::name(record) != "QByteArray") {
         return;
     }
 
@@ -72,10 +68,10 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
 
     FunctionDecl *func = qgetEnvCall->getDirectCallee();
 
-    if (!func || func->getNameAsString() != "qgetenv")
+    if (!func || clazy::name(func) != "qgetenv")
         return;
 
-    string methodname = method->getNameAsString();
+    StringRef methodname = clazy::name(method);
     string errorMsg;
     std::string replacement;
     if (methodname == "isEmpty") {
@@ -92,7 +88,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (!errorMsg.empty()) {
         std::vector<FixItHint> fixits;
         if (isFixitEnabled(FixitAll)) {
-            const bool success = FixItUtils::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
+            const bool success = clazy::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
             if (!success) {
                 queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
             }
@@ -102,8 +98,3 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         emitWarning(memberCall->getLocStart(), errorMsg.c_str(), fixits);
     }
 }
-
-
-const char *const s_checkName = "qgetenv";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, QGetEnv, CheckLevel0, RegisteredCheck::Option_Qt4Incompatible)
-REGISTER_FIXIT(FixitAll, "fix-qgetenv", s_checkName)

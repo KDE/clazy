@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015-2016 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,31 +22,37 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLAZY_MISSING_TYPE_INFO_H
-#define CLAZY_MISSING_TYPE_INFO_H
+#ifndef VIRTUALCALLSFROMCTOR_H
+#define VIRTUALCALLSFROMCTOR_H
 
 #include "checkbase.h"
 
+#include <vector>
+
 namespace clang {
-class ClassTemplateSpecializationDecl;
 class CXXRecordDecl;
+class Stmt;
+class SourceLocation;
 }
 
 /**
- * Suggests usage of Q_PRIMITIVE_TYPE or Q_MOVABLE_TYPE in cases where you're using QList<T> and sizeof(T) > sizeof(void*)
- * or using QVector<T>. Unless they already have a classification.
+ * Finds places where you're calling pure virtual functions inside a CTOR or DTOR.
+ * Compilers warn about this if there isn't any indirection, this plugin will catch cases like calling
+ * a non-pure virtual that calls a pure virtual.
  *
- * See README-missing-type-info for more info.
+ * This plugin only checks for pure virtuals, ignoring non-pure, which in theory you shouldn't call,
+ * but seems common practice.
  */
-class MissingTypeinfo : public CheckBase
+class VirtualCallCtor : public CheckBase
 {
 public:
-    MissingTypeinfo(const std::string &name, ClazyContext *context);
+    VirtualCallCtor(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
-    void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);
-    bool typeHasClassification(clang::QualType) const;
-    std::set<std::string> m_typeInfos;
+    clang::SourceLocation containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt,
+                                              std::vector<clang::Stmt*> &processedStmts);
 };
+
 
 #endif

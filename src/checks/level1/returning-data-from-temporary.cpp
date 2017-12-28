@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -33,7 +32,7 @@ using namespace std;
 
 
 ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -50,8 +49,8 @@ bool ReturningDataFromTemporary::handleReturn(ReturnStmt *ret)
     if (!ret)
         return false;
 
-    auto memberCall = HierarchyUtils::unpeal<CXXMemberCallExpr>(HierarchyUtils::getFirstChild(ret), HierarchyUtils::IgnoreExprWithCleanups |
-                                                                HierarchyUtils::IgnoreImplicitCasts);
+    auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups |
+                                                                clazy::IgnoreImplicitCasts);
     handleMemberCall(memberCall, false);
     return true;
 }
@@ -73,8 +72,8 @@ void ReturningDataFromTemporary::handleDeclStmt(DeclStmt *declStmt)
         if (!init)
             continue;
 
-        auto memberCall = HierarchyUtils::unpeal<CXXMemberCallExpr>(HierarchyUtils::getFirstChild(init), HierarchyUtils::IgnoreExprWithCleanups |
-                                                                    HierarchyUtils::IgnoreImplicitCasts);
+        auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups |
+                                                                    clazy::IgnoreImplicitCasts);
 
 
         handleMemberCall(memberCall, true);
@@ -104,7 +103,7 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
 
     while (t) {
         if (dyn_cast<ImplicitCastExpr>(t) || dyn_cast<MaterializeTemporaryExpr>(t)) {
-            t = HierarchyUtils::getFirstChild(t);
+            t = clazy::getFirstChild(t);
             continue;
         }
 
@@ -139,5 +138,3 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
 
     emitWarning(memberCall, "Returning data of temporary QByteArray");
 }
-
-REGISTER_CHECK("returning-data-from-temporary", ReturningDataFromTemporary, CheckLevel1)

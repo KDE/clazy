@@ -25,7 +25,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -34,7 +33,7 @@ using namespace std;
 
 
 PostEvent::PostEvent(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -44,7 +43,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
     if (!callexpr)
         return;
 
-    auto name = StringUtils::qualifiedMethodName(callexpr);
+    auto name = clazy::qualifiedMethodName(callexpr);
 
     const bool isPostEvent = name == "QCoreApplication::postEvent";
     const bool isSendEvent = name == "QCoreApplication::sendEvent";
@@ -55,7 +54,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
         return;
 
     Expr *event = callexpr->getNumArgs() > 1 ? callexpr->getArg(1) : nullptr;
-    if (!event || StringUtils::simpleTypeName(event->getType(), lo()) != "QEvent *")
+    if (!event || clazy::simpleTypeName(event->getType(), lo()) != "QEvent *")
         return;
 
     bool isStack = false;
@@ -72,5 +71,3 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
         // It's something else, like an rvalue, ignore it
     }
 }
-
-REGISTER_CHECK("post-event", PostEvent, CheckLevel1)

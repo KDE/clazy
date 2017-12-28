@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 
@@ -35,7 +34,7 @@ using namespace std;
 
 
 LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -49,13 +48,13 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
     // connect(const QObject *sender, PointerToMemberFunction signal, const QObject *context, Functor functor, Qt::ConnectionType type)
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
+    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
     Expr *typeArg = call->getArg(4); // The type
 
     vector<DeclRefExpr*> result;
-    HierarchyUtils::getChilds(typeArg, result);
+    clazy::getChilds(typeArg, result);
 
     bool found = false;
     for (auto declRef : result) {
@@ -78,7 +77,7 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
     if (tempParams->size() != 2)
         return;
 
-    CXXMethodDecl *method = QtUtils::pmfFromConnect(call, 3);
+    CXXMethodDecl *method = clazy::pmfFromConnect(call, 3);
     if (method) {
         // How else to detect if it's the right overload ? It's all templated stuff with the same
         // names for all the template arguments
@@ -87,5 +86,3 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(typeArg, "UniqueConnection is not supported with non-member functions");
 }
-
-REGISTER_CHECK("lambda-unique-connection", LambdaUniqueConnection, CheckLevel0)

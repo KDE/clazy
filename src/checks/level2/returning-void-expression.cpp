@@ -23,9 +23,9 @@
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
+#include "ClazyContext.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -34,21 +34,21 @@ using namespace std;
 
 
 ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
 void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 {
     auto ret = dyn_cast<ReturnStmt>(stmt);
-    if (!ret || !clazy_std::hasChildren(ret))
+    if (!ret || !clazy::hasChildren(ret))
         return;
 
     QualType qt = ret->getRetValue()->getType();
     if (qt.isNull() || !qt->isVoidType())
         return;
 
-    DeclContext *context = ContextUtils::contextForDecl(m_lastDecl);
+    DeclContext *context = clazy::contextForDecl(m_context->lastDecl);
     if (!context)
         return;
 
@@ -59,5 +59,3 @@ void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt, "Returning a void expression");
 }
-
-REGISTER_CHECK("returning-void-expression", ReturningVoidExpression, CheckLevel2)

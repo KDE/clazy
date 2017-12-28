@@ -26,7 +26,6 @@
 #include "Utils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
@@ -42,7 +41,7 @@ enum Aggressiveness
 };
 
 AssertWithSideEffects::AssertWithSideEffects(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
     , m_aggressiveness(NormalAggressiveness)
 {
 }
@@ -53,7 +52,7 @@ static bool functionIsOk(const string &name)
                                              "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-"
                                              "q_func", "d_func", "isEmptyHelper"
                                              "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
-    return clazy_std::contains(whitelist, name);
+    return clazy::contains(whitelist, name);
 }
 
 static bool methodIsOK(const string &name)
@@ -63,13 +62,13 @@ static bool methodIsOK(const string &name)
                                              "QByteArray::data", "QBasicMutex::isRecursive",
                                              "QLinkedList::begin", "QLinkedList::end", "QDataBuffer::first",
                                             "QOpenGLFunctions::glIsRenderbuffer"};
-    return clazy_std::contains(whitelist, name);
+    return clazy::contains(whitelist, name);
 }
 
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = stm->getLocStart();
-    if (!MacroUtils::isInMacro(&m_astContext, stmStart, "Q_ASSERT"))
+    if (!clazy::isInMacro(&m_astContext, stmStart, "Q_ASSERT"))
         return;
 
     bool warn = false;
@@ -79,8 +78,8 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
     if (memberCall) {
         if (checkfunctions) {
             CXXMethodDecl *method = memberCall->getMethodDecl();
-            if (!method->isConst() && !methodIsOK(StringUtils::qualifiedMethodName(method)) && !functionIsOk(method->getNameAsString())) {
-                // llvm::errs() << "reason1 " << StringUtils::qualifiedMethodName(method) << "\n";
+            if (!method->isConst() && !methodIsOK(clazy::qualifiedMethodName(method)) && !functionIsOk(method->getNameAsString())) {
+                // llvm::errs() << "reason1 " << clazy::qualifiedMethodName(method) << "\n";
                 warn = true;
             }
         }
@@ -128,5 +127,3 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
         emitWarning(stmStart, "Code inside Q_ASSERT has side-effects but won't be built in release mode");
     }
 }
-
-REGISTER_CHECK("assert-with-side-effects", AssertWithSideEffects, CheckLevel3)

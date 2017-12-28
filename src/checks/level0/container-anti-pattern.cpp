@@ -21,10 +21,10 @@
 
 #include "container-anti-pattern.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "MacroUtils.h"
 #include "LoopUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -34,7 +34,7 @@ using namespace std;
 
 
 ContainerAntiPattern::ContainerAntiPattern(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -48,7 +48,7 @@ static bool isInterestingCall(CallExpr *call)
                                             "QMap::keys", "QSet::toList", "QSet::values",
                                             "QHash::values", "QHash::keys" };
 
-    return clazy_std::contains(methods, StringUtils::qualifiedMethodName(func));
+    return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
 void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
@@ -80,7 +80,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
         return false;
 
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
-    const string secondMethodName = StringUtils::qualifiedMethodName(secondMethod);
+    const string secondMethodName = clazy::qualifiedMethodName(secondMethod);
     if (secondMethodName != "QSet::isEmpty")
         return false;
 
@@ -94,7 +94,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
         return false;
 
     CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (!firstMethod || StringUtils::qualifiedMethodName(firstMethod) != "QSet::intersect")
+    if (!firstMethod || clazy::qualifiedMethodName(firstMethod) != "QSet::intersect")
         return false;
 
     emitWarning(stmt->getLocStart(), "Use QSet::intersects() instead");
@@ -103,11 +103,11 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
 
 bool ContainerAntiPattern::handleLoop(Stmt *stm)
 {
-    Expr *containerExpr = LoopUtils::containerExprForLoop(stm);
+    Expr *containerExpr = clazy::containerExprForLoop(stm);
     if (!containerExpr)
         return false;
 
-    auto memberExpr = HierarchyUtils::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
+    auto memberExpr = clazy::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
     if (isInterestingCall(memberExpr)) {
         emitWarning(stm->getLocStart(), "allocating an unneeded temporary container");
         return true;
@@ -115,7 +115,3 @@ bool ContainerAntiPattern::handleLoop(Stmt *stm)
 
     return false;
 }
-
-
-
-REGISTER_CHECK("container-anti-pattern", ContainerAntiPattern, CheckLevel0)

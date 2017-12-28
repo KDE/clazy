@@ -23,7 +23,6 @@
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 
@@ -40,42 +39,42 @@ enum Fixit {
 };
 
 StringRefCandidates::StringRefCandidates(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
 static bool isInterestingFirstMethod(CXXMethodDecl *method)
 {
-    if (!method || method->getParent()->getNameAsString() != "QString")
+    if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
     static const vector<string> list = { "left", "mid", "right" };
-    return clazy_std::contains(list, method->getNameAsString());
+    return clazy::contains(list, method->getNameAsString());
 }
 
 static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOptions &lo)
 {
-    if (!method || method->getParent()->getNameAsString() != "QString")
+    if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
     static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
                                          "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
                                          "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" };
 
-    if (!clazy_std::contains(list, method->getNameAsString()))
+    if (!clazy::contains(list, method->getNameAsString()))
         return false;
 
-    return !StringUtils::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
+    return !clazy::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
 }
 
 static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
 {
     static const vector<string> list = { "append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth", "operator+=" };
 
-    if (!method || method->getParent()->getNameAsString() != "QString")
+    if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    return clazy_std::contains(list, method->getNameAsString());
+    return clazy::contains(list, method->getNameAsString());
 }
 
 void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
@@ -115,7 +114,7 @@ bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt* s) const
     if (!s)
         return false;
 
-    auto constr = HierarchyUtils::getFirstParentOfType<CXXConstructExpr>(m_context->parentMap, s);
+    auto constr = clazy::getFirstParentOfType<CXXConstructExpr>(m_context->parentMap, s);
     if (!constr || constr->getNumArgs() == 0)
         return false;
 
@@ -189,7 +188,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
             return false;
     }
 
-    CallExpr *innerCall = HierarchyUtils::getFirstChildOfType2<CallExpr>(temp);
+    CallExpr *innerCall = clazy::getFirstChildOfType2<CallExpr>(temp);
     auto innerMemberCall = innerCall ? dyn_cast<CXXMemberCallExpr>(innerCall) : nullptr;
     if (!innerMemberCall)
         return false;
@@ -209,7 +208,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
 
 std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
-    MemberExpr *memberExpr = HierarchyUtils::getFirstChildOfType<MemberExpr>(call);
+    MemberExpr *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
         queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 1");
         return {};
@@ -223,11 +222,7 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
     }
 
     std::vector<FixItHint> fixits;
-    fixits.push_back(FixItUtils::createInsertion(insertionLoc, "Ref"));
+    fixits.push_back(clazy::createInsertion(insertionLoc, "Ref"));
     return fixits;
 
 }
-
-const char *const s_checkName = "qstring-ref";
-REGISTER_CHECK(s_checkName, StringRefCandidates, CheckLevel0)
-REGISTER_FIXIT(FixitUseQStringRef, "fix-missing-qstringref", s_checkName)

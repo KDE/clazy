@@ -22,12 +22,11 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "nonpodstatic.h"
+#include "non-pod-global-static.h"
 #include "Utils.h"
 #include "StringUtils.h"
 #include "MacroUtils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -40,18 +39,18 @@ static bool shouldIgnoreType(const std::string &name)
 {
     // Q_GLOBAL_STATIC and such
     static vector<string> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage"};
-    return clazy_std::contains(blacklist, name);
+    return clazy::contains(blacklist, name);
 }
 
-NonPodStatic::NonPodStatic(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "main.cpp", "qrc_", "qdbusxml2cpp" };
 }
 
-void NonPodStatic::VisitStmt(clang::Stmt *stm)
+void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
 {
-    VarDecl *varDecl = m_lastDecl ? dyn_cast<VarDecl>(m_lastDecl) : nullptr;
+    VarDecl *varDecl = m_context->lastDecl ? dyn_cast<VarDecl>(m_context->lastDecl) : nullptr;
     if (!varDecl || varDecl->isConstexpr() || varDecl->isExternallyVisible() || !varDecl->isFileVarDecl())
         return;
 
@@ -64,7 +63,7 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
 
     const SourceLocation declStart = varDecl->getLocStart();
     auto macroName = Lexer::getImmediateMacroName(declStart, sm(), lo());
-    if (clazy_std::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
+    if (clazy::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
         return;
 
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
@@ -88,7 +87,7 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (m_context->isQtDeveloper() && QtUtils::isBootstrapping(m_preprocessorOpts))
+    if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->ci.getPreprocessorOpts()))
         return;
 
     const string className = recordDecl->getName();
@@ -98,5 +97,3 @@ void NonPodStatic::VisitStmt(clang::Stmt *stm)
     }
 
 }
-
-REGISTER_CHECK("non-pod-global-static", NonPodStatic, CheckLevel1)

@@ -26,7 +26,7 @@
 #include "Utils.h"
 #include "FixItUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -59,13 +59,19 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
                                               "QVariantComparisonHelper",
                                               "QHashDummyValue", "QCharRef", "QString::Null"
                                              };
-    return clazy_std::contains(ignoreList, record->getQualifiedNameAsString());
+    return clazy::contains(ignoreList, record->getQualifiedNameAsString());
+}
+
+static bool shouldIgnoreOperator(FunctionDecl *function)
+{
+    // Too many warnings in operator<<
+    static const vector<string> ignoreList = {"operator<<"};
+
+    return clazy::contains(ignoreList, function->getNameAsString());
 }
 
 static bool shouldIgnoreFunction(clang::FunctionDecl *function)
 {
-    // Too many warnings in operator<<
-    static const vector<string> ignoreList = {"operator<<"};
     static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
                                                        "QMenu::exec", // Fixed in Qt6
                                                        "QTextFrame::iterator", // Fixed in Qt6
@@ -77,14 +83,12 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
                                                        "QSslCertificate::verify", // Fixed in Qt6
                                                        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
                                                       };
-    if (clazy_std::contains(ignoreList, function->getNameAsString()))
-        return true;
 
-    return clazy_std::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
+    return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
 FunctionArgsByRef::FunctionArgsByRef(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -96,8 +100,10 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
 
 void FunctionArgsByRef::processFunction(FunctionDecl *func)
 {
-    if (!func || shouldIgnoreFunction(func) ||
-        !func->isThisDeclarationADefinition() || func->isDeleted())
+    if (!func || !func->isThisDeclarationADefinition() || func->isDeleted() || shouldIgnoreOperator(func))
+        return;
+
+    if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
         return;
 
     Stmt *body = func->getBody();
@@ -114,7 +120,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
             continue;
 
         TypeUtils::QualTypeClassification classif;
-        bool success = TypeUtils::classifyQualType(&m_astContext, param, classif, body);
+        bool success = TypeUtils::classifyQualType(m_context, param, classif, body);
         if (!success)
             continue;
 
@@ -155,7 +161,3 @@ clang::FixItHint FunctionArgsByRef::fixit(const ParmVarDecl *, TypeUtils::QualTy
     FixItHint fixit;
     return fixit;
 }
-
-const char *const s_checkName = "function-args-by-ref";
-REGISTER_CHECK(s_checkName, FunctionArgsByRef, CheckLevel2)
-// REGISTER_FIXIT(FixitAll, "fix-func-args", s_checkName)

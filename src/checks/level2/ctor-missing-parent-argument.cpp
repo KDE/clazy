@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -55,7 +54,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     auto record = dyn_cast<CXXRecordDecl>(decl);
     bool ok = false;
 
-    if (!QtUtils::isQObject(record))
+    if (!clazy::isQObject(record))
         return;
 
     const bool hasCtors = record->ctor_begin() != record->ctor_end();
@@ -64,19 +63,19 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
 
     const string parentType = expectedParentTypeFor(record);
     int numCtors = 0;
-    const bool hasQObjectParam = QtUtils::recordHasCtorWithParam(record, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
+    const bool hasQObjectParam = clazy::recordHasCtorWithParam(record, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
     if (!ok)
         return;
 
     if (numCtors > 0 && !hasQObjectParam) {
-        clang::CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
-        const bool baseHasQObjectParam = QtUtils::recordHasCtorWithParam(baseClass, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
+        clang::CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
+        const bool baseHasQObjectParam = clazy::recordHasCtorWithParam(baseClass, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
         if (ok && !baseHasQObjectParam && sm().isInSystemHeader(baseClass->getLocStart())) {
             // If the base class ctors don't accept QObject, and it's declared in a system header don't warn
             return;
         }
 
-        if (baseClass->getNameAsString() == "QCoreApplication")
+        if (clazy::name(baseClass) == "QCoreApplication")
             return;
 
         emitWarning(decl, record->getQualifiedNameAsString() +
@@ -84,6 +83,3 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
                     parentType + string(" parent argument in CTOR"));
     }
 }
-
-
-REGISTER_CHECK("ctor-missing-parent-argument", CtorMissingParentArgument, CheckLevel2)

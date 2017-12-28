@@ -42,7 +42,7 @@ class CXXMethodDecl;
 class ParentMap;
 }
 
-namespace ContextUtils
+namespace clazy
 {
 
 /**
@@ -135,7 +135,7 @@ T* firstContextOfType(clang::DeclContext *context)
     if (llvm::isa<T>(context))
         return llvm::cast<T>(context);
 
-    return ContextUtils::firstContextOfType<T>(context->getParent());
+    return clazy::firstContextOfType<T>(context->getParent());
 }
 
 

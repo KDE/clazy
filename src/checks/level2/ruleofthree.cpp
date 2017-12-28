@@ -22,7 +22,6 @@
 #include "ruleofthree.h"
 #include "Utils.h"
 #include "MacroUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 
@@ -52,7 +51,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const SourceLocation recordStart = record->getLocStart();
     if (recordStart.isMacroID()) {
-        if (MacroUtils::isInMacro(&m_astContext, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
+        if (clazy::isInMacro(&m_astContext, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
             return;
     }
 
@@ -121,7 +120,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         return; // These need boiler-plate copy ctor and dtor
 
     const string filename = sm().getFilename(recordStart);
-    if (clazy_std::endsWith(className, "Private") && clazy_std::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
+    if (clazy::endsWith(className, "Private") && clazy::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 
     string msg = classQualifiedName + " has ";
@@ -150,7 +149,5 @@ bool RuleOfThree::shouldIgnoreType(const std::string &className) const
     static const vector<string> types = { "QTransform" // Fixed for Qt 6
                                         };
 
-    return clazy_std::contains(types, className);
+    return clazy::contains(types, className);
 }
-
-REGISTER_CHECK("rule-of-three", RuleOfThree, CheckLevel2)

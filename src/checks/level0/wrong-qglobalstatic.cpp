@@ -22,7 +22,6 @@
 #include "wrong-qglobalstatic.h"
 #include "Utils.h"
 #include "TemplateUtils.h"
-#include "checkmanager.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
 #include "Utils.h"
@@ -46,15 +45,15 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    if (!ctorDecl || ctorDecl->getNameAsString() != "QGlobalStatic")
+    if (!ctorDecl || clazy::name(ctorDecl) != "QGlobalStatic")
         return;
 
     SourceLocation loc = stmt->getLocStart();
-    if (MacroUtils::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
+    if (clazy::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
         return;
 
     CXXRecordDecl *record = ctorDecl->getParent();
-    vector<QualType> typeList = TemplateUtils::getTemplateArgumentsTypes(record);
+    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(record);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
     if (!t)
         return;
@@ -71,5 +70,3 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         emitWarning(loc, error.c_str());
     }
 }
-
-REGISTER_CHECK("wrong-qglobalstatic", WrongQGlobalStatic, CheckLevel0)

@@ -16,6 +16,7 @@ set(CLAZY_LIB_SRC
 
 set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qcolor-from-literal.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-by-name.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-not-normalized.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/container-anti-pattern.cpp
@@ -45,8 +46,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/foreach.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/inefficient-qlist-soft.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/install-event-filter.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/ctor-missing-parent-argument.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/nonpodstatic.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/non-pod-global-static.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qdeleteall.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qproperty-without-notify.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qstring-left.cpp
@@ -58,7 +58,9 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/incorrect-emit.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/overridden-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qhash-namespace.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/skipped-base-method.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/virtual-signal.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ctor-missing-parent-argument.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/base-class-event.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/container-inside-loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-ref.cpp
@@ -66,16 +68,16 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/globalconstcharpointer.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/implicitcasts.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-qobject-macro.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-type-info.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-typeinfo.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/qstring-allocations.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/reservecandidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ruleofthree.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/virtualcallsfromctor.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/virtual-call-ctor.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/returning-void-expression.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/copyable-polymorphic.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assertwithsideeffects.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detachingmember.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/dynamic_cast.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/bogus-dynamic-cast.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/thread-with-slots.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/inefficientqlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/isempty-vs-count.cpp
@@ -83,7 +85,6 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/qt4-qstring-from-array.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/detachingbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/inefficientqlistbase.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/requiredresults.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
 )
 

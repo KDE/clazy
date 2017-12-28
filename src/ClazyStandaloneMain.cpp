@@ -56,6 +56,9 @@ static cl::opt<bool> s_qtDeveloper("qt-developer", cl::desc("For running clazy o
 static cl::opt<bool> s_visitImplicitCode("visit-implicit-code", cl::desc("For visiting implicit code like compiler generated constructors. None of the built-in checks benefit from this, but can be useful for custom checks"),
                               cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<bool> s_ignoreIncludedFiles("ignore-included-files", cl::desc("Only emit warnings for the current file being compiled and ignore any includes. Useful for performance reasons."),
+                              cl::init(false), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
@@ -84,6 +87,9 @@ public:
 
         if (s_visitImplicitCode.getValue())
             options |= ClazyContext::ClazyOption_VisitImplicitCode;
+
+        if (s_ignoreIncludedFiles.getValue())
+            options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
         return new ClazyStandaloneASTAction(s_checks.getValue(), options);
     }

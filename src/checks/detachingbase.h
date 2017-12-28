@@ -41,7 +41,7 @@ class CXXMethodDecl;
 class DetachingBase : public CheckBase
 {
 public:
-    explicit DetachingBase(const std::string &name, ClazyContext *context);
+    explicit DetachingBase(const std::string &name, ClazyContext *context, Options = Option_None);
 protected:
     bool isDetachingMethod(clang::CXXMethodDecl *) const;
 };

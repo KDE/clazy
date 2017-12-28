@@ -32,7 +32,7 @@ namespace clang {
     class Decl;
 }
 
-namespace TemplateUtils
+namespace clazy
 {
     /**
      * Returns a list of QualTypes for the template arguments.

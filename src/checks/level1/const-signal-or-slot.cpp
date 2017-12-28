@@ -24,10 +24,8 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-
 #include <clang/AST/AST.h>
 
 using namespace clang;
@@ -35,7 +33,7 @@ using namespace std;
 
 
 ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enableAccessSpecifierManager();
 }
@@ -48,10 +46,10 @@ void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
+    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *slot =  QtUtils::receiverMethodForConnect(call);
+    CXXMethodDecl *slot =  clazy::receiverMethodForConnect(call);
     if (!slot || !slot->isConst() || slot->getReturnType()->isVoidType()) // const and returning void must do something, so not a getter
         return;
 
@@ -91,5 +89,3 @@ void ConstSignalOrSlot::VisitDecl(Decl *decl)
         emitWarning(decl, "signal " + method->getQualifiedNameAsString() + " shouldn't be const");
     }
 }
-
-REGISTER_CHECK("const-signal-or-slot", ConstSignalOrSlot, CheckLevel1)

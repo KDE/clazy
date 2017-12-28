@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -33,7 +32,7 @@ using namespace std;
 
 
 QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     enablePreProcessorCallbacks();
 }
@@ -62,7 +61,7 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
     string text = Lexer::getSourceText(crange, sm(), lo());
-    vector<string> split = clazy_std::splitString(text, ' ');
+    vector<string> split = clazy::splitString(text, ' ');
 
     bool found_read = false;
     bool found_constant = false;
@@ -90,5 +89,3 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
 
     emitWarning(range.getBegin(), "Q_PROPERTY should have either NOTIFY or CONSTANT");
 }
-
-REGISTER_CHECK("qproperty-without-notify", QPropertyWithoutNotify, CheckLevel1)

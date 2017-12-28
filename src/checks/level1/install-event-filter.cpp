@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -33,10 +32,9 @@ using namespace std;
 
 
 InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
-
 
 void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
 {
@@ -52,7 +50,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     if (!expr)
         return;
 
-    if (!isa<CXXThisExpr>(HierarchyUtils::getFirstChildAtDepth(expr, 1)))
+    if (!isa<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1)))
         return;
 
     Expr *arg1 = memberCallExpr->getArg(0);
@@ -68,5 +66,3 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt, "'this' should usually be the filter object, not the monitored one.");
 }
-
-REGISTER_CHECK("install-event-filter", InstallEventFilter, CheckLevel1)

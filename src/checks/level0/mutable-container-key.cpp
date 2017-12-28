@@ -25,7 +25,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -36,11 +35,11 @@ using namespace std;
 static bool isInterestingContainer(const string &name)
 {
     static const vector<string> containers = { "QMap", "QHash" };
-    return clazy_std::contains(containers, name);
+    return clazy::contains(containers, name);
 }
 
 MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -60,13 +59,10 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
         return;
 
     auto record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
-    if (!StringUtils::classIsOneOf(record, {"QPointer", "QWeakPointer",
+    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer",
                                             "QPersistentModelIndex", "weak_ptr"}))
         return;
 
 
     emitWarning(decl->getLocStart(), "Associative container key might be modified externally");
 }
-
-
-REGISTER_CHECK("mutable-container-key", MutableContainerKey, CheckLevel0)

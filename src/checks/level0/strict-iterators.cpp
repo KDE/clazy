@@ -26,7 +26,6 @@
 #include "QtUtils.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -37,7 +36,7 @@ using namespace std;
 // QVector::iterator isn't even a class, it's a typedef.
 
 StrictIterators::StrictIterators(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -56,25 +55,25 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (!implicitCast)
         return false;
 
-    const string nameTo = StringUtils::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
+    const string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
 
     const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = TypeUtils::parentRecordForTypedef(typeTo);
-    if (recordTo && !QtUtils::isQtCOWIterableClass(recordTo))
+    if (recordTo && !clazy::isQtCOWIterableClass(recordTo))
         return false;
 
     recordTo = TypeUtils::typeAsRecord(typeTo);
-    if (recordTo && !QtUtils::isQtCOWIterator(recordTo))
+    if (recordTo && !clazy::isQtCOWIterator(recordTo))
         return false;
 
     assert(implicitCast->getSubExpr());
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = TypeUtils::parentRecordForTypedef(typeFrom);
-    if (recordFrom && !QtUtils::isQtCOWIterableClass(recordFrom))
+    if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom))
         return false;
 
     // const_iterator might be a typedef to pointer, like const T *, instead of a class, so just check for const qualification in that case
-    if (!(TypeUtils::pointeeQualType(typeTo).isConstQualified() || clazy_std::endsWith(nameTo, "const_iterator")))
+    if (!(TypeUtils::pointeeQualType(typeTo).isConstQualified() || clazy::endsWith(nameTo, "const_iterator")))
         return false;
 
     if (implicitCast->getCastKind() == CK_ConstructorConversion) {
@@ -83,16 +82,16 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     }
 
     // TODO: some util function to get the name of a nested class
-    const  bool nameToIsIterator = nameTo == "iterator" || clazy_std::endsWith(nameTo, "::iterator");
+    const  bool nameToIsIterator = nameTo == "iterator" || clazy::endsWith(nameTo, "::iterator");
     if (nameToIsIterator)
         return false;
 
-    const string nameFrom = StringUtils::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
-    const  bool nameFromIsIterator = nameFrom == "iterator" || clazy_std::endsWith(nameFrom, "::iterator");
+    const string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
+    const  bool nameFromIsIterator = nameFrom == "iterator" || clazy::endsWith(nameFrom, "::iterator");
     if (!nameFromIsIterator)
         return false;
 
-    if (recordTo && clazy_std::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
+    if (recordTo && clazy::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
         string filename = m_sm.getFilename(implicitCast->getLocStart());
         if (filename == "lalr.cpp") // Lots of false positives here, because of const_iterator -> iterator typedefs
             return false;
@@ -118,19 +117,17 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
         return false;
 
     CXXRecordDecl *record = method->getParent();
-    if (!QtUtils::isQtCOWIterator(record))
+    if (!clazy::isQtCOWIterator(record))
         return false;
 
-    if (record->getNameAsString() != "iterator")
+    if (record->getName() != "iterator")
         return false;
 
     ParmVarDecl *p = method->getParamDecl(0);
     CXXRecordDecl *paramClass = p ? TypeUtils::typeAsRecord(TypeUtils::pointeeQualType(p->getType())) : nullptr;
-    if (!paramClass || paramClass->getNameAsString() != "const_iterator")
+    if (!paramClass || paramClass->getName() != "const_iterator")
         return false;
 
     emitWarning(op, "Mixing iterators with const_iterators");
     return true;
 }
-
-REGISTER_CHECK("strict-iterators", StrictIterators, CheckLevel0)

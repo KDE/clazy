@@ -24,7 +24,6 @@
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <vector>
@@ -33,39 +32,40 @@ using namespace clang;
 using namespace std;
 
 QDeleteAll::QDeleteAll(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-}
-
-static bool isInterestingMethod(const string &name)
-{
-    static const vector<string> names = { "values", "keys" };
-    return clazy_std::contains(names, name);
 }
 
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values/keys
-    CXXMemberCallExpr *offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
     FunctionDecl *func = offendingCall ? offendingCall->getDirectCallee() : nullptr;
     if (!func)
         return;
 
     const string funcName = func->getNameAsString();
-    if (isInterestingMethod(funcName)) {
+    const bool isValues = funcName == "values";
+    const bool isKeys = isValues ? false : funcName == "keys";
+
+    if (isValues || isKeys) {
         const std::string offendingClassName = offendingCall->getMethodDecl()->getParent()->getNameAsString();
-        if (QtUtils::isQtAssociativeContainer(offendingClassName)) {
+        if (clazy::isQtAssociativeContainer(offendingClassName)) {
             // Once found see if the first parent call is qDeleteAll
             int i = 1;
-            Stmt *p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
+            Stmt *p = clazy::parent(m_context->parentMap, stmt, i);
             while (p) {
-                CallExpr *pc = dyn_cast<CallExpr>(p);
+                auto pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
-                    if (f->getNameAsString() == "qDeleteAll") {
-                        string msg = "Calling qDeleteAll with " + offendingClassName + "::" + funcName;
+                    if (clazy::name(f) == "qDeleteAll") {
+                        string msg = "qDeleteAll() is being used on an unnecessary temporary container created by " + offendingClassName + "::" + funcName + "()";
                         if (func->getNumParams() == 0) {
-                            msg += ", call qDeleteAll on the container itself";
+                            if (isValues) {
+                                msg += ", use qDeleteAll(mycontainer) instead";
+                            } else {
+                                msg += ", use qDeleteAll(mycontainer.keyBegin(), mycontainer.keyEnd()) instead";
+                            }
                         }
 
                         emitWarning(p->getLocStart(), msg);
@@ -73,10 +73,8 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                     break;
                 }
                 ++i;
-                p = HierarchyUtils::parent(m_context->parentMap, stmt, i);
+                p = clazy::parent(m_context->parentMap, stmt, i);
             }
         }
     }
 }
-
-REGISTER_CHECK("qdeleteall", QDeleteAll, CheckLevel1)

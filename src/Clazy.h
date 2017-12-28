@@ -46,12 +46,6 @@ namespace clang {
 class ClazyASTAction : public clang::PluginASTAction
 {
 public:
-
-    enum HelpMode {
-        HelpMode_Normal = 0,
-        HelpMode_AnchorHeader = 1
-    };
-
     ClazyASTAction();
 
 protected:
@@ -60,7 +54,7 @@ protected:
     /// @note This function is reentrant
     bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args_) override;
 
-    void PrintHelp(llvm::raw_ostream &ros, HelpMode = HelpMode_Normal) const;
+    void PrintHelp(llvm::raw_ostream &ros) const;
     void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks) const;
 private:
     void printRequestedChecks() const;
@@ -99,7 +93,7 @@ public:
     bool VisitDecl(clang::Decl *decl);
     bool VisitStmt(clang::Stmt *stm);
     void HandleTranslationUnit(clang::ASTContext &ctx) override;
-    void addCheck(CheckBase *check);
+    void addCheck(const std::pair<CheckBase *, RegisteredCheck> &check);
 
     ClazyContext *context() const { return m_context; }
 
@@ -107,7 +101,9 @@ private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
     clang::Stmt *lastStm = nullptr;
     ClazyContext *const m_context;
-    CheckBase::List m_createdChecks;
+    //CheckBase::List m_createdChecks;
+    CheckBase::List m_checksToVisitStmts;
+    CheckBase::List m_checksToVisitDecls;
     clang::ast_matchers::MatchFinder m_matchFinder;
 };
 

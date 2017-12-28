@@ -24,7 +24,6 @@
 
 #include "qmap-with-pointer-key.h"
 #include "Utils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -54,5 +53,3 @@ void QMapWithPointerKey::VisitDecl(clang::Decl *decl)
         emitWarning(decl->getLocStart(), "Use QHash<K,T> instead of QMap<K,T> when K is a pointer");
     }
 }
-
-REGISTER_CHECK("qmap-with-pointer-key", QMapWithPointerKey, CheckLevel0)

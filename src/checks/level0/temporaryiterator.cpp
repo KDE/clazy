@@ -23,7 +23,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
+
 #include "ClazyContext.h"
 #include "temporaryiterator.h"
 #include "Utils.h"
@@ -58,12 +58,12 @@ static bool isBlacklistedFunction(const string &name)
 {
     // These are fine
     static const vector<string> list = {"QVariant::toList", "QHash::operator[]", "QMap::operator[]", "QSet::operator[]"};
-    return clazy_std::contains(list, name);
+    return clazy::contains(list, name);
 }
 
 void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 {
-    CXXMemberCallExpr *memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
+    auto memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
     if (!memberExpr)
         return;
 
@@ -81,29 +81,29 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     // Check if it's a method returning an iterator
     const std::string functionName = methodDecl->getNameAsString();
     const auto &allowedFunctions = it->second;
-    if (!clazy_std::contains(allowedFunctions, functionName))
+    if (!clazy::contains(allowedFunctions, functionName))
         return;
 
 
     // Catch getList().cbegin().value(), which is ok
-    if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, m_context->parentMap->getParent(memberExpr)))
+    if (clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, m_context->parentMap->getParent(memberExpr)))
         return;
 
     // Catch variant.toList().cbegin(), which is ok
-    CXXMemberCallExpr *chainedMemberCall = HierarchyUtils::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
+    auto chainedMemberCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
     if (chainedMemberCall) {
-        if (isBlacklistedFunction(StringUtils::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
+        if (isBlacklistedFunction(clazy::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
             return;
     }
 
     // catch map[foo].cbegin()
-    CXXOperatorCallExpr *chainedOperatorCall = HierarchyUtils::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
+    CXXOperatorCallExpr *chainedOperatorCall = clazy::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
     if (chainedOperatorCall) {
         FunctionDecl *func = chainedOperatorCall->getDirectCallee();
         if (func) {
-            CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(func);
+            auto method = dyn_cast<CXXMethodDecl>(func);
             if (method) {
-                if (isBlacklistedFunction(StringUtils::qualifiedMethodName(method)))
+                if (isBlacklistedFunction(clazy::qualifiedMethodName(method)))
                     return;
             }
         }
@@ -128,24 +128,22 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
             if (impl->getCastKind() == CK_LValueToRValue)
                 return;
 
-            Stmt *firstChild = HierarchyUtils::getFirstChild(impl);
+            Stmt *firstChild = clazy::getFirstChild(impl);
             if (firstChild && isa<ImplicitCastExpr>(firstChild) && dyn_cast<ImplicitCastExpr>(firstChild)->getCastKind() == CK_LValueToRValue)
                 return;
         }
     }
 
-    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(HierarchyUtils::getFirstChildAtDepth(expr, 2));
+    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(clazy::getFirstChildAtDepth(expr, 2));
     if (possibleCtorCall)
         return;
 
-    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(HierarchyUtils::getFirstChildAtDepth(expr, 1));
+    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1));
     if (possibleThisCall)
         return;
 
     // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
 
-    std::string error = std::string("Don't call ") + StringUtils::qualifiedMethodName(methodDecl) + std::string("() on temporary");
+    std::string error = std::string("Don't call ") + clazy::qualifiedMethodName(methodDecl) + std::string("() on temporary");
     emitWarning(stm->getLocStart(), error.c_str());
 }
-
-REGISTER_CHECK("temporary-iterator", TemporaryIterator, CheckLevel0)

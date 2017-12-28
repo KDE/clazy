@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
@@ -33,12 +32,12 @@ using namespace clang;
 using namespace std;
 
 
-ChildEvent_qobject_cast::ChildEvent_qobject_cast(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+ChildEventQObjectCast::ChildEventQObjectCast(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
-void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
+void ChildEventQObjectCast::VisitDecl(Decl *decl)
 {
     auto childEventMethod = dyn_cast<CXXMethodDecl>(decl);
     if (!childEventMethod)
@@ -49,22 +48,22 @@ void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
         return;
 
     auto methodName = childEventMethod->getNameAsString();
-    if (!clazy_std::equalsAny(methodName, {"event", "childEvent", "eventFilter"}))
+    if (!clazy::equalsAny(methodName, {"event", "childEvent", "eventFilter"}))
         return;
 
-    if (!QtUtils::isQObject(childEventMethod->getParent()))
+    if (!clazy::isQObject(childEventMethod->getParent()))
         return;
 
 
-    auto callExprs = HierarchyUtils::getStatements<CallExpr>(body, &(sm()));
+    auto callExprs = clazy::getStatements<CallExpr>(body, &(sm()));
     for (auto callExpr : callExprs) {
 
         if (callExpr->getNumArgs() != 1)
             continue;
 
         FunctionDecl *fdecl = callExpr->getDirectCallee();
-        if (fdecl && fdecl->getNameAsString() == "qobject_cast")  {
-            CXXMemberCallExpr *childCall = dyn_cast<CXXMemberCallExpr>(callExpr->getArg(0));
+        if (fdecl && clazy::name(fdecl) == "qobject_cast")  {
+            auto childCall = dyn_cast<CXXMemberCallExpr>(callExpr->getArg(0));
             // The call to event->child()
             if (!childCall)
                 continue;
@@ -77,7 +76,3 @@ void ChildEvent_qobject_cast::VisitDecl(Decl *decl)
         }
     }
 }
-
-
-
-REGISTER_CHECK("child-event-qobject-cast", ChildEvent_qobject_cast, CheckLevel1)

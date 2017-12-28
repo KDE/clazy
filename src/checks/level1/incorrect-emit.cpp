@@ -20,14 +20,12 @@
 */
 
 #include "incorrect-emit.h"
-
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
@@ -38,7 +36,7 @@ using namespace clang;
 using namespace std;
 
 IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enableAccessSpecifierManager();
     enablePreProcessorCallbacks();
@@ -67,10 +65,10 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (shouldIgnoreFile(stmt->getLocStart()))
         return;
 
-    if (Stmt *parent = HierarchyUtils::parent(m_context->parentMap, methodCall)) {
+    if (Stmt *parent = clazy::parent(m_context->parentMap, methodCall)) {
         // Check if we're inside a chained call, such as: emit d_func()->mySignal()
         // We're not interested in the d_func() call, so skip it
-        if (HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, parent))
+        if (clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, parent))
             return;
     }
 
@@ -93,10 +91,10 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
 
 void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
 {
-    if (!m_lastMethodDecl)
+    if (!m_context->lastMethodDecl)
         return;
 
-    auto ctorDecl = dyn_cast<CXXConstructorDecl>(m_lastMethodDecl);
+    auto ctorDecl = dyn_cast<CXXConstructorDecl>(m_context->lastMethodDecl);
     if (!ctorDecl)
         return;
 
@@ -104,7 +102,7 @@ void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
     if (!implicitArg || !isa<CXXThisExpr>(implicitArg)) // emit other->sig() is ok
         return;
 
-    if (HierarchyUtils::getFirstParentOfType<LambdaExpr>(m_context->parentMap, callExpr) != nullptr)
+    if (clazy::getFirstParentOfType<LambdaExpr>(m_context->parentMap, callExpr) != nullptr)
         return; // Emit is inside a lambda, it's fine
 
     emitWarning(callExpr->getLocStart(), "Emitting inside constructor has no effect");
@@ -134,5 +132,3 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
 
     return false;
 }
-
-REGISTER_CHECK("incorrect-emit", IncorrectEmit, CheckLevel1)

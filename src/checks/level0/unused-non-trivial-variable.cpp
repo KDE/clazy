@@ -21,7 +21,7 @@
 
 #include "unused-non-trivial-variable.h"
 #include "Utils.h"
-#include "checkmanager.h"
+
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
@@ -38,7 +38,7 @@ using namespace std;
 
 
 UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -70,11 +70,11 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
                                                     "QLine", "QLineF", "QRect", "QRectF"
                                                   };
 
-    if (QtUtils::isQtContainer(t))
+    if (clazy::isQtContainer(t))
         return true;
 
-    const string typeName = StringUtils::simpleTypeName(t, lo());
-    return clazy_std::any_of(nonTrivialTypes, [typeName] (const string &container) {
+    const string typeName = clazy::simpleTypeName(t, lo());
+    return clazy::any_of(nonTrivialTypes, [typeName] (const string &container) {
         return container == typeName;
     });
 }
@@ -84,22 +84,19 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
     if (!varDecl || !isInterestingType(varDecl->getType()))
         return;
 
-    auto currentFunc = ContextUtils::firstContextOfType<FunctionDecl>(varDecl->getDeclContext());
+    auto currentFunc = clazy::firstContextOfType<FunctionDecl>(varDecl->getDeclContext());
     Stmt *body = currentFunc ? currentFunc->getBody() : nullptr;
     if (!body)
         return;
 
     SourceLocation locStart = varDecl->getLocStart();
     locStart = sm().getExpansionLoc(locStart);
-    auto declRefs = HierarchyUtils::getStatements<DeclRefExpr>(body, &sm(), locStart);
+    auto declRefs = clazy::getStatements<DeclRefExpr>(body, &sm(), locStart);
 
     auto pred = [varDecl] (DeclRefExpr *declRef) {
         return declRef->getDecl() == varDecl;
     };
 
-    if (!clazy_std::any_of(declRefs, pred))
-        emitWarning(locStart, "unused " + StringUtils::simpleTypeName(varDecl->getType(), lo()));
+    if (!clazy::any_of(declRefs, pred))
+        emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()));
 }
-
-
-REGISTER_CHECK("unused-non-trivial-variable", UnusedNonTrivialVariable, CheckLevel0)

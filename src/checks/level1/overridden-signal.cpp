@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FunctionUtils.h"
@@ -36,7 +35,7 @@ using namespace std;
 
 
 OverriddenSignal::OverriddenSignal(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enableAccessSpecifierManager();
 }
@@ -52,20 +51,19 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
         return;
 
     CXXRecordDecl *record = method->getParent();
-    if (!QtUtils::isQObject(record))
+    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
+    if (!baseClass)
         return;
 
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
-    const std::string methodName = method->getNameAsString();
+    const StringRef methodName = clazy::name(method);
 
-
-    CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(record);
     std::string warningMsg;
     while (baseClass) {
         for (auto baseMethod : baseClass->methods()) {
-            if (baseMethod->getNameAsString() == methodName) {
+            if (clazy::name(baseMethod) == methodName) {
 
-                if (!FunctionUtils::parametersMatch(method, baseMethod)) // overloading is permitted.
+                if (!clazy::parametersMatch(method, baseMethod)) // overloading is permitted.
                     continue;
 
                 const bool baseMethodIsSignal = accessSpecifierManager->qtAccessSpecifierType(baseMethod) == QtAccessSpecifier_Signal;
@@ -85,9 +83,6 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
             }
         }
 
-        baseClass = QtUtils::getQObjectBaseClass(baseClass);
+        baseClass = clazy::getQObjectBaseClass(baseClass);
     }
 }
-
-
-REGISTER_CHECK("overridden-signal", OverriddenSignal, CheckLevel1)

@@ -25,7 +25,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
@@ -35,14 +34,14 @@
 using namespace clang;
 using namespace std;
 
-Qenums::Qenums(const std::string &name, ClazyContext *context)
+QEnums::QEnums(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
     context->enablePreprocessorVisitor();
 }
 
-void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
+void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
 {
     PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
     if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 50500)
@@ -58,7 +57,7 @@ void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
 
         CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
         string text = Lexer::getSourceText(crange, sm(), lo());
-        if (clazy_std::contains(text, "::"))
+        if (clazy::contains(text, "::"))
             return;
     }
 
@@ -70,5 +69,3 @@ void Qenums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
 
     emitWarning(range.getBegin(), "Use Q_ENUM instead of Q_ENUMS");
 }
-
-REGISTER_CHECK_WITH_FLAGS("qenums", Qenums, CheckLevel0, RegisteredCheck::Option_Qt4Incompatible)

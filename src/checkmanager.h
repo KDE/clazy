@@ -33,6 +33,8 @@
 #include <functional>
 #include <mutex>
 #include <unordered_map>
+#include <vector>
+#include <utility>
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
@@ -48,14 +50,15 @@ using FactoryFunction = std::function<CheckBase*(ClazyContext *context)>;
 struct CLAZYLIB_EXPORT RegisteredCheck {
     enum Option {
         Option_None = 0,
-        Option_Qt4Incompatible
+        Option_Qt4Incompatible = 1,
+        Option_VisitsStmts = 2,
+        Option_VisitsDecls = 4
     };
 
     typedef std::vector<RegisteredCheck> List;
     typedef int Options;
 
     std::string name;
-    std::string className;
     CheckLevel level;
     FactoryFunction factory;
     Options options;
@@ -86,11 +89,6 @@ public:
     static CheckManager *instance();
 
     static std::mutex &lock() { return m_lock; }
-
-    int registerCheck(const std::string &name, const std::string &className,
-                      CheckLevel level, const FactoryFunction &, RegisteredCheck::Options = RegisteredCheck::Option_None);
-    int registerFixIt(int id, const std::string &fititName, const std::string &checkName);
-
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv(const ClazyContext *context) const;
     RegisteredCheck::List requestedChecksThroughEnv(const ClazyContext *context, std::vector<std::string> &userDisabledChecks) const;
@@ -107,7 +105,7 @@ public:
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
     RegisteredCheck::List requestedChecks(const ClazyContext *context, std::vector<std::string> &args);
-    CheckBase::List createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
+    std::vector<std::pair<CheckBase*, RegisteredCheck>> createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
@@ -115,27 +113,16 @@ private:
     CheckManager();
     static std::mutex m_lock;
 
+    void registerChecks();
+    void registerFixIt(int id, const std::string &fititName, const std::string &checkName);
+    void registerCheck(const RegisteredCheck &check);
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
-    bool isReservedCheckName(const std::string &name) const;
     CheckBase* createCheck(const std::string &name, ClazyContext *context);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
 };
-
-#define CLAZY_STRINGIFY2(X) #X
-#define CLAZY_STRINGIFY(X) CLAZY_STRINGIFY2(X)
-
-#define REGISTER_CHECK_WITH_FLAGS(CHECK_NAME, CLASS_NAME, LEVEL, OPTIONS) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); }, OPTIONS);
-
-#define REGISTER_CHECK(CHECK_NAME, CLASS_NAME, LEVEL) \
-    volatile int ClazyAnchor_##CLASS_NAME = CheckManager::instance()->registerCheck(CHECK_NAME, CLAZY_STRINGIFY(CLASS_NAME), LEVEL, [](ClazyContext *context){ return new CLASS_NAME(CHECK_NAME, context); });
-
-#define REGISTER_FIXIT(FIXIT_ID, FIXIT_NAME, CHECK_NAME) \
-    static int dummy_##FIXIT_ID = CheckManager::instance()->registerFixIt(FIXIT_ID, FIXIT_NAME, CHECK_NAME); \
-    inline void silence_warning_dummy_##FIXIT_ID() { (void)dummy_##FIXIT_ID; }
 
 #endif

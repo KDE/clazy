@@ -24,74 +24,73 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
 using namespace std;
 
-
-Connect3argLambda::Connect3argLambda(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+Connect3ArgLambda::Connect3ArgLambda(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
-
-void Connect3argLambda::VisitStmt(clang::Stmt *stmt)
+void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 {
     auto callExpr = dyn_cast<CallExpr>(stmt);
     if (!callExpr)
         return;
 
     FunctionDecl *fdecl = callExpr->getDirectCallee();
-    if (!QtUtils::isConnect(fdecl) || fdecl->getNumParams() != 3)
+    if (!fdecl || fdecl->getNumParams() != 3 || !clazy::isConnect(fdecl))
         return;
 
-    auto lambda = HierarchyUtils::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
+    auto lambda = clazy::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
     if (!lambda)
         return;
 
-    // The sender can be: this
-    auto senderThis = HierarchyUtils::unpeal<CXXThisExpr>(callExpr->getArg(0), HierarchyUtils::IgnoreImplicitCasts);
+    DeclRefExpr *senderDeclRef = nullptr;
+    MemberExpr *senderMemberExpr = nullptr;
 
-    // Or it can be: a declref (variable)
-    DeclRefExpr *senderDeclRef = senderThis ? nullptr : HierarchyUtils::getFirstChildOfType2<DeclRefExpr>(callExpr->getArg(0));
+    Stmt *s = callExpr->getArg(0);
+    while (s) {
+        if ((senderDeclRef = dyn_cast<DeclRefExpr>(s)))
+            break;
 
+        if ((senderMemberExpr = dyn_cast<MemberExpr>(s)))
+            break;
 
-    // If this is referenced inside the lambda body, for example, by calling a member function
-    auto thisExprs = HierarchyUtils::getStatements<CXXThisExpr>(lambda->getBody());
-    const bool lambdaHasThis = !thisExprs.empty();
-
-    // The variables used inside the lambda
-    auto declrefs = HierarchyUtils::getStatements<DeclRefExpr>(lambda->getBody());
-
-    // If lambda doesn't do anything interesting, don't warn
-    if (declrefs.empty() && !lambdaHasThis)
-        return;
-
-    if (lambdaHasThis && !senderThis && QtUtils::isQObject(thisExprs[0]->getType())) {
-        emitWarning(stmt->getLocStart(), "Pass 'this' as the 3rd connect parameter");
-        return;
+        s = clazy::getFirstChild(s);
     }
 
+
+    // The sender can be: this
+    CXXThisExpr* senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
+
+    // The variables used inside the lambda
+    auto declrefs = clazy::getStatements<DeclRefExpr>(lambda->getBody());
+
     ValueDecl *senderDecl = senderDeclRef ? senderDeclRef->getDecl() : nullptr;
-    // We'll only warn if the lambda is dereferencing another QObject (besides the sender).
+
+    // We'll only warn if the lambda is dereferencing another QObject (besides the sender)
     bool found = false;
     for (auto declref : declrefs) {
         ValueDecl *decl = declref->getDecl();
         if (decl == senderDecl)
             continue; // It's the sender, continue.
 
-        if (QtUtils::isQObject(decl->getType())) {
+        if (clazy::isQObject(decl->getType())) {
             found = true;
             break;
         }
     }
 
+    if (!found) {
+        auto thisexprs = clazy::getStatements<CXXThisExpr>(lambda->getBody());
+        if (!thisexprs.empty() && !senderThis)
+            found = true;
+    }
+
     if (found)
         emitWarning(stmt->getLocStart(), "Pass a context object as 3rd connect parameter");
 }
-
-
-REGISTER_CHECK("connect-3arg-lambda", Connect3argLambda, CheckLevel1)

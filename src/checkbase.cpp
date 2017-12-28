@@ -65,34 +65,18 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
-CheckBase::CheckBase(const string &name, const ClazyContext *context, Options)
+CheckBase::CheckBase(const string &name, const ClazyContext *context, Options options)
     : m_sm(context->ci.getSourceManager())
     , m_name(name)
     , m_context(context)
     , m_astContext(context->astContext)
-    , m_preprocessorOpts(context->ci.getPreprocessorOpts())
-    , m_tu(m_astContext.getTranslationUnitDecl())
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
+    , m_options(options)
 {
 }
 
 CheckBase::~CheckBase()
 {
-}
-
-void CheckBase::VisitStatement(Stmt *stm)
-{
-    m_lastStmt = stm;
-    VisitStmt(stm);
-}
-
-void CheckBase::VisitDeclaration(Decl *decl)
-{
-    m_lastDecl = decl;
-    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
-        m_lastMethodDecl = mdecl;
-
-    VisitDecl(decl);
 }
 
 void CheckBase::VisitStmt(Stmt *)
@@ -141,8 +125,8 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 
     string filename = sm().getFilename(loc);
 
-    return clazy_std::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
-        return clazy_std::contains(filename, ignored);
+    return clazy::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
+        return clazy::contains(filename, ignored);
     });
 }
 
@@ -164,6 +148,9 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
                             const vector<FixItHint> &fixits, bool printWarningTag)
 {
+    if (m_context->ignoresIncludedFiles() && !Utils::isMainFile(sm(), loc))
+        return;
+
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
         return;
 
@@ -243,11 +230,6 @@ bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
     }
 
     return false;
-}
-
-std::vector<string> CheckBase::supportedOptions() const
-{
-    return {};
 }
 
 bool CheckBase::isOptionSet(const std::string &optionName) const

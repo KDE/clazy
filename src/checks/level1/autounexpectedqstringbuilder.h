@@ -38,6 +38,7 @@ class AutoUnexpectedQStringBuilder : public CheckBase
 public:
     explicit AutoUnexpectedQStringBuilder(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+    void VisitStmt(clang::Stmt *stmt) override;
 };
 
 #endif

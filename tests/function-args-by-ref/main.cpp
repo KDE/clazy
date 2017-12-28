@@ -194,10 +194,10 @@ void Derived::foo(const Trivial &)
 {
 }
 
-struct QDBusMessage
-{
-    void createErrorReply(QString) {}
-};
+
+
+
+
 
 struct DeletedCtor // bug #360112
 {

@@ -36,10 +36,10 @@ class SourceLocation;
  *
  * See README-missing-qobject for more information
  */
-class MissingQ_OBJECT : public CheckBase
+class MissingQObjectMacro : public CheckBase
 {
 public:
-    explicit MissingQ_OBJECT(const std::string &name, ClazyContext *context);
+    explicit MissingQObjectMacro(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,

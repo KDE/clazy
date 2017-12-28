@@ -22,10 +22,9 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "virtualcallsfromctor.h"
+#include "virtual-call-ctor.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -33,26 +32,20 @@
 using namespace std;
 using namespace clang;
 
-VirtualCallsFromCTOR::VirtualCallsFromCTOR(const std::string &name, ClazyContext *context)
+VirtualCallCtor::VirtualCallCtor(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-
 }
 
-void VirtualCallsFromCTOR::VisitStmt(clang::Stmt *stm)
+void VirtualCallCtor::VisitDecl(Decl *decl)
 {
-
-}
-
-void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
-{
-    CXXConstructorDecl *ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
-    CXXDestructorDecl *dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
-    if (ctorDecl == nullptr && dtorDecl == nullptr)
+    auto ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
+    auto dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
+    if (!ctorDecl && !dtorDecl)
         return;
 
     Stmt *ctorOrDtorBody = ctorDecl ? ctorDecl->getBody() : dtorDecl->getBody();
-    if (ctorOrDtorBody == nullptr)
+    if (!ctorOrDtorBody)
         return;
 
     CXXRecordDecl *classDecl = ctorDecl ? ctorDecl->getParent() : dtorDecl->getParent();
@@ -60,7 +53,7 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
     std::vector<Stmt*> processedStmts;
     SourceLocation loc = containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts);
     if (loc.isValid()) {
-        if (ctorDecl != nullptr) {
+        if (ctorDecl) {
             emitWarning(decl->getLocStart(), "Calling pure virtual function in CTOR");
         } else {
             emitWarning(decl->getLocStart(), "Calling pure virtual function in DTOR");
@@ -69,23 +62,24 @@ void VirtualCallsFromCTOR::VisitDecl(Decl *decl)
     }
 }
 
-SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt*> &processedStmts)
+SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt,
+                                                    std::vector<Stmt*> &processedStmts)
 {
-    if (stmt == nullptr)
+    if (!stmt)
         return {};
 
     // already processed ? we don't want recurring calls
-    if (clazy_std::contains(processedStmts, stmt))
+    if (clazy::contains(processedStmts, stmt))
         return {};
 
     processedStmts.push_back(stmt);
 
     std::vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds<CXXMemberCallExpr>(stmt, memberCalls);
+    clazy::getChilds<CXXMemberCallExpr>(stmt, memberCalls);
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {
         CXXMethodDecl *memberDecl = callExpr->getMethodDecl();
-        if (!memberDecl || dyn_cast<CXXThisExpr>(callExpr->getImplicitObjectArgument()) == nullptr)
+        if (!memberDecl || !isa<CXXThisExpr>(callExpr->getImplicitObjectArgument()))
             continue;
 
         if (memberDecl->getParent() == classDecl) {
@@ -100,5 +94,3 @@ SourceLocation VirtualCallsFromCTOR::containsVirtualCall(clang::CXXRecordDecl *c
 
     return {};
 }
-
-REGISTER_CHECK("virtual-call-ctor", VirtualCallsFromCTOR, CheckLevel2)

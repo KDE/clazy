@@ -22,7 +22,6 @@
 #include "container-inside-loop.h"
 #include "ClazyContext.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
@@ -36,7 +35,7 @@ using namespace std;
 
 
 ContainerInsideLoop::ContainerInsideLoop(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -47,14 +46,14 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *ctor = ctorExpr->getConstructor();
-    if (!ctor || !clazy_std::equalsAny(StringUtils::classNameFor(ctor), { "QVector", "std::vector", "QList" }))
+    if (!ctor || !clazy::equalsAny(clazy::classNameFor(ctor), { "QVector", "std::vector", "QList" }))
         return;
 
     DeclStmt *declStm = dyn_cast_or_null<DeclStmt>(m_context->parentMap->getParent(stmt));
     if (!declStm || !declStm->isSingleDecl())
         return;
 
-    Stmt *loopStmt = LoopUtils::isInLoop(m_context->parentMap, stmt);
+    Stmt *loopStmt = clazy::isInLoop(m_context->parentMap, stmt);
     if (!loopStmt)
         return;
 
@@ -67,6 +66,3 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "container inside loop causes unneeded allocations");
 }
-
-
-REGISTER_CHECK("container-inside-loop", ContainerInsideLoop, CheckLevel2)

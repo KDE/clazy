@@ -25,7 +25,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -34,7 +33,7 @@ using namespace std;
 
 
 QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -46,9 +45,7 @@ void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
     if (!ctor || ctor->getQualifiedNameAsString() != "QLatin1String::QLatin1String")
         return;
 
-    StringLiteral *lt = HierarchyUtils::getFirstChildOfType2<StringLiteral>(stmt);
+    StringLiteral *lt = clazy::getFirstChildOfType2<StringLiteral>(stmt);
     if (lt && !Utils::isAscii(lt))
         emitWarning(stmt, "QStringLiteral with non-ascii literal");
 }
-
-REGISTER_CHECK("qlatin1string-non-ascii", QLatin1StringNonAscii, CheckLevel1)

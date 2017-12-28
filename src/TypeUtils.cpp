@@ -22,6 +22,7 @@
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "StmtBodyRange.h"
+#include "ClazyContext.h"
 #include <HierarchyUtils.h>
 #include <StringUtils.h>
 
@@ -30,7 +31,7 @@
 
 using namespace clang;
 
-bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
+bool TypeUtils::classifyQualType(const ClazyContext *context, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     if (!varDecl)
         return false;
@@ -43,7 +44,7 @@ bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDe
     if (isUndeducibleAuto(paramType))
         return false;
 
-    classif.size_of_T = context->getTypeSize(qualType) / 8;
+    classif.size_of_T = context->astContext.getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
@@ -61,8 +62,9 @@ bool TypeUtils::classifyQualType(const ASTContext *context, const VarDecl *varDe
     } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
         classif.passSmallTrivialByValue = true;
     } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
-        if (body && (Utils::containsNonConstMemberCall(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
+        if (body && (Utils::containsNonConstMemberCall(context->parentMap, body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
             return true;
+
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
         if (classif.isBig) {
             classif.passBigTypeByConstRef = true;
@@ -84,7 +86,7 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 
     std::vector<DeclRefExpr*> declrefs;
-    HierarchyUtils::getChilds(arg, declrefs, 3);
+    clazy::getChilds(arg, declrefs, 3);
 
     std::vector<DeclRefExpr*> interestingDeclRefs;
     for (auto declref : declrefs) {
@@ -96,7 +98,7 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
         QualType qt = t->isPointerType() ? t->getPointeeType()
                                          : declref->getType();
 
-        if (t && type == StringUtils::simpleTypeName(qt, lo)) {
+        if (t && type == clazy::simpleTypeName(qt, lo)) {
             interestingDeclRefs.push_back(declref);
         }
     }
@@ -113,7 +115,8 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 }
 
-bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
+bool TypeUtils::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase,
+                            std::vector<CXXRecordDecl*> *baseClasses)
 {
     if (!derived || !possibleBase || derived == possibleBase)
         return false;
@@ -123,7 +126,9 @@ bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
         if (!type) continue;
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
 
-        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase)) {
+        if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase, baseClasses)) {
+            if (baseClasses)
+                baseClasses->push_back(baseDecl);
             return true;
         }
     }
@@ -131,7 +136,7 @@ bool TypeUtils::derivesFrom(CXXRecordDecl *derived, CXXRecordDecl *possibleBase)
     return false;
 }
 
-bool TypeUtils::derivesFrom(clang::CXXRecordDecl *derived, const std::string &possibleBase)
+bool TypeUtils::derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
     if (!derived || !derived->hasDefinition())
         return false;

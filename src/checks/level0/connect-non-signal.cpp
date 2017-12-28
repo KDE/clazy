@@ -21,14 +21,12 @@
 */
 
 #include "connect-non-signal.h"
-
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "NormalizedSignatureUtils.h"
 
 #include <clang/AST/AST.h>
@@ -38,7 +36,7 @@ using namespace std;
 
 
 ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enableAccessSpecifierManager();
 }
@@ -46,23 +44,24 @@ ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *contex
 void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 {
     auto call = dyn_cast<CallExpr>(stmt);
-    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!call || !accessSpecifierManager)
+    if (!call)
         return;
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!QtUtils::isConnect(func) || !QtUtils::connectHasPMFStyle(func))
+    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *method = QtUtils::pmfFromConnect(call, /*argIndex=*/ 1);
+    CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/ 1);
     if (!method) {
         emitInternalError(func->getLocStart(), "couldn't find method from pmf connect");
         return;
     }
 
+    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
+    if (!accessSpecifierManager)
+        return;
+
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
     if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
         emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
 }
-
-REGISTER_CHECK("connect-non-signal", ConnectNonSignal, CheckLevel0)

@@ -21,8 +21,8 @@
 
 #include "qfileinfo-exists.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -32,23 +32,20 @@ using namespace std;
 
 
 QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
 void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
 {
     auto existsCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    std::string methodName = StringUtils::qualifiedMethodName(existsCall);
+    std::string methodName = clazy::qualifiedMethodName(existsCall);
     if (methodName != "QFileInfo::exists")
         return;
 
-    CXXConstructExpr* ctorExpr = HierarchyUtils::getFirstChildOfType<CXXConstructExpr>(existsCall);
-    if (!ctorExpr || StringUtils::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
+    CXXConstructExpr* ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
+    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
         return;
 
     emitWarning(stmt->getLocStart(), "Use the static QFileInfo::exists() instead. It's documented to be faster.");
 }
-
-
-REGISTER_CHECK("qfileinfo-exists", QFileInfoExists, CheckLevel0)

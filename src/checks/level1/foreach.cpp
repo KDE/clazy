@@ -28,7 +28,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 #include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
@@ -37,7 +36,7 @@ using namespace clang;
 using namespace std;
 
 Foreach::Foreach(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enablePreprocessorVisitor();
 }
@@ -65,11 +64,11 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-    if (!constructorDecl || constructorDecl->getNameAsString() != "QForeachContainer")
+    if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
         return;
 
     vector<DeclRefExpr*> declRefExprs;
-    HierarchyUtils::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
+    clazy::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
     if (declRefExprs.empty())
         return;
 
@@ -90,7 +89,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 
     auto rootBaseClass = Utils::rootBaseClass(containerRecord);
     const string containerClassName = rootBaseClass->getNameAsString();
-    const bool isQtContainer = QtUtils::isQtIterableClass(containerClassName);
+    const bool isQtContainer = clazy::isQtIterableClass(containerClassName);
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
         return;
@@ -123,13 +122,13 @@ void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
     vector<ForStmt*> forStatements;
-    HierarchyUtils::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
+    clazy::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
     if (forStatements.empty())
         return;
 
     // Get the variable declaration (lhs of foreach)
     vector<DeclStmt*> varDecls;
-    HierarchyUtils::getChilds<DeclStmt>(forStatements.at(0), varDecls);
+    clazy::getChilds<DeclStmt>(forStatements.at(0), varDecls);
     if (varDecls.empty())
         return;
 
@@ -139,7 +138,7 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     TypeUtils::QualTypeClassification classif;
-    bool success = TypeUtils::classifyQualType(&m_astContext, varDecl, /*by-ref*/classif, forStatements.at(0));
+    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/classif, forStatements.at(0));
     if (!success)
         return;
 
@@ -174,17 +173,17 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
             if (recordDecl) {
                 const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
-                const std::unordered_map<string, std::vector<string> > &detachingMethodsMap = QtUtils::detachingMethods();
+                const std::unordered_map<string, std::vector<string> > &detachingMethodsMap = clazy::detachingMethods();
                 if (detachingMethodsMap.find(className) != detachingMethodsMap.end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap.at(className);
-                    if (clazy_std::contains(allowedFunctions, functionName)) {
+                    if (clazy::contains(allowedFunctions, functionName)) {
                         Expr *expr = memberExpr->getBase();
 
                         if (expr) {
                             DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(expr);
                             if (!refExpr) {
-                                auto s = HierarchyUtils::getFirstChildAtDepth(expr, 1);
+                                auto s = clazy::getFirstChildAtDepth(expr, 1);
                                 refExpr = dyn_cast<DeclRefExpr>(s);
                                 if (refExpr) {
                                     if (refExpr->getDecl() == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating
@@ -199,9 +198,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
         }
     }
 
-    return clazy_std::any_of(stm->children(), [this, containerValueDecl](Stmt *child) {
+    return clazy::any_of(stm->children(), [this, containerValueDecl](Stmt *child) {
         return this->containsDetachments(child, containerValueDecl);
     });
 }
-
-REGISTER_CHECK("foreach", Foreach, CheckLevel1)

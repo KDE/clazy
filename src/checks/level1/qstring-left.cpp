@@ -25,7 +25,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -34,15 +33,14 @@ using namespace std;
 
 
 QStringLeft::QStringLeft(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
-
 
 void QStringLeft::VisitStmt(clang::Stmt *stmt)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall || StringUtils::qualifiedMethodName(memberCall) != "QString::left")
+    if (!memberCall || clazy::qualifiedMethodName(memberCall) != "QString::left")
         return;
 
     if (memberCall->getNumArgs() == 0) // Doesn't happen
@@ -59,6 +57,3 @@ void QStringLeft::VisitStmt(clang::Stmt *stmt)
         }
     }
 }
-
-
-REGISTER_CHECK("qstring-left", QStringLeft, CheckLevel1)

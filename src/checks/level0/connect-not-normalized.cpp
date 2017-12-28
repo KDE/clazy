@@ -27,7 +27,6 @@
 #include "NormalizedSignatureUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 
@@ -35,7 +34,7 @@ using namespace clang;
 using namespace std;
 
 ConnectNotNormalized::ConnectNotNormalized(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -60,12 +59,12 @@ bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
     if (name != "QArgument" && name != "QReturnArgument")
         return false;
 
-    StringLiteral *sl = HierarchyUtils::getFirstChildOfType2<StringLiteral>(expr->getArg(0));
+    StringLiteral *sl = clazy::getFirstChildOfType2<StringLiteral>(expr->getArg(0));
     if (!sl)
         return false;
 
     const std::string original = sl->getString().str();
-    const std::string normalized = NormalizedSignatureUtils::normalizedType(original.c_str());
+    const std::string normalized = clazy::normalizedType(original.c_str());
 
     if (original == normalized)
         return false;
@@ -80,27 +79,27 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
         return false;
 
     FunctionDecl *func = callExpr->getDirectCallee();
-    if (!func || func->getNumParams() != 1 || func->getNameAsString() != "qFlagLocation")
+    if (!func || func->getNumParams() != 1 || clazy::name(func) != "qFlagLocation")
         return false;
 
     {
         // Only warn in connect statements, not disconnect, since there there's no optimization in Qt's side
-        auto parentCallExpr = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap,
+        auto parentCallExpr = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap,
                                                                              m_context->parentMap->getParent(callExpr), -1);
         if (!parentCallExpr)
             return false;
 
         FunctionDecl *parentFunc = parentCallExpr->getDirectCallee();
-        if (!parentFunc || parentFunc->getNameAsString() != "connect")
+        if (!parentFunc || clazy::name(parentFunc) != "connect")
             return false;
     }
 
     Expr *arg1 = callExpr->getArg(0);
-    StringLiteral *sl = HierarchyUtils::getFirstChildOfType2<StringLiteral>(arg1);
+    StringLiteral *sl = clazy::getFirstChildOfType2<StringLiteral>(arg1);
     if (!sl)
         return false;
     std::string original = sl->getString().str();
-    std::string normalized = NormalizedSignatureUtils::normalizedSignature(original.c_str());
+    std::string normalized = clazy::normalizedSignature(original.c_str());
 
     // discard the junk after '\0'
     normalized = string(normalized.c_str());
@@ -116,5 +115,3 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     emitWarning(callExpr->getLocStart(), "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
 }
-
-REGISTER_CHECK("connect-not-normalized", ConnectNotNormalized, CheckLevel0)

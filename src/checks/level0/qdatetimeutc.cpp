@@ -24,7 +24,6 @@
 
 #include "qdatetimeutc.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 
@@ -75,7 +74,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 
     std::vector<FixItHint> fixits;
     if (isFixitEnabled(FixitAll)) {
-        const bool success = FixItUtils::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
+        const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
         if (!success) {
             queueManualFixitWarning(secondCall->getLocStart(), FixitAll);
         }
@@ -83,7 +82,3 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "Use QDateTime" + replacement + " instead", fixits);
 }
-
-const char *const s_checkName = "qdatetime-utc";
-REGISTER_CHECK(s_checkName, QDateTimeUtc, CheckLevel0)
-REGISTER_FIXIT(FixitAll, "fix-qdatetime-utc", s_checkName)

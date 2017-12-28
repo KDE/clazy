@@ -1,2 +1,3 @@
 auto-unexpected-qstringbuilder/main.cpp:6:5: warning: auto deduced to be QStringBuilder instead of QString. Possible crash. [-Wclazy-auto-unexpected-qstringbuilder]
 auto-unexpected-qstringbuilder/main.cpp:7:5: warning: auto deduced to be QStringBuilder instead of QString. Possible crash. [-Wclazy-auto-unexpected-qstringbuilder]
+auto-unexpected-qstringbuilder/main.cpp:11:5: warning: lambda return type deduced to be QStringBuilder instead of QString. Possible crash. [-Wclazy-auto-unexpected-qstringbuilder]

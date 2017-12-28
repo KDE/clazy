@@ -27,7 +27,6 @@
 #include "ContextUtils.h"
 #include "StringUtils.h"
 #include "ClazyContext.h"
-#include "checkmanager.h"
 #include "PreProcessorVisitor.h"
 
 #include <clang/AST/AST.h>
@@ -36,33 +35,33 @@ using namespace clang;
 using namespace std;
 
 
-qhash_namespace::qhash_namespace(const std::string &name, ClazyContext *context)
+QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     if (context->isQtDeveloper())
         context->enablePreprocessorVisitor();
 }
 
-void qhash_namespace::VisitDecl(clang::Decl *decl)
+void QHashNamespace::VisitDecl(clang::Decl *decl)
 {
     auto func = dyn_cast<FunctionDecl>(decl);
-    if (!func || isa<CXXMethodDecl>(func) || func->getNumParams() == 0 || func->getNameAsString() != "qHash")
+    if (!func || isa<CXXMethodDecl>(func) || func->getNumParams() == 0 || clazy::name(func) != "qHash")
         return;
 
     ParmVarDecl *firstArg = func->getParamDecl(0);
-    NamespaceDecl *argumentNS = ContextUtils::namespaceForType(firstArg->getType());
-    NamespaceDecl *qHashNS =  ContextUtils::namespaceForFunction(func);
+    NamespaceDecl *argumentNS = clazy::namespaceForType(firstArg->getType());
+    NamespaceDecl *qHashNS =  clazy::namespaceForFunction(func);
 
     std::string msg;
     if (qHashNS && argumentNS) {
         const string argumentNSstr = argumentNS->getQualifiedNameAsString();
         const string qhashNSstr = qHashNS->getQualifiedNameAsString();
         if (argumentNSstr != qhashNSstr)
-            msg = "Move qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") to " + argumentNSstr + " namespace for ADL lookup";
+            msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") to " + argumentNSstr + " namespace for ADL lookup";
     } else if (qHashNS && !argumentNS) {
-        msg = "Move qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
+        msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
     } else if (!qHashNS && argumentNS) {
-        msg = "Move qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
+        msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
     }
 
     if (!msg.empty())
@@ -71,9 +70,7 @@ void qhash_namespace::VisitDecl(clang::Decl *decl)
     if (m_context->isQtDeveloper()) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (preProcessorVisitor && !preProcessorVisitor->isBetweenQtNamespaceMacros(func->getLocStart())) {
-            emitWarning(decl, "qHash(" + StringUtils::simpleTypeName(firstArg->getType(), lo()) + ") must be declared before QT_END_NAMESPACE");
+            emitWarning(decl, "qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") must be declared before QT_END_NAMESPACE");
         }
     }
 }
-
-REGISTER_CHECK("qhash-namespace", qhash_namespace, CheckLevel1)

@@ -26,7 +26,6 @@
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -37,7 +36,7 @@ using namespace std;
 
 
 ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "qobject_impl.h", "qdebug.h", "hb-", "qdbusintegrator.cpp",
                         "harfbuzz-", "qunicodetools.cpp" };
@@ -114,10 +113,10 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
         if (!qt.getTypePtrOrNull()->isBooleanType()) // Filter out some bool to const bool
             continue;
 
-        if (HierarchyUtils::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
+        if (clazy::getFirstChildOfType<CXXFunctionalCastExpr>(implicitCast))
             continue;
 
-        if (HierarchyUtils::getFirstChildOfType<CStyleCastExpr>(implicitCast))
+        if (clazy::getFirstChildOfType<CStyleCastExpr>(implicitCast))
             continue;
 
         if (Utils::isInsideOperatorCall(parentMap, implicitCast, {"QTextStream", "QAtomicInt", "QBasicAtomicInt"}))
@@ -138,10 +137,13 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     // Lets check only in function calls. Otherwise there are too many false positives, it's common
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
-    CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
-    auto ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
-    if (!callExpr && !ctorExpr)
-        return;
+    auto callExpr = dyn_cast<CallExpr>(stmt);
+    CXXConstructExpr* ctorExpr = nullptr;
+    if (!callExpr) {
+        ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
+        if (!ctorExpr)
+            return;
+    }
 
     if (isa<CXXOperatorCallExpr>(stmt))
         return;
@@ -176,20 +178,12 @@ bool ImplicitCasts::isBoolToInt(FunctionDecl *func) const
         return false; // Disabled for now, too many false-positives when interacting with C code
 
     static const vector<string> functions = {"QString::arg"};
-    return !clazy_std::contains(functions, func->getQualifiedNameAsString());
+    return !clazy::contains(functions, func->getQualifiedNameAsString());
 }
 
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
     static const vector<string> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
     auto macro = Lexer::getImmediateMacroName(loc, sm(), lo());
-    return clazy_std::contains(macros, macro);
+    return clazy::contains(macros, macro);
 }
-
-std::vector<string> ImplicitCasts::supportedOptions() const
-{
-    static const vector<string> options = { "bool-to-int" };
-    return options;
-}
-
-REGISTER_CHECK("implicit-casts", ImplicitCasts, CheckLevel2)

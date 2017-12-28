@@ -103,7 +103,7 @@ namespace Utils {
     // For example:
     // Foo foo; // this is the varDecl
     // while (bar) { foo.setValue(); // non-const call }
-    CLAZYLIB_EXPORT bool containsNonConstMemberCall(clang::Stmt *body, const clang::VarDecl *varDecl);
+    CLAZYLIB_EXPORT bool containsNonConstMemberCall(clang::ParentMap *map, clang::Stmt *body, const clang::VarDecl *varDecl);
 
     // Returns true if there's an assignment to varDecl in body
     // Example: our_var = something_else
@@ -137,8 +137,8 @@ namespace Utils {
     CLAZYLIB_EXPORT bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
 
     CLAZYLIB_EXPORT bool isAssignOperator(clang::CXXOperatorCallExpr *op,
-                          const std::string &className,
-                          const std::string &argumentType, const clang::LangOptions &lo);
+                                          llvm::StringRef className,
+                                          llvm::StringRef argumentType, const clang::LangOptions &lo);
 
     CLAZYLIB_EXPORT bool isImplicitCastTo(clang::Stmt *, const std::string &);
 
@@ -273,6 +273,19 @@ namespace Utils {
     CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(clang::SourceLocation loc,
                                                           const clang::SourceManager &sm,
                                                           const clang::LangOptions &lo);
+
+    inline bool isMainFile(const clang::SourceManager &sm, clang::SourceLocation loc)
+    {
+        if (loc.isMacroID())
+            loc = sm.getExpansionLoc(loc);
+
+        return sm.isInFileID(loc, sm.getMainFileID());
+    }
+
+    /**
+     * Returns true if the string literal contains escaped bytes, such as \x12, \123, \u00F6.
+     */
+    bool literalContainsEscapedBytes(clang::StringLiteral *lt, const clang::SourceManager &sm, const clang::LangOptions &lo);
 }
 
 #endif

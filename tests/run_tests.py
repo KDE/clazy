@@ -223,10 +223,11 @@ def clazy_command(qt, test, filename):
     if test.isScript():
         return "./" + filename
 
-    if 'CLAZY_CXX' in os.environ:
+    if 'CLAZY_CXX' in os.environ: # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
     else:
-        result = "clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
+        clang = os.getenv('CLANGXX', 'clang')
+        result = clang + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
 
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt4-compat "
@@ -255,7 +256,7 @@ def dump_ast_command(test):
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
         return os.environ['CLAZY_CXX'] # so we can set clazy.bat instead
-    return 'clang'
+    return os.getenv('CLANGXX', 'clang')
 
 #-------------------------------------------------------------------------------
 # Get clang version
@@ -289,7 +290,6 @@ if args.only_standalone and args.no_standalone:
 # Global variables
 
 _enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
-_help_command = "echo | clang -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang help -c -xc -"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone
@@ -355,6 +355,7 @@ def get_fixed_files():
     return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
 
 def print_differences(file1, file2):
+    # Returns true if the the files are equal
     return run_command("diff -Naur {} {}".format(file1, file2))
 
 def normalizedCwd():
@@ -431,17 +432,17 @@ def run_unit_test(test, is_standalone):
     if test.expects_failure:
         if success:
             print "[XOK]   " + printableName
+            return False
         else:
             print "[XFAIL] " + printableName
-            if not print_differences(expected_file, result_file):
-                return False
+            print_differences(expected_file, result_file)
     else:
         if success:
             print "[OK]   " + printableName
         else:
             print "[FAIL] " + printableName
-            if not print_differences(expected_file, result_file):
-                return False
+            print_differences(expected_file, result_file)
+            return False
 
     return True
 
@@ -478,6 +479,9 @@ def load_checks(all_check_names):
     return checks
 #-------------------------------------------------------------------------------
 # main
+
+if 'CLAZY_NO_WERROR' in os.environ:
+    del os.environ['CLAZY_NO_WERROR']
 
 os.environ['CLAZY_CHECKS'] = ''
 

@@ -34,7 +34,6 @@
     qcolor-from-literal
     strict-iterators
     connect-not-normalized
-    thread-with-slots
   - returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned
   - returning-data-from-temporary now checks for assignment too, not only return statements
   - unused-non-trivial-variable now warns for unused QList, QVector and many more types
@@ -49,8 +48,9 @@
     and headers or nothing at all. By default nothing is installed, except
     the plugin and man pages.
 
-* v1.3 ()
+* v1.3 (November 26th, 2017)
   - New checks:
+    thread-with-slots
     connect-3arg-lambda
     qproperty-without-notify
     virtual-signal
@@ -64,3 +64,10 @@
     For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed, which is usually the case in most build systems.
   - Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the
     list will grow.
+
+* v1.4 ()
+  - New Checks:
+    connect-by-name
+    skipped-base-class
+  - auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder
+  - performance optimizations

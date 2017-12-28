@@ -26,15 +26,13 @@
 #include "Utils.h"
 #include "TemplateUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 
 using namespace std;
 using namespace clang;
 
 QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-
 }
 
 static bool isMatchingClass(const std::string &name)
@@ -45,7 +43,7 @@ static bool isMatchingClass(const std::string &name)
                                            "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
                                            "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
 
-    return clazy_std::contains(classes, name);
+    return clazy::contains(classes, name);
 }
 
 void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
@@ -55,14 +53,14 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         return;
 
     CXXMethodDecl *methodDecl = callExpr->getMethodDecl();
-    if (!methodDecl || methodDecl->getNameAsString() != "value")
+    if (!methodDecl || clazy::name(methodDecl) != "value")
         return;
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!decl || decl->getNameAsString() != "QVariant")
+    if (!decl || clazy::name(decl) != "QVariant")
         return;
 
-    vector<QualType> typeList = TemplateUtils::getTemplateArgumentsTypes(methodDecl);
+    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
     if (!t)
         return;
@@ -76,7 +74,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     if (matches) {
-        string typeName = StringUtils::simpleTypeName(typeList[0], lo());
+        string typeName = clazy::simpleTypeName(typeList[0], lo());
         typeName[0] = toupper(typeName[0]);
 
         string typeName2 = typeName;
@@ -86,5 +84,3 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         emitWarning(stm->getLocStart(), error.c_str());
     }
 }
-
-REGISTER_CHECK("qvariant-template-instantiation", QVariantTemplateInstantiation, CheckLevel0)

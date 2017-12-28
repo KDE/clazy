@@ -24,7 +24,6 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
@@ -52,27 +51,27 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         return;
 
     CXXRecordDecl *classDecl = method->getParent();
-    if (!QtUtils::isQObject(classDecl))
+    if (!clazy::isQObject(classDecl))
         return;
 
     const string className = classDecl->getQualifiedNameAsString();
-    if (clazy_std::contains(vector<string>({"QObject", "QWidget"}), className))
+    if (clazy::contains(vector<string>({"QObject", "QWidget"}), className))
         return;
 
-    CXXRecordDecl *baseClass = QtUtils::getQObjectBaseClass(classDecl);
+    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
     const string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
                                            : string("BaseClass");
 
-    if (isEventFilter && clazy_std::contains(vector<string>({"QObject", "QWidget"}), baseClassName)) {
+    if (isEventFilter && clazy::contains(vector<string>({"QObject", "QWidget"}), baseClassName)) {
         // This is fine, QObject and QWidget eventFilter() don't do anything
         return;
     }
 
     Stmt *body = method->getBody();
     std::vector<ReturnStmt*> returns;
-    HierarchyUtils::getChilds<ReturnStmt>(body, /*by-ref*/returns);
+    clazy::getChilds<ReturnStmt>(body, /*by-ref*/returns);
     for (ReturnStmt *returnStmt : returns) {
-        Stmt *maybeBoolExpr = clazy_std::childAt(returnStmt, 0);
+        Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);
         if (!maybeBoolExpr)
             continue;
         auto boolExpr = dyn_cast<CXXBoolLiteralExpr>(maybeBoolExpr);
@@ -82,5 +81,3 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         emitWarning(returnStmt->getLocStart(), "Return " + baseClassName + "::" + methodName + "() instead of false");
     }
 }
-
-REGISTER_CHECK("base-class-event", BaseClassEvent, CheckLevel2)

@@ -25,7 +25,6 @@
 #include "oldstyleconnect.h"
 
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
 #include "ContextUtils.h"
@@ -69,11 +68,11 @@ static bool classIsOk(const string &className)
 {
     // List of classes we usually use Qt4 syntax
     static const vector<string> okClasses = { "QDBusInterface" };
-    return clazy_std::contains(okClasses, className);
+    return clazy::contains(okClasses, className);
 }
 
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     enablePreProcessorCallbacks();
     context->enableAccessSpecifierManager();
@@ -97,7 +96,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     if (classification == ConnectFlag_None)
         return classification;
 
-    if (QtUtils::connectHasPMFStyle(connectFunc))
+    if (clazy::connectHasPMFStyle(connectFunc))
         return classification;
     else
         classification |= ConnectFlag_OldStyle;
@@ -151,7 +150,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
 bool OldStyleConnect::isQPointer(Expr *expr) const
 {
     vector<CXXMemberCallExpr*> memberCalls;
-    HierarchyUtils::getChilds<CXXMemberCallExpr>(expr, memberCalls);
+    clazy::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
     for (auto callExpr : memberCalls) {
         if (!callExpr->getDirectCallee())
@@ -171,7 +170,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 
 bool OldStyleConnect::isPrivateSlot(const string &name) const
 {
-    return clazy_std::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
+    return clazy::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
         return slot.name == name;
     });
 }
@@ -182,8 +181,8 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!call)
         return;
 
-    if (m_lastMethodDecl && m_context->isQtDeveloper() && m_lastMethodDecl->getParent() &&
-        m_lastMethodDecl->getParent()->getNameAsString() == "QObject") // Don't warn of stuff inside qobject.h
+    if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent() &&
+        clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") // Don't warn of stuff inside qobject.h
         return;
 
     FunctionDecl *function = call->getDirectCallee();
@@ -368,7 +367,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 for (unsigned int i = 0; i < numReceiverParams; ++i) {
                     ParmVarDecl *receiverParm = methodDecl->getParamDecl(i);
                     ParmVarDecl *senderParm = senderMethod->getParamDecl(i);
-                    if (!QtUtils::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
+                    if (!clazy::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
                         string msg = string("Sender's parameters are incompatible with the receiver's");
                         queueManualFixitWarning(s, FixItConnects, msg);
                         return {};
@@ -382,24 +381,24 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 return {};
             }
 
-            DeclContext *context = m_lastDecl->getDeclContext();
+            DeclContext *context = m_context->lastDecl->getDeclContext();
 
             bool isSpecialProtectedCase = false;
-            if (!ContextUtils::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
-                string msg = "Can't fix " + StringUtils::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
+            if (!clazy::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
+                string msg = "Can't fix " + clazy::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
                 queueManualFixitWarning(s, FixItConnects, msg);
                 return {};
             }
 
             string qualifiedName;
-            auto contextRecord = ContextUtils::firstContextOfType<CXXRecordDecl>(m_lastDecl->getDeclContext());
+            auto contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
             const bool isInInclude = sm().getMainFileID() != sm().getFileID(call->getLocStart());
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = ContextUtils::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
             auto expansionRange = sm().getImmediateExpansionRange(s);
@@ -419,7 +418,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = FixItUtils::locForNextToken(&m_astContext, arg->getLocStart(), tok::comma);
+                    auto endLoc = clazy::locForNextToken(&m_astContext, arg->getLocStart(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {
@@ -433,7 +432,3 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
     return fixits;
 }
-
-const char *const s_checkName = "old-style-connect";
-REGISTER_CHECK_WITH_FLAGS(s_checkName, OldStyleConnect, CheckLevel2, RegisteredCheck::Option_Qt4Incompatible)
-REGISTER_FIXIT(FixItConnects, "fix-old-style-connect", s_checkName)

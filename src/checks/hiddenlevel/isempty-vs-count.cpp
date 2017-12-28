@@ -21,7 +21,6 @@
 
 #include "isempty-vs-count.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 #include "QtUtils.h"
 
@@ -33,27 +32,24 @@ using namespace std;
 
 
 IsEmptyVSCount::IsEmptyVSCount(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
 void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
 {
-    ImplicitCastExpr *cast = dyn_cast<ImplicitCastExpr>(stmt);
+    auto cast = dyn_cast<ImplicitCastExpr>(stmt);
     if (!cast || cast->getCastKind() != clang::CK_IntegralToBoolean)
         return;
 
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(*(cast->child_begin()));
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(*(cast->child_begin()));
     CXXMethodDecl *method = memberCall ? memberCall->getMethodDecl() : nullptr;
 
-    if (!StringUtils::functionIsOneOf(method, {"size", "count", "length"}))
+    if (!clazy::functionIsOneOf(method, {"size", "count", "length"}))
         return;
 
-    if (!StringUtils::classIsOneOf(method->getParent(), QtUtils::qtContainers()))
+    if (!clazy::classIsOneOf(method->getParent(), clazy::qtContainers()))
         return;
 
     emitWarning(stmt->getLocStart(), "use isEmpty() instead");
 }
-
-
-REGISTER_CHECK("isempty-vs-count", IsEmptyVSCount, HiddenCheckLevel)

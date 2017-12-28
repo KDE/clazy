@@ -57,7 +57,8 @@ public:
         ClazyOption_Qt4Compat = 8,
         ClazyOption_OnlyQt = 16, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
         ClazyOption_QtDeveloper = 32, // For running clazy on Qt itself, optional, but honours specific guidelines
-        ClazyOption_VisitImplicitCode = 64 // Inspect compiler generated code aswell, useful for custom checks, if then need it
+        ClazyOption_VisitImplicitCode = 64, // Inspect compiler generated code aswell, useful for custom checks, if they need it
+        ClazyOption_IgnoreIncludedFiles = 128 // Only warn for the current file being compiled, not on includes (useful for performance reasons)
     };
     typedef int ClazyOptions;
 
@@ -89,6 +90,11 @@ public:
         return options & ClazyOption_QtDeveloper;
     }
 
+    bool ignoresIncludedFiles() const
+    {
+        return options & ClazyOption_IgnoreIncludedFiles;
+    }
+
     bool isVisitImplicitCode() const
     {
         return options & ClazyContext::ClazyOption_VisitImplicitCode;
@@ -96,7 +102,7 @@ public:
 
     bool isOptionSet(const std::string &optionName) const
     {
-        return clazy_std::contains(extraOptions, optionName);
+        return clazy::contains(extraOptions, optionName);
     }
 
     /**
@@ -120,6 +126,8 @@ public:
     clang::FixItRewriter *rewriter = nullptr;
     bool allFixitsEnabled = false;
     std::string requestedFixitName;
+    clang::CXXMethodDecl *lastMethodDecl = nullptr;
+    clang::Decl *lastDecl = nullptr;
 };
 
 #endif

@@ -28,7 +28,6 @@
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "TemplateUtils.h"
-#include "checkmanager.h"
 #include "StmtBodyRange.h"
 
 #include <clang/AST/Decl.h>
@@ -50,7 +49,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
     DeclContext *context = varDecl->getDeclContext();
     FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
 
-    if ((m_ignoreMode & IgnoreNonLocalVariable) && !ContextUtils::isValueDeclInFunctionContext(varDecl)) {
+    if ((m_ignoreMode & IgnoreNonLocalVariable) && !clazy::isValueDeclInFunctionContext(varDecl)) {
         return true;
     }
 
@@ -85,14 +84,11 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (!t)
         return;
 
-    if (shouldIgnoreVariable(varDecl))
-        return;
-
     CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-    if (!recordDecl || recordDecl->getNameAsString() != "QList")
+    if (!recordDecl || recordDecl->getName() != "QList")
         return;
 
-    const std::vector<clang::QualType> types = TemplateUtils::getTemplateArgumentsTypes(recordDecl);
+    const std::vector<clang::QualType> types = clazy::getTemplateArgumentsTypes(recordDecl);
     if (types.empty())
         return;
     QualType qt2 = types[0];
@@ -102,7 +98,7 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     const int size_of_ptr = TypeUtils::sizeOfPointer(&m_astContext, qt2); // in bits
     const int size_of_T = m_astContext.getTypeSize(qt2);
 
-    if (size_of_T > size_of_ptr) {
+    if (size_of_T > size_of_ptr && !shouldIgnoreVariable(varDecl)) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");
         emitWarning(decl->getLocStart(), s.c_str());
     }

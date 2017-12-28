@@ -21,7 +21,6 @@
 
 #include "qstring-insensitive-allocation.h"
 #include "Utils.h"
-#include "checkmanager.h"
 #include "StringUtils.h"
 
 #include <clang/AST/AST.h>
@@ -32,7 +31,7 @@ using namespace std;
 
 
 QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -43,7 +42,7 @@ static bool isInterestingCall1(CallExpr *call)
         return false;
 
     static const vector<string> methods = { "QString::toUpper", "QString::toLower" };
-    return clazy_std::contains(methods, StringUtils::qualifiedMethodName(func));
+    return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
 static bool isInterestingCall2(CallExpr *call)
@@ -54,7 +53,7 @@ static bool isInterestingCall2(CallExpr *call)
 
     static const vector<string> methods = { "QString::endsWith", "QString::startsWith",
                                             "QString::contains", "QString::compare" };
-    return clazy_std::contains(methods, StringUtils::qualifiedMethodName(func));
+    return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
 void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
@@ -71,6 +70,3 @@ void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
 
     emitWarning(stmt->getLocStart(), "unneeded allocation");
 }
-
-
-REGISTER_CHECK("qstring-insensitive-allocation", QStringInsensitiveAllocation, CheckLevel0)

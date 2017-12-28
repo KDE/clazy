@@ -1,10 +1,7 @@
 /*
-   This file is part of the clazy static checker.
+  This file is part of the clazy static checker.
 
-  Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
-  Author: Sérgio Martins <sergio.martins@kdab.com>
-
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2017 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,21 +19,20 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef NON_POD_STATIC_H
-#define NON_POD_STATIC_H
+#ifndef CLAZY_CONNECT_BY_NAME_H
+#define CLAZY_CONNECT_BY_NAME_H
 
 #include "checkbase.h"
 
+
 /**
- * Finds global static non-POD variables.
- *
- * See README-non-pod-global-static.
+ * See README-connect-by-name.md for more info.
  */
-class NonPodStatic : public CheckBase
+class ConnectByName : public CheckBase
 {
 public:
-    NonPodStatic(const std::string &name, ClazyContext *context);
-    void VisitStmt(clang::Stmt *stm) override;
+    explicit ConnectByName(const std::string &name, ClazyContext *context);
+    void VisitDecl(clang::Decl *decl) override;
 };
 
 #endif

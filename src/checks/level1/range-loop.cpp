@@ -27,7 +27,6 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "checkmanager.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
 
@@ -37,7 +36,7 @@ using namespace clang;
 using namespace std;
 
 RangeLoop::RangeLoop(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
@@ -69,11 +68,11 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    if (!QtUtils::isQtCOWIterableClass(Utils::rootBaseClass(record)))
+    if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record)))
         return;
 
     StmtBodyRange bodyRange(nullptr, &sm(), rangeLoop->getLocStart());
-    if (QtUtils::containerNeverDetaches(LoopUtils::containerDeclForLoop(rangeLoop), bodyRange))
+    if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange))
         return;
 
     emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
@@ -83,19 +82,17 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 {
     TypeUtils::QualTypeClassification classif;
     auto varDecl = rangeLoop->getLoopVariable();
-    bool success = TypeUtils::classifyQualType(&m_astContext, varDecl, /*by-ref*/classif, rangeLoop);
+    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/classif, rangeLoop);
     if (!success)
         return;
 
     if (classif.passNonTriviallyCopyableByConstRef) {
-        string error;
-        const string paramStr = StringUtils::simpleTypeName(varDecl->getType(), lo());
-        error = "Missing reference in range-for with non trivial type (" + paramStr + ')';
+        string msg;
+        const string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
+        msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(varDecl->getLocStart(), error.c_str());
+        emitWarning(varDecl->getLocStart(), msg.c_str());
     }
 }
-
-REGISTER_CHECK("range-loop", RangeLoop, CheckLevel1)

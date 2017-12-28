@@ -29,6 +29,7 @@
 
 #include "clazy_export.h"
 #include "clazy_stl.h"
+#include "StringUtils.h"
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/Stmt.h>
@@ -36,7 +37,7 @@
 #include <clang/AST/ParentMap.h>
 
 
-namespace HierarchyUtils {
+namespace clazy {
 
 enum IgnoreStmt {
     IgnoreNone             = 0,
@@ -54,7 +55,7 @@ inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
     if (!child || !parent)
         return false;
 
-    return clazy_std::any_of(parent->children(), [child](clang::Stmt *c) {
+    return clazy::any_of(parent->children(), [child](clang::Stmt *c) {
         return c == child || isChildOf(child, c);
     });
 }
@@ -70,11 +71,11 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
 
     if (auto expr = llvm::dyn_cast<clang::MemberExpr>(stm)) {
         auto namedDecl = llvm::dyn_cast<clang::NamedDecl>(expr->getMemberDecl());
-        if (namedDecl && namedDecl->getNameAsString() == name)
+        if (namedDecl && clazy::name(namedDecl) == name)
             return true;
     }
 
-    return clazy_std::any_of(stm->children(), [name] (clang::Stmt *child) {
+    return clazy::any_of(stm->children(), [name] (clang::Stmt *child) {
         return isParentOfMemberFunctionCall(child, name);
     });
 
@@ -115,7 +116,7 @@ T* getFirstChildOfType2(clang::Stmt *stm)
     if (!stm)
         return nullptr;
 
-    if (clazy_std::hasChildren(stm)) {
+    if (clazy::hasChildren(stm)) {
         auto child = *(stm->child_begin());
         if (auto s = clang::dyn_cast<T>(child))
             return s;
@@ -137,7 +138,7 @@ inline clang::Stmt *parent(clang::ParentMap *map, clang::Stmt *s, unsigned int d
         return nullptr;
 
     return depth == 0 ? s
-                      : HierarchyUtils::parent(map, map->getParent(s), depth - 1);
+                      : clazy::parent(map, map->getParent(s), depth - 1);
 }
 
 // Returns the first parent of type T, with max depth depth
@@ -171,7 +172,7 @@ inline clang::Stmt * getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
     if (depth == 0 || !s)
         return s;
 
-    return clazy_std::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
+    return clazy::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
                                      : nullptr;
 }
 
@@ -232,7 +233,7 @@ std::vector<T*> getStatements(clang::Stmt *body,
             --depth;
 
         auto childStatements = getStatements<T>(child, sm, startLocation, depth, false, ignoreOptions);
-        clazy_std::append(childStatements, statements);
+        clazy::append(childStatements, statements);
     }
 
     return statements;
@@ -256,10 +257,10 @@ T* unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
         return tt;
 
     if ((options & IgnoreImplicitCasts) && llvm::isa<clang::ImplicitCastExpr>(stmt))
-        return unpeal<T>(HierarchyUtils::getFirstChild(stmt), options);
+        return unpeal<T>(clazy::getFirstChild(stmt), options);
 
     if ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(stmt))
-        return unpeal<T>(HierarchyUtils::getFirstChild(stmt), options);
+        return unpeal<T>(clazy::getFirstChild(stmt), options);
 
     return nullptr;
 }

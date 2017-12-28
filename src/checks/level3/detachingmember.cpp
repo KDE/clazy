@@ -24,7 +24,6 @@
 
 #include "detachingmember.h"
 #include "ClazyContext.h"
-#include "checkmanager.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
@@ -37,7 +36,7 @@ using namespace clang;
 using namespace std;
 
 DetachingMember::DetachingMember(const std::string &name, ClazyContext *context)
-    : DetachingBase(name, context)
+    : DetachingBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "qstring.h" };
 }
@@ -48,8 +47,8 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (!callExpr)
         return;
 
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(callExpr);
-    CXXOperatorCallExpr *operatorExpr = dyn_cast<CXXOperatorCallExpr>(callExpr);
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(callExpr);
+    auto operatorExpr = dyn_cast<CXXOperatorCallExpr>(callExpr);
     if (!memberCall && !operatorExpr)
         return;
 
@@ -64,7 +63,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         if (!method || method->getNameAsString() != "operator[]")
             return;
 
-        auto memberExpr = HierarchyUtils::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, operatorExpr);
+        auto memberExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, operatorExpr);
         CXXMethodDecl *parentMemberDecl = memberExpr ? memberExpr->getMethodDecl() : nullptr;
         if (parentMemberDecl && !parentMemberDecl->isConst()) {
             // Don't warn for s.m_listOfValues[0].nonConstMethod();
@@ -86,40 +85,40 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
 
     // Catch cases like m_foo[0] = .. , which is fine
 
-    auto parentUnaryOp = HierarchyUtils::getFirstParentOfType<UnaryOperator>(m_context->parentMap, callExpr);
+    auto parentUnaryOp = clazy::getFirstParentOfType<UnaryOperator>(m_context->parentMap, callExpr);
     if (parentUnaryOp) {
         // m_foo[0]++ is OK
         return;
     }
 
-    auto parentOp = HierarchyUtils::getFirstParentOfType<CXXOperatorCallExpr>(m_context->parentMap, HierarchyUtils::parent(m_context->parentMap, callExpr));
+    auto parentOp = clazy::getFirstParentOfType<CXXOperatorCallExpr>(m_context->parentMap, clazy::parent(m_context->parentMap, callExpr));
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
         const string parentFuncName = parentFunc ? parentFunc->getNameAsString() : "";
-        if (clazy_std::startsWith(parentFuncName, "operator")) {
+        if (clazy::startsWith(parentFuncName, "operator")) {
             // m_foo[0] = ... is OK
             return;
         }
     }
 
-    auto parentBinaryOp = HierarchyUtils::getFirstParentOfType<BinaryOperator>(m_context->parentMap, callExpr);
+    auto parentBinaryOp = clazy::getFirstParentOfType<BinaryOperator>(m_context->parentMap, callExpr);
     if (parentBinaryOp && parentBinaryOp->isAssignmentOp()) {
         // m_foo[0] += .. is OK
         Expr *lhs = parentBinaryOp->getLHS();
-        if (callExpr == lhs || HierarchyUtils::isChildOf(callExpr, lhs))
+        if (callExpr == lhs || clazy::isChildOf(callExpr, lhs))
             return;
     }
 
-    const bool returnsNonConstIterator = clazy_std::endsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
+    const bool returnsNonConstIterator = clazy::endsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
     if (returnsNonConstIterator) {
         // If we're calling begin()/end() as arguments to a function taking non-const iterators it's fine
         // Such as qSort(list.begin(), list.end());
-        auto parentCall = HierarchyUtils::getFirstParentOfType<CallExpr>(m_context->parentMap, HierarchyUtils::parent(m_context->parentMap, memberCall));
+        auto parentCall = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap, clazy::parent(m_context->parentMap, memberCall));
         FunctionDecl *parentFunc = parentCall ? parentCall->getDirectCallee() : nullptr;
         if (parentFunc && parentFunc->getNumParams() == parentCall->getNumArgs()) {
             int i = 0;
             for (auto argExpr : parentCall->arguments()) {
-                if (CXXMemberCallExpr *expr2 = HierarchyUtils::getFirstChildOfType<CXXMemberCallExpr>(argExpr)) {
+                if (CXXMemberCallExpr *expr2 = clazy::getFirstChildOfType<CXXMemberCallExpr>(argExpr)) {
                     if (expr2 == memberCall) {
                         // Success, we found which arg
                         ParmVarDecl *parm = parentFunc->getParamDecl(i);
@@ -137,5 +136,3 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
 
     emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
-
-REGISTER_CHECK("detaching-member", DetachingMember, CheckLevel3)

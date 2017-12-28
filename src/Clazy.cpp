@@ -64,10 +64,19 @@ ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
 {
 }
 
-void ClazyASTConsumer::addCheck(CheckBase *check)
+void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &check)
 {
-    check->registerASTMatchers(m_matchFinder);
-    m_createdChecks.push_back(check);
+    CheckBase *checkBase = check.first;
+    checkBase->registerASTMatchers(m_matchFinder);
+    //m_createdChecks.push_back(checkBase);
+
+    const RegisteredCheck &rcheck = check.second;
+
+    if (rcheck.options & RegisteredCheck::Option_VisitsStmts)
+        m_checksToVisitStmts.push_back(checkBase);
+
+    if (rcheck.options & RegisteredCheck::Option_VisitsDecls)
+        m_checksToVisitDecls.push_back(checkBase);
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
@@ -77,14 +86,21 @@ ClazyASTConsumer::~ClazyASTConsumer()
 
 bool ClazyASTConsumer::VisitDecl(Decl *decl)
 {
-    const bool isInSystemHeader = m_context->sm.isInSystemHeader(decl->getLocStart());
-
-    if (AccessSpecifierManager *a = m_context->accessSpecifierManager)
+    if (AccessSpecifierManager *a = m_context->accessSpecifierManager) // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
 
-    if (!isInSystemHeader) {
-        for (CheckBase *check : m_createdChecks)
-            check->VisitDeclaration(decl);
+    if (m_context->sm.isInSystemHeader(decl->getLocStart()))
+        return true;
+
+    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, decl->getLocStart());
+
+    m_context->lastDecl = decl;
+    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
+        m_context->lastMethodDecl = mdecl;
+
+    for (CheckBase *check : m_checksToVisitDecls) {
+        if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
+            check->VisitDecl(decl);
     }
 
     return true;
@@ -92,6 +108,9 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 {
+    if (m_context->sm.isInSystemHeader(stm->getLocStart()))
+        return true;
+
     if (!m_context->parentMap) {
         if (m_context->ci.getDiagnostics().hasUnrecoverableErrorOccurred())
             return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
@@ -114,10 +133,10 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
     if (!parentMap->hasParent(stm))
         parentMap->addStmt(stm);
 
-    const bool isInSystemHeader = m_context->sm.isInSystemHeader(stm->getLocStart());
-    if (!isInSystemHeader) {
-        for (CheckBase *check : m_createdChecks)
-            check->VisitStatement(stm);
+    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, stm->getLocStart());
+    for (CheckBase *check : m_checksToVisitStmts) {
+        if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
+            check->VisitStmt(stm);
     }
 
     return true;
@@ -137,7 +156,7 @@ void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
 
 static bool parseArgument(const string &arg, vector<string> &args)
 {
-    auto it = clazy_std::find(args, arg);
+    auto it = clazy::find(args, arg);
     if (it != args.end()) {
         args.erase(it);
         return true;
@@ -160,8 +179,8 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     std::lock_guard<std::mutex> lock(CheckManager::lock());
 
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
-    CheckBase::List createdChecks = m_checkManager->createChecks(m_checks, m_context);
-    for (CheckBase *check : createdChecks) {
+    auto createdChecks = m_checkManager->createChecks(m_checks, m_context);
+    for (auto check : createdChecks) {
         astConsumer->addCheck(check);
     }
 
@@ -177,13 +196,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     if (parseArgument("help", args)) {
         m_context = new ClazyContext(ci, ClazyContext::ClazyOption_None);
-        PrintHelp(llvm::errs(), HelpMode_Normal);
-        return true;
-    }
-
-    if (parseArgument("generateAnchorHeader", args)) {
-        m_context = new ClazyContext(ci, ClazyContext::ClazyOption_None);
-        PrintHelp(llvm::errs(), HelpMode_AnchorHeader);
+        PrintHelp(llvm::errs());
         return true;
     }
 
@@ -211,6 +224,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     if (parseArgument("visit-implicit-code", args))
         m_options |= ClazyContext::ClazyOption_VisitImplicitCode;
+
+    if (parseArgument("ignore-included-files", args))
+        m_options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
     m_context = new ClazyContext(ci, m_options);
 
@@ -259,45 +275,12 @@ void ClazyASTAction::printRequestedChecks() const
     llvm::errs() << "\n";
 }
 
-void ClazyASTAction::PrintAnchorHeader(llvm::raw_ostream &ros, RegisteredCheck::List &checks) const
-{
-    // Generates ClazyAnchorHeader.h.
-    // Needed so we can support a static build of clazy without the linker discarding our checks.
-    // You can generate with:
-    // $ echo | clang -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy -Xclang -plugin-arg-clang-lazy -Xclang generateAnchorHeader -c -xc -
-
-
-    ros << "// This file was autogenerated.\n\n";
-    ros << "#ifndef CLAZY_ANCHOR_HEADER_H\n#define CLAZY_ANCHOR_HEADER_H\n\n";
-
-    for (auto &check : checks) {
-        ros << string("extern volatile int ClazyAnchor_") + check.className + ";\n";
-    }
-
-    ros << "\n";
-    ros << "int clazy_dummy()\n{\n";
-    ros << "    return\n";
-
-    for (auto &check : checks) {
-        ros << string("        ClazyAnchor_") + check.className + " +\n";
-    }
-
-    ros << "    0;\n";
-    ros << "}\n\n";
-    ros << "#endif\n";
-}
-
-void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros, HelpMode helpMode) const
+void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
 {
     std::lock_guard<std::mutex> lock(CheckManager::lock());
     RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
 
-    clazy_std::sort(checks, checkLessThanByLevel);
-
-    if (helpMode == HelpMode_AnchorHeader) {
-        PrintAnchorHeader(ros, checks);
-        return;
-    }
+    clazy::sort(checks, checkLessThanByLevel);
 
     ros << "Available checks and FixIts:\n\n";
     const bool useMarkdown = getenv("CLAZY_HELP_USE_MARKDOWN");
@@ -376,8 +359,8 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
         return nullptr;
     }
 
-    CheckBase::List createdChecks = cm->createChecks(requestedChecks, context);
-    for (CheckBase *check : createdChecks) {
+    auto createdChecks = cm->createChecks(requestedChecks, context);
+    for (const auto &check : createdChecks) {
         astConsumer->addCheck(check);
     }
 

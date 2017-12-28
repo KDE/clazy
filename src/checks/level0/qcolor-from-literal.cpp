@@ -20,8 +20,8 @@
 */
 
 #include "StringUtils.h"
+#include "HierarchyUtils.h"
 #include "qcolor-from-literal.h"
-#include "checkmanager.h"
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -65,7 +65,7 @@ public :
 
 
 QColorFromLiteral::QColorFromLiteral(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
     , m_astMatcherCallBack(new QColorFromLiteral_Callback(this))
 {
 }
@@ -81,11 +81,11 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
     if (!call || call->getNumArgs() != 1)
         return;
 
-    string name = StringUtils::qualifiedMethodName(call);
+    string name = clazy::qualifiedMethodName(call);
     if (name != "QColor::setNamedColor")
         return;
 
-    StringLiteral *lt = HierarchyUtils::getFirstChildOfType2<StringLiteral>(call->getArg(0));
+    StringLiteral *lt = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(0));
     if (handleStringLiteral(lt))
         emitWarning(lt, "The ctor taking ints is cheaper than QColor::setNamedColor(QString)");
 }
@@ -95,5 +95,3 @@ void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
     finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
                                        hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
 }
-
-REGISTER_CHECK("qcolor-from-literal", QColorFromLiteral, CheckLevel0)

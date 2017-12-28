@@ -93,18 +93,17 @@ class CLAZYLIB_EXPORT CheckBase
 public:
 
     enum Option {
-        Option_None = 0
+        Option_None = 0,
+        Option_CanIgnoreIncludes = 1
     };
     typedef int Options;
 
     typedef std::vector<CheckBase*> List;
-    explicit CheckBase(const std::string &name, const ClazyContext *context, Options = Option_None);
+    explicit CheckBase(const std::string &name, const ClazyContext *context,
+                       Options = Option_None);
     CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
-
-    void VisitStatement(clang::Stmt *stm);
-    void VisitDeclaration(clang::Decl *stm);
 
     std::string name() const { return m_name; }
 
@@ -119,9 +118,14 @@ public:
 
     virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &) {};
 
-protected:
+    bool canIgnoreIncludes() const
+    {
+        return m_options & Option_CanIgnoreIncludes;
+    }
+
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
+protected:
     virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &);
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
     virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
@@ -136,7 +140,6 @@ protected:
     void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
-    virtual std::vector<std::string> supportedOptions() const;
     bool isOptionSet(const std::string &optionName) const;
 
     // 3 shortcuts for stuff that litter the codebase all over.
@@ -147,12 +150,6 @@ protected:
     const std::string m_name;
     const ClazyContext *const m_context;
     clang::ASTContext &m_astContext;
-    const clang::PreprocessorOptions &m_preprocessorOpts;
-    clang::TranslationUnitDecl *const m_tu;
-
-    clang::CXXMethodDecl *m_lastMethodDecl = nullptr;
-    clang::Decl *m_lastDecl = nullptr;
-    clang::Stmt *m_lastStmt = nullptr;
     std::vector<std::string> m_filesToIgnore;
 private:
     friend class ClazyPreprocessorCallbacks;
@@ -162,6 +159,7 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits = 0;
+    const Options m_options;
 };
 
 #endif

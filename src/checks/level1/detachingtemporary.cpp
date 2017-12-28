@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
+
 #include "detachingtemporary.h"
 #include "Utils.h"
 #include "StringUtils.h"
@@ -36,7 +36,7 @@ using namespace clang;
 using namespace std;
 
 DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *context)
-    : DetachingBase(name, context)
+    : DetachingBase(name, context, Option_CanIgnoreIncludes)
 {
     // Extra stuff that isn't really related to detachments but doesn't make sense to call on temporaries
     m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};
@@ -57,7 +57,7 @@ DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *co
 bool isAllowedChainedClass(const std::string &className)
 {
     static const vector<string> allowed = {"QString", "QByteArray", "QVariant"};
-    return clazy_std::contains(allowed, className);
+    return clazy::contains(allowed, className);
 }
 
 bool isAllowedChainedMethod(const std::string &methodName)
@@ -69,12 +69,12 @@ bool isAllowedChainedMethod(const std::string &methodName)
                                            "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList",
                                            "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes",
                                            "QMimeData::formats", "i18n", "QAbstractTransition::targetStates"};
-    return clazy_std::contains(allowed, methodName);
+    return clazy::contains(allowed, methodName);
 }
 
 void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 {
-    CallExpr *callExpr = dyn_cast<CallExpr>(stm);
+    auto callExpr = dyn_cast<CallExpr>(stm);
     if (!callExpr)
         return;
 
@@ -103,7 +103,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     }
 
     CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (isAllowedChainedMethod(StringUtils::qualifiedMethodName(firstFunc))) {
+    if (isAllowedChainedMethod(clazy::qualifiedMethodName(firstFunc))) {
         return;
     }
 
@@ -112,7 +112,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     }
 
     // Check if this is a QGlobalStatic
-    if (firstMethod && firstMethod->getParent()->getNameAsString() == "QGlobalStatic") {
+    if (firstMethod && clazy::name(firstMethod->getParent()) == "QGlobalStatic") {
         return;
     }
 
@@ -127,7 +127,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     const std::string className = classDecl->getNameAsString();
 
-    const std::unordered_map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    const std::unordered_map<string, std::vector<string> > &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(className);
     auto it2 = m_writeMethodsByType.find(className);
 
@@ -146,20 +146,19 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     string error;
 
-    const bool isReadFunction = clazy_std::contains(allowedFunctions, functionName);
-    const bool isWriteFunction = clazy_std::contains(allowedWriteFunctions, functionName);
+    const bool isReadFunction = clazy::contains(allowedFunctions, functionName);
+    const bool isWriteFunction = clazy::contains(allowedWriteFunctions, functionName);
 
     if (isReadFunction || isWriteFunction) {
         bool returnTypeIsIterator = false;
         CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
-        if (returnRecord) {
-            returnTypeIsIterator = returnRecord->getNameAsString() == "iterator";
-        }
+        if (returnRecord)
+            returnTypeIsIterator = clazy::name(returnRecord) == "iterator";
 
         if (isWriteFunction && (detachingMethodReturnType->isVoidType() || returnTypeIsIterator)) {
             error = std::string("Modifying temporary container is pointless and it also detaches");
         } else {
-            error = std::string("Don't call ") + StringUtils::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
+            error = std::string("Don't call ") + clazy::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
         }
     }
 
@@ -185,11 +184,9 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
     auto it = m_writeMethodsByType.find(className);
     if (it != m_writeMethodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy_std::contains(methods, method->getNameAsString()))
+        if (clazy::contains(methods, method->getNameAsString()))
             return true;
     }
 
     return false;
 }
-
-REGISTER_CHECK("detaching-temporary", DetachingTemporary, CheckLevel1)

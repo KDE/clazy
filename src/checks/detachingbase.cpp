@@ -22,7 +22,6 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "checkmanager.h"
 #include "detachingbase.h"
 #include "Utils.h"
 #include "StringUtils.h"
@@ -35,8 +34,8 @@
 using namespace clang;
 using namespace std;
 
-DetachingBase::DetachingBase(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Options options)
+    : CheckBase(name, context, options)
 {
 }
 
@@ -51,11 +50,11 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method) const
 
     const string className = record->getNameAsString();
 
-    const std::unordered_map<string, std::vector<string> > &methodsByType = QtUtils::detachingMethods();
+    const std::unordered_map<string, std::vector<string> > &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(className);
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy_std::contains(methods, method->getNameAsString()))
+        if (clazy::contains(methods, method->getNameAsString()))
             return true;
     }
 
