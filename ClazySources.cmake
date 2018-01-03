@@ -88,7 +88,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
 )
 
-if(HAS_STD_REGEX)
+if(HAS_STD_REGEX OR CLAZY_BUILD_WITH_CLANG)
   set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp)
 endif()
 

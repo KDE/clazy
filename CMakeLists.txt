@@ -19,8 +19,10 @@ set(CLAZY_VERSION_PATCH "0")
 set(CLAZY_VERSION "${CLAZY_VERSION_MAJOR}.${CLAZY_VERSION_MINOR}.${CLAZY_VERSION_PATCH}")
 set(CLAZY_PRINT_VERSION "${CLAZY_VERSION_MAJOR}.${CLAZY_VERSION_MINOR}")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-find_package(Clang 3.8 MODULE REQUIRED)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake)
+if (NOT CLAZY_BUILD_WITH_CLANG)
+  find_package(Clang 3.8 MODULE REQUIRED)
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -35,7 +37,7 @@ if(CLAZY_BUILD_UTILS_LIB)
   add_definitions(-DCLAZY_BUILD_UTILS_LIB)
 endif()
 
-if(MSVC AND NOT CLANG_LIBRARY_IMPORT)
+if(NOT CLAZY_BUILD_WITH_CLANG AND MSVC AND NOT CLANG_LIBRARY_IMPORT)
   message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
 endif()
 
@@ -55,7 +57,7 @@ endif()
 
 # Look for std::regex support
 message("Looking for std::regex support...")
-try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake_has_regex_test.cpp)
+try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
 
 if(RUN_RESULT EQUAL 0)
   set(HAS_STD_REGEX TRUE)
@@ -68,25 +70,27 @@ endif()
 
 include(ClazySources.cmake)
 
-if(MSVC)
-  string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
-endif()
+if (NOT CLAZY_BUILD_WITH_CLANG)
+  if(MSVC)
+    string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
+  endif()
 
-string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
+  string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
 
-set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS_LIST})
+  set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS_LIST})
 
-if(NOT APPLE AND NOT MINGW)
-  # Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
-  list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
-endif()
+  if(NOT APPLE AND NOT MINGW)
+    # Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
+    list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
+  endif()
 
-if(MSVC)
-  list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
+  if(MSVC)
+    list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
+  endif()
 endif()
 
 include_directories(${CMAKE_BINARY_DIR})
-include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
+include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
 macro(link_to_llvm name llvm_libs)
@@ -121,17 +125,10 @@ macro(link_to_llvm name llvm_libs)
   endif()
 endmacro()
 
-option(CLAZY_STATIC_PLUGIN_LIB "Build plugin into static library" OFF)
-set(PLUGIN_LINK_TYPE SHARED)
-
-if (CLAZY_STATIC_PLUGIN_LIB)
-  set(PLUGIN_LINK_TYPE STATIC)
-endif()
-
 macro(add_clang_plugin name)
   set(srcs ${ARGN})
 
-  add_library(${name} ${PLUGIN_LINK_TYPE} ${srcs})
+  add_library(${name} SHARED ${srcs})
 
   if(SYMBOL_FILE)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
@@ -169,96 +166,132 @@ endif()
 
 set(SYMBOL_FILE Lazy.exports)
 
-add_clang_plugin(ClangLazy ${CLAZY_PLUGIN_SRCS})
-
-set_target_properties(ClangLazy PROPERTIES
-  LINKER_LANGUAGE CXX
-  PREFIX ""
-)
-
-install(TARGETS ClangLazy
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-set(SHARE_INSTALL_DIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "Share directory name")
-
-if(NOT WIN32)
-  configure_file(${CMAKE_SOURCE_DIR}/clazy.cmake ${CMAKE_BINARY_DIR}/clazy @ONLY)
-  install(FILES ${CMAKE_BINARY_DIR}/clazy DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
-else()
-  install(FILES ${CMAKE_SOURCE_DIR}/clazy.bat DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
-  if(MSVC)
-    install(FILES ${CMAKE_SOURCE_DIR}/clazy-cl.bat DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
-  endif()
-endif()
-
-# Install the explanation README's
-set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/clazy/doc)
-file(GLOB README_LEVEL0_FILES src/checks/level0/README-*)
-file(GLOB README_LEVEL1_FILES src/checks/level1/README-*)
-file(GLOB README_LEVEL2_FILES src/checks/level2/README-*)
-file(GLOB README_LEVEL3_FILES src/checks/level3/README-*)
-file(GLOB README_HIDDENLEVEL_FILES src/checks/hiddenlevel/README-*)
-install(FILES ${README_LEVEL0_FILES} DESTINATION ${DOC_INSTALL_DIR}/level0)
-install(FILES ${README_LEVEL1_FILES} DESTINATION ${DOC_INSTALL_DIR}/level1)
-install(FILES ${README_LEVEL2_FILES} DESTINATION ${DOC_INSTALL_DIR}/level2)
-install(FILES ${README_LEVEL3_FILES} DESTINATION ${DOC_INSTALL_DIR}/level3)
-install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${DOC_INSTALL_DIR}/hiddenlevel)
-
-# Install more doc files
-install(FILES README.md COPYING-LGPL2.txt checks.json DESTINATION ${DOC_INSTALL_DIR})
-
-# Build docs
-set(MAN_INSTALL_DIR "man/man1")
-add_subdirectory(docs)
-
-if(CLAZY_BUILD_UTILS_LIB)
-  # Install public headers
-  set(CLAZY_LIB_INCLUDES
-    src/AccessSpecifierManager.h
-    src/checkbase.h
-    src/checkmanager.h
-    src/clazy_export.h
-    src/clazy_stl.h
-    src/ContextUtils.h
-    src/FixItUtils.h
-    src/HierarchyUtils.h
-    src/LoopUtils.h
-    src/MacroUtils.h
-    src/QtUtils.h
-    src/SuppressionManager.h
-    src/StmtBodyRange.h
-    src/StringUtils.h
-    src/TemplateUtils.h
-    src/TypeUtils.h
-    src/Utils.h
-    src/ClazyContext.h
+if (NOT CLAZY_BUILD_WITH_CLANG)
+  add_clang_plugin(ClangLazy ${CLAZY_PLUGIN_SRCS})
+  set_target_properties(ClangLazy PROPERTIES
+    LINKER_LANGUAGE CXX
+    PREFIX ""
   )
-  install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
-endif()
 
-# rpath
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
+  install(TARGETS ClangLazy
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
+
+  set(SHARE_INSTALL_DIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "Share directory name")
+
+  if(NOT WIN32)
+    configure_file(${CMAKE_CURRENT_LIST_DIR}/clazy.cmake ${CMAKE_BINARY_DIR}/clazy @ONLY)
+    install(FILES ${CMAKE_BINARY_DIR}/clazy DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
+  else()
+    install(FILES ${CMAKE_CURRENT_LIST_DIR}/clazy.bat DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
+    if(MSVC)
+      install(FILES ${CMAKE_CURRENT_LIST_DIR}/clazy-cl.bat DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
+    endif()
+  endif()
+
+  # Install the explanation README's
+  set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/clazy/doc)
+  file(GLOB README_LEVEL0_FILES src/checks/level0/README-*)
+  file(GLOB README_LEVEL1_FILES src/checks/level1/README-*)
+  file(GLOB README_LEVEL2_FILES src/checks/level2/README-*)
+  file(GLOB README_LEVEL3_FILES src/checks/level3/README-*)
+  file(GLOB README_HIDDENLEVEL_FILES src/checks/hiddenlevel/README-*)
+  install(FILES ${README_LEVEL0_FILES} DESTINATION ${DOC_INSTALL_DIR}/level0)
+  install(FILES ${README_LEVEL1_FILES} DESTINATION ${DOC_INSTALL_DIR}/level1)
+  install(FILES ${README_LEVEL2_FILES} DESTINATION ${DOC_INSTALL_DIR}/level2)
+  install(FILES ${README_LEVEL3_FILES} DESTINATION ${DOC_INSTALL_DIR}/level3)
+  install(FILES ${README_HIDDENLEVEL_FILES} DESTINATION ${DOC_INSTALL_DIR}/hiddenlevel)
+
+  # Install more doc files
+  install(FILES README.md COPYING-LGPL2.txt checks.json DESTINATION ${DOC_INSTALL_DIR})
+
+  # Build docs
+  set(MAN_INSTALL_DIR "man/man1")
+  add_subdirectory(docs)
+
+  if(CLAZY_BUILD_UTILS_LIB)
+    # Install public headers
+    set(CLAZY_LIB_INCLUDES
+      src/AccessSpecifierManager.h
+      src/checkbase.h
+      src/checkmanager.h
+      src/clazy_export.h
+      src/clazy_stl.h
+      src/ContextUtils.h
+      src/FixItUtils.h
+      src/HierarchyUtils.h
+      src/LoopUtils.h
+      src/MacroUtils.h
+      src/QtUtils.h
+      src/SuppressionManager.h
+      src/StmtBodyRange.h
+      src/StringUtils.h
+      src/TemplateUtils.h
+      src/TypeUtils.h
+      src/Utils.h
+      src/ClazyContext.h
+      )
+    install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
+  endif()
+
+  # rpath
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-endif("${isSystemDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
+  if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+  endif("${isSystemDir}" STREQUAL "-1")
 
-# Build clazy-standalone
-add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
+  # Build clazy-standalone
+  add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
 
-if(MSVC)
-  # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClangLazy.dll
-  target_link_libraries(clazy-standalone clangFrontend)
+  if(MSVC)
+    # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClangLazy.dll
+    target_link_libraries(clazy-standalone clangFrontend)
+  else()
+    target_link_libraries(clazy-standalone ClangLazy)
+  endif()
+
+  link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
+
+  install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 else()
-  target_link_libraries(clazy-standalone ClangLazy)
+  set(LLVM_LINK_COMPONENTS
+    Support
+    )
+  add_clang_library(clazyPlugin
+    ${CLAZY_PLUGIN_SRCS}
+
+    LINK_LIBS
+    clangFrontend
+    clangDriver
+    clangCodeGen
+    clangSema
+    clangAnalysis
+    clangRewriteFrontend
+    clangRewrite
+    clangAST
+    clangASTMatchers
+    clangParse
+    clangLex
+    clangBasic
+    clangARCMigrate
+    clangEdit
+    clangFrontendTool
+    clangRewrite
+    clangSerialization
+    clangTooling
+    clangStaticAnalyzerCheckers
+    clangStaticAnalyzerCore
+    clangStaticAnalyzerFrontend
+    )
+  add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
+
+  target_link_libraries(clazy-standalone clazyPlugin)
+
+  install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 endif()
-
-link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
-
-install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
