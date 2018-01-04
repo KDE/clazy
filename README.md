@@ -215,6 +215,7 @@ There are many checks and they are divided in levels:
 clazy runs all checks from level1 by default.
 
 - Checks from level0:
+    - [connect-by-name](src/checks/level0/README-connect-by-name.md)
     - [connect-non-signal](src/checks/level0/README-connect-non-signal.md)
     - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
     - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
@@ -259,6 +260,7 @@ clazy runs all checks from level1 by default.
     - [range-loop](src/checks/level1/README-range-loop.md)
     - [returning-data-from-temporary](src/checks/level1/README-returning-data-from-temporary.md)
     - [rule-of-two-soft](src/checks/level1/README-rule-of-two-soft.md)
+    - [skipped-base-method](src/checks/level1/README-skipped-base-method.md)
     - [virtual-signal](src/checks/level1/README-virtual-signal.md)
 
 - Checks from level2:
