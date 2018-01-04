@@ -251,7 +251,7 @@ def clazy_command(qt, test, filename):
     return result
 
 def dump_ast_command(test):
-    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.filename
+    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename
 
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
