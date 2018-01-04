@@ -215,6 +215,7 @@ There are many checks and they are divided in levels:
 clazy runs all checks from level1 by default.
 
 - Checks from level0:
+    - [connect-by-name](src/checks/level0/README-connect-by-name.md)
     - [connect-non-signal](src/checks/level0/README-connect-non-signal.md)
     - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
     - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
