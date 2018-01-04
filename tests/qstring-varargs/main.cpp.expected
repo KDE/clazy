@@ -1,0 +1,2 @@
+qstring-varargs/main.cpp:11:18: warning: Passing QString to variadic function [-Wclazy-qstring-varargs]
+qstring-varargs/main.cpp:12:25: warning: Passing QString to variadic function [-Wclazy-qstring-varargs]

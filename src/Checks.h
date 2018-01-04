@@ -29,6 +29,7 @@
 #include "checkmanager.h"
 #include "checks/hiddenlevel/inefficientqlist.h"
 #include "checks/hiddenlevel/isempty-vs-count.h"
+#include "checks/hiddenlevel/qstring-varargs.h"
 #include "checks/hiddenlevel/qt4-qstring-from-array.h"
 #include "checks/hiddenlevel/tr-non-literal.h"
 #include "checks/level0/connect-by-name.h"
@@ -108,6 +109,7 @@ void CheckManager::registerChecks()
 {
     registerCheck(check<InefficientQList>("inefficient-qlist", HiddenCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QStringVarargs>("qstring-varargs", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<TrNonLiteral>("tr-non-literal", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));

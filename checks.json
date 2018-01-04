@@ -15,6 +15,12 @@
             "visits_stmts" : true
         },
         {
+            "name"   : "qstring-varargs",
+            "level"  : -1,
+            "categories" : ["bug"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "qt4-qstring-from-array",
             "class_name" : "Qt4QStringFromArray",
             "level" : -1,

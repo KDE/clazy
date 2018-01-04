@@ -83,6 +83,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/tr-non-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/qt4-qstring-from-array.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/qstring-varargs.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/detachingbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/inefficientqlistbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
