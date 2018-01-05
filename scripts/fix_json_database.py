@@ -57,6 +57,10 @@ f.close()
 decoded = json.loads(contents)
 new_decoded = []
 for cmd in decoded:
+    if 'file' in cmd:
+        if cmd['file'].endswith('.moc') or cmd['file'].endswith('.rcc') or cmd['file'].endswith('_moc.cpp'):
+            continue
+
     if 'command' in cmd or 'arguments' in cmd:
         if 'command' in cmd:
             cmd['command'] = fix_command(cmd['command'])
