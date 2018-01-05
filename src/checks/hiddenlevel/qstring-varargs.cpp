@@ -36,13 +36,11 @@ QStringVarargs::QStringVarargs(const std::string &name, ClazyContext *context)
 {
 }
 
-
 void QStringVarargs::VisitStmt(clang::Stmt *stmt)
 {
     auto binop = dyn_cast<BinaryOperator>(stmt);
     if (!binop || binop->getOpcode() != BO_Comma)
         return;
-
 
     auto callexpr = dyn_cast<CallExpr>(binop->getLHS());
     if (!callexpr)
@@ -54,8 +52,10 @@ void QStringVarargs::VisitStmt(clang::Stmt *stmt)
 
     QualType qt = binop->getRHS()->getType();
     CXXRecordDecl *record = qt->getAsCXXRecordDecl();
-    if (!record || clazy::name(record) != "QString")
+    if (!record)
         return;
 
-    emitWarning(stmt, "Passing QString to variadic function");
+     StringRef name = clazy::name(record);
+     if (name == "QString" || name == "QByteArray")
+         emitWarning(stmt, string("Passing ") + name.data() + string(" to variadic function"));
 }

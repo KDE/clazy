@@ -12,4 +12,7 @@ void test()
     simple_printf("%s", s); // Warn
     const char *foo = "f";
     printf("%s", foo);
+
+    QByteArray b;
+    printf("%s", b); // Warn
 }
