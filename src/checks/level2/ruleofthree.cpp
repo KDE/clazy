@@ -89,12 +89,6 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const int numNotImplemented = missingList.size();
 
-    const string className = record->getNameAsString();
-    if (shouldIgnoreType(className))
-        return;
-
-    const string classQualifiedName = record->getQualifiedNameAsString();
-
     if (hasUserDtor && numImplemented == 1) {
         // Protected dtor is a way for a non-polymorphic base class avoid being deleted
         if (destructor->getAccess() == clang::AccessSpecifier::AS_protected)
@@ -119,6 +113,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (Utils::hasMember(record, "QSharedDataPointer"))
         return; // These need boiler-plate copy ctor and dtor
 
+    const string className = record->getNameAsString();
+    const string classQualifiedName = record->getQualifiedNameAsString();
     const string filename = sm().getFilename(recordStart);
     if (clazy::endsWith(className, "Private") && clazy::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
@@ -142,12 +138,4 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     }
 
     emitWarning(decl->getLocStart(), msg);
-}
-
-bool RuleOfThree::shouldIgnoreType(const std::string &className) const
-{
-    static const vector<StringRef> types = { "QTransform" // Fixed for Qt 6
-                                        };
-
-    return clazy::contains(types, className);
 }
