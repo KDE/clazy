@@ -28,9 +28,10 @@
 #include <clang/AST/AST.h>
 #include <clang/AST/DeclCXX.h>
 
+#include <array>
+
 using namespace clang;
 using namespace std;
-
 
 BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -55,14 +56,14 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         return;
 
     const string className = classDecl->getQualifiedNameAsString();
-    if (clazy::contains(vector<string>({"QObject", "QWidget"}), className))
+    if (clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), className))
         return;
 
     CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
     const string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
                                            : string("BaseClass");
 
-    if (isEventFilter && clazy::contains(vector<string>({"QObject", "QWidget"}), baseClassName)) {
+    if (isEventFilter && clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), baseClassName)) {
         // This is fine, QObject and QWidget eventFilter() don't do anything
         return;
     }

@@ -70,8 +70,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (numImplemented == 0 || numImplemented == 3) // Rule of 3 respected
         return;
 
-    vector<string> hasList;
-    vector<string> missingList;
+    vector<StringRef> hasList;
+    vector<StringRef> missingList;
     if (hasUserDtor)
         hasList.push_back("dtor");
     else
@@ -146,7 +146,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
 bool RuleOfThree::shouldIgnoreType(const std::string &className) const
 {
-    static const vector<string> types = { "QTransform" // Fixed for Qt 6
+    static const vector<StringRef> types = { "QTransform" // Fixed for Qt 6
                                         };
 
     return clazy::contains(types, className);

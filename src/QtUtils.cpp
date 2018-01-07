@@ -42,26 +42,26 @@ bool clazy::isQtIterableClass(clang::CXXRecordDecl *record)
     return isQtIterableClass(record->getQualifiedNameAsString());
 }
 
-const vector<string> & clazy::qtContainers()
+const vector<StringRef> & clazy::qtContainers()
 {
-    static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
-                                            "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
-                                            "QByteArray", "QSequentialIterable", "QAssociativeIterable", "QJsonArray", "QLinkedList" };
+    static const vector<StringRef> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
+                                               "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
+                                               "QByteArray", "QSequentialIterable", "QAssociativeIterable", "QJsonArray", "QLinkedList" };
     return classes;
 }
 
-const vector<string> & clazy::qtCOWContainers()
+const vector<StringRef> & clazy::qtCOWContainers()
 {
-    static const vector<string> classes = { "QListSpecialMethods", "QList", "QVector", "QMap", "QHash",
-                                            "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
-                                            "QByteArray", "QJsonArray", "QLinkedList" };
+    static const vector<StringRef> classes = { "QListSpecialMethods", "QList", "QVector", "QMap", "QHash",
+                                               "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
+                                               "QByteArray", "QJsonArray", "QLinkedList" };
     return classes;
 }
 
 
-std::unordered_map<string, std::vector<string> > clazy::detachingMethods()
+std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethods()
 {
-    static std::unordered_map<string, std::vector<string> > map;
+    static std::unordered_map<string, std::vector<StringRef> > map;
     if (map.empty()) {
         map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
         map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]", "fill" };
@@ -164,10 +164,10 @@ bool clazy::isJavaIterator(CXXRecordDecl *record)
     if (!record)
         return false;
 
-    static const vector<string> names = { "QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
-                                         "QVectorIterator", "QLinkedListIterator", "QStringListIterator" };
+    static const vector<StringRef> names = { "QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
+                                             "QVectorIterator", "QLinkedListIterator", "QStringListIterator" };
 
-    return clazy::contains(names, record->getNameAsString());
+    return clazy::contains(names, clazy::name(record));
 }
 
 bool clazy::isJavaIterator(CXXMemberCallExpr *call)

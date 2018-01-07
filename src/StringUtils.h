@@ -107,20 +107,46 @@ inline std::string classNameFor(clang::ParmVarDecl *param)
     return classNameFor(param->getType());
 }
 
+inline llvm::StringRef name(const clang::NamedDecl *decl)
+{
+    if (decl->getDeclName().isIdentifier())
+        return decl->getName();
+
+    return "";
+}
+
+inline llvm::StringRef name(const clang::CXXMethodDecl *method)
+{
+    if (method->getOverloadedOperator() == clang::OO_Subscript)
+        return "operator[]";
+
+    return name(static_cast<const clang::NamedDecl *>(method));
+}
+
+inline llvm::StringRef name(const clang::CXXConstructorDecl *decl)
+{
+    return name(decl->getParent());
+}
+
+inline llvm::StringRef name(const clang::CXXDestructorDecl *decl)
+{
+    return name(decl->getParent());
+}
+
 template <typename T>
 inline bool isOfClass(T *node, llvm::StringRef className)
 {
     return node && classNameFor(node) == className;
 }
 
-inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<std::string> &functionNames)
+inline bool functionIsOneOf(clang::FunctionDecl *func, const std::vector<llvm::StringRef> &functionNames)
 {
-    return func && clazy::contains(functionNames, func->getNameAsString());
+    return func && clazy::contains(functionNames, clazy::name(func));
 }
 
-inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<std::string> &classNames)
+inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<llvm::StringRef> &classNames)
 {
-    return record && clazy::contains(classNames, record->getNameAsString());
+    return record && clazy::contains(classNames, clazy::name(record));
 }
 
 inline void printLocation(const clang::SourceManager &sm, clang::SourceLocation loc, bool newLine = true)
@@ -169,24 +195,6 @@ inline std::string qualifiedMethodName(clang::FunctionDecl *func)
 inline std::string qualifiedMethodName(clang::CallExpr *call)
 {
     return call ? qualifiedMethodName(call->getDirectCallee()) : std::string();
-}
-
-inline llvm::StringRef name(const clang::NamedDecl *decl)
-{
-    if (decl->getDeclName().isIdentifier())
-        return decl->getName();
-
-    return "";
-}
-
-inline llvm::StringRef name(const clang::CXXConstructorDecl *decl)
-{
-    return name(decl->getParent());
-}
-
-inline llvm::StringRef name(const clang::CXXDestructorDecl *decl)
-{
-    return name(decl->getParent());
 }
 
 inline std::string accessString(clang::AccessSpecifier s)

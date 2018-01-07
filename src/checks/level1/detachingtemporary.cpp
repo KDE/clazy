@@ -102,7 +102,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         return; // const doesn't detach
     }
 
-    CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    auto firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
     if (isAllowedChainedMethod(clazy::qualifiedMethodName(firstFunc))) {
         return;
     }
@@ -125,14 +125,14 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     // Check if it's one of the implicit shared classes
     CXXRecordDecl *classDecl = detachingMethod->getParent();
-    const std::string className = classDecl->getNameAsString();
+    StringRef className = clazy::name(classDecl);
 
-    const std::unordered_map<string, std::vector<string> > &methodsByType = clazy::detachingMethods();
+    const std::unordered_map<string, std::vector<StringRef> > &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(className);
     auto it2 = m_writeMethodsByType.find(className);
 
-    std::vector<std::string> allowedFunctions;
-    std::vector<std::string> allowedWriteFunctions;
+    std::vector<StringRef> allowedFunctions;
+    std::vector<StringRef> allowedWriteFunctions;
     if (it != methodsByType.end()) {
         allowedFunctions = it->second;
     }
@@ -142,7 +142,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     }
 
     // Check if it's one of the detaching methods
-    const std::string functionName = detachingMethod->getNameAsString();
+    StringRef functionName = clazy::name(detachingMethod);
 
     string error;
 
@@ -179,12 +179,12 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
     if (DetachingBase::isDetachingMethod(method))
         return true;
 
-    const string className = record->getNameAsString();
+    StringRef className = clazy::name(record);
 
     auto it = m_writeMethodsByType.find(className);
     if (it != m_writeMethodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy::contains(methods, method->getNameAsString()))
+        if (clazy::contains(methods, clazy::name(method)))
             return true;
     }
 

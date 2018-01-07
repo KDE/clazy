@@ -40,7 +40,7 @@ public:
     void VisitStmt(clang::Stmt *stm) override;
 private:
     bool isDetachingMethod(clang::CXXMethodDecl *method) const;
-    std::map<std::string, std::vector<std::string>> m_writeMethodsByType;
+    std::map<llvm::StringRef, std::vector<llvm::StringRef>> m_writeMethodsByType;
 };
 
 #endif

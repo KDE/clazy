@@ -102,17 +102,17 @@ CLAZYLIB_EXPORT bool isQtAssociativeContainer(const std::string &className);
 /**
  * Returns a list of Qt containers.
  */
-CLAZYLIB_EXPORT const std::vector<std::string> & qtContainers();
+CLAZYLIB_EXPORT const std::vector<llvm::StringRef> & qtContainers();
 
 /**
  * Returns a list of implicitly shared Qt containers.
  */
-CLAZYLIB_EXPORT const std::vector<std::string> & qtCOWContainers();
+CLAZYLIB_EXPORT const std::vector<llvm::StringRef> & qtCOWContainers();
 
 /**
  * Returns a map with the list of method names that detach each container.
  */
-CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<std::string>> detachingMethods();
+CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethods();
 
 /**
  * Returns true if a type represents a Qt container class.
