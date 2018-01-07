@@ -27,8 +27,10 @@
 #include "FixItUtils.h"
 
 #include <clang/AST/AST.h>
-#include <vector>
 #include <clang/Lex/Lexer.h>
+
+#include <array>
+#include <vector>
 
 using namespace clang;
 using namespace std;
@@ -48,8 +50,8 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
     if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    static const vector<string> list = { "left", "mid", "right" };
-    return clazy::contains(list, method->getNameAsString());
+    static const llvm::SmallVector<StringRef, 3> list = {{ "left", "mid", "right" }};
+    return clazy::contains(list, clazy::name(method));
 }
 
 static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOptions &lo)
@@ -57,11 +59,11 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
     if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    static const vector<string> list = { "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
-                                         "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
-                                         "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" };
+    static const std::array<StringRef, 19> list = {{ "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
+                                                     "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
+                                                     "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" }};
 
-    if (!clazy::contains(list, method->getNameAsString()))
+    if (!clazy::contains(list, clazy::name(method)))
         return false;
 
     return !clazy::anyArgIsOfAnySimpleType(method, {"QRegExp", "QRegularExpression"}, lo);
@@ -69,12 +71,18 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
 
 static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
 {
-    static const vector<string> list = { "append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth", "operator+=" };
-
     if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    return clazy::contains(list, method->getNameAsString());
+    static const std::array<StringRef, 8> list = {{ "append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth" }};
+
+    if  (clazy::contains(list, clazy::name(method)))
+        return true;
+
+    if (method->getOverloadedOperator() == OO_PlusEqual) // operator+=
+        return true;
+
+    return false;
 }
 
 void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
@@ -166,7 +174,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 bool StringRefCandidates::processCase2(CallExpr *call)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(call);
-    CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(call);
+    auto operatorCall = memberCall ? nullptr : dyn_cast<CXXOperatorCallExpr>(call);
 
     CXXMethodDecl *method = nullptr;
     if (memberCall) {
