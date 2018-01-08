@@ -104,7 +104,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         const bool copyCtorIsDeleted = copyCtor && copyCtor->isDeleted();
         const bool copyAssignIsDeleted = copyAssign && copyAssign->isDeleted();
 
-        if (copyCtorIsDeleted && copyAssignIsDeleted) // They were explicitely deleted, it's safe.
+        if (copyCtorIsDeleted || copyAssignIsDeleted) // One of them was explicitely deleted, it's safe.
             return;
 
         if (Utils::functionHasEmptyBody(destructor)) {

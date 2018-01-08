@@ -2,6 +2,9 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "bug388677.cpp"
         }
     ]
 }
