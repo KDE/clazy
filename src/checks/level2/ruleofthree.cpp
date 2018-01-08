@@ -66,6 +66,17 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     //const bool hasMoveCtor = record->hasNonTrivialMoveConstructor();
     //const bool hasTrivialMoveAssignment = record->hasNonTrivialMoveAssignment();
 
+
+    const bool copyCtorIsDeleted = copyCtor && copyCtor->isDeleted();
+    const bool copyAssignIsDeleted = copyAssign && copyAssign->isDeleted();
+
+    if (hasUserDtor && (copyCtorIsDeleted || copyAssignIsDeleted)) {
+        // One of the copy methods was explicitely deleted, it's safe.
+        // The case we want to catch is when one is user-written and the other is
+        // compiler-generated.
+        return;
+    }
+
     const int numImplemented = hasUserCopyCtor + hasUserCopyAssign + hasUserDtor;
     if (numImplemented == 0 || numImplemented == 3) // Rule of 3 respected
         return;
@@ -92,12 +103,6 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (hasUserDtor && numImplemented == 1) {
         // Protected dtor is a way for a non-polymorphic base class avoid being deleted
         if (destructor->getAccess() == clang::AccessSpecifier::AS_protected)
-            return;
-
-        const bool copyCtorIsDeleted = copyCtor && copyCtor->isDeleted();
-        const bool copyAssignIsDeleted = copyAssign && copyAssign->isDeleted();
-
-        if (copyCtorIsDeleted && copyAssignIsDeleted) // They were explicitely deleted, it's safe.
             return;
 
         if (Utils::functionHasEmptyBody(destructor)) {
