@@ -172,8 +172,10 @@ void CheckManager::registerChecks()
     registerCheck(check<ImplicitCasts>("implicit-casts", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<MissingQObjectMacro>("missing-qobject-macro", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<MissingTypeInfo>("missing-typeinfo", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
+#ifndef NO_STD_REGEX
     registerCheck(check<OldStyleConnect>("old-style-connect", CheckLevel2, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-old-style-connect", "old-style-connect");
+#endif
     registerCheck(check<QStringAllocations>("qstring-allocations", CheckLevel2, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qlatin1string-allocations", "qstring-allocations");
     registerFixIt(2, "fix-fromLatin1_fromUtf8-allocations", "qstring-allocations");

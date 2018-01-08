@@ -48,6 +48,7 @@ class Check:
         self.fixits = []
         self.visits_stmts = False
         self.visits_decls = False
+        self.ifndef = ""
 
     def include(self):
         level = 'level' + str(self.level)
@@ -125,6 +126,9 @@ def load_json(filename):
         if 'class_name' in check:
             c.class_name = check['class_name']
 
+        if 'ifndef' in check:
+            c.ifndef = check['ifndef']
+
         if 'minimum_qt_version' in check:
             c.minimum_qt_version = check['minimum_qt_version']
 
@@ -181,12 +185,18 @@ void CheckManager::registerChecks()
 
         qt4flag = qt4flag.replace("RegisteredCheck::Option_None |", "")
 
+        if c.ifndef:
+            text += "#ifndef " + c.ifndef + "\n"
+
         text += '    registerCheck(check<%s>("%s", %s, %s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), qt4flag)
 
         fixitID = 1
         for fixit in c.fixits:
             text += '    registerFixIt(%d, "%s", "%s");\n' % (fixitID, "fix-" + fixit, c.name)
             fixitID = fixitID * 2
+
+        if c.ifndef:
+            text += "#endif" + "\n"
 
     text += "}\n"
 
