@@ -530,4 +530,9 @@ else:
 for thread in threads:
     thread.join()
 
-sys.exit(0 if _was_successful else -1)
+if _was_successful:
+    print "SUCCESS"
+    sys.exit(0)
+else:
+    print "FAIL"
+    sys.exit(-1)
