@@ -633,12 +633,11 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
         return {};
 
     const bool isOperator = isa<CXXOperatorCallExpr>(lastCallExpr);
-
     vector<CallExpr *> callexprs = { lastCallExpr };
     Stmt *s = lastCallExpr;
     do {
         const int childCount = std::distance(s->child_begin(), s->child_end());
-        if (isOperator && childCount > 1) {
+        if (isOperator && childCount > 1 && s == lastCallExpr) {
             // for operator case, the chained call childs are in the second child
             s = *(++s->child_begin());
         } else {
@@ -652,6 +651,11 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
             } else if (auto memberExpr = dyn_cast<MemberExpr>(s)) {
                 if (isa<FieldDecl>(memberExpr->getMemberDecl()))
                     break; // accessing a public member via . or -> breaks the chain
+            } else if (isa<ConditionalOperator>(s)) {
+                // Gets very greasy with conditional operators
+                // This would match: (should() ? container1 : container2).append()
+                // and it would return { append(), should()}
+                break;
             }
         }
     } while (s);
