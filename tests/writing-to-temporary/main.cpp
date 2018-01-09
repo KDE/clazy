@@ -72,3 +72,11 @@ void test363428()
     QTextTable *currentTable;
     currentTable->cellAt(cursor).setFormat(QTextCharFormat());
 }
+
+bool returnsBool() { return true; }
+
+void testTernary()
+{
+    QStringList list;
+    (returnsBool() ? list : list).append("");
+}
