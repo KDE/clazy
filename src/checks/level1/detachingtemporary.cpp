@@ -80,7 +80,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
 
     // For a chain like getList().first(), returns {first(), getList()}
-    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr);
+    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
     if (callExprs.size() < 2)
         return;
 

@@ -2,8 +2,7 @@
     "tests" : [
         {
             "filename" : "main.cpp",
-            "minimum_qt_version" : 550,
-            "expects_failure" : true
+            "minimum_qt_version" : 550
         }
     ]
 }
