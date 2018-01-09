@@ -78,5 +78,5 @@ bool returnsBool() { return true; }
 void testTernary()
 {
     QStringList list;
-    (returnsBool() ? list : list).append("");
+    (returnsBool() ? list : list).append(""); // OK
 }

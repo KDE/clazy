@@ -82,7 +82,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
         return;
 
     // For a chain like getFoo().setBar(), returns {setBar(), getFoo()}
-    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr);
+    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr is the call to setBar()
     if (callExprs.size() < 2)
         return;
 

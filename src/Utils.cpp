@@ -650,6 +650,11 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
             } else if (MemberExpr *memberExpr = dyn_cast<MemberExpr>(s)) {
                 if (isa<FieldDecl>(memberExpr->getMemberDecl()))
                     break; // accessing a public member via . or -> breaks the chain
+            } else if (isa<ConditionalOperator>(s)) {
+                // Gets very greasy with conditional operators
+                // This would match: (should() ? container1 : container2).append()
+                // and it would return { append(), should()}
+                break;
             }
         }
     } while (s);
