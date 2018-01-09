@@ -168,8 +168,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
     if (!clazy::isOfClass(ctorDecl, "QString"))
         return;
 
-    static const vector<string> blacklistedParentCtors = { "QRegExp", "QIcon" };
-    if (Utils::insideCTORCall(m_context->parentMap, stm, blacklistedParentCtors)) {
+    if (Utils::insideCTORCall(m_context->parentMap, stm, { "QRegExp", "QIcon" })) {
         // https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
         return;
     }

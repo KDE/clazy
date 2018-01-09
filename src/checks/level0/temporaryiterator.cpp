@@ -73,13 +73,12 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         return;
 
     // Check if it's a container
-    const std::string className = classDecl->getNameAsString();
-    auto it = m_methodsByType.find(className);
+    auto it = m_methodsByType.find(clazy::name(classDecl));
     if (it == m_methodsByType.end())
         return;
 
     // Check if it's a method returning an iterator
-    const std::string functionName = methodDecl->getNameAsString();
+    const StringRef functionName = clazy::name(methodDecl);
     const auto &allowedFunctions = it->second;
     if (!clazy::contains(allowedFunctions, functionName))
         return;

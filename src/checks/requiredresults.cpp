@@ -37,48 +37,46 @@ RequiredResults::RequiredResults(const std::string &name, ClazyContext *context)
 {
 }
 
-bool RequiredResults::shouldIgnoreMethod(const std::string &qualifiedName)
+bool RequiredResults::shouldIgnoreMethod(const StringRef &qualifiedName)
 {
-    static std::vector<std::string> files;
-    if (files.empty()) {
-        files.reserve(31);
-        files.push_back("QDir::mkdir");
-        files.push_back("QDir::rmdir");
-        files.push_back("QDir::mkpath");
-        files.push_back("QDBusConnection::send");
+    static const std::vector<StringRef> files = {
+        "QDir::mkdir",
+        "QDir::rmdir",
+        "QDir::mkpath",
+        "QDBusConnection::send",
 
-        files.push_back("QRegExp::indexIn");
-        files.push_back("QRegExp::exactMatch");
-        files.push_back("QQmlProperty::write");
-        files.push_back("QQmlProperty::reset");
-        files.push_back("QWidget::winId");
-        files.push_back("QtWaylandClient::QWaylandEglWindow::contentFBO");
-        files.push_back("ProString::updatedHash");
+        "QRegExp::indexIn",
+        "QRegExp::exactMatch",
+        "QQmlProperty::write",
+        "QQmlProperty::reset",
+        "QWidget::winId",
+        "QtWaylandClient::QWaylandEglWindow::contentFBO",
+        "ProString::updatedHash",
 
         // kdepim
-        files.push_back("KCalCore::Incidence::recurrence");
-        files.push_back("KCalCore::RecurrenceRule::Private::buildCache");
-        files.push_back("KAlarmCal::KAEvent::updateKCalEvent");
-        files.push_back("Akonadi::Server::Collection::clearMimeTypes");
-        files.push_back("Akonadi::Server::Collection::addMimeType");
-        files.push_back("Akonadi::Server::PimItem::addFlag");
-        files.push_back("Akonadi::Server::PimItem::addTag");
+        "KCalCore::Incidence::recurrence",
+        "KCalCore::RecurrenceRule::Private::buildCache",
+        "KAlarmCal::KAEvent::updateKCalEvent",
+        "Akonadi::Server::Collection::clearMimeTypes",
+        "Akonadi::Server::Collection::addMimeType",
+        "Akonadi::Server::PimItem::addFlag",
+        "Akonadi::Server::PimItem::addTag",
 
         // kf5 libs
-        files.push_back("KateVi::Command::execute");
-        files.push_back("KArchiveDirectory::copyTo");
-        files.push_back("KBookmarkManager::saveAs");
-        files.push_back("KBookmarkManager::save");
-        files.push_back("KLineEditPrivate::copySqueezedText");
-        files.push_back("KJS::UString::Rep::hash");
-        files.push_back("KCModuleProxy::realModule");
-        files.push_back("KCategorizedView::visualRect");
-        files.push_back("KateLineLayout::textLine");
-        files.push_back("DOM::HTMLCollectionImpl::firstItem");
-        files.push_back("DOM::HTMLCollectionImpl::nextItem");
-        files.push_back("DOM::HTMLCollectionImpl::firstItem");
-        files.push_back("ImapResourceBase::settings");
-    }
+        "KateVi::Command::execute",
+        "KArchiveDirectory::copyTo",
+        "KBookmarkManager::saveAs",
+        "KBookmarkManager::save",
+        "KLineEditPrivate::copySqueezedText",
+        "KJS::UString::Rep::hash",
+        "KCModuleProxy::realModule",
+        "KCategorizedView::visualRect",
+        "KateLineLayout::textLine",
+        "DOM::HTMLCollectionImpl::firstItem",
+        "DOM::HTMLCollectionImpl::nextItem",
+        "DOM::HTMLCollectionImpl::firstItem",
+        "ImapResourceBase::settings"
+    };
 
     return clazy::contains(files, qualifiedName);
 }
@@ -94,12 +92,12 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
         if (!callExpr)
             continue;
 
-        CXXMethodDecl *methodDecl =	callExpr->getMethodDecl();
+        CXXMethodDecl *methodDecl = callExpr->getMethodDecl();
         if (!methodDecl || !methodDecl->isConst())
             continue;
 
         std::string methodName = methodDecl->getQualifiedNameAsString();
-        if (shouldIgnoreMethod(methodName)) // Filter out some false positives
+        if (shouldIgnoreMethod(StringRef(methodName.c_str()))) // Filter out some false positives
             continue;
 
         QualType qt = methodDecl->getReturnType();

@@ -31,7 +31,6 @@
 #include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Basic/SourceLocation.h>
 
-#include <string>
 #include <vector>
 
 namespace clang {
@@ -46,7 +45,7 @@ namespace clazy
  * Returns true is macroName was defined via compiler invocation argument.
  * Like $ gcc -Dfoo main.cpp
  */
-inline bool isPredefined(const clang::PreprocessorOptions &ppOpts, const std::string &macroName)
+inline bool isPredefined(const clang::PreprocessorOptions &ppOpts, const llvm::StringRef &macroName)
 {
     const auto &macros = ppOpts.Macros;
 
@@ -61,10 +60,10 @@ inline bool isPredefined(const clang::PreprocessorOptions &ppOpts, const std::st
 /**
  * Returns true if the source location loc is inside a macro named macroName.
  */
-inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::string &macroName)
+inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation loc, const llvm::StringRef &macroName)
 {
     if (loc.isValid() && loc.isMacroID()) {
-        auto macro = clang::Lexer::getImmediateMacroName(loc, context->getSourceManager(), context->getLangOpts());
+        StringRef macro = clang::Lexer::getImmediateMacroName(loc, context->getSourceManager(), context->getLangOpts());
         return macro == macroName;
     }
 
@@ -74,9 +73,9 @@ inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation lo
 /**
  * Returns true if the source location loc is inside any of the specified macros.
  */
-inline bool isInAnyMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::vector<std::string> &macroNames)
+inline bool isInAnyMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::vector<llvm::StringRef> &macroNames)
 {
-    return clazy::any_of(macroNames, [context, loc](const std::string &macroName) {
+    return clazy::any_of(macroNames, [context, loc](const llvm::StringRef &macroName) {
         return isInMacro(context, loc, macroName);
     });
 }

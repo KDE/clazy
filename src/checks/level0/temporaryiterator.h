@@ -43,7 +43,7 @@ public:
     TemporaryIterator(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 private:
-    std::map<std::string, std::vector<std::string>> m_methodsByType;
+    std::map<llvm::StringRef, std::vector<llvm::StringRef>> m_methodsByType;
 };
 
 #endif

@@ -128,10 +128,10 @@ namespace Utils {
     CLAZYLIB_EXPORT bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
     CLAZYLIB_EXPORT bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s,
-                                              const std::vector<std::string> &anyOf);
+                                              const std::vector<llvm::StringRef> &anyOf);
 
     CLAZYLIB_EXPORT bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s,
-                                        const std::vector<std::string> &anyOf);
+                                        const std::vector<llvm::StringRef> &anyOf);
 
     // returns true if the ternary operator has two string literal arguments, such as:
     // foo ? "bar" : "baz"

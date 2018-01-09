@@ -107,24 +107,23 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
     if (binary && (binary->isAssignmentOp() || binary->isShiftAssignOp() || binary->isCompoundAssignmentOp()))
         return true;
 
-    static std::vector<std::string> method_blacklist;
-    if (method_blacklist.empty()) {
-        method_blacklist.push_back("isDestroyed");
-        method_blacklist.push_back("isRecursive"); // TODO: Use qualified name instead ?
-        method_blacklist.push_back("q_func");
-        method_blacklist.push_back("d_func");
-        method_blacklist.push_back("begin");
-        method_blacklist.push_back("end");
-        method_blacklist.push_back("data");
-        method_blacklist.push_back("fragment");
-        method_blacklist.push_back("glIsRenderbuffer");
-    }
+    static const std::vector<StringRef> method_blacklist = {
+        "isDestroyed",
+        "isRecursive", // TODO: Use qualified name instead ?
+        "q_func",
+        "d_func",
+        "begin",
+        "end",
+        "data",
+        "fragment",
+        "glIsRenderbuffer"
+    };
 
     auto memberCall = dyn_cast<MemberExpr>(stm);
     if (memberCall) {
         auto methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
         if (methodDecl && !methodDecl->isConst() && !methodDecl->isStatic() &&
-                !clazy::contains(method_blacklist, methodDecl->getNameAsString()))
+                !clazy::contains(method_blacklist, clazy::name(methodDecl)))
             return true;
     }
 
@@ -493,7 +492,7 @@ bool Utils::isImplicitCastTo(Stmt *s, const string &className)
 }
 
 
-bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<string> &anyOf)
+bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<StringRef> &anyOf)
 {
     if (!s)
         return false;
@@ -508,7 +507,7 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
             auto method = dyn_cast<CXXMethodDecl>(func);
             if (method) {
                 auto record = method->getParent();
-                if (record && clazy::contains(anyOf, record->getNameAsString()))
+                if (record && clazy::contains(anyOf, clazy::name(record)))
                     return true;
             }
         }
@@ -518,13 +517,13 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<stri
 }
 
 
-bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<string> &anyOf)
+bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<llvm::StringRef> &anyOf)
 {
     if (!s)
         return false;
 
     auto expr = dyn_cast<CXXConstructExpr>(s);
-    if (expr && expr->getConstructor() && clazy::contains(anyOf, expr->getConstructor()->getNameAsString())) {
+    if (expr && expr->getConstructor() && clazy::contains(anyOf, clazy::name(expr->getConstructor()))) {
         return true;
     }
 
@@ -535,7 +534,7 @@ bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::Pr
 {
     return l1.isValid() && l2.isValid() && l1.getColumn() == l2.getColumn() &&
            l1.getLine()   == l2.getLine()   &&
-            string(l1.getFilename()) == string(l2.getFilename());
+            StringRef(l1.getFilename()) == StringRef(l2.getFilename());
 }
 
 CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
