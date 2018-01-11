@@ -32,9 +32,9 @@
 using namespace clang;
 using namespace std;
 
-static bool isInterestingContainer(const string &name)
+static bool isInterestingContainer(StringRef name)
 {
-    static const vector<string> containers = { "QMap", "QHash" };
+    static const vector<StringRef> containers = { "QMap", "QHash" };
     return clazy::contains(containers, name);
 }
 

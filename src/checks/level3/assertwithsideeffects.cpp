@@ -46,12 +46,12 @@ AssertWithSideEffects::AssertWithSideEffects(const std::string &name, ClazyConte
 {
 }
 
-static bool functionIsOk(const string &name)
+static bool functionIsOk(StringRef name)
 {
-    static const vector<string> whitelist = {"qFuzzyIsNull", "qt_noop", "qt_assert", "qIsFinite", "qIsInf",
-                                             "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-"
-                                             "q_func", "d_func", "isEmptyHelper"
-                                             "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
+    static const vector<StringRef> whitelist = {"qFuzzyIsNull", "qt_noop", "qt_assert", "qIsFinite", "qIsInf",
+                                                "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-"
+                                                "q_func", "d_func", "isEmptyHelper"
+                                                "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
     return clazy::contains(whitelist, name);
 }
 
@@ -92,8 +92,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
             if (isa<CXXMethodDecl>(func)) // This will be visited next, so ignore it now
                 return;
 
-            const std::string funcName = func->getNameAsString();
-            if (functionIsOk(funcName)) {
+            if (functionIsOk(clazy::name(func))) {
                 return;
             }
 

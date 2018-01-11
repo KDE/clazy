@@ -64,11 +64,10 @@ enum ConnectFlag {
     ConnectFlag_Bogus = 1024
 };
 
-static bool classIsOk(const string &className)
+static bool classIsOk(StringRef className)
 {
     // List of classes we usually use Qt4 syntax
-    static const vector<string> okClasses = { "QDBusInterface" };
-    return clazy::contains(okClasses, className);
+    return className != "QDBusInterface";
 }
 
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
@@ -319,7 +318,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 if (isPrivateSlot(methodName)) {
                     msg = "Converting Q_PRIVATE_SLOTS not implemented yet\n";
                 } else {
-                    if (m_context->isQtDeveloper() && classIsOk(lastRecordDecl->getNameAsString())) {
+                    if (m_context->isQtDeveloper() && classIsOk(clazy::name(lastRecordDecl))) {
                         // This is OK
                         return {};
                     } else {

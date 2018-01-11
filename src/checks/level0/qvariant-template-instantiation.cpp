@@ -35,13 +35,13 @@ QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &
 {
 }
 
-static bool isMatchingClass(const std::string &name)
+static bool isMatchingClass(StringRef name)
 {
-    static const vector<string> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
-                                           "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
-                                           "QJsonValue", "QLocale", "QModelIndex", "QPoint", "QPointF",
-                                           "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
-                                           "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
+    static const vector<StringRef> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
+                                              "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
+                                              "QJsonValue", "QLocale", "QModelIndex", "QPoint", "QPointF",
+                                              "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
+                                              "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
 
     return clazy::contains(classes, name);
 }
@@ -70,7 +70,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         matches = true;
     } else {
         CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-        matches = recordDecl && t->isClassType() && isMatchingClass(recordDecl->getNameAsString());
+        matches = recordDecl && t->isClassType() && isMatchingClass(clazy::name(recordDecl));
     }
 
     if (matches) {
