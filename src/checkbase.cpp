@@ -149,9 +149,6 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
                             const vector<FixItHint> &fixits, bool printWarningTag)
 {
-    if (m_context->ignoresIncludedFiles() && !Utils::isMainFile(sm(), loc))
-        return;
-
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
         return;
 
