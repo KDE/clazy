@@ -43,7 +43,7 @@ DetachingMember::DetachingMember(const std::string &name, ClazyContext *context)
 
 void DetachingMember::VisitStmt(clang::Stmt *stm)
 {
-    CallExpr *callExpr = dyn_cast<CallExpr>(stm);
+    auto callExpr = dyn_cast<CallExpr>(stm);
     if (!callExpr)
         return;
 
@@ -60,7 +60,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (operatorExpr) {
         FunctionDecl *func = operatorExpr->getDirectCallee();
         method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
-        if (!method || method->getNameAsString() != "operator[]")
+        if (!method || clazy::name(method) != "operator[]")
             return;
 
         auto memberExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, operatorExpr);

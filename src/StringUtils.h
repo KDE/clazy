@@ -117,8 +117,13 @@ inline llvm::StringRef name(const clang::NamedDecl *decl)
 
 inline llvm::StringRef name(const clang::CXXMethodDecl *method)
 {
-    if (method->getOverloadedOperator() == clang::OO_Subscript)
+    auto op = method->getOverloadedOperator();
+    if (op == clang::OO_Subscript)
         return "operator[]";
+    if (op == clang::OO_LessLess)
+        return "operator<<";
+    if (op == clang::OO_PlusEqual)
+        return "operator+=";
 
     return name(static_cast<const clang::NamedDecl *>(method));
 }

@@ -29,6 +29,7 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "PreProcessorVisitor.h"
+#include "StringUtils.h"
 
 #include <clang/AST/AST.h>
 
@@ -59,7 +60,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     if (!m_lastForStmt)
         return;
 
-    CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stmt);
+    auto constructExpr = dyn_cast<CXXConstructExpr>(stmt);
     if (!constructExpr || constructExpr->getNumArgs() < 1)
         return;
 
@@ -74,7 +75,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 
     // Get the container value declaration
     DeclRefExpr *declRefExpr = declRefExprs.front();
-    ValueDecl *valueDecl = dyn_cast<ValueDecl>(declRefExpr->getDecl());
+    auto valueDecl = dyn_cast<ValueDecl>(declRefExpr->getDecl());
     if (!valueDecl)
         return;
 
@@ -88,7 +89,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
         return;
 
     auto rootBaseClass = Utils::rootBaseClass(containerRecord);
-    const string containerClassName = rootBaseClass->getNameAsString();
+    StringRef containerClassName = clazy::name(rootBaseClass);
     const bool isQtContainer = clazy::isQtIterableClass(containerClassName);
     if (containerClassName.empty()) {
         emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");

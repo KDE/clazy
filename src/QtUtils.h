@@ -65,7 +65,7 @@ CLAZYLIB_EXPORT bool isQtIterableClass(clang::CXXRecordDecl *record);
 /**
  * Overload.
  */
-CLAZYLIB_EXPORT bool isQtIterableClass(const std::string &className);
+CLAZYLIB_EXPORT bool isQtIterableClass(llvm::StringRef className);
 
 /**
  * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
@@ -97,7 +97,7 @@ CLAZYLIB_EXPORT bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
 /**
  * Overload.
  */
-CLAZYLIB_EXPORT bool isQtAssociativeContainer(const std::string &className);
+CLAZYLIB_EXPORT bool isQtAssociativeContainer(llvm::StringRef className);
 
 /**
  * Returns a list of Qt containers.

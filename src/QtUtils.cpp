@@ -98,7 +98,7 @@ bool clazy::isQtCOWIterableClass(const string &className)
     return clazy::contains(classes, className);
 }
 
-bool clazy::isQtIterableClass(const string &className)
+bool clazy::isQtIterableClass(StringRef className)
 {
     const auto &classes = qtContainers();
     return clazy::contains(classes, className);
@@ -112,9 +112,9 @@ bool clazy::isQtAssociativeContainer(clang::CXXRecordDecl *record)
     return isQtAssociativeContainer(record->getNameAsString());
 }
 
-bool clazy::isQtAssociativeContainer(const string &className)
+bool clazy::isQtAssociativeContainer(StringRef className)
 {
-    static const vector<string> classes = { "QSet", "QMap", "QHash" };
+    static const vector<StringRef> classes = { "QSet", "QMap", "QHash" };
     return clazy::contains(classes, className);
 }
 

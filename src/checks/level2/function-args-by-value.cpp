@@ -64,9 +64,9 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
 static bool shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
-    static const vector<string> ignoreList = {"operator<<"};
+    static const vector<StringRef> ignoreList = { "operator<<" };
 
-    return clazy::contains(ignoreList, function->getNameAsString());
+    return clazy::contains(ignoreList, clazy::name(function));
 }
 
 static bool shouldIgnoreFunction(clang::FunctionDecl *function)

@@ -83,13 +83,13 @@ void QStringAllocations::VisitStmt(clang::Stmt *stm)
 
 static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 {
-    static const vector<string> methods = {"append", "compare", "endsWith", "startsWith", "insert",
-                                           "lastIndexOf", "prepend", "replace", "contains", "indexOf" };
+    static const vector<StringRef> methods = {"append", "compare", "endsWith", "startsWith", "insert",
+                                              "lastIndexOf", "prepend", "replace", "contains", "indexOf" };
 
     if (!clazy::isOfClass(method, "QString"))
         return false;
 
-    return (!lt || Utils::isAscii(lt)) && clazy::contains(methods, method->getNameAsString());
+    return (!lt || Utils::isAscii(lt)) && clazy::contains(methods, clazy::name(method));
 }
 
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
@@ -98,7 +98,7 @@ Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator * 
     if (!stm)
         return {};
 
-    CXXConstructExpr *constructExpr = dyn_cast<CXXConstructExpr>(stm);
+    auto constructExpr = dyn_cast<CXXConstructExpr>(stm);
     if (constructExpr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
         const int numArgs = ctor->getNumParams();
@@ -258,7 +258,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                         if (parentMemberCallExpr) {
                             FunctionDecl *fDecl = parentMemberCallExpr->getDirectCallee();
                             if (fDecl) {
-                                CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(fDecl);
+                                auto method = dyn_cast<CXXMethodDecl>(fDecl);
                                 if (method && betterTakeQLatin1String(method, lt)) {
                                     replacement = "QLatin1String";
                                 }
