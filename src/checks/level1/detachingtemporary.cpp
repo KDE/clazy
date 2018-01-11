@@ -118,7 +118,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to first()
     FunctionDecl *detachingFunc = secondCallToBeEvaluated->getDirectCallee();
-    CXXMethodDecl *detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
+    auto detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
     const Type *detachingMethodReturnType = detachingMethod ? detachingMethod->getReturnType().getTypePtrOrNull() : nullptr;
     if (!detachingMethod || !detachingMethodReturnType)
         return;

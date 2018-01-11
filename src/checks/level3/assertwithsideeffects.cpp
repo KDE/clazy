@@ -74,16 +74,16 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
     bool warn = false;
     const bool checkfunctions = m_aggressiveness & AlsoCheckFunctionCallsAggressiveness;
 
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stm);
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(stm);
     if (memberCall) {
         if (checkfunctions) {
             CXXMethodDecl *method = memberCall->getMethodDecl();
-            if (!method->isConst() && !methodIsOK(clazy::qualifiedMethodName(method)) && !functionIsOk(method->getNameAsString())) {
+            if (!method->isConst() && !methodIsOK(clazy::qualifiedMethodName(method)) && !functionIsOk(clazy::name(method))) {
                 // llvm::errs() << "reason1 " << clazy::qualifiedMethodName(method) << "\n";
                 warn = true;
             }
         }
-    } else if (CallExpr *call = dyn_cast<CallExpr>(stm)) {
+    } else if (auto call = dyn_cast<CallExpr>(stm)) {
         // Non member function calls not allowed
 
         FunctionDecl *func = call->getDirectCallee();
@@ -96,10 +96,9 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
                 return;
             }
 
-            // llvm::errs() << "reason2 " << funcName << "\n";
             warn = true;
         }
-    } else if (BinaryOperator *op = dyn_cast<BinaryOperator>(stm)) {
+    } else if (auto op = dyn_cast<BinaryOperator>(stm)) {
         if (op->isAssignmentOp()) {
             if (DeclRefExpr *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
                 ValueDecl *valueDecl = declRef->getDecl();
@@ -109,8 +108,8 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
                 }
             }
         }
-    } else if (UnaryOperator *op = dyn_cast<UnaryOperator>(stm)) {
-        if (DeclRefExpr *declRef = dyn_cast<DeclRefExpr>(op->getSubExpr())) {
+    } else if (auto op = dyn_cast<UnaryOperator>(stm)) {
+        if (auto declRef = dyn_cast<DeclRefExpr>(op->getSubExpr())) {
             ValueDecl *valueDecl = declRef->getDecl();
             auto type = op->getOpcode();
             if (type != UnaryOperatorKind::UO_Deref && type != UnaryOperatorKind::UO_AddrOf) {

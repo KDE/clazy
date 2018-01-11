@@ -60,7 +60,7 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
 
     auto record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
     if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer",
-                                            "QPersistentModelIndex", "weak_ptr"}))
+                             "QPersistentModelIndex", "weak_ptr"}))
         return;
 
 
