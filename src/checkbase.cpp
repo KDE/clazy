@@ -72,6 +72,7 @@ CheckBase::CheckBase(const string &name, const ClazyContext *context, Options op
     , m_astContext(context->astContext)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
+    , m_tag(" [-Wclazy-" + m_name + ']')
 {
 }
 
@@ -160,9 +161,8 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
-    const string tag = " [-Wclazy-" + name() + ']';
     if (printWarningTag)
-        error += tag;
+        error += m_tag;
 
     reallyEmitWarning(loc, error, fixits);
 
@@ -171,7 +171,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
         if (!l.second.empty())
             msg += ' ' + l.second;
 
-        reallyEmitWarning(l.first, msg + tag, {});
+        reallyEmitWarning(l.first, msg + m_tag, {});
     }
 
     m_queuedManualInterventionWarnings.clear();
@@ -179,8 +179,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
 
 void CheckBase::emitInternalError(SourceLocation loc, string error)
 {
-    const string tag = " [-Wclazy-" + name() + ']';
-    llvm::errs() << tag << ": internal error: " << error
+    llvm::errs() << m_tag << ": internal error: " << error
                  << " at " << loc.printToString(sm()) << "\n";
 }
 

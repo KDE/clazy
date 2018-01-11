@@ -160,6 +160,7 @@ private:
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     int m_enabledFixits = 0;
     const Options m_options;
+    const std::string m_tag;
 };
 
 #endif
