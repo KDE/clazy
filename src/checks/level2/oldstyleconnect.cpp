@@ -154,13 +154,12 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
     for (auto callExpr : memberCalls) {
         if (!callExpr->getDirectCallee())
             continue;
-        CXXMethodDecl *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
+        auto method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
         if (!method)
             continue;
 
         // Any better way to detect it's an operator ?
-        static regex rx(R"(operator .* \*)");
-        if (regex_match(method->getNameAsString(), rx))
+        if (clazy::startsWith(method->getNameAsString(), "operator "))
             return true;
     }
 
