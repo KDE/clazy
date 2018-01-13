@@ -35,6 +35,7 @@ class Test:
         self.qt4compat = False
         self.only_qt = False
         self.qt_developer = False
+        self.header_filter = ""
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -155,6 +156,9 @@ def load_json(check_name):
                 test.only_qt = t['only_qt']
             if 'qt_developer' in t:
                 test.qt_developer = t['qt_developer']
+            if 'header_filter' in t:
+                test.header_filter = t['header_filter']
+
 
             if not test.checks:
                 test.checks.append(test.check.name)
@@ -220,6 +224,9 @@ def clazy_standalone_command(test, qt):
 
     if test.qt_developer:
         result = " -qt-developer " + result
+
+    if test.header_filter:
+        result = " -header-filter " + test.header_filter + " " + result
 
     return result
 

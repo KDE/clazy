@@ -59,6 +59,12 @@ static cl::opt<bool> s_visitImplicitCode("visit-implicit-code", cl::desc("For vi
 static cl::opt<bool> s_ignoreIncludedFiles("ignore-included-files", cl::desc("Only emit warnings for the current file being compiled and ignore any includes. Useful for performance reasons."),
                               cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<std::string> s_headerFilter("header-filter", cl::desc(R"(Regular expression matching the names of the
+headers to output diagnostics from. Diagnostics
+from the main file of each translation unit are
+always displayed.)"),
+                              cl::init(""), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
@@ -91,7 +97,7 @@ public:
         if (s_ignoreIncludedFiles.getValue())
             options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
-        return new ClazyStandaloneASTAction(s_checks.getValue(), options);
+        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(), options);
     }
 };
 

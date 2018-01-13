@@ -195,7 +195,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::vector<std::string> args = args_;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(ci, ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(ci, /*headerFilter=*/ "", ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -228,7 +228,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     if (parseArgument("ignore-included-files", args))
         m_options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
-    m_context = new ClazyContext(ci, m_options);
+    m_context = new ClazyContext(ci, /*headerFilter=*/ "", m_options);
 
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
@@ -334,19 +334,18 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
 }
 
-ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList,
+ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList, const string &headerFilter,
                                                    ClazyContext::ClazyOptions options)
     : clang::ASTFrontendAction()
-    , m_checkList(checkList)
+    , m_checkList(checkList.empty() ? "level1" : checkList)
+    , m_headerFilter(headerFilter)
     , m_options(options)
 {
-    if (m_checkList.empty())
-        m_checkList = "level1";
 }
 
 unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    auto context = new ClazyContext(ci, m_options);
+    auto context = new ClazyContext(ci, m_headerFilter, m_options);
     auto astConsumer = new ClazyASTConsumer(context);
 
     auto cm = CheckManager::instance();

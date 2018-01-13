@@ -152,6 +152,9 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
         return;
 
+    if (m_context->isHeaderFilteredOut(loc))
+        return;
+
     if (loc.isMacroID()) {
         if (warningAlreadyEmitted(loc))
             return; // For warnings in macro arguments we get a warning in each place the argument is used within the expanded macro, so filter all the dups

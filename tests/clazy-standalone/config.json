@@ -1,0 +1,15 @@
+{
+    "clazy_standalone_only" : true,
+    "tests" : [
+        {
+            "filename" : "header_filter.cpp",
+            "header_filter" : "",
+            "checks" : ["qdatetime-utc"]
+        },
+        {
+            "filename" : "header_filter2.cpp",
+            "header_filter" : ".*_foo.*.h",
+            "checks" : ["qdatetime-utc"]
+        }
+    ]
+}

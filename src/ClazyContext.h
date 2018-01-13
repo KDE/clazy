@@ -28,9 +28,12 @@
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
+#include <clang/Basic/FileManager.h>
+#include <llvm/Support/Regex.h>
 
 #include <string>
 #include <vector>
+#include <memory>
 
 // ClazyContext is just a struct to share data and code between all checks
 
@@ -62,7 +65,9 @@ public:
     };
     typedef int ClazyOptions;
 
-    explicit ClazyContext(const clang::CompilerInstance &ci, ClazyOptions = ClazyOption_None);
+    explicit ClazyContext(const clang::CompilerInstance &ci,
+                          const std::string &headerFilter,
+                          ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
     bool usingPreCompiledHeaders() const
@@ -105,6 +110,28 @@ public:
         return clazy::contains(extraOptions, optionName);
     }
 
+    bool isHeaderFilteredOut(clang::SourceLocation loc) const
+    {
+        if (!headerFilterRegex || isMainFile(loc))
+            return false;
+
+        clang::FileID fid = sm.getDecomposedExpansionLoc(loc).first;
+        const clang::FileEntry *file = sm.getFileEntryForID(fid);
+        if (!file)
+            return false;
+
+        StringRef fileName(file->getName());
+        return !headerFilterRegex->match(fileName);
+    }
+
+    bool isMainFile(clang::SourceLocation loc) const
+    {
+        if (loc.isMacroID())
+            loc = sm.getExpansionLoc(loc);
+
+        return sm.isInFileID(loc, sm.getMainFileID());
+    }
+
     /**
      * We only enable it if a check needs it, for performance reasons
      */
@@ -128,6 +155,7 @@ public:
     std::string requestedFixitName;
     clang::CXXMethodDecl *lastMethodDecl = nullptr;
     clang::Decl *lastDecl = nullptr;
+    std::unique_ptr<llvm::Regex> headerFilterRegex;
 };
 
 #endif

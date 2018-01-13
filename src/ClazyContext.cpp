@@ -49,7 +49,8 @@ public:
     }
 };
 
-ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions opts)
+ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
+                           const string &headerFilter, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
@@ -57,6 +58,9 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler, ClazyOptions
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
 {
+    if (!headerFilter.empty())
+        headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
+
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
     allFixitsEnabled = (options & ClazyOption_AllFixitsEnabled);
     if (!allFixitsEnabled && fixitsEnv) {
