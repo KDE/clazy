@@ -64,6 +64,7 @@ class Check:
         self.minimum_qt_version = 500
         self.maximum_qt_version = 999
         self.enabled = True
+        self.clazy_standalone_only = False
         self.tests = []
 #-------------------------------------------------------------------------------
 # utility functions #1
@@ -100,6 +101,9 @@ def load_json(check_name):
 
     if 'enabled' in decoded:
         check.enabled = decoded['enabled']
+
+    if 'clazy_standalone_only' in decoded:
+        check.clazy_standalone_only = decoded['clazy_standalone_only']
 
     if 'blacklist_platforms' in decoded:
         check_blacklist_platforms = decoded['blacklist_platforms']
@@ -373,6 +377,9 @@ def extract_word(word, in_file, out_file):
     out_f.close()
 
 def run_unit_test(test, is_standalone):
+    if test.check.clazy_standalone_only and not is_standalone:
+        return True
+
     qt = qt_installation(test.qt_major_version)
 
     if _verbose:
