@@ -119,6 +119,8 @@ CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<llvm::StringRef> > d
  */
 CLAZYLIB_EXPORT bool isQtContainer(clang::QualType);
 
+CLAZYLIB_EXPORT bool isQtContainer(const clang::CXXRecordDecl *);
+
 
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler

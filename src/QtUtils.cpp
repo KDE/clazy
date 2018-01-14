@@ -184,8 +184,13 @@ bool clazy::isQtContainer(QualType t)
     if (!record)
         return false;
 
-    const string typeName = record->getNameAsString();
-    return clazy::any_of(clazy::qtContainers(), [typeName] (const string &container) {
+    return isQtContainer(record);
+}
+
+bool clazy::isQtContainer(const CXXRecordDecl *record)
+{
+    const StringRef typeName = clazy::name(record);
+    return clazy::any_of(clazy::qtContainers(), [typeName] (StringRef container) {
         return container == typeName;
     });
 }
