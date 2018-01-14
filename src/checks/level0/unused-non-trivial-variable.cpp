@@ -55,26 +55,30 @@ void UnusedNonTrivialVariable::VisitStmt(clang::Stmt *stmt)
 bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
 {
     // TODO Remove QColor in Qt6
-    static const vector<string> nonTrivialTypes = { "QColor", "QVariant", "QFont", "QUrl", "QIcon",
-                                                    "QImage", "QPixmap", "QPicture", "QBitmap", "QBrush",
-                                                    "QPen", "QBuffer", "QCache", "QDateTime", "QDir", "QEvent",
-                                                    "QFileInfo", "QFontInfo", "QFontMetrics", "QJSValue", "QLocale",
-                                                    "QRegularExpression", "QRegExp", "QUrlQuery", "QStorageInfo",
-                                                    "QPersistentModelIndex", "QJsonArray", "QJsonDocument",
-                                                    "QMimeType", "QBitArray", "QCollator",
-                                                    "QByteArrayList", "QCollatorSortKey",
-                                                    "QCursor", "QPalette", "QPainterPath", "QRegion", "QFontInfo", "QTextCursor",
-                                                    "QStaticText", "QFontMetricsF", "QTextFrameFormat", "QTextImageFormat",
-                                                    "QNetworkCookie", "QNetworkRequest", "QNetworkConfiguration",
-                                                    "QHostAddress", "QSqlQuery", "QSqlRecord", "QSqlField",
-                                                    "QLine", "QLineF", "QRect", "QRectF"
-                                                  };
+    static const vector<StringRef> nonTrivialTypes = { "QColor", "QVariant", "QFont", "QUrl", "QIcon",
+                                                       "QImage", "QPixmap", "QPicture", "QBitmap", "QBrush",
+                                                       "QPen", "QBuffer", "QCache", "QDateTime", "QDir", "QEvent",
+                                                       "QFileInfo", "QFontInfo", "QFontMetrics", "QJSValue", "QLocale",
+                                                       "QRegularExpression", "QRegExp", "QUrlQuery", "QStorageInfo",
+                                                       "QPersistentModelIndex", "QJsonArray", "QJsonDocument",
+                                                       "QMimeType", "QBitArray", "QCollator",
+                                                       "QByteArrayList", "QCollatorSortKey",
+                                                       "QCursor", "QPalette", "QPainterPath", "QRegion", "QFontInfo", "QTextCursor",
+                                                       "QStaticText", "QFontMetricsF", "QTextFrameFormat", "QTextImageFormat",
+                                                       "QNetworkCookie", "QNetworkRequest", "QNetworkConfiguration",
+                                                       "QHostAddress", "QSqlQuery", "QSqlRecord", "QSqlField",
+                                                       "QLine", "QLineF", "QRect", "QRectF"
+                                                     };
 
-    if (clazy::isQtContainer(t))
+    CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
+    if (!record)
+        return false;
+
+    if (clazy::isQtContainer(record))
         return true;
 
-    const string typeName = clazy::simpleTypeName(t, lo());
-    return clazy::any_of(nonTrivialTypes, [typeName] (const string &container) {
+    StringRef typeName = clazy::name(record);
+    return clazy::any_of(nonTrivialTypes, [typeName] (StringRef container) {
         return container == typeName;
     });
 }
