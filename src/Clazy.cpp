@@ -283,7 +283,6 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     clazy::sort(checks, checkLessThanByLevel);
 
     ros << "Available checks and FixIts:\n\n";
-    const bool useMarkdown = getenv("CLAZY_HELP_USE_MARKDOWN");
 
     int lastPrintedLevel = -1;
     const auto numChecks = checks.size();
@@ -303,7 +302,7 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
 
         auto padded = check.name;
         padded.insert(padded.end(), 39 - padded.size(), ' ');
-        ros << "    - " << (useMarkdown ? "[" : "") << check.name << (useMarkdown ? "](" + relativeReadmePath + ")" : "");
+        ros << "    - " << check.name;;
         auto fixits = m_checkManager->availableFixIts(check.name);
         if (!fixits.empty()) {
             ros << "    (";

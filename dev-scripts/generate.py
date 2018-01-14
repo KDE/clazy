@@ -24,7 +24,7 @@ _license_text = \
 */
 """
 
-import sys, os, json
+import sys, os, json, argparse
 
 CHECKS_FILENAME = 'checks.json'
 _checks = []
@@ -88,6 +88,19 @@ class Check:
         if self.name.startswith('fix'):
             return False
         return True
+
+    def fixits_text(self):
+        if not self.fixits:
+            return ""
+
+        text = ""
+        fixitnames = []
+        for f in self.fixits:
+            fixitnames.append("fix-" + f)
+
+        text = ','.join(fixitnames)
+
+        return "(" + text + ")"
 
 if not os.path.exists(CHECKS_FILENAME):
     print("File doesn't exist: " + CHECKS_FILENAME)
@@ -210,9 +223,28 @@ void CheckManager::registerChecks()
     text = _license_text + '\n' + comment_text + '\n' + text
     print(text)
 
+def print_markdown_help():
+    for level in ['0', '1', '2', '3']:
+        print("\n- Checks from level%s:" % level)
+        for c in _checks:
+            if str(c.level) == level:
+                fixits_text = c.fixits_text()
+                if fixits_text:
+                    fixits_text = "    " + fixits_text
+                print("    - [%s](src/checks/level%s/README-%s.md)%s" % (c.name, level, c.name, fixits_text))
+
+
 if not load_json(CHECKS_FILENAME):
     exit(1)
 
-generate_register_checks(_checks)
+parser = argparse.ArgumentParser()
+parser.add_argument("--generate-readme", action='store_true', help="Generate list of checks to copy-paste to README.md")
+parser.add_argument("--generate-checks-header", action='store_true', help="Generate src/Checks.h")
+args = parser.parse_args()
+
+if args.generate_readme:
+    print_markdown_help()
+elif args.generate_checks_header:
+    generate_register_checks(_checks)
 
 #print_checks(_checks)
