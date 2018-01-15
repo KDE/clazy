@@ -28,3 +28,5 @@ output.log
 clazy.1
 /dev-scripts/*.log
 clanglazy_export.h
+CPackConfig.cmake
+CPackSourceConfig.cmake
