@@ -26,6 +26,7 @@
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
 #include "QtUtils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
@@ -52,6 +53,31 @@ void UnusedNonTrivialVariable::VisitStmt(clang::Stmt *stmt)
         handleVarDecl(dyn_cast<VarDecl>(decl));
 }
 
+bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) const
+{
+    static const vector<StringRef> blacklist = { "QMutexLocker", "QDebugStateSaver",
+                                                 "QTextBlockFormat", "QWriteLocker",
+                                                 "QSignalBlocker", "QReadLocker", "PRNGLocker", "QDBusWriteLocker", "QDBusBlockingCallWatcher",
+                                                 "QBoolBlocker", "QOrderedMutexLocker", "QTextLine", "QScopedScopeLevelCounter" };
+
+    StringRef typeName = clazy::name(record);
+    bool any = clazy::any_of(blacklist, [typeName] (StringRef container) {
+        return container == typeName;
+    });
+
+    if (any)
+        return true;
+
+    static const vector<StringRef> blacklistedTemplates = { "QScopedPointer", "QSetValueOnDestroy", "QScopedValueRollback" };
+    StringRef className = clazy::name(record);
+    for (StringRef templateName : blacklistedTemplates) {
+        if (clazy::startsWith(className, templateName))
+            return true;
+    }
+
+    return false;
+}
+
 bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
 {
     // TODO Remove QColor in Qt6
@@ -73,6 +99,11 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
     CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
     if (!record)
         return false;
+
+    if (isOptionSet("no-whitelist")) {
+        // Will cause too many false-positives, like RAII classes. Use suppressing comments to silence them.
+        return !isUninterestingType(record);
+    }
 
     if (clazy::isQtContainer(record))
         return true;

@@ -44,6 +44,7 @@ public:
 private:
     void handleVarDecl(clang::VarDecl *varDecl);
     bool isInterestingType(clang::QualType t) const;
+    bool isUninterestingType(const clang::CXXRecordDecl *record) const;
 };
 
 #endif

@@ -1,0 +1,7 @@
+unused-non-trivial-variable/no-whitelist.cpp:16:5: warning: unused QString [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/no-whitelist.cpp:17:5: warning: unused QString [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/no-whitelist.cpp:33:5: warning: unused MyRAII [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/no-whitelist.cpp:49:5: warning: unused QList<int> [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/no-whitelist.cpp:50:5: warning: unused QVector<int> [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/no-whitelist.cpp:51:5: warning: unused QByteArray [-Wclazy-unused-non-trivial-variable]
+unused-non-trivial-variable/no-whitelist.cpp:52:5: warning: unused QRect [-Wclazy-unused-non-trivial-variable]

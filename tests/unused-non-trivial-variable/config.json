@@ -2,6 +2,10 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "no-whitelist.cpp",
+            "env" : { "CLAZY_EXTRA_OPTIONS" : "unused-non-trivial-variable-no-whitelist" }
         }
     ]
 }
