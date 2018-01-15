@@ -74,3 +74,5 @@
   - performance optimizations
   - Added -header-filter=<regex> option to clazy-standalone. Only headers matching the regexp will have warnings,
     besides the .cpp file from the translation unit, which is never filtered out.
+  - unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist option
+  - unused-non-trivial-variable got user-blacklist and user-whitelist support
