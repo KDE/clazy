@@ -41,6 +41,14 @@ using namespace std;
 UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
+    const char *user_blacklist = getenv("CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_BLACKLIST");
+    const char *user_whitelist = getenv("CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_WHITELIST");
+
+    if (user_blacklist)
+        m_userBlacklist = clazy::splitString(user_blacklist, ',');
+
+    if (user_whitelist)
+        m_userWhitelist = clazy::splitString(user_whitelist, ',');
 }
 
 void UnusedNonTrivialVariable::VisitStmt(clang::Stmt *stmt)
@@ -60,6 +68,7 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
                                                  "QSignalBlocker", "QReadLocker", "PRNGLocker", "QDBusWriteLocker", "QDBusBlockingCallWatcher",
                                                  "QBoolBlocker", "QOrderedMutexLocker", "QTextLine", "QScopedScopeLevelCounter" };
 
+    // Check some obvious candidates first
     StringRef typeName = clazy::name(record);
     bool any = clazy::any_of(blacklist, [typeName] (StringRef container) {
         return container == typeName;
@@ -74,6 +83,14 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
         if (clazy::startsWith(className, templateName))
             return true;
     }
+
+    // Now check the user's blacklist, set by env-variable
+    any = clazy::any_of(m_userBlacklist, [typeName] (const std::string &container) {
+        return container == typeName;
+    });
+
+    if (any)
+        return true;
 
     return false;
 }
@@ -109,7 +126,14 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
         return true;
 
     StringRef typeName = clazy::name(record);
-    return clazy::any_of(nonTrivialTypes, [typeName] (StringRef container) {
+    bool any = clazy::any_of(nonTrivialTypes, [typeName] (StringRef container) {
+        return container == typeName;
+    });
+
+    if (any)
+        return true;
+
+    return clazy::any_of(m_userWhitelist, [typeName] (const std::string &container) {
         return container == typeName;
     });
 }

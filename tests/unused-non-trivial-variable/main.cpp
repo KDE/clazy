@@ -30,7 +30,7 @@ struct MyRAII
 
 void testRAII()
 {
-    MyRAII m; // OK
+    MyRAII m; // OK, not whitelisted
 }
 
 void testFor()
@@ -52,4 +52,15 @@ void test4()
     QRect r; // Warn
     FOO(QRect) r2; // OK
     r2.setX(0);
+}
+
+struct MyWhitelistedType
+{
+    MyWhitelistedType();
+    ~MyWhitelistedType();
+};
+
+void testUserWhitelist()
+{
+    MyWhitelistedType m; // OK, whitelisted
 }

@@ -1,11 +1,14 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
+            "filename" : "main.cpp",
+            "env" :{ "CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_WHITELIST" : "MyWhitelistedType" }
         },
         {
             "filename" : "no-whitelist.cpp",
-            "env" : { "CLAZY_EXTRA_OPTIONS" : "unused-non-trivial-variable-no-whitelist" }
+            "env" : { "CLAZY_EXTRA_OPTIONS" : "unused-non-trivial-variable-no-whitelist",
+                      "CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_BLACKLIST" : "MyBlacklistedType"
+                    }
         }
     ]
 }

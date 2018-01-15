@@ -45,6 +45,8 @@ private:
     void handleVarDecl(clang::VarDecl *varDecl);
     bool isInterestingType(clang::QualType t) const;
     bool isUninterestingType(const clang::CXXRecordDecl *record) const;
+    std::vector<std::string> m_userBlacklist;
+    std::vector<std::string> m_userWhitelist;
 };
 
 #endif

@@ -60,3 +60,14 @@ void mutex()
     QMutexLocker ml(&m); // OK, is uninteresting
     QScopedPointer<QMutex> p(&m);  // OK, is uninteresting
 }
+
+struct MyBlacklistedType
+{
+    MyBlacklistedType();
+    ~MyBlacklistedType();
+};
+
+void testUserWhitelist()
+{
+    MyBlacklistedType m; // OK, blacklisted
+}
