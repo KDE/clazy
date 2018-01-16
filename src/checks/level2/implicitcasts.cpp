@@ -184,6 +184,8 @@ bool ImplicitCasts::isBoolToInt(FunctionDecl *func) const
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
     static const vector<StringRef> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
+    if (!loc.isMacroID())
+        return false;
     StringRef macro = Lexer::getImmediateMacroName(loc, sm(), lo());
     return clazy::contains(macros, macro);
 }

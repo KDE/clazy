@@ -89,10 +89,11 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     if (AccessSpecifierManager *a = m_context->accessSpecifierManager) // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
 
-    if (m_context->sm.isInSystemHeader(decl->getLocStart()))
+    const SourceLocation locStart = decl->getLocStart();
+    if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart))
         return true;
 
-    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, decl->getLocStart());
+    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);
 
     m_context->lastDecl = decl;
     if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
@@ -108,7 +109,8 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 {
-    if (m_context->sm.isInSystemHeader(stm->getLocStart()))
+    const SourceLocation locStart = stm->getLocStart();
+    if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart))
         return true;
 
     if (!m_context->parentMap) {
@@ -133,7 +135,7 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
     if (!parentMap->hasParent(stm))
         parentMap->addStmt(stm);
 
-    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, stm->getLocStart());
+    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);
     for (CheckBase *check : m_checksToVisitStmts) {
         if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))
             check->VisitStmt(stm);

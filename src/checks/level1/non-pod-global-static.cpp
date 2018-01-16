@@ -62,9 +62,12 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
         return;
 
     const SourceLocation declStart = varDecl->getLocStart();
-    auto macroName = Lexer::getImmediateMacroName(declStart, sm(), lo());
-    if (clazy::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
-        return;
+
+    if (declStart.isMacroID()) {
+        auto macroName = Lexer::getImmediateMacroName(declStart, sm(), lo());
+        if (clazy::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
+            return;
+    }
 
     CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
     if (!ctorExpr)
