@@ -19,19 +19,19 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLAZY_FULLY_QUALIFIED_SIGNALS_AND_PROPERTIES_H
-#define CLAZY_FULLY_QUALIFIED_SIGNALS_AND_PROPERTIES_H
+#ifndef CLAZY_FULLY_QUALIFIED_MOC_TYPES_H
+#define CLAZY_FULLY_QUALIFIED_MOC_TYPES_H
 
 #include "checkbase.h"
 
 
 /**
- * See README-fully-qualified-signals-and-properties.md for more info.
+ * See README-fully-qualified-moc-types.md for more info.
  */
-class FullyQualifiedSignalsAndProperties : public CheckBase
+class FullyQualifiedMocTypes : public CheckBase
 {
 public:
-    explicit FullyQualifiedSignalsAndProperties(const std::string &name, ClazyContext *context);
+    explicit FullyQualifiedMocTypes(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
 };
 #endif

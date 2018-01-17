@@ -1,4 +1,4 @@
-# fully-qualified-signals-and-properties
+# fully-qualified-moc-types
 
 Warns when a signal declaration is not using fully-qualified type names, which will break old-style connects
 and interacting with QML.

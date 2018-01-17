@@ -39,7 +39,7 @@
 #include "checks/level0/qdatetimeutc.h"
 #include "checks/level0/qgetenv.h"
 #include "checks/level0/qstring-insensitive-allocation.h"
-#include "checks/level0/fully-qualified-signals-and-properties.h"
+#include "checks/level0/fully-qualified-moc-types.h"
 #include "checks/level0/qvariant-template-instantiation.h"
 #include "checks/level0/unused-non-trivial-variable.h"
 #include "checks/level0/connect-not-normalized.h"
@@ -123,7 +123,7 @@ void CheckManager::registerChecks()
     registerCheck(check<QGetEnv>("qgetenv", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qgetenv", "qgetenv");
     registerCheck(check<QStringInsensitiveAllocation>("qstring-insensitive-allocation", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<FullyQualifiedSignalsAndProperties>("fully-qualified-signals-and-properties", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<FullyQualifiedMocTypes>("fully-qualified-moc-types", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));

@@ -1,1 +1,0 @@
-fully-qualified-signals-and-properties/main.cpp:12:9: warning: signal arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-signals-and-properties]

@@ -19,7 +19,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "fully-qualified-signals-and-properties.h"
+#include "fully-qualified-moc-types.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
@@ -33,13 +33,13 @@ using namespace clang;
 using namespace std;
 
 
-FullyQualifiedSignalsAndProperties::FullyQualifiedSignalsAndProperties(const std::string &name, ClazyContext *context)
+FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     context->enableAccessSpecifierManager();
 }
 
-void FullyQualifiedSignalsAndProperties::VisitDecl(clang::Decl *decl)
+void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
 {
     auto method = dyn_cast<CXXMethodDecl>(decl);
     if (!method)
