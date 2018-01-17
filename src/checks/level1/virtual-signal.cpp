@@ -43,7 +43,7 @@ VirtualSignal::VirtualSignal(const std::string &name, ClazyContext *context)
 void VirtualSignal::VisitDecl(Decl *stmt)
 {
     auto method = dyn_cast<CXXMethodDecl>(stmt);
-    if (!method)
+    if (!method || !method->isVirtual())
         return;
 
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
@@ -51,6 +51,6 @@ void VirtualSignal::VisitDecl(Decl *stmt)
         return;
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
-    if (qst == QtAccessSpecifier_Signal && method->isVirtual())
+    if (qst == QtAccessSpecifier_Signal)
         emitWarning(method, "signal is virtual");
 }
