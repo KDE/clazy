@@ -1,5 +1,5 @@
 {
-    "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance", "deprecation"],
+    "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance", "deprecation", "qml"],
     "checks" : [
         {
             "name"  : "inefficient-qlist",
@@ -93,6 +93,13 @@
             "level" : 0,
             "categories" : ["performance", "qstring"],
             "visits_stmts" : true
+        },
+        {
+            "name"  : "fully-qualified-signals-and-properties",
+            "class_name" : "FullyQualifiedSignalsAndProperties",
+            "level" : 0,
+            "categories" : ["bug", "qml"],
+            "visits_decls" : true
         },
         {
             "name"  : "qvariant-template-instantiation",

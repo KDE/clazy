@@ -138,6 +138,15 @@ inline llvm::StringRef name(const clang::CXXDestructorDecl *decl)
     return name(decl->getParent());
 }
 
+// Returns the type name with or without namespace, depending on how it was written by the user.
+// If the user omitted the namespace then the return won't have namespace
+inline std::string name(clang::QualType t, clang::LangOptions lo, bool asWritten)
+{
+    clang::PrintingPolicy p(lo);
+    p.SuppressScope = asWritten;
+    return t.getAsString(p);
+}
+
 template <typename T>
 inline bool isOfClass(T *node, llvm::StringRef className)
 {
