@@ -1,6 +1,6 @@
 # fully-qualified-moc-types
 
-Warns when a signal declaration is not using fully-qualified type names, which will break old-style connects
+Warns when a signal or slot declaration is not using fully-qualified type names, which will break old-style connects
 and interacting with QML.
 
 Example:
@@ -18,6 +18,6 @@ namespace MyNameSpace {
     };
 }
 
-For Q_PROPERTIES it's not implemented yet.
-Beware that fixing these signals might break user code if they are connecting to them via old style connects,
+For Q_PROPERTIES and Q_INVOKABLE it's not implemented yet.
+Beware that fixing these type names might break user code if they are connecting to them via old style connects,
 since the users might have worked around your bug and not included the namespace in their connect statement

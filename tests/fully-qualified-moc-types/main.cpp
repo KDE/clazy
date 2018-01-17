@@ -16,6 +16,15 @@ namespace NS {
         void mysig6(const A);
         void mysig7(const A *);
         void mysig8(A *);
+    public Q_SLOTS:
+        void myslot1(NS::MyType);
+        void myslot2(MyType); // Warn
+        void myslot3(NS::MyType);
+        void myslot4(const NS::MyType &);
+        void myslot5(A);
+        void myslot6(const A);
+        void myslot7(const A *);
+        void myslot8(A *);
     };
 }
 
