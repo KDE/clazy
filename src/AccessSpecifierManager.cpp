@@ -85,7 +85,8 @@ public:
 
         const bool isSlot = (isSlots || isSignals) ? false : name == "Q_SLOT";
         const bool isSignal = (isSlots || isSignals || isSlot) ? false : name == "Q_SIGNAL";
-        if (!isSlots && !isSignals && !isSlot && !isSignal)
+        const bool isInvokable = (isSlots || isSignals || isSlot || isSignal) ? false : name == "Q_INVOKABLE";
+        if (!isSlots && !isSignals && !isSlot && !isSignal & !isInvokable)
             return;
 
         SourceLocation loc = range.getBegin();
@@ -95,7 +96,6 @@ public:
         if (isSignals || isSlots) {
             QtAccessSpecifierType qtAccessSpecifier = isSlots ? QtAccessSpecifier_Slot
                                                               : QtAccessSpecifier_Signal;
-
             m_qtAccessSpecifiers.push_back( { loc, clang::AS_none, qtAccessSpecifier } );
         } else {
             // Get the location of the method declaration, so we can compare directly when we visit methods
@@ -104,14 +104,17 @@ public:
                 return;
             if (isSignal) {
                 m_individualSignals.push_back(loc.getRawEncoding());
-            } else {
+            } else if (isSlot) {
                 m_individualSlots.push_back(loc.getRawEncoding());
+            } else if (isInvokable) {
+                m_individualInvokables.push_back(loc.getRawEncoding());
             }
         }
     }
 
     vector<unsigned> m_individualSignals; // Q_SIGNAL
     vector<unsigned> m_individualSlots;   // Q_SLOT
+    vector<unsigned> m_individualInvokables; // Q_INVOKABLE
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
@@ -193,6 +196,12 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     for (auto slotLoc : m_preprocessorCallbacks->m_individualSlots) {
         if (slotLoc == methodLoc.getRawEncoding())
             return QtAccessSpecifier_Slot;
+    }
+
+    // Process Q_INVOKABLE:
+    for (auto loc : m_preprocessorCallbacks->m_individualInvokables) {
+        if (loc == methodLoc.getRawEncoding())
+            return QtAccessSpecifier_Invokable;
     }
 
     // Process Q_SLOTS and Q_SIGNALS:

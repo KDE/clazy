@@ -57,7 +57,8 @@ enum QtAccessSpecifierType
     QtAccessSpecifier_None,
     QtAccessSpecifier_Unknown,
     QtAccessSpecifier_Slot,
-    QtAccessSpecifier_Signal
+    QtAccessSpecifier_Signal,
+    QtAccessSpecifier_Invokable
 };
 
 struct ClazyAccessSpecifier
