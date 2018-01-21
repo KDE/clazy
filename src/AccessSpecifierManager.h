@@ -81,6 +81,11 @@ public:
      */
     QtAccessSpecifierType qtAccessSpecifierType(const clang::CXXMethodDecl*) const;
 
+    /**
+     * Returns a string representations of a Qt Access Specifier Type
+     */
+    llvm::StringRef qtAccessSpecifierTypeStr(QtAccessSpecifierType) const;
+
 private:
     ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl*);
     const clang::CompilerInstance &m_ci;

@@ -53,7 +53,7 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
         return;
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
-    if (qst != QtAccessSpecifier_Signal && qst != QtAccessSpecifier_Slot)
+    if (qst != QtAccessSpecifier_Signal && qst != QtAccessSpecifier_Slot && qst != QtAccessSpecifier_Invokable)
         return;
 
     for (auto param : method->parameters()) {
@@ -66,7 +66,7 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
             std::string qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/ false);
 
             if (typeName != qualifiedTypeName) {
-                emitWarning(method, (qst == QtAccessSpecifier_Signal ? string("signal") : string("slot")) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
+                emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
             }
         }
     }

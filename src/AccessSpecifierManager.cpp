@@ -231,3 +231,20 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     --i; // One before the upper bound is the last access specifier before our method
     return (*i).qtAccessSpecifier;
 }
+
+llvm::StringRef AccessSpecifierManager::qtAccessSpecifierTypeStr(QtAccessSpecifierType t) const
+{
+    switch (t) {
+    case QtAccessSpecifier_None:
+    case QtAccessSpecifier_Unknown:
+        return "";
+    case QtAccessSpecifier_Slot:
+        return "slot";
+    case QtAccessSpecifier_Signal:
+        return "signal";
+    case QtAccessSpecifier_Invokable:
+        return "invokable";
+    default:
+        return "";
+    }
+}

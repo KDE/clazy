@@ -25,6 +25,15 @@ namespace NS {
         void myslot6(const A);
         void myslot7(const A *);
         void myslot8(A *);
+    public:
+        Q_INVOKABLE void myinvokable1(NS::MyType);
+        Q_INVOKABLE void myinvokable2(MyType); // Warn
+        Q_INVOKABLE void myinvokable3(NS::MyType);
+        Q_INVOKABLE void myinvokable4(const NS::MyType &);
+        Q_INVOKABLE void myinvokable5(A);
+        Q_INVOKABLE void myinvokable6(const A);
+        Q_INVOKABLE void myinvokable7(const A *);
+        Q_INVOKABLE void myinvokable8(A *);
     };
 }
 
