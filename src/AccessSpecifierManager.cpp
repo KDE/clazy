@@ -184,6 +184,10 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     // and possibly outside the class
     method = method->getCanonicalDecl();
 
+    const CXXRecordDecl *record = method->getParent();
+    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
+        return QtAccessSpecifier_None;
+
     const SourceLocation methodLoc = method->getLocStart();
 
     // Process Q_SIGNAL:
@@ -205,10 +209,6 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     }
 
     // Process Q_SLOTS and Q_SIGNALS:
-
-    const CXXRecordDecl *record = method->getParent();
-    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
-        return QtAccessSpecifier_None;
 
     auto it = m_specifiersMap.find(record);
     if (it == m_specifiersMap.cend())
