@@ -96,7 +96,7 @@ FunctionArgsByRef::FunctionArgsByRef(const std::string &name, ClazyContext *cont
 static std::string warningMsgForSmallType(int sizeOf, const std::string &typeName)
 {
     std::string sizeStr = std::to_string(sizeOf);
-    return "Missing reference on large type sizeof " + typeName + " is " + sizeStr + " bytes)";
+    return "Missing reference on large type (sizeof " + typeName + " is " + sizeStr + " bytes)";
 }
 
 void FunctionArgsByRef::processFunction(FunctionDecl *func)
