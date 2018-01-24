@@ -96,7 +96,7 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (types.empty())
         return;
     QualType qt2 = types[0];
-    if (!qt2.getTypePtrOrNull())
+    if (!qt2.getTypePtrOrNull() || qt2->isIncompleteType())
         return;
 
     const int size_of_ptr = TypeUtils::sizeOfPointer(&m_astContext, qt2); // in bits
