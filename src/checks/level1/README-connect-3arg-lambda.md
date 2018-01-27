@@ -8,6 +8,12 @@ It's very common to use lambdas to connect signals to slots with different numbe
 of arguments. This can result in a crash if the signal is emitted after the receiver
 is deleted.
 
+Another reason for using a context-object is so you explicitly think about in
+which thread you want the slot to run in. Note that with a context-object the
+connection will be of type `Qt::AutoConnection` instead of `Qt::DirectConnection`,
+which you can control if needed, via the 5th (optional) argument.
+
+
 In order to reduce false-positives, it will only warn if the lambda body dereferences
 at least one QObject (other than the sender).
 
