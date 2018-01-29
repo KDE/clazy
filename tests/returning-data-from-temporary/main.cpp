@@ -131,6 +131,7 @@ void testAssignment()
     const char *c8 = str.toUtf8(); // Warn
     const char *c9 = str.toLatin1(); // Warn
     const char *c10 = returnsByteArray(); // Warn
+    const char* buffer = QByteArray("Hello").constData(); // Warn
 }
 
 const char * testByParam(QByteArray &ba, QString &foo, QByteArray ba2)
