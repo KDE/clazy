@@ -15,7 +15,7 @@ Table of contents
          * [Build and install clang](#build-and-install-clang)
          * [Build clazy](#build-clazy)
       * [Windows](#windows)
-         * [Pre-built msvc2015 clang and clazy binaries](#pre-built-msvc2015-clang-and-clazy-binaries)
+         * [3rdparty pre-built msvc2015 clang and clazy binaries](#3rdparty-pre-built-msvc2015-clang-and-clazy-binaries)
          * [Build and install clang](#build-and-install-clang-1)
          * [Build clazy](#build-clazy-1)
       * [macOS with MacPorts](#macos-with-macports)
