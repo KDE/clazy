@@ -2,7 +2,7 @@
 #include <QtGui/QColor>
 #include <QtGui/QTextTableCell>
 #include <QtXml/QDomNode>
-
+#include <QtGui/QTextCursor>
 
 
 
