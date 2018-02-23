@@ -38,6 +38,14 @@ def level_num_to_enum(n):
 
     return 'CheckLevelUndefined'
 
+def level_num_to_name(n):
+    if n == -1:
+        return 'Manual Level'
+    if n >= 0 and n <= 3:
+        return 'Level ' + str(n)
+
+    return 'undefined'
+
 class Check:
     def __init__(self):
         self.name = ""
@@ -224,8 +232,8 @@ void CheckManager::registerChecks()
     print(text)
 
 def print_markdown_help():
-    for level in ['0', '1', '2', '3']:
-        print("\n- Checks from level%s:" % level)
+    for level in ['-1', '0', '1', '2', '3']:
+        print("\n- Checks from %s:" % level_num_to_name(int(level)))
         for c in _checks:
             if str(c.level) == level:
                 fixits_text = c.fixits_text()

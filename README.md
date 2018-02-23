@@ -207,41 +207,50 @@ Read on if you want to enable/disable which checks are run.
 # List of checks
 
 There are many checks and they are divided in levels:
-- level0: Very stable checks, 99.99% safe, no false-positives
+- level0: Very stable checks, 99.99% safe, mostly no false-positives
 - level1: Similar to level0, but sometimes (rarely) there might be some false-positives
 - level2: Sometimes has false-positives (20-30%).
 - level3: Not always correct, possibly very noisy, might require a knowledgeable developer to review, might have a very big rate of false-positives, might have bugs.
+- manual: Checks here need to be enabled explicitly, as they don't belong to any level. Checks here are very stable and have very few false-positives too.
 
 clazy runs all checks from level1 by default.
 
-- Checks from level0:
+- Checks from Manual Level:
+    - [inefficient-qlist](src/checks/level-1/README-inefficient-qlist.md)
+    - [isempty-vs-count](src/checks/level-1/README-isempty-vs-count.md)
+    - [qstring-varargs](src/checks/level-1/README-qstring-varargs.md)
+    - [qt4-qstring-from-array](src/checks/level-1/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
+    - [tr-non-literal](src/checks/level-1/README-tr-non-literal.md)
+    - [container-inside-loop](src/checks/level-1/README-container-inside-loop.md)
+
+- Checks from Level 0:
     - [connect-by-name](src/checks/level0/README-connect-by-name.md)
     - [connect-non-signal](src/checks/level0/README-connect-non-signal.md)
-    - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
-    - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
     - [lambda-in-connect](src/checks/level0/README-lambda-in-connect.md)
     - [lambda-unique-connection](src/checks/level0/README-lambda-unique-connection.md)
-    - [mutable-container-key](src/checks/level0/README-mutable-container-key.md)
-    - [qcolor-from-literal](src/checks/level0/README-qcolor-from-literal.md)
     - [qdatetime-utc](src/checks/level0/README-qdatetime-utc.md)    (fix-qdatetime-utc)
-    - [qenums](src/checks/level0/README-qenums.md)
-    - [qfileinfo-exists](src/checks/level0/README-qfileinfo-exists.md)
     - [qgetenv](src/checks/level0/README-qgetenv.md)    (fix-qgetenv)
-    - [qmap-with-pointer-key](src/checks/level0/README-qmap-with-pointer-key.md)
-    - [qstring-arg](src/checks/level0/README-qstring-arg.md)
     - [qstring-insensitive-allocation](src/checks/level0/README-qstring-insensitive-allocation.md)
-    - [qstring-ref](src/checks/level0/README-qstring-ref.md)    (fix-missing-qstringref)
-    - [qt-macros](src/checks/level0/README-qt-macros.md)
+    - [fully-qualified-moc-types](src/checks/level0/README-fully-qualified-moc-types.md)
     - [qvariant-template-instantiation](src/checks/level0/README-qvariant-template-instantiation.md)
-    - [strict-iterators](src/checks/level0/README-strict-iterators.md)
-    - [temporary-iterator](src/checks/level0/README-temporary-iterator.md)
     - [unused-non-trivial-variable](src/checks/level0/README-unused-non-trivial-variable.md)
+    - [connect-not-normalized](src/checks/level0/README-connect-not-normalized.md)
+    - [mutable-container-key](src/checks/level0/README-mutable-container-key.md)
+    - [qenums](src/checks/level0/README-qenums.md)
+    - [qmap-with-pointer-key](src/checks/level0/README-qmap-with-pointer-key.md)
+    - [qstring-ref](src/checks/level0/README-qstring-ref.md)    (fix-missing-qstringref)
+    - [strict-iterators](src/checks/level0/README-strict-iterators.md)
     - [writing-to-temporary](src/checks/level0/README-writing-to-temporary.md)
+    - [container-anti-pattern](src/checks/level0/README-container-anti-pattern.md)
+    - [qcolor-from-literal](src/checks/level0/README-qcolor-from-literal.md)
+    - [qfileinfo-exists](src/checks/level0/README-qfileinfo-exists.md)
+    - [qstring-arg](src/checks/level0/README-qstring-arg.md)
+    - [qt-macros](src/checks/level0/README-qt-macros.md)
+    - [temporary-iterator](src/checks/level0/README-temporary-iterator.md)
     - [wrong-qglobalstatic](src/checks/level0/README-wrong-qglobalstatic.md)
 
-- Checks from level1:
+- Checks from Level 1:
     - [auto-unexpected-qstringbuilder](src/checks/level1/README-auto-unexpected-qstringbuilder.md)    (fix-auto-unexpected-qstringbuilder)
-    - [child-event-qobject-cast](src/checks/level1/README-child-event-qobject-cast.md)
     - [connect-3arg-lambda](src/checks/level1/README-connect-3arg-lambda.md)
     - [const-signal-or-slot](src/checks/level1/README-const-signal-or-slot.md)
     - [detaching-temporary](src/checks/level1/README-detaching-temporary.md)
@@ -250,24 +259,24 @@ clazy runs all checks from level1 by default.
     - [inefficient-qlist-soft](src/checks/level1/README-inefficient-qlist-soft.md)
     - [install-event-filter](src/checks/level1/README-install-event-filter.md)
     - [non-pod-global-static](src/checks/level1/README-non-pod-global-static.md)
-    - [overridden-signal](src/checks/level1/README-overridden-signal.md)
     - [post-event](src/checks/level1/README-post-event.md)
     - [qdeleteall](src/checks/level1/README-qdeleteall.md)
-    - [qhash-namespace](src/checks/level1/README-qhash-namespace.md)
     - [qlatin1string-non-ascii](src/checks/level1/README-qlatin1string-non-ascii.md)
     - [qproperty-without-notify](src/checks/level1/README-qproperty-without-notify.md)
     - [qstring-left](src/checks/level1/README-qstring-left.md)
     - [range-loop](src/checks/level1/README-range-loop.md)
     - [returning-data-from-temporary](src/checks/level1/README-returning-data-from-temporary.md)
     - [rule-of-two-soft](src/checks/level1/README-rule-of-two-soft.md)
-    - [skipped-base-method](src/checks/level1/README-skipped-base-method.md)
+    - [child-event-qobject-cast](src/checks/level1/README-child-event-qobject-cast.md)
     - [virtual-signal](src/checks/level1/README-virtual-signal.md)
+    - [overridden-signal](src/checks/level1/README-overridden-signal.md)
+    - [qhash-namespace](src/checks/level1/README-qhash-namespace.md)
+    - [skipped-base-method](src/checks/level1/README-skipped-base-method.md)
 
-- Checks from level2:
-    - [base-class-event](src/checks/level2/README-base-class-event.md)
-    - [container-inside-loop](src/checks/level2/README-container-inside-loop.md)
-    - [copyable-polymorphic](src/checks/level2/README-copyable-polymorphic.md)
+- Checks from Level 2:
     - [ctor-missing-parent-argument](src/checks/level2/README-ctor-missing-parent-argument.md)
+    - [base-class-event](src/checks/level2/README-base-class-event.md)
+    - [copyable-polymorphic](src/checks/level2/README-copyable-polymorphic.md)
     - [function-args-by-ref](src/checks/level2/README-function-args-by-ref.md)
     - [function-args-by-value](src/checks/level2/README-function-args-by-value.md)
     - [global-const-char-pointer](src/checks/level2/README-global-const-char-pointer.md)
@@ -281,10 +290,10 @@ clazy runs all checks from level1 by default.
     - [rule-of-three](src/checks/level2/README-rule-of-three.md)
     - [virtual-call-ctor](src/checks/level2/README-virtual-call-ctor.md)
 
-- Checks from level3:
+- Checks from Level 3:
     - [assert-with-side-effects](src/checks/level3/README-assert-with-side-effects.md)
-    - [bogus-dynamic-cast](src/checks/level3/README-bogus-dynamic-cast.md)
     - [detaching-member](src/checks/level3/README-detaching-member.md)
+    - [bogus-dynamic-cast](src/checks/level3/README-bogus-dynamic-cast.md)
     - [thread-with-slots](src/checks/level3/README-thread-with-slots.md)
 
 # Selecting which checks to enable
