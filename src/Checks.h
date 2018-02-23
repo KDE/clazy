@@ -32,6 +32,7 @@
 #include "checks/hiddenlevel/qstring-varargs.h"
 #include "checks/hiddenlevel/qt4-qstring-from-array.h"
 #include "checks/hiddenlevel/tr-non-literal.h"
+#include "checks/hiddenlevel/container-inside-loop.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/lambda-in-connect.h"
@@ -80,7 +81,6 @@
 #include "checks/level1/skipped-base-method.h"
 #include "checks/level2/ctor-missing-parent-argument.h"
 #include "checks/level2/base-class-event.h"
-#include "checks/level2/container-inside-loop.h"
 #include "checks/level2/copyable-polymorphic.h"
 #include "checks/level2/function-args-by-ref.h"
 #include "checks/level2/function-args-by-value.h"
@@ -114,6 +114,7 @@ void CheckManager::registerChecks()
     registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<TrNonLiteral>("tr-non-literal", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ContainerInsideLoop>("container-inside-loop", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
@@ -166,7 +167,6 @@ void CheckManager::registerChecks()
     registerCheck(check<SkippedBaseMethod>("skipped-base-method", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<CtorMissingParentArgument>("ctor-missing-parent-argument", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<BaseClassEvent>("base-class-event", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<ContainerInsideLoop>("container-inside-loop", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<CopyablePolymorphic>("copyable-polymorphic", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<FunctionArgsByRef>("function-args-by-ref", CheckLevel2,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<FunctionArgsByValue>("function-args-by-value", CheckLevel2,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));

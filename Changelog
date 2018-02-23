@@ -77,3 +77,4 @@
     besides the .cpp file from the translation unit, which is never filtered out.
   - unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist option
   - unused-non-trivial-variable got user-blacklist and user-whitelist support
+  - container-inside-loop is now a manual check instead of level2

@@ -39,6 +39,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "container-inside-loop",
+            "level" : -1,
+            "categories" : ["containers", "performance"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "connect-by-name",
             "level" : 0,
             "categories" : ["bug", "readability"],
@@ -368,12 +374,6 @@
             "level" : 2,
             "categories" : ["bug"],
             "visits_decls" : true
-        },
-        {
-            "name"  : "container-inside-loop",
-            "level" : 2,
-            "categories" : ["containers", "performance"],
-            "visits_stmts" : true
         },
         {
             "name"  : "copyable-polymorphic",

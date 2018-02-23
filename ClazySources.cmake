@@ -63,7 +63,6 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/virtual-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ctor-missing-parent-argument.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/base-class-event.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/container-inside-loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-value.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/globalconstcharpointer.cpp
@@ -85,6 +84,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/tr-non-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/qt4-qstring-from-array.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/qstring-varargs.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/hiddenlevel/container-inside-loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/detachingbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/inefficientqlistbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
