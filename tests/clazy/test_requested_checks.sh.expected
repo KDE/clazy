@@ -8,7 +8,7 @@ Requested checks: foreach, writing-to-temporary
 Requested checks: old-style-connect
 Requested checks: old-style-connect
 Requested checks: foreach, old-style-connect
-Requested checks: auto-unexpected-qstringbuilder, base-class-event, child-event-qobject-cast, connect-3arg-lambda, connect-by-name, connect-non-signal, connect-not-normalized, const-signal-or-slot, container-anti-pattern, container-inside-loop, copyable-polymorphic, ctor-missing-parent-argument, detaching-temporary, foreach, fully-qualified-moc-types, function-args-by-ref, function-args-by-value, global-const-char-pointer, implicit-casts, incorrect-emit, inefficient-qlist-soft, install-event-filter, lambda-in-connect, lambda-unique-connection, missing-qobject-macro, missing-typeinfo, mutable-container-key, non-pod-global-static, old-style-connect, overridden-signal, post-event, qcolor-from-literal, qdatetime-utc, qdeleteall, qenums, qfileinfo-exists, qgetenv, qhash-namespace, qlatin1string-non-ascii, qmap-with-pointer-key, qproperty-without-notify, qstring-allocations, qstring-arg, qstring-insensitive-allocation, qstring-left, qstring-ref, qt-macros, qvariant-template-instantiation, range-loop, reserve-candidates, returning-data-from-temporary, returning-void-expression, rule-of-three, rule-of-two-soft, skipped-base-method, strict-iterators, temporary-iterator, unused-non-trivial-variable, virtual-call-ctor, virtual-signal, writing-to-temporary, wrong-qglobalstatic
+Requested checks: auto-unexpected-qstringbuilder, base-class-event, child-event-qobject-cast, connect-3arg-lambda, connect-by-name, connect-non-signal, connect-not-normalized, const-signal-or-slot, container-anti-pattern, copyable-polymorphic, ctor-missing-parent-argument, detaching-temporary, foreach, fully-qualified-moc-types, function-args-by-ref, function-args-by-value, global-const-char-pointer, implicit-casts, incorrect-emit, inefficient-qlist-soft, install-event-filter, lambda-in-connect, lambda-unique-connection, missing-qobject-macro, missing-typeinfo, mutable-container-key, non-pod-global-static, old-style-connect, overridden-signal, post-event, qcolor-from-literal, qdatetime-utc, qdeleteall, qenums, qfileinfo-exists, qgetenv, qhash-namespace, qlatin1string-non-ascii, qmap-with-pointer-key, qproperty-without-notify, qstring-allocations, qstring-arg, qstring-insensitive-allocation, qstring-left, qstring-ref, qt-macros, qvariant-template-instantiation, range-loop, reserve-candidates, returning-data-from-temporary, returning-void-expression, rule-of-three, rule-of-two-soft, skipped-base-method, strict-iterators, temporary-iterator, unused-non-trivial-variable, virtual-call-ctor, virtual-signal, writing-to-temporary, wrong-qglobalstatic
 Requested checks: implicit-casts
 Requested checks: foreach, implicit-casts
 Requested checks: old-style-connect
@@ -79,7 +79,6 @@ Available checks and FixIts:
 
 - Checks from level2:
     - base-class-event
-    - container-inside-loop
     - copyable-polymorphic
     - ctor-missing-parent-argument
     - function-args-by-ref

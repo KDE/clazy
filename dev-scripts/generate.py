@@ -32,7 +32,7 @@ _available_categories = []
 
 def level_num_to_enum(n):
     if n == -1:
-        return 'HiddenCheckLevel'
+        return 'ManualCheckLevel'
     if n >= 0 and n <= 3:
         return 'CheckLevel' + str(n)
 
@@ -53,7 +53,7 @@ class Check:
     def include(self):
         level = 'level' + str(self.level)
         if self.level == -1:
-            level = 'hiddenlevel'
+            level = 'manuallevel'
         headername = self.name + ".h"
         filename = 'checks/' + level + '/' + headername
         if not os.path.exists('src/' + filename):

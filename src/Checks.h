@@ -27,12 +27,12 @@
  */
 
 #include "checkmanager.h"
-#include "checks/hiddenlevel/inefficientqlist.h"
-#include "checks/hiddenlevel/isempty-vs-count.h"
-#include "checks/hiddenlevel/qstring-varargs.h"
-#include "checks/hiddenlevel/qt4-qstring-from-array.h"
-#include "checks/hiddenlevel/tr-non-literal.h"
-#include "checks/hiddenlevel/container-inside-loop.h"
+#include "checks/manuallevel/inefficientqlist.h"
+#include "checks/manuallevel/isempty-vs-count.h"
+#include "checks/manuallevel/qstring-varargs.h"
+#include "checks/manuallevel/qt4-qstring-from-array.h"
+#include "checks/manuallevel/tr-non-literal.h"
+#include "checks/manuallevel/container-inside-loop.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/lambda-in-connect.h"
@@ -108,13 +108,13 @@ RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Optio
 
 void CheckManager::registerChecks()
 {
-    registerCheck(check<InefficientQList>("inefficient-qlist", HiddenCheckLevel,  RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<IsEmptyVSCount>("isempty-vs-count", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<QStringVarargs>("qstring-varargs", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QStringVarargs>("qstring-varargs", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
-    registerCheck(check<TrNonLiteral>("tr-non-literal", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<ContainerInsideLoop>("container-inside-loop", HiddenCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
