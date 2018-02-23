@@ -53,13 +53,13 @@ class PreprocessorOptions;
 class CheckBase;
 class ClazyContext;
 
-enum CheckLevel {
+enum CheckLevel { // See README.md for what each level does
     CheckLevelUndefined = -1,
-    CheckLevel0 = 0, // Probably safe, almost no false-positives, very useful
-    CheckLevel1,     // Similar to CheckLevel0, but sometimes (rarely) there might be more false-positives
-    CheckLevel2,     // Sometimes has false-positives (20-30% ?)
-    CheckLevel3 = 3, // Not always correct, possibly very noisy, requires a knowledgeable developer to review, might have a very big rate of false-positives
-    ManualCheckLevel, // The check must be explicitly enabled
+    CheckLevel0 = 0,
+    CheckLevel1,
+    CheckLevel2,
+    CheckLevel3 = 3,
+    ManualCheckLevel,
     MaxCheckLevel = CheckLevel3,
     DefaultCheckLevel = CheckLevel1
 };

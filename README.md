@@ -207,11 +207,11 @@ Read on if you want to enable/disable which checks are run.
 # List of checks
 
 There are many checks and they are divided in levels:
-- level0: Very stable checks, 99.99% safe, mostly no false-positives
-- level1: Similar to level0, but sometimes (rarely) there might be some false-positives
-- level2: Sometimes has false-positives (20-30%).
-- level3: Not always correct, possibly very noisy, might require a knowledgeable developer to review, might have a very big rate of false-positives, might have bugs.
-- manual: Checks here need to be enabled explicitly, as they don't belong to any level. Checks here are very stable and have very few false-positives too.
+- level0: Very stable checks, 99.99% safe, mostly no false-positives, very desirable
+- level1: The default level. Very similar to level 0, slightly more false-positives but very few.
+- level2: Also very few false-positives, but contains noisy checks which not everyone agree should be default.
+- level3: Contains checks with high rate of false-positives.
+- manual: Checks here need to be enabled explicitly, as they don't belong to any level. Checks here are very stable and have very few false-positives.
 
 clazy runs all checks from level1 by default.
 
