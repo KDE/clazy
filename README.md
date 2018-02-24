@@ -293,7 +293,7 @@ clazy runs all checks from level1 by default.
 - Checks from Level 3:
     - [assert-with-side-effects](src/checks/level3/README-assert-with-side-effects.md)
     - [detaching-member](src/checks/level3/README-detaching-member.md)
-    - [bogus-dynamic-cast](src/checks/level3/README-bogus-dynamic-cast.md)
+    - [unneeded-cast](src/checks/level3/README-unneeded-cast.md)
     - [thread-with-slots](src/checks/level3/README-thread-with-slots.md)
 
 # Selecting which checks to enable
@@ -305,7 +305,7 @@ You can disable checks by prefixing with `no-`, in case you don't want all check
 
 ## Example via env variable
 ```
-export CLAZY_CHECKS="bogus-dynamic-cast,qmap-with-key-pointer,virtual-call-ctor" # Enables only these 3 checks
+export CLAZY_CHECKS="unneeded-cast,qmap-with-key-pointer,virtual-call-ctor" # Enables only these 3 checks
 export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except for qenums
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```

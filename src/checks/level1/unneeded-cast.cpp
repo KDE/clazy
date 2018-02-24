@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "bogus-dynamic-cast.h"
+#include "unneeded-cast.h"
 #include "Utils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
@@ -32,12 +32,12 @@
 
 using namespace clang;
 
-BogusDynamicCast::BogusDynamicCast(const std::string &name, ClazyContext *context)
+UnneededCast::UnneededCast(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
-void BogusDynamicCast::VisitStmt(clang::Stmt *stm)
+void UnneededCast::VisitStmt(clang::Stmt *stm)
 {
     auto dynExp = dyn_cast<CXXDynamicCastExpr>(stm);
     if (!dynExp)

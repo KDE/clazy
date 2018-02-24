@@ -1,0 +1,1 @@
+unneeded-cast/qobjectcast.cpp:7:5: warning: Use qobject_cast rather than dynamic_cast [-Wclazy-unneeded-cast]

@@ -157,9 +157,9 @@ B<Examples:>
 
 =over 4
 
-=item 1. Enables the 2 checkers "bogus-dynamic-cast" and "virtual-call-ctor" only:
+=item 1. Enables the 2 checkers "unneeded-cast" and "virtual-call-ctor" only:
 
-% export CLAZY_CHECKS="bogus-dynamic-cast,virtual-call-ctor"
+% export CLAZY_CHECKS="unneeded-cast,virtual-call-ctor"
 
 =item 2. Enables all checks from the "level0" check-set, except for "qenums":
 

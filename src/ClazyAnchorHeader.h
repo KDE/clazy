@@ -63,7 +63,7 @@ extern volatile int ClazyAnchor_ReturningVoidExpression;
 extern volatile int ClazyAnchor_RuleOfThree;
 extern volatile int ClazyAnchor_VirtualCallsFromCTOR;
 extern volatile int ClazyAnchor_AssertWithSideEffects;
-extern volatile int ClazyAnchor_BogusDynamicCast;
+extern volatile int ClazyAnchor_UnneededCast;
 extern volatile int ClazyAnchor_DetachingMember;
 extern volatile int ClazyAnchor_ThreadWithSlots;
 
@@ -130,7 +130,7 @@ int clazy_dummy()
         ClazyAnchor_RuleOfThree +
         ClazyAnchor_VirtualCallsFromCTOR +
         ClazyAnchor_AssertWithSideEffects +
-        ClazyAnchor_BogusDynamicCast +
+        ClazyAnchor_UnneededCast +
         ClazyAnchor_DetachingMember +
         ClazyAnchor_ThreadWithSlots +
     0;

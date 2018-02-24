@@ -364,6 +364,17 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "unneeded-cast",
+            "level" : 1,
+            "categories" : ["cpp"],
+            "options" : [
+                {
+                    "name" : "qobject"
+                }
+            ],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "ctor-missing-parent-argument",
             "level" : 2,
             "categories" : ["bug"],
@@ -495,17 +506,6 @@
             "name"  : "detaching-member",
             "level" : 3,
             "categories" : ["containers", "performance"],
-            "visits_stmts" : true
-        },
-        {
-            "name"  : "bogus-dynamic-cast",
-            "level" : 3,
-            "categories" : ["performance"],
-            "options" : [
-                {
-                    "name" : "qobject"
-                }
-            ],
             "visits_stmts" : true
         },
         {

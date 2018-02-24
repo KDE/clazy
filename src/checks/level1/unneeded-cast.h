@@ -22,8 +22,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANG_LAZY_DYNAMIC_CAST_H
-#define CLANG_LAZY_DYNAMIC_CAST_H
+#ifndef CLAZY_UNNEEDED_CAST_H
+#define CLAZY_UNNEEDED_CAST_H
 
 #include "checkbase.h"
 
@@ -32,12 +32,13 @@
 #include <string>
 
 /**
- * Finds redundant dynamic casts.
+ * Finds redundant casts.
+ * See README-unneeded-cast.md for more info.
  */
-class BogusDynamicCast : public CheckBase
+class UnneededCast : public CheckBase
 {
 public:
-    BogusDynamicCast(const std::string &name, ClazyContext *context);
+    UnneededCast(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

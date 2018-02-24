@@ -10,4 +10,4 @@ Optionally it can also find places where a qobject_cast should be used instead.
 
 
 If you prefer to use qobject_cast instead of dynamic_cast you can catch those cases with:
-`export CLAZY_EXTRA_OPTIONS="bogus-dynamic-cast-qobject`
+`export CLAZY_EXTRA_OPTIONS="unneeded-cast-qobject`

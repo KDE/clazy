@@ -7,7 +7,7 @@
             "filename" : "qobjectcast.cpp",
             "env" :
                 {
-                    "CLAZY_EXTRA_OPTIONS" : "bogus-dynamic-cast-qobject"
+                    "CLAZY_EXTRA_OPTIONS" : "unneeded-cast-qobject"
                 }
         }
     ]

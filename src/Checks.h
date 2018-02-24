@@ -79,6 +79,7 @@
 #include "checks/level1/overridden-signal.h"
 #include "checks/level1/qhash-namespace.h"
 #include "checks/level1/skipped-base-method.h"
+#include "checks/level1/unneeded-cast.h"
 #include "checks/level2/ctor-missing-parent-argument.h"
 #include "checks/level2/base-class-event.h"
 #include "checks/level2/copyable-polymorphic.h"
@@ -96,7 +97,6 @@
 #include "checks/level2/virtual-call-ctor.h"
 #include "checks/level3/assertwithsideeffects.h"
 #include "checks/level3/detachingmember.h"
-#include "checks/level3/bogus-dynamic-cast.h"
 #include "checks/level3/thread-with-slots.h"
 
 template <typename T>
@@ -165,6 +165,7 @@ void CheckManager::registerChecks()
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QHashNamespace>("qhash-namespace", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<SkippedBaseMethod>("skipped-base-method", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<UnneededCast>("unneeded-cast", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<CtorMissingParentArgument>("ctor-missing-parent-argument", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<BaseClassEvent>("base-class-event", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<CopyablePolymorphic>("copyable-polymorphic", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
@@ -188,7 +189,6 @@ void CheckManager::registerChecks()
     registerCheck(check<VirtualCallCtor>("virtual-call-ctor", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<DetachingMember>("detaching-member", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<BogusDynamicCast>("bogus-dynamic-cast", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", CheckLevel3,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
 }
 
