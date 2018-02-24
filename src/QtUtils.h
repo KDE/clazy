@@ -258,6 +258,46 @@ inline clang::CXXMethodDecl* receiverMethodForConnect(clang::CallExpr *call)
     return clazy::pmfFromConnect(call, 3);
 }
 
+
+// Returns if callExpr is a call to qobject_cast()
+inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = nullptr,
+                            clang::CXXRecordDecl **castFrom = nullptr)
+{
+    if (auto callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
+        clang::FunctionDecl *func = callExpr->getDirectCallee();
+        if (!func || clazy::name(func) != "qobject_cast")
+            return false;
+
+        if (castFrom) {
+            clang::Expr *arg1 = callExpr->getArg(0);
+            auto implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(arg1);
+            implicitCast = implicitCast ? implicitCast : clazy::getFirstChildOfType2<clang::ImplicitCastExpr>(arg1);
+            if (implicitCast) {
+                clang::QualType qt = TypeUtils::pointeeQualType(implicitCast->getSubExpr()->getType());
+                if (!qt.isNull()) {
+                    clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
+                    *castFrom = record ? record->getCanonicalDecl() : nullptr;
+                }
+            }
+        }
+
+        if (castTo) {
+            auto templateArgs = func->getTemplateSpecializationArgs();
+            if (templateArgs->size() == 1) {
+                const clang::TemplateArgument &arg = templateArgs->get(0);
+                clang::QualType qt = TypeUtils::pointeeQualType(arg.getAsType());
+                if (!qt.isNull()) {
+                    clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
+                    *castTo = record ? record->getCanonicalDecl() : nullptr;
+                }
+            }
+        }
+        return true;
+    }
+
+    return false;
+}
+
 }
 
 #endif
