@@ -37,19 +37,18 @@ CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *
 
 void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 {
-    CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(decl);
+    auto record = dyn_cast<CXXRecordDecl>(decl);
     if (!record || !record->hasDefinition() || record->getDefinition() != record || !record->isPolymorphic())
         return;
 
     CXXConstructorDecl *copyCtor = Utils::copyCtor(record);
-    CXXMethodDecl *copyAssign = Utils::copyAssign(record);
-
     const bool hasCallableCopyCtor = copyCtor && !copyCtor->isDeleted() && copyCtor->getAccess() != clang::AS_private;
-    const bool hasCallableCopyAssign = copyAssign && !copyAssign->isDeleted() && copyAssign->getAccess() != clang::AS_private;
-
-    if (!hasCallableCopyCtor && !hasCallableCopyAssign)
-        return;
-
+    if (!hasCallableCopyCtor) {
+        CXXMethodDecl *copyAssign = Utils::copyAssign(record);
+        const bool hasCallableCopyAssign = copyAssign && !copyAssign->isDeleted() && copyAssign->getAccess() != clang::AS_private;
+        if (!hasCallableCopyAssign)
+            return;
+    }
 
     emitWarning(record->getLocStart(), "Polymorphic class is copyable. Potential slicing.");
 }
