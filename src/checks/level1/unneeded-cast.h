@@ -27,9 +27,9 @@
 
 #include "checkbase.h"
 
-#include <map>
-#include <vector>
-#include <string>
+namespace {
+class CXXNAmedCastExpr;
+}
 
 /**
  * Finds redundant casts.
@@ -40,6 +40,8 @@ class UnneededCast : public CheckBase
 public:
     UnneededCast(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
+private:
+    bool handleNamedCast(clang::CXXNamedCastExpr *);
 };
 
 #endif

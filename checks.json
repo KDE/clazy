@@ -369,7 +369,7 @@
             "categories" : ["cpp"],
             "options" : [
                 {
-                    "name" : "qobject"
+                    "name" : "prefer-dynamic-cast-over-qobject"
                 }
             ],
             "visits_stmts" : true

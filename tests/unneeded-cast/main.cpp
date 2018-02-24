@@ -33,6 +33,10 @@ void test()
     dynamic_cast<A*>(a); // warning: Casting to itself
     dynamic_cast<B*>(a); // OK
     dynamic_cast<B*>(b); // warning: Casting to itself
+    static_cast<A*>(b); // warning: Casting to base
+    static_cast<A*>(a); // warning: Casting to itself
+    static_cast<B*>(a); // OK
+    static_cast<B*>(b); // warning: Casting to itself
 }
 
 class MyObj : public QObject
@@ -42,5 +46,5 @@ public:
 
 void testQObjectCast(QObject *o)
 {
-    dynamic_cast<MyObj*>(o); // OK
+    dynamic_cast<MyObj*>(o); // Warn
 }

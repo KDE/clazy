@@ -4,10 +4,10 @@
             "filename" : "main.cpp"
         },
         {
-            "filename" : "qobjectcast.cpp",
+            "filename" : "dynamic_cast_over_qobjectcast.cpp",
             "env" :
                 {
-                    "CLAZY_EXTRA_OPTIONS" : "unneeded-cast-qobject"
+                    "CLAZY_EXTRA_OPTIONS" : "unneeded-cast-prefer-dynamic-cast-over-qobject"
                 }
         }
     ]

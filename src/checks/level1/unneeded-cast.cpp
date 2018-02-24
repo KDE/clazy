@@ -39,25 +39,29 @@ UnneededCast::UnneededCast(const std::string &name, ClazyContext *context)
 
 void UnneededCast::VisitStmt(clang::Stmt *stm)
 {
-    auto dynExp = dyn_cast<CXXDynamicCastExpr>(stm);
-    if (!dynExp)
+    if (handleNamedCast(dyn_cast<CXXNamedCastExpr>(stm)))
         return;
+}
 
-    auto namedCast = dyn_cast<CXXNamedCastExpr>(stm);
-    CXXRecordDecl *castFrom = Utils::namedCastInnerDecl(namedCast);
+bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
+{
+    CXXRecordDecl *castFrom = namedCast ? Utils::namedCastInnerDecl(namedCast) : nullptr;
     if (!castFrom)
-        return;
+        return false;
 
-    if (isOptionSet("qobject") && clazy::isQObject(castFrom)) // Very noisy and not very useful, and qobject_cast can fail too
-        emitWarning(dynExp->getLocStart(), "Use qobject_cast rather than dynamic_cast");
+    const bool isDynamicCast = isa<CXXDynamicCastExpr>(namedCast);
+    if (isDynamicCast && !isOptionSet("prefer-dynamic-cast-over-qobject") && clazy::isQObject(castFrom))
+        emitWarning(namedCast->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);
     if (!castTo)
-        return;
+        return false;
 
     if (castFrom == castTo) {
-        emitWarning(stm->getLocStart(), "Casting to itself");
+        emitWarning(namedCast->getLocStart(), "Casting to itself");
     } else if (TypeUtils::derivesFrom(/*child=*/castFrom, castTo)) {
-        emitWarning(stm->getLocStart(), "explicitly casting to base is unnecessary");
+        emitWarning(namedCast->getLocStart(), "explicitly casting to base is unnecessary");
     }
+
+    return true;
 }

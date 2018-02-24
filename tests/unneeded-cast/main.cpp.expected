@@ -4,3 +4,10 @@ unneeded-cast/main.cpp:33:5: warning: Casting to itself [-Wclazy-unneeded-cast]
     dynamic_cast<A*>(a); // warning: Casting to itself
 unneeded-cast/main.cpp:35:5: warning: Casting to itself [-Wclazy-unneeded-cast]
     dynamic_cast<B*>(b); // warning: Casting to itself
+unneeded-cast/main.cpp:36:5: warning: Casting to itself [-Wclazy-unneeded-cast]
+    static_cast<A*>(b); // warning: Casting to base
+unneeded-cast/main.cpp:37:5: warning: Casting to itself [-Wclazy-unneeded-cast]
+    static_cast<A*>(a); // warning: Casting to itself
+unneeded-cast/main.cpp:39:5: warning: Casting to itself [-Wclazy-unneeded-cast]
+    static_cast<B*>(b); // warning: Casting to itself
+unneeded-cast/main.cpp:49:5: warning: Use qobject_cast rather than dynamic_cast [-Wclazy-unneeded-cast]
