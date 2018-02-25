@@ -125,6 +125,7 @@ bool TypeUtils::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *p
         const Type *type = base.getType().getTypePtrOrNull();
         if (!type) continue;
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
+        baseDecl = baseDecl ? baseDecl->getCanonicalDecl() : nullptr;
 
         if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase, baseClasses)) {
             if (baseClasses)
