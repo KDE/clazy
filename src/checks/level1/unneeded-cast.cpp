@@ -26,10 +26,13 @@
 #include "Utils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "HierarchyUtils.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
 
+using namespace llvm;
 using namespace clang;
 
 UnneededCast::UnneededCast(const std::string &name, ClazyContext *context)
@@ -41,15 +44,41 @@ void UnneededCast::VisitStmt(clang::Stmt *stm)
 {
     if (handleNamedCast(dyn_cast<CXXNamedCastExpr>(stm)))
         return;
+
+    handleQObjectCast(stm);
 }
 
 bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
 {
-    CXXRecordDecl *castFrom = namedCast ? Utils::namedCastInnerDecl(namedCast) : nullptr;
-    if (!castFrom)
+    if (!namedCast)
         return false;
 
     const bool isDynamicCast = isa<CXXDynamicCastExpr>(namedCast);
+    const bool isStaticCast = isDynamicCast ? false : isa<CXXStaticCastExpr>(namedCast);
+
+    if (!isDynamicCast && !isStaticCast)
+        return false;
+
+    if (namedCast->getLocStart().isMacroID())
+        return false;
+
+    CXXRecordDecl *castFrom = namedCast ? Utils::namedCastInnerDecl(namedCast) : nullptr;
+    if (!castFrom || !castFrom->hasDefinition() || std::distance(castFrom->bases_begin(), castFrom->bases_end()) > 1)
+        return false;
+
+    if (isStaticCast) {
+        if (auto implicitCast = dyn_cast<ImplicitCastExpr>(namedCast->getSubExpr())) {
+            if (implicitCast->getCastKind() == CK_NullToPointer) {
+                // static_cast<Foo*>(0) is OK, and sometimes needed
+                return false;
+            }
+        }
+
+        // static_cast to base is needed in ternary operators
+        if (clazy::getFirstParentOfType<ConditionalOperator>(m_context->parentMap, namedCast) != nullptr)
+            return false;
+    }
+
     if (isDynamicCast && !isOptionSet("prefer-dynamic-cast-over-qobject") && clazy::isQObject(castFrom))
         emitWarning(namedCast->getLocStart(), "Use qobject_cast rather than dynamic_cast");
 
@@ -57,11 +86,32 @@ bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
     if (!castTo)
         return false;
 
+    return maybeWarn(namedCast, castFrom, castTo);
+}
+
+bool UnneededCast::handleQObjectCast(Stmt *stm)
+{
+    CXXRecordDecl *castTo = nullptr;
+    CXXRecordDecl *castFrom = nullptr;
+
+    if (!clazy::is_qobject_cast(stm, &castTo, &castFrom))
+        return false;
+
+    return maybeWarn(stm, castFrom, castTo);
+}
+
+bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl *castTo)
+{
+    castFrom = castFrom->getCanonicalDecl();
+    castTo = castTo->getCanonicalDecl();
+
     if (castFrom == castTo) {
-        emitWarning(namedCast->getLocStart(), "Casting to itself");
+        emitWarning(stmt->getLocStart(), "Casting to itself");
+        return true;
     } else if (TypeUtils::derivesFrom(/*child=*/castFrom, castTo)) {
-        emitWarning(namedCast->getLocStart(), "explicitly casting to base is unnecessary");
+        emitWarning(stmt->getLocStart(), "explicitly casting to base is unnecessary");
+        return true;
     }
 
-    return true;
+    return false;
 }

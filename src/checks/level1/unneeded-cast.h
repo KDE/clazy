@@ -42,6 +42,8 @@ public:
     void VisitStmt(clang::Stmt *stm) override;
 private:
     bool handleNamedCast(clang::CXXNamedCastExpr *);
+    bool handleQObjectCast(clang::Stmt *);
+    bool maybeWarn(clang::Stmt *, clang::CXXRecordDecl *from, clang::CXXRecordDecl *to);
 };
 
 #endif

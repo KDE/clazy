@@ -57,6 +57,13 @@ CXXRecordDecl * Utils::namedCastInnerDecl(CXXNamedCastExpr *staticOrDynamicCast)
 {
     Expr *e = staticOrDynamicCast->getSubExpr();
     if (!e) return nullptr;
+    if (auto implicitCast = dyn_cast<ImplicitCastExpr>(e)) {
+        // Sometimes it's automatically cast to base
+        if (implicitCast->getCastKind() == CK_DerivedToBase) {
+            e = implicitCast->getSubExpr();
+        }
+    }
+
     QualType qt = e->getType();
     const Type *t = qt.getTypePtrOrNull();
     if (!t) return nullptr;

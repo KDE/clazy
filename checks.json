@@ -365,8 +365,8 @@
         },
         {
             "name"  : "unneeded-cast",
-            "level" : 1,
-            "categories" : ["cpp"],
+            "level" : -1,
+            "categories" : ["cpp", "readability"],
             "options" : [
                 {
                     "name" : "prefer-dynamic-cast-over-qobject"
