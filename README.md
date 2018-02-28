@@ -408,6 +408,8 @@ If you think you found a false-positive, file a bug report.
 
 If you want to suppress warnings from headers of Qt or 3rd party code, include them with `-isystem` instead of `-I`.
 
+Alternatively you can set the CLAZY_HEADER_FILTER env variable to a regexp matching the path where you want warnings.
+
 You can also suppress individual warnings by file or by line by inserting comments:
 
 - To disable clazy in a specific source file, insert this comment, anywhere in the file:

@@ -189,6 +189,14 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     return std::unique_ptr<clang::ASTConsumer>(astConsumer.release());
 }
 
+static std::string getHeaderFilterEnv()
+{
+    const char *headerFilter = getenv("CLAZY_HEADER_FILTER");
+    if (headerFilter)
+        return headerFilter;
+    else return std::string();
+}
+
 bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_)
 {
     // NOTE: This method needs to be kept reentrant (but not necessarily thread-safe)
@@ -197,7 +205,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::vector<std::string> args = args_;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(ci, /*headerFilter=*/ "", ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(ci, getHeaderFilterEnv(), ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -339,7 +347,7 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList, cons
                                                    ClazyContext::ClazyOptions options)
     : clang::ASTFrontendAction()
     , m_checkList(checkList.empty() ? "level1" : checkList)
-    , m_headerFilter(headerFilter)
+    , m_headerFilter(headerFilter.empty() ? getHeaderFilterEnv() : headerFilter)
     , m_options(options)
 {
 }
