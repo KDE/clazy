@@ -331,3 +331,5 @@ if args.generate:
     generate_register_checks(_checks)
     generate_cmake_file(_checks)
     generate_readme(_checks)
+else:
+    parser.print_help(sys.stderr)
