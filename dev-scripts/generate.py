@@ -30,6 +30,9 @@ CHECKS_FILENAME = 'checks.json'
 _checks = []
 _available_categories = []
 
+def checkSortKey(check):
+    return str(check.level) + check.name
+
 def level_num_to_enum(n):
     if n == -1:
         return 'ManualCheckLevel'
@@ -45,6 +48,9 @@ def level_num_to_name(n):
         return 'Level ' + str(n)
 
     return 'undefined'
+
+def clazy_source_path():
+    return os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/..") + "/"
 
 class Check:
     def __init__(self):
@@ -110,6 +116,12 @@ class Check:
 
         return "(" + text + ")"
 
+    def cpp_filename(self):
+        filename = self.include()
+        filename = filename.replace(".h", ".cpp")
+        return filename
+
+
 if not os.path.exists(CHECKS_FILENAME):
     print("File doesn't exist: " + CHECKS_FILENAME)
     exit(1)
@@ -126,7 +138,7 @@ def load_json(filename):
 
     checks = decodedJson['checks']
 
-    global _available_categories
+    global _available_categories, _checks
     if 'available_categories' in decodedJson:
         _available_categories = decodedJson['available_categories']
 
@@ -171,12 +183,14 @@ def load_json(filename):
             return False
         _checks.append(c)
 
+    _checks = sorted(_checks, key=checkSortKey)
     return True
 
 def print_checks(checks):
     for c in checks:
         print(c.name + " " + str(c.level) + " " + str(c.categories))
 
+#-------------------------------------------------------------------------------
 def generate_register_checks(checks):
     text = '#include "checkmanager.h"\n'
     for c in checks:
@@ -229,8 +243,35 @@ void CheckManager::registerChecks()
  */
 """
     text = _license_text + '\n' + comment_text + '\n' + text
-    print(text)
+    filename = clazy_source_path() + "src/Checks.h"
+    f = open(filename, 'w')
+    f.write(text)
+    f.close()
+    print("Generated " + filename)
+#-------------------------------------------------------------------------------
+def generate_cmake_file(checks):
+    text = "set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}\n"
+    checks_with_regexp = []
+    for level in [-1, 0, 1, 2, 3]:
+        for check in checks:
+            if check.level == level:
+                text += "  ${CMAKE_CURRENT_LIST_DIR}/src/" + check.cpp_filename() + "\n"
+                if check.ifndef == "NO_STD_REGEX":
+                    checks_with_regexp.append(check)
+    text += ")\n"
 
+    if checks_with_regexp:
+        text += "\nif(HAS_STD_REGEX OR CLAZY_BUILD_WITH_CLANG)\n"
+        for check in checks_with_regexp:
+            text += "  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/" + check.cpp_filename() + ")\n"
+        text += "endif()\n"
+
+    filename = clazy_source_path() + "CheckSources.cmake"
+    f = open(filename, 'w')
+    f.write(text)
+    f.close()
+    print("Generated " + filename)
+#-------------------------------------------------------------------------------
 def print_markdown_help():
     for level in ['-1', '0', '1', '2', '3']:
         print("\n- Checks from %s:" % level_num_to_name(int(level)))
@@ -240,19 +281,20 @@ def print_markdown_help():
                 if fixits_text:
                     fixits_text = "    " + fixits_text
                 print("    - [%s](src/checks/level%s/README-%s.md)%s" % (c.name, level, c.name, fixits_text))
-
+#-------------------------------------------------------------------------------
 
 if not load_json(CHECKS_FILENAME):
     exit(1)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--generate-readme", action='store_true', help="Generate list of checks to copy-paste to README.md")
-parser.add_argument("--generate-checks-header", action='store_true', help="Generate src/Checks.h")
+parser.add_argument("--generate-checks", action='store_true', help="Generate src/Checks.h and CheckSources.cmake")
 args = parser.parse_args()
 
 if args.generate_readme:
     print_markdown_help()
-elif args.generate_checks_header:
+elif args.generate_checks:
     generate_register_checks(_checks)
+    generate_cmake_file(_checks)
 
 #print_checks(_checks)

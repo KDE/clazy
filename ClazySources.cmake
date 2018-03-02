@@ -14,6 +14,11 @@ set(CLAZY_LIB_SRC
   ${CMAKE_CURRENT_LIST_DIR}/src/Utils.cpp
 )
 
+set(CLAZY_CHECKS_SRCS
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/detachingbase.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/inefficientqlistbase.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
+)
 include(CheckSources.cmake)
 
 set(CLAZY_SHARED_SRCS # sources shared between clazy-standalone and clazy plugin

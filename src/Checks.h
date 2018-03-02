@@ -33,7 +33,7 @@
 #include "checks/manuallevel/qstring-varargs.h"
 #include "checks/manuallevel/qt4-qstring-from-array.h"
 #include "checks/manuallevel/tr-non-literal.h"
-#include "checks/manuallevel/unneededcast.h"
+#include "checks/manuallevel/unneeded-cast.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/connect-not-normalized.h"
