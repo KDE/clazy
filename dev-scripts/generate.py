@@ -67,7 +67,7 @@ class Check:
     def include(self):
         headername = self.name + ".h"
         filename = self.basedir() + "/" + headername
-        if not os.path.exists('src/' + filename):
+        if not os.path.exists(clazy_source_path() + 'src/' + filename):
             filename = filename.replace('-', '')
 
         return filename
@@ -128,9 +128,6 @@ class Check:
 
         return "(" + text + ")"
 
-if not os.path.exists(CHECKS_FILENAME):
-    print("File doesn't exist: " + CHECKS_FILENAME)
-    exit(1)
 
 def load_json(filename):
     f = open(filename, 'r')
@@ -317,7 +314,13 @@ def generate_readme(checks):
     print("Generated " + filename)
 #-------------------------------------------------------------------------------
 
-if not load_json(CHECKS_FILENAME):
+complete_json_filename = clazy_source_path() + CHECKS_FILENAME
+
+if not os.path.exists(complete_json_filename):
+    print("File doesn't exist: " + complete_json_filename)
+    exit(1)
+
+if not load_json(complete_json_filename):
     exit(1)
 
 parser = argparse.ArgumentParser()
