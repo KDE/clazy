@@ -52,6 +52,9 @@ def level_num_to_name(n):
 def clazy_source_path():
     return os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/..") + "/"
 
+def templates_path():
+    return clazy_source_path() + "dev-scripts/templates/"
+
 class Check:
     def __init__(self):
         self.name = ""
@@ -85,6 +88,9 @@ class Check:
         if with_src:
             return "src/checks/" + level
         return "checks/" + level
+
+    def readme_path(self):
+        return clazy_source_path() + self.basedir(True) + "/" + "README-" + self.name + ".md"
 
 
     def supportsQt4(self):
@@ -275,6 +281,18 @@ def generate_cmake_file(checks):
     f.close()
     print("Generated " + filename)
 #-------------------------------------------------------------------------------
+def create_readmes(checks):
+    for check in checks:
+        if not os.path.exists(check.readme_path()):
+            f = open(templates_path() + "check-readme.md", 'r')
+            contents = f.read()
+            f.close()
+            contents = contents.replace('[check-name]', check.name)
+            f = open(check.readme_path(), 'w')
+            f.write(contents)
+            f.close()
+            print("Created " + check.readme_path())
+#-------------------------------------------------------------------------------
 def generate_readme(checks):
 
     filename = clazy_source_path() + "README.md"
@@ -331,5 +349,6 @@ if args.generate:
     generate_register_checks(_checks)
     generate_cmake_file(_checks)
     generate_readme(_checks)
+    create_readmes(_checks)
 else:
     parser.print_help(sys.stderr)
