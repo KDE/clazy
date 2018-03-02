@@ -65,15 +65,27 @@ class Check:
         self.ifndef = ""
 
     def include(self):
-        level = 'level' + str(self.level)
-        if self.level == -1:
-            level = 'manuallevel'
         headername = self.name + ".h"
-        filename = 'checks/' + level + '/' + headername
+        filename = self.basedir() + "/" + headername
         if not os.path.exists('src/' + filename):
             filename = filename.replace('-', '')
 
         return filename
+
+    def cpp_filename(self):
+        filename = self.include()
+        filename = filename.replace(".h", ".cpp")
+        return filename
+
+    def basedir(self, with_src=False):
+        level = 'level' + str(self.level)
+        if self.level == -1:
+            level = 'manuallevel'
+
+        if with_src:
+            return "src/checks/" + level
+        return "checks/" + level
+
 
     def supportsQt4(self):
         return self.minimum_qt_version < 50000
@@ -115,12 +127,6 @@ class Check:
         text = ','.join(fixitnames)
 
         return "(" + text + ")"
-
-    def cpp_filename(self):
-        filename = self.include()
-        filename = filename.replace(".h", ".cpp")
-        return filename
-
 
 if not os.path.exists(CHECKS_FILENAME):
     print("File doesn't exist: " + CHECKS_FILENAME)
@@ -287,7 +293,7 @@ def generate_readme(checks):
                 fixits_text = c.fixits_text()
                 if fixits_text:
                     fixits_text = "    " + fixits_text
-                new_text_to_insert += "    - [%s](src/checks/level%s/README-%s.md)%s" % (c.name, level, c.name, fixits_text) + "\n"
+                new_text_to_insert += "    - [%s](%s/README-%s.md)%s" % (c.name, c.basedir(True), c.name, fixits_text) + "\n"
         new_text_to_insert += "\n"
 
 
@@ -308,6 +314,7 @@ def generate_readme(checks):
 
         f.write(line)
     f.close()
+    print("Generated " + filename)
 #-------------------------------------------------------------------------------
 
 if not load_json(CHECKS_FILENAME):

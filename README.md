@@ -216,13 +216,13 @@ There are many checks and they are divided in levels:
 clazy runs all checks from level1 by default.
 
 - Checks from Manual Level:
-    - [container-inside-loop](src/checks/level-1/README-container-inside-loop.md)
-    - [inefficient-qlist](src/checks/level-1/README-inefficient-qlist.md)
-    - [isempty-vs-count](src/checks/level-1/README-isempty-vs-count.md)
-    - [qstring-varargs](src/checks/level-1/README-qstring-varargs.md)
-    - [qt4-qstring-from-array](src/checks/level-1/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
-    - [tr-non-literal](src/checks/level-1/README-tr-non-literal.md)
-    - [unneeded-cast](src/checks/level-1/README-unneeded-cast.md)
+    - [container-inside-loop](src/checks/manuallevel/README-container-inside-loop.md)
+    - [inefficient-qlist](src/checks/manuallevel/README-inefficient-qlist.md)
+    - [isempty-vs-count](src/checks/manuallevel/README-isempty-vs-count.md)
+    - [qstring-varargs](src/checks/manuallevel/README-qstring-varargs.md)
+    - [qt4-qstring-from-array](src/checks/manuallevel/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
+    - [tr-non-literal](src/checks/manuallevel/README-tr-non-literal.md)
+    - [unneeded-cast](src/checks/manuallevel/README-unneeded-cast.md)
 
 - Checks from Level 0:
     - [connect-by-name](src/checks/level0/README-connect-by-name.md)
