@@ -25,6 +25,7 @@ _license_text = \
 """
 
 import sys, os, json, argparse
+from shutil import copyfile
 
 CHECKS_FILENAME = 'checks.json'
 _checks = []
@@ -293,6 +294,24 @@ def create_readmes(checks):
             f.close()
             print("Created " + check.readme_path())
 #-------------------------------------------------------------------------------
+def create_unittests(checks):
+    for check in checks:
+        unittest_folder = clazy_source_path() + "tests/" + check.name
+        if not os.path.exists(unittest_folder):
+            os.mkdir(unittest_folder)
+            print("Created " + unittest_folder)
+
+        configjson_file = unittest_folder + "/config.json"
+        if not os.path.exists(configjson_file):
+            copyfile(templates_path() + "test-config.json", configjson_file)
+            print("Created " + configjson_file)
+
+        testmain_file = unittest_folder + "/main.cpp"
+        if not os.path.exists(testmain_file) and check.name != 'non-pod-global-static':
+            copyfile(templates_path() + "test-main.cpp", testmain_file)
+            print("Created " + testmain_file)
+
+#-------------------------------------------------------------------------------
 def generate_readme(checks):
 
     filename = clazy_source_path() + "README.md"
@@ -350,5 +369,6 @@ if args.generate:
     generate_cmake_file(_checks)
     generate_readme(_checks)
     create_readmes(_checks)
+    create_unittests(_checks)
 else:
     parser.print_help(sys.stderr)
