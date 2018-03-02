@@ -272,29 +272,52 @@ def generate_cmake_file(checks):
     f.close()
     print("Generated " + filename)
 #-------------------------------------------------------------------------------
-def print_markdown_help():
+def generate_readme(checks):
+
+    filename = clazy_source_path() + "README.md"
+    f = open(filename, 'r')
+    old_contents = f.readlines();
+    f.close();
+
+    new_text_to_insert = ""
     for level in ['-1', '0', '1', '2', '3']:
-        print("\n- Checks from %s:" % level_num_to_name(int(level)))
-        for c in _checks:
+        new_text_to_insert += "- Checks from %s:" % level_num_to_name(int(level)) + "\n"
+        for c in checks:
             if str(c.level) == level:
                 fixits_text = c.fixits_text()
                 if fixits_text:
                     fixits_text = "    " + fixits_text
-                print("    - [%s](src/checks/level%s/README-%s.md)%s" % (c.name, level, c.name, fixits_text))
+                new_text_to_insert += "    - [%s](src/checks/level%s/README-%s.md)%s" % (c.name, level, c.name, fixits_text) + "\n"
+        new_text_to_insert += "\n"
+
+
+    f = open(filename, 'w')
+
+    skip = False
+    for line in old_contents:
+        if skip and line.startswith("#"):
+            skip = False
+
+        if skip:
+            continue
+
+        if line.startswith("- Checks from Manual Level:"):
+            skip = True
+            f.write(new_text_to_insert)
+            continue
+
+        f.write(line)
+    f.close()
 #-------------------------------------------------------------------------------
 
 if not load_json(CHECKS_FILENAME):
     exit(1)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--generate-readme", action='store_true', help="Generate list of checks to copy-paste to README.md")
-parser.add_argument("--generate-checks", action='store_true', help="Generate src/Checks.h and CheckSources.cmake")
+parser.add_argument("--generate", action='store_true', help="Generate src/Checks.h, CheckSources.cmake and README.md")
 args = parser.parse_args()
 
-if args.generate_readme:
-    print_markdown_help()
-elif args.generate_checks:
+if args.generate:
     generate_register_checks(_checks)
     generate_cmake_file(_checks)
-
-#print_checks(_checks)
+    generate_readme(_checks)
