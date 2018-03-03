@@ -24,7 +24,7 @@ _license_text = \
 */
 """
 
-import sys, os, json, argparse
+import sys, os, json, argparse, datetime
 from shutil import copyfile
 
 CHECKS_FILENAME = 'checks.json'
@@ -56,6 +56,23 @@ def clazy_source_path():
 def templates_path():
     return clazy_source_path() + "dev-scripts/templates/"
 
+def read_file(filename):
+    f = open(filename, 'r')
+    contents = f.read()
+    f.close()
+    return contents
+
+def write_file(filename, contents):
+    f = open(filename, 'w')
+    f.write(contents)
+    f.close()
+
+def get_copyright():
+    year = datetime.datetime.now().year
+    author = os.getenv('GIT_AUTHOR_NAME', 'Author')
+    email = os.getenv('GIT_AUTHOR_EMAIL', 'your@email')
+    return "Copyright (C) %s %s <%s>" % (year, author, email)
+
 class Check:
     def __init__(self):
         self.name = ""
@@ -68,11 +85,15 @@ class Check:
         self.visits_decls = False
         self.ifndef = ""
 
-    def include(self):
+    def include(self, simple=False):
         headername = self.name + ".h"
         filename = self.basedir() + "/" + headername
         if not os.path.exists(clazy_source_path() + 'src/' + filename):
             filename = filename.replace('-', '')
+            headername = headername.replace('-', '')
+
+        if simple:
+            return headername
 
         return filename
 
@@ -134,6 +155,10 @@ class Check:
         text = ','.join(fixitnames)
 
         return "(" + text + ")"
+
+    def include_guard(self):
+        guard = self.name.replace('-', '_')
+        return guard.upper()
 
 
 def load_json(filename):
@@ -310,7 +335,27 @@ def create_unittests(checks):
         if not os.path.exists(testmain_file) and check.name != 'non-pod-global-static':
             copyfile(templates_path() + "test-main.cpp", testmain_file)
             print("Created " + testmain_file)
-
+#-------------------------------------------------------------------------------
+def create_checks(checks):
+    for check in checks:
+        include_file = clazy_source_path() + 'src/' + check.include()
+        cpp_file = clazy_source_path() + 'src/' + check.cpp_filename()
+        copyright = get_copyright()
+        if not os.path.exists(include_file):
+            contents = read_file(templates_path() + 'check.h')
+            contents = contents.replace('%1', check.include_guard())
+            contents = contents.replace('%2', check.get_class_name())
+            contents = contents.replace('%3', check.name)
+            contents = contents.replace('%4', copyright)
+            write_file(include_file, contents)
+            print("Created " + include_file)
+        if not os.path.exists(cpp_file):
+            contents = read_file(templates_path() + 'check.cpp')
+            contents = contents.replace('%1', check.include(True))
+            contents = contents.replace('%2', check.get_class_name())
+            contents = contents.replace('%3', copyright)
+            write_file(cpp_file, contents)
+            print("Created " + cpp_file)
 #-------------------------------------------------------------------------------
 def generate_readme(checks):
 
@@ -370,5 +415,6 @@ if args.generate:
     generate_readme(_checks)
     create_readmes(_checks)
     create_unittests(_checks)
+    create_checks(_checks)
 else:
     parser.print_help(sys.stderr)
