@@ -2,6 +2,10 @@
     "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance", "deprecation", "qml"],
     "checks" : [
         {
+            "name"  : "qt-keywords",
+            "level" : -1
+        },
+        {
             "name"  : "inefficient-qlist",
             "level" : -1,
             "categories" : ["containers", "performance"],

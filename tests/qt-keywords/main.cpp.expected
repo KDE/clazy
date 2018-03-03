@@ -1,0 +1,4 @@
+qt-keywords/main.cpp:6:8: warning: Using a Qt keyword (slots) [-Wclazy-qt-keywords]
+qt-keywords/main.cpp:11:1: warning: Using a Qt keyword (signals) [-Wclazy-qt-keywords]
+qt-keywords/main.cpp:20:9: warning: Using a Qt keyword (emit) [-Wclazy-qt-keywords]
+qt-keywords/main.cpp:22:9: warning: Using a Qt keyword (foreach) [-Wclazy-qt-keywords]

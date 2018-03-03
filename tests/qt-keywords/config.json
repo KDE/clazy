@@ -1,0 +1,10 @@
+{
+    "tests" : [
+        {
+            "filename" : "main.cpp"
+        },
+        {
+            "filename" : "no_keywords.cpp"
+        }
+    ]
+}
