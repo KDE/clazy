@@ -20,6 +20,7 @@
 */
 
 #include "PreProcessorVisitor.h"
+#include "MacroUtils.h"
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Preprocessor.h>
@@ -35,6 +36,9 @@ PreProcessorVisitor::PreProcessorVisitor(const clang::CompilerInstance &ci)
 {
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(this));
+
+    // This catches -DQT_NO_KEYWORDS passed to compiler. In MacroExpands() we catch when defined via in code
+    m_isQtNoKeywords = clazy::isPredefined(ci.getPreprocessorOpts(), "QT_NO_KEYWORDS");
 }
 
 bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
@@ -127,6 +131,11 @@ void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDef
 
     if (ii->getName() == "QT_BEGIN_NAMESPACE" || ii->getName() == "QT_END_NAMESPACE") {
         handleQtNamespaceMacro(range.getBegin(), ii->getName());
+        return;
+    }
+
+    if (!m_isQtNoKeywords && ii->getName() == "QT_NO_KEYWORDS") {
+        m_isQtNoKeywords = true;
         return;
     }
 

@@ -55,6 +55,9 @@ public:
 
     bool isBetweenQtNamespaceMacros(clang::SourceLocation loc);
 
+    // Returns true if QT_NO_KEYWORDS is defined
+    bool isQT_NO_KEYWORDS() const { return m_isQtNoKeywords; }
+
 protected:
     void MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDefinition &,
                       clang::SourceRange range, const clang::MacroArgs *) override;
@@ -68,6 +71,7 @@ private:
     int m_qtMinorVersion  = -1;
     int m_qtPatchVersion = -1;
     int m_qtVersion = -1;
+    bool m_isQtNoKeywords = false;
 
     // Indexed by FileId, has a list of QT_BEGIN_NAMESPACE/QT_END_NAMESPACE location
     std::unordered_map<uint, std::vector<clang::SourceRange>> m_q_namespace_macro_locations;
