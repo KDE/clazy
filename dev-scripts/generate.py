@@ -166,9 +166,7 @@ class Check:
 
 
 def load_json(filename):
-    f = open(filename, 'r')
-    jsonContents = f.read()
-    f.close()
+    jsonContents = read_file(filename)
     decodedJson = json.loads(jsonContents)
 
     if 'checks' not in decodedJson:
@@ -283,9 +281,7 @@ void CheckManager::registerChecks()
 """
     text = _license_text + '\n' + comment_text + '\n' + text
     filename = clazy_source_path() + "src/Checks.h"
-    f = open(filename, 'w')
-    f.write(text)
-    f.close()
+    write_file(filename, text)
     print("Generated " + filename)
 #-------------------------------------------------------------------------------
 def generate_cmake_file(checks):
@@ -306,21 +302,15 @@ def generate_cmake_file(checks):
         text += "endif()\n"
 
     filename = clazy_source_path() + "CheckSources.cmake"
-    f = open(filename, 'w')
-    f.write(text)
-    f.close()
+    write_file(filename, text)
     print("Generated " + filename)
 #-------------------------------------------------------------------------------
 def create_readmes(checks):
     for check in checks:
         if not os.path.exists(check.readme_path()):
-            f = open(templates_path() + "check-readme.md", 'r')
-            contents = f.read()
-            f.close()
+            contents = read_file(templates_path() + "check-readme.md")
             contents = contents.replace('[check-name]', check.name)
-            f = open(check.readme_path(), 'w')
-            f.write(contents)
-            f.close()
+            write_file(check.readme_path(), contents)
             print("Created " + check.readme_path())
 #-------------------------------------------------------------------------------
 def create_unittests(checks):
