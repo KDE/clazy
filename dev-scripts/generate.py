@@ -281,8 +281,13 @@ void CheckManager::registerChecks()
 """
     text = _license_text + '\n' + comment_text + '\n' + text
     filename = clazy_source_path() + "src/Checks.h"
-    write_file(filename, text)
-    print("Generated " + filename)
+
+    old_text = read_file(filename)
+    if old_text != text:
+        write_file(filename, text)
+        print("Generated " + filename)
+        return True
+    return False
 #-------------------------------------------------------------------------------
 def generate_cmake_file(checks):
     text = "set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}\n"
@@ -302,35 +307,48 @@ def generate_cmake_file(checks):
         text += "endif()\n"
 
     filename = clazy_source_path() + "CheckSources.cmake"
-    write_file(filename, text)
-    print("Generated " + filename)
+    old_text = read_file(filename)
+    if old_text != text:
+        write_file(filename, text)
+        print("Generated " + filename)
+        return True
+    return False
 #-------------------------------------------------------------------------------
 def create_readmes(checks):
+    generated = False
     for check in checks:
         if not os.path.exists(check.readme_path()):
             contents = read_file(templates_path() + "check-readme.md")
             contents = contents.replace('[check-name]', check.name)
             write_file(check.readme_path(), contents)
             print("Created " + check.readme_path())
+            generated = True
+    return generated
 #-------------------------------------------------------------------------------
 def create_unittests(checks):
+    generated = False
     for check in checks:
         unittest_folder = clazy_source_path() + "tests/" + check.name
         if not os.path.exists(unittest_folder):
             os.mkdir(unittest_folder)
             print("Created " + unittest_folder)
+            generated = True
 
         configjson_file = unittest_folder + "/config.json"
         if not os.path.exists(configjson_file):
             copyfile(templates_path() + "test-config.json", configjson_file)
             print("Created " + configjson_file)
+            generated = True
 
         testmain_file = unittest_folder + "/main.cpp"
         if not os.path.exists(testmain_file) and check.name != 'non-pod-global-static':
             copyfile(templates_path() + "test-main.cpp", testmain_file)
             print("Created " + testmain_file)
+            generated = True
+    return generated
 #-------------------------------------------------------------------------------
 def create_checks(checks):
+    generated = False
     for check in checks:
         include_file = check.path() + check.include()
         cpp_file = check.path() + check.cpp_filename()
@@ -343,6 +361,7 @@ def create_checks(checks):
             contents = contents.replace('%4', copyright)
             write_file(include_file, contents)
             print("Created " + include_file)
+            generated = True
         if not os.path.exists(cpp_file):
             contents = read_file(templates_path() + 'check.cpp')
             contents = contents.replace('%1', check.include())
@@ -350,6 +369,8 @@ def create_checks(checks):
             contents = contents.replace('%3', copyright)
             write_file(cpp_file, contents)
             print("Created " + cpp_file)
+            generated = True
+    return generated
 #-------------------------------------------------------------------------------
 def generate_readme(checks):
 
@@ -387,7 +408,15 @@ def generate_readme(checks):
 
         f.write(line)
     f.close()
-    print("Generated " + filename)
+
+    f = open(filename, 'r')
+    new_contents = f.readlines();
+    f.close();
+
+    if old_contents != new_contents:
+        print("Generated " + filename)
+        return True
+    return False
 #-------------------------------------------------------------------------------
 
 complete_json_filename = clazy_source_path() + CHECKS_FILENAME
@@ -404,11 +433,14 @@ parser.add_argument("--generate", action='store_true', help="Generate src/Checks
 args = parser.parse_args()
 
 if args.generate:
-    generate_register_checks(_checks)
-    generate_cmake_file(_checks)
-    generate_readme(_checks)
-    create_readmes(_checks)
-    create_unittests(_checks)
-    create_checks(_checks)
+    generated = False
+    generated = generated or generate_register_checks(_checks)
+    generated = generated or generate_cmake_file(_checks)
+    generated = generated or generate_readme(_checks)
+    generated = generated or create_readmes(_checks)
+    generated = generated or create_unittests(_checks)
+    generated = generated or create_checks(_checks)
+    if not generated:
+        print("Nothing to do, everything is OK")
 else:
     parser.print_help(sys.stderr)
