@@ -85,22 +85,26 @@ class Check:
         self.visits_decls = False
         self.ifndef = ""
 
-    def include(self, simple=False):
-        headername = self.name + ".h"
-        filename = self.basedir() + "/" + headername
-        if not os.path.exists(clazy_source_path() + 'src/' + filename):
-            filename = filename.replace('-', '')
-            headername = headername.replace('-', '')
+    def include(self): # Returns for example: "returning-void-expression.h"
+        oldstyle_headername = (self.name + ".h").replace('-', '')
+        if os.path.exists(self.path() + oldstyle_headername):
+            return oldstyle_headername
 
-        if simple:
-            return headername
+        return self.name + '.h'
 
-        return filename
+    def qualified_include(self): # Returns for example: "checks/level2/returning-void-expression.h"
+        return self.basedir() + self.include()
 
-    def cpp_filename(self):
+    def qualified_cpp_filename(self): # Returns for example: "checks/level2/returning-void-expression.cpp"
+        return self.basedir() + self.cpp_filename()
+
+    def cpp_filename(self): # Returns for example: "returning-void-expression.cpp"
         filename = self.include()
         filename = filename.replace(".h", ".cpp")
         return filename
+
+    def path(self):
+        return clazy_source_path() + self.basedir(True) + "/"
 
     def basedir(self, with_src=False):
         level = 'level' + str(self.level)
@@ -108,11 +112,11 @@ class Check:
             level = 'manuallevel'
 
         if with_src:
-            return "src/checks/" + level
-        return "checks/" + level
+            return "src/checks/" + level + '/'
+        return "checks/" + level + '/'
 
     def readme_path(self):
-        return clazy_source_path() + self.basedir(True) + "/" + "README-" + self.name + ".md"
+        return clazy_source_path() + self.basedir(True) + "README-" + self.name + ".md"
 
 
     def supportsQt4(self):
@@ -229,7 +233,7 @@ def print_checks(checks):
 def generate_register_checks(checks):
     text = '#include "checkmanager.h"\n'
     for c in checks:
-        text += '#include "' + c.include() + '"\n'
+        text += '#include "' + c.qualified_include() + '"\n'
     text += \
 """
 template <typename T>
@@ -290,7 +294,7 @@ def generate_cmake_file(checks):
     for level in [-1, 0, 1, 2, 3]:
         for check in checks:
             if check.level == level:
-                text += "  ${CMAKE_CURRENT_LIST_DIR}/src/" + check.cpp_filename() + "\n"
+                text += "  ${CMAKE_CURRENT_LIST_DIR}/src/" + check.qualified_cpp_filename() + "\n"
                 if check.ifndef == "NO_STD_REGEX":
                     checks_with_regexp.append(check)
     text += ")\n"
@@ -298,7 +302,7 @@ def generate_cmake_file(checks):
     if checks_with_regexp:
         text += "\nif(HAS_STD_REGEX OR CLAZY_BUILD_WITH_CLANG)\n"
         for check in checks_with_regexp:
-            text += "  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/" + check.cpp_filename() + ")\n"
+            text += "  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/" + check.qualified_cpp_filename() + ")\n"
         text += "endif()\n"
 
     filename = clazy_source_path() + "CheckSources.cmake"
@@ -338,8 +342,8 @@ def create_unittests(checks):
 #-------------------------------------------------------------------------------
 def create_checks(checks):
     for check in checks:
-        include_file = clazy_source_path() + 'src/' + check.include()
-        cpp_file = clazy_source_path() + 'src/' + check.cpp_filename()
+        include_file = check.path() + check.include()
+        cpp_file = check.path() + check.cpp_filename()
         copyright = get_copyright()
         if not os.path.exists(include_file):
             contents = read_file(templates_path() + 'check.h')
@@ -351,7 +355,7 @@ def create_checks(checks):
             print("Created " + include_file)
         if not os.path.exists(cpp_file):
             contents = read_file(templates_path() + 'check.cpp')
-            contents = contents.replace('%1', check.include(True))
+            contents = contents.replace('%1', check.include())
             contents = contents.replace('%2', check.get_class_name())
             contents = contents.replace('%3', copyright)
             write_file(cpp_file, contents)
@@ -372,7 +376,7 @@ def generate_readme(checks):
                 fixits_text = c.fixits_text()
                 if fixits_text:
                     fixits_text = "    " + fixits_text
-                new_text_to_insert += "    - [%s](%s/README-%s.md)%s" % (c.name, c.basedir(True), c.name, fixits_text) + "\n"
+                new_text_to_insert += "    - [%s](%sREADME-%s.md)%s" % (c.name, c.basedir(True), c.name, fixits_text) + "\n"
         new_text_to_insert += "\n"
 
 
