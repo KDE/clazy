@@ -184,7 +184,8 @@ def load_json(filename):
         try:
             c.name = check['name']
             c.level = check['level']
-            c.categories = check['categories']
+            if 'categories' in check:
+                c.categories = check['categories']
             for cat in c.categories:
                 if cat not in _available_categories:
                     print('Unknown category ' + cat)
