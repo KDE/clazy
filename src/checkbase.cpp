@@ -44,10 +44,10 @@ ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
 {
 }
 
-void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &,
+void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &md,
                                               SourceRange range, const MacroArgs *)
 {
-    check->VisitMacroExpands(macroNameTok, range);
+    check->VisitMacroExpands(macroNameTok, range, md.getMacroInfo());
 }
 
 void ClazyPreprocessorCallbacks::Defined(const Token &macroNameTok, const MacroDefinition &, SourceRange range)
@@ -90,7 +90,7 @@ void CheckBase::VisitDecl(Decl *)
     // Overriden in derived classes
 }
 
-void CheckBase::VisitMacroExpands(const Token &, const SourceRange &)
+void CheckBase::VisitMacroExpands(const Token &, const SourceRange &, const clang::MacroInfo *)
 {
     // Overriden in derived classes
 }

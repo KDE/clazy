@@ -43,7 +43,7 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range) override;
+                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     void registerQ_OBJECT(clang::SourceLocation);
     std::vector<clang::SourceLocation> m_qobjectMacroLocations;
 };

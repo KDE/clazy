@@ -33,7 +33,8 @@ public:
     explicit QEnums(const std::string &name, ClazyContext *context);
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range) override;
+                           const clang::SourceRange &range,
+                           const clang::MacroInfo * = nullptr) override;
 };
 
 #endif

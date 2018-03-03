@@ -44,7 +44,7 @@ IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
     m_filesToIgnore = { "moc_", ".moc" };
 }
 
-void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range)
+void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (ii && (ii->getName() == "emit" || ii->getName() == "Q_EMIT"))

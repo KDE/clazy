@@ -41,7 +41,7 @@ public:
 private:
     void checkCallSignalInsideCTOR(clang::CXXMemberCallExpr *);
     void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range) override;
+                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     bool hasEmitKeyboard(clang::CXXMemberCallExpr *) const;
     std::vector<clang::SourceLocation> m_emitLocations;
     mutable std::unordered_map<unsigned, clang::SourceLocation> m_locationCache;

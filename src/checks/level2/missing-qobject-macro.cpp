@@ -40,7 +40,7 @@ MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *
     enablePreProcessorCallbacks();
 }
 
-void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range)
+void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (ii && ii->getName() == "Q_OBJECT")

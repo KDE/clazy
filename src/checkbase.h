@@ -126,7 +126,7 @@ public:
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
 protected:
-    virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &);
+    virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr);
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
     virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
     virtual void VisitIfdef(clang::SourceLocation, const clang::Token &macroNameTok);

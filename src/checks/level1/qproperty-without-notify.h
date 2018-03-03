@@ -34,7 +34,7 @@ public:
     explicit QPropertyWithoutNotify(const std::string &name, ClazyContext *context);
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range) override;
+                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 
     bool m_lastIsGadget = false;
 };

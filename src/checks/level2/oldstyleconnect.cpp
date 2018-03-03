@@ -211,7 +211,7 @@ void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
     m_privateSlots.push_back(slot);
 }
 
-void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range)
+void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = macroNameTok.getIdentifierInfo();
     if (!ii || ii->getName() != "Q_PRIVATE_SLOT")

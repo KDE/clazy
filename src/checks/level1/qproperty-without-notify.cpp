@@ -37,7 +37,7 @@ QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyCon
     enablePreProcessorCallbacks();
 }
 
-void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range)
+void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (!ii)
