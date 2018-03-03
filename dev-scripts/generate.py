@@ -29,6 +29,7 @@ from shutil import copyfile
 
 CHECKS_FILENAME = 'checks.json'
 _checks = []
+_specified_check_names = []
 _available_categories = []
 
 def checkSortKey(check):
@@ -178,7 +179,8 @@ def load_json(filename):
 
     checks = decodedJson['checks']
 
-    global _available_categories, _checks
+    global _available_categories, _checks, _specified_check_names
+
     if 'available_categories' in decodedJson:
         _available_categories = decodedJson['available_categories']
 
@@ -196,6 +198,9 @@ def load_json(filename):
         except KeyError:
             print("Missing mandatory field while processing " + str(check))
             return False
+
+        if _specified_check_names and c.name not in _specified_check_names:
+            continue
 
         if 'class_name' in check:
             c.class_name = check['class_name']
@@ -440,12 +445,17 @@ if not os.path.exists(complete_json_filename):
     print("File doesn't exist: " + complete_json_filename)
     exit(1)
 
-if not load_json(complete_json_filename):
-    exit(1)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--generate", action='store_true', help="Generate src/Checks.h, CheckSources.cmake and README.md")
+parser.add_argument("checks", nargs='*', help="Optional check names to build. Useful to speedup builds during development, by building only the specified checks. Default is to build all checks.")
 args = parser.parse_args()
+
+_specified_check_names = args.checks
+
+if not load_json(complete_json_filename):
+    exit(1)
 
 if args.generate:
     generated = False
