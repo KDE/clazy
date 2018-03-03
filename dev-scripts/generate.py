@@ -130,9 +130,12 @@ class Check:
         splitted = self.name.split('-')
         classname = ""
         for word in splitted:
-            word = word.title()
-            if word.startswith('Q'):
-                word = 'Q' + word[1:].title()
+            if word == 'qt':
+                word = 'Qt'
+            else:
+                word = word.title()
+                if word.startswith('Q'):
+                    word = 'Q' + word[1:].title()
 
             classname += word
 
