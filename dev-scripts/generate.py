@@ -446,12 +446,12 @@ args = parser.parse_args()
 
 if args.generate:
     generated = False
-    generated = generated or generate_register_checks(_checks)
-    generated = generated or generate_cmake_file(_checks)
-    generated = generated or generate_readme(_checks)
-    generated = generated or create_readmes(_checks)
-    generated = generated or create_unittests(_checks)
-    generated = generated or create_checks(_checks)
+    generated = generate_register_checks(_checks) or generated
+    generated = generate_cmake_file(_checks) or generated
+    generated = generate_readme(_checks) or generated
+    generated = create_readmes(_checks) or generated
+    generated = create_unittests(_checks) or generated
+    generated = create_checks(_checks) or generated
     if not generated:
         print("Nothing to do, everything is OK")
 else:
