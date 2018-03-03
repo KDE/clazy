@@ -3,7 +3,12 @@
     "checks" : [
         {
             "name"  : "qt-keywords",
-            "level" : -1
+            "level" : -1,
+            "fixits" : [
+                {
+                    "name" : "qt-keywords"
+                }
+            ]
         },
         {
             "name"  : "inefficient-qlist",

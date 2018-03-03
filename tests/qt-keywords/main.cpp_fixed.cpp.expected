@@ -1,0 +1,25 @@
+#include <QtCore/QObject>
+#include <QtCore/QString>
+
+class MyObj : public QObject
+{
+public Q_SLOTS:
+    void slot1();
+
+public Q_SLOTS:
+    void slot2();
+Q_SIGNALS:
+    void signal1();
+Q_SIGNALS:
+    void signal2();
+public:
+    Q_SLOT void slot3();
+    Q_SIGNAL void signal3();
+    void test()
+    {
+        Q_EMIT signal1();
+        QList<int> l;
+        Q_FOREACH(int i, l) {}
+    }
+};
+

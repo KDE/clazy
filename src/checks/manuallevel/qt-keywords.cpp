@@ -24,6 +24,7 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "FixItUtils.h"
 #include "ClazyContext.h"
 #include "PreProcessorVisitor.h"
 
@@ -33,6 +34,10 @@
 using namespace clang;
 using namespace std;
 
+enum Fixits {
+    FixitNone = 0,
+    FixitKeywords = 1
+};
 
 QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -54,11 +59,22 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
     }
 
     static const vector<StringRef> keywords = { "foreach", "signals", "slots", "emit" };
-    if (!clazy::contains(keywords, ii->getName()))
+    std::string name = ii->getName();
+    if (!clazy::contains(keywords, name))
         return;
 
     // Make sure the macro is Qt's. It must be defined in Qt's headers, not 3rdparty
     std::string qtheader = sm().getFilename(sm().getSpellingLoc(minfo->getDefinitionLoc()));
-    if (clazy::endsWith(qtheader, "qglobal.h") || clazy::endsWith(qtheader, "qobjectdefs.h"))
-        emitWarning(range.getBegin(), "Using a Qt keyword (" + string(ii->getName()) + ")");
+    if (!clazy::endsWith(qtheader, "qglobal.h") && !clazy::endsWith(qtheader, "qobjectdefs.h"))
+        return;
+
+    std::vector<FixItHint> fixits;
+    if (isFixitEnabled(FixitKeywords)) {
+        std::string replacement = "Q_" + name;
+        std::transform(replacement.begin(), replacement.end(), replacement.begin(), ::toupper);
+        fixits.push_back(clazy::createReplacement(range, replacement));
+    }
+
+    emitWarning(range.getBegin(), "Using a Qt keyword (" + string(ii->getName()) + ")", fixits);
+
 }
