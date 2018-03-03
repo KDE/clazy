@@ -353,7 +353,9 @@ def create_checks(checks):
         include_file = check.path() + check.include()
         cpp_file = check.path() + check.cpp_filename()
         copyright = get_copyright()
-        if not os.path.exists(include_file):
+        include_missing = not os.path.exists(include_file)
+        cpp_missing = not os.path.exists(cpp_file)
+        if include_missing:
             contents = read_file(templates_path() + 'check.h')
             contents = contents.replace('%1', check.include_guard())
             contents = contents.replace('%2', check.get_class_name())
@@ -362,7 +364,7 @@ def create_checks(checks):
             write_file(include_file, contents)
             print("Created " + include_file)
             generated = True
-        if not os.path.exists(cpp_file):
+        if cpp_missing:
             contents = read_file(templates_path() + 'check.cpp')
             contents = contents.replace('%1', check.include())
             contents = contents.replace('%2', check.get_class_name())
@@ -370,6 +372,15 @@ def create_checks(checks):
             write_file(cpp_file, contents)
             print("Created " + cpp_file)
             generated = True
+
+        if include_missing or cpp_missing:
+            # We created a new check, let's also edit the ChangeLog
+            changelog_file = clazy_source_path() + 'Changelog'
+            contents = read_file(changelog_file)
+            contents += '\n  - <dont forget changelog entry for ' + check.name + '>\n'
+            write_file(changelog_file, contents)
+            print('Edited Changelog')
+
     return generated
 #-------------------------------------------------------------------------------
 def generate_readme(checks):
