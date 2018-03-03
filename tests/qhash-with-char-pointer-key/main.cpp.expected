@@ -1,0 +1,1 @@
+qhash-with-char-pointer-key/main.cpp:6:5: warning: Using QHash<const char *, T> is dangerous [-Wclazy-qhash-with-char-pointer-key]

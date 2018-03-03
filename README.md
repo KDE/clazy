@@ -219,6 +219,7 @@ clazy runs all checks from level1 by default.
     - [container-inside-loop](src/checks/manuallevel/README-container-inside-loop.md)
     - [inefficient-qlist](src/checks/manuallevel/README-inefficient-qlist.md)
     - [isempty-vs-count](src/checks/manuallevel/README-isempty-vs-count.md)
+    - [qhash-with-char-pointer-key](src/checks/manuallevel/README-qhash-with-char-pointer-key.md)
     - [qstring-varargs](src/checks/manuallevel/README-qstring-varargs.md)
     - [qt-keywords](src/checks/manuallevel/README-qt-keywords.md)    (fix-qt-keywords)
     - [qt4-qstring-from-array](src/checks/manuallevel/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)

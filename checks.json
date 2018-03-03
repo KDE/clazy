@@ -54,6 +54,12 @@
             "visits_stmts" : true
         },
         {
+            "name" : "qhash-with-char-pointer-key",
+            "level" : -1,
+            "categories" : ["cpp", "bug"],
+            "visits_decls" : true
+        },
+        {
             "name"  : "connect-by-name",
             "level" : 0,
             "categories" : ["bug", "readability"],
