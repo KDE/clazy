@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "assertwithsideeffects.h"
+#include "assert-with-side-effects.h"
 #include "Utils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"

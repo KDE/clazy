@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "detachingmember.h"
+#include "detaching-member.h"
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"

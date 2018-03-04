@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "oldstyleconnect.h"
+#include "old-style-connect.h"
 
 #include "Utils.h"
 #include "StringUtils.h"

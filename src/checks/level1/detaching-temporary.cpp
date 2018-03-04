@@ -23,7 +23,7 @@
 */
 
 
-#include "detachingtemporary.h"
+#include "detaching-temporary.h"
 #include "Utils.h"
 #include "StringUtils.h"
 #include "QtUtils.h"

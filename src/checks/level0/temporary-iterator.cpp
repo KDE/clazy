@@ -25,7 +25,7 @@
 
 
 #include "ClazyContext.h"
-#include "temporaryiterator.h"
+#include "temporary-iterator.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"

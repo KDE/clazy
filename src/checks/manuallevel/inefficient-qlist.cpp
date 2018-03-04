@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "inefficientqlist.h"
+#include "inefficient-qlist.h"
 #include "Utils.h"
 #include "TypeUtils.h"
 #include "TemplateUtils.h"

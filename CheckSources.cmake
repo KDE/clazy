@@ -1,6 +1,6 @@
 set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/container-inside-loop.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficientqlist.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficient-qlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-varargs.cpp
@@ -17,26 +17,26 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-unique-connection.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/mutable-container-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qcolor-from-literal.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qdatetimeutc.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qdatetime-utc.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qenums.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qfileinfo-exists.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qgetenv.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qmap-with-pointer-key.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstringarg.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-arg.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-insensitive-allocation.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstringref.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qt-macros.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qvariant-template-instantiation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/strict-iterators.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/temporaryiterator.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/temporary-iterator.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/unused-non-trivial-variable.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/writingtotemporary.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/writing-to-temporary.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/wrong-qglobalstatic.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/autounexpectedqstringbuilder.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/auto-unexpected-qstringbuilder.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/child-event-qobject-cast.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/connect-3arg-lambda.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/const-signal-or-slot.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/detachingtemporary.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/detaching-temporary.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/foreach.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/incorrect-emit.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/inefficient-qlist-soft.cpp
@@ -51,7 +51,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qstring-left.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/range-loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/returning-data-from-temporary.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/ruleoftwosoft.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/rule-of-two-soft.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/skipped-base-method.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/virtual-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/base-class-event.cpp
@@ -59,21 +59,21 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ctor-missing-parent-argument.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/function-args-by-value.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/globalconstcharpointer.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/implicitcasts.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/global-const-char-pointer.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/implicit-casts.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-qobject-macro.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-typeinfo.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/old-style-connect.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/qstring-allocations.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/reservecandidates.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/reserve-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/returning-void-expression.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/ruleofthree.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/rule-of-three.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/virtual-call-ctor.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assertwithsideeffects.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detachingmember.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assert-with-side-effects.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detaching-member.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/thread-with-slots.cpp
 )
 
 if(HAS_STD_REGEX OR CLAZY_BUILD_WITH_CLANG)
-  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/oldstyleconnect.cpp)
+  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/old-style-connect.cpp)
 endif()

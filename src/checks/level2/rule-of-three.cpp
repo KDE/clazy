@@ -19,7 +19,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "ruleofthree.h"
+#include "rule-of-three.h"
 #include "Utils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"

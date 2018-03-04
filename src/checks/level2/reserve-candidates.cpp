@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "reservecandidates.h"
+#include "reserve-candidates.h"
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "clazy_stl.h"

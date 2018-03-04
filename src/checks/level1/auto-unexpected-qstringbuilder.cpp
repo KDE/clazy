@@ -20,7 +20,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "autounexpectedqstringbuilder.h"
+#include "auto-unexpected-qstringbuilder.h"
 #include "Utils.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"

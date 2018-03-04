@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "globalconstcharpointer.h"
+#include "global-const-char-pointer.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
