@@ -116,8 +116,11 @@ class Check:
             return "src/checks/" + level + '/'
         return "checks/" + level + '/'
 
+    def readme_name(self):
+        return "README-" + self.name + ".md"
+
     def readme_path(self):
-        return clazy_source_path() + self.basedir(True) + "README-" + self.name + ".md"
+        return clazy_source_path() + self.basedir(True) + self.readme_name()
 
 
     def supportsQt4(self):
@@ -327,10 +330,18 @@ def create_readmes(checks):
     generated = False
     for check in checks:
         if not os.path.exists(check.readme_path()):
-            contents = read_file(templates_path() + "check-readme.md")
-            contents = contents.replace('[check-name]', check.name)
-            write_file(check.readme_path(), contents)
-            print("Created " + check.readme_path())
+            existing_readme = search_in_all_levels(check.readme_name())
+            if existing_readme:
+                contents = read_file(existing_readme)
+                write_file(check.readme_path(), contents)
+                os.remove(existing_readme)
+                print("Moved " + check.readme_name())
+            else:
+
+                contents = read_file(templates_path() + "check-readme.md")
+                contents = contents.replace('[check-name]', check.name)
+                write_file(check.readme_path(), contents)
+                print("Created " + check.readme_path())
             generated = True
     return generated
 #-------------------------------------------------------------------------------
@@ -355,9 +366,19 @@ def create_unittests(checks):
             print("Created " + testmain_file)
             generated = True
     return generated
+
+#-------------------------------------------------------------------------------
+def search_in_all_levels(filename):
+    for level in ['manuallevel', 'level0', 'level1', 'level2', 'level3']:
+        complete_filename = clazy_source_path() + 'src/checks/' + level + '/' + filename
+        if os.path.exists(complete_filename):
+            return complete_filename
+    return ""
+
 #-------------------------------------------------------------------------------
 def create_checks(checks):
     generated = False
+    edit_changelog = False
     for check in checks:
         include_file = check.path() + check.include()
         cpp_file = check.path() + check.cpp_filename()
@@ -365,24 +386,42 @@ def create_checks(checks):
         include_missing = not os.path.exists(include_file)
         cpp_missing = not os.path.exists(cpp_file)
         if include_missing:
-            contents = read_file(templates_path() + 'check.h')
-            contents = contents.replace('%1', check.include_guard())
-            contents = contents.replace('%2', check.get_class_name())
-            contents = contents.replace('%3', check.name)
-            contents = contents.replace('%4', copyright)
-            write_file(include_file, contents)
-            print("Created " + include_file)
+
+            existing_include_path = search_in_all_levels(check.include())
+            if existing_include_path:
+                # File already exists, but is in another level. Just move it:
+                contents = read_file(existing_include_path)
+                write_file(include_file, contents)
+                os.remove(existing_include_path)
+                print("Moved " + check.include())
+            else:
+                contents = read_file(templates_path() + 'check.h')
+                contents = contents.replace('%1', check.include_guard())
+                contents = contents.replace('%2', check.get_class_name())
+                contents = contents.replace('%3', check.name)
+                contents = contents.replace('%4', copyright)
+                write_file(include_file, contents)
+                print("Created " + include_file)
+                edit_changelog = True
             generated = True
         if cpp_missing:
-            contents = read_file(templates_path() + 'check.cpp')
-            contents = contents.replace('%1', check.include())
-            contents = contents.replace('%2', check.get_class_name())
-            contents = contents.replace('%3', copyright)
-            write_file(cpp_file, contents)
-            print("Created " + cpp_file)
+            existing_cpp_path = search_in_all_levels(check.cpp_filename())
+            if existing_cpp_path:
+                # File already exists, but is in another level. Just move it:
+                contents = read_file(existing_cpp_path)
+                write_file(cpp_file, contents)
+                os.remove(existing_cpp_path)
+                print("Moved " + check.cpp_filename())
+            else:
+                contents = read_file(templates_path() + 'check.cpp')
+                contents = contents.replace('%1', check.include())
+                contents = contents.replace('%2', check.get_class_name())
+                contents = contents.replace('%3', copyright)
+                write_file(cpp_file, contents)
+                print("Created " + cpp_file)
             generated = True
 
-        if include_missing or cpp_missing:
+        if edit_changelog:
             # We created a new check, let's also edit the ChangeLog
             changelog_file = clazy_source_path() + 'Changelog'
             contents = read_file(changelog_file)
