@@ -65,12 +65,12 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/missing-typeinfo.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/old-style-connect.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/qstring-allocations.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/reserve-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/returning-void-expression.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/rule-of-three.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/virtual-call-ctor.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assert-with-side-effects.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detaching-member.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/reserve-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/thread-with-slots.cpp
 )
 

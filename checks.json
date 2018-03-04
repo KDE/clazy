@@ -488,12 +488,6 @@
             "visits_stmts" : true
         },
         {
-            "name"  : "reserve-candidates",
-            "level" : 2,
-            "categories" : ["containers"],
-            "visits_stmts" : true
-        },
-        {
             "name"  : "returning-void-expression",
             "level" : 2,
             "categories" : ["readability", "cpp"],
@@ -528,6 +522,12 @@
             "level" : 3,
             "categories" : ["bug"],
             "visits_decls" : true,
+            "visits_stmts" : true
+        },
+        {
+            "name"  : "reserve-candidates",
+            "level" : 3,
+            "categories" : ["containers"],
             "visits_stmts" : true
         }
     ]

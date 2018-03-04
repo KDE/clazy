@@ -93,12 +93,12 @@
 #include "checks/level2/missing-typeinfo.h"
 #include "checks/level2/old-style-connect.h"
 #include "checks/level2/qstring-allocations.h"
-#include "checks/level2/reserve-candidates.h"
 #include "checks/level2/returning-void-expression.h"
 #include "checks/level2/rule-of-three.h"
 #include "checks/level2/virtual-call-ctor.h"
 #include "checks/level3/assert-with-side-effects.h"
 #include "checks/level3/detaching-member.h"
+#include "checks/level3/reserve-candidates.h"
 #include "checks/level3/thread-with-slots.h"
 
 template <typename T>
@@ -188,11 +188,11 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qlatin1string-allocations", "qstring-allocations");
     registerFixIt(2, "fix-fromLatin1_fromUtf8-allocations", "qstring-allocations");
     registerFixIt(4, "fix-fromCharPtrAllocations", "qstring-allocations");
-    registerCheck(check<ReserveCandidates>("reserve-candidates", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReturningVoidExpression>("returning-void-expression", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfThree>("rule-of-three", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<VirtualCallCtor>("virtual-call-ctor", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<DetachingMember>("detaching-member", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ReserveCandidates>("reserve-candidates", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", CheckLevel3,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
 }

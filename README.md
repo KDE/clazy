@@ -288,7 +288,6 @@ clazy runs all checks from level1 by default.
     - [missing-typeinfo](src/checks/level2/README-missing-typeinfo.md)
     - [old-style-connect](src/checks/level2/README-old-style-connect.md)    (fix-old-style-connect)
     - [qstring-allocations](src/checks/level2/README-qstring-allocations.md)    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
-    - [reserve-candidates](src/checks/level2/README-reserve-candidates.md)
     - [returning-void-expression](src/checks/level2/README-returning-void-expression.md)
     - [rule-of-three](src/checks/level2/README-rule-of-three.md)
     - [virtual-call-ctor](src/checks/level2/README-virtual-call-ctor.md)
@@ -296,6 +295,7 @@ clazy runs all checks from level1 by default.
 - Checks from Level 3:
     - [assert-with-side-effects](src/checks/level3/README-assert-with-side-effects.md)
     - [detaching-member](src/checks/level3/README-detaching-member.md)
+    - [reserve-candidates](src/checks/level3/README-reserve-candidates.md)
     - [thread-with-slots](src/checks/level3/README-thread-with-slots.md)
 
 # Selecting which checks to enable
