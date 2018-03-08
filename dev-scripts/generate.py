@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 _license_text = \
 """/*
@@ -24,7 +24,7 @@ _license_text = \
 */
 """
 
-import sys, os, json, argparse, datetime
+import sys, os, json, argparse, datetime, io
 from shutil import copyfile
 
 CHECKS_FILENAME = 'checks.json'
@@ -58,13 +58,13 @@ def templates_path():
     return clazy_source_path() + "dev-scripts/templates/"
 
 def read_file(filename):
-    f = open(filename, 'r')
+    f = io.open(filename, 'r', newline='\n', encoding='utf8')
     contents = f.read()
     f.close()
     return contents
 
 def write_file(filename, contents):
-    f = open(filename, 'w')
+    f = io.open(filename, 'w', newline='\n', encoding='utf8')
     f.write(contents)
     f.close()
 
@@ -434,7 +434,7 @@ def create_checks(checks):
 def generate_readme(checks):
 
     filename = clazy_source_path() + "README.md"
-    f = open(filename, 'r')
+    f = io.open(filename, 'r', newline='\n', encoding='utf8')
     old_contents = f.readlines();
     f.close();
 
@@ -450,7 +450,7 @@ def generate_readme(checks):
         new_text_to_insert += "\n"
 
 
-    f = open(filename, 'w')
+    f = io.open(filename, 'w', newline='\n', encoding='utf8')
 
     skip = False
     for line in old_contents:
@@ -468,7 +468,7 @@ def generate_readme(checks):
         f.write(line)
     f.close()
 
-    f = open(filename, 'r')
+    f = io.open(filename, 'r', newline='\n', encoding='utf8')
     new_contents = f.readlines();
     f.close();
 
