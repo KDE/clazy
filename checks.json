@@ -73,6 +73,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "wrong-qevent-cast",
+            "level" : 0,
+            "categories" : ["bug"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "lambda-in-connect",
             "level" : 0,
             "categories" : ["bug"],

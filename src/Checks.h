@@ -59,6 +59,7 @@
 #include "checks/level0/temporary-iterator.h"
 #include "checks/level0/unused-non-trivial-variable.h"
 #include "checks/level0/writing-to-temporary.h"
+#include "checks/level0/wrong-qevent-cast.h"
 #include "checks/level0/wrong-qglobalstatic.h"
 #include "checks/level1/auto-unexpected-qstringbuilder.h"
 #include "checks/level1/child-event-qobject-cast.h"
@@ -147,6 +148,7 @@ void CheckManager::registerChecks()
     registerCheck(check<TemporaryIterator>("temporary-iterator", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<WritingToTemporary>("writing-to-temporary", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<WrongQEventCast>("wrong-qevent-cast", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<WrongQGlobalStatic>("wrong-qglobalstatic", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<AutoUnexpectedQStringBuilder>("auto-unexpected-qstringbuilder", CheckLevel1,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-auto-unexpected-qstringbuilder", "auto-unexpected-qstringbuilder");

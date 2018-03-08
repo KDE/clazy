@@ -31,6 +31,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/temporary-iterator.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/unused-non-trivial-variable.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/writing-to-temporary.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/wrong-qevent-cast.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/wrong-qglobalstatic.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/auto-unexpected-qstringbuilder.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/child-event-qobject-cast.cpp

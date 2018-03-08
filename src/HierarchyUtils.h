@@ -118,6 +118,10 @@ T* getFirstChildOfType2(clang::Stmt *stm)
 
     if (clazy::hasChildren(stm)) {
         auto child = *(stm->child_begin());
+
+        if (!child) // can happen
+            return nullptr;
+
         if (auto s = clang::dyn_cast<T>(child))
             return s;
 
@@ -263,6 +267,11 @@ T* unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
         return unpeal<T>(clazy::getFirstChild(stmt), options);
 
     return nullptr;
+}
+
+inline clang::SwitchStmt* getSwitchFromCase(clang::ParentMap *pmap, clang::CaseStmt *caseStm)
+{
+    return getFirstParentOfType<clang::SwitchStmt>(pmap, caseStm);
 }
 
 }

@@ -250,6 +250,7 @@ clazy runs all checks from level1 by default.
     - [temporary-iterator](src/checks/level0/README-temporary-iterator.md)
     - [unused-non-trivial-variable](src/checks/level0/README-unused-non-trivial-variable.md)
     - [writing-to-temporary](src/checks/level0/README-writing-to-temporary.md)
+    - [wrong-qevent-cast](src/checks/level0/README-wrong-qevent-cast.md)
     - [wrong-qglobalstatic](src/checks/level0/README-wrong-qglobalstatic.md)
 
 - Checks from Level 1:
