@@ -115,7 +115,7 @@ static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, string
 
     // Otherwise it's unregular and we need a map:
 
-    static unordered_map<QtUnregularlyNamedEventTypes, ClassNameList> map = {
+    static unordered_map<QtUnregularlyNamedEventTypes, ClassNameList, std::hash<int>> map = {
         { ActionAdded, {"QActionEvent" } },
         { ActionRemoved, {"QActionEvent" } },
         { ActionChanged, {"QActionEvent" } },
