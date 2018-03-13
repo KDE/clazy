@@ -407,7 +407,7 @@ and rebuild.
 
 # Reducing warning noise
 
-If you think you found a false-positive, file a bug report.
+If you think you found a false-positive, file a bug report. But do make sure to test first without icecc/distcc enabled.
 
 If you want to suppress warnings from headers of Qt or 3rd party code, include them with `-isystem` instead of `-I`.
 
