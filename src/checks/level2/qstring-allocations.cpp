@@ -208,6 +208,13 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
         auto qlatin1Ctor = qlatin1expr.qlatin1ctorexpr;
 
+
+        if (qlatin1Ctor->getLocStart().isMacroID()) {
+            auto macroName = Lexer::getImmediateMacroName(qlatin1Ctor->getLocStart(), sm(), lo());
+            if (macroName == "Q_GLOBAL_STATIC_WITH_ARGS") // bug #391807
+                return;
+        }
+
         vector<FixItHint> fixits;
         if (qlatin1expr.enableFixit && isFixitEnabled(QLatin1StringAllocations)) {
             if (!qlatin1Ctor->getLocStart().isMacroID()) {
