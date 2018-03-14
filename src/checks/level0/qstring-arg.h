@@ -36,7 +36,7 @@ class CallExpr;
 class QStringArg : public CheckBase
 {
 public:
-    QStringArg(const std::string &name, ClazyContext *context);
+    explicit QStringArg(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 private:

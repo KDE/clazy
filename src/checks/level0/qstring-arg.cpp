@@ -104,6 +104,12 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
     if (!isArgFuncWithOnlyQString(memberCall))
         return;
 
+    if (memberCall->getLocStart().isMacroID()) {
+        auto macroName = Lexer::getImmediateMacroName(memberCall->getLocStart(), sm(), lo());
+        if (macroName == "QT_REQUIRE_VERSION") // bug #391851
+            return;
+    }
+
     vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
     vector<clang::CallExpr *> argCalls;
     for (auto call : callExprs) {
@@ -122,7 +128,7 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
 
 void QStringArg::VisitStmt(clang::Stmt *stmt)
 {
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!memberCall)
         return;
 
