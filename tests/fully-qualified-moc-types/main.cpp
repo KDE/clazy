@@ -2,11 +2,28 @@
 
 struct A {};
 
+struct NonNamespacedGadget {
+    Q_GADGET
+};
+
 namespace NS {
     struct MyType {};
+
+    struct NamespacedGadget {
+        Q_GADGET
+    };
+
+    enum EnumFoo { EnumFoo1 };
+
     class MyObject : public QObject
     {
         Q_OBJECT
+        Q_PROPERTY(NS::MyType foo READ foo) // OK, not gadget
+        Q_PROPERTY(MyType foo1 READ foo) // OK, not gadget
+        Q_PROPERTY(EnumFoo enumFoo READ enumFoo CONSTANT) // OK
+        Q_PROPERTY(NamespacedGadget namespacedGadget READ namespacedGadget CONSTANT) // Warn, gadget
+        Q_PROPERTY(NS::NamespacedGadget namespacedGadget2 READ namespacedGadget2 CONSTANT) // OK
+        Q_PROPERTY(NonNamespacedGadget nonNamespacedGadget READ nonNamespacedGadget CONSTANT) // OK
     Q_SIGNALS:
         void mysig(NS::MyType);
         void mysig2(MyType); // Warn
@@ -34,6 +51,11 @@ namespace NS {
         Q_INVOKABLE void myinvokable6(const A);
         Q_INVOKABLE void myinvokable7(const A *);
         Q_INVOKABLE void myinvokable8(A *);
+        NS::MyType foo();
+        NamespacedGadget namespacedGadget() const;
+        NamespacedGadget namespacedGadget2() const;
+        NonNamespacedGadget nonNamespacedGadget() const;
+        EnumFoo enumFoo() const;
     };
 }
 

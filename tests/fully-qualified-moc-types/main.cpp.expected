@@ -1,3 +1,4 @@
-fully-qualified-moc-types/main.cpp:12:9: warning: signal arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-moc-types]
-fully-qualified-moc-types/main.cpp:21:9: warning: slot arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-moc-types]
-fully-qualified-moc-types/main.cpp:30:21: warning: invokable arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:29:9: warning: signal arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:38:9: warning: slot arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:47:21: warning: invokable arguments need to be fully-qualified (NS::MyType instead of MyType) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:18:5: warning: Q_PROPERTY of type NamespacedGadget should use full qualification (NS::NamespacedGadget) [-Wclazy-fully-qualified-moc-types]

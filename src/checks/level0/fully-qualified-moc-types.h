@@ -23,7 +23,7 @@
 #define CLAZY_FULLY_QUALIFIED_MOC_TYPES_H
 
 #include "checkbase.h"
-
+#include <vector>
 
 /**
  * See README-fully-qualified-moc-types.md for more info.
@@ -33,5 +33,12 @@ class FullyQualifiedMocTypes : public CheckBase
 public:
     explicit FullyQualifiedMocTypes(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+private:
+    bool isGadget(clang::CXXRecordDecl *record) const;
+    bool handleQ_PROPERTY(clang::CXXMethodDecl *);
+    void VisitMacroExpands(const clang::Token &MacroNameTok,
+                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void registerQ_GADGET(clang::SourceLocation);
+    std::vector<clang::SourceLocation> m_qgadgetMacroLocations;
 };
 #endif
