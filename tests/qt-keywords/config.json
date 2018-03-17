@@ -4,11 +4,11 @@
             "filename" : "main.cpp"
         },
         {
-            "filename" : "no_keywords.cpp"
-        },
-        {
             "filename" : "main.cpp_fixed.cpp",
             "isFixedFile" : true
+        },
+        {
+            "filename" : "no_keywords.cpp"
         }
     ]
 }
