@@ -109,6 +109,7 @@ public:
 
     void setEnabledFixits(int);
     bool isFixitEnabled(int fixit) const;
+    bool isFixitEnabled() const;
 
     void emitWarning(const clang::Decl *, const std::string &error, bool printWarningTag = true);
     void emitWarning(const clang::Stmt *, const std::string &error, bool printWarningTag = true);
@@ -137,7 +138,7 @@ protected:
     bool shouldIgnoreFile(clang::SourceLocation) const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
-    void queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const std::string &message = {});
+    void queueManualFixitWarning(clang::SourceLocation loc, const std::string &message = {}, int fixitType = 1);
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
     bool isOptionSet(const std::string &optionName) const;

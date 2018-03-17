@@ -32,11 +32,6 @@
 using namespace clang;
 using namespace std;
 
-enum Fixit {
-    FixitNone = 0,
-    FixitAll = 0x1 // More granularity isn't needed I guess
-};
-
 QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -87,10 +82,10 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
 
     if (!errorMsg.empty()) {
         std::vector<FixItHint> fixits;
-        if (isFixitEnabled(FixitAll)) {
+        if (isFixitEnabled()) {
             const bool success = clazy::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
             if (!success) {
-                queueManualFixitWarning(memberCall->getLocStart(), FixitAll);
+                queueManualFixitWarning(memberCall->getLocStart());
             }
         }
 

@@ -32,12 +32,6 @@
 using namespace clang;
 using namespace std;
 
-
-enum Fixit {
-    FixitNone = 0,
-    FixitUseQString = 0x1,
-};
-
 static bool isQStringBuilder(QualType t)
 {
     CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
@@ -61,7 +55,7 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
         return;
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled(FixitUseQString)) {
+    if (isFixitEnabled()) {
         std::string replacement = "QString " + varDecl->getName().str();
 
         if (qualtype.isConstQualified())

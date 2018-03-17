@@ -223,7 +223,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
                         auto removalFixits = clazy::fixItRemoveToken(&m_astContext, ctorExpr, true);
                         if (removalFixits.empty())  {
-                            queueManualFixitWarning(ctorExpr->getLocStart(), QLatin1StringAllocations, "Internal error: invalid start or end location");
+                            queueManualFixitWarning(ctorExpr->getLocStart(), "Internal error: invalid start or end location", QLatin1StringAllocations);
                         } else {
                             clazy::append(removalFixits, fixits);
                         }
@@ -232,7 +232,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                     fixits = fixItReplaceWordWithWordInTernary(ternary);
                 }
             } else {
-                queueManualFixitWarning(qlatin1Ctor->getLocStart(), QLatin1StringAllocations, "Can't use QStringLiteral in macro");
+                queueManualFixitWarning(qlatin1Ctor->getLocStart(), "Can't use QStringLiteral in macro", QLatin1StringAllocations);
             }
         }
 
@@ -256,7 +256,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                         else if (!ctorExpr->getLocStart().isMacroID())
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString", CharPtrAllocations);
                         else
-                            queueManualFixitWarning(ctorExpr->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro.");
+                            queueManualFixitWarning(ctorExpr->getLocStart(), "Can't use QStringLiteral in macro.", CharPtrAllocations);
                     } else {
 
                         auto parentMemberCallExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
@@ -298,7 +298,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
     vector<FixItHint> fixits;
     FixItHint fixit = clazy::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
     if (fixit.isNull()) {
-        queueManualFixitWarning(begin->getLocStart(), fixitType);
+        queueManualFixitWarning(begin->getLocStart(), "", fixitType);
     } else {
         fixits.push_back(fixit);
     }
@@ -386,10 +386,10 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
     vector<FixItHint> fixits;
 
     std::string replacement = isQStringLiteralCandidate(callExpr, m_context->parentMap, lo(), sm()) ? "QStringLiteral"
-                                                                               : "QLatin1String";
+                                                                                                    : "QLatin1String";
 
     if (replacement == "QStringLiteral" && callExpr->getLocStart().isMacroID()) {
-        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations, "Can't use QStringLiteral in macro!");
+        queueManualFixitWarning(callExpr->getLocStart(), "Can't use QStringLiteral in macro!", FromLatin1_FromUtf8Allocations);
         return {};
     }
 
@@ -414,7 +414,7 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
         SourceRange range(callExpr->getLocStart(), methodNameLoc);
         fixits.push_back(FixItHint::CreateReplacement(range, replacement));
     } else {
-        queueManualFixitWarning(callExpr->getLocStart(), FromLatin1_FromUtf8Allocations, "Internal error: literal is null");
+        queueManualFixitWarning(callExpr->getLocStart(), "Internal error: literal is null", FromLatin1_FromUtf8Allocations);
     }
 
     return fixits;
@@ -427,21 +427,21 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
     SourceRange range = clazy::rangeForLiteral(&m_astContext, lt);
     if (range.isInvalid()) {
         if (lt) {
-            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Internal error: Can't calculate source location");
+            queueManualFixitWarning(lt->getLocStart(), "Internal error: Can't calculate source location", CharPtrAllocations);
         }
         return {};
     }
 
     SourceLocation start = lt->getLocStart();
     if (start.isMacroID()) {
-        queueManualFixitWarning(start, CharPtrAllocations, "Can't use QStringLiteral in macro..");
+        queueManualFixitWarning(start, "Can't use QStringLiteral in macro", CharPtrAllocations);
     } else {
         if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
             return {};
 
         string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
         if (revisedReplacement == "QStringLiteral" && lt->getLocStart().isMacroID()) {
-            queueManualFixitWarning(lt->getLocStart(), CharPtrAllocations, "Can't use QStringLiteral in macro...");
+            queueManualFixitWarning(lt->getLocStart(), "Can't use QStringLiteral in macro...", CharPtrAllocations);
             return {};
         }
 
@@ -494,7 +494,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
 
     if (isFixitEnabled(CharPtrAllocations)) {
         if (literals.empty()) {
-            queueManualFixitWarning(stm->getLocStart(), CharPtrAllocations, "Couldn't find literal");
+            queueManualFixitWarning(stm->getLocStart(), "Couldn't find literal", CharPtrAllocations);
         } else {
             const string replacement = Utils::isAscii(literals[0]) ? "QLatin1String" : "QStringLiteral";
             fixits = fixItRawLiteral(literals[0], replacement);

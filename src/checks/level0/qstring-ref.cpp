@@ -35,11 +35,6 @@
 using namespace clang;
 using namespace std;
 
-enum Fixit {
-    FixitNone = 0,
-    FixitUseQStringRef = 0x1,
-};
-
 StringRefCandidates::StringRefCandidates(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -163,7 +158,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 
     const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled(FixitUseQStringRef))
+    if (isFixitEnabled())
         fixits = fixit(firstMemberCall);
 
     emitWarning(firstMemberCall->getLocEnd(), "Use " + firstMethodName + "Ref() instead", fixits);
@@ -206,7 +201,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
         return false;
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled(FixitUseQStringRef)) {
+    if (isFixitEnabled()) {
         fixits = fixit(innerMemberCall);
     }
 
@@ -218,14 +213,14 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
     MemberExpr *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
-        queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 1");
+        queueManualFixitWarning(call->getLocStart(), "Internal error 1");
         return {};
     }
 
     auto insertionLoc = Lexer::getLocForEndOfToken(memberExpr->getLocEnd(), 0, sm(), lo());
     // llvm::errs() << insertionLoc.printToString(sm()) << "\n";
     if (!insertionLoc.isValid()) {
-        queueManualFixitWarning(call->getLocStart(), FixitUseQStringRef, "Internal error 2");
+        queueManualFixitWarning(call->getLocStart(), "Internal error 2");
         return {};
     }
 

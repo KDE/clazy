@@ -197,7 +197,7 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
     }
 }
 
-void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, int fixitType, const string &message)
+void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const string &message, int fixitType)
 {
     if (isFixitEnabled(fixitType) && !manualFixitAlreadyQueued(loc)) {
         m_queuedManualInterventionWarnings.push_back({loc, message});
@@ -245,6 +245,12 @@ void CheckBase::setEnabledFixits(int fixits)
 bool CheckBase::isFixitEnabled(int fixit) const
 {
     return (m_enabledFixits & fixit) || (m_context->options & ClazyContext::ClazyOption_AllFixitsEnabled);
+}
+
+bool CheckBase::isFixitEnabled() const
+{
+    // Checks with only 1 fixit (which is most of them) don't need to pass fixit id
+    return isFixitEnabled(1);
 }
 
 ClazyAstMatcherCallback::ClazyAstMatcherCallback(CheckBase *check)

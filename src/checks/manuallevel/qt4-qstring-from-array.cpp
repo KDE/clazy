@@ -33,11 +33,6 @@
 using namespace clang;
 using namespace std;
 
-enum FixIt {
-    FixItNone,
-    FixItToFromLatin1
-};
-
 Qt4QStringFromArray::Qt4QStringFromArray(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -238,7 +233,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstr
             clazy::printLocation(sm(), rangeStart);
             clazy::printLocation(sm(), rangeEnd);
             clazy::printLocation(sm(), Lexer::getLocForEndOfToken(rangeStart, 0, sm(), lo()));
-            queueManualFixitWarning(ctorExpr->getLocStart(), FixItToFromLatin1);
+            queueManualFixitWarning(ctorExpr->getLocStart());
             return {};
         }
     }

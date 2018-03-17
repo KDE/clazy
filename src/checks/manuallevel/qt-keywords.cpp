@@ -34,11 +34,6 @@
 using namespace clang;
 using namespace std;
 
-enum Fixits {
-    FixitNone = 0,
-    FixitKeywords = 1
-};
-
 QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
@@ -69,12 +64,11 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
         return;
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled(FixitKeywords)) {
+    if (isFixitEnabled()) {
         std::string replacement = "Q_" + name;
         std::transform(replacement.begin(), replacement.end(), replacement.begin(), ::toupper);
         fixits.push_back(clazy::createReplacement(range, replacement));
     }
 
     emitWarning(range.getBegin(), "Using a Qt keyword (" + string(ii->getName()) + ")", fixits);
-
 }

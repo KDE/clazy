@@ -4,7 +4,7 @@
   Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2015,2018 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -34,11 +34,6 @@
 
 using namespace clang;
 using namespace std;
-
-enum Fixit {
-    FixitNone = 0,
-    FixitAll = 0x1 // More granularity isn't needed I guess
-};
 
 static bool shouldIgnoreClass(CXXRecordDecl *record)
 {

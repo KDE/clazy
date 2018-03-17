@@ -33,11 +33,6 @@
 using namespace clang;
 using namespace std;
 
-enum Fixit {
-    FixitNone = 0,
-    FixitAll = 0x1 // More granularity isn't needed I guess
-};
-
 QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
@@ -73,10 +68,10 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled(FixitAll)) {
+    if (isFixitEnabled()) {
         const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
         if (!success) {
-            queueManualFixitWarning(secondCall->getLocStart(), FixitAll);
+            queueManualFixitWarning(secondCall->getLocStart());
         }
     }
 

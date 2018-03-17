@@ -43,12 +43,6 @@
 using namespace clang;
 using namespace std;
 
-
-enum Fixit {
-    FixitNone = 0,
-    FixItConnects = 1
-};
-
 enum ConnectFlag {
     ConnectFlag_None = 0,       // Not a disconnect or connect
     ConnectFlag_Connect = 1,    // It's a connect
@@ -265,7 +259,7 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) cons
 
 vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 {
-    if (!isFixitEnabled(FixItConnects))
+    if (!isFixitEnabled())
         return {};
 
     if (!call) {
@@ -276,7 +270,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 2 args";
-        queueManualFixitWarning(call->getLocStart(), FixItConnects, msg);
+        queueManualFixitWarning(call->getLocStart(), msg);
         return {};
     }
 
@@ -298,14 +292,14 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                     llvm::errs() << "This first macro shouldn't enter this path";
                 if (!lastRecordDecl) {
                     string msg = "Failed to get class name for implicit receiver";
-                    queueManualFixitWarning(s, FixItConnects, msg);
+                    queueManualFixitWarning(s, msg);
                     return {};
                 }
             }
 
             if (!lastRecordDecl) {
                 string msg = "Failed to get class name for explicit receiver";
-                queueManualFixitWarning(s, FixItConnects, msg);
+                queueManualFixitWarning(s, msg);
                 return {};
             }
 
@@ -325,12 +319,12 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                     }
                 }
 
-                queueManualFixitWarning(s, FixItConnects, msg);
+                queueManualFixitWarning(s, msg);
                 return {};
             } else if (methods.size() != 1) {
                 string msg = string("Too many overloads (") + to_string(methods.size()) + string(") for method ")
                              + methodName + " for record " + lastRecordDecl->getNameAsString();
-                queueManualFixitWarning(s, FixItConnects, msg);
+                queueManualFixitWarning(s, msg);
                 return {};
             } else {
                 AccessSpecifierManager *a = m_context->accessSpecifierManager;
@@ -342,7 +336,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                     // The method is actually a signal and the user used SLOT()
                     // bail out with the fixing.
                     string msg = string("Can't fix. SLOT macro used but method " + methodName + " is a signal");
-                    queueManualFixitWarning(s, FixItConnects, msg);
+                    queueManualFixitWarning(s, msg);
                     return {};
                 }
             }
@@ -358,7 +352,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 const unsigned int numReceiverParams = methodDecl->getNumParams();
                 if (numReceiverParams > senderMethod->getNumParams()) {
                     string msg = string("Receiver has more parameters (") + to_string(methodDecl->getNumParams()) + ") than signal (" + to_string(senderMethod->getNumParams()) + ')';
-                    queueManualFixitWarning(s, FixItConnects, msg);
+                    queueManualFixitWarning(s, msg);
                     return {};
                 }
 
@@ -367,7 +361,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                     ParmVarDecl *senderParm = senderMethod->getParamDecl(i);
                     if (!clazy::isConvertibleTo(senderParm->getType().getTypePtr(), receiverParm->getType().getTypePtrOrNull())) {
                         string msg = string("Sender's parameters are incompatible with the receiver's");
-                        queueManualFixitWarning(s, FixItConnects, msg);
+                        queueManualFixitWarning(s, msg);
                         return {};
                     }
                 }
@@ -375,7 +369,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             if ((classification & ConnectFlag_QTimerSingleShot) && methodDecl->getNumParams() > 0) {
                 string msg = "(QTimer) Fixit not implemented for slot with arguments, use a lambda";
-                queueManualFixitWarning(s, FixItConnects, msg);
+                queueManualFixitWarning(s, msg);
                 return {};
             }
 
@@ -384,7 +378,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             bool isSpecialProtectedCase = false;
             if (!clazy::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
                 string msg = "Can't fix " + clazy::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
-                queueManualFixitWarning(s, FixItConnects, msg);
+                queueManualFixitWarning(s, msg);
                 return {};
             }
 
@@ -420,7 +414,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {
-                        queueManualFixitWarning(s, FixItConnects, "Can't fix this QPointer case");
+                        queueManualFixitWarning(s, "Can't fix this QPointer case");
                         return {};
                     }
                 }
