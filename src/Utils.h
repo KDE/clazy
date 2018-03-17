@@ -287,6 +287,14 @@ namespace Utils {
      * Returns true if the string literal contains escaped bytes, such as \x12, \123, \u00F6.
      */
     bool literalContainsEscapedBytes(clang::StringLiteral *lt, const clang::SourceManager &sm, const clang::LangOptions &lo);
+
+    /**
+     * Returns true if this method overrides one from the base class
+     */
+    inline bool methodOverrides(clang::CXXMethodDecl *method)
+    {
+        return method && method->isVirtual() && method->size_overridden_methods() > 0;
+    }
 }
 
 #endif

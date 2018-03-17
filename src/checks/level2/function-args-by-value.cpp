@@ -1,7 +1,7 @@
 /*
    This file is part of the clazy static checker.
 
-  Copyright (C) 2016-2017 Sergio Martins <smartins@kde.org>
+  Copyright (C) 2016-2018 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -98,20 +98,22 @@ void FunctionArgsByValue::VisitDecl(Decl *decl)
 
 void FunctionArgsByValue::VisitStmt(Stmt *stmt)
 {
-    if (LambdaExpr *lambda = dyn_cast<LambdaExpr>(stmt))
+    if (auto lambda = dyn_cast<LambdaExpr>(stmt))
         processFunction(lambda->getCallOperator());
 }
 
 void FunctionArgsByValue::processFunction(FunctionDecl *func)
 {
-    if (!func || !func->isThisDeclarationADefinition() ||
-        func->isDeleted())
+    if (!func || !func->isThisDeclarationADefinition() || func->isDeleted())
         return;
 
     auto ctor = dyn_cast<CXXConstructorDecl>(func);
-    if (ctor) {
-        if (ctor->isCopyConstructor())
-            return; // copy-ctor must take by ref
+    if (ctor && ctor->isCopyConstructor())
+        return; // copy-ctor must take by ref
+
+    if (Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
+        // When overriding you can't change the signature. You should fix the base classes first
+        return;
     }
 
     if (shouldIgnoreOperator(func))
@@ -161,9 +163,11 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
             }
 
             std::vector<FixItHint> fixits;
-            if (isFixitEnabled(FixitAll)) {
+            auto method = dyn_cast<CXXMethodDecl>(func);
+            const bool isVirtualMethod = method && method->isVirtual();
+            if (!isVirtualMethod && isFixitEnabled(FixitAll)) { // Don't try to fix virtual methods, as build can fail
                 for (auto redecl : func->redecls()) { // Fix in both header and .cpp
-                    FunctionDecl *fdecl = dyn_cast<FunctionDecl>(redecl);
+                    auto fdecl = dyn_cast<FunctionDecl>(redecl);
                     const ParmVarDecl *param = fdecl->getParamDecl(i);
                     fixits.push_back(fixit(fdecl, param, classif));
                 }

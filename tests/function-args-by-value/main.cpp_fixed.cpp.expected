@@ -216,3 +216,20 @@ struct Ctors
 
 void trivialByConstRef(int t) {} // Warn
 void trivialByRef(int &t) {} // OK
+
+// #381812
+
+class BaseWithVirtuals
+{
+public:
+    virtual void virtualMethod1(const Trivial &) {}; // Warn
+    virtual void virtualMethod2(const Trivial &) {}; // Warn
+    void nonVirtualMethod(Trivial ) {}; // Warn
+};
+
+class DerivedWithVirtuals : BaseWithVirtuals {
+public:
+    void virtualMethod1(const Trivial &) override {}; // OK
+    void virtualMethod2(const Trivial &) {}; // OK
+    void nonVirtualMethod(Trivial ) {}; // Warn
+};

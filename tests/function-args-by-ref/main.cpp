@@ -228,3 +228,20 @@ struct Ctors3
     NonTrivial m;
     int i;
 };
+
+
+// #381812
+class BaseWithVirtuals
+{
+public:
+    virtual void virtualMethod1(NonTrivial) {}; // Warn
+    virtual void virtualMethod2(NonTrivial) {}; // Warn
+    void nonVirtualMethod(NonTrivial) {}; // Warn
+};
+
+class DerivedWithVirtuals : BaseWithVirtuals {
+public:
+    void virtualMethod1(NonTrivial) override {}; // OK
+    void virtualMethod2(NonTrivial) {}; // OK
+    void nonVirtualMethod(NonTrivial) {}; // Warn
+};
