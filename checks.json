@@ -417,6 +417,11 @@
             "name"  : "function-args-by-ref",
             "level" : 2,
             "categories" : ["cpp", "performance"],
+            "options" : [
+                {
+                    "name" : "warn-for-overridden-methods"
+                }
+            ],
             "visits_decls" : true,
             "visits_stmts" : true
         },
@@ -424,6 +429,11 @@
             "name"  : "function-args-by-value",
             "level" : 2,
             "categories" : ["cpp", "performance"],
+            "options" : [
+                {
+                    "name" : "warn-for-overridden-methods"
+                }
+            ],
             "visits_decls" : true,
             "visits_stmts" : true
         },

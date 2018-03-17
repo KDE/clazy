@@ -1,0 +1,7 @@
+function-args-by-value/warn-for-overridden-methods.cpp:14:10: warning: 'virtualMethod2' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+function-args-by-value/warn-for-overridden-methods.cpp:6:33: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/warn-for-overridden-methods.cpp:7:33: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/warn-for-overridden-methods.cpp:8:27: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/warn-for-overridden-methods.cpp:13:25: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/warn-for-overridden-methods.cpp:14:25: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/warn-for-overridden-methods.cpp:15:27: warning: Pass small and trivially-copyable type by value (const struct Trivial &) [-Wclazy-function-args-by-value]

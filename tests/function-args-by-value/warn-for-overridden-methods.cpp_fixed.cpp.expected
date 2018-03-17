@@ -1,0 +1,16 @@
+struct Trivial {};
+
+class BaseWithVirtuals
+{
+public:
+    virtual void virtualMethod1(Trivial ) {}; // Warn
+    virtual void virtualMethod2(Trivial ) {}; // Warn
+    void nonVirtualMethod(Trivial ) {}; // Warn
+};
+
+class DerivedWithVirtuals : BaseWithVirtuals {
+public:
+    void virtualMethod1(Trivial ) override {}; // Warn
+    void virtualMethod2(Trivial ) {}; // Warn
+    void nonVirtualMethod(Trivial ) {}; // Warn
+};

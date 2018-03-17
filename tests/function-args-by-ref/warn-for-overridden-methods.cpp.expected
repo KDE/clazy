@@ -1,0 +1,7 @@
+function-args-by-ref/warn-for-overridden-methods.cpp:20:10: warning: 'virtualMethod2' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+function-args-by-ref/warn-for-overridden-methods.cpp:12:33: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/warn-for-overridden-methods.cpp:13:33: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/warn-for-overridden-methods.cpp:14:27: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/warn-for-overridden-methods.cpp:19:25: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/warn-for-overridden-methods.cpp:20:25: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/warn-for-overridden-methods.cpp:21:27: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]

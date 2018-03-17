@@ -107,7 +107,8 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
     if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
         return;
 
-    if (Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
+    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods");
+    if (!warnForOverriddenMethods && Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
         // When overriding you can't change the signature. You should fix the base classes first
         return;
     }

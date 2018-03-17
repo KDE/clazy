@@ -111,7 +111,8 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
     if (ctor && ctor->isCopyConstructor())
         return; // copy-ctor must take by ref
 
-    if (Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
+    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods");
+    if (!warnForOverriddenMethods && Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
         // When overriding you can't change the signature. You should fix the base classes first
         return;
     }
@@ -165,7 +166,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
             std::vector<FixItHint> fixits;
             auto method = dyn_cast<CXXMethodDecl>(func);
             const bool isVirtualMethod = method && method->isVirtual();
-            if (!isVirtualMethod && isFixitEnabled(FixitAll)) { // Don't try to fix virtual methods, as build can fail
+            if ((!isVirtualMethod || warnForOverriddenMethods) && isFixitEnabled(FixitAll)) { // Don't try to fix virtual methods, as build can fail
                 for (auto redecl : func->redecls()) { // Fix in both header and .cpp
                     auto fdecl = dyn_cast<FunctionDecl>(redecl);
                     const ParmVarDecl *param = fdecl->getParamDecl(i);

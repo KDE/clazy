@@ -15,6 +15,15 @@
         },
         {
             "filename" : "bug379342.cpp"
+        },
+        {
+            "filename" : "warn-for-overridden-methods.cpp",
+            "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-value-warn-for-overridden-methods" }
+        },
+        {
+            "filename" : "warn-for-overridden-methods.cpp_fixed.cpp",
+            "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-value-warn-for-overridden-methods" },
+            "isFixedFile" : true
         }
     ]
 }

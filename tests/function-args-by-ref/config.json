@@ -8,6 +8,10 @@
         },
         {
             "filename" : "sharedptrs.cpp"
+        },
+        {
+            "filename" : "warn-for-overridden-methods.cpp",
+            "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-ref-warn-for-overridden-methods" }
         }
     ]
 }
