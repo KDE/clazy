@@ -68,6 +68,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/qstring-allocations.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/returning-void-expression.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/rule-of-three.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/static-pmf.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/virtual-call-ctor.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assert-with-side-effects.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detaching-member.cpp

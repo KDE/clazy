@@ -291,6 +291,7 @@ clazy runs all checks from level1 by default.
     - [qstring-allocations](src/checks/level2/README-qstring-allocations.md)    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)
     - [returning-void-expression](src/checks/level2/README-returning-void-expression.md)
     - [rule-of-three](src/checks/level2/README-rule-of-three.md)
+    - [static-pmf](src/checks/level2/README-static-pmf.md)
     - [virtual-call-ctor](src/checks/level2/README-virtual-call-ctor.md)
 
 - Checks from Level 3:

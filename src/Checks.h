@@ -96,6 +96,7 @@
 #include "checks/level2/qstring-allocations.h"
 #include "checks/level2/returning-void-expression.h"
 #include "checks/level2/rule-of-three.h"
+#include "checks/level2/static-pmf.h"
 #include "checks/level2/virtual-call-ctor.h"
 #include "checks/level3/assert-with-side-effects.h"
 #include "checks/level3/detaching-member.h"
@@ -192,6 +193,7 @@ void CheckManager::registerChecks()
     registerFixIt(4, "fix-fromCharPtrAllocations", "qstring-allocations");
     registerCheck(check<ReturningVoidExpression>("returning-void-expression", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfThree>("rule-of-three", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<StaticPmf>("static-pmf", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<VirtualCallCtor>("virtual-call-ctor", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<DetachingMember>("detaching-member", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));

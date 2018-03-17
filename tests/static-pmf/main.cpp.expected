@@ -1,0 +1,1 @@
+static-pmf/main.cpp:9:5: warning: Static pointer to member has portability issues [-Wclazy-static-pmf]

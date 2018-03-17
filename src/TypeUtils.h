@@ -124,6 +124,17 @@ namespace TypeUtils
         return at && at->getDeducedType().isNull();
     }
 
+    inline const clang::Type * unpealAuto(clang::QualType q)
+    {
+        if (q.isNull())
+            return nullptr;
+
+        if (auto t = llvm::dyn_cast<clang::AutoType>(q.getTypePtr()))
+            return t->getDeducedType().getTypePtrOrNull();
+
+        return q.getTypePtr();
+    }
+
     /**
      * Returns true if childDecl is a descent from parentDecl
      **/
