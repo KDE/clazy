@@ -11,9 +11,10 @@ class QtInstallation:
     def __init__(self):
         self.int_version = 000
         self.qmake_header_path = "/usr/include/qt/"
+        self.qmake_lib_path = "/usr/lib"
 
     def compiler_flags(self):
-        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC")
+        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path
 
 class Test:
     def __init__(self, check):
@@ -178,8 +179,11 @@ def find_qt_installation(major_version, qmakes):
         qmake_version_str,success = get_command_output(qmake + " -query QT_VERSION")
         if success and qmake_version_str.startswith(str(major_version) + "."):
             qmake_header_path = get_command_output(qmake + " -query QT_INSTALL_HEADERS")[0].strip()
+            qmake_lib_path = get_command_output(qmake + " -query QT_INSTALL_LIBS")[0].strip()
             if qmake_header_path:
                 installation.qmake_header_path = qmake_header_path
+                if qmake_lib_path:
+                    installation.qmake_lib_path = qmake_lib_path
                 installation.int_version = int(qmake_version_str.replace(".", ""))
                 if _verbose:
                     print "Found Qt " + str(installation.int_version) + " using qmake " + qmake
