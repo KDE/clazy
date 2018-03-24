@@ -63,9 +63,22 @@ std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethods()
 {
     static std::unordered_map<string, std::vector<StringRef> > map;
     if (map.empty()) {
+        map = detachingMethodsWithConstCounterParts();
+        map["QVector"].push_back("fill");
+        map["QMap"].push_back("upperBound");
+        map["QVector"].push_back("lowerBound");
+    }
+
+    return map;
+}
+
+std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethodsWithConstCounterParts()
+{
+    static std::unordered_map<string, std::vector<StringRef> > map;
+    if (map.empty()) {
         map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
-        map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]", "fill" };
-        map["QMap"] = {"begin", "end", "first", "find", "last", "lowerBound", "upperBound", "operator[]" };
+        map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };
+        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]" };
         map["QHash"] = {"begin", "end", "find", "operator[]" };
         map["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]" };
         map["QSet"] = {"begin", "end", "find", "operator[]" };
@@ -82,7 +95,6 @@ std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethods()
 
     return map;
 }
-
 
 bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record)
 {

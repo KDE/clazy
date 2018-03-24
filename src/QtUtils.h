@@ -115,6 +115,12 @@ CLAZYLIB_EXPORT const std::vector<llvm::StringRef> & qtCOWContainers();
 CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethods();
 
 /**
+ * Returns a map with the list of method names that detach each container, but only those methods
+ * with const counterparts.
+ */
+CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethodsWithConstCounterParts();
+
+/**
  * Returns true if a type represents a Qt container class.
  */
 CLAZYLIB_EXPORT bool isQtContainer(clang::QualType);

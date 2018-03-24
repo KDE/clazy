@@ -43,7 +43,13 @@ class DetachingBase : public CheckBase
 public:
     explicit DetachingBase(const std::string &name, ClazyContext *context, Options = Option_None);
 protected:
-    bool isDetachingMethod(clang::CXXMethodDecl *) const;
+
+    enum DetachingMethodType {
+        DetachingMethod,
+        DetachingMethodWithConstCounterPart
+    };
+
+    bool isDetachingMethod(clang::CXXMethodDecl *, DetachingMethodType = DetachingMethod) const;
 };
 
 #endif

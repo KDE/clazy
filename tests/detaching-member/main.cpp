@@ -1,7 +1,7 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QMap>
-
+#include <QtCore/QVector>
 
 
 
@@ -103,4 +103,14 @@ void test356755()
 {
     S s;
     qSort(s.m_listOfPointers.begin(), s.m_listOfPointers.end());
+}
+
+void testFill() {
+    struct Fill {
+        Fill() {
+            m_vector.fill(1);
+        }
+        QVector<int> m_vector;
+    };
+
 }

@@ -80,7 +80,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         memberDecl = Utils::valueDeclForMemberCall(memberCall);
     }
 
-    if (!method || !memberDecl || !Utils::isMemberVariable(memberDecl) || !isDetachingMethod(method) || method->isConst())
+    if (!method || !memberDecl || !Utils::isMemberVariable(memberDecl) || !isDetachingMethod(method, DetachingMethodWithConstCounterPart) || method->isConst())
         return;
 
     // Catch cases like m_foo[0] = .. , which is fine
