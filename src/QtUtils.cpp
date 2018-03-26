@@ -65,8 +65,6 @@ std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethods()
     if (map.empty()) {
         map = detachingMethodsWithConstCounterParts();
         map["QVector"].push_back("fill");
-        map["QMap"].push_back("upperBound");
-        map["QVector"].push_back("lowerBound");
     }
 
     return map;
@@ -78,7 +76,7 @@ std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethodsWithC
     if (map.empty()) {
         map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
         map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };
-        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]" };
+        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]", "lowerBound", "upperBound" };
         map["QHash"] = {"begin", "end", "find", "operator[]" };
         map["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]" };
         map["QSet"] = {"begin", "end", "find", "operator[]" };
