@@ -310,7 +310,7 @@ CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
         if (!context)
             return nullptr;
 
-        CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(context);
+        auto record = dyn_cast<CXXRecordDecl>(context);
         if (!record)
             return nullptr;
 
@@ -321,6 +321,10 @@ CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
         return pmfFromUnary(dyn_cast<UnaryOperator>(call->getArg(1)));
     } else if (auto staticCast = dyn_cast<CXXStaticCastExpr>(expr)) {
         return pmfFromUnary(staticCast->getSubExpr());
+    } else if (auto callexpr = dyn_cast<CallExpr>(expr)) {
+        // QOverload case, go deeper one level to get to the UnaryOperator
+        if (callexpr->getNumArgs() == 1)
+            return pmfFromUnary(callexpr->getArg(0));
     }
 
     return nullptr;
