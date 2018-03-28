@@ -9,6 +9,10 @@
             "minimum_qt_version" : 570
         },
         {
+            "filename" : "392441.cpp",
+            "minimum_qt_version" : 570
+        },
+        {
             "filename" : "bug375239.cpp"
         },
         {

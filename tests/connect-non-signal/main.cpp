@@ -1,5 +1,5 @@
 #include <QtCore/QObject>
-#include <QtWidgets/QComboBox>
+
 class MyObj;
 class MyObj : public QObject
 {
@@ -50,10 +50,4 @@ void test3()
     auto *o = new MyDerivedObj();
     QObject::connect(o, &MyDerivedObj::myVirtualSig, o, &MyObj::foo); // Warn, overridden but not a signal now
     QObject::connect(o, &MyObj::myVirtualSig, o, &MyObj::foo); // OK
-}
-
-void test_bug392441()
-{
-    QComboBox *combo;
-    QObject::connect(combo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), [] (QString) {}); // OK
 }
