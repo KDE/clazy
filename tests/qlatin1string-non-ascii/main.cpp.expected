@@ -1,1 +1,1 @@
-qlatin1string-non-ascii/main.cpp:5:19: warning: QStringLiteral with non-ascii literal [-Wclazy-qlatin1string-non-ascii]
+qlatin1string-non-ascii/main.cpp:5:19: warning: QLatin1String with non-ascii literal [-Wclazy-qlatin1string-non-ascii]
