@@ -72,6 +72,16 @@ static bool classIsOk(const string &className)
     return clazy_std::contains(okClasses, className);
 }
 
+static CharSourceRange getImmediateExpansionRange(SourceLocation macroLoc, const SourceManager &sm)
+{
+#if LLVM_VERSION_MAJOR >= 7
+    return sm.getImmediateExpansionRange(macroLoc);
+#else
+    auto pair = sm.getImmediateExpansionRange(macroLoc);
+    return CharSourceRange(SourceRange(pair.first, pair.second), false);
+#endif
+}
+
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
@@ -237,8 +247,8 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     if (!macroLoc.isMacroID())
         return "error";
 
-    auto expansionRange = sm().getImmediateExpansionRange(macroLoc);
-    SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
+    CharSourceRange expansionRange = getImmediateExpansionRange(macroLoc, sm());
+    SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
     const string text = Lexer::getSourceText(charRange, sm(), lo());
 
@@ -402,8 +412,8 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 qualifiedName = ContextUtils::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
             }
 
-            auto expansionRange = sm().getImmediateExpansionRange(s);
-            SourceRange range = SourceRange(expansionRange.first, expansionRange.second);
+            CharSourceRange expansionRange = getImmediateExpansionRange(s, sm());
+            SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
 
             const string functionPointer = '&' + qualifiedName;
             string replacement = functionPointer;
