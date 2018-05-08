@@ -20,7 +20,7 @@ class Test:
     def __init__(self, check):
         self.filename = ""
         self.minimum_qt_version = 500
-        self.maximum_qt_version = 999
+        self.maximum_qt_version = 59999
         self.minimum_clang_version = 380
         self.compare_everything = False
         self.isFixedFile = False
@@ -64,7 +64,7 @@ class Check:
         self.name = name
         self.minimum_clang_version = 380 # clang 3.8.0
         self.minimum_qt_version = 500
-        self.maximum_qt_version = 999
+        self.maximum_qt_version = 59999
         self.enabled = True
         self.clazy_standalone_only = False
         self.tests = []
@@ -184,7 +184,8 @@ def find_qt_installation(major_version, qmakes):
                 installation.qmake_header_path = qmake_header_path
                 if qmake_lib_path:
                     installation.qmake_lib_path = qmake_lib_path
-                installation.int_version = int(qmake_version_str.replace(".", ""))
+                ver = qmake_version_str.split('.')
+                installation.int_version = int(ver[0]) * 10000 + int(ver[1]) * 100 + int(ver[2])
                 if _verbose:
                     print "Found Qt " + str(installation.int_version) + " using qmake " + qmake
             break
@@ -399,9 +400,13 @@ def run_unit_test(test, is_standalone):
         print "Qt headers: " + qt.qmake_header_path
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
+        if (_verbose):
+            print "Skipping " + test.check_name + " because required version is not available"
         return True
 
     if _platform in test.blacklist_platforms:
+        if (_verbose):
+            print "Skipping " + test.check_name + " because it is blacklisted for this platform"
         return True
 
     checkname = test.check.name
