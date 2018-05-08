@@ -66,7 +66,7 @@ static bool classIsOk(StringRef className)
 
 static CharSourceRange getImmediateExpansionRange(SourceLocation macroLoc, const SourceManager &sm)
 {
-#if LLVM_VERSION_MAJOR >= 8
+#if LLVM_VERSION_MAJOR >= 7
     return sm.getImmediateExpansionRange(macroLoc);
 #else
     auto pair = sm.getImmediateExpansionRange(macroLoc);
