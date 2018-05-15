@@ -51,11 +51,25 @@ def level_num_to_name(n):
 
     return 'undefined'
 
+def level_num_to_cmake_readme_variable(n):
+    if n == -1:
+        return 'README_manuallevel_FILES'
+    if n >= 0 and n <= 3:
+        return 'README_LEVEL%s_FILES' % str(n)
+
+    return 'undefined'
+
 def clazy_source_path():
     return os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/..") + "/"
 
 def templates_path():
     return clazy_source_path() + "dev-scripts/templates/"
+
+def docs_relative_path():
+    return "docs/checks/"
+
+def docs_path():
+    return clazy_source_path() + docs_relative_path()
 
 def read_file(filename):
     f = io.open(filename, 'r', newline='\n', encoding='utf8')
@@ -120,7 +134,7 @@ class Check:
         return "README-" + self.name + ".md"
 
     def readme_path(self):
-        return clazy_source_path() + self.basedir(True) + self.readme_name()
+        return docs_path() + self.readme_name()
 
 
     def supportsQt4(self):
@@ -337,7 +351,6 @@ def create_readmes(checks):
                 os.remove(existing_readme)
                 print("Moved " + check.readme_name())
             else:
-
                 contents = read_file(templates_path() + "check-readme.md")
                 contents = contents.replace('[check-name]', check.name)
                 write_file(check.readme_path(), contents)
@@ -432,7 +445,6 @@ def create_checks(checks):
     return generated
 #-------------------------------------------------------------------------------
 def generate_readme(checks):
-
     filename = clazy_source_path() + "README.md"
     f = io.open(filename, 'r', newline='\n', encoding='utf8')
     old_contents = f.readlines();
@@ -446,7 +458,7 @@ def generate_readme(checks):
                 fixits_text = c.fixits_text()
                 if fixits_text:
                     fixits_text = "    " + fixits_text
-                new_text_to_insert += "    - [%s](%sREADME-%s.md)%s" % (c.name, c.basedir(True), c.name, fixits_text) + "\n"
+                new_text_to_insert += "    - [%s](%sREADME-%s.md)%s" % (c.name, docs_relative_path(), c.name, fixits_text) + "\n"
         new_text_to_insert += "\n"
 
 
@@ -477,6 +489,31 @@ def generate_readme(checks):
         return True
     return False
 #-------------------------------------------------------------------------------
+def generate_readmes_cmake_install(checks):
+    old_contents = ""
+    filename = clazy_source_path() + 'readmes.cmake'
+    if os.path.exists(filename):
+        f = io.open(filename, 'r', newline='\n', encoding='utf8')
+        old_contents = f.readlines();
+        f.close();
+
+    new_text_to_insert = ""
+    for level in ['-1', '0', '1', '2', '3']:
+        new_text_to_insert += 'SET(' + level_num_to_cmake_readme_variable(int(level)) + "\n"
+        for c in checks:
+            if str(c.level) == level:
+                new_text_to_insert += '    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/' + c.readme_name() + '\n'
+        new_text_to_insert += ')\n\n'
+
+        if old_contents == new_text_to_insert:
+            return False
+
+    f = io.open(filename, 'w', newline='\n', encoding='utf8')
+    f.write(new_text_to_insert)
+    f.close()
+    return True
+
+#-------------------------------------------------------------------------------
 
 complete_json_filename = clazy_source_path() + CHECKS_FILENAME
 
@@ -504,6 +541,7 @@ if args.generate:
     generated = create_readmes(_checks) or generated
     generated = create_unittests(_checks) or generated
     generated = create_checks(_checks) or generated
+    generated = generate_readmes_cmake_install(_checks) or generated
     if not generated:
         print("Nothing to do, everything is OK")
 else:

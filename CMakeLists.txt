@@ -193,11 +193,9 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
 
   # Install the explanation README's
   set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/clazy/doc)
-  file(GLOB README_LEVEL0_FILES src/checks/level0/README-*)
-  file(GLOB README_LEVEL1_FILES src/checks/level1/README-*)
-  file(GLOB README_LEVEL2_FILES src/checks/level2/README-*)
-  file(GLOB README_LEVEL3_FILES src/checks/level3/README-*)
-  file(GLOB README_manuallevel_FILES src/checks/manuallevel/README-*)
+
+  include(${CMAKE_CURRENT_LIST_DIR}/readmes.cmake)
+
   install(FILES ${README_LEVEL0_FILES} DESTINATION ${DOC_INSTALL_DIR}/level0)
   install(FILES ${README_LEVEL1_FILES} DESTINATION ${DOC_INSTALL_DIR}/level1)
   install(FILES ${README_LEVEL2_FILES} DESTINATION ${DOC_INSTALL_DIR}/level2)
