@@ -29,7 +29,7 @@ Table of contents
    * [Selecting which checks to enable](#selecting-which-checks-to-enable)
       * [Example via env variable](#example-via-env-variable)
       * [Example via compiler argument](#example-via-compiler-argument)
-   * [clang-standalone and JSON database support](#clang-standalone-and-json-database-support)
+   * [clazy-standalone and JSON database support](#clazy-standalone-and-json-database-support)
    * [Enabling Fixits](#enabling-fixits)
    * [Troubleshooting](#troubleshooting)
    * [Qt4 compatibility mode](#qt4-compatibility-mode)
@@ -175,7 +175,7 @@ $ brew install --with-clang llvm
 # Setting up your project to build with clazy
 
 Note: Wherever `clazy` it mentioned, replace with `clazy-cl.bat` if you're on Windows.
-Note: If you prefer running clazy over a JSON compilation database instead of using it as a plugin, jump to [clazy-standalone](#clang-standalone-and-json-database-support).
+Note: If you prefer running clazy over a JSON compilation database instead of using it as a plugin, jump to [clazy-standalone](#clazy-standalone-and-json-database-support).
 
 You should now have the clazy command available to you, in `<prefix>/bin/`.
 Compile your programs with it instead of clang++/g++.
@@ -317,7 +317,7 @@ export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and a
 `clazy -Xclang -plugin-arg-clang-lazy -Xclang level0,detaching-temporary`
 Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.
 
-# clang-standalone and JSON database support
+# clazy-standalone and JSON database support
 
 The `clazy-standalone` binary allows you to run clazy over a compilation database JSON file, in the same
 way you would use `clang-tidy` or other clang tooling. This way you don't need to build your application,
