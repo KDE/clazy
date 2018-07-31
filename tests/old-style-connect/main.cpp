@@ -366,4 +366,10 @@ void testStatic()
     TestStatic::disconnect(test, SIGNAL(destroyed(QObject*)), test, SLOT(test(QObject*)));
 }
 
+void test1ArgDisconnect()
+{
+    QObject *o;
+    o->disconnect(SIGNAL(destroyed())); 
+}
+
 #include "main.moc"

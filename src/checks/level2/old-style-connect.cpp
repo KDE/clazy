@@ -49,13 +49,14 @@ enum ConnectFlag {
     ConnectFlag_Disconnect = 2, // It's a disconnect
     ConnectFlag_QTimerSingleShot = 4,
     ConnectFlag_OldStyle = 8,   // Qt4 style
-    ConnectFlag_4ArgsDisconnect = 16 , // disconnect(const char *signal = 0, const QObject *receiver = 0, const char *method = 0) const
-    ConnectFlag_2ArgsDisconnect = 32, //disconnect(const QObject *receiver, const char *method = 0) const
-    ConnectFlag_5ArgsConnect = 64, // connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
-    ConnectFlag_4ArgsConnect = 128, // connect(const QObject *sender, const char *signal, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
-    ConnectFlag_OldStyleButNonLiteral = 256, // connect(foo, SIGNAL(bar()), foo, variableWithSlotName); // here the slot name isn't a literal
-    ConnectFlag_QStateAddTransition = 512,
-    ConnectFlag_Bogus = 1024
+    ConnectFlag_4ArgsDisconnect = 16, // disconnect(const char *signal = 0, const QObject *receiver = 0, const char *method = 0) const
+    ConnectFlag_3ArgsDisconnect = 32, // disconnect(SIGNAL(foo))
+    ConnectFlag_2ArgsDisconnect = 64, //disconnect(const QObject *receiver, const char *method = 0) const
+    ConnectFlag_5ArgsConnect = 128, // connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
+    ConnectFlag_4ArgsConnect = 256, // connect(const QObject *sender, const char *signal, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
+    ConnectFlag_OldStyleButNonLiteral = 512, // connect(foo, SIGNAL(bar()), foo, variableWithSlotName); // here the slot name isn't a literal
+    ConnectFlag_QStateAddTransition = 1024,
+    ConnectFlag_Bogus = 2048
 };
 
 static bool classIsOk(StringRef className)
@@ -117,6 +118,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     } else if (classification & ConnectFlag_Disconnect) {
         if (numParams == 4) {
             classification |= ConnectFlag_4ArgsDisconnect;
+        } else if (numParams == 3) {
+            classification |= ConnectFlag_3ArgsDisconnect;
         } else if (numParams == 2) {
             classification |= ConnectFlag_2ArgsDisconnect;
         } else {
@@ -280,6 +283,13 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 2 args";
+        queueManualFixitWarning(call->getLocStart(), msg);
+        return {};
+    }
+
+    if (classification & ConnectFlag_3ArgsDisconnect) {
+        // Not implemented yet
+        string msg = "Fix it not implemented for disconnect with 3 args";
         queueManualFixitWarning(call->getLocStart(), msg);
         return {};
     }
