@@ -211,7 +211,6 @@ CaseStmt* getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *even
             if (switchStmt) {
                 auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(switchStmt->getCond());
 
-                llvm::errs() << "Found a switch statement " << switchStmt << "with declref" << declRef << "; " << event << "\n";
                 switchStmt->getCond()->dump();
 
                 // Does this switch refer to the same QEvent ?
