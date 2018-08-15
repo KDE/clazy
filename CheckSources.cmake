@@ -13,6 +13,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-not-normalized.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/container-anti-pattern.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/empty-qstringliteral.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/fully-qualified-moc-types.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-in-connect.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-unique-connection.cpp

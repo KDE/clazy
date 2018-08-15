@@ -41,6 +41,7 @@
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/connect-not-normalized.h"
 #include "checks/level0/container-anti-pattern.h"
+#include "checks/level0/empty-qstringliteral.h"
 #include "checks/level0/fully-qualified-moc-types.h"
 #include "checks/level0/lambda-in-connect.h"
 #include "checks/level0/lambda-unique-connection.h"
@@ -129,6 +130,7 @@ void CheckManager::registerChecks()
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ContainerAntiPattern>("container-anti-pattern", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<EmptyQStringliteral>("empty-qstringliteral", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<FullyQualifiedMocTypes>("fully-qualified-moc-types", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaUniqueConnection>("lambda-unique-connection", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));

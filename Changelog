@@ -77,6 +77,7 @@
     wrong-qevent-cast
     static-pmf
     raw-environment-function
+    empty-qstringliteral
   - auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder
   - performance optimizations
   - Added -header-filter=<regex> option to clazy-standalone. Only headers matching the regexp will have warnings,

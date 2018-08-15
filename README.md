@@ -232,6 +232,7 @@ clazy runs all checks from level1 by default.
     - [connect-non-signal](docs/checks/README-connect-non-signal.md)
     - [connect-not-normalized](docs/checks/README-connect-not-normalized.md)
     - [container-anti-pattern](docs/checks/README-container-anti-pattern.md)
+    - [empty-qstringliteral](docs/checks/README-empty-qstringliteral.md)
     - [fully-qualified-moc-types](docs/checks/README-fully-qualified-moc-types.md)
     - [lambda-in-connect](docs/checks/README-lambda-in-connect.md)
     - [lambda-unique-connection](docs/checks/README-lambda-unique-connection.md)

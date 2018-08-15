@@ -16,6 +16,7 @@ SET(README_LEVEL0_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-connect-non-signal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-connect-not-normalized.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-container-anti-pattern.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-empty-qstringliteral.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-fully-qualified-moc-types.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-lambda-in-connect.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-lambda-unique-connection.md

@@ -230,6 +230,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "empty-qstringliteral",
+            "level" : 0,
+            "categories" : ["performance"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "qt-macros",
             "class_name" : "QtMacros",
             "level" : 0,
