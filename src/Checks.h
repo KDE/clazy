@@ -34,6 +34,7 @@
 #include "checks/manuallevel/qstring-varargs.h"
 #include "checks/manuallevel/qt-keywords.h"
 #include "checks/manuallevel/qt4-qstring-from-array.h"
+#include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/tr-non-literal.h"
 #include "checks/manuallevel/unneeded-cast.h"
 #include "checks/level0/connect-by-name.h"
@@ -121,6 +122,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt-keywords", "qt-keywords");
     registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
+    registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));

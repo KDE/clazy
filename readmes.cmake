@@ -6,6 +6,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-tr-non-literal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md
 )

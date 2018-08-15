@@ -48,6 +48,12 @@
             "visits_stmts" : true
         },
         {
+            "name"   : "raw-environment-function",
+            "level"  : -1,
+            "categories" : ["bug"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "container-inside-loop",
             "level" : -1,
             "categories" : ["containers", "performance"],

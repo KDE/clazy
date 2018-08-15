@@ -1,0 +1,3 @@
+raw-environment-function/main.cpp:11:26: warning: Prefer using qgetenv instead of getenv [-Wclazy-raw-environment-function]
+raw-environment-function/main.cpp:13:13: warning: Prefer using qputenv instead of putenv [-Wclazy-raw-environment-function]
+raw-environment-function/main.cpp:15:26: warning: Prefer using qgetenv instead of getenv [-Wclazy-raw-environment-function]

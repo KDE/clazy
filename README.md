@@ -223,6 +223,7 @@ clazy runs all checks from level1 by default.
     - [qstring-varargs](docs/checks/README-qstring-varargs.md)
     - [qt-keywords](docs/checks/README-qt-keywords.md)    (fix-qt-keywords)
     - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
+    - [raw-environment-function](docs/checks/README-raw-environment-function.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)
     - [unneeded-cast](docs/checks/README-unneeded-cast.md)
 
