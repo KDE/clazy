@@ -63,9 +63,8 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         s = clazy::getFirstChild(s);
     }
 
-
     // The sender can be: this
-    CXXThisExpr* senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
+    auto senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
 
     // The variables used inside the lambda
     auto declrefs = clazy::getStatements<DeclRefExpr>(lambda->getBody());
