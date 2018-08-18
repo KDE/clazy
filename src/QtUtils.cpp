@@ -128,7 +128,7 @@ bool clazy::isQtAssociativeContainer(StringRef className)
     return clazy::contains(classes, className);
 }
 
-bool clazy::isQObject(CXXRecordDecl *decl)
+bool clazy::isQObject(const CXXRecordDecl *decl)
 {
     return TypeUtils::derivesFrom(decl, "QObject");
 }

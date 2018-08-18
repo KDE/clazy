@@ -4,8 +4,7 @@
             "filename" : "main.cpp"
         },
         {
-            "filename" : "non-qobject-base.cpp",
-            "expects_failure" : true
+            "filename" : "non-qobject-base.cpp"
         }
     ]
 }

@@ -51,6 +51,19 @@ void VirtualSignal::VisitDecl(Decl *stmt)
         return;
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
-    if (qst == QtAccessSpecifier_Signal)
+    if (qst == QtAccessSpecifier_Signal) {
+
+        for (auto m : method->overridden_methods()) {
+
+            if (auto baseClass = m->getParent()) {
+                if (!clazy::isQObject(baseClass)) {
+                    // It's possible that the signal is overriding a method from a non-QObject base class
+                    // if the derived class inherits both QObject and some other interface.
+                    return;
+                }
+            }
+        }
+
         emitWarning(method, "signal is virtual");
+    }
 }

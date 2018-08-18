@@ -139,7 +139,7 @@ inline bool isBootstrapping(const clang::PreprocessorOptions &ppOpts)
 /**
  * Returns if decl is or derives from QObject
  */
-CLAZYLIB_EXPORT bool isQObject(clang::CXXRecordDecl *decl);
+CLAZYLIB_EXPORT bool isQObject(const clang::CXXRecordDecl *decl);
 
 /**
  * Overload.
