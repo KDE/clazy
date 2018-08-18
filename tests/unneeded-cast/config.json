@@ -1,8 +1,7 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp",
-            "expects_failure" : true
+            "filename" : "main.cpp"
         },
         {
             "filename" : "dynamic_cast_over_qobjectcast.cpp",

@@ -275,15 +275,16 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
             return false;
 
         if (castFrom) {
-            clang::Expr *arg1 = callExpr->getArg(0);
-            auto implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(arg1);
-            implicitCast = implicitCast ? implicitCast : clazy::getFirstChildOfType2<clang::ImplicitCastExpr>(arg1);
-            if (implicitCast) {
-                clang::QualType qt = TypeUtils::pointeeQualType(implicitCast->getSubExpr()->getType());
-                if (!qt.isNull()) {
-                    clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
-                    *castFrom = record ? record->getCanonicalDecl() : nullptr;
+            clang::Expr *expr = callExpr->getArg(0);
+            if (auto implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
+                if (implicitCast->getCastKind() == clang::CK_DerivedToBase) {
+                    expr = implicitCast->getSubExpr();
                 }
+            }
+            clang::QualType qt = TypeUtils::pointeeQualType(expr->getType());
+            if (!qt.isNull()) {
+                clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
+                *castFrom = record ? record->getCanonicalDecl() : nullptr;
             }
         }
 
