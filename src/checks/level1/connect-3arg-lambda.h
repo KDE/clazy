@@ -34,6 +34,7 @@ public:
     explicit Connect3ArgLambda(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    void processQTimer(clang::FunctionDecl *, clang::Stmt *);
 };
 
 #endif

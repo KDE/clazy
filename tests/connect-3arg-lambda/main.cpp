@@ -1,6 +1,6 @@
 #include <QtCore/QString>
 #include <QtCore/QObject>
-
+#include <QtCore/QTimer>
 void another_global();
 void test()
 {
@@ -74,3 +74,13 @@ public:
     QObject *m_member;
     QObject *m_member2;
 };
+
+void testTimer()
+{
+    QObject *o;
+    QTimer::singleShot(0, [] {}); // Warn
+    QTimer::singleShot(0, o, [] {}); // OK
+
+    QTimer::singleShot(0, Qt::CoarseTimer, [] {}); // Warn
+    QTimer::singleShot(0, Qt::CoarseTimer, o, [] {}); // OK
+}

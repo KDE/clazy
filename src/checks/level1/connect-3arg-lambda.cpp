@@ -42,7 +42,19 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *fdecl = callExpr->getDirectCallee();
-    if (!fdecl || fdecl->getNumParams() != 3 || !clazy::isConnect(fdecl))
+    if (!fdecl)
+        return;
+
+    const uint numParams = fdecl->getNumParams();
+    if (numParams != 2 && numParams != 3)
+        return;
+
+    if (fdecl->getQualifiedNameAsString() == "QTimer::singleShot") {
+        processQTimer(fdecl, stmt);
+        return;
+    }
+
+    if (numParams != 3 || !clazy::isConnect(fdecl))
         return;
 
     auto lambda = clazy::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
@@ -91,5 +103,27 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     }
 
     if (found)
-        emitWarning(stmt->getLocStart(), "Pass a context object as 3rd connect parameter");
+        emitWarning(stmt, "Pass a context object as 3rd connect parameter");
+}
+
+void Connect3ArgLambda::processQTimer(FunctionDecl *func, Stmt *stmt)
+{
+    // Signatures to catch:
+    // QTimer::singleShot(int msec, Functor functor)
+    // QTimer::singleShot(int msec, Qt::TimerType timerType, Functor functor)
+
+
+    const uint numParams = func->getNumParams();
+    if (numParams == 2) {
+        if (func->getParamDecl(0)->getNameAsString() == "interval" &&
+            func->getParamDecl(1)->getNameAsString() == "slot") {
+            emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
+        }
+    } else if (numParams == 3) {
+        if (func->getParamDecl(0)->getNameAsString() == "interval"  &&
+            func->getParamDecl(1)->getNameAsString() == "timerType" &&
+            func->getParamDecl(2)->getNameAsString() == "slot") {
+            emitWarning(stmt, "Pass a context object as 3nd singleShot parameter");
+        }
+    }
 }

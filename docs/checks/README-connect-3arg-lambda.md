@@ -19,3 +19,6 @@ at least one QObject (other than the sender).
 
 It's very hard to not have any false-positives. If you find any you probably can just
 pass the sender again, as 3rd parameter.
+
+This will also warn if you pass a lambda to `QTimer::singleShot()` without
+using the overload that takes a context object.

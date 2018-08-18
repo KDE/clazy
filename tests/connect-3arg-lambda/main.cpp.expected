@@ -6,3 +6,5 @@ connect-3arg-lambda/main.cpp:46:9: warning: Pass a context object as 3rd connect
 connect-3arg-lambda/main.cpp:59:9: warning: Pass a context object as 3rd connect parameter [-Wclazy-connect-3arg-lambda]
 connect-3arg-lambda/main.cpp:63:9: warning: Pass a context object as 3rd connect parameter [-Wclazy-connect-3arg-lambda]
 connect-3arg-lambda/main.cpp:68:9: warning: Pass a context object as 3rd connect parameter [-Wclazy-connect-3arg-lambda]
+connect-3arg-lambda/main.cpp:81:5: warning: Pass a context object as 2nd singleShot parameter [-Wclazy-connect-3arg-lambda]
+connect-3arg-lambda/main.cpp:84:5: warning: Pass a context object as 3nd singleShot parameter [-Wclazy-connect-3arg-lambda]
