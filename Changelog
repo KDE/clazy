@@ -71,7 +71,6 @@
     skipped-base-class
     qstring-varargs
     fully-qualified-moc-types
-    unneeded-cast
     qt-keywords, with fixit included
     qhash-with-char-pointer-key
     wrong-qevent-cast

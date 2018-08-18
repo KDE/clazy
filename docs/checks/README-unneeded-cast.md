@@ -15,3 +15,7 @@ Also warns when you're using dynamic_cast for QObjects. qobject_cast is prefered
 
 To shut the warnings about using qobject_cast over dynamic cast you can set:
 `export CLAZY_EXTRA_OPTIONS="unneeded-cast-prefer-dynamic-cast-over-qobject"`
+
+NOTE: This check has many false-positives. For example, you might cast to base
+class to call a non-virtual method, or qobject_cast to itself to check if the
+`QObject` destructor is currently being run.

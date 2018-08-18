@@ -8,7 +8,6 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-tr-non-literal.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md
 )
 
 SET(README_LEVEL0_FILES
@@ -88,5 +87,6 @@ SET(README_LEVEL3_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-member.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-reserve-candidates.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-thread-with-slots.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md
 )
 

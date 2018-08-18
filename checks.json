@@ -398,7 +398,7 @@
         },
         {
             "name"  : "unneeded-cast",
-            "level" : -1,
+            "level" : 3,
             "categories" : ["cpp", "readability"],
             "options" : [
                 {

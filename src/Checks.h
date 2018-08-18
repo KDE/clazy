@@ -36,7 +36,6 @@
 #include "checks/manuallevel/qt4-qstring-from-array.h"
 #include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/tr-non-literal.h"
-#include "checks/manuallevel/unneeded-cast.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/connect-not-normalized.h"
@@ -104,6 +103,7 @@
 #include "checks/level3/detaching-member.h"
 #include "checks/level3/reserve-candidates.h"
 #include "checks/level3/thread-with-slots.h"
+#include "checks/level3/unneeded-cast.h"
 
 template <typename T>
 RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options = RegisteredCheck::Option_None)
@@ -125,7 +125,6 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
@@ -203,4 +202,5 @@ void CheckManager::registerChecks()
     registerCheck(check<DetachingMember>("detaching-member", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReserveCandidates>("reserve-candidates", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", CheckLevel3,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<UnneededCast>("unneeded-cast", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
 }

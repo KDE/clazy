@@ -225,7 +225,6 @@ clazy runs all checks from level1 by default.
     - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
     - [raw-environment-function](docs/checks/README-raw-environment-function.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)
-    - [unneeded-cast](docs/checks/README-unneeded-cast.md)
 
 - Checks from Level 0:
     - [connect-by-name](docs/checks/README-connect-by-name.md)
@@ -301,6 +300,7 @@ clazy runs all checks from level1 by default.
     - [detaching-member](docs/checks/README-detaching-member.md)
     - [reserve-candidates](docs/checks/README-reserve-candidates.md)
     - [thread-with-slots](docs/checks/README-thread-with-slots.md)
+    - [unneeded-cast](docs/checks/README-unneeded-cast.md)
 
 # Selecting which checks to enable
 
