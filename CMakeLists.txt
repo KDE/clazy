@@ -206,7 +206,7 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   install(FILES README.md COPYING-LGPL2.txt checks.json DESTINATION ${DOC_INSTALL_DIR})
 
   # Build docs
-  set(MAN_INSTALL_DIR "man/man1")
+  set(MAN_INSTALL_DIR "${SHARE_INSTALL_DIR}/man/man1")
   add_subdirectory(docs)
 
   if(CLAZY_BUILD_UTILS_LIB)
