@@ -86,5 +86,5 @@
   - unused-non-trivial-variable got user-blacklist and user-whitelist support
   - container-inside-loop is now a manual check instead of level2
   - HiddenLevel was renamed to ManualLevel
-  - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() without a context
+  - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction() without a context object
   - old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now

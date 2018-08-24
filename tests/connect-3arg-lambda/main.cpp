@@ -1,5 +1,5 @@
 #include <QtCore/QString>
-#include <QtCore/QObject>
+#include <QtWidgets/QMenu>
 #include <QtCore/QTimer>
 void another_global();
 void test()
@@ -83,4 +83,13 @@ void testTimer()
 
     QTimer::singleShot(0, Qt::CoarseTimer, [] {}); // Warn
     QTimer::singleShot(0, Qt::CoarseTimer, o, [] {}); // OK
+}
+
+void testQMenu()
+{
+    MyObject o;
+    QMenu menu;
+    menu.addAction("foo", &o, &MyObject::test); // OK
+    menu.addAction("foo", &o, []{}); // OK
+    menu.addAction("foo", []{}); // Warn
 }

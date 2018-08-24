@@ -35,6 +35,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void processQTimer(clang::FunctionDecl *, clang::Stmt *);
+    void processQMenu(clang::FunctionDecl *, clang::Stmt *);
 };
 
 #endif

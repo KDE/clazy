@@ -49,8 +49,14 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     if (numParams != 2 && numParams != 3)
         return;
 
-    if (fdecl->getQualifiedNameAsString() == "QTimer::singleShot") {
+    string qualifiedName = fdecl->getQualifiedNameAsString();
+    if (qualifiedName == "QTimer::singleShot") {
         processQTimer(fdecl, stmt);
+        return;
+    }
+
+    if (qualifiedName == "QMenu::addAction") {
+        processQMenu(fdecl, stmt);
         return;
     }
 
@@ -112,7 +118,6 @@ void Connect3ArgLambda::processQTimer(FunctionDecl *func, Stmt *stmt)
     // QTimer::singleShot(int msec, Functor functor)
     // QTimer::singleShot(int msec, Qt::TimerType timerType, Functor functor)
 
-
     const uint numParams = func->getNumParams();
     if (numParams == 2) {
         if (func->getParamDecl(0)->getNameAsString() == "interval" &&
@@ -123,7 +128,21 @@ void Connect3ArgLambda::processQTimer(FunctionDecl *func, Stmt *stmt)
         if (func->getParamDecl(0)->getNameAsString() == "interval"  &&
             func->getParamDecl(1)->getNameAsString() == "timerType" &&
             func->getParamDecl(2)->getNameAsString() == "slot") {
-            emitWarning(stmt, "Pass a context object as 3nd singleShot parameter");
+            emitWarning(stmt, "Pass a context object as 3rd singleShot parameter");
         }
     }
+}
+
+void Connect3ArgLambda::processQMenu(FunctionDecl *func, Stmt *stmt)
+{
+    // Signatures to catch:
+    // QMenu::addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0)
+    const uint numParams = func->getNumParams();
+    if (numParams == 3) {
+           if (func->getParamDecl(0)->getNameAsString() == "text"  &&
+               func->getParamDecl(1)->getNameAsString() == "slot" &&
+               func->getParamDecl(2)->getNameAsString() == "shortcut") {
+               emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
+           }
+       }
 }
