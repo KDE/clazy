@@ -76,3 +76,4 @@ old-style-connect/main.cpp:365:5: warning: Old Style Connect [-Wclazy-old-style-
 old-style-connect/main.cpp:366:5: warning: Old Style Connect [-Wclazy-old-style-connect]
 old-style-connect/main.cpp:372:5: warning: Old Style Connect [-Wclazy-old-style-connect]
 old-style-connect/main.cpp:372:5: warning: FixIt failed, requires manual intervention:  Fix it not implemented for disconnect with 3 args [-Wclazy-old-style-connect]
+old-style-connect/main.cpp:379:5: warning: Old Style Connect [-Wclazy-old-style-connect]

@@ -54,9 +54,10 @@ enum ConnectFlag {
     ConnectFlag_2ArgsDisconnect = 64, //disconnect(const QObject *receiver, const char *method = 0) const
     ConnectFlag_5ArgsConnect = 128, // connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
     ConnectFlag_4ArgsConnect = 256, // connect(const QObject *sender, const char *signal, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
-    ConnectFlag_OldStyleButNonLiteral = 512, // connect(foo, SIGNAL(bar()), foo, variableWithSlotName); // here the slot name isn't a literal
-    ConnectFlag_QStateAddTransition = 1024,
-    ConnectFlag_Bogus = 2048
+    ConnectFlag_OldStyleButNonLiteral = 0x200, // connect(foo, SIGNAL(bar()), foo, variableWithSlotName); // here the slot name isn't a literal
+    ConnectFlag_QStateAddTransition = 0x400,
+    ConnectFlag_QMenuAddAction = 0x800,
+    ConnectFlag_Bogus = 0x1000
 };
 
 static bool classIsOk(StringRef className)
@@ -95,7 +96,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         classification |= ConnectFlag_QTimerSingleShot;
     else if (methodName == "QState::addTransition")
         classification |= ConnectFlag_QStateAddTransition;
-
+    else if (methodName == "QMenu::addAction")
+        classification |= ConnectFlag_QMenuAddAction;
 
     if (classification == ConnectFlag_None)
         return classification;
@@ -146,6 +148,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         } else if ((classification & ConnectFlag_QStateAddTransition) && numLiterals != 1) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
         } else if ((classification & ConnectFlag_Disconnect) && numLiterals == 0) {
+            classification |= ConnectFlag_OldStyleButNonLiteral;
+        } else if ((classification & ConnectFlag_QMenuAddAction) && numLiterals != 1) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
         }
     }
@@ -389,6 +393,12 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             if ((classification & ConnectFlag_QTimerSingleShot) && methodDecl->getNumParams() > 0) {
                 string msg = "(QTimer) Fixit not implemented for slot with arguments, use a lambda";
+                queueManualFixitWarning(s, msg);
+                return {};
+            }
+
+            if ((classification & ConnectFlag_QMenuAddAction) && methodDecl->getNumParams() > 0) {
+                string msg = "(QMenu) Fixit not implemented for slot with arguments, use a lambda";
                 queueManualFixitWarning(s, msg);
                 return {};
             }
