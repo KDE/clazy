@@ -57,7 +57,8 @@ enum ConnectFlag {
     ConnectFlag_OldStyleButNonLiteral = 0x200, // connect(foo, SIGNAL(bar()), foo, variableWithSlotName); // here the slot name isn't a literal
     ConnectFlag_QStateAddTransition = 0x400,
     ConnectFlag_QMenuAddAction = 0x800,
-    ConnectFlag_Bogus = 0x1000
+    ConnectFlag_QMessageBoxOpen = 0x1000,
+    ConnectFlag_Bogus = 0x2000
 };
 
 static bool classIsOk(StringRef className)
@@ -98,6 +99,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         classification |= ConnectFlag_QStateAddTransition;
     else if (methodName == "QMenu::addAction")
         classification |= ConnectFlag_QMenuAddAction;
+    else if (methodName == "QMessageBox::open")
+        classification |= ConnectFlag_QMessageBoxOpen;
 
     if (classification == ConnectFlag_None)
         return classification;
@@ -150,6 +153,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         } else if ((classification & ConnectFlag_Disconnect) && numLiterals == 0) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
         } else if ((classification & ConnectFlag_QMenuAddAction) && numLiterals != 1) {
+            classification |= ConnectFlag_OldStyleButNonLiteral;
+        } else if ((classification & ConnectFlag_QMessageBoxOpen) && numLiterals != 1) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
         }
     }
@@ -294,6 +299,12 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     if (classification & ConnectFlag_3ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 3 args";
+        queueManualFixitWarning(call->getLocStart(), msg);
+        return {};
+    }
+
+    if (classification & ConnectFlag_QMessageBoxOpen) {
+        string msg = "Fix it not implemented for QMessageBox::open()";
         queueManualFixitWarning(call->getLocStart(), msg);
         return {};
     }

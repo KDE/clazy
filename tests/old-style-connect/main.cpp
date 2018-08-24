@@ -7,7 +7,7 @@
 #include <QtWidgets/QProgressDialog>
 #include <QtDBus/QDBusInterface>
 #include <QtWidgets/QMenu>
-
+#include <QtWidgets/QMessageBox>
 
 
 
@@ -372,12 +372,15 @@ void test1ArgDisconnect()
     o->disconnect(SIGNAL(destroyed())); 
 }
 
-void testQMenu()
+void testQMenuAndQMessageBox()
 {
     QMenu m;
     OtherObj o;
     m.addAction("test", &o, SLOT(otherSlot())); // Warn
     m.addAction("test", &o, &OtherObj::otherSlot); // OK
+    QMessageBox box;
+    box.open(); // OK
+    box.open(&o,SLOT(otherSlot())); // Warn
 }
 
 #include "main.moc"

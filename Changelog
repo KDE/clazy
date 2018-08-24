@@ -87,3 +87,4 @@
   - container-inside-loop is now a manual check instead of level2
   - HiddenLevel was renamed to ManualLevel
   - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() without a context
+  - old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now
