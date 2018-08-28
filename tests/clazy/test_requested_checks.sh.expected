@@ -101,6 +101,7 @@ Available checks and FixIts:
     - detaching-member
     - reserve-candidates
     - thread-with-slots
+    - unneeded-cast
 
 If nothing is specified, all checks from level0 and level1 will be run.
 
