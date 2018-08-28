@@ -152,7 +152,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
         return;
 
-    if (m_context->isHeaderFilteredOut(loc))
+    if (m_context->shouldIgnoreFile(loc))
         return;
 
     if (loc.isMacroID()) {

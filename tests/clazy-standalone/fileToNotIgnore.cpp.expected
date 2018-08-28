@@ -1,0 +1,1 @@
+clazy-standalone/fileToNotIgnore.cpp:5:5: warning: Use QDateTime::currentDateTimeUtc().toTime_t() instead [-Wclazy-qdatetime-utc]

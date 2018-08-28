@@ -65,6 +65,10 @@ from the main file of each translation unit are
 always displayed.)"),
                               cl::init(""), cl::cat(s_clazyCategory));
 
+static cl::opt<std::string> s_ignoreDirs("ignore-dirs", cl::desc(R"(Regular expression matching the names of the
+directories for which diagnostics should never be emitted. Useful for ignoring 3rdparty code.)"),
+                              cl::init(""), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
@@ -97,7 +101,7 @@ public:
         if (s_ignoreIncludedFiles.getValue())
             options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
-        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(), options);
+        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(), s_ignoreDirs.getValue(), options);
     }
 };
 

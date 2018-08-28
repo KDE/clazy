@@ -10,6 +10,21 @@
             "filename" : "header_filter2.cpp",
             "header_filter" : ".*_foo.*.h",
             "checks" : ["qdatetime-utc"]
+        },
+        {
+            "filename" : "header_filter2.cpp",
+            "header_filter" : ".*_foo.*.h",
+            "checks" : ["qdatetime-utc"]
+        },
+        {
+            "filename" : "fileToIgnore.cpp",
+            "ignore_dirs" : ".*fileToIgnore.*",
+            "checks" : ["qdatetime-utc"]
+        },
+        {
+            "filename" : "fileToNotIgnore.cpp",
+            "ignore_dirs" : ".*fileToIgnore.*",
+            "checks" : ["qdatetime-utc"]
         }
     ]
 }

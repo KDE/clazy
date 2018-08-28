@@ -189,11 +189,11 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     return std::unique_ptr<clang::ASTConsumer>(astConsumer.release());
 }
 
-static std::string getHeaderFilterEnv()
+static std::string getEnvVariable(const char *name)
 {
-    const char *headerFilter = getenv("CLAZY_HEADER_FILTER");
-    if (headerFilter)
-        return headerFilter;
+    const char *result = getenv(name);
+    if (result)
+        return result;
     else return std::string();
 }
 
@@ -205,7 +205,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::vector<std::string> args = args_;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(ci, getHeaderFilterEnv(), ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(ci, getEnvVariable("CLAZY_HEADER_FILTER"), getEnvVariable("CLAZY_IGNORE_DIRS"), ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -238,7 +238,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     if (parseArgument("ignore-included-files", args))
         m_options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
-    m_context = new ClazyContext(ci, /*headerFilter=*/ "", m_options);
+    m_context = new ClazyContext(ci, /*headerFilter=*/ "", /*ignoreDirs=*/ "", m_options);
 
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
@@ -343,18 +343,19 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
 }
 
-ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList, const string &headerFilter,
+ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList, const string &headerFilter, const string &ignoreDirs,
                                                    ClazyContext::ClazyOptions options)
     : clang::ASTFrontendAction()
     , m_checkList(checkList.empty() ? "level1" : checkList)
-    , m_headerFilter(headerFilter.empty() ? getHeaderFilterEnv() : headerFilter)
+    , m_headerFilter(headerFilter.empty() ? getEnvVariable("CLAZY_HEADER_FILTER") : headerFilter)
+    , m_ignoreDirs(ignoreDirs.empty() ? getEnvVariable("CLAZY_IGNORE_DIRS") : ignoreDirs)
     , m_options(options)
 {
 }
 
 unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    auto context = new ClazyContext(ci, m_headerFilter, m_options);
+    auto context = new ClazyContext(ci, m_headerFilter, m_ignoreDirs, m_options);
     auto astConsumer = new ClazyASTConsumer(context);
 
     auto cm = CheckManager::instance();

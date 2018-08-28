@@ -50,7 +50,7 @@ public:
 };
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
-                           const string &headerFilter, ClazyOptions opts)
+                           const string &headerFilter, const string &ignoreDirs, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
@@ -60,6 +60,9 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
 {
     if (!headerFilter.empty())
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
+
+    if (!ignoreDirs.empty())
+        ignoreDirsRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(ignoreDirs));
 
     const char *fixitsEnv = getenv("CLAZY_FIXIT");
     allFixitsEnabled = (options & ClazyOption_AllFixitsEnabled);

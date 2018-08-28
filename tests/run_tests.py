@@ -37,6 +37,7 @@ class Test:
         self.only_qt = False
         self.qt_developer = False
         self.header_filter = ""
+        self.ignore_dirs = ""
 
     def isScript(self):
         return self.filename.endswith(".sh")
@@ -159,7 +160,8 @@ def load_json(check_name):
                 test.qt_developer = t['qt_developer']
             if 'header_filter' in t:
                 test.header_filter = t['header_filter']
-
+            if 'ignore_dirs' in t:
+                test.ignore_dirs = t['ignore_dirs']
 
             if not test.checks:
                 test.checks.append(test.check.name)
@@ -232,6 +234,9 @@ def clazy_standalone_command(test, qt):
 
     if test.header_filter:
         result = " -header-filter " + test.header_filter + " " + result
+
+    if test.ignore_dirs:
+        result = " -ignore-dirs " + test.ignore_dirs + " " + result
 
     return result
 

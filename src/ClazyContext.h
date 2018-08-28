@@ -67,6 +67,7 @@ public:
 
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,
+                          const std::string &ignoreDirs,
                           ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
@@ -110,18 +111,42 @@ public:
         return clazy::contains(extraOptions, optionName);
     }
 
-    bool isHeaderFilteredOut(clang::SourceLocation loc) const
+    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc,  const clang::FileEntry **file) const
     {
+        if (!regex)
+            return false;
+
+        if (!(*file)) {
+            clang::FileID fid = sm.getDecomposedExpansionLoc(loc).first;
+            *file = sm.getFileEntryForID(fid);
+            if (!(*file)) {
+                return false;
+            }
+        }
+
+        StringRef fileName((*file)->getName());
+        return regex->match(fileName);
+    }
+
+    bool shouldIgnoreFile(clang::SourceLocation loc) const
+    {
+        // 1. Process the regexp that excludes files
+        const clang::FileEntry *file = nullptr;
+        if (ignoreDirsRegex) {
+            const bool matches = fileMatchesLoc(ignoreDirsRegex, loc, &file);
+            if (matches)
+                return true;
+        }
+
+        // 2. Process the regexp that includes files. Has lower priority.
         if (!headerFilterRegex || isMainFile(loc))
             return false;
 
-        clang::FileID fid = sm.getDecomposedExpansionLoc(loc).first;
-        const clang::FileEntry *file = sm.getFileEntryForID(fid);
+        const bool matches = fileMatchesLoc(headerFilterRegex, loc, &file);
         if (!file)
             return false;
 
-        StringRef fileName(file->getName());
-        return !headerFilterRegex->match(fileName);
+        return !matches;
     }
 
     bool isMainFile(clang::SourceLocation loc) const
@@ -156,6 +181,7 @@ public:
     clang::CXXMethodDecl *lastMethodDecl = nullptr;
     clang::Decl *lastDecl = nullptr;
     std::unique_ptr<llvm::Regex> headerFilterRegex;
+    std::unique_ptr<llvm::Regex> ignoreDirsRegex;
 };
 
 #endif

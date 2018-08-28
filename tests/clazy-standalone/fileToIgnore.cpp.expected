@@ -1,0 +1,2 @@
+clazy-standalone/header_filter_foo.h:5:5: warning: Use QDateTime::currentDateTimeUtc().toTime_t() instead [-Wclazy-qdatetime-utc]
+clazy-standalone/header_filter_bar.h:5:5: warning: Use QDateTime::currentDateTimeUtc().toTime_t() instead [-Wclazy-qdatetime-utc]
