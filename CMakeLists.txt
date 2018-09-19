@@ -195,7 +195,7 @@ else()
 endif()
 
 # Install the explanation README's
-set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/clazy/doc)
+set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/doc/clazy)
 file(GLOB README_LEVEL0_FILES src/checks/level0/README-*)
 file(GLOB README_LEVEL1_FILES src/checks/level1/README-*)
 file(GLOB README_LEVEL2_FILES src/checks/level2/README-*)
