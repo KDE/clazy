@@ -192,7 +192,7 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   endif()
 
   # Install the explanation README's
-  set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/clazy/doc)
+  set(DOC_INSTALL_DIR ${SHARE_INSTALL_DIR}/doc/clazy)
 
   include(${CMAKE_CURRENT_LIST_DIR}/readmes.cmake)
 
