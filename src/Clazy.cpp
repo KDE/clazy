@@ -62,17 +62,20 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
     : m_context(context)
 {
+    clang::ast_matchers::MatchFinder::MatchFinderOptions options;
+    m_matchFinder = new clang::ast_matchers::MatchFinder(options);
 }
 
 void ClazyASTConsumer::addCheck(CheckBase *check)
 {
-    check->registerASTMatchers(m_matchFinder);
+    check->registerASTMatchers(*m_matchFinder);
     m_createdChecks.push_back(check);
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
 {
     delete m_context;
+    delete m_matchFinder;
 }
 
 bool ClazyASTConsumer::VisitDecl(Decl *decl)
@@ -132,7 +135,7 @@ void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
     TraverseDecl(ctx.getTranslationUnitDecl());
 
     // Run our AstMatcher base checks:
-    m_matchFinder.matchAST(ctx);
+    m_matchFinder->matchAST(ctx);
 }
 
 static bool parseArgument(const string &arg, vector<string> &args)

@@ -108,7 +108,7 @@ private:
     clang::Stmt *lastStm = nullptr;
     ClazyContext *const m_context;
     CheckBase::List m_createdChecks;
-    clang::ast_matchers::MatchFinder m_matchFinder;
+    clang::ast_matchers::MatchFinder *m_matchFinder = nullptr;
 };
 
 #endif
