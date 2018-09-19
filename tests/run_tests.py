@@ -19,7 +19,7 @@ class Test:
     def __init__(self, check):
         self.filename = ""
         self.minimum_qt_version = 500
-        self.maximum_qt_version = 999
+        self.maximum_qt_version = 999999
         self.minimum_clang_version = 380
         self.compare_everything = False
         self.isFixedFile = False
@@ -62,7 +62,7 @@ class Check:
         self.name = name
         self.minimum_clang_version = 380 # clang 3.8.0
         self.minimum_qt_version = 500
-        self.maximum_qt_version = 999
+        self.maximum_qt_version = 999999
         self.enabled = True
         self.tests = []
 #-------------------------------------------------------------------------------
