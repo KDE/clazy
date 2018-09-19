@@ -72,14 +72,8 @@ if(MSVC)
   string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
 endif()
 
-string(REPLACE " " ";" LLVM_LIBS_LIST ${LLVM_LIBS}) # Transform into a list
+set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS})
 
-set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS_LIST})
-
-if(NOT APPLE AND NOT MINGW)
-  # Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
-  list(REMOVE_ITEM LLVM_LIBS_LIST "-lLLVMSupport")    # Remove element
-endif()
 
 if(MSVC)
   list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
@@ -89,7 +83,7 @@ include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
-macro(link_to_llvm name llvm_libs)
+macro(link_to_llvm name llvm_libs is_standalone)
   foreach(clang_lib ${CLANG_LIBS})
     if(MSVC)
       get_filename_component(LIB_FILENAME ${clang_lib} NAME)
@@ -105,7 +99,14 @@ macro(link_to_llvm name llvm_libs)
   endforeach()
 
   foreach(llvm_lib ${llvm_libs})
-    target_link_libraries(${name} ${llvm_lib})
+    if(NOT ${is_standalone} AND NOT APPLE AND NOT MINGW)
+        ## Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
+        if (NOT llvm_lib MATCHES ".*LLVMSupport.*")
+            target_link_libraries(${name} ${llvm_lib})
+        endif()
+    else()
+        target_link_libraries(${name} ${llvm_lib})
+    endif()
   endforeach()
 
   foreach(user_lib ${USER_LIBS})
@@ -137,7 +138,7 @@ macro(add_clang_plugin name)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
   endif()
 
-  link_to_llvm(${name} "${LLVM_LIBS_LIST}")
+  link_to_llvm(${name} "${LLVM_LIBS}" FALSE)
 
   if(MSVC)
     target_link_libraries(${name} ${CLANG_LIBRARY_IMPORT}) # Link against clang.exe to share the plugin registry
@@ -157,7 +158,7 @@ if(CLAZY_BUILD_UTILS_LIB)
 
   set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
   add_library(clazylib SHARED ${CLAZY_LIB_SRC})
-  link_to_llvm(clazylib "${LLVM_LIBS_LIST}")
+  link_to_llvm(clazylib "${LLVM_LIBS}" FALSE)
   generate_export_header(clazylib)
   set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
   install(TARGETS clazylib EXPORT LibClazyExport
@@ -259,6 +260,6 @@ else()
   target_link_libraries(clazy-standalone ClangLazy)
 endif()
 
-link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}")
+link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}" TRUE)
 
 install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
