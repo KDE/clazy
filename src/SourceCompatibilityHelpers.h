@@ -42,7 +42,7 @@ inline clang::SourceLocation getLocEnd(const T *t)
 #if LLVM_VERSION_MAJOR >= 8
     return t->getEndLoc();
 #else
-    return t->getLocEnd);
+    return t->getLocEnd();
 #endif
 }
 
