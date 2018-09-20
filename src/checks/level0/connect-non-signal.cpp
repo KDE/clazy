@@ -53,7 +53,7 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 
     CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/ 1);
     if (!method) {
-        emitInternalError(func->getLocStart(), "couldn't find method from pmf connect");
+        emitInternalError(getLocStart(func), "couldn't find method from pmf connect");
         return;
     }
 

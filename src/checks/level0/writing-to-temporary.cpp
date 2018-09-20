@@ -71,7 +71,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!callExpr)
         return;
 
-    if (shouldIgnoreFile(stmt->getLocStart()))
+    if (shouldIgnoreFile(getLocStart(stmt)))
         return;
 
     // For a chain like getFoo().setBar(), returns {setBar(), getFoo()}
@@ -114,5 +114,5 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (isDisallowedMethod(methodName))
         return;
 
-    emitWarning(stmt->getLocStart(), "Call to temporary is a no-op: " + methodName);
+    emitWarning(getLocStart(stmt), "Call to temporary is a no-op: " + methodName);
 }

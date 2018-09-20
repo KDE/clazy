@@ -79,6 +79,6 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         if (!boolExpr || boolExpr->getValue()) // if getValue() is true that's a return true, which is fine
             continue;
 
-        emitWarning(returnStmt->getLocStart(), "Return " + baseClassName + "::" + methodName + "() instead of false");
+        emitWarning(getLocStart(returnStmt), "Return " + baseClassName + "::" + methodName + "() instead of false");
     }
 }

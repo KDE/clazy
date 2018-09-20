@@ -48,7 +48,7 @@ struct StmtBodyRange
 
     bool isOutsideRange(clang::Stmt *stmt) const
     {
-        return isOutsideRange(stmt ? stmt->getLocStart() : clang::SourceLocation());
+        return isOutsideRange(stmt ? getLocStart(stmt) : clang::SourceLocation());
     }
 
     bool isOutsideRange(clang::SourceLocation loc) const

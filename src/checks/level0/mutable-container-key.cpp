@@ -64,5 +64,5 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
         return;
 
 
-    emitWarning(decl->getLocStart(), "Associative container key might be modified externally");
+    emitWarning(getLocStart(decl), "Associative container key might be modified externally");
 }

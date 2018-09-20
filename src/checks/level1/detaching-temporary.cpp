@@ -164,7 +164,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
 
     if (!error.empty())
-        emitWarning(stm->getLocStart(), error.c_str());
+        emitWarning(getLocStart(stm), error.c_str());
 }
 
 bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const

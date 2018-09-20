@@ -26,6 +26,7 @@
 #define MOREWARNINGS_UTILS_H
 
 #include "clazy_export.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/Basic/SourceManager.h>
 #include <clang/AST/DeclCXX.h>

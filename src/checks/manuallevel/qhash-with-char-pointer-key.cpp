@@ -50,7 +50,7 @@ void QHashWithCharPointerKey::VisitDecl(clang::Decl *decl)
     if (!qt.isNull() && qt->isPointerType()) {
         qt = TypeUtils::pointeeQualType(qt);
         if (!qt.isNull() && !qt->isPointerType() && qt->isCharType()) {
-            emitWarning(decl->getLocStart(), "Using QHash<const char *, T> is dangerous");
+            emitWarning(getLocStart(decl), "Using QHash<const char *, T> is dangerous");
         }
     }
 }

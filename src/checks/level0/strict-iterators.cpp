@@ -92,7 +92,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
 
     if (recordTo && clazy::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
-        string filename = m_sm.getFilename(implicitCast->getLocStart());
+        string filename = m_sm.getFilename(getLocStart(implicitCast));
         if (filename == "lalr.cpp") // Lots of false positives here, because of const_iterator -> iterator typedefs
             return false;
     }

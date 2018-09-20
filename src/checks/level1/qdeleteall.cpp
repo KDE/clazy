@@ -68,7 +68,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                             }
                         }
 
-                        emitWarning(p->getLocStart(), msg);
+                        emitWarning(getLocStart(p), msg);
                     }
                     break;
                 }

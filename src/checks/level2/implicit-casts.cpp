@@ -81,7 +81,7 @@ static bool iterateCallExpr(T* callExpr, CheckBase *check)
         if (!implicitCast || implicitCast->getCastKind() != clang::CK_PointerToBoolean)
             continue;
 
-        check->emitWarning(implicitCast->getLocStart(), "Implicit pointer to bool cast (argument " + std::to_string(i) + ')');
+        check->emitWarning(getLocStart(implicitCast), "Implicit pointer to bool cast (argument " + std::to_string(i) + ')');
         result = true;
     }
 
@@ -125,7 +125,7 @@ static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap
         if (Utils::insideCTORCall(parentMap, implicitCast, {"QAtomicInt", "QBasicAtomicInt"}))
             continue;
 
-        check->emitWarning(implicitCast->getLocStart(), "Implicit bool to int cast (argument " + std::to_string(i) + ')');
+        check->emitWarning(getLocStart(implicitCast), "Implicit bool to int cast (argument " + std::to_string(i) + ')');
         result = true;
     }
 
@@ -148,10 +148,10 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     if (isa<CXXOperatorCallExpr>(stmt))
         return;
 
-    if (isMacroToIgnore(stmt->getLocStart()))
+    if (isMacroToIgnore(getLocStart(stmt)))
         return;
 
-    if (shouldIgnoreFile(stmt->getLocStart()))
+    if (shouldIgnoreFile(getLocStart(stmt)))
         return;
 
     FunctionDecl *func = callExpr ? callExpr->getDirectCallee()

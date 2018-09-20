@@ -100,6 +100,6 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
 
     if (size_of_T > size_of_ptr && !shouldIgnoreVariable(varDecl)) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");
-        emitWarning(decl->getLocStart(), s.c_str());
+        emitWarning(getLocStart(decl), s.c_str());
     }
 }

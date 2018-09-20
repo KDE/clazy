@@ -133,12 +133,12 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 
 void CheckBase::emitWarning(const clang::Decl *d, const std::string &error, bool printWarningTag)
 {
-    emitWarning(d->getLocStart(), error, printWarningTag);
+    emitWarning(getLocStart(d), error, printWarningTag);
 }
 
 void CheckBase::emitWarning(const clang::Stmt *s, const std::string &error, bool printWarningTag)
 {
-    emitWarning(s->getLocStart(), error, printWarningTag);
+    emitWarning(getLocStart(s), error, printWarningTag);
 }
 
 void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag)
