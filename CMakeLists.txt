@@ -75,8 +75,6 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
     string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
   endif()
 
-  set(CLAZY_STANDALONE_LLVM_LIBS ${LLVM_LIBS})
-
   if(MSVC)
     list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
   endif()
@@ -86,7 +84,7 @@ include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
-macro(link_to_llvm name llvm_libs is_standalone)
+macro(link_to_llvm name is_standalone)
   foreach(clang_lib ${CLANG_LIBS})
     if(MSVC)
       get_filename_component(LIB_FILENAME ${clang_lib} NAME)
@@ -101,7 +99,7 @@ macro(link_to_llvm name llvm_libs is_standalone)
     target_link_libraries(${name} ${clang_lib})
   endforeach()
 
-  foreach(llvm_lib ${llvm_libs})
+  foreach(llvm_lib ${LLVM_LIBS})
     if(NOT ${is_standalone} AND NOT APPLE AND NOT MINGW)
         ## Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
         if (NOT llvm_lib MATCHES ".*LLVMSupport.*")
@@ -134,7 +132,7 @@ macro(add_clang_plugin name)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
   endif()
 
-  link_to_llvm(${name} "${LLVM_LIBS}" FALSE)
+  link_to_llvm(${name} FALSE)
 
   if(MSVC)
     target_link_libraries(${name} ${CLANG_LIBRARY_IMPORT}) # Link against clang.exe to share the plugin registry
@@ -154,7 +152,7 @@ if(CLAZY_BUILD_UTILS_LIB)
 
   set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
   add_library(clazylib SHARED ${CLAZY_LIB_SRC})
-  link_to_llvm(clazylib "${LLVM_LIBS}" FALSE)
+  link_to_llvm(clazylib FALSE)
   generate_export_header(clazylib)
   set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
   install(TARGETS clazylib EXPORT LibClazyExport
@@ -254,7 +252,7 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
     target_link_libraries(clazy-standalone ClangLazy)
   endif()
 
-  link_to_llvm(clazy-standalone "${CLAZY_STANDALONE_LLVM_LIBS}" TRUE)
+  link_to_llvm(clazy-standalone TRUE)
 
   install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 
