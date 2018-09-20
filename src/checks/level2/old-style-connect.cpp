@@ -67,16 +67,6 @@ static bool classIsOk(StringRef className)
     return className != "QDBusInterface";
 }
 
-static CharSourceRange getImmediateExpansionRange(SourceLocation macroLoc, const SourceManager &sm)
-{
-#if LLVM_VERSION_MAJOR >= 7
-    return sm.getImmediateExpansionRange(macroLoc);
-#else
-    auto pair = sm.getImmediateExpansionRange(macroLoc);
-    return CharSourceRange(SourceRange(pair.first, pair.second), false);
-#endif
-}
-
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
