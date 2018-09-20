@@ -118,10 +118,11 @@ if (LLVM_FOUND)
   )
 
   execute_process(
-    COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --libfiles
     OUTPUT_VARIABLE LLVM_LIBS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
+  string(REPLACE " " ";" LLVM_LIBS ${LLVM_LIBS}) # Make it consistent with --libs
 
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --system-libs
