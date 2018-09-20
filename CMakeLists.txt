@@ -70,16 +70,6 @@ endif()
 
 include(ClazySources.cmake)
 
-if (NOT CLAZY_BUILD_WITH_CLANG)
-  if(MSVC)
-    string(REPLACE "\\" "/" LLVM_LIBS ${LLVM_LIBS})
-  endif()
-
-  if(MSVC)
-    list(REMOVE_ITEM CLANG_LIBS "-lFrontend")
-  endif()
-endif()
-
 include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
@@ -100,7 +90,7 @@ macro(link_to_llvm name is_standalone)
   endforeach()
 
   foreach(llvm_lib ${LLVM_LIBS})
-    if(NOT ${is_standalone} AND NOT APPLE AND NOT MINGW)
+    if(NOT ${is_standalone} AND NOT APPLE AND NOT MINGW AND NOT MSVC)
         ## Don't link against LLVMSupport, causes: CommandLine Error: Option 'view-background' registered more than once!
         if (NOT llvm_lib MATCHES ".*LLVMSupport.*")
             target_link_libraries(${name} ${llvm_lib})
