@@ -140,7 +140,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
                 error = "Missing reference on non-trivial type (" + paramStr + ')';
             }
 
-            emitWarning(param->getLocStart(), error.c_str(), fixits);
+            emitWarning(getLocStart(param), error.c_str(), fixits);
         }
     }
 }
@@ -153,7 +153,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 void FunctionArgsByRef::VisitStmt(Stmt *stmt)
 {
     if (auto lambda = dyn_cast<LambdaExpr>(stmt)) {
-        if (!shouldIgnoreFile(stmt->getLocStart()))
+        if (!shouldIgnoreFile(getLocStart(stmt)))
             processFunction(lambda->getCallOperator());
     }
 }

@@ -65,7 +65,7 @@ bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &
 
     if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
         if (onlyBeforeThisLoc.isValid()) {
-            FullSourceLoc sourceLoc(stmt->getLocStart(), sm);
+            FullSourceLoc sourceLoc(getLocStart(stmt), sm);
             FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, sm);
             if (sourceLoc.isBeforeInTranslationUnitThan(otherSourceLoc))
                 return true;

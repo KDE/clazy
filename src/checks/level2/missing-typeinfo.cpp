@@ -64,7 +64,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
     const bool isTooBigForQList = isQList && clazy::isTooBigForQList(qt2, &m_astContext);
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
-        if (sm().isInSystemHeader(record->getLocStart()))
+        if (sm().isInSystemHeader(getLocStart(record)))
             return;
 
         std::string typeName = record->getName();

@@ -137,7 +137,7 @@ const CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocatio
 {
     for (const auto &it : m_specifiersMap) {
         const CXXRecordDecl *record = it.first;
-        if (record->getLocStart() < loc && loc < record->getLocEnd())
+        if (getLocStart(record) < loc && loc < getLocEnd(record))
             return record;
     }
     return nullptr;
@@ -171,13 +171,13 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
         if (!accessSpec || accessSpec->getDeclContext() != record)
             continue;
         ClazySpecifierList &specifiers = entryForClassDefinition(record);
-        sorted_insert(specifiers, {accessSpec->getLocStart(), accessSpec->getAccess(), QtAccessSpecifier_None }, sm);
+        sorted_insert(specifiers, {getLocStart(accessSpec), accessSpec->getAccess(), QtAccessSpecifier_None }, sm);
     }
 }
 
 QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMethodDecl *method) const
 {
-    if (!method || method->getLocStart().isMacroID())
+    if (!method || getLocStart(method).isMacroID())
         return QtAccessSpecifier_Unknown;
 
     // We want the declaration that's inside class {}, not the ones that are also a method definition
@@ -188,7 +188,7 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
         return QtAccessSpecifier_None;
 
-    const SourceLocation methodLoc = method->getLocStart();
+    const SourceLocation methodLoc = getLocStart(method);
 
     // Process Q_SIGNAL:
     for (auto signalLoc : m_preprocessorCallbacks->m_individualSignals) {

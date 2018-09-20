@@ -28,6 +28,7 @@
 #include "clazy_export.h"
 
 #include "clazy_stl.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>

@@ -67,16 +67,6 @@ static bool classIsOk(StringRef className)
     return className != "QDBusInterface";
 }
 
-static CharSourceRange getImmediateExpansionRange(SourceLocation macroLoc, const SourceManager &sm)
-{
-#if LLVM_VERSION_MAJOR >= 7
-    return sm.getImmediateExpansionRange(macroLoc);
-#else
-    auto pair = sm.getImmediateExpansionRange(macroLoc);
-    return CharSourceRange(SourceRange(pair.first, pair.second), false);
-#endif
-}
-
 OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -136,7 +126,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         // It's old style, but check if all macros are literals
         int numLiterals = 0;
         for (auto arg : connectCall->arguments()) {
-            auto argLocation = arg->getLocStart();
+            auto argLocation = getLocStart(arg);
             string dummy;
             if (isSignalOrSlot(argLocation, dummy))
                 ++numLiterals;
@@ -215,11 +205,11 @@ void OldStyleConnect::VisitStmt(Stmt *s)
         return;
 
     if (classification & ConnectFlag_Bogus) {
-        emitWarning(s->getLocStart(), "Internal error");
+        emitWarning(getLocStart(s), "Internal error");
         return;
     }
 
-    emitWarning(s->getLocStart(), "Old Style Connect", fixits(classification, call));
+    emitWarning(getLocStart(s), "Old Style Connect", fixits(classification, call));
 }
 
 void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
@@ -292,20 +282,20 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 2 args";
-        queueManualFixitWarning(call->getLocStart(), msg);
+        queueManualFixitWarning(getLocStart(call), msg);
         return {};
     }
 
     if (classification & ConnectFlag_3ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 3 args";
-        queueManualFixitWarning(call->getLocStart(), msg);
+        queueManualFixitWarning(getLocStart(call), msg);
         return {};
     }
 
     if (classification & ConnectFlag_QMessageBoxOpen) {
         string msg = "Fix it not implemented for QMessageBox::open()";
-        queueManualFixitWarning(call->getLocStart(), msg);
+        queueManualFixitWarning(getLocStart(call), msg);
         return {};
     }
 
@@ -315,7 +305,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     string macroName;
     CXXMethodDecl *senderMethod = nullptr;
     for (auto arg : call->arguments()) {
-        SourceLocation s = arg->getLocStart();
+        SourceLocation s = getLocStart(arg);
         static const CXXRecordDecl *lastRecordDecl = nullptr;
         if (isSignalOrSlot(s, macroName)) {
             macroNum++;
@@ -425,13 +415,13 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             string qualifiedName;
             auto contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
-            const bool isInInclude = sm().getMainFileID() != sm().getFileID(call->getLocStart());
+            const bool isInInclude = sm().getMainFileID() != sm().getFileID(getLocStart(call));
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, call->getLocStart(), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, getLocStart(call), !isInInclude); // (In includes ignore using directives)
             }
 
             CharSourceRange expansionRange = getImmediateExpansionRange(s, sm());
@@ -451,7 +441,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = clazy::locForNextToken(&m_astContext, arg->getLocStart(), tok::comma);
+                    auto endLoc = clazy::locForNextToken(&m_astContext, getLocStart(arg), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

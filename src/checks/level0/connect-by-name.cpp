@@ -56,7 +56,7 @@ void ConnectByName::VisitDecl(clang::Decl *decl)
             if (qst == QtAccessSpecifier_Slot) {
                 auto tokens = clazy::splitString(name, '_');
                 if (tokens.size() == 3) {
-                    emitWarning(method->getLocStart(), "Slots named on_foo_bar are error prone");
+                    emitWarning(method, "Slots named on_foo_bar are error prone");
                 }
             }
         }

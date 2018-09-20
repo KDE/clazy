@@ -68,5 +68,5 @@ void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingCall1(call1) || !isInterestingCall2(call2))
         return;
 
-    emitWarning(stmt->getLocStart(), "unneeded allocation");
+    emitWarning(getLocStart(stmt), "unneeded allocation");
 }

@@ -180,7 +180,7 @@ inline void printRange(const clang::SourceManager &sm, clang::SourceRange range,
 inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, bool newLine = true)
 {
     if (s)
-        printLocation(sm, s->getLocStart(), newLine);
+        printLocation(sm, getLocStart(s), newLine);
 }
 
 inline void printLocation(const clang::PresumedLoc &loc, bool newLine = true)
@@ -300,8 +300,8 @@ inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
     if (!s)
         return;
 
-    llvm::errs() << "Start=" << s->getLocStart().printToString(sm)
-                 << "; end=" << s->getLocStart().printToString(sm)
+    llvm::errs() << "Start=" << getLocStart(s).printToString(sm)
+                 << "; end=" << getLocStart(s).printToString(sm)
                  << "\n";
 
     for (auto child : s->children())

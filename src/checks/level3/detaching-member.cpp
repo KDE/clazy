@@ -52,7 +52,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (!memberCall && !operatorExpr)
         return;
 
-    if (shouldIgnoreFile(stm->getLocStart()))
+    if (shouldIgnoreFile(getLocStart(stm)))
         return;
 
     CXXMethodDecl *method = nullptr;
@@ -134,5 +134,5 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    emitWarning(stm->getLocStart(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
+    emitWarning(getLocStart(stm), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }

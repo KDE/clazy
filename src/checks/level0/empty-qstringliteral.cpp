@@ -56,7 +56,7 @@ void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
     if (!literal || literal->getByteLength() != 0)
         return;
 
-    if (!stmt->getLocStart().isMacroID())
+    if (!getLocStart(stmt).isMacroID())
         return;
 
     emitWarning(stmt, "Use QString instead of an empty QStringLiteral");

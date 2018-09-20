@@ -46,7 +46,7 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
             const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
             if (hasCopyCtor && !hasCopyAssignOp && !isBlacklisted(record)) {
                 string msg = "Using assign operator but class " + record->getQualifiedNameAsString() + " has copy-ctor but no assign operator";
-                emitWarning(s->getLocStart(), msg);
+                emitWarning(getLocStart(s), msg);
             }
         }
     } else if (auto ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
@@ -57,7 +57,7 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
             const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
             if (!hasCopyCtor && hasCopyAssignOp && !isBlacklisted(record)) {
                 string msg = "Using copy-ctor but class " + record->getQualifiedNameAsString() + " has a trivial copy-ctor but non trivial assign operator";
-                emitWarning(s->getLocStart(), msg);
+                emitWarning(getLocStart(s), msg);
             }
         }
     }

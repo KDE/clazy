@@ -64,5 +64,5 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
     if (Utils::isPassedToFunction(StmtBodyRange(loopStmt), varDecl, true))
         return;
 
-    emitWarning(stmt->getLocStart(), "container inside loop causes unneeded allocations");
+    emitWarning(getLocStart(stmt), "container inside loop causes unneeded allocations");
 }

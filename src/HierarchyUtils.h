@@ -229,7 +229,7 @@ std::vector<T*> getStatements(clang::Stmt *body,
     for (auto child : body->children()) {
         if (!child) continue; // can happen
         if (T *childT = clang::dyn_cast<T>(child)) {
-            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), child->getLocStart())))
+            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), getLocStart(child))))
                 statements.push_back(childT);
         }
 

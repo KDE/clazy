@@ -171,7 +171,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
 
             const string paramStr = param->getType().getAsString();
             string error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
-            emitWarning(param->getLocStart(), error.c_str(), fixits);
+            emitWarning(getLocStart(param), error.c_str(), fixits);
         }
     }
 }
@@ -183,15 +183,15 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
     qt.removeLocalConst();
     const string typeName = qt.getAsString(PrintingPolicy(lo()));
     string replacement = typeName + ' ' + string(param->getName());
-    SourceLocation startLoc = param->getLocStart();
-    SourceLocation endLoc = param->getLocEnd();
+    SourceLocation startLoc = getLocStart(param);
+    SourceLocation endLoc = getLocEnd(param);
 
     const int numRedeclarations = std::distance(func->redecls_begin(), func->redecls_end());
     const bool definitionIsAlsoDeclaration = numRedeclarations == 1;
     const bool isDeclarationButNotDefinition = !func->doesThisDeclarationHaveABody();
 
     if (param->hasDefaultArg() && (isDeclarationButNotDefinition || definitionIsAlsoDeclaration)) {
-        endLoc = param->getDefaultArg()->getLocStart().getLocWithOffset(-1);
+        endLoc = getLocStart(param->getDefaultArg()).getLocWithOffset(-1);
         replacement += " =";
     }
 

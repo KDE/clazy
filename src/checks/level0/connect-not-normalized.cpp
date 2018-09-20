@@ -69,7 +69,7 @@ bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
     if (original == normalized)
         return false;
 
-    emitWarning(expr->getLocStart(), "Signature is not normalized. Use " + normalized + " instead of " + original);
+    emitWarning(expr, "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
 }
 
@@ -112,6 +112,6 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     normalized.erase(0, 1);
     original.erase(0, 1);
 
-    emitWarning(callExpr->getLocStart(), "Signature is not normalized. Use " + normalized + " instead of " + original);
+    emitWarning(getLocStart(callExpr), "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
 }

@@ -59,7 +59,7 @@ bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
     if (!isDynamicCast && !isStaticCast)
         return false;
 
-    if (namedCast->getLocStart().isMacroID())
+    if (getLocStart(namedCast).isMacroID())
         return false;
 
     CXXRecordDecl *castFrom = namedCast ? Utils::namedCastInnerDecl(namedCast) : nullptr;
@@ -80,7 +80,7 @@ bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
     }
 
     if (isDynamicCast && !isOptionSet("prefer-dynamic-cast-over-qobject") && clazy::isQObject(castFrom))
-        emitWarning(namedCast->getLocStart(), "Use qobject_cast rather than dynamic_cast");
+        emitWarning(getLocStart(namedCast), "Use qobject_cast rather than dynamic_cast");
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);
     if (!castTo)
@@ -106,10 +106,10 @@ bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl 
     castTo = castTo->getCanonicalDecl();
 
     if (castFrom == castTo) {
-        emitWarning(stmt->getLocStart(), "Casting to itself");
+        emitWarning(getLocStart(stmt), "Casting to itself");
         return true;
     } else if (TypeUtils::derivesFrom(/*child=*/castFrom, castTo)) {
-        emitWarning(stmt->getLocStart(), "explicitly casting to base is unnecessary");
+        emitWarning(getLocStart(stmt), "explicitly casting to base is unnecessary");
         return true;
     }
 

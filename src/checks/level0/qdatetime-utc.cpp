@@ -71,9 +71,9 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (isFixitEnabled()) {
         const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
         if (!success) {
-            queueManualFixitWarning(secondCall->getLocStart());
+            queueManualFixitWarning(getLocStart(secondCall));
         }
     }
 
-    emitWarning(stmt->getLocStart(), "Use QDateTime" + replacement + " instead", fixits);
+    emitWarning(getLocStart(stmt), "Use QDateTime" + replacement + " instead", fixits);
 }

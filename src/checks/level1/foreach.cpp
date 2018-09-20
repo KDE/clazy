@@ -92,14 +92,14 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     StringRef containerClassName = clazy::name(rootBaseClass);
     const bool isQtContainer = clazy::isQtIterableClass(containerClassName);
     if (containerClassName.empty()) {
-        emitWarning(stmt->getLocStart(), "internal error, couldn't get class name of foreach container, please report a bug");
+        emitWarning(getLocStart(stmt), "internal error, couldn't get class name of foreach container, please report a bug");
         return;
     } else {
         if (!isQtContainer) {
-            emitWarning(stmt->getLocStart(), "foreach with STL container causes deep-copy (" + rootBaseClass->getQualifiedNameAsString() + ')');
+            emitWarning(getLocStart(stmt), "foreach with STL container causes deep-copy (" + rootBaseClass->getQualifiedNameAsString() + ')');
             return;
         } else if (containerClassName == "QVarLengthArray") {
-            emitWarning(stmt->getLocStart(), "foreach with QVarLengthArray causes deep-copy");
+            emitWarning(getLocStart(stmt), "foreach with QVarLengthArray causes deep-copy");
             return;
         }
     }
@@ -115,7 +115,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 
     // Now look inside the for statement for detachments
     if (containsDetachments(m_lastForStmt, valueDecl)) {
-        emitWarning(stmt->getLocStart(), "foreach container detached");
+        emitWarning(getLocStart(stmt), "foreach container detached");
     }
 }
 
@@ -157,7 +157,7 @@ void Foreach::checkBigTypeMissingRef()
             return;
         }
 
-        emitWarning(varDecl->getLocStart(), error.c_str());
+        emitWarning(getLocStart(varDecl), error.c_str());
     }
 }
 

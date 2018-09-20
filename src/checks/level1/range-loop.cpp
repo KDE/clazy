@@ -71,11 +71,11 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record)))
         return;
 
-    StmtBodyRange bodyRange(nullptr, &sm(), rangeLoop->getLocStart());
+    StmtBodyRange bodyRange(nullptr, &sm(), getLocStart(rangeLoop));
     if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange))
         return;
 
-    emitWarning(rangeLoop->getLocStart(), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
+    emitWarning(getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
 }
 
 void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
@@ -93,6 +93,6 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(varDecl->getLocStart(), msg.c_str());
+        emitWarning(getLocStart(varDecl), msg.c_str());
     }
 }
