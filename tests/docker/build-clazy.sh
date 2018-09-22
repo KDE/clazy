@@ -19,4 +19,7 @@ then
     exit 1;
 fi
 
+export PATH=$CLAZY_PREFIX/bin:$PATH
+export LD_LIBRARY_PATH=$CLAZY_PREFIX/lib:$CLAZY_PREFIX/lib64:$LD_LIBRARY_PATH
+
 cd /root/clazy && git pull && git checkout $BRANCH && cmake -DCMAKE_INSTALL_PREFIX=$CLAZY_PREFIX -DCMAKE_BUILD_TYPE=RelWithDebInfo . && make $J_FLAG && make install && cd tests && ./run_tests.py

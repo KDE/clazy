@@ -10,7 +10,7 @@ BUILD_SCRIPT = '/usr/bin/build-clazy.sh'
 class DockerTest:
     def __init__(self, name):
         self.name = name
-
+        self.prefix = '/opt/clazy'
 
 def read_json_config():
     dockerTests = []
@@ -34,7 +34,7 @@ def read_json_config():
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s' % (dockerTest.name, BUILD_SCRIPT, BRANCH, MAKEFLAGS)
+    cmd = 'docker run -i -t %s sh %s %s %s %s' % (dockerTest.name, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix)
     print cmd
     return os.system(cmd) == 0
 
