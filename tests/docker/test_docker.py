@@ -12,6 +12,7 @@ class DockerTest:
         self.name = name
         self.url = url
         self.prefix = '/opt/clazy'
+        self.llvm_root = ''
 
 def read_json_config():
     dockerTests = []
@@ -31,13 +32,16 @@ def read_json_config():
                 dockerTest = DockerTest(test['name'], test['url'])
                 if 'prefix' in test:
                     dockerTest.prefix = test['prefix']
+                if 'llvm_root' in test:
+                    dockerTest.llvm_root = test['llvm_root']
+
                 dockerTests.append(dockerTest)
     return dockerTests
 
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix)
+    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix dockerTest.llvm_root)
     print cmd
     return os.system(cmd) == 0
 

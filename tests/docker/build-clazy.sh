@@ -3,6 +3,7 @@
 BRANCH=$1
 J_FLAG=$2
 CLAZY_PREFIX=$3
+LLVM_ROOT=$3
 
 if [ -z "$1" ]
 then
