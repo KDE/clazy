@@ -30,6 +30,12 @@ add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
 option(CLAZY_BUILD_UTILS_LIB "Enable this option to build a library so you can reuse clazy's utility functions" OFF)
+option(CLAZY_AST_MATCHERS_CRASH_WORKAROUND "Disable AST Matchers if being built with clang. See bug #392223" ON)
+
+if (CLAZY_AST_MATCHERS_CRASH_WORKAROUND AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    message("Enabling AST Matchers workaround. Consider building with gcc instead. See bug #392223.")
+    add_definitions(-DCLAZY_DISABLE_AST_MATCHERS)
+endif()
 
 if(CLAZY_BUILD_UTILS_LIB)
   add_definitions(-DCLAZY_BUILD_UTILS_LIB)
