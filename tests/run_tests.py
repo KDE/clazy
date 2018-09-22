@@ -393,6 +393,12 @@ def extract_word(word, in_file, out_file):
     in_f.close()
     out_f.close()
 
+def print_file(filename):
+    f = open(filename, 'r')
+    print f.read()
+    f.close()
+
+
 def run_unit_test(test, is_standalone):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
@@ -441,6 +447,10 @@ def run_unit_test(test, is_standalone):
 
     if (not cmd_success and not must_fail) or (cmd_success and must_fail):
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
+        print "-------------------"
+        print "Contents of %s:" % output_file
+        print_file(output_file)
+        print "-------------------"
         print
         return False
 
