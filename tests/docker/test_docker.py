@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-import sys, os, json
+import sys, os, json, argparse
 
 JSON_CONFIG_FILENAME = os.path.dirname(sys.argv[0]) + '/conf.json'
 MAKEFLAGS = "-j12"
@@ -41,13 +41,22 @@ def run_test(dockerTest):
 
 dockerTests = read_json_config()
 
-if len(sys.argv) > 1:
-    BRANCH = sys.argv[1]
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-b", "--branch")
+parser.add_argument("docker_names", nargs='*', help="Names of the containers to run. Defaults to running all docker containers.")
+
+args = parser.parse_args()
+
+if args.branch is None:
+    BRANCH = 'master'
 
 results = {}
 success = True
 for test in dockerTests:
+    if args.docker_names and test.name not in args.docker_names:
+        continue
+
     results[test.name] = run_test(test)
     success = success and results[test.name]
 
