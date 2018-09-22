@@ -8,9 +8,11 @@ BRANCH = 'master'
 BUILD_SCRIPT = '/root/clazy/tests/docker/build-clazy.sh'
 
 class DockerTest:
-    def __init__(self, name):
+    def __init__(self, name, url):
         self.name = name
+        self.url = url
         self.prefix = '/opt/clazy'
+        self.llvm_root = ''
 
 def read_json_config():
     dockerTests = []
@@ -26,15 +28,20 @@ def read_json_config():
     if 'tests' in decoded:
         tests = decoded['tests']
         for test in tests:
-            if 'name' in test:
-                dockerTest = DockerTest(test['name'])
+            if 'name' in test and 'url' in test:
+                dockerTest = DockerTest(test['name'], test['url'])
+                if 'prefix' in test:
+                    dockerTest.prefix = test['prefix']
+                if 'llvm_root' in test:
+                    dockerTest.llvm_root = test['llvm_root']
+
                 dockerTests.append(dockerTest)
     return dockerTests
 
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s %s' % (dockerTest.name, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix)
+    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix dockerTest.llvm_root)
     print cmd
     return os.system(cmd) == 0
 

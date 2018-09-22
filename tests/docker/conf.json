@@ -1,16 +1,35 @@
 {
     "tests" : [
         {
-            "name" : "iamsergio/clazy-ubuntu-17.04"
+            "name" : "ubuntu-17.04",
+            "url" : "iamsergio/clazy-ubuntu-17.04",
+            "prefix" : "/usr/"
         },
         {
-            "name" : "iamsergio/clazy-ubuntu-16.04"
+            "name" : "ubuntu-16.04",
+            "url" : "iamsergio/clazy-ubuntu-16.04",
+            "prefix" : "/usr/"
         },
         {
-            "name" : "iamsergio/clazy-opensuse-tumbleweed"
+            "name" : "opensuse-tumbleweed",
+            "url" : "iamsergio/clazy-opensuse-tumbleweed",
+            "prefix" : "/usr/"
         },
         {
-            "name" : "iamsergio/clazy-archlinux"
+            "name" : "archlinux",
+            "url" : "iamsergio/clazy-archlinux",
+            "prefix" : "/usr/"
+        },
+        {
+            "name" : "debian-unstable-llvm6",
+            "url" : "iamsergio/clazy-debian-unstable",
+            "prefix" : "/usr/lib/llvm-6.0/"
+        },
+        {
+            "name" : "debian-unstable-llvm7",
+            "url" : "iamsergio/clazy-debian-unstable",
+            "prefix" : "/usr/lib/llvm-7.0/",
+            "llvm_root" : "/usr/lib/llvm-7.0/"
         }
     ]
 }
