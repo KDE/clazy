@@ -29,7 +29,8 @@
             "name" : "debian-unstable-llvm7",
             "url" : "iamsergio/clazy-debian-unstable",
             "prefix" : "/usr/lib/llvm-7/",
-            "llvm_root" : "/usr/lib/llvm-7/"
+            "llvm_root" : "/usr/lib/llvm-7/",
+            "ignore_checks" : "qcolor-from-literal"
         }
     ]
 }
