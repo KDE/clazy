@@ -5,7 +5,7 @@ import sys, os, json, argparse
 JSON_CONFIG_FILENAME = os.path.dirname(sys.argv[0]) + '/conf.json'
 MAKEFLAGS = "-j12"
 BRANCH = 'master'
-BUILD_SCRIPT = '/usr/bin/build-clazy.sh'
+BUILD_SCRIPT = '/root/clazy/tests/docker/build-clazy.sh'
 
 class DockerTest:
     def __init__(self, name):
