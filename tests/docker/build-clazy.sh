@@ -4,7 +4,7 @@ BRANCH=$1
 J_FLAG=$2
 CLAZY_PREFIX=$3
 IGNORE_CHECKS=$4
-LLVM_ROOT = $5
+LLVM_ROOT=$5
 
 if [ -z "$1" ]
 then
@@ -23,9 +23,9 @@ fi
 
 if [ "$IGNORE_CHECKS" = "none" ]
 then
-    IGNORE_CHECKS = ""
+    IGNORE_CHECKS=""
 else
-    IGNORE_CHECKS = " --exclude ${IGNORE_CHECKS} "
+    IGNORE_CHECKS=" --exclude ${IGNORE_CHECKS} "
 fi
 
 if [ "$5" = "none" ]
