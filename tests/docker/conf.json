@@ -3,34 +3,28 @@
         {
             "name" : "ubuntu-17.04",
             "url" : "iamsergio/clazy-ubuntu-17.04",
-            "prefix" : "/usr/"
-        },
-        {
-            "name" : "ubuntu-16.04",
-            "url" : "iamsergio/clazy-ubuntu-16.04",
-            "prefix" : "/usr/"
+            "prefix" : "/usr/",
+            "comment" : "llvm-4;Qt-5.7.1"
         },
         {
             "name" : "opensuse-tumbleweed",
             "url" : "iamsergio/clazy-opensuse-tumbleweed",
-            "prefix" : "/usr/"
-        },
-        {
-            "name" : "archlinux",
-            "url" : "iamsergio/clazy-archlinux",
-            "prefix" : "/usr/"
+            "prefix" : "/usr/",
+            "comment" : "llvm-6;Qt-5.11.1"
         },
         {
             "name" : "debian-unstable-llvm6",
             "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-6/"
+            "prefix" : "/usr/lib/llvm-6/",
+            "comment" : "llvm6;Qt-5.11.1"
         },
         {
             "name" : "debian-unstable-llvm7",
             "url" : "iamsergio/clazy-debian-unstable",
             "prefix" : "/usr/lib/llvm-7/",
             "llvm_root" : "/usr/lib/llvm-7/",
-            "ignore_checks" : "qcolor-from-literal"
+            "ignore_checks" : "qcolor-from-literal",
+            "comment" : "llvm7;Qt-5.11.1"
         }
     ]
 }
