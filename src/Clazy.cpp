@@ -62,12 +62,17 @@ static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
     : m_context(context)
 {
+#ifndef CLAZY_DISABLE_AST_MATCHERS
+    m_matchFinder = new clang::ast_matchers::MatchFinder();
+#endif
 }
 
 void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &check)
 {
     CheckBase *checkBase = check.first;
-    checkBase->registerASTMatchers(m_matchFinder);
+#ifndef CLAZY_DISABLE_AST_MATCHERS
+    checkBase->registerASTMatchers(*m_matchFinder);
+#endif
     //m_createdChecks.push_back(checkBase);
 
     const RegisteredCheck &rcheck = check.second;
@@ -77,10 +82,14 @@ void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &c
 
     if (rcheck.options & RegisteredCheck::Option_VisitsDecls)
         m_checksToVisitDecls.push_back(checkBase);
+
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
 {
+#ifndef CLAZY_DISABLE_AST_MATCHERS
+    delete m_matchFinder;
+#endif
     delete m_context;
 }
 
@@ -152,8 +161,10 @@ void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
     // Run our RecursiveAstVisitor based checks:
     TraverseDecl(ctx.getTranslationUnitDecl());
 
+#ifndef CLAZY_DISABLE_AST_MATCHERS
     // Run our AstMatcher base checks:
-    m_matchFinder.matchAST(ctx);
+    m_matchFinder->matchAST(ctx);
+#endif
 }
 
 static bool parseArgument(const string &arg, vector<string> &args)

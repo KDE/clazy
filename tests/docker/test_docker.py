@@ -41,7 +41,7 @@ def read_json_config():
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix dockerTest.llvm_root)
+    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix, dockerTest.llvm_root)
     print cmd
     return os.system(cmd) == 0
 
@@ -57,6 +57,8 @@ args = parser.parse_args()
 
 if args.branch is None:
     BRANCH = 'master'
+else:
+    BRANCH = args.branch
 
 results = {}
 success = True
