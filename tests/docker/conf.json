@@ -21,9 +21,15 @@
             "prefix" : "/usr/"
         },
         {
-            "name" : "debian-unstable",
+            "name" : "debian-unstable-llvm6",
             "url" : "iamsergio/clazy-debian-unstable",
             "prefix" : "/usr/lib/llvm-6.0/"
+        },
+        {
+            "name" : "debian-unstable-llvm7",
+            "url" : "iamsergio/clazy-debian-unstable",
+            "prefix" : "/usr/lib/llvm-7.0/",
+            "llvm_root" : "/usr/lib/llvm-7.0/"
         }
     ]
 }
