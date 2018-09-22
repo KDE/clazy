@@ -57,6 +57,8 @@ args = parser.parse_args()
 
 if args.branch is None:
     BRANCH = 'master'
+else:
+    BRANCH = args.branch
 
 results = {}
 success = True
