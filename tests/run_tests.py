@@ -300,6 +300,7 @@ parser.add_argument("-v", "--verbose", action='store_true')
 parser.add_argument("--no-standalone", action='store_true', help="Don\'t run clazy-standalone")
 parser.add_argument("--only-standalone", action='store_true', help='Only run clazy-standalone')
 parser.add_argument("--dump-ast", action='store_true', help='Dump a unit-test AST to file')
+parser.add_argument("--exclude", help='Comma separated list of checks to ignore')
 parser.add_argument("check_names", nargs='*', help="The name of the check who's unit-tests will be run. Defaults to running all checks.")
 args = parser.parse_args()
 
@@ -320,6 +321,8 @@ _lock = threading.Lock()
 _was_successful = True
 _qt5_installation = find_qt_installation(5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake"])
 _qt4_installation = find_qt_installation(4, ["QT_SELECT=4 qmake", "qmake-qt4", "qmake"])
+_excluded_checks = args.exclude.split(',') if args.exclude is not None else []
+
 #-------------------------------------------------------------------------------
 # utility functions #2
 
@@ -537,7 +540,7 @@ for check_name in requested_check_names:
 if not requested_check_names:
     requested_check_names = all_check_names
 
-requested_checks = filter(lambda check: check.name in requested_check_names, all_checks)
+requested_checks = filter(lambda check: check.name in requested_check_names and check.name not in _excluded_checks, all_checks)
 requested_checks = filter(lambda check: check.minimum_clang_version <= CLANG_VERSION, requested_checks)
 
 threads = []
