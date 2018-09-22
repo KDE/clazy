@@ -28,6 +28,8 @@ def read_json_config():
         for test in tests:
             if 'name' in test:
                 dockerTest = DockerTest(test['name'])
+                if 'prefix' in test:
+                    dockerTest.prefix = test['prefix']
                 dockerTests.append(dockerTest)
     return dockerTests
 
