@@ -5,7 +5,7 @@
         {
             "filename" : "test_requested_checks.sh",
             "compare_everything" : true,
-            "minimum_qt_version" : 550
+            "minimum_qt_version" : 50500
         },
         {
             "filename" : "suppressions.cpp",
