@@ -1,6 +1,6 @@
 *WARNING:* master is the development branch. Please use the v1.4 tag.
 
-clazy v1.4
+clazy v1.5
 ===========
 
 clazy is a compiler plugin which allows clang to understand Qt semantics. You get more than 50 Qt related compiler warnings, ranging from unneeded memory allocations to misusage of API, including fix-its for automatic refactoring.

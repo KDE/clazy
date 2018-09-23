@@ -89,3 +89,6 @@
   - HiddenLevel was renamed to ManualLevel
   - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction() without a context object
   - old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now
+
+
+* v1.5 (, 2019)
