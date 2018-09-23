@@ -65,7 +65,7 @@
   - Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the
     list will grow.
 
-* v1.4 (, 2018)
+* v1.4 (September 23rd, 2018)
   - New Checks:
     connect-by-name
     skipped-base-class
