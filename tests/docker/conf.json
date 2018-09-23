@@ -31,7 +31,9 @@
         {
             "name" : "debian-unstable-llvm6",
             "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-6/",
+            "prefix" : "/usr/lib/llvm-6.0/",
+            "llvm_root" : "/usr/lib/llvm-6.0/",
+            "ignore_checks" : "qcolor-from-literal",
             "comment" : "llvm6;Qt-5.11.1"
         },
         {
