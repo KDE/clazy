@@ -55,7 +55,7 @@ You can get clazy from:
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 3.9 are required.
+clang and LLVM >= 4.0 are required.
 Use clazy v1.1 if you need 3.7 support, or v1.3 for 3.8 support.
 
 If your distro provides clang then you can skip this step.
