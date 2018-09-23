@@ -6,11 +6,11 @@
         },
         {
             "filename" : "bug374951.cpp",
-            "minimum_qt_version" : 570
+            "minimum_qt_version" : 50700
         },
         {
             "filename" : "392441.cpp",
-            "minimum_qt_version" : 570
+            "minimum_qt_version" : 50700
         },
         {
             "filename" : "bug375239.cpp"

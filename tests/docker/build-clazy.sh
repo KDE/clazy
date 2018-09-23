@@ -6,21 +6,6 @@ CLAZY_PREFIX=$3
 IGNORE_CHECKS=$4
 LLVM_ROOT=$5
 
-if [ -z "$1" ]
-then
-    exit 1;
-fi
-
-if [ -z "$2" ]
-then
-    exit 1;
-fi
-
-if [ -z "$3" ]
-then
-    exit 1;
-fi
-
 if [ "$IGNORE_CHECKS" = "none" ]
 then
     IGNORE_CHECKS=""

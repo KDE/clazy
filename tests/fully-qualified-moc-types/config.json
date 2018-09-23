@@ -1,4 +1,5 @@
 {
+    "minimum_qt_version" : 50800,
     "tests" : [
         {
             "filename" : "main.cpp"

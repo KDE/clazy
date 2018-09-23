@@ -43,6 +43,27 @@
 using namespace clang;
 using namespace std;
 
+namespace clazy {
+// Copied from Clang's Expr.cpp and added "|| !DerivedType->isRecordType()" to avoid a crash
+const CXXRecordDecl *getBestDynamicClassType(Expr *expr)
+{
+  if (!expr)
+      return nullptr;
+
+  const Expr *E = expr->getBestDynamicClassTypeExpr();
+  QualType DerivedType = E->getType();
+  if (const PointerType *PTy = DerivedType->getAs<PointerType>())
+    DerivedType = PTy->getPointeeType();
+
+  if (DerivedType->isDependentType() || !DerivedType->isRecordType())
+    return nullptr;
+
+  const RecordType *Ty = DerivedType->castAs<RecordType>();
+  Decl *D = Ty->getDecl();
+  return cast<CXXRecordDecl>(D);
+}
+}
+
 enum ConnectFlag {
     ConnectFlag_None = 0,       // Not a disconnect or connect
     ConnectFlag_Connect = 1,    // It's a connect
@@ -437,7 +458,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             lastRecordDecl = nullptr;
         } else {
             Expr *expr = arg;
-            const auto record = expr ? expr->getBestDynamicClassType() : nullptr;
+            const auto record = clazy::getBestDynamicClassType(expr);
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {

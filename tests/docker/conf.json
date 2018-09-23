@@ -3,34 +3,52 @@
         {
             "name" : "ubuntu-17.04",
             "url" : "iamsergio/clazy-ubuntu-17.04",
-            "prefix" : "/usr/"
+            "prefix" : "/usr/",
+            "comment" : "llvm-4;Qt-5.7.1"
         },
         {
-            "name" : "ubuntu-16.04",
-            "url" : "iamsergio/clazy-ubuntu-16.04",
-            "prefix" : "/usr/"
+            "name" : "ubuntu-18.04",
+            "url" : "iamsergio/clazy-ubuntu-18.04",
+            "prefix" : "/usr/",
+            "comment" : "llvm-6;Qt-5.9.5"
         },
         {
             "name" : "opensuse-tumbleweed",
             "url" : "iamsergio/clazy-opensuse-tumbleweed",
-            "prefix" : "/usr/"
+            "prefix" : "/usr/",
+            "comment" : "llvm-6;Qt-5.11.1"
         },
         {
-            "name" : "archlinux",
-            "url" : "iamsergio/clazy-archlinux",
-            "prefix" : "/usr/"
+            "name" : "debian-unstable-llvm4",
+            "url" : "iamsergio/clazy-debian-unstable",
+            "prefix" : "/usr/lib/llvm-4.0/",
+            "llvm_root" : "/usr/lib/llvm-4.0/",
+            "ignore_checks" : "qcolor-from-literal",
+            "comment" : "llvm4;Qt-5.11.1"
+        },
+        {
+            "name" : "debian-unstable-llvm5",
+            "url" : "iamsergio/clazy-debian-unstable",
+            "prefix" : "/usr/lib/llvm-5.0/",
+            "llvm_root" : "/usr/lib/llvm-5.0/",
+            "ignore_checks" : "qcolor-from-literal",
+            "comment" : "llvm5;Qt-5.11.1"
         },
         {
             "name" : "debian-unstable-llvm6",
             "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-6/"
+            "prefix" : "/usr/lib/llvm-6.0/",
+            "llvm_root" : "/usr/lib/llvm-6.0/",
+            "ignore_checks" : "qcolor-from-literal",
+            "comment" : "llvm6;Qt-5.11.1"
         },
         {
             "name" : "debian-unstable-llvm7",
             "url" : "iamsergio/clazy-debian-unstable",
             "prefix" : "/usr/lib/llvm-7/",
             "llvm_root" : "/usr/lib/llvm-7/",
-            "ignore_checks" : "qcolor-from-literal"
+            "ignore_checks" : "qcolor-from-literal",
+            "comment" : "llvm7;Qt-5.11.1"
         }
     ]
 }

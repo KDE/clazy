@@ -51,13 +51,13 @@ You can get clazy from:
 
 ### Install dependencies
 - OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
-- Ubuntu-16.04: `apt install g++ cmake clang llvm-dev git-core libclang-3.8-dev qtbase5-dev`
+- Ubuntu: `apt install g++ cmake clang llvm-dev git-core libclang-dev qtbase5-dev`
 - Archlinux: `pacman -S make llvm clang python2 cmake qt5-base git gcc`
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 3.9 are required.
+clang and LLVM >= 4.0 are required.
 Use clazy v1.1 if you need 3.7 support, or v1.3 for 3.8 support.
 
 If your distro provides clang then you can skip this step.

@@ -5,7 +5,7 @@
         },
         {
             "filename" : "qset.cpp",
-            "minimum_qt_version" : 560
+            "minimum_qt_version" : 50600
         }
     ]
 }
