@@ -7,6 +7,12 @@
             "comment" : "llvm-4;Qt-5.7.1"
         },
         {
+            "name" : "ubuntu-18.04",
+            "url" : "iamsergio/clazy-ubuntu-18.04",
+            "prefix" : "/usr/",
+            "comment" : "llvm-6;Qt-5.9.5"
+        },
+        {
             "name" : "opensuse-tumbleweed",
             "url" : "iamsergio/clazy-opensuse-tumbleweed",
             "prefix" : "/usr/",
