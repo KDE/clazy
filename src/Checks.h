@@ -134,7 +134,9 @@ void CheckManager::registerChecks()
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaUniqueConnection>("lambda-unique-connection", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<MutableContainerKey>("mutable-container-key", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
+#ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<QColorFromLiteral>("qcolor-from-literal", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
+#endif
     registerCheck(check<QDateTimeUtc>("qdatetime-utc", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qdatetime-utc", "qdatetime-utc");
     registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible));
