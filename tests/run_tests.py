@@ -401,6 +401,11 @@ def print_file(filename):
     print f.read()
     f.close()
 
+def file_contains(filename, text):
+    f = open(filename, 'r')
+    contents = f.read()
+    f.close()
+    return text in contents
 
 def run_unit_test(test, is_standalone):
     if test.check.clazy_standalone_only and not is_standalone:
@@ -447,6 +452,9 @@ def run_unit_test(test, is_standalone):
     must_fail = test.must_fail
 
     cmd_success = run_command(cmd_to_run, output_file, test.env)
+
+    if file_contains(output_file, 'Invalid check: '):
+        return True
 
     if (not cmd_success and not must_fail) or (cmd_success and must_fail):
         print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
