@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
-sharedir=@CMAKE_INSTALL_PREFIX@/@SHARE_INSTALL_DIR@/clazy
+sharedir=@CMAKE_INSTALL_PREFIX@/@SHARE_INSTALL_DIR@
 
 HELP() {
   echo "Usage: `basename $0` [options] [clang++-options]"
@@ -38,11 +38,11 @@ VERSION() {
 PRLIST() {
   echo ""
   echo "Checks from level$1. $2:"
-  ls -1 $sharedir/doc/level$1/README* | awk -F/ '{printf("    %s\n", $NF)}' | sed s/README-// | sed s/\.md$// | sort
+  ls -1 $sharedir/doc/clazy/level$1/README* | awk -F/ '{printf("    %s\n", $NF)}' | sed s/README-// | sed s/\.md$// | sort
 }
 
 PRINFO() {
-  lst=`ls -1 $sharedir/doc/level*/README*$1*`
+  lst=`ls -1 $sharedir/doc/clazy/level*/README*$1*`
   for f in $lst
   do
     l=`echo $f | awk -F/ '{foo=NF-1; printf("    %s:%s\n", $foo,$NF)}'`
