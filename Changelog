@@ -68,7 +68,7 @@
 * v1.4 (September 23rd, 2018)
   - New Checks:
     connect-by-name
-    skipped-base-class
+    skipped-base-method
     qstring-varargs
     fully-qualified-moc-types
     qt-keywords, with fixit included
