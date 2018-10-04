@@ -15,4 +15,4 @@ public:
 };
 
 Try to avoid jumping over the direct base method. If you really need to then at least
-add a comment in the code, so people know it was intentional. Or even better, an clazy:exclude=skipped-base-method comment, which also sliences this warning.
+add a comment in the code, so people know it was intentional. Or even better, an clazy:exclude=skipped-base-method comment, which also silences this warning.
