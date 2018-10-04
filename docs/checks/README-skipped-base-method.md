@@ -10,7 +10,7 @@ public:
     bool event(QEvent *ev) override
     {
         (...)
-        return QWidget::event(ev); // warning: Maybe you meant to call QFrame::changeEvent() instead [-Wclazy-skipped-base-method]
+        return QWidget::event(ev); // warning: Maybe you meant to call QFrame::event() instead [-Wclazy-skipped-base-method]
     }
 };
 
