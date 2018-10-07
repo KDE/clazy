@@ -1,4 +1,5 @@
 =encoding utf8
+
 =head1 NAME
 
 clazy - a static source code analyzer for Qt5-based C++.
