@@ -1,6 +1,6 @@
 # skipped-base-method
 
-Warns when calling a method from the "grand-base class" instead of the base-class method.
+Warns when calling a method from the "grand-base class" instead of the base-class one.
 
 Example:
 ```
