@@ -1,5 +1,6 @@
 set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/container-inside-loop.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/ifndef-define-typo.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficient-qlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp

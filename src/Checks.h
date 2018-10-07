@@ -28,6 +28,7 @@
 
 #include "checkmanager.h"
 #include "checks/manuallevel/container-inside-loop.h"
+#include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
@@ -115,6 +116,7 @@ RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Optio
 void CheckManager::registerChecks()
 {
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));

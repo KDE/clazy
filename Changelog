@@ -92,3 +92,5 @@
 
 
 * v1.5 (, 2019)
+  - New Checks:
+    ifndef-define-typo

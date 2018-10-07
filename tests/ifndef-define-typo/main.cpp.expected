@@ -1,0 +1,1 @@
+ifndef-define-typo/main.cpp:3:10: warning: Possible typo in define. GL_FRAMEBUFFER_SRB vs GL_FRAMEBUFFER_SRGB [-Wclazy-ifndef-define-typo]

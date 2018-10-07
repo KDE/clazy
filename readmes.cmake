@@ -1,5 +1,6 @@
 SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-container-inside-loop.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-ifndef-define-typo.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-inefficient-qlist.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md

@@ -11,6 +11,11 @@
             ]
         },
         {
+            "name"  : "ifndef-define-typo",
+            "level" : -1,
+            "categories" : ["bug"]
+        },
+        {
             "name"  : "inefficient-qlist",
             "level" : -1,
             "categories" : ["containers", "performance"],

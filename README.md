@@ -217,6 +217,7 @@ clazy runs all checks from level1 by default.
 
 - Checks from Manual Level:
     - [container-inside-loop](docs/checks/README-container-inside-loop.md)
+    - [ifndef-define-typo](docs/checks/README-ifndef-define-typo.md)
     - [inefficient-qlist](docs/checks/README-inefficient-qlist.md)
     - [isempty-vs-count](docs/checks/README-isempty-vs-count.md)
     - [qhash-with-char-pointer-key](docs/checks/README-qhash-with-char-pointer-key.md)
