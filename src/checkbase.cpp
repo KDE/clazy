@@ -60,6 +60,31 @@ void ClazyPreprocessorCallbacks::Ifdef(SourceLocation loc, const Token &macroNam
     check->VisitIfdef(loc, macroNameTok);
 }
 
+void ClazyPreprocessorCallbacks::Ifndef(SourceLocation loc, const Token &macroNameTok, const MacroDefinition &)
+{
+    check->VisitIfndef(loc, macroNameTok);
+}
+
+void ClazyPreprocessorCallbacks::If(SourceLocation loc, SourceRange conditionRange, PPCallbacks::ConditionValueKind conditionValue)
+{
+    check->VisitIf(loc, conditionRange, conditionValue);
+}
+
+void ClazyPreprocessorCallbacks::Elif(SourceLocation loc, SourceRange conditionRange, PPCallbacks::ConditionValueKind conditionValue, SourceLocation ifLoc)
+{
+    check->VisitElif(loc, conditionRange, conditionValue, ifLoc);
+}
+
+void ClazyPreprocessorCallbacks::Else(SourceLocation loc, SourceLocation ifLoc)
+{
+    check->VisitElse(loc, ifLoc);
+}
+
+void ClazyPreprocessorCallbacks::Endif(SourceLocation loc, SourceLocation ifLoc)
+{
+    check->VisitEndif(loc, ifLoc);
+}
+
 void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const MacroDirective *)
 {
     check->VisitMacroDefined(macroNameTok);
@@ -106,6 +131,31 @@ void CheckBase::VisitDefined(const Token &, const SourceRange &)
 }
 
 void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitIfndef(SourceLocation, const Token &)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitIf(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind)
+{
+   // Overriden in derived classes
+}
+
+void CheckBase::VisitElif(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind, SourceLocation)
+{
+   // Overriden in derived classes
+}
+
+void CheckBase::VisitElse(SourceLocation, SourceLocation)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitEndif(SourceLocation, SourceLocation)
 {
     // Overriden in derived classes
 }

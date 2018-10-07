@@ -76,7 +76,11 @@ public:
     void MacroDefined(const clang::Token &MacroNameTok, const clang::MacroDirective*) override;
     void Defined(const clang::Token &MacroNameTok, const clang::MacroDefinition &, clang::SourceRange Range) override;
     void Ifdef(clang::SourceLocation, const clang::Token &MacroNameTok, const clang::MacroDefinition &) override;
-
+    void Ifndef(clang::SourceLocation Loc, const clang::Token &MacroNameTok, const clang::MacroDefinition &) override;
+    void If(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind conditionValue) override;
+    void Elif(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind ConditionValue, clang::SourceLocation ifLoc) override;
+    void Else(clang::SourceLocation loc, clang::SourceLocation ifLoc) override;
+    void Endif(clang::SourceLocation loc, clang::SourceLocation ifLoc) override;
 private:
     CheckBase *const check;
 };
@@ -131,7 +135,12 @@ protected:
     virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr);
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
     virtual void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &);
-    virtual void VisitIfdef(clang::SourceLocation, const clang::Token &macroNameTok);
+    virtual void VisitIfdef(clang::SourceLocation, const clang::Token &);
+    virtual void VisitIfndef(clang::SourceLocation, const clang::Token &);
+    virtual void VisitIf(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind conditionValue);
+    virtual void VisitElif(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind ConditionValue, clang::SourceLocation ifLoc);
+    virtual void VisitElse(clang::SourceLocation loc, clang::SourceLocation ifLoc);
+    virtual void VisitEndif(clang::SourceLocation loc, clang::SourceLocation ifLoc);
 
     void enablePreProcessorCallbacks();
 
