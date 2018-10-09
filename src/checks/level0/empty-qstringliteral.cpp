@@ -73,7 +73,7 @@ bool EmptyQStringliteral::maybeIgnoreUic(SourceLocation loc) const
     PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
 
     // Since 5.12 uic no longer uses QStringLiteral("")
-    if (preProcessorVisitor && preProcessorVisitor->qtVersion() >= 051200)
+    if (preProcessorVisitor && preProcessorVisitor->qtVersion() >= 51200)
         return false;
 
     return clazy::isUIFile(loc, sm());
