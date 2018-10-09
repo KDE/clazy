@@ -862,7 +862,10 @@ bool Utils::ctorInitializerContainsMove(const vector<CXXCtorInitializer*> &ctorI
 
 string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
 {
-    string filename = sm.getFilename(loc);
+    if (loc.isMacroID())
+        loc = sm.getExpansionLoc(loc);
+
+    const string filename = sm.getFilename(loc);
     auto splitted = clazy::splitString(filename, '/');
     if (splitted.empty())
         return {};
