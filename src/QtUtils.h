@@ -305,6 +305,12 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
     return false;
 }
 
+inline bool isUIFile(clang::SourceLocation loc, const clang::SourceManager &sm)
+{
+    const std::string filename = Utils::filenameForLoc(loc, sm);
+    return clazy::startsWith(filename, "ui_") && clazy::endsWith(filename, ".h");
+}
+
 }
 
 #endif
