@@ -32,6 +32,7 @@ class EmptyQStringliteral : public CheckBase
 public:
     explicit EmptyQStringliteral(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+    bool maybeIgnoreUic(clang::SourceLocation) const;
 private:
 };
 
