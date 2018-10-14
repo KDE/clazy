@@ -42,7 +42,7 @@ PRLIST() {
 }
 
 PRINFO() {
-  lst=`ls -1 $sharedir/doc/clazy/level*/README*$1*`
+  lst=`ls -1 $sharedir/doc/clazy/level*/README*$1* $sharedir/doc/clazy/manuallevel/README*$1*`
   for f in $lst
   do
     l=`echo $f | awk -F/ '{foo=NF-1; printf("    %s:%s\n", $foo,$NF)}'`
