@@ -128,7 +128,7 @@ public:
             }
         }
 
-        StringRef fileName((*file)->getName());
+        llvm::StringRef fileName((*file)->getName());
         return regex->match(fileName);
     }
 

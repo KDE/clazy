@@ -63,7 +63,7 @@ inline bool isPredefined(const clang::PreprocessorOptions &ppOpts, const llvm::S
 inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation loc, const llvm::StringRef &macroName)
 {
     if (loc.isValid() && loc.isMacroID()) {
-        StringRef macro = clang::Lexer::getImmediateMacroName(loc, context->getSourceManager(), context->getLangOpts());
+        llvm::StringRef macro = clang::Lexer::getImmediateMacroName(loc, context->getSourceManager(), context->getLangOpts());
         return macro == macroName;
     }
 
