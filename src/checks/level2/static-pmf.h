@@ -22,7 +22,14 @@
 #ifndef CLAZY_STATIC_PMF_H
 #define CLAZY_STATIC_PMF_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 
 /**

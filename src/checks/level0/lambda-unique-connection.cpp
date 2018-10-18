@@ -20,14 +20,23 @@
 */
 
 #include "lambda-unique-connection.h"
-#include "Utils.h"
+
+#include <vector>
+
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "TypeUtils.h"
-#include "AccessSpecifierManager.h"
-#include "ClazyContext.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclTemplate.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
+class ClazyContext;
+namespace clang {
+class CXXMethodDecl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

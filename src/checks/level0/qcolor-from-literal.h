@@ -22,9 +22,18 @@
 #ifndef CLAZY_QCOLOR_FROM_LITERAL_H
 #define CLAZY_QCOLOR_FROM_LITERAL_H
 
+#include <string>
+
 #include "checkbase.h"
 
 class QColorFromLiteral_Callback;
+class ClazyContext;
+namespace clang {
+class Stmt;
+namespace ast_matchers {
+class MatchFinder;
+}  // namespace ast_matchers
+}  // namespace clang
 
 /**
  * See README-qcolor-from-literal.md for more info.

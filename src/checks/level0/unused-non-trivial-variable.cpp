@@ -20,19 +20,30 @@
 */
 
 #include "unused-non-trivial-variable.h"
-#include "Utils.h"
+
+#include <stdlib.h>
+#include <vector>
+#include <string>
 
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
 #include "QtUtils.h"
 #include "clazy_stl.h"
+#include "SourceCompatibilityHelpers.h"
+#include "TypeUtils.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "clang/Basic/SourceLocation.h"
+#include "clang/Basic/SourceManager.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
-
-#include <vector>
-#include <string>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

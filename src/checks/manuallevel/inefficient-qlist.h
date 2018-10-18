@@ -25,7 +25,11 @@
 #ifndef INEFFICIENT_QLIST_H
 #define INEFFICIENT_QLIST_H
 
+#include <string>
+
 #include "checks/inefficientqlistbase.h"
+
+class ClazyContext;
 
 /**
  * Finds usages of QList<T> where T is bigger than sizeof(void*), where QVector should be used instead.

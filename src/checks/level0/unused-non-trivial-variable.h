@@ -22,11 +22,18 @@
 #ifndef CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_H
 #define CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_H
 
+#include <string>
+#include <vector>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;
 class VarDecl;
+class CXXRecordDecl;
+class QualType;
 }
 
 /**

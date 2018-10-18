@@ -23,17 +23,28 @@
 */
 
 #include "inefficientqlistbase.h"
-#include "Utils.h"
-#include "TypeUtils.h"
-#include "ContextUtils.h"
-#include "HierarchyUtils.h"
-#include "TemplateUtils.h"
-#include "StmtBodyRange.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
-#include <clang/AST/AST.h>
-#include <clang/AST/DeclTemplate.h>
+#include <vector>
+
+#include "Utils.h"
+#include "TypeUtils.h"
+#include "ContextUtils.h"
+#include "TemplateUtils.h"
+#include "StmtBodyRange.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/ASTContext.h"
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

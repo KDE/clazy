@@ -25,7 +25,11 @@
 #ifndef FOREACH_DETACHMENTS_H
 #define FOREACH_DETACHMENTS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class ForStmt;

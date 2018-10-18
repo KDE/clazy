@@ -25,16 +25,18 @@
 #ifndef CLANG_LAZY_CHECK_MANAGER_H
 #define CLANG_LAZY_CHECK_MANAGER_H
 
-#include "clazy_export.h"
-#include "checkbase.h"
-
 #include <clang/Lex/PreprocessorOptions.h>
-
 #include <functional>
 #include <mutex>
 #include <unordered_map>
 #include <vector>
 #include <utility>
+#include <string>
+
+#include "clazy_export.h"
+#include "checkbase.h"
+
+class ClazyContext;
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;

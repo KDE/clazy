@@ -22,18 +22,20 @@
 #ifndef CLAZY_CONTEXT_H
 #define CLAZY_CONTEXT_H
 
-#include "SuppressionManager.h"
-
-#include "clazy_stl.h"
-
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Basic/FileManager.h>
 #include <llvm/Support/Regex.h>
-
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
+
+#include "SuppressionManager.h"
+#include "clazy_stl.h"
+#include "clang/Basic/SourceLocation.h"
+#include "clang/Basic/SourceManager.h"
+#include "llvm/ADT/StringRef.h"
 
 // ClazyContext is just a struct to share data and code between all checks
 
@@ -43,6 +45,8 @@ namespace clang {
     class ParentMap;
     class SourceManager;
     class FixItRewriter;
+class CXXMethodDecl;
+class Decl;
 }
 
 class AccessSpecifierManager;

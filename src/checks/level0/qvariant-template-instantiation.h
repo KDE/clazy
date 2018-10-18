@@ -25,7 +25,14 @@
 #ifndef VARIANT_SANITIZER_H
 #define VARIANT_SANITIZER_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * Detects when you're using QVariant::value<Foo>() instead of QVariant::toFoo().

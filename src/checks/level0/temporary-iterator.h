@@ -25,11 +25,17 @@
 #ifndef TEMPORARY_ITERATOR_H
 #define TEMPORARY_ITERATOR_H
 
-#include "checkbase.h"
-
 #include <map>
 #include <vector>
 #include <string>
+
+#include "checkbase.h"
+#include "llvm/ADT/StringRef.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * Finds places where you're using iterators on temporary containers.

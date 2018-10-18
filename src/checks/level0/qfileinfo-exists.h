@@ -22,7 +22,11 @@
 #ifndef CLAZY_QFILEINFO_EXISTS_H
 #define CLAZY_QFILEINFO_EXISTS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

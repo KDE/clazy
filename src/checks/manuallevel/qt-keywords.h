@@ -22,7 +22,16 @@
 #ifndef CLAZY_QT_KEYWORDS_H
 #define CLAZY_QT_KEYWORDS_H
 
+#include <string>
+
 #include "checkbase.h"
+#include "clang/Basic/SourceLocation.h"
+
+class ClazyContext;
+namespace clang {
+class MacroInfo;
+class Token;
+}  // namespace clang
 
 
 /**

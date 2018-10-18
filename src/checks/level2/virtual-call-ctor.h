@@ -25,14 +25,18 @@
 #ifndef VIRTUALCALLSFROMCTOR_H
 #define VIRTUALCALLSFROMCTOR_H
 
+#include <vector>
+#include <string>
+
 #include "checkbase.h"
 
-#include <vector>
+class ClazyContext;
 
 namespace clang {
 class CXXRecordDecl;
 class Stmt;
 class SourceLocation;
+class Decl;
 }
 
 /**

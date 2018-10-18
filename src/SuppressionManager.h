@@ -22,11 +22,12 @@
 #ifndef CLAZY_SUPPRESSION_MANAGER_H
 #define CLAZY_SUPPRESSION_MANAGER_H
 
-#include "clazy_export.h"
-
 #include <set>
 #include <string>
 #include <unordered_map>
+#include <utility>
+
+#include "clazy_export.h"
 
 
 namespace clang {

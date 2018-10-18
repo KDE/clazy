@@ -20,14 +20,24 @@
 */
 
 #include "wrong-qglobalstatic.h"
-#include "Utils.h"
+
+#include <memory>
+#include <vector>
+
 #include "TemplateUtils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
-#include "Utils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "clang/Basic/SourceLocation.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

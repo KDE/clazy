@@ -22,7 +22,11 @@
 #ifndef CLAZY_CONTAINER_INSIDE_LOOP_H
 #define CLAZY_CONTAINER_INSIDE_LOOP_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

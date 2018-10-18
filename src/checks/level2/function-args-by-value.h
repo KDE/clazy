@@ -22,10 +22,18 @@
 #ifndef CLAZY_FUNC_ARGS_BY_VALUE_H
 #define CLAZY_FUNC_ARGS_BY_VALUE_H
 
+#include <string>
+
 #include "checkbase.h"
+#include "clang/Basic/Diagnostic.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;
+class Decl;
+class FunctionDecl;
+class ParmVarDecl;
 }
 
 namespace TypeUtils {

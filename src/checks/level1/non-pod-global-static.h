@@ -25,7 +25,14 @@
 #ifndef NON_POD_STATIC_H
 #define NON_POD_STATIC_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * Finds global static non-POD variables.

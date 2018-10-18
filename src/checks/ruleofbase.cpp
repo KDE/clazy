@@ -20,7 +20,14 @@
 */
 
 #include "ruleofbase.h"
+
+#include <vector>
+
 #include "StringUtils.h"
+#include "clang/AST/DeclCXX.h"
+#include "clazy_stl.h"
+
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

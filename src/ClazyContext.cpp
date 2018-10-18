@@ -19,13 +19,16 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include <clang/AST/ParentMap.h>
+#include <stdlib.h>
+
 #include "AccessSpecifierManager.h"
 #include "PreProcessorVisitor.h"
 #include "ClazyContext.h"
-
-#include <clang/AST/ParentMap.h>
-#include <clang/Basic/SourceManager.h>
 #include "clang/Rewrite/Frontend/FixItRewriter.h"
+#include "clang/Frontend/CompilerInstance.h"
+#include "clang/Lex/PreprocessorOptions.h"
+#include "llvm/Support/Regex.h"
 
 using namespace std;
 using namespace clang;

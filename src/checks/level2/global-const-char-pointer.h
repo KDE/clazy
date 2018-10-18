@@ -25,9 +25,15 @@
 #ifndef GLOBAL_CONST_CHAR_POINTER_H
 #define GLOBAL_CONST_CHAR_POINTER_H
 
+#include <vector>
+#include <string>
+
 #include "checkbase.h"
 
-#include <vector>
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 /**
  * Finds where you're using const char *foo; instead of const char *const foo; or const char []foo;

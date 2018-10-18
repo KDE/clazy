@@ -22,12 +22,17 @@
 #ifndef CLAZY_STRICT_ITERATORS_H
 #define CLAZY_STRICT_ITERATORS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
     class CXXConstructExpr;
     class ImplicitCastExpr;
     class CXXOperatorCallExpr;
+class Stmt;
 }
 
 /**

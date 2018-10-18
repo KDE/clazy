@@ -25,7 +25,14 @@
 #ifndef QMAP_WITH_POINTER_KEY_H
 #define QMAP_WITH_POINTER_KEY_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 /**
  * Finds cases where you're using QMap<K,T> and K is a pointer. QHash<K,T> should be used instead.

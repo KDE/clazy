@@ -20,14 +20,28 @@
 */
 
 #include "wrong-qevent-cast.h"
+
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "QtUtils.h"
 #include "TypeUtils.h"
 #include "ClazyContext.h"
-
-#include <clang/AST/AST.h>
-#include <unordered_map>
+#include "StringUtils.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/ParentMap.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "clazy_stl.h"
+#include "llvm/ADT/APSInt.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
 using namespace clang;
 using namespace std;

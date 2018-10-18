@@ -22,7 +22,14 @@
 #ifndef CLAZY_RAW_ENVIRONMENT_FUNCTION_H
 #define CLAZY_RAW_ENVIRONMENT_FUNCTION_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * See README-raw-environment-function.md for more info.

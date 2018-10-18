@@ -22,7 +22,14 @@
 #ifndef CLAZY_CTOR_MISSING_PARENT_ARGUMENT_H
 #define CLAZY_CTOR_MISSING_PARENT_ARGUMENT_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 
 /**

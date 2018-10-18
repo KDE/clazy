@@ -23,14 +23,22 @@
 */
 
 #include "missing-typeinfo.h"
-#include "Utils.h"
+
+#include <clang/AST/DeclTemplate.h>
+
 #include "TemplateUtils.h"
-#include "TypeUtils.h"
 #include "QtUtils.h"
 #include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/SourceManager.h"
+#include "llvm/ADT/StringRef.h"
 
-#include <clang/AST/AST.h>
-#include <clang/AST/DeclTemplate.h>
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 using namespace std;
 using namespace clang;

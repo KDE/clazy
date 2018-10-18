@@ -20,12 +20,24 @@
 */
 
 #include "rule-of-three.h"
+
+#include <vector>
+
 #include "Utils.h"
 #include "MacroUtils.h"
-#include "StringUtils.h"
 #include "TypeUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/Basic/LLVM.h"
+#include "clang/Basic/SourceLocation.h"
+#include "clang/Basic/SourceManager.h"
+#include "clang/Basic/Specifiers.h"
+#include "clazy_stl.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

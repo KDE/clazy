@@ -22,11 +22,12 @@
 
 #ifndef CLAZY_FIXIT_UTILS_H
 #define CLAZY_FIXIT_UTILS_H
-#include "clazy_export.h"
 #include <clang/Parse/Parser.h>
-
 #include <string>
 #include <vector>
+
+#include "clazy_export.h"
+#include "clang/Basic/TokenKinds.h"
 
 namespace clang {
 class ASTContext;
@@ -37,6 +38,7 @@ class SourceLocation;
 class StringLiteral;
 class CallExpr;
 class CXXMemberCallExpr;
+class Stmt;
 }
 
 namespace clazy {

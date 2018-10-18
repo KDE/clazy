@@ -22,7 +22,14 @@
 #ifndef CLAZY_QSTRING_LEFT_H
 #define CLAZY_QSTRING_LEFT_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 
 /**

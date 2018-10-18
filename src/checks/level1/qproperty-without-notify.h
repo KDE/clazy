@@ -22,7 +22,16 @@
 #ifndef CLAZY_QPROPERTY_WITHOUT_NOTIFY_H
 #define CLAZY_QPROPERTY_WITHOUT_NOTIFY_H
 
+#include <string>
+
 #include "checkbase.h"
+#include "clang/Basic/SourceLocation.h"
+
+class ClazyContext;
+namespace clang {
+class MacroInfo;
+class Token;
+}  // namespace clang
 
 
 /**

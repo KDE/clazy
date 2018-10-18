@@ -25,7 +25,16 @@
 #ifndef CLAZY_UNNEEDED_CAST_H
 #define CLAZY_UNNEEDED_CAST_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class CXXNamedCastExpr;
+class CXXRecordDecl;
+class Stmt;
+}  // namespace clang
 
 namespace {
 class CXXNAmedCastExpr;

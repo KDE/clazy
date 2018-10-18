@@ -22,7 +22,15 @@
 #ifndef CLAZY_THREAD_WITH_SLOTS_H
 #define CLAZY_THREAD_WITH_SLOTS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Decl;
+class Stmt;
+}  // namespace clang
 
 
 /**

@@ -22,7 +22,14 @@
 #ifndef QDELETEALL_H
 #define QDELETEALL_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * - QDeleteAll:

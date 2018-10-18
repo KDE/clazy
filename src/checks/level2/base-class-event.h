@@ -22,7 +22,14 @@
 #ifndef CLAZY_BASE_CLASS_EVENT_H
 #define CLAZY_BASE_CLASS_EVENT_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 
 /**

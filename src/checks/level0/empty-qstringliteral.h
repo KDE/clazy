@@ -22,7 +22,15 @@
 #ifndef CLAZY_EMPTY_QSTRINGLITERAL_H
 #define CLAZY_EMPTY_QSTRINGLITERAL_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class SourceLocation;
+class Stmt;
+}  // namespace clang
 
 /**
  * See README-empty-qstringliteral.md for more info.

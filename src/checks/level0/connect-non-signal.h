@@ -23,7 +23,14 @@
 #ifndef CLAZY_CONNECT_NON_SIGNAL_H
 #define CLAZY_CONNECT_NON_SIGNAL_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * See README-connect-non-signal.md for more info.

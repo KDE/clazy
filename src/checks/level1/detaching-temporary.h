@@ -25,7 +25,18 @@
 #ifndef DETACHING_TEMPORARIES_H
 #define DETACHING_TEMPORARIES_H
 
+#include <map>
+#include <string>
+#include <vector>
+
 #include "checks/detachingbase.h"
+#include "llvm/ADT/StringRef.h"
+
+class ClazyContext;
+namespace clang {
+class CXXMethodDecl;
+class Stmt;
+}  // namespace clang
 
 /**
  * Finds places where you're calling non-const member functions on temporaries.

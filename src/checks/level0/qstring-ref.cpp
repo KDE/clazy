@@ -20,17 +20,34 @@
 */
 
 #include "qstring-ref.h"
+
+#include <clang/Lex/Lexer.h>
+#include <array>
+#include <vector>
+
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
 #include "FixItUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/Diagnostic.h"
+#include "clang/Basic/IdentifierTable.h"
+#include "clang/Basic/LLVM.h"
+#include "clang/Basic/SourceLocation.h"
+#include "clazy_stl.h"
+#include "llvm/ADT/SmallVector.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
-
-#include <array>
-#include <vector>
+namespace clang {
+class Decl;
+class LangOptions;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

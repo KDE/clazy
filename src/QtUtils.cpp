@@ -24,12 +24,11 @@
 #include "Utils.h"
 #include "TypeUtils.h"
 #include "StmtBodyRange.h"
-#include "MacroUtils.h"
-#include "HierarchyUtils.h"
 #include "StringUtils.h"
-#include "ContextUtils.h"
-
-#include <clang/AST/AST.h>
+#include "clang/AST/ExprCXX.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/Support/raw_ostream.h"
 
 using namespace std;
 using namespace clang;

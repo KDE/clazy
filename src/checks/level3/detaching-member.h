@@ -25,7 +25,14 @@
 #ifndef DETACHING_MEMBER_H
 #define DETACHING_MEMBER_H
 
+#include <string>
+
 #include "checks/detachingbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * Finds places where you're calling non-const member functions on member containers.

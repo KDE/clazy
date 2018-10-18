@@ -25,7 +25,11 @@
 #ifndef RANGELOOP_DETACHMENTS_H
 #define RANGELOOP_DETACHMENTS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class ForStmt;

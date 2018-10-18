@@ -20,14 +20,24 @@
 */
 
 #include "container-anti-pattern.h"
+
+#include <vector>
+
 #include "Utils.h"
 #include "StringUtils.h"
-#include "MacroUtils.h"
 #include "LoopUtils.h"
 #include "HierarchyUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/LLVM.h"
+#include "clazy_stl.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

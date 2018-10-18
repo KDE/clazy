@@ -22,7 +22,14 @@
 #ifndef CLAZY_MUTABLE_CONTAINER_KEY_H
 #define CLAZY_MUTABLE_CONTAINER_KEY_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 
 /**

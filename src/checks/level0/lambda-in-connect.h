@@ -22,7 +22,11 @@
 #ifndef CLAZY_LAMBDA_IN_CONNECT_H
 #define CLAZY_LAMBDA_IN_CONNECT_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

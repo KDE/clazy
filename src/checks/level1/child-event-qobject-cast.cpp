@@ -20,13 +20,24 @@
 */
 
 #include "child-event-qobject-cast.h"
-#include "Utils.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <vector>
+
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "TypeUtils.h"
+#include "StringUtils.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/LLVM.h"
+#include "clazy_stl.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
-#include <clang/AST/DeclCXX.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

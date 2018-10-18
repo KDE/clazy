@@ -22,11 +22,17 @@
 #ifndef CLAZY_RETURNING_DATA_FROM_TEMPORARY_H
 #define CLAZY_RETURNING_DATA_FROM_TEMPORARY_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
     class CXXMemberCallExpr;
     class DeclStmt;
+class ReturnStmt;
+class Stmt;
 }
 
 /**

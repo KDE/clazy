@@ -21,13 +21,19 @@
 */
 
 #include "FixItUtils.h"
-#include "checkmanager.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Lex/Lexer.h>
 #include <StringUtils.h>
+
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/ASTContext.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/SourceLocation.h"
+#include "clang/Basic/SourceManager.h"
+#include "clang/Lex/Token.h"
 
 using namespace clazy;
 using namespace clang;

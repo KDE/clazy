@@ -22,7 +22,14 @@
 #ifndef CLAZY_INSTALL_EVENT_FILTER_H
 #define CLAZY_INSTALL_EVENT_FILTER_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 
 /**

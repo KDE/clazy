@@ -27,11 +27,13 @@
 // For example, getting the Qt version can be done once and the result shared
 // with all checks
 
-#include "checkbase.h"
-
-#include <string>
 #include <clang/Lex/PPCallbacks.h>
+#include <string>
 #include <unordered_map>
+#include <vector>
+
+#include "checkbase.h"
+#include "llvm/ADT/StringRef.h"
 
 namespace clang {
     class CompilerInstance;
@@ -40,6 +42,7 @@ namespace clang {
     class Token;
     class MacroDefinition;
     class MacroArgs;
+class SourceLocation;
 }
 
 using uint = unsigned;

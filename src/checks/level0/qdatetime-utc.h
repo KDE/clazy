@@ -25,7 +25,11 @@
 #ifndef CLANG_LAZY_QDATETIME_UTC_H
 #define CLANG_LAZY_QDATETIME_UTC_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

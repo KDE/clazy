@@ -23,12 +23,17 @@
 #ifndef CLAZY_CONNECT_NOT_NORMALIZED_H
 #define CLAZY_CONNECT_NOT_NORMALIZED_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
     class CXXConstructExpr;
     class CallExpr;
     class Expr;
+class Stmt;
 }
 
 /**

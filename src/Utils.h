@@ -25,19 +25,22 @@
 #ifndef MOREWARNINGS_UTILS_H
 #define MOREWARNINGS_UTILS_H
 
-#include "clazy_export.h"
-#include "SourceCompatibilityHelpers.h"
-
 #include <clang/Basic/SourceManager.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/DeclTemplate.h>
-
 #include <string>
 #include <vector>
 #include <map>
+
+#include "clazy_export.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/Basic/SourceLocation.h"
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Config/llvm-config.h"
 
 // TODO: this is a dumping ground, most of these functions should be moved to the other *Utils classes
 
@@ -58,6 +61,16 @@ namespace clang {
     class ConditionalOperator;
     class CXXMethodDecl;
     class BinaryOperator;
+class CXXOperatorCallExpr;
+class CallExpr;
+class DeclStmt;
+class Expr;
+class FunctionDecl;
+class LangOptions;
+class ParmVarDecl;
+class StringLiteral;
+class UserDefinedLiteral;
+class VarDecl;
 }
 
 struct StmtBodyRange;

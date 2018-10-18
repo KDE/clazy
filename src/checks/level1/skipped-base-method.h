@@ -22,7 +22,14 @@
 #ifndef CLAZY_SKIPPED_BASE_METHOD_H
 #define CLAZY_SKIPPED_BASE_METHOD_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 
 /**

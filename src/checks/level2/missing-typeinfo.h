@@ -25,11 +25,18 @@
 #ifndef CLAZY_MISSING_TYPE_INFO_H
 #define CLAZY_MISSING_TYPE_INFO_H
 
+#include <set>
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class ClassTemplateSpecializationDecl;
 class CXXRecordDecl;
+class Decl;
+class QualType;
 }
 
 /**

@@ -20,12 +20,21 @@
 */
 
 #include "install-event-filter.h"
+
+#include <vector>
+
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "QtUtils.h"
 #include "TypeUtils.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

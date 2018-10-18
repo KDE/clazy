@@ -20,13 +20,12 @@
 */
 
 #include "qt-macros.h"
-#include "ClazyContext.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
 
-#include <clang/AST/AST.h>
+#include "ClazyContext.h"
+#include "clang/Basic/IdentifierTable.h"
+#include "clang/Lex/Token.h"
+#include "clazy_stl.h"
+#include "llvm/ADT/StringRef.h"
 
 using namespace clang;
 using namespace std;

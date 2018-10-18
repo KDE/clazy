@@ -23,14 +23,24 @@
 */
 
 #include "range-loop.h"
+
 #include "Utils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/StmtCXX.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

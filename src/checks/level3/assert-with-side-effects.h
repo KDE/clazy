@@ -25,7 +25,14 @@
 #ifndef ASSERT_WITH_SIDE_EFFECTS_H
 #define ASSERT_WITH_SIDE_EFFECTS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 class AssertWithSideEffects : public CheckBase
 {

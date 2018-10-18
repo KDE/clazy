@@ -22,7 +22,16 @@
 #ifndef CLAZY_QENUMS_H
 #define CLAZY_QENUMS_H
 
+#include <string>
+
 #include "checkbase.h"
+#include "clang/Basic/SourceLocation.h"
+
+class ClazyContext;
+namespace clang {
+class MacroInfo;
+class Token;
+}  // namespace clang
 
 /**
  * See README-qenums for more info.

@@ -22,9 +22,16 @@
 #ifndef CLAZY_QT_MACROS_H
 #define CLAZY_QT_MACROS_H
 
+#include <string>
+
 #include "checkbase.h"
+#include "clang/Basic/SourceLocation.h"
 
 class QtMacrosPreprocessorCallbacks;
+class ClazyContext;
+namespace clang {
+class Token;
+}  // namespace clang
 
 /**
  * See README-qt-macros for more info.

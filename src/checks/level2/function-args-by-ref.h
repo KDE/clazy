@@ -25,7 +25,11 @@
 #ifndef FUNCTION_ARGS_BY_REF_H
 #define FUNCTION_ARGS_BY_REF_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Decl;
@@ -33,6 +37,7 @@ class VarDecl;
 class FixItHint;
 class ParmVarDecl;
 class FunctionDecl;
+class Stmt;
 }
 
 namespace TypeUtils {

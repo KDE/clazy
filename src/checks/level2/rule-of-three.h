@@ -22,7 +22,11 @@
 #ifndef CLANG_LAZY_RULE_OF_THREE_H
 #define CLANG_LAZY_RULE_OF_THREE_H
 
+#include <string>
+
 #include "checks/ruleofbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Decl;

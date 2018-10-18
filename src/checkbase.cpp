@@ -24,16 +24,30 @@
 
 #include "checkbase.h"
 
-#include "ClazyContext.h"
-#include "StringUtils.h"
-
-#include <clang/AST/Decl.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/ASTContext.h>
-#include <clang/Rewrite/Frontend/FixItRewriter.h>
-
 #include <vector>
-#include <chrono>
+#include <memory>
+
+#include "ClazyContext.h"
+#include "SourceCompatibilityHelpers.h"
+#include "SuppressionManager.h"
+#include "Utils.h"
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/Diagnostic.h"
+#include "clang/Basic/DiagnosticIDs.h"
+#include "clang/Basic/SourceManager.h"
+#include "clang/Frontend/CompilerInstance.h"
+#include "clang/Lex/MacroInfo.h"
+#include "clang/Lex/Preprocessor.h"
+#include "clazy_stl.h"
+#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/raw_ostream.h"
+
+namespace clang {
+class MacroArgs;
+class Token;
+}  // namespace clang
 
 using namespace clang;
 using namespace clang::ast_matchers;

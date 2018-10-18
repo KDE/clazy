@@ -20,14 +20,25 @@
 */
 
 #include "thread-with-slots.h"
-#include "Utils.h"
+
+#include <vector>
+
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
+namespace clang {
+class Decl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

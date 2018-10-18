@@ -22,7 +22,12 @@
 #ifndef QSTRING_ARG_H
 #define QSTRING_ARG_H
 
+#include <string>
+#include <vector>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

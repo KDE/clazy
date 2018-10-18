@@ -20,13 +20,22 @@
 */
 
 #include "const-signal-or-slot.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
+
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-#include <clang/AST/AST.h>
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/Support/Casting.h"
+
+namespace clang {
+class Decl;
+class FunctionDecl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

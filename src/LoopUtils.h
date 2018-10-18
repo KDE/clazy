@@ -25,10 +25,12 @@
 #ifndef CLAZY_LOOP_UTILS_H
 #define CLAZY_LOOP_UTILS_H
 
+#include <clang/AST/StmtCXX.h>
+
 #include "clazy_stl.h"
 #include "clazy_export.h"
-
-#include <clang/AST/StmtCXX.h>
+#include "clang/AST/Stmt.h"
+#include "llvm/Support/Casting.h"
 
 namespace clang {
 class Stmt;
@@ -36,6 +38,7 @@ class SourceManager;
 class SourceLocation;
 class Expr;
 class ParentMap;
+class VarDecl;
 }
 
 namespace clazy {

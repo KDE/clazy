@@ -20,11 +20,8 @@
 */
 
 #include "inefficient-qlist-soft.h"
-#include "Utils.h"
-#include "StringUtils.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

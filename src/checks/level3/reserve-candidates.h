@@ -25,14 +25,19 @@
 #ifndef CLAZY_RESERVE_CANDIDATES
 #define CLAZY_RESERVE_CANDIDATES
 
+#include <vector>
+#include <string>
+
 #include "checkbase.h"
 
-#include <vector>
+class ClazyContext;
 
 namespace clang {
 class ValueDecl;
 class Expr;
 class CallExpr;
+class SourceLocation;
+class Stmt;
 }
 
 /**

@@ -25,7 +25,15 @@
 #include "global-const-char-pointer.h"
 
 #include <clang/AST/Decl.h>
-#include <clang/AST/DeclCXX.h>
+#include <vector>
+
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/LLVM.h"
+#include "llvm/Support/Casting.h"
+
+class ClazyContext;
 
 using namespace clang;
 

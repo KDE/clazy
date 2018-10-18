@@ -21,14 +21,19 @@
 
 // clazy:excludeall=non-pod-global-static
 
-#include "Clazy.h"
-
-#include <clang/Frontend/FrontendActions.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
 #include <llvm/Support/CommandLine.h>
+#include <string>
 
-#include <memory>
+#include "Clazy.h"
+#include "ClazyContext.h"
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/ADT/StringRef.h"
+
+namespace clang {
+class FrontendAction;
+}  // namespace clang
 
 using namespace clang;
 using namespace clang::tooling;

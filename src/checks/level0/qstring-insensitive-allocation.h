@@ -22,7 +22,11 @@
 #ifndef CLAZY_QSTRING_INSENSITIVE_ALLOCATION_H
 #define CLAZY_QSTRING_INSENSITIVE_ALLOCATION_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

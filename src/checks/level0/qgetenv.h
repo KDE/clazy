@@ -25,7 +25,11 @@
 #ifndef CLANG_LAZY_QGETENV_H
 #define CLANG_LAZY_QGETENV_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

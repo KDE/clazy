@@ -23,8 +23,12 @@
 #ifndef CLAZY_QT4_QSTRING_FROM_ARRAY_H
 #define CLAZY_QT4_QSTRING_FROM_ARRAY_H
 
-#include "checkbase.h"
 #include <vector>
+#include <string>
+
+#include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

@@ -22,7 +22,11 @@
 #ifndef CLANG_LAZY_RULE_OF_TWO_SOFT_H
 #define CLANG_LAZY_RULE_OF_TWO_SOFT_H
 
+#include <string>
+
 #include "checks/ruleofbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

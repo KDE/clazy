@@ -20,11 +20,22 @@
 */
 
 #include "qstring-insensitive-allocation.h"
+
+#include <vector>
+
 #include "Utils.h"
 #include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/Stmt.h"
+#include "clang/Basic/LLVM.h"
+#include "clazy_stl.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+class ClazyContext;
+namespace clang {
+class FunctionDecl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

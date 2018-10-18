@@ -22,12 +22,18 @@
 #ifndef QSTRING_REF_H
 #define QSTRING_REF_H
 
+#include <string>
+#include <vector>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;
 class CallExpr;
 class CXXMemberCallExpr;
+class FixItHint;
 }
 
 /**

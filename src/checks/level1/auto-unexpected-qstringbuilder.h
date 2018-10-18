@@ -22,10 +22,15 @@
 #ifndef CLANG_LAZY_AUTO_UNEXPECTED_QSTRING_BUILDER_H
 #define CLANG_LAZY_AUTO_UNEXPECTED_QSTRING_BUILDER_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;
+class Decl;
 }
 
 /**

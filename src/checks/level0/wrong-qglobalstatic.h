@@ -23,7 +23,11 @@
 #ifndef CLAZY_WRONG_QGLOBALSTATIC_H
 #define CLAZY_WRONG_QGLOBALSTATIC_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class Stmt;

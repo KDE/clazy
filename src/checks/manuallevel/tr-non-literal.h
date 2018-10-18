@@ -23,7 +23,14 @@
 #ifndef CLAZY_TR_NON_LITERAL_H
 #define CLAZY_TR_NON_LITERAL_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 
 /**

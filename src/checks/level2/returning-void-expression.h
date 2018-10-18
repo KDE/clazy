@@ -22,7 +22,14 @@
 #ifndef CLAZY_RETURNING_VOID_EXPRESSION_H
 #define CLAZY_RETURNING_VOID_EXPRESSION_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 
 /**

@@ -20,14 +20,31 @@
 */
 
 #include "fully-qualified-moc-types.h"
-#include "Utils.h"
+
 #include "HierarchyUtils.h"
-#include "QtUtils.h"
 #include "TypeUtils.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+#include "clang/Basic/IdentifierTable.h"
+#include "clang/Basic/LLVM.h"
+#include "clang/Basic/SourceManager.h"
+#include "clang/Lex/Token.h"
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
 
-#include <clang/AST/AST.h>
+namespace clang {
+class Decl;
+class MacroInfo;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

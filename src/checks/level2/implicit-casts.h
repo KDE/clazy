@@ -25,7 +25,11 @@
 #ifndef CLANG_LAZY_IMPLICIT_CASTS_H
 #define CLANG_LAZY_IMPLICIT_CASTS_H
 
+#include <string>
+
 #include "checkbase.h"
+
+class ClazyContext;
 
 namespace clang {
 class ImplicitCastExpr;
