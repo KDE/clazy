@@ -24,6 +24,14 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class FunctionDecl;
+class Stmt;
+}  // namespace clang
+
 
 /**
  * See README-connect-3arg-lambda.md for more info.

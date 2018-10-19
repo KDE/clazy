@@ -23,12 +23,26 @@
 */
 
 #include "assert-with-side-effects.h"
-#include "Utils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/OperationKinds.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
+
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

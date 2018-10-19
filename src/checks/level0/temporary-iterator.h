@@ -27,9 +27,16 @@
 
 #include "checkbase.h"
 
+#include <llvm/ADT/StringRef.h>
+
 #include <map>
 #include <vector>
 #include <string>
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
 
 /**
  * Finds places where you're using iterators on temporary containers.

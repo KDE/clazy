@@ -28,11 +28,15 @@
 #include "checkbase.h"
 
 #include <vector>
+#include <string>
+
+class ClazyContext;
 
 namespace clang {
 class CXXRecordDecl;
 class Stmt;
 class SourceLocation;
+class Decl;
 }
 
 /**

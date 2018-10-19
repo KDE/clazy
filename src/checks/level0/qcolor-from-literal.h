@@ -24,7 +24,16 @@
 
 #include "checkbase.h"
 
+#include <string>
+
 class QColorFromLiteral_Callback;
+class ClazyContext;
+namespace clang {
+class Stmt;
+namespace ast_matchers {
+class MatchFinder;
+}  // namespace ast_matchers
+}  // namespace clang
 
 /**
  * See README-qcolor-from-literal.md for more info.

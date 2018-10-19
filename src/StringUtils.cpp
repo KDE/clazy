@@ -23,8 +23,13 @@
 */
 
 #include "StringUtils.h"
+
 #include <string>
 #include <vector>
+
+namespace clang {
+class LangOptions;
+}  // namespace clang
 
 using namespace std;
 using namespace clang;

@@ -24,6 +24,15 @@
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/TemplateBase.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
+
+namespace clang {
+class LangOptions;
+}  // namespace clang
 
 using namespace std;
 using namespace clang;

@@ -29,7 +29,11 @@
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ASTContext.h>
+#include <clang/AST/Decl.h>
+#include <llvm/Support/Casting.h>
+
 #include <string>
+#include <vector>
 
 namespace clang {
 class CompilerInstance;

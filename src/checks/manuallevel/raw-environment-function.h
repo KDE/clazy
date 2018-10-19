@@ -24,6 +24,13 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
+
 /**
  * See README-raw-environment-function.md for more info.
  */

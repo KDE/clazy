@@ -26,10 +26,14 @@
 #define INEFFICIENT_QLIST_BASE_H
 
 #include "checkbase.h"
+
 #include <string>
+
+class ClazyContext;
 
 namespace clang {
 class VarDecl;
+class Decl;
 }
 
 /**

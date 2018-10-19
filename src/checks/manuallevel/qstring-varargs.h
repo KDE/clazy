@@ -24,6 +24,13 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
+
 
 /**
  * See README-qstring-varargs.md for more info.

@@ -21,13 +21,21 @@
 
 #include "lambda-in-connect.h"
 #include "ClazyContext.h"
-#include "Utils.h"
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "ContextUtils.h"
 #include "QtUtils.h"
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/LambdaCapture.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/Lambda.h>
+#include <llvm/ADT/iterator_range.h>
+#include <llvm/Support/Casting.h>
 
 using namespace clang;
 using namespace std;

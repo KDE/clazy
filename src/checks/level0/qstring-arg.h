@@ -24,6 +24,11 @@
 
 #include "checkbase.h"
 
+#include <string>
+#include <vector>
+
+class ClazyContext;
+
 namespace clang {
 class Stmt;
 class CXXMemberCallExpr;

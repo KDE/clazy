@@ -20,6 +20,7 @@
 */
 
 #include "clazy_export.h"
+
 #include <clang/AST/Type.h>
 
 #include <vector>
@@ -30,6 +31,7 @@ namespace clang {
     class CXXRecordDecl;
     class ClassTemplateSpecializationDecl;
     class Decl;
+class LangOptions;
 }
 
 namespace clazy

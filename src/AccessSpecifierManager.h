@@ -23,11 +23,16 @@
 #ifndef CLAZY_ACCESS_SPECIFIER_MANAGER_H
 #define CLAZY_ACCESS_SPECIFIER_MANAGER_H
 
-#include "checkbase.h"
-
 # include <clang/Frontend/CompilerInstance.h>
 # include <unordered_map>
 # include <vector>
+
+#include "checkbase.h"
+#include "clazy_export.h"
+
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/Specifiers.h>
+#include <llvm/ADT/StringRef.h>
 
 /*
    clang supports "public", "private" and "protected"
@@ -48,6 +53,8 @@ namespace clang
     class Decl;
     class CXXRecordDecl;
     class SourceLocation;
+class CXXMethodDecl;
+class CompilerInstance;
 }
 
 class AccessSpecifierPreprocessorCallbacks;

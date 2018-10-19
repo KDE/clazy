@@ -21,15 +21,18 @@
 
 #include "qenums.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
 #include "PreProcessorVisitor.h"
+#include "clazy_stl.h"
 
-#include <clang/AST/AST.h>
 #include <clang/Lex/Token.h>
-#include <clang/Lex/Preprocessor.h>
+#include <clang/Basic/IdentifierTable.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Lexer.h>
+#include <llvm/ADT/StringRef.h>
+
+namespace clang {
+class MacroInfo;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

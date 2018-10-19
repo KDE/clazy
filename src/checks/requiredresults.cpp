@@ -25,7 +25,6 @@
 #include "requiredresults.h"
 #include "Utils.h"
 
-
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>

@@ -21,13 +21,19 @@
 
 #include "mutable-container-key.h"
 #include "Utils.h"
-#include "HierarchyUtils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
 #include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clazy_stl.h"
 
-#include <clang/AST/AST.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclTemplate.h>
+#include <clang/AST/TemplateBase.h>
+#include <clang/AST/Type.h>
+#include <llvm/ADT/StringRef.h>
+
 #include <vector>
+
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

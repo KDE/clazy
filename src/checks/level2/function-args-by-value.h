@@ -24,8 +24,17 @@
 
 #include "checkbase.h"
 
+#include <clang/Basic/Diagnostic.h>
+
+#include <string>
+
+class ClazyContext;
+
 namespace clang {
 class Stmt;
+class Decl;
+class FunctionDecl;
+class ParmVarDecl;
 }
 
 namespace TypeUtils {

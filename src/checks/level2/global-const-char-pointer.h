@@ -28,6 +28,12 @@
 #include "checkbase.h"
 
 #include <vector>
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 /**
  * Finds where you're using const char *foo; instead of const char *const foo; or const char []foo;

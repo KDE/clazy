@@ -24,10 +24,19 @@
 
 #include "checkbase.h"
 
+#include <clang/Basic/SourceLocation.h>
+
 #include <unordered_map>
+#include <string>
+#include <vector>
+
+class ClazyContext;
 
 namespace clang {
     class CXXMemberCallExpr;
+class MacroInfo;
+class Stmt;
+class Token;
 }
 
 /**

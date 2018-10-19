@@ -24,23 +24,31 @@
 
 #include "Utils.h"
 #include "Clazy.h"
-#include "StringUtils.h"
 #include "clazy_stl.h"
 #include "checkbase.h"
 #include "AccessSpecifierManager.h"
+#include "SourceCompatibilityHelpers.h"
 
-#include "clang/Frontend/FrontendPluginRegistry.h"
-#include "clang/AST/AST.h"
+#include <clang/Frontend/FrontendPluginRegistry.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/AST/ParentMap.h>
+#include <clang/AST/ASTConsumer.h>
+#include <clang/AST/ASTContext.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/StmtCXX.h>
+#include <clang/Basic/Diagnostic.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/FrontendAction.h>
+#include <llvm/Support/raw_ostream.h>
+#include <llvm/Support/Casting.h>
 
-#include "clang/Frontend/CompilerInstance.h"
-#include "llvm/Support/raw_ostream.h"
-#include "clang/AST/ParentMap.h"
-#include <llvm/Config/llvm-config.h>
-
+#include <stdlib.h>
 #include <mutex>
-#include <stdio.h>
-#include <sstream>
-#include <iostream>
 
 using namespace clang;
 using namespace std;

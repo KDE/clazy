@@ -24,6 +24,10 @@
 
 #include "checks/ruleofbase.h"
 
+#include <string>
+
+class ClazyContext;
+
 namespace clang {
 class Decl;
 }

@@ -20,12 +20,21 @@
 */
 
 #include "isempty-vs-count.h"
-#include "Utils.h"
 #include "StringUtils.h"
 #include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/OperationKinds.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/StmtIterator.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

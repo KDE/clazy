@@ -24,6 +24,13 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
+
 
 /**
  * See README-skipped-base-method.md for more info.

@@ -24,6 +24,14 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Decl;
+class Stmt;
+}  // namespace clang
+
 
 /**
  * See README-const-signal-or-slot.md for more info.

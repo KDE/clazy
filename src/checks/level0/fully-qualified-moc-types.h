@@ -23,7 +23,20 @@
 #define CLAZY_FULLY_QUALIFIED_MOC_TYPES_H
 
 #include "checkbase.h"
+
+#include <clang/Basic/SourceLocation.h>
+
 #include <vector>
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class CXXMethodDecl;
+class CXXRecordDecl;
+class Decl;
+class MacroInfo;
+class Token;
+}  // namespace clang
 
 /**
  * See README-fully-qualified-moc-types.md for more info.

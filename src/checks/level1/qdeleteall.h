@@ -24,6 +24,13 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
+
 /**
  * - QDeleteAll:
  *   - Finds places where you call qDeleteAll(set/map/hash.values()/keys())

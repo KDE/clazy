@@ -23,12 +23,25 @@
 #define CLAZY_QT_UTILS_H
 
 #include "clazy_export.h"
-
 #include "TypeUtils.h"
 #include "MacroUtils.h"
 #include "FunctionUtils.h"
+#include "StringUtils.h"
+#include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/ASTContext.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclTemplate.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/OperationKinds.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/TemplateBase.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/SourceLocation.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
 
 #include <string>
 #include <vector>
@@ -49,6 +62,8 @@ class FunctionDecl;
 class UnaryOperator;
 class CXXMethodDecl;
 class Expr;
+class PreprocessorOptions;
+class SourceManager;
 }
 
 struct StmtBodyRange;

@@ -21,10 +21,17 @@
 
 #include "copyable-polymorphic.h"
 #include "Utils.h"
-#include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/Specifiers.h>
+#include <llvm/Support/Casting.h>
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

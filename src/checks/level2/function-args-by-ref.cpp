@@ -24,13 +24,24 @@
 
 #include "function-args-by-ref.h"
 #include "Utils.h"
-#include "FixItUtils.h"
 #include "TypeUtils.h"
 #include "ClazyContext.h"
 #include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clazy_stl.h"
 
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/Diagnostic.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/ArrayRef.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 using namespace clang;
 using namespace std;

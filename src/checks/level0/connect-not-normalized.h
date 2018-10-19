@@ -25,10 +25,15 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+
 namespace clang {
     class CXXConstructExpr;
     class CallExpr;
     class Expr;
+class Stmt;
 }
 
 /**

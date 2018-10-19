@@ -24,6 +24,16 @@
 
 #include "checkbase.h"
 
+#include <clang/Basic/SourceLocation.h>
+
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class MacroInfo;
+class Token;
+}  // namespace clang
+
 
 /**
  * See README-qproperty-without-notify.md for more info.

@@ -25,11 +25,16 @@
 #include "checkmanager.h"
 #include "clazy_stl.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "Checks.h"
 
+#include <llvm/Support/raw_ostream.h>
+
 #include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <algorithm>
+#include <iterator>
+#include <memory>
 
 using namespace clang;
 using namespace std;

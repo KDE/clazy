@@ -23,17 +23,20 @@
 #define CLAZY_CONTEXT_H
 
 #include "SuppressionManager.h"
-
 #include "clazy_stl.h"
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Basic/FileManager.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
 #include <llvm/Support/Regex.h>
+#include <llvm/ADT/StringRef.h>
 
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
 
 // ClazyContext is just a struct to share data and code between all checks
 
@@ -43,6 +46,8 @@ namespace clang {
     class ParentMap;
     class SourceManager;
     class FixItRewriter;
+class CXXMethodDecl;
+class Decl;
 }
 
 class AccessSpecifierManager;
@@ -124,7 +129,7 @@ public:
             }
         }
 
-        StringRef fileName((*file)->getName());
+        llvm::StringRef fileName((*file)->getName());
         return regex->match(fileName);
     }
 

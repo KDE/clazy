@@ -20,12 +20,19 @@
 */
 
 #include "ctor-missing-parent-argument.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
-#include <clang/AST/AST.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceManager.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

@@ -24,7 +24,15 @@
 
 #include "checkbase.h"
 
+#include <clang/Basic/SourceLocation.h>
+
+#include <string>
+
 class QtMacrosPreprocessorCallbacks;
+class ClazyContext;
+namespace clang {
+class Token;
+}  // namespace clang
 
 /**
  * See README-qt-macros for more info.

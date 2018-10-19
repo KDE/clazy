@@ -25,6 +25,10 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+
 namespace clang {
 class Stmt;
 }

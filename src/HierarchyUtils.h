@@ -36,7 +36,6 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/ParentMap.h>
 
-
 namespace clazy {
 
 enum IgnoreStmt {

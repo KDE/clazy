@@ -24,6 +24,14 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class SourceLocation;
+class Stmt;
+}  // namespace clang
+
 /**
  * See README-empty-qstringliteral.md for more info.
  */

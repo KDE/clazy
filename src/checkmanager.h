@@ -35,6 +35,9 @@
 #include <unordered_map>
 #include <vector>
 #include <utility>
+#include <string>
+
+class ClazyContext;
 
 struct CLAZYLIB_EXPORT RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;

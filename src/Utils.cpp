@@ -25,23 +25,36 @@
 #include "Utils.h"
 #include "StringUtils.h"
 #include "HierarchyUtils.h"
-#include "ContextUtils.h"
 #include "StmtBodyRange.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Expr.h>
-#include <clang/AST/StmtCXX.h>
-#include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
-#include <clang/AST/DeclFriend.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/Basic/SourceLocation.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/AST/ParentMap.h>
 #include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclGroup.h>
+#include <clang/AST/OperationKinds.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/StmtIterator.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/CharInfo.h>
+#include <clang/Basic/IdentifierTable.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Token.h>
+#include <llvm/Support/Casting.h>
 
 #include <cctype>
-#include <sstream>
+#include <iterator>
+#include <utility>
+
+namespace clang {
+class LangOptions;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

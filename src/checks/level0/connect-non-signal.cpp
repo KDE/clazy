@@ -23,13 +23,15 @@
 #include "connect-non-signal.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "TypeUtils.h"
-#include "NormalizedSignatureUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
-#include <clang/AST/AST.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 using namespace clang;
 using namespace std;

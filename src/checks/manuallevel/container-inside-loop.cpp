@@ -25,10 +25,19 @@
 #include "StringUtils.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/ParentMap.h>
-#include <clang/AST/AST.h>
-#include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
+
+namespace clang {
+class CXXConstructorDecl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

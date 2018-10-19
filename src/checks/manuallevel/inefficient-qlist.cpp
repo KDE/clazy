@@ -23,14 +23,8 @@
 */
 
 #include "inefficient-qlist.h"
-#include "Utils.h"
-#include "TypeUtils.h"
-#include "TemplateUtils.h"
 
-#include <clang/AST/Decl.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/AST.h>
-#include <clang/AST/DeclTemplate.h>
+class ClazyContext;
 
 using namespace clang;
 using namespace std;

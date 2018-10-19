@@ -20,16 +20,21 @@
 */
 
 #include "qhash-namespace.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
 #include "ContextUtils.h"
 #include "StringUtils.h"
 #include "ClazyContext.h"
 #include "PreProcessorVisitor.h"
+#include "SourceCompatibilityHelpers.h"
 
-#include <clang/AST/AST.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+namespace clang {
+class Decl;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

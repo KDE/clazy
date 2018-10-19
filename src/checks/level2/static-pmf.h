@@ -24,6 +24,13 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Decl;
+}  // namespace clang
+
 
 /**
  * See README-static-pmf.md for more info.

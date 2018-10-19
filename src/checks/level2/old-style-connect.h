@@ -27,10 +27,22 @@
 
 #include "checkbase.h"
 
+#include <clang/Basic/SourceLocation.h>
+
+#include <string>
+#include <vector>
+
+class ClazyContext;
+
 namespace clang {
 class CallExpr;
 class CXXMemberCallExpr;
 class Expr;
+class FixItHint;
+class FunctionDecl;
+class MacroInfo;
+class Stmt;
+class Token;
 }
 
 struct PrivateSlot

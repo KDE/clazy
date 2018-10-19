@@ -27,17 +27,27 @@
 
 #include "checkmanager.h"
 #include "ClazyContext.h"
+#include "checkbase.h"
 
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
-#include "clang/AST/RecursiveASTVisitor.h"
+#include <clang/AST/RecursiveASTVisitor.h>
+#include <llvm/ADT/StringRef.h>
 
 #include <memory>
 #include <vector>
 #include <string>
+#include <utility>
+
+namespace llvm {
+class raw_ostream;
+}  // namespace llvm
 
 namespace clang {
     class CompilerInstance;
+class ASTContext;
+class Decl;
+class Stmt;
 }
 
 /**

@@ -28,16 +28,32 @@
 #include "clazy_export.h"
 #include "Utils.h"
 #include "clazy_stl.h"
+#include "SourceCompatibilityHelpers.h"
 
-#include "clang/AST/PrettyPrinter.h"
 #include <clang/Basic/LangOptions.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/PrettyPrinter.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclarationName.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/OperatorKinds.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/Specifiers.h>
+#include <llvm/ADT/ArrayRef.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+#include <llvm/Support/raw_ostream.h>
+
 #include <string>
 #include <vector>
 
 namespace clang {
 class LangOpts;
+class SourceManager;
 }
 
 

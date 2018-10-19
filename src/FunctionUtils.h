@@ -32,6 +32,7 @@
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
+
 #include <string>
 
 namespace clazy {
@@ -104,7 +105,7 @@ inline bool classImplementsMethod(const clang::CXXRecordDecl *record, const clan
     if (!method->getDeclName().isIdentifier())
         return false;
 
-    StringRef methodName = method->getName();
+    llvm::StringRef methodName = method->getName();
     for (auto m : record->methods()) {
         if (!m->isPure() && clazy::name(m) == methodName && parametersMatch(m, method))
             return true;

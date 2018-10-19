@@ -26,10 +26,29 @@
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clazy_stl.h"
 
-#include <clang/AST/AST.h>
 #include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/OperationKinds.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/Linkage.h>
+#include <clang/Basic/SourceLocation.h>
+#include <llvm/ADT/ArrayRef.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
+
+namespace clang {
+class ParentMap;
+}  // namespace clang
 
 using namespace clang;
 using namespace std;

@@ -34,6 +34,10 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/DeclTemplate.h>
+#include <clang/Basic/SourceLocation.h>
+#include <llvm/ADT/ArrayRef.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Config/llvm-config.h>
 
 #include <string>
 #include <vector>
@@ -58,6 +62,16 @@ namespace clang {
     class ConditionalOperator;
     class CXXMethodDecl;
     class BinaryOperator;
+class CXXOperatorCallExpr;
+class CallExpr;
+class DeclStmt;
+class Expr;
+class FunctionDecl;
+class LangOptions;
+class ParmVarDecl;
+class StringLiteral;
+class UserDefinedLiteral;
+class VarDecl;
 }
 
 struct StmtBodyRange;

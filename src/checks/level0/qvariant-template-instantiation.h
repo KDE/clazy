@@ -27,6 +27,13 @@
 
 #include "checkbase.h"
 
+#include <string>
+
+class ClazyContext;
+namespace clang {
+class Stmt;
+}  // namespace clang
+
 /**
  * Detects when you're using QVariant::value<Foo>() instead of QVariant::toFoo().
  *

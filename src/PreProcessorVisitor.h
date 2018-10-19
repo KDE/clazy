@@ -29,9 +29,12 @@
 
 #include "checkbase.h"
 
-#include <string>
 #include <clang/Lex/PPCallbacks.h>
+#include <llvm/ADT/StringRef.h>
+
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace clang {
     class CompilerInstance;
@@ -40,6 +43,7 @@ namespace clang {
     class Token;
     class MacroDefinition;
     class MacroArgs;
+class SourceLocation;
 }
 
 using uint = unsigned;

@@ -27,9 +27,16 @@
 
 #include "checkbase.h"
 
+#include <set>
+#include <string>
+
+class ClazyContext;
+
 namespace clang {
 class ClassTemplateSpecializationDecl;
 class CXXRecordDecl;
+class Decl;
+class QualType;
 }
 
 /**

@@ -20,13 +20,15 @@
 */
 
 #include "post-event.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "QtUtils.h"
 #include "TypeUtils.h"
 #include "StringUtils.h"
 
-#include <clang/AST/AST.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
+
+class ClazyContext;
 
 using namespace clang;
 using namespace std;
