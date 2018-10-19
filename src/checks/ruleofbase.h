@@ -22,9 +22,9 @@
 #ifndef CLANG_LAZY_RULE_OF_BASE_H
 #define CLANG_LAZY_RULE_OF_BASE_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

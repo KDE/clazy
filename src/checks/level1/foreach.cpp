@@ -23,10 +23,6 @@
 */
 
 #include "foreach.h"
-
-#include <unordered_map>
-#include <vector>
-
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "HierarchyUtils.h"
@@ -35,16 +31,20 @@
 #include "PreProcessorVisitor.h"
 #include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
 #include "clazy_stl.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <unordered_map>
+#include <vector>
 
 namespace clang {
 class Decl;

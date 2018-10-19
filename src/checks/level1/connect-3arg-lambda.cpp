@@ -20,17 +20,17 @@
 */
 
 #include "connect-3arg-lambda.h"
-
-#include <vector>
-
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 class ClazyContext;
 

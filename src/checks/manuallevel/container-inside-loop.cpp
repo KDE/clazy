@@ -20,21 +20,20 @@
 */
 
 #include "container-inside-loop.h"
-
-#include <clang/AST/ParentMap.h>
-
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "StringUtils.h"
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
 #include "clazy_stl.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/ParentMap.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class CXXConstructorDecl;

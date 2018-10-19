@@ -23,14 +23,6 @@
 */
 
 #include "qstring-allocations.h"
-
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/ExprCXX.h>
-#include <clang/AST/Expr.h>
-#include <clang/Basic/Diagnostic.h>
-#include <clang/Lex/Lexer.h>
-#include <assert.h>
-
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -40,15 +32,23 @@
 #include "QtUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/StmtIterator.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/SourceLocation.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/raw_ostream.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/Basic/Diagnostic.h>
+#include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/StmtIterator.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+#include <llvm/Support/raw_ostream.h>
+
+#include <assert.h>
 
 namespace clang {
 class LangOptions;

@@ -28,10 +28,11 @@
 # include <vector>
 
 #include "checkbase.h"
-#include "clang/Basic/SourceLocation.h"
-#include "clang/Basic/Specifiers.h"
 #include "clazy_export.h"
-#include "llvm/ADT/StringRef.h"
+
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/Specifiers.h>
+#include <llvm/ADT/StringRef.h>
 
 /*
    clang supports "public", "private" and "protected"

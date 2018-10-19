@@ -25,9 +25,9 @@
 #ifndef DETACHING_MEMBER_H
 #define DETACHING_MEMBER_H
 
-#include <string>
-
 #include "checks/detachingbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

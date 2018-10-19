@@ -22,9 +22,9 @@
 #ifndef CLAZY_QHASH_WITH_CHAR_POINTER_KEY_H
 #define CLAZY_QHASH_WITH_CHAR_POINTER_KEY_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

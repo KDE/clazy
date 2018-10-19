@@ -21,12 +21,12 @@
 
 #include "raw-environment-function.h"
 
-#include "clang/AST/Decl.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+#include <clang/AST/Decl.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
 
 class ClazyContext;
 

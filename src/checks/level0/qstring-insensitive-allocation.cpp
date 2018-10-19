@@ -20,17 +20,17 @@
 */
 
 #include "qstring-insensitive-allocation.h"
-
-#include <vector>
-
 #include "Utils.h"
 #include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
 #include "clazy_stl.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 class ClazyContext;
 namespace clang {

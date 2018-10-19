@@ -22,9 +22,9 @@
 #ifndef CLAZY_CONTAINER_ANTI_PATTERN_H
 #define CLAZY_CONTAINER_ANTI_PATTERN_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

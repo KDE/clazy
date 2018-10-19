@@ -22,9 +22,9 @@
 #ifndef CLAZY_EMPTY_QSTRINGLITERAL_H
 #define CLAZY_EMPTY_QSTRINGLITERAL_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

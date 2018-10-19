@@ -25,11 +25,12 @@
 #ifndef OLD_STYLE_CONNECT_H
 #define OLD_STYLE_CONNECT_H
 
+#include "checkbase.h"
+
+#include <clang/Basic/SourceLocation.h>
+
 #include <string>
 #include <vector>
-
-#include "checkbase.h"
-#include "clang/Basic/SourceLocation.h"
 
 class ClazyContext;
 

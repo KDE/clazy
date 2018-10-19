@@ -20,20 +20,20 @@
 */
 
 #include "base-class-event.h"
-
-#include <clang/AST/DeclCXX.h>
-#include <array>
-#include <vector>
-
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
 #include "clazy_stl.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <array>
+#include <vector>
 
 class ClazyContext;
 namespace clang {

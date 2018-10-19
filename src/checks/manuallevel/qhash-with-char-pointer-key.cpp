@@ -20,15 +20,15 @@
 */
 
 #include "qhash-with-char-pointer-key.h"
-
 #include "Utils.h"
 #include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/AST/DeclTemplate.h"
-#include "clang/AST/TemplateBase.h"
-#include "clang/AST/Type.h"
-#include "llvm/ADT/StringRef.h"
+
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclTemplate.h>
+#include <clang/AST/TemplateBase.h>
+#include <clang/AST/Type.h>
+#include <llvm/ADT/StringRef.h>
 
 class ClazyContext;
 

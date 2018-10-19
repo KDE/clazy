@@ -20,17 +20,17 @@
 */
 
 #include "SuppressionManager.h"
+#include "clazy_stl.h"
 
 #include <clang/Basic/SourceManager.h>
 #include <clang/Lex/Lexer.h>
-#include <vector>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/TokenKinds.h>
+#include <clang/Lex/Token.h>
+#include <llvm/Support/MemoryBuffer.h>
+#include <llvm/Support/raw_ostream.h>
 
-#include "clazy_stl.h"
-#include "clang/Basic/SourceLocation.h"
-#include "clang/Basic/TokenKinds.h"
-#include "clang/Lex/Token.h"
-#include "llvm/Support/MemoryBuffer.h"
-#include "llvm/Support/raw_ostream.h"
+#include <vector>
 
 #ifndef NO_STD_REGEX
 # include <regex>

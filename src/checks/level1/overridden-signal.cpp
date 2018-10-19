@@ -20,16 +20,16 @@
 */
 
 #include "overridden-signal.h"
-
 #include "QtUtils.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FunctionUtils.h"
 #include "StringUtils.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class Decl;

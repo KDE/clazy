@@ -25,9 +25,9 @@
 #ifndef CLANG_LAZY_QGETENV_H
 #define CLANG_LAZY_QGETENV_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

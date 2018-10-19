@@ -25,10 +25,10 @@
 #ifndef CLAZY_RESERVE_CANDIDATES
 #define CLAZY_RESERVE_CANDIDATES
 
+#include "checkbase.h"
+
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
 
 class ClazyContext;
 

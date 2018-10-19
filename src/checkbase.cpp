@@ -23,26 +23,26 @@
 */
 
 #include "checkbase.h"
-
-#include <vector>
-#include <memory>
-
 #include "ClazyContext.h"
 #include "SourceCompatibilityHelpers.h"
 #include "SuppressionManager.h"
 #include "Utils.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/Diagnostic.h"
-#include "clang/Basic/DiagnosticIDs.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Lex/MacroInfo.h"
-#include "clang/Lex/Preprocessor.h"
 #include "clazy_stl.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/raw_ostream.h"
+
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/Diagnostic.h>
+#include <clang/Basic/DiagnosticIDs.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/MacroInfo.h>
+#include <clang/Lex/Preprocessor.h>
+#include <llvm/ADT/IntrusiveRefCntPtr.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/raw_ostream.h>
+
+#include <vector>
+#include <memory>
 
 namespace clang {
 class MacroArgs;

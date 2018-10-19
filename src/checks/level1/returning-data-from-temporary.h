@@ -22,9 +22,9 @@
 #ifndef CLAZY_RETURNING_DATA_FROM_TEMPORARY_H
 #define CLAZY_RETURNING_DATA_FROM_TEMPORARY_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

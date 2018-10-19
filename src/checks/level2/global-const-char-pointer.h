@@ -25,10 +25,10 @@
 #ifndef GLOBAL_CONST_CHAR_POINTER_H
 #define GLOBAL_CONST_CHAR_POINTER_H
 
+#include "checkbase.h"
+
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
 
 class ClazyContext;
 namespace clang {

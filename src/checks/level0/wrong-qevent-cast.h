@@ -22,9 +22,9 @@
 #ifndef CLAZY_WRONG_QEVENT_CAST_H
 #define CLAZY_WRONG_QEVENT_CAST_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

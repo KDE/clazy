@@ -22,9 +22,9 @@
 #ifndef CLANG_LAZY_RULE_OF_TWO_SOFT_H
 #define CLANG_LAZY_RULE_OF_TWO_SOFT_H
 
-#include <string>
-
 #include "checks/ruleofbase.h"
+
+#include <string>
 
 class ClazyContext;
 

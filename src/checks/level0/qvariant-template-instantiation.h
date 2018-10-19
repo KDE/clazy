@@ -25,9 +25,9 @@
 #ifndef VARIANT_SANITIZER_H
 #define VARIANT_SANITIZER_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

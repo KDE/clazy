@@ -32,6 +32,7 @@
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
+
 #include <string>
 
 namespace clazy {

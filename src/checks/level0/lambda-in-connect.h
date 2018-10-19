@@ -22,9 +22,9 @@
 #ifndef CLAZY_LAMBDA_IN_CONNECT_H
 #define CLAZY_LAMBDA_IN_CONNECT_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

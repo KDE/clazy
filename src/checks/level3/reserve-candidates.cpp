@@ -23,14 +23,6 @@
 */
 
 #include "reserve-candidates.h"
-
-#include <clang/AST/Decl.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/Expr.h>
-#include <clang/AST/ExprCXX.h>
-#include <clang/AST/Stmt.h>
-#include <vector>
-
 #include "ClazyContext.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -41,13 +33,21 @@
 #include "HierarchyUtils.h"
 #include "LoopUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/StmtCXX.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/SourceLocation.h"
-#include "clang/Basic/SourceManager.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/StmtCXX.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 using namespace clang;
 using namespace std;

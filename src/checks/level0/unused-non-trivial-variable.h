@@ -22,10 +22,10 @@
 #ifndef CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_H
 #define CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_H
 
+#include "checkbase.h"
+
 #include <string>
 #include <vector>
-
-#include "checkbase.h"
 
 class ClazyContext;
 

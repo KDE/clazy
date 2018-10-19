@@ -25,11 +25,11 @@
 #ifndef CLAZY_STRING_ALLOCATIONS_H
 #define CLAZY_STRING_ALLOCATIONS_H
 
+#include "checkbase.h"
+
 #include <map>
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
 
 class ClazyContext;
 

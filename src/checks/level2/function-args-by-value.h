@@ -22,10 +22,11 @@
 #ifndef CLAZY_FUNC_ARGS_BY_VALUE_H
 #define CLAZY_FUNC_ARGS_BY_VALUE_H
 
-#include <string>
-
 #include "checkbase.h"
-#include "clang/Basic/Diagnostic.h"
+
+#include <clang/Basic/Diagnostic.h>
+
+#include <string>
 
 class ClazyContext;
 

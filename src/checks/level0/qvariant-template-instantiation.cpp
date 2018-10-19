@@ -23,22 +23,22 @@
 */
 
 #include "qvariant-template-instantiation.h"
+#include "TemplateUtils.h"
+#include "StringUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "clazy_stl.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
 
 #include <ctype.h>
 #include <memory>
 #include <vector>
-
-#include "TemplateUtils.h"
-#include "StringUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "clazy_stl.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
 
 class ClazyContext;
 

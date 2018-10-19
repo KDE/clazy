@@ -25,10 +25,10 @@
 #ifndef VIRTUALCALLSFROMCTOR_H
 #define VIRTUALCALLSFROMCTOR_H
 
+#include "checkbase.h"
+
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
 
 class ClazyContext;
 

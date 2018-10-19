@@ -25,11 +25,11 @@
 #ifndef DETACHING_BASE_H
 #define DETACHING_BASE_H
 
+#include "checkbase.h"
+
 #include <map>
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
 
 class ClazyContext;
 

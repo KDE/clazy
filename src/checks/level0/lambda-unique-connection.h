@@ -22,9 +22,9 @@
 #ifndef CLAZY_LAMBDA_UNIQUE_CONNECTION_H
 #define CLAZY_LAMBDA_UNIQUE_CONNECTION_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

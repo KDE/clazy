@@ -22,9 +22,9 @@
 #ifndef CLAZY_CHILD_EVENT_QOBJECT_CAST_H
 #define CLAZY_CHILD_EVENT_QOBJECT_CAST_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

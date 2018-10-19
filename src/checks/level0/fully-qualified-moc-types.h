@@ -22,11 +22,12 @@
 #ifndef CLAZY_FULLY_QUALIFIED_MOC_TYPES_H
 #define CLAZY_FULLY_QUALIFIED_MOC_TYPES_H
 
+#include "checkbase.h"
+
+#include <clang/Basic/SourceLocation.h>
+
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
-#include "clang/Basic/SourceLocation.h"
 
 class ClazyContext;
 namespace clang {

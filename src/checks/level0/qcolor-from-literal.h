@@ -22,9 +22,9 @@
 #ifndef CLAZY_QCOLOR_FROM_LITERAL_H
 #define CLAZY_QCOLOR_FROM_LITERAL_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class QColorFromLiteral_Callback;
 class ClazyContext;

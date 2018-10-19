@@ -22,9 +22,9 @@
 #ifndef CLAZY_VIRTUAL_SIGNAL_H
 #define CLAZY_VIRTUAL_SIGNAL_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

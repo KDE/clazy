@@ -20,18 +20,18 @@
 */
 
 #include "empty-qstringliteral.h"
-
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "PreProcessorVisitor.h"
 #include "ClazyContext.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/SourceLocation.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
 
 using namespace clang;
 using namespace std;

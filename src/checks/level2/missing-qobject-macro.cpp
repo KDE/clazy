@@ -23,14 +23,15 @@
 #include "ClazyContext.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/Basic/IdentifierTable.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Lex/Token.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/IdentifierTable.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Token.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class MacroInfo;

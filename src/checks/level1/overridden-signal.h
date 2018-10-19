@@ -22,9 +22,9 @@
 #ifndef CLAZY_OVERRIDDEN_SIGNAL_H
 #define CLAZY_OVERRIDDEN_SIGNAL_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

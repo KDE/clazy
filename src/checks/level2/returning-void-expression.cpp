@@ -20,16 +20,16 @@
 */
 
 #include "returning-void-expression.h"
-
 #include "ContextUtils.h"
 #include "ClazyContext.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
 #include "clazy_stl.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class DeclContext;

@@ -20,13 +20,13 @@
 */
 
 #include "virtual-signal.h"
-
 #include "QtUtils.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class Decl;

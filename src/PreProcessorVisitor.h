@@ -27,13 +27,14 @@
 // For example, getting the Qt version can be done once and the result shared
 // with all checks
 
+#include "checkbase.h"
+
 #include <clang/Lex/PPCallbacks.h>
+#include <llvm/ADT/StringRef.h>
+
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-#include "checkbase.h"
-#include "llvm/ADT/StringRef.h"
 
 namespace clang {
     class CompilerInstance;

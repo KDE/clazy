@@ -23,24 +23,24 @@
 */
 
 #include "non-pod-global-static.h"
-
-#include <clang/AST/DeclCXX.h>
-#include <clang/Lex/Lexer.h>
-#include <vector>
-
 #include "QtUtils.h"
 #include "ClazyContext.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/SourceLocation.h"
-#include "clang/Basic/Specifiers.h"
-#include "clang/Frontend/CompilerInstance.h"
 #include "clazy_stl.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/Specifiers.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 using namespace clang;
 using namespace std;

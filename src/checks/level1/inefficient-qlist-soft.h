@@ -22,9 +22,9 @@
 #ifndef CLAZY_INEFFICIENT_QLIST_SOFT_H
 #define CLAZY_INEFFICIENT_QLIST_SOFT_H
 
-#include <string>
-
 #include "checks/inefficientqlistbase.h"
+
+#include <string>
 
 class ClazyContext;
 

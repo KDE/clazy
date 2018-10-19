@@ -25,22 +25,23 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
-#include <clang/Basic/SourceManager.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Parse/Parser.h>
-#include <llvm/Config/llvm-config.h>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "clazy_export.h"
 #include "clazy_stl.h"
 #include "SourceCompatibilityHelpers.h"
-#include "clang/ASTMatchers/ASTMatchers.h"
-#include "clang/ASTMatchers/ASTMatchFinder.h"
-#include "clang/AST/ASTContext.h"
-#include "clang/Basic/SourceLocation.h"
-#include "clang/Lex/PPCallbacks.h"
+
+#include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Parse/Parser.h>
+#include <clang/ASTMatchers/ASTMatchers.h>
+#include <clang/ASTMatchers/ASTMatchFinder.h>
+#include <clang/AST/ASTContext.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Lex/PPCallbacks.h>
+#include <llvm/Config/llvm-config.h>
+
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace clang {
 class CXXMethodDecl;

@@ -22,9 +22,9 @@
 #ifndef CLAZY_STRICT_ITERATORS_H
 #define CLAZY_STRICT_ITERATORS_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

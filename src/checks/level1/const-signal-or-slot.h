@@ -22,9 +22,9 @@
 #ifndef CLAZY_CONST_SIGNAL_OR_SLOT_H
 #define CLAZY_CONST_SIGNAL_OR_SLOT_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

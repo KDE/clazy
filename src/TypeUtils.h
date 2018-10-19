@@ -22,17 +22,18 @@
 #ifndef CLAZY_TYPE_UTILS_H
 #define CLAZY_TYPE_UTILS_H
 
+#include "clazy_export.h"
+
 #include <clang/AST/Type.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ASTContext.h>
+#include <clang/AST/Decl.h>
+#include <llvm/Support/Casting.h>
+
 #include <string>
 #include <vector>
-
-#include "clazy_export.h"
-#include "clang/AST/Decl.h"
-#include "llvm/Support/Casting.h"
 
 namespace clang {
 class CompilerInstance;

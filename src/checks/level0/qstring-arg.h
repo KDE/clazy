@@ -22,10 +22,10 @@
 #ifndef QSTRING_ARG_H
 #define QSTRING_ARG_H
 
+#include "checkbase.h"
+
 #include <string>
 #include <vector>
-
-#include "checkbase.h"
 
 class ClazyContext;
 

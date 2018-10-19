@@ -20,13 +20,13 @@
 */
 
 #include "post-event.h"
-
 #include "TypeUtils.h"
 #include "StringUtils.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 class ClazyContext;
 

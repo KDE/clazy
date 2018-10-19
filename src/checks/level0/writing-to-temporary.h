@@ -25,9 +25,9 @@
 #ifndef CLANG_WRITING_TO_TEMPORARY_H
 #define CLANG_WRITING_TO_TEMPORARY_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

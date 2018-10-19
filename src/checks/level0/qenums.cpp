@@ -20,16 +20,15 @@
 */
 
 #include "qenums.h"
-
-#include <clang/Lex/Token.h>
-
 #include "ClazyContext.h"
 #include "PreProcessorVisitor.h"
-#include "clang/Basic/IdentifierTable.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Lex/Lexer.h"
 #include "clazy_stl.h"
-#include "llvm/ADT/StringRef.h"
+
+#include <clang/Lex/Token.h>
+#include <clang/Basic/IdentifierTable.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Lexer.h>
+#include <llvm/ADT/StringRef.h>
 
 namespace clang {
 class MacroInfo;

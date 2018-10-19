@@ -22,9 +22,9 @@
 #ifndef CLAZY_CONNECT_3ARG_LAMBDA_H
 #define CLAZY_CONNECT_3ARG_LAMBDA_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

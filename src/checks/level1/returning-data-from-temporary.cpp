@@ -20,17 +20,17 @@
 */
 
 #include "returning-data-from-temporary.h"
-
 #include "HierarchyUtils.h"
 #include "TypeUtils.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 class ClazyContext;
 

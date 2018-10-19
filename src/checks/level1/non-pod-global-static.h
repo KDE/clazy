@@ -25,9 +25,9 @@
 #ifndef NON_POD_STATIC_H
 #define NON_POD_STATIC_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

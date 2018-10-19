@@ -21,15 +21,15 @@
 */
 
 #include "qlatin1string-non-ascii.h"
-
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 class ClazyContext;
 

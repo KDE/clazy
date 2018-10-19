@@ -19,11 +19,12 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include "clazy_export.h"
+
 #include <clang/AST/Type.h>
+
 #include <vector>
 #include <string>
-
-#include "clazy_export.h"
 
 namespace clang {
     class CXXMethodDecl;

@@ -23,16 +23,16 @@
 */
 
 #include "detachingbase.h"
-
-#include <clang/AST/DeclCXX.h>
-#include <unordered_map>
-#include <utility>
-#include <vector>
-
 #include "StringUtils.h"
 #include "QtUtils.h"
 #include "clazy_stl.h"
-#include "llvm/ADT/StringRef.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <llvm/ADT/StringRef.h>
+
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 class ClazyContext;
 

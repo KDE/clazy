@@ -25,18 +25,19 @@
 #ifndef CLAZY_AST_ACTION_H
 #define CLAZY_AST_ACTION_H
 
+#include "checkmanager.h"
+#include "ClazyContext.h"
+#include "checkbase.h"
+
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
+#include <clang/AST/RecursiveASTVisitor.h>
+#include <llvm/ADT/StringRef.h>
+
 #include <memory>
 #include <vector>
 #include <string>
 #include <utility>
-
-#include "checkmanager.h"
-#include "ClazyContext.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "checkbase.h"
-#include "llvm/ADT/StringRef.h"
 
 namespace llvm {
 class raw_ostream;

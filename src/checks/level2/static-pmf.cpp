@@ -20,13 +20,13 @@
 */
 
 #include "static-pmf.h"
-
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 class ClazyContext;
 namespace clang {

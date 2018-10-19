@@ -25,9 +25,9 @@
 #ifndef CLAZY_UNNEEDED_CAST_H
 #define CLAZY_UNNEEDED_CAST_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

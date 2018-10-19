@@ -22,9 +22,9 @@
 #ifndef CLANG_COPYABLE_POLYMORPHIC_H
 #define CLANG_COPYABLE_POLYMORPHIC_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

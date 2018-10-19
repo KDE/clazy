@@ -20,17 +20,17 @@
 */
 
 #include "const-signal-or-slot.h"
-
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class Decl;

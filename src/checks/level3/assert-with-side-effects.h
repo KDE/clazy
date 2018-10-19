@@ -25,9 +25,9 @@
 #ifndef ASSERT_WITH_SIDE_EFFECTS_H
 #define ASSERT_WITH_SIDE_EFFECTS_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

@@ -25,9 +25,9 @@
 #ifndef FOREACH_DETACHMENTS_H
 #define FOREACH_DETACHMENTS_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

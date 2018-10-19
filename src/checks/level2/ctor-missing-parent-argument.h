@@ -22,9 +22,9 @@
 #ifndef CLAZY_CTOR_MISSING_PARENT_ARGUMENT_H
 #define CLAZY_CTOR_MISSING_PARENT_ARGUMENT_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

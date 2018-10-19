@@ -20,16 +20,15 @@
 */
 
 #include "TemplateUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
-
-#include "StringUtils.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/TemplateBase.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+#include <clang/AST/Decl.h>
+#include <clang/AST/TemplateBase.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
 namespace clang {
 class LangOptions;

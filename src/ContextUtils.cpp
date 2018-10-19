@@ -20,20 +20,19 @@
 */
 
 #include "ContextUtils.h"
+#include "clazy_stl.h"
+#include "TypeUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclFriend.h>
-
-#include "clazy_stl.h"
-#include "TypeUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/Specifiers.h"
-#include "llvm/Support/raw_ostream.h"
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/Specifiers.h>
+#include <llvm/Support/raw_ostream.h>
 
 using namespace clang;
 using namespace std;

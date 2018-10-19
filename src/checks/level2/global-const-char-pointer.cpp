@@ -23,15 +23,15 @@
 */
 
 #include "global-const-char-pointer.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/Decl.h>
-#include <vector>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
 
-#include "SourceCompatibilityHelpers.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/Support/Casting.h"
+#include <vector>
 
 class ClazyContext;
 

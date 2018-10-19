@@ -20,12 +20,12 @@
 */
 
 #include "ruleofbase.h"
+#include "StringUtils.h"
+#include "clazy_stl.h"
+
+#include <clang/AST/DeclCXX.h>
 
 #include <vector>
-
-#include "StringUtils.h"
-#include "clang/AST/DeclCXX.h"
-#include "clazy_stl.h"
 
 class ClazyContext;
 

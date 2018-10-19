@@ -25,9 +25,9 @@
 #ifndef INEFFICIENT_QLIST_BASE_H
 #define INEFFICIENT_QLIST_BASE_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

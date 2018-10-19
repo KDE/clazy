@@ -22,17 +22,18 @@
 #ifndef CLAZY_CONTEXT_UTILS_H
 #define CLAZY_CONTEXT_UTILS_H
 
+#include "clazy_export.h"
+#include "TypeUtils.h"
+
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Stmt.h>
+#include <clang/AST/Type.h>
+#include <llvm/Support/Casting.h>
+
 #include <vector>
 #include <string>
-
-#include "clazy_export.h"
-#include "TypeUtils.h"
-#include "clang/AST/Type.h"
-#include "llvm/Support/Casting.h"
 
 namespace clang {
 class ValueDecl;

@@ -25,9 +25,9 @@
 #ifndef FUNCTION_ARGS_BY_REF_H
 #define FUNCTION_ARGS_BY_REF_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

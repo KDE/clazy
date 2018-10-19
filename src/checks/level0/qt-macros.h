@@ -22,10 +22,11 @@
 #ifndef CLAZY_QT_MACROS_H
 #define CLAZY_QT_MACROS_H
 
-#include <string>
-
 #include "checkbase.h"
-#include "clang/Basic/SourceLocation.h"
+
+#include <clang/Basic/SourceLocation.h>
+
+#include <string>
 
 class QtMacrosPreprocessorCallbacks;
 class ClazyContext;

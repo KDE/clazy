@@ -23,9 +23,9 @@
 #ifndef CLAZY_QLATIN1STRING_ENCODING_H
 #define CLAZY_QLATIN1STRING_ENCODING_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

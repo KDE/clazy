@@ -22,11 +22,12 @@
 #ifndef CLANG_MISSING_Q_OBJECT_H
 #define CLANG_MISSING_Q_OBJECT_H
 
+#include "checkbase.h"
+
+#include <clang/Basic/SourceLocation.h>
+
 #include <vector>
 #include <string>
-
-#include "checkbase.h"
-#include "clang/Basic/SourceLocation.h"
 
 class ClazyContext;
 

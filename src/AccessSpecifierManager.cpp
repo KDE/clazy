@@ -21,25 +21,25 @@
 */
 
 #include "AccessSpecifierManager.h"
-
-#include <clang/Basic/SourceManager.h>
-#include <clang/AST/DeclCXX.h>
-#include <algorithm>
-#include <memory>
-#include <utility>
-
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/AST/DeclTemplate.h"
-#include "clang/Basic/IdentifierTable.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Lex/PPCallbacks.h"
-#include "clang/Lex/Preprocessor.h"
-#include "clang/Lex/Token.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/Basic/SourceManager.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclTemplate.h>
+#include <clang/Basic/IdentifierTable.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/PPCallbacks.h>
+#include <clang/Lex/Preprocessor.h>
+#include <clang/Lex/Token.h>
+#include <llvm/Support/Casting.h>
+
+#include <algorithm>
+#include <memory>
+#include <utility>
 
 namespace clang {
 class MacroArgs;

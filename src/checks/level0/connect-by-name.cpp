@@ -20,15 +20,15 @@
 */
 
 #include "connect-by-name.h"
-
-#include <vector>
-
 #include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
-#include "clang/AST/DeclCXX.h"
-#include "clang/Basic/LLVM.h"
 #include "clazy_stl.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/DeclCXX.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 namespace clang {
 class Decl;

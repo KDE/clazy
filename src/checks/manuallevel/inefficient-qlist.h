@@ -25,9 +25,9 @@
 #ifndef INEFFICIENT_QLIST_H
 #define INEFFICIENT_QLIST_H
 
-#include <string>
-
 #include "checks/inefficientqlistbase.h"
+
+#include <string>
 
 class ClazyContext;
 

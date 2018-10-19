@@ -22,10 +22,11 @@
 #ifndef CLAZY_QPROPERTY_WITHOUT_NOTIFY_H
 #define CLAZY_QPROPERTY_WITHOUT_NOTIFY_H
 
-#include <string>
-
 #include "checkbase.h"
-#include "clang/Basic/SourceLocation.h"
+
+#include <clang/Basic/SourceLocation.h>
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

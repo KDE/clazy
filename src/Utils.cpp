@@ -23,6 +23,10 @@
 */
 
 #include "Utils.h"
+#include "StringUtils.h"
+#include "HierarchyUtils.h"
+#include "StmtBodyRange.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/DeclCXX.h>
@@ -30,27 +34,23 @@
 #include <clang/AST/ExprCXX.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Lex/Lexer.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclGroup.h>
+#include <clang/AST/OperationKinds.h>
+#include <clang/AST/Stmt.h>
+#include <clang/AST/StmtIterator.h>
+#include <clang/AST/Type.h>
+#include <clang/Basic/CharInfo.h>
+#include <clang/Basic/IdentifierTable.h>
+#include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Token.h>
+#include <llvm/Support/Casting.h>
+
 #include <cctype>
 #include <iterator>
 #include <utility>
-
-#include "StringUtils.h"
-#include "HierarchyUtils.h"
-#include "StmtBodyRange.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/DeclBase.h"
-#include "clang/AST/DeclGroup.h"
-#include "clang/AST/OperationKinds.h"
-#include "clang/AST/Stmt.h"
-#include "clang/AST/StmtIterator.h"
-#include "clang/AST/Type.h"
-#include "clang/Basic/CharInfo.h"
-#include "clang/Basic/IdentifierTable.h"
-#include "clang/Basic/LLVM.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Lex/Token.h"
-#include "clazy_stl.h"
-#include "llvm/Support/Casting.h"
 
 namespace clang {
 class LangOptions;

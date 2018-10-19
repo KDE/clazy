@@ -20,18 +20,18 @@
 */
 
 #include "lambda-unique-connection.h"
-
-#include <vector>
-
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/DeclTemplate.h"
-#include "clang/AST/Expr.h"
-#include "clang/AST/Stmt.h"
-#include "clang/Basic/LLVM.h"
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/Casting.h"
+
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclTemplate.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Basic/LLVM.h>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Casting.h>
+
+#include <vector>
 
 class ClazyContext;
 namespace clang {

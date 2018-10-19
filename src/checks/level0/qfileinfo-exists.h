@@ -22,9 +22,9 @@
 #ifndef CLAZY_QFILEINFO_EXISTS_H
 #define CLAZY_QFILEINFO_EXISTS_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 

@@ -22,9 +22,9 @@
 #ifndef CLAZY_CONNECT_BY_NAME_H
 #define CLAZY_CONNECT_BY_NAME_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

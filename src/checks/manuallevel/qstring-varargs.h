@@ -22,9 +22,9 @@
 #ifndef CLAZY_QSTRING_VARARGS_H
 #define CLAZY_QSTRING_VARARGS_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 namespace clang {

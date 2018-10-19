@@ -22,9 +22,9 @@
 #ifndef CLAZY_IS_EMPTY_VS_COUNT_H
 #define CLAZY_IS_EMPTY_VS_COUNT_H
 
-#include <string>
-
 #include "checkbase.h"
+
+#include <string>
 
 class ClazyContext;
 
