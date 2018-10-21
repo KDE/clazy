@@ -15,7 +15,8 @@ CLAZY_REPO_URL = "https://github.com/KDE/clazy.git"
 MSVC_VERSION = os.getenv('MSVC_VERSION', '')
 LLVM_INSTALL_DIR = os.getenv('LLVM_INSTALL_DIR', '')
 CLAZY_WORK_DIR = 'work' + MSVC_VERSION
-CLAZY_ZIP = "clazy_v%s-msvc%s.zip" % (CLAZY_VERSION, MSVC_VERSION)
+CLAZY_ZIP_WITHOUT_EXTENSION = "clazy_v%s-msvc%s" % (CLAZY_VERSION, MSVC_VERSION)
+CLAZY_ZIP = CLAZY_ZIP_WITHOUT_EXTENSION + '.zip'
 CLAZY_SRC_ZIP = "clazy_v%s-src.zip" % CLAZY_VERSION
 
 IS_FIRST_RUN = (MSVC_VERSION == '2015')
@@ -97,6 +98,8 @@ def zip_package():
         run_command('sha1sum %s >> sums.txt' % CLAZY_ZIP)
         run_command('sha256sum %s >> sums.txt' % CLAZY_ZIP)
 
+    run_command("unzip %s -d %s" % (CLAZY_ZIP, CLAZY_ZIP_WITHOUT_EXTENSION))
+    print "Don't forget to delete %s after testing" % CLAZY_ZIP_WITHOUT_EXTENSION
     os.chdir('..')
 
 check_env()
