@@ -1,6 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS // Silence warnings with MSVC
 #include <QtCore/QObject>
 #include <QtCore/QString>
-
 #include <stdlib.h>
 
 void test()
