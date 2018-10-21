@@ -1,5 +1,5 @@
 This package distributes the clang compiler and a compiler plugin called clazy.
-clang and llvm were built from branch release_40 (https://github.com/llvm-mirror/llvm.git c8fccc53ed66d505898f8850bcc690c977a7c9a7 and https://github.com/llvm-mirror/clang.git 3c8961bedc65c9a15cbe67a2ef385a0938f7cfef.
+clang and llvm were built from branch release_70 (https://github.com/llvm-mirror/llvm.git 888225e7beebbdd82f6b6c7e139c2b094ea4faaa and https://github.com/llvm-mirror/clang.git 0513b409d5e34b2d2a28ae21b6d620cc52de0e57).
 
 See LICENSE-LLVM.TXT for clang's license.
 See LICENSE-CLAZY.txt for clazy's license.
