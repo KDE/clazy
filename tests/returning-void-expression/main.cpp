@@ -34,3 +34,10 @@ void test6()
     test5<int>(); // OK
     return foo(); // Warning
 }
+
+struct A {};
+void foo()
+{
+
+    test6<A>();
+}
