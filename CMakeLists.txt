@@ -164,7 +164,6 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   add_clang_plugin(ClangLazy ${CLAZY_PLUGIN_SRCS})
   set_target_properties(ClangLazy PROPERTIES
     LINKER_LANGUAGE CXX
-    PREFIX ""
   )
 
   install(TARGETS ClangLazy
