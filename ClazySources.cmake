@@ -25,11 +25,8 @@ set(CLAZY_SHARED_SRCS # sources shared between clazy-standalone and clazy plugin
   ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/ClazyContext.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
+  ${CLAZY_LIB_SRC}
 )
-
-if (NOT CLAZY_BUILD_UTILS_LIB)
-  set(CLAZY_SHARED_SRCS ${CLAZY_SHARED_SRCS} ${CLAZY_LIB_SRC})
-endif()
 
 set(CLAZY_PLUGIN_SRCS # Sources for the plugin
   ${CLAZY_SHARED_SRCS}

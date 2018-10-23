@@ -25,7 +25,6 @@
 #ifndef MOREWARNINGS_UTILS_H
 #define MOREWARNINGS_UTILS_H
 
-#include "clazy_export.h"
 #include "SourceCompatibilityHelpers.h"
 
 #include <clang/Basic/SourceManager.h>
@@ -78,104 +77,104 @@ struct StmtBodyRange;
 
 namespace Utils {
     /// Returns true if the class has at least one constexpr ctor
-    CLAZYLIB_EXPORT bool hasConstexprCtor(clang::CXXRecordDecl *decl);
+    bool hasConstexprCtor(clang::CXXRecordDecl *decl);
 
     /// Returns the type we're casting *from*
-    CLAZYLIB_EXPORT clang::CXXRecordDecl * namedCastInnerDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
+    clang::CXXRecordDecl * namedCastInnerDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
 
     /// Returns the type we're casting *to*
-    CLAZYLIB_EXPORT clang::CXXRecordDecl * namedCastOuterDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
+    clang::CXXRecordDecl * namedCastOuterDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
 
     /// Returns the class declaration from a variable declaration
     // So, if the var decl is "Foo f"; it returns the declaration of Foo
-    CLAZYLIB_EXPORT clang::CXXRecordDecl * recordFromVarDecl(clang::Decl *);
+    clang::CXXRecordDecl * recordFromVarDecl(clang::Decl *);
 
     /// Returns the template specialization from a variable declaration
     // So, if the var decl is "QList<Foo> f;", returns the template specialization QList<Foo>
-    CLAZYLIB_EXPORT clang::ClassTemplateSpecializationDecl * templateSpecializationFromVarDecl(clang::Decl *);
+    clang::ClassTemplateSpecializationDecl * templateSpecializationFromVarDecl(clang::Decl *);
 
     /// Returns true if all the child member function calls are const functions.
-    CLAZYLIB_EXPORT bool allChildrenMemberCallsConst(clang::Stmt *stm);
+    bool allChildrenMemberCallsConst(clang::Stmt *stm);
 
     /// Returns true if at least a UnaryOperator, BinaryOperator or non-const function call is found
-    CLAZYLIB_EXPORT bool childsHaveSideEffects(clang::Stmt *stm);
+    bool childsHaveSideEffects(clang::Stmt *stm);
 
     /// Receives a member call, such as "list.reserve()" and returns the declaration of the variable list
     // such as "QList<F> list"
-    CLAZYLIB_EXPORT clang::ValueDecl * valueDeclForMemberCall(clang::CXXMemberCallExpr *);
+    clang::ValueDecl * valueDeclForMemberCall(clang::CXXMemberCallExpr *);
 
     /// Receives an operator call, such as "list << fooo" and returns the declaration of the variable list
     // such as "QList<F> list"
-    CLAZYLIB_EXPORT clang::ValueDecl * valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
+    clang::ValueDecl * valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
 
     // overload
-    CLAZYLIB_EXPORT clang::ValueDecl * valueDeclForCallExpr(clang::CallExpr *);
+    clang::ValueDecl * valueDeclForCallExpr(clang::CallExpr *);
 
     // Returns true of this value decl is a member variable of a class or struct
     // returns null if not
-    CLAZYLIB_EXPORT clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);
+    clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);
 
     // Returns true if a body of statements contains a non const member call on object declared by varDecl
     // For example:
     // Foo foo; // this is the varDecl
     // while (bar) { foo.setValue(); // non-const call }
-    CLAZYLIB_EXPORT bool containsNonConstMemberCall(clang::ParentMap *map, clang::Stmt *body, const clang::VarDecl *varDecl);
+    bool containsNonConstMemberCall(clang::ParentMap *map, clang::Stmt *body, const clang::VarDecl *varDecl);
 
     // Returns true if there's an assignment to varDecl in body
     // Example: our_var = something_else
-    CLAZYLIB_EXPORT bool isAssignedTo(clang::Stmt *body, const clang::VarDecl *varDecl);
+    bool isAssignedTo(clang::Stmt *body, const clang::VarDecl *varDecl);
 
     // Returns true if a body of statements contains a function call that takes our variable (varDecl)
     // By ref or pointer
-    CLAZYLIB_EXPORT bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl,
-                                            bool byRefOrPtrOnly);
+    bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl,
+                            bool byRefOrPtrOnly);
 
     // Returns true if we take the address of varDecl, such as: &foo
-    CLAZYLIB_EXPORT bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body,
-                                        const clang::ValueDecl *valDecl);
+    bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body,
+                        const clang::ValueDecl *valDecl);
 
     // QString::fromLatin1("foo")    -> true
     // QString::fromLatin1("foo", 1) -> false
-    CLAZYLIB_EXPORT bool callHasDefaultArguments(clang::CallExpr *expr);
+    bool callHasDefaultArguments(clang::CallExpr *expr);
 
     // If there's a child of type StringLiteral, returns true
     // if allowEmpty is false, "" will be ignored
-    CLAZYLIB_EXPORT bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
+    bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
-    CLAZYLIB_EXPORT bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s,
-                                              const std::vector<llvm::StringRef> &anyOf);
+    bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s,
+                              const std::vector<llvm::StringRef> &anyOf);
 
-    CLAZYLIB_EXPORT bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s,
-                                        const std::vector<llvm::StringRef> &anyOf);
+    bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s,
+                        const std::vector<llvm::StringRef> &anyOf);
 
     // returns true if the ternary operator has two string literal arguments, such as:
     // foo ? "bar" : "baz"
-    CLAZYLIB_EXPORT bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
+    bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
 
-    CLAZYLIB_EXPORT bool isAssignOperator(clang::CXXOperatorCallExpr *op,
-                                          llvm::StringRef className,
-                                          llvm::StringRef argumentType, const clang::LangOptions &lo);
+    bool isAssignOperator(clang::CXXOperatorCallExpr *op,
+                          llvm::StringRef className,
+                          llvm::StringRef argumentType, const clang::LangOptions &lo);
 
-    CLAZYLIB_EXPORT bool isImplicitCastTo(clang::Stmt *, const std::string &);
+    bool isImplicitCastTo(clang::Stmt *, const std::string &);
 
-    CLAZYLIB_EXPORT bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
+    bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 
 
     // Returns the list of methods with name methodName that the class/struct record contains
-    CLAZYLIB_EXPORT std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record,
-                                                                         const std::string &methodName);
+    std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record,
+                                                         const std::string &methodName);
 
     // Returns the most derived class. (CXXMemberCallExpr::getRecordDecl() return the first base class with the method)
     // The returned callee is the name of the variable on which the member call was made:
     // o1->foo() => "o1"
     // foo() => "this"
-    CLAZYLIB_EXPORT const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call,
-                                                                    std::string &implicitCallee);
+    const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call,
+                                                    std::string &implicitCallee);
 
-    CLAZYLIB_EXPORT bool isAscii(clang::StringLiteral *lt);
+    bool isAscii(clang::StringLiteral *lt);
 
     // Checks if Statement s inside an operator* call
-    CLAZYLIB_EXPORT bool isInDerefExpression(clang::Stmt *s, clang::ParentMap *map);
+    bool isInDerefExpression(clang::Stmt *s, clang::ParentMap *map);
 
     // For a a chain called expression like foo().bar().baz() returns a list of calls
     // {baz(), bar(), foo()}
@@ -185,23 +184,23 @@ namespace Utils {
     // - baz
     // -- bar
     // --- foo
-    CLAZYLIB_EXPORT std::vector<clang::CallExpr *> callListForChain(clang::CallExpr *lastCallExpr);
+    std::vector<clang::CallExpr *> callListForChain(clang::CallExpr *lastCallExpr);
 
     // Returns the first base class
-    CLAZYLIB_EXPORT clang::CXXRecordDecl * rootBaseClass(clang::CXXRecordDecl *derived);
+    clang::CXXRecordDecl * rootBaseClass(clang::CXXRecordDecl *derived);
 
     // Returns the copy ctor for this class
-    CLAZYLIB_EXPORT clang::CXXConstructorDecl *copyCtor(clang::CXXRecordDecl *);
+    clang::CXXConstructorDecl *copyCtor(clang::CXXRecordDecl *);
 
     // Returns the copy-assignment operator for this class
-    CLAZYLIB_EXPORT clang::CXXMethodDecl *copyAssign(clang::CXXRecordDecl *);
+    clang::CXXMethodDecl *copyAssign(clang::CXXRecordDecl *);
 
-    CLAZYLIB_EXPORT bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
+    bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
 
     /**
      * Returns true if record is a shared pointer (boost, Qt or stl only).
      */
-    CLAZYLIB_EXPORT bool isSharedPointer(clang::CXXRecordDecl *record);
+    bool isSharedPointer(clang::CXXRecordDecl *record);
 
     /**
      * Returns true if varDecl is initialized externally.
@@ -211,18 +210,18 @@ namespace Utils {
      *     QList<int> list = {1, 2, 3}; // false
      *     QList<int> list;             // false
      */
-    CLAZYLIB_EXPORT bool isInitializedExternally(clang::VarDecl *varDecl);
+    bool isInitializedExternally(clang::VarDecl *varDecl);
 
     /**
      * Returns true if declStmt refers to varDecl
      */
-    CLAZYLIB_EXPORT bool referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl);
+    bool referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl);
 
     /**
      * Returns true if the body of a function is empty.
      * Returns false if either function or it's body are null.
      */
-    CLAZYLIB_EXPORT bool functionHasEmptyBody(clang::FunctionDecl *func);
+    bool functionHasEmptyBody(clang::FunctionDecl *func);
 
     /**
      * If stm is an UnaryOperator or BinaryOperator that writes to the variable it returns the expression
@@ -232,21 +231,20 @@ namespace Utils {
      *
      * The operators that write to the variable are operator=, operator+=, operator++, etc.
      */
-    CLAZYLIB_EXPORT clang::Expr* isWriteOperator(clang::Stmt *stm);
+    clang::Expr* isWriteOperator(clang::Stmt *stm);
 
     /**
      * Gets the UserDefinedLiteral of type @p type which is somewhere in the ast of @p stm.
      * Returns nullptr if there's no such UserDefinedLiteral.
      */
-    CLAZYLIB_EXPORT clang::UserDefinedLiteral* userDefinedLiteral(clang::Stmt *stm, const std::string &type,
-                                                                  const clang::LangOptions &lo);
+    clang::UserDefinedLiteral* userDefinedLiteral(clang::Stmt *stm, const std::string &type,
+                                                  const clang::LangOptions &lo);
 
     /**
      * Returns the function parameters fom @p func
      * This should be used instead of calling FunctionDecl::params() since it changed signature in
      * clang 3.9.
      */
-    CLAZYLIB_EXPORT
 #if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 8
     clang::FunctionDecl::param_range
 #else
@@ -261,23 +259,23 @@ namespace Utils {
      * MyCtor(int a, int b) : c(a), d(b) {}
      * auto result = Utils::ctorInitializer(MyCtor, b); // Result is the statement "d(b)"
      */
-    CLAZYLIB_EXPORT std::vector<clang::CXXCtorInitializer*> ctorInitializer(clang::CXXConstructorDecl *ctor,
-                                                                            clang::ParmVarDecl *param);
+    std::vector<clang::CXXCtorInitializer*> ctorInitializer(clang::CXXConstructorDecl *ctor,
+                                                            clang::ParmVarDecl *param);
 
    /**
     * Returns true if a ctor initializer contains a std::move()
     * Example
     * MyCtor(Foo a) : c(move(a)) {} // Would return true for this init list
     */
-    CLAZYLIB_EXPORT bool ctorInitializerContainsMove(clang::CXXCtorInitializer*);
+    bool ctorInitializerContainsMove(clang::CXXCtorInitializer*);
 
     // Overload that recieves a vector and returns true if any ctor initializer contains a move()
-    CLAZYLIB_EXPORT bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer*> &);
+    bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer*> &);
 
     /**
      * Returns the filename for the source location loc
      */
-    CLAZYLIB_EXPORT std::string filenameForLoc(clang::SourceLocation loc, const clang::SourceManager &sm);
+    std::string filenameForLoc(clang::SourceLocation loc, const clang::SourceManager &sm);
 
     /**
      * Returns the location after the lexer token that is at loc.
@@ -286,9 +284,9 @@ namespace Utils {
      * If loc refers to the location of 'emit', then this function will return the source location if
      * the sig() call.
      */
-    CLAZYLIB_EXPORT clang::SourceLocation locForNextToken(clang::SourceLocation loc,
-                                                          const clang::SourceManager &sm,
-                                                          const clang::LangOptions &lo);
+    clang::SourceLocation locForNextToken(clang::SourceLocation loc,
+                                          const clang::SourceManager &sm,
+                                          const clang::LangOptions &lo);
 
     inline bool isMainFile(const clang::SourceManager &sm, clang::SourceLocation loc)
     {

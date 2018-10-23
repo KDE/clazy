@@ -25,7 +25,6 @@
 #ifndef CLANG_LAZY_STRING_UTILS_H
 #define CLANG_LAZY_STRING_UTILS_H
 
-#include "clazy_export.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 #include "SourceCompatibilityHelpers.h"
@@ -297,19 +296,19 @@ inline bool hasArgumentOfType(clang::FunctionDecl *func, llvm::StringRef typeNam
  * void foo(int a, const QString &);
  * simpleArgTypeName(foo, 1, lo) would return "QString"
  */
-CLAZYLIB_EXPORT std::string simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &);
+std::string simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &);
 
 /**
  * Returns true if any of the function's arguments if of type simpleType
  * By "simple" we mean without const or &, *
  */
-CLAZYLIB_EXPORT bool anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleType, const clang::LangOptions &);
+bool anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleType, const clang::LangOptions &);
 
 /**
  * Returns true if any of the function's arguments if of any of the types in simpleTypes
  * By "simple" we mean without const or &, *
  */
-CLAZYLIB_EXPORT bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::string> &simpleTypes, const clang::LangOptions &);
+bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::string> &simpleTypes, const clang::LangOptions &);
 
 inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {

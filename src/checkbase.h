@@ -25,7 +25,6 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
-#include "clazy_export.h"
 #include "clazy_stl.h"
 #include "SourceCompatibilityHelpers.h"
 
@@ -103,7 +102,7 @@ protected:
     CheckBase *const m_check;
 };
 
-class CLAZYLIB_EXPORT CheckBase
+class CheckBase
 {
 public:
 

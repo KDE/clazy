@@ -19,8 +19,6 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "clazy_export.h"
-
 #include <clang/AST/Type.h>
 
 #include <vector>
@@ -41,16 +39,16 @@ namespace clazy
      * For example:
      *    If the method was foo<int, Bar, char*>(), it would return {int, Bar, Char*}
      */
-    CLAZYLIB_EXPORT std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXMethodDecl *);
+    std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXMethodDecl *);
 
     /**
      * Returns a list of QualTypes for the template arguments.
      * For example:
      *    If the class was QList<int>(), it would return {int}
      */
-    CLAZYLIB_EXPORT std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXRecordDecl *);
+    std::vector<clang::QualType> getTemplateArgumentsTypes(clang::CXXRecordDecl *);
 
-    CLAZYLIB_EXPORT clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
+    clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
 
     /**
      * Returns a string with the type name of the argument at the specified index.
@@ -58,9 +56,9 @@ namespace clazy
      *
      * Example: For QList<Foo>, getTemplateArgumentTypeStr(decl, 0) would return "Foo"
      */
-    CLAZYLIB_EXPORT std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl*,
+    std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl*,
                                            unsigned int index, const clang::LangOptions &lo, bool recordOnly = false);
 
-    CLAZYLIB_EXPORT clang::QualType getTemplateArgumentType(clang::ClassTemplateSpecializationDecl *, unsigned int index);
+    clang::QualType getTemplateArgumentType(clang::ClassTemplateSpecializationDecl *, unsigned int index);
 
 }

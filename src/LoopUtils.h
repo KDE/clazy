@@ -26,7 +26,6 @@
 #define CLAZY_LOOP_UTILS_H
 
 #include "clazy_stl.h"
-#include "clazy_export.h"
 
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/Stmt.h>
@@ -45,20 +44,20 @@ namespace clazy {
     /**
      * Returns the body of a for, range-foor, while or do-while loop
      */
-    CLAZYLIB_EXPORT clang::Stmt *bodyFromLoop(clang::Stmt *);
+    clang::Stmt *bodyFromLoop(clang::Stmt *);
 
     /**
      * Recursively goes through stmt's children and returns true if it finds a "break", "continue" or a "return" stmt
      * All child statements that are on a source code line <
      * If onlyBeforThisLoc is valid, then this function will only return true if the break/return/continue happens before
      */
-    CLAZYLIB_EXPORT bool loopCanBeInterrupted(clang::Stmt *loop, const clang::SourceManager &sm,
-                                              clang::SourceLocation onlyBeforeThisLoc);
+    bool loopCanBeInterrupted(clang::Stmt *loop, const clang::SourceManager &sm,
+                              clang::SourceLocation onlyBeforeThisLoc);
 
     /**
      * Returns true if stmt is a for, while or do-while loop
      */
-    CLAZYLIB_EXPORT inline bool isLoop(clang::Stmt *stmt)
+    inline bool isLoop(clang::Stmt *stmt)
     {
         return llvm::isa<clang::DoStmt>(stmt)  || llvm::isa<clang::WhileStmt>(stmt) ||
                llvm::isa<clang::ForStmt>(stmt) || llvm::isa<clang::CXXForRangeStmt>(stmt);
@@ -69,20 +68,20 @@ namespace clazy {
      *
      * Q_FOREACH (auto f, expression) or for (auto i : expression)
      */
-    CLAZYLIB_EXPORT clang::Expr* containerExprForLoop(clang::Stmt *loop);
+    clang::Expr* containerExprForLoop(clang::Stmt *loop);
 
     /**
      * Returns the container decl for a range-loop or Q_FOREACH
      *
      * Q_FOREACH (auto f, container) or for (auto i : container)
      */
-    CLAZYLIB_EXPORT clang::VarDecl* containerDeclForLoop(clang::Stmt *loop);
+    clang::VarDecl* containerDeclForLoop(clang::Stmt *loop);
 
     /**
      * Returns true of stmt is inside a for, while or do-while loop.
      * If yes, returns the loop statement, otherwise nullptr.
      */
-    CLAZYLIB_EXPORT clang::Stmt* isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt);
+    clang::Stmt* isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt);
 }
 
 #endif

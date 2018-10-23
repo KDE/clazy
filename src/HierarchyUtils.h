@@ -27,7 +27,6 @@
 
 // Contains utility classes to retrieve parents and childs from AST Nodes
 
-#include "clazy_export.h"
 #include "clazy_stl.h"
 #include "StringUtils.h"
 

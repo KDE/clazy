@@ -31,16 +31,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 
-option(CLAZY_BUILD_UTILS_LIB "Enable this option to build a library so you can reuse clazy's utility functions" OFF)
 option(CLAZY_AST_MATCHERS_CRASH_WORKAROUND "Disable AST Matchers if being built with clang. See bug #392223" ON)
 
 if (CLAZY_AST_MATCHERS_CRASH_WORKAROUND AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message("Enabling AST Matchers workaround. Consider building with gcc instead. See bug #392223.")
     add_definitions(-DCLAZY_DISABLE_AST_MATCHERS)
-endif()
-
-if(CLAZY_BUILD_UTILS_LIB)
-  add_definitions(-DCLAZY_BUILD_UTILS_LIB)
 endif()
 
 if(NOT CLAZY_BUILD_WITH_CLANG AND MSVC AND NOT CLANG_LIBRARY_IMPORT)
@@ -134,29 +129,7 @@ macro(add_clang_plugin name)
     target_link_libraries(${name} ${CLANG_LIBRARY_IMPORT}) # Link against clang.exe to share the plugin registry
   endif()
 
-  if(CLAZY_BUILD_UTILS_LIB)
-    target_link_libraries(${name} clazylib)
-  endif()
 endmacro()
-
-if(CLAZY_BUILD_UTILS_LIB)
-  # clazylib version
-  set(clazylib_VERSION_MAJOR 0)
-  set(clazylib_VERSION_MINOR 1)
-  # Enable the full x.y.z version only for release versions
-  set(clazylib_VERSION_PATCH 0)
-
-  set(clazylib_VERSION ${clazylib_VERSION_MAJOR}.${clazylib_VERSION_MINOR})
-  add_library(clazylib SHARED ${CLAZY_LIB_SRC})
-  link_to_llvm(clazylib FALSE)
-  generate_export_header(clazylib)
-  set_target_properties(clazylib PROPERTIES VERSION ${clazylib_VERSION} SOVERSION ${clazylib_VERSION_MAJOR})
-  install(TARGETS clazylib EXPORT LibClazyExport
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  )
-endif()
 
 set(SYMBOL_FILE Lazy.exports)
 
@@ -202,31 +175,6 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   # Build docs
   set(MAN_INSTALL_DIR "${SHARE_INSTALL_DIR}/man/man1")
   add_subdirectory(docs)
-
-  if(CLAZY_BUILD_UTILS_LIB)
-    # Install public headers
-    set(CLAZY_LIB_INCLUDES
-      src/AccessSpecifierManager.h
-      src/checkbase.h
-      src/checkmanager.h
-      src/clazy_export.h
-      src/clazy_stl.h
-      src/ContextUtils.h
-      src/FixItUtils.h
-      src/HierarchyUtils.h
-      src/LoopUtils.h
-      src/MacroUtils.h
-      src/QtUtils.h
-      src/SuppressionManager.h
-      src/StmtBodyRange.h
-      src/StringUtils.h
-      src/TemplateUtils.h
-      src/TypeUtils.h
-      src/Utils.h
-      src/ClazyContext.h
-      )
-    install(FILES ${CLAZY_LIB_INCLUDES} DESTINATION include/clazy)
-  endif()
 
   # rpath
   set(CMAKE_SKIP_BUILD_RPATH FALSE)

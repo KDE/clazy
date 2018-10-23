@@ -25,7 +25,6 @@
 #ifndef CLANG_LAZY_CHECK_MANAGER_H
 #define CLANG_LAZY_CHECK_MANAGER_H
 
-#include "clazy_export.h"
 #include "checkbase.h"
 
 #include <clang/Lex/PreprocessorOptions.h>
@@ -39,7 +38,7 @@
 
 class ClazyContext;
 
-struct CLAZYLIB_EXPORT RegisteredFixIt {
+struct RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
     RegisteredFixIt() : id(-1) {}
     RegisteredFixIt(int id, const std::string &name) : id(id), name(name) {}
@@ -50,7 +49,7 @@ struct CLAZYLIB_EXPORT RegisteredFixIt {
 
 using FactoryFunction = std::function<CheckBase*(ClazyContext *context)>;
 
-struct CLAZYLIB_EXPORT RegisteredCheck {
+struct RegisteredCheck {
     enum Option {
         Option_None = 0,
         Option_Qt4Incompatible = 1,
@@ -81,7 +80,7 @@ inline bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
     return c1.level < c2.level;
 }
 
-class CLAZYLIB_EXPORT CheckManager
+class CheckManager
 {
 public:
     /**

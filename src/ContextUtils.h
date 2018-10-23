@@ -22,7 +22,6 @@
 #ifndef CLAZY_CONTEXT_UTILS_H
 #define CLAZY_CONTEXT_UTILS_H
 
-#include "clazy_export.h"
 #include "TypeUtils.h"
 
 #include <clang/AST/DeclBase.h>
@@ -62,7 +61,7 @@ inline bool isValueDeclInFunctionContext(const clang::ValueDecl *valueDecl)
  * Returns the list of scopes for a decl context (namespaces, classes, inner classes, etc)
  * The inner ones are at the beginning of the list
  */
-CLAZYLIB_EXPORT std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
+std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
 
 /**
  * Returns the first context for a decl.
@@ -148,11 +147,11 @@ T* firstContextOfType(clang::DeclContext *context)
  * if currentScope == nullptr will return a fully qualified name
  */
 
-CLAZYLIB_EXPORT std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager,
-                                                       clang::CXXMethodDecl *method,
-                                                       clang::DeclContext *currentScope,
-                                                       clang::SourceLocation usageLoc,
-                                                       bool honourUsingDirectives);
+std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager,
+                                       clang::CXXMethodDecl *method,
+                                       clang::DeclContext *currentScope,
+                                       clang::SourceLocation usageLoc,
+                                       bool honourUsingDirectives);
 
 /**
  * Returns true, if in a specific context, we can take the address of a method
@@ -164,9 +163,9 @@ CLAZYLIB_EXPORT std::string getMostNeededQualifiedName(const clang::SourceManage
  * but only if you qualify it with the derived class name, so &Derived::baseMethod, instead of &Base::baseMethod
  * If this was the case then isSpecialProtectedCase will be true
  */
-CLAZYLIB_EXPORT bool canTakeAddressOf(clang::CXXMethodDecl *method,
-                                      clang::DeclContext *context,
-                                      bool &isSpecialProtectedCase);
+bool canTakeAddressOf(clang::CXXMethodDecl *method,
+                      clang::DeclContext *context,
+                      bool &isSpecialProtectedCase);
 
 }
 

@@ -22,8 +22,6 @@
 #ifndef CLAZY_SUPPRESSION_MANAGER_H
 #define CLAZY_SUPPRESSION_MANAGER_H
 
-#include "clazy_export.h"
-
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -36,7 +34,7 @@ class SourceManager;
 class FileID;
 }
 
-class CLAZYLIB_EXPORT SuppressionManager
+class SuppressionManager
 {
 public:
     typedef unsigned SourceFileID;

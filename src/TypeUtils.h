@@ -22,8 +22,6 @@
 #ifndef CLAZY_TYPE_UTILS_H
 #define CLAZY_TYPE_UTILS_H
 
-#include "clazy_export.h"
-
 #include <clang/AST/Type.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/StmtCXX.h>
@@ -80,9 +78,9 @@ namespace TypeUtils
      * The optional parameter body is in order to advise non-const-ref -> value, since the body
      * needs to be inspected to see if we that would compile.
      */
-    CLAZYLIB_EXPORT bool classifyQualType(const ClazyContext *context, const clang::VarDecl *varDecl,
-                                          QualTypeClassification &classification,
-                                          clang::Stmt *body = nullptr);
+    bool classifyQualType(const ClazyContext *context, const clang::VarDecl *varDecl,
+                          QualTypeClassification &classification,
+                          clang::Stmt *body = nullptr);
 
     /**
      * If qt is a reference, return it without a reference.
@@ -112,9 +110,9 @@ namespace TypeUtils
      * Returns if @p arg is stack or heap allocated.
      * true means it is. false means it either isn't or the situation was too complex to judge.
      */
-    CLAZYLIB_EXPORT void heapOrStackAllocated(clang::Expr *arg, const std::string &type,
-                                              const clang::LangOptions &lo,
-                                              bool &isStack, bool &isHeap);
+    void heapOrStackAllocated(clang::Expr *arg, const std::string &type,
+                              const clang::LangOptions &lo,
+                              bool &isStack, bool &isHeap);
 
     /**
      * Returns true if t is an AutoType that can't be deduced.
@@ -142,14 +140,14 @@ namespace TypeUtils
     /**
      * Returns true if childDecl is a descent from parentDecl
      **/
-    CLAZYLIB_EXPORT bool derivesFrom(const clang::CXXRecordDecl *derived, const clang::CXXRecordDecl *possibleBase,
-                                     std::vector<clang::CXXRecordDecl*> *baseClasses = nullptr);
+    bool derivesFrom(const clang::CXXRecordDecl *derived, const clang::CXXRecordDecl *possibleBase,
+                     std::vector<clang::CXXRecordDecl*> *baseClasses = nullptr);
 
     // Overload
-    CLAZYLIB_EXPORT bool derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase);
+    bool derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase);
 
     // Overload
-    CLAZYLIB_EXPORT bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
+    bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
 
     /**
      * Returns the CXXRecordDecl represented by the CXXBaseSpecifier

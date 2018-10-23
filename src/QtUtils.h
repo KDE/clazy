@@ -22,7 +22,6 @@
 #ifndef CLAZY_QT_UTILS_H
 #define CLAZY_QT_UTILS_H
 
-#include "clazy_export.h"
 #include "TypeUtils.h"
 #include "MacroUtils.h"
 #include "FunctionUtils.h"
@@ -75,22 +74,22 @@ namespace clazy
  * Returns true if the class is a Qt class which can be iterated with foreach.
  * Which means all containers and also stuff like QAssociativeIterable.
  */
-CLAZYLIB_EXPORT bool isQtIterableClass(clang::CXXRecordDecl *record);
+bool isQtIterableClass(clang::CXXRecordDecl *record);
 
 /**
  * Overload.
  */
-CLAZYLIB_EXPORT bool isQtIterableClass(llvm::StringRef className);
+bool isQtIterableClass(llvm::StringRef className);
 
 /**
  * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
  */
-CLAZYLIB_EXPORT bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
+bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
 
 /**
  * Overload.
  */
-CLAZYLIB_EXPORT bool isQtCOWIterableClass(const std::string &className);
+bool isQtCOWIterableClass(const std::string &className);
 
 /**
  * Returns if the iterators belongs to a COW container
@@ -107,40 +106,40 @@ inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
 /**
  * Returns true if the class is a Qt class which is an associative container (QHash, QMap, QSet)
  */
-CLAZYLIB_EXPORT bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
+bool isQtAssociativeContainer(clang::CXXRecordDecl *record);
 
 /**
  * Overload.
  */
-CLAZYLIB_EXPORT bool isQtAssociativeContainer(llvm::StringRef className);
+bool isQtAssociativeContainer(llvm::StringRef className);
 
 /**
  * Returns a list of Qt containers.
  */
-CLAZYLIB_EXPORT const std::vector<llvm::StringRef> & qtContainers();
+const std::vector<llvm::StringRef> & qtContainers();
 
 /**
  * Returns a list of implicitly shared Qt containers.
  */
-CLAZYLIB_EXPORT const std::vector<llvm::StringRef> & qtCOWContainers();
+const std::vector<llvm::StringRef> & qtCOWContainers();
 
 /**
  * Returns a map with the list of method names that detach each container.
  */
-CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethods();
+std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethods();
 
 /**
  * Returns a map with the list of method names that detach each container, but only those methods
  * with const counterparts.
  */
-CLAZYLIB_EXPORT std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethodsWithConstCounterParts();
+std::unordered_map<std::string, std::vector<llvm::StringRef> > detachingMethodsWithConstCounterParts();
 
 /**
  * Returns true if a type represents a Qt container class.
  */
-CLAZYLIB_EXPORT bool isQtContainer(clang::QualType);
+bool isQtContainer(clang::QualType);
 
-CLAZYLIB_EXPORT bool isQtContainer(const clang::CXXRecordDecl *);
+bool isQtContainer(const clang::CXXRecordDecl *);
 
 
 /**
@@ -154,17 +153,17 @@ inline bool isBootstrapping(const clang::PreprocessorOptions &ppOpts)
 /**
  * Returns if decl is or derives from QObject
  */
-CLAZYLIB_EXPORT bool isQObject(const clang::CXXRecordDecl *decl);
+bool isQObject(const clang::CXXRecordDecl *decl);
 
 /**
  * Overload.
  */
-CLAZYLIB_EXPORT bool isQObject(clang::QualType);
+bool isQObject(clang::QualType);
 
 /**
  * Convertible means that a signal with of type source can connect to a signal/slot of type target
  */
-CLAZYLIB_EXPORT bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
+bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
 
 /**
  * Returns true if \a loc is in a foreach macro
@@ -177,9 +176,9 @@ inline bool isInForeach(const clang::ASTContext *context, clang::SourceLocation 
 /**
  * Returns true if \a record is a java-style iterator
  */
-CLAZYLIB_EXPORT bool isJavaIterator(clang::CXXRecordDecl *record);
+bool isJavaIterator(clang::CXXRecordDecl *record);
 
-CLAZYLIB_EXPORT bool isJavaIterator(clang::CXXMemberCallExpr *call);
+bool isJavaIterator(clang::CXXMemberCallExpr *call);
 
 /**
  * Returns true if the call is on a java-style iterator class.
@@ -207,25 +206,25 @@ bool recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &par
  * - It's not passed to any function
  * - It's not assigned to another variable
  */
-CLAZYLIB_EXPORT bool containerNeverDetaches(const clang::VarDecl *varDecl,
-                                            StmtBodyRange bodyRange);
+bool containerNeverDetaches(const clang::VarDecl *varDecl,
+                            StmtBodyRange bodyRange);
 
 /**
  * Returns true if recordDecl is one of the container classes that supports reserve(), such
  * as QList, QVector, etc.
  */
-CLAZYLIB_EXPORT bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
+bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
 
 /**
  * Returns the base class that inherits QObject.
  * Useful when the class has more than one base class and we're only interested in the QObject one.
  */
-CLAZYLIB_EXPORT clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl);
+clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl);
 
 /**
  * Returns true if the function declaration is QObject::connect().
  */
-CLAZYLIB_EXPORT bool isConnect(clang::FunctionDecl *func);
+bool isConnect(clang::FunctionDecl *func);
 
 /**
  * Returns true if the function declaration represents a QObject::connect() using the new Qt5
@@ -233,16 +232,16 @@ CLAZYLIB_EXPORT bool isConnect(clang::FunctionDecl *func);
  *
  * It's assumed that func represents a connect().
  */
-CLAZYLIB_EXPORT bool connectHasPMFStyle(clang::FunctionDecl *func);
+bool connectHasPMFStyle(clang::FunctionDecl *func);
 
 
 /**
  * Returns the method referenced by a PMF-style connect for the specified connect() call.
  */
-CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
+clang::CXXMethodDecl* pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
 
-CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::Expr *e);
-CLAZYLIB_EXPORT clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
+clang::CXXMethodDecl* pmfFromUnary(clang::Expr *e);
+clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
 
 /**
  * Returns the varDecl for the 1st argument in a connect call

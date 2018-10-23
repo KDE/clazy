@@ -22,7 +22,6 @@
 #ifndef CLAZY_MACRO_UTILS_H
 #define CLAZY_MACRO_UTILS_H
 
-#include "clazy_export.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/ASTContext.h>
