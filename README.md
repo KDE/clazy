@@ -51,8 +51,8 @@ You can get clazy from:
 
 ### Install dependencies
 - OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
-- Ubuntu: `apt install g++ cmake clang llvm-dev git-core libclang-dev qtbase5-dev`
-- Archlinux: `pacman -S make llvm clang python2 cmake qt5-base git gcc`
+- Ubuntu: `apt install g++ cmake clang llvm-dev git-core libclang-dev`
+- Archlinux: `pacman -S make llvm clang python2 cmake git gcc`
 - Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
