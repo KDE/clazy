@@ -1,2 +1,2 @@
 @echo off
-clang.exe --driver-mode=cl -Qunused-arguments -Xclang -load -Xclang ClangLazy.dll -Xclang -add-plugin -Xclang clang-lazy -Wno-microsoft-enum-value %*
+clang.exe --driver-mode=cl -Qunused-arguments -Xclang -load -Xclang ClazyPlugin.dll -Xclang -add-plugin -Xclang clazy -Wno-microsoft-enum-value %*

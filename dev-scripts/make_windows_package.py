@@ -75,7 +75,7 @@ def copy_files(work_dir):
     copy("../README.md", PACKAGE_DIR + 'clazy/README-CLAZY.md')
     copy(LLVM_INSTALL_DIR + '/bin/clang.exe', PACKAGE_DIR + 'clazy/bin/clang/')
     copy(LLVM_INSTALL_DIR + '/bin/clang.exe', PACKAGE_DIR + 'clazy/bin/clang/clang-cl.exe')
-    copy(LLVM_INSTALL_DIR + '/bin/ClangLazy.dll', PACKAGE_DIR + 'clazy/bin/clang/')
+    copy(LLVM_INSTALL_DIR + '/bin/ClazyPlugin.dll', PACKAGE_DIR + 'clazy/bin/clang/')
     copy(LLVM_INSTALL_DIR + '/bin/clazy-standalone.exe', PACKAGE_DIR + 'clazy/bin/clang/')
 
     run_command("cp -r %s/lib/clang/ %s" % (LLVM_INSTALL_DIR, PACKAGE_DIR + 'clazy/bin/lib/'))

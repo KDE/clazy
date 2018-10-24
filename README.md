@@ -181,7 +181,7 @@ You should now have the clazy command available to you, in `<prefix>/bin/`.
 Compile your programs with it instead of clang++/g++.
 
 Note that this command is just a convenience wrapper which calls:
-`clang++ -Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy`
+`clang++ -Xclang -load -Xclang ClazyPlugin.so -Xclang -add-plugin -Xclang clazy`
 
 If you have multiple versions of clang installed (say clang++-3.8 and clang++-3.9)
 you can choose which one to use by setting the CLANGXX environment variable, like so:
@@ -195,7 +195,7 @@ To make it the compiler for qmake projects, just run qmake like:
 `qmake -spec linux-clang QMAKE_CXX="clazy"`
 
 Alternatively, if you want to use clang directly, without the wrapper:
-`qmake -spec linux-clang QMAKE_CXXFLAGS="-Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy"`
+`qmake -spec linux-clang QMAKE_CXXFLAGS="-Xclang -load -Xclang ClazyPlugin.so -Xclang -add-plugin -Xclang clazy"`
 
 You can also edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++ and run qmake -spec linux-clang
 
@@ -317,7 +317,7 @@ export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except 
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```
 ## Example via compiler argument
-`clazy -Xclang -plugin-arg-clang-lazy -Xclang level0,detaching-temporary`
+`clazy -Xclang -plugin-arg-clazy -Xclang level0,detaching-temporary`
 Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.
 
 # clazy-standalone and JSON database support
@@ -370,7 +370,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 
 # Troubleshooting
 
-- clang: symbol lookup error: `/usr/lib/x86_64-linux-gnu/ClangLazy.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv`.
+- clang: symbol lookup error: `/usr/lib/x86_64-linux-gnu/ClazyPlugin.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv`.
   This is due to mixing ABIs. Your clang/llvm was compiled with the [new gcc c++ ABI][1] but you compiled the clazy plugin with clang (which uses [the old ABI][2]).
 
   The solution is to build the clazy plugin with gcc or use a distro which hasn't migrated to gcc5 ABI yet, such as archlinux.
@@ -402,7 +402,7 @@ For better results don't use parallel builds, otherwise a fixit being applied in
 # Qt4 compatibility mode
 
 When running on codebases that must still compile with Qt4, you can pass `--qt4compat`
-(a convenience option equivalent to passing `-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat`)
+(a convenience option equivalent to passing `-Xclang -plugin-arg-clazy -Xclang qt4-compat`)
 to disable checks that only make sense with Qt5.
 
 For example, to build a CMake project with Qt4 compatibility use:

@@ -20,9 +20,9 @@ HELP() {
   echo
   echo "Convenience Options:"
   echo "  --qt4compat        Qt4 compatibility mode. useful for source code that can build with Qt4"
-  echo "  (this is the same as passing \"-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat\")"
+  echo "  (this is the same as passing \"-Xclang -plugin-arg-clazy -Xclang qt4-compat\")"
   echo "  --qtdeveloper      Special option for building Qt5 itself resulting in fewer false positives"
-  echo "  (this is the same as passing \"-Xclang -plugin-arg-clang-lazy -Xclang qt-developer\")"
+  echo "  (this is the same as passing \"-Xclang -plugin-arg-clazy -Xclang qt-developer\")"
   echo
   echo "All other options are passed directly to clang++ and handled from there."
   echo
@@ -87,31 +87,31 @@ ExtraClangOptions=""
 if ( test $# -gt 0 -a "$1" = "--qt4compat" )
 then
   shift
-  ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat"
+  ExtraClangOptions="-Xclang -plugin-arg-clazy -Xclang qt4-compat"
 fi
 if ( test $# -gt 0 -a "$1" = "--qtdeveloper" )
 then
   shift
-  ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang qt-developer"
+  ExtraClangOptions="-Xclang -plugin-arg-clazy -Xclang qt-developer"
 fi
 if ( test $# -gt 0 -a "$1" = "--visit-implicit-code" )
 then
   shift
-  ExtraClangOptions="-Xclang -plugin-arg-clang-lazy -Xclang visit-implicit-code"
+  ExtraClangOptions="-Xclang -plugin-arg-clazy -Xclang visit-implicit-code"
 fi
 
-ClangLazyLib=ClangLazy@CMAKE_SHARED_LIBRARY_SUFFIX@
+ClazyPluginLib=ClazyPlugin@CMAKE_SHARED_LIBRARY_SUFFIX@
 
-if ( test -f "$libdir/$ClangLazyLib" )
+if ( test -f "$libdir/$ClazyPluginLib" )
 then
     # find plugin libraries in install dir
     export LD_LIBRARY_PATH=$libdir:$LD_LIBRARY_PATH
     export DYLD_LIBRARY_PATH=$libdir:$DYLD_LIBRARY_PATH
-elif ( test -f "$(dirname $0)/lib/$ClangLazyLib" )
+elif ( test -f "$(dirname $0)/lib/$ClazyPluginLib" )
 then
     # find plugin libraries in build dir
     export LD_LIBRARY_PATH=$(dirname $0)/lib:$LD_LIBRARY_PATH
     export DYLD_LIBRARY_PATH=$(dirname $0)/lib:$DYLD_LIBRARY_PATH
 fi
 
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClangLazyLib -Xclang -add-plugin -Xclang clang-lazy $ExtraClangOptions "$@"
+${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClazyPluginLib -Xclang -add-plugin -Xclang clazy $ExtraClangOptions "$@"

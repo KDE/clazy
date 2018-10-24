@@ -1,7 +1,7 @@
 CMakeFiles/
 CMakeCache.txt
 CMakeLists.txt.user
-ClangLazy.cbp
+ClazyPlugin.cbp
 cmake_install.cmake
 lib/
 compile.output

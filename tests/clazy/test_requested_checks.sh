@@ -1,6 +1,6 @@
 unset CLAZY_CHECKS
 unset CLAZY_FIXIT
-CLAZY_COMMAND="clazy -c -o /dev/null -xc++ -Xclang -plugin-arg-clang-lazy -Xclang print-requested-checks "
+CLAZY_COMMAND="clazy -c -o /dev/null -xc++ -Xclang -plugin-arg-clazy -Xclang print-requested-checks "
 CLAZY_COMMAND_STDIN=$CLAZY_COMMAND"-"
 
 # Test without checks:
@@ -46,28 +46,28 @@ unset CLAZY_FIXIT
 unset CLAZY_CHECKS
 
 # Test specifying check in command line
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts -)
 
 # Pass two checks in command line
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts,foreach -)
 
 # Pass fixits through the command-line
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang fix-old-style-connect -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang fix-old-style-connect -)
 
 # Pass level0
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang level0 -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang level0 -)
 
 # Pass level1
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang level1 -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang level1 -)
 
 # Pass level0 + another check
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang reserve-candidates -Xclang -plugin-arg-clang-lazy -Xclang level0 -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang reserve-candidates -Xclang -plugin-arg-clazy -Xclang level0 -)
 
 # Pass level0 + another check that's already in level0
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang qdatetime-utc -Xclang -plugin-arg-clang-lazy -Xclang level0 -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang qdatetime-utc -Xclang -plugin-arg-clazy -Xclang level0 -)
 
 # Use a level argument in the checks list
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach,level0 -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts,foreach,level0 -)
 
 # Use a level in env-variable
 export CLAZY_CHECKS="level1"
@@ -84,16 +84,16 @@ echo | $CLAZY_COMMAND_STDIN
 
 # Use both env variable and compiler argument
 export CLAZY_CHECKS="level0,reserve-candidates"
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,level0 -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts,level0 -)
 
 unset CLAZY_FIXIT
 unset CLAZY_CHECKS
 
 # Test disabling checks works
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,foreach,no-foreach -)
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,no-foreach -)
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang implicit-casts,no-implicit-casts -)
-echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clang-lazy -Xclang level0,no-qenums,no-qgetenv -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts,foreach,no-foreach -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts,no-foreach -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang implicit-casts,no-implicit-casts -)
+echo | $($CLAZY_COMMAND -Xclang -plugin-arg-clazy -Xclang level0,no-qenums,no-qgetenv -)
 
 # Test disabling checks works, now with env variables
 export CLAZY_CHECKS="implicit-casts,foreach,no-foreach"

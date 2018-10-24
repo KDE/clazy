@@ -54,7 +54,7 @@ Use this when your source code can build with Qt4 and Qt5 in order to easily
 suppress issues that cannot be fixed due to the requirement of the Qt4 API.
 
 This is a convenience option which is identical to directly passing:
-  "-Xclang -plugin-arg-clang-lazy -Xclang qt4-compat"
+  "-Xclang -plugin-arg-clazy -Xclang qt4-compat"
 
 =back
 
@@ -66,7 +66,7 @@ B<For Qt developers only.>  This option is special for running clazy on Qt itsel
 Will result in fewer false positives being reported in Qt code.
 
 This is a convenience option which is identical to directly passing:
-  "-Xclang -plugin-arg-clang-lazy -Xclang qt-developer"
+  "-Xclang -plugin-arg-clazy -Xclang qt-developer"
 
 =back
 

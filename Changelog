@@ -28,7 +28,7 @@
   - clazy-standalone executable. Allows to run clazy against a JSON compilation database
     instead of as a plugin. clang-tidy doesn't support loading external modules (https://bugs.llvm.org/show_bug.cgi?id=32739)
     so this is a good workaround.
-  - qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clang-lazy -Xclang qt4-compat
+  - qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat
   - New checks:
     install-event-filter
     qcolor-from-literal
@@ -94,4 +94,5 @@
 * v1.5 (, 2019)
   - New Checks:
     ifndef-define-typo
-  - Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt.
+  - Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt
+  - Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so

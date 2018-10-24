@@ -198,11 +198,11 @@ def find_qt_installation(major_version, qmakes):
 
 def libraryName():
     if _platform == 'win32':
-        return 'ClangLazy.dll'
+        return 'ClazyPlugin.dll'
     elif _platform == 'darwin':
-        return 'ClangLazy.dylib'
+        return 'ClazyPlugin.dylib'
     else:
-        return 'ClangLazy.so'
+        return 'ClazyPlugin.so'
 
 def link_flags():
     flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
@@ -214,7 +214,7 @@ def clazy_cpp_args():
     return "-Wno-unused-value -Qunused-arguments -std=c++14 "
 
 def more_clazy_args():
-    return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + clazy_cpp_args()
+    return " -Xclang -plugin-arg-clazy -Xclang no-inplace-fixits " + clazy_cpp_args()
 
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
@@ -248,23 +248,23 @@ def clazy_command(qt, test, filename):
         result = os.environ['CLAZY_CXX'] + more_clazy_args() + qt.compiler_flags()
     else:
         clang = os.getenv('CLANGXX', 'clang')
-        result = clang + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clang-lazy " + more_clazy_args() + qt.compiler_flags()
+        result = clang + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clazy " + more_clazy_args() + qt.compiler_flags()
 
     if test.qt4compat:
-        result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt4-compat "
+        result = result + " -Xclang -plugin-arg-clazy -Xclang qt4-compat "
 
     if test.only_qt:
-        result = result + " -Xclang -plugin-arg-clang-lazy -Xclang only-qt "
+        result = result + " -Xclang -plugin-arg-clazy -Xclang only-qt "
 
     if test.qt_developer:
-        result = result + " -Xclang -plugin-arg-clang-lazy -Xclang qt-developer "
+        result = result + " -Xclang -plugin-arg-clazy -Xclang qt-developer "
 
     if test.link and _platform.startswith('linux'): # Linking on one platform is enough. Won't waste time on macOS and Windows.
         result = result + " " + link_flags()
     else:
         result = result + " -c "
 
-    result = result + test.flags + " -Xclang -plugin-arg-clang-lazy -Xclang " + string.join(test.checks, ',') + " "
+    result = result + test.flags + " -Xclang -plugin-arg-clazy -Xclang " + string.join(test.checks, ',') + " "
     if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
         result += _enable_fixits_argument + " "
     result += filename
@@ -311,7 +311,7 @@ if args.only_standalone and args.no_standalone:
 #-------------------------------------------------------------------------------
 # Global variables
 
-_enable_fixits_argument = "-Xclang -plugin-arg-clang-lazy -Xclang enable-all-fixits"
+_enable_fixits_argument = "-Xclang -plugin-arg-clazy -Xclang enable-all-fixits"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone

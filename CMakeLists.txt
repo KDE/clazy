@@ -5,7 +5,7 @@
 # The man page is not available on Windows.
 #
 
-project(ClangLazy)
+project(clazy)
 
 cmake_minimum_required(VERSION 3.3)
 include(FeatureSummary)
@@ -134,13 +134,13 @@ endmacro()
 set(SYMBOL_FILE Lazy.exports)
 
 if (NOT CLAZY_BUILD_WITH_CLANG)
-  add_clang_plugin(ClangLazy ${CLAZY_PLUGIN_SRCS})
-  set_target_properties(ClangLazy PROPERTIES
+  add_clang_plugin(ClazyPlugin ${CLAZY_PLUGIN_SRCS})
+  set_target_properties(ClazyPlugin PROPERTIES
     LINKER_LANGUAGE CXX
     PREFIX ""
   )
 
-  install(TARGETS ClangLazy
+  install(TARGETS ClazyPlugin
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -190,10 +190,10 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   add_executable(clazy-standalone ${CLAZY_STANDALONE_SRCS})
 
   if(MSVC)
-    # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClangLazy.dll
+    # On MSVC clang-standalone crashes with a meaningless backtrace if linked to ClazyPlugin.dll
     target_link_libraries(clazy-standalone clangFrontend)
   else()
-    target_link_libraries(clazy-standalone ClangLazy)
+    target_link_libraries(clazy-standalone ClazyPlugin)
   endif()
 
   link_to_llvm(clazy-standalone TRUE)
