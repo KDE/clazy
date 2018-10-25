@@ -42,16 +42,22 @@ PRLIST() {
 }
 
 PRINFO() {
-  lst=`ls -1 $sharedir/doc/clazy/level*/README*$1* $sharedir/doc/clazy/manuallevel/README*$1*`
-  for f in $lst
-  do
-    l=`echo $f | awk -F/ '{foo=NF-1; printf("    %s:%s\n", $foo,$NF)}'`
-    level=`echo $l | cut -d: -f1`
-    checker=`echo $l | cut -d: -f2 | sed s/README-// | sed s/\.md$//`
-    echo "== Explanation for checker $checker ($level) =="
-    cat $f
-    echo
-  done
+  lst=`ls -1 $sharedir/doc/clazy/level*/README*$1* $sharedir/doc/clazy/manuallevel/README*$1* 2>/dev/null`
+  if ( test ! -z "$lst" )
+  then
+    for f in $lst
+    do
+      l=`echo $f | awk -F/ '{foo=NF-1; printf("    %s:%s\n", $foo,$NF)}'`
+      level=`echo $l | cut -d: -f1`
+      checker=`echo $l | cut -d: -f2 | sed s/README-// | sed s/\.md$//`
+      echo "== Explanation for checker $checker ($level) =="
+      cat $f
+      echo
+    done
+  else
+    echo "There is no explanation available for checker \"$1\""
+    echo "Run 'clazy --explain' to see the list of all available checkers."
+  fi
 }
 
 if ( test $# -gt 0 -a "$1" = "--help" )
