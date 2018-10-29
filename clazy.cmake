@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
-sharedir=@CMAKE_INSTALL_PREFIX@/@SHARE_INSTALL_DIR@
+libdir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_LIBDIR@")
+sharedir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_SHAREDIR@")
 
 HELP() {
   echo "Usage: `basename $0` [options] [clang++-options]"
