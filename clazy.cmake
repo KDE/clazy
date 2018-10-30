@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
-sharedir=@CMAKE_INSTALL_PREFIX@/@SHARE_INSTALL_DIR@
+libdir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_LIBDIR@")
+sharedir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_SHAREDIR@")
 
 HELP() {
   echo "Usage: `basename $0` [options] [clang++-options]"
@@ -11,6 +11,7 @@ HELP() {
   echo "Options:"
   echo "  --help             print program help"
   echo "  --version          print the program version"
+  echo "  --standalone       run clazy-standalone instead of clang"
   echo "  --list             print a list of all available checkers, arranged by level"
   echo "  --explain [regexp] print explanations for the checker matching a regexp"
   echo "or"
@@ -120,4 +121,17 @@ then
     export DYLD_LIBRARY_PATH=$(dirname $0)/lib:$DYLD_LIBRARY_PATH
 fi
 
-${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClazyPluginLib -Xclang -add-plugin -Xclang clazy $ExtraClangOptions "$@"
+if ( test $# -gt 0 -a "$1" = "--standalone" )
+then
+  shift
+  if ( test -f "$(dirname $0)/clazy-standalone" )
+  then
+    # find binary in install dir
+    $(dirname $0)/clazy-standalone "$@"
+  else
+    # hope binary is in the expected build dir
+    $(dirname $0)/bin/clazy-standalone "$@"
+  fi
+else
+  ${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClazyPluginLib -Xclang -add-plugin -Xclang clazy $ExtraClangOptions "$@"
+fi
