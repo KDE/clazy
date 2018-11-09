@@ -89,3 +89,6 @@
   - HiddenLevel was renamed to ManualLevel
   - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction() without a context object
   - old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now
+
+* v1.4.1 (probably never)
+  - fully-qualified-moc-types now warns for slot/invokable return values too. They need to be fully qualified for QML.
