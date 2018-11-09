@@ -92,3 +92,4 @@
 
 * v1.4.1 (probably never)
   - fully-qualified-moc-types now warns for slot/invokable return values too. They need to be fully qualified for QML.
+  - Fixed a crash (clang assert) in raw-environment-function
