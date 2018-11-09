@@ -51,6 +51,7 @@ namespace NS {
         Q_INVOKABLE void myinvokable6(const A);
         Q_INVOKABLE void myinvokable7(const A *);
         Q_INVOKABLE void myinvokable8(A *);
+        Q_INVOKABLE MyType* myinvokable9(NS::MyType); // Warn
         NS::MyType foo();
         NamespacedGadget namespacedGadget() const;
         NamespacedGadget namespacedGadget2() const;

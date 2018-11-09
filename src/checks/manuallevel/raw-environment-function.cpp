@@ -20,6 +20,7 @@
 */
 
 #include "raw-environment-function.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
@@ -49,8 +50,9 @@ void RawEnvironmentFunction::VisitStmt(clang::Stmt *stmt)
     if (!func)
         return;
 
-    StringRef funcName = func->getName();
-    if (func->getName() == "putenv")
+    StringRef funcName = clazy::name(func);
+
+    if (funcName == "putenv")
         emitWarning(stmt, "Prefer using qputenv instead of putenv");
 
     if (funcName == "getenv")

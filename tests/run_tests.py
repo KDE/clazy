@@ -18,7 +18,7 @@ class QtInstallation:
 
 class Test:
     def __init__(self, check):
-        self.filename = ""
+        self.filenames = []
         self.minimum_qt_version = 500
         self.maximum_qt_version = 59999
         self.minimum_clang_version = 380
@@ -39,8 +39,13 @@ class Test:
         self.header_filter = ""
         self.ignore_dirs = ""
 
+    def filename(self):
+        if len(self.filenames) == 1:
+            return self.filenames[0]
+        return ""
+
     def isScript(self):
-        return self.filename.endswith(".sh")
+        return self.filename().endswith(".sh")
 
     def setQtMajorVersion(self, major_version):
         if major_version == 4:
@@ -115,7 +120,12 @@ def load_json(check_name):
         for t in decoded['tests']:
             test = Test(check)
             test.blacklist_platforms = check_blacklist_platforms
-            test.filename = t['filename']
+
+            if 'filename' in t:
+                test.filenames.append(t['filename'])
+
+            if 'filenames' in t:
+                test.filenames += t['filenames']
 
             if 'minimum_qt_version' in t:
                 test.minimum_qt_version = t['minimum_qt_version']
@@ -168,7 +178,7 @@ def load_json(check_name):
 
             check.tests.append(test)
             if test.isFixedFile:
-                fileToDelete = check_name + "/" + test.filename
+                fileToDelete = check_name + "/" + test.filename()
                 if os.path.exists(fileToDelete):
                     os.remove(fileToDelete)
 
@@ -272,7 +282,7 @@ def clazy_command(qt, test, filename):
     return result
 
 def dump_ast_command(test):
-    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename
+    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
 
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
@@ -429,7 +439,7 @@ def run_unit_test(test, is_standalone):
         return True
 
     checkname = test.check.name
-    filename = checkname + "/" + test.filename
+    filename = checkname + "/" + test.filename()
 
     output_file = filename + ".out"
     result_file = filename + ".result"
@@ -471,7 +481,7 @@ def run_unit_test(test, is_standalone):
 
     printableName = checkname
     if len(test.check.tests) > 1:
-        printableName += "/" + test.filename
+        printableName += "/" + test.filename()
 
     if is_standalone:
         printableName += " (standalone)"
@@ -510,7 +520,7 @@ def run_unit_tests(tests):
 
 def dump_ast(check):
     for test in check.tests:
-        ast_filename = test.filename + ".ast"
+        ast_filename = test.filename() + ".ast"
         run_command(dump_ast_command(test) + " > " + ast_filename)
         print "Dumped AST to " + os.getcwd() + "/" + ast_filename
 #-------------------------------------------------------------------------------

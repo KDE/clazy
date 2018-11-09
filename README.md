@@ -413,9 +413,13 @@ and rebuild.
 
 If you think you found a false-positive, file a bug report. But do make sure to test first without icecc/distcc enabled.
 
-If you want to suppress warnings from headers of Qt or 3rd party code, include them with `-isystem` instead of `-I`.
+If you want to suppress warnings from headers of Qt or 3rd party code, include them with `-isystem` instead of `-I` (gcc/clang only).
+For MSVC use `/external`, which is available since VS 15.6.
 
-Alternatively you can set the CLAZY_HEADER_FILTER env variable to a regexp matching the path where you want warnings.
+Alternatively you can set the CLAZY_HEADER_FILTER env variable to a regexp matching the path where you want warnings,
+for example `CLAZY_HEADER_FILTER=.*myapplication.*`.
+
+You can also exclude paths using a regexp by setting CLAZY_IGNORE_DIRS, for example `CLAZY_IGNORE_DIRS=.*my_qt_folder.*`.
 
 You can also suppress individual warnings by file or by line by inserting comments:
 

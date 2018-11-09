@@ -128,12 +128,6 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext *context) const
-{
-    vector<string> dummy;
-    return requestedChecksThroughEnv(context, dummy);
-}
-
 RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext *context, vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;

@@ -77,19 +77,38 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     if (qst != QtAccessSpecifier_Signal && qst != QtAccessSpecifier_Slot && qst != QtAccessSpecifier_Invokable)
         return;
 
+    string qualifiedTypeName;
+    string typeName;
     for (auto param : method->parameters()) {
         QualType t = TypeUtils::pointeeQualType(param->getType());
-        if (!t.isNull()) {
-            std::string typeName = clazy::name(t, lo(), /*asWritten=*/ true);
-            if (typeName == "QPrivateSignal")
-                continue;
-
-            std::string qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/ false);
-
-            if (typeName != qualifiedTypeName) {
-                emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
-            }
+        if (!typeIsFullyQualified(t, /*by-ref*/qualifiedTypeName, /*by-ref*/typeName)) {
+            emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
+    }
+
+    if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
+        QualType returnT = TypeUtils::pointeeQualType(method->getReturnType());
+        if (!typeIsFullyQualified(returnT, /*by-ref*/qualifiedTypeName, /*by-ref*/typeName)) {
+            emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
+        }
+    }
+
+}
+
+bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, string &qualifiedTypeName, string &typeName) const
+{
+    qualifiedTypeName.clear();
+    typeName.clear();
+
+    if (!t.isNull()) {
+        typeName = clazy::name(t, lo(), /*asWritten=*/ true);
+        if (typeName == "QPrivateSignal")
+            return true;
+
+        qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/ false);
+        return typeName == qualifiedTypeName;
+    } else {
+        return true;
     }
 }
 

@@ -18,7 +18,7 @@ Here's a summary of usages that allocate:
 
 6. `s == "foo" // Allocates, use QLatin1String`
 
-7. `s == QLatin1String("foo) // No allocation`
+7. `s == QLatin1String("foo") // No allocation`
 
 8. `s == QStringLiteral("foo") // No allocation`
 
