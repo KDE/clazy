@@ -25,6 +25,7 @@
 #include "qmap-with-pointer-key.h"
 #include "Utils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclTemplate.h>
@@ -45,7 +46,7 @@ QMapWithPointerKey::QMapWithPointerKey(const std::string &name, ClazyContext *co
 void QMapWithPointerKey::VisitDecl(clang::Decl *decl)
 {
     auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (!tsdecl || tsdecl->getName() != "QMap")
+    if (!tsdecl || clazy::name(tsdecl) != "QMap")
         return;
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();

@@ -134,12 +134,12 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
     if (!clazy::isQtCOWIterator(record))
         return false;
 
-    if (record->getName() != "iterator")
+    if (clazy::name(record) != "iterator")
         return false;
 
     ParmVarDecl *p = method->getParamDecl(0);
     CXXRecordDecl *paramClass = p ? TypeUtils::typeAsRecord(TypeUtils::pointeeQualType(p->getType())) : nullptr;
-    if (!paramClass || paramClass->getName() != "const_iterator")
+    if (!paramClass || clazy::name(paramClass) != "const_iterator")
         return false;
 
     emitWarning(op, "Mixing iterators with const_iterators");

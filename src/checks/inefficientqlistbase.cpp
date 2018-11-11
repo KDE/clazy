@@ -29,6 +29,7 @@
 #include "TemplateUtils.h"
 #include "StmtBodyRange.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -96,7 +97,7 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
         return;
 
     CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-    if (!recordDecl || recordDecl->getName() != "QList")
+    if (!recordDecl || clazy::name(recordDecl) != "QList")
         return;
 
     const std::vector<clang::QualType> types = clazy::getTemplateArgumentsTypes(recordDecl);

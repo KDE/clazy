@@ -204,7 +204,7 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
     QualType qt = TypeUtils::unrefQualType(param->getType());
     qt.removeLocalConst();
     const string typeName = qt.getAsString(PrintingPolicy(lo()));
-    string replacement = typeName + ' ' + string(param->getName());
+    string replacement = typeName + ' ' + string(clazy::name(param));
     SourceLocation startLoc = getLocStart(param);
     SourceLocation endLoc = getLocEnd(param);
 

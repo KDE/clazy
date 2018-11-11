@@ -54,7 +54,7 @@ void QStringVarargs::VisitStmt(clang::Stmt *stmt)
         return;
 
     FunctionDecl *func = callexpr->getDirectCallee();
-    if (!func || func->getName() != "__builtin_trap")
+    if (!func || clazy::name(func) != "__builtin_trap")
         return;
 
     QualType qt = binop->getRHS()->getType();

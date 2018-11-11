@@ -24,6 +24,7 @@
 #include "FixItUtils.h"
 #include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
@@ -47,7 +48,7 @@ using namespace std;
 static bool isQStringBuilder(QualType t)
 {
     CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
-    return record && record->getName() == "QStringBuilder";
+    return record && clazy::name(record) == "QStringBuilder";
 }
 
 AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name, ClazyContext *context)
@@ -68,7 +69,7 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 
     std::vector<FixItHint> fixits;
     if (isFixitEnabled()) {
-        std::string replacement = "QString " + varDecl->getName().str();
+        std::string replacement = "QString " + clazy::name(varDecl).str();
 
         if (qualtype.isConstQualified())
             replacement = "const " + replacement;

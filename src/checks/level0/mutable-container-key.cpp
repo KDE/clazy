@@ -52,7 +52,7 @@ MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *
 void MutableContainerKey::VisitDecl(clang::Decl *decl)
 {
     auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (!tsdecl || !isInterestingContainer(tsdecl->getName()))
+    if (!tsdecl || !isInterestingContainer(clazy::name(tsdecl)))
         return;
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
