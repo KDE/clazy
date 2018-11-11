@@ -68,7 +68,7 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
     bool found = false;
     for (auto declRef : result) {
         if (auto enumConstant = dyn_cast<EnumConstantDecl>(declRef->getDecl())) {
-            if (enumConstant->getName() == "UniqueConnection") {
+            if (clazy::name(enumConstant) == "UniqueConnection") {
                 found = true;
                 break;
             }

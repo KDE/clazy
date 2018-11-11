@@ -53,8 +53,8 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
     if (!tstdecl)
         return;
 
-    const bool isQList = tstdecl->getName() == "QList";
-    const bool isQVector = isQList ? false : tstdecl->getName() == "QVector";
+    const bool isQList = clazy::name(tstdecl) == "QList";
+    const bool isQVector = isQList ? false : clazy::name(tstdecl) == "QVector";
 
     if (!isQList && !isQVector) {
         registerQTypeInfo(tstdecl);
@@ -74,7 +74,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
         if (sm().isInSystemHeader(getLocStart(record)))
             return;
 
-        std::string typeName = record->getName();
+        std::string typeName = clazy::name(record);
         if (typeName == "QPair") // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
             return;
 
@@ -85,7 +85,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 
 void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
-    if (decl->getName() == "QTypeInfo") {
+    if (clazy::name(decl) == "QTypeInfo") {
         const string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
         if (!typeName.empty())
             m_typeInfos.insert(typeName);

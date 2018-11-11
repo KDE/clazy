@@ -131,12 +131,13 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
 RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext *context, vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;
+    static vector<string> disabledChecksThroughEnv;
     if (requestedChecksThroughEnv.empty()) {
         const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv) {
             const string checksEnvStr = clazy::unquoteString(checksEnv);
             requestedChecksThroughEnv = checksEnvStr == "all_checks" ? availableChecks(CheckLevel2)
-                                                                     : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ userDisabledChecks);
+                                                                     : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ disabledChecksThroughEnv);
         }
 
         const string checkName = checkNameForFixIt(context->requestedFixitName);
@@ -145,6 +146,8 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext
         }
     }
 
+    std::copy(disabledChecksThroughEnv.begin(), disabledChecksThroughEnv.end(),
+              std::back_inserter(userDisabledChecks));
     return requestedChecksThroughEnv;
 }
 

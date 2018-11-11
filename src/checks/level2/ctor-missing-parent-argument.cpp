@@ -64,6 +64,14 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     if (!clazy::isQObject(record))
         return;
 
+    if (record->hasInheritedConstructor()) {
+        // When doing using QObject::QObject you inherit the ctors from QObject, so don't warn.
+        // Would be nicer to check if the using directives really refer to QObject::QObject and not to
+        // Some other non-object class, but I can't find a way to get to ConstructorUsingShadowDecl from the CxxRecordDecl
+        // so we might miss some true-positives
+        return;
+    }
+
     const bool hasCtors = record->ctor_begin() != record->ctor_end();
     if (!hasCtors)
         return;

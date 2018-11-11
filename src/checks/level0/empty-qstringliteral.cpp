@@ -49,7 +49,7 @@ void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
         return;
 
     auto vd = dyn_cast<VarDecl>(declstm->getSingleDecl());
-    if (!vd || vd->getName() != "qstring_literal")
+    if (!vd || clazy::name(vd) != "qstring_literal")
         return;
 
     Expr *expr = vd->getInit();

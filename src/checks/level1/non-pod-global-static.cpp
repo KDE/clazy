@@ -103,7 +103,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
     if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->ci.getPreprocessorOpts()))
         return;
 
-    StringRef className = recordDecl->getName();
+    StringRef className = clazy::name(recordDecl);
     if (!shouldIgnoreType(className)) {
         std::string error = string("non-POD static (") + className.data() + string(")");
         emitWarning(declStart, error);

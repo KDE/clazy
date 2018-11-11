@@ -148,7 +148,7 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
         auto enumRefs = clazy::getStatements<DeclRefExpr>(bo->getRHS());
         if (enumRefs.size() == 1) {
             auto enumerator = dyn_cast<EnumConstantDecl>(enumRefs.at(0)->getDecl());
-            if (enumerator && enumerator->getName() == "ReadProperty") {
+            if (enumerator && clazy::name(enumerator) == "ReadProperty") {
                 auto reinterprets = clazy::getStatements<CXXReinterpretCastExpr>(iff);
                 for (auto reinterpret : reinterprets) {
                     QualType qt = TypeUtils::pointeeQualType(reinterpret->getTypeAsWritten());
