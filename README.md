@@ -192,10 +192,13 @@ and rebuild.
 To make it the compiler for qmake projects, just run qmake like:
 `qmake -spec linux-clang QMAKE_CXX="clazy"`
 
+On Windows with MSVC it's simply: `qmake QMAKE_CXX="clazy-cl.bat"`
+
 Alternatively, if you want to use clang directly, without the wrapper:
 `qmake -spec linux-clang QMAKE_CXXFLAGS="-Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy"`
 
-You can also edit mkspecs/common/clang.conf and change QMAKE_CXX to clazy instead of clang++ and run qmake -spec linux-clang
+On Windows it's similar, just inspect the contents of `clazy-cl.bat`.
+
 
 It's recommended that you disable pre-compiled headers and don't use ccache.
 
