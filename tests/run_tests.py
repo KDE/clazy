@@ -441,12 +441,12 @@ def run_unit_test(test, is_standalone):
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
-            print "Skipping " + test.check_name + " because required version is not available"
+            print "Skipping " + test.check.name + " because required version is not available"
         return True
 
     if _platform in test.blacklist_platforms:
         if (_verbose):
-            print "Skipping " + test.check_name + " because it is blacklisted for this platform"
+            print "Skipping " + test.check.name + " because it is blacklisted for this platform"
         return True
 
     checkname = test.check.name
