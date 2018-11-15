@@ -29,7 +29,7 @@ import sys, os, getpass
 CLAZY_SHA1 = ''
 WORK_FOLDER = '/tmp/clazy_work/'
 DOCKER_IMAGE = 'iamsergio/clazy-centos68'
-
+DEST_FILE = WORK_FOLDER + '/Clazy-x86_64.AppImage'
 
 def print_usage():
     print sys.argv[0] + ' <clazy sha1>'
@@ -52,12 +52,8 @@ def make_appimage_in_docker():
         print 'Error running docker. Make sure docker is running and that you have ' + DOCKER_IMAGE
 
     os.environ['ARCH'] = 'x86_64'
-    dest = WORK_FOLDER + '/Clazy-x86_64.AppImage'
-    if not run_command('appimagetool-x86_64.AppImage %s/clazy.AppDir/ %s' % (WORK_FOLDER, dest)):
+    if not run_command('appimagetool-x86_64.AppImage %s/clazy.AppDir/ %s' % (WORK_FOLDER, DEST_FILE)):
         return False
-
-    print ''
-    print 'Created ' + dest
 
     return True
 
@@ -86,3 +82,5 @@ if not make_appimage_in_docker():
 
 if not run_tests():
     sys.exit(1)
+
+print 'Success: ' + DEST_FILE

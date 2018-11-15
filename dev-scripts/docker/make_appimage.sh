@@ -6,7 +6,15 @@
 #   $2 user uid to chown the files to before leaving docker
 
 cp -r /clazy.AppDir /tmp/clazy_work/
+
+cd /llvm
+echo "LLVM sha1: `git rev-parse HEAD`" > /tmp/clazy_work/clazy.AppDir/sha1
+cd tools/clang
+echo "Clang sha1: `git rev-parse HEAD`" >> /tmp/clazy_work/clazy.AppDir/sha1
+
 cd /clazy
+echo "Clazy sha1: `git rev-parse HEAD`" >> /tmp/clazy_work/clazy.AppDir/sha1
+
 git clean -fdx .
 git checkout .
 
