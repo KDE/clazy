@@ -46,18 +46,10 @@ def prepare_folder():
     run_command('rm -rf ' + WORK_FOLDER)
     os.mkdir(WORK_FOLDER)
 
-def remove_unneeded_files():
-    print 'Doing some cleanup...'
-    run_command('rm -rf ' + WORK_FOLDER + '/clazy.AppDir/usr/share/')
-    run_command('rm -rf ' + WORK_FOLDER + '/clazy.AppDir/usr/include/')
-    run_command('rm -rf ' + WORK_FOLDER + '/clazy.AppDir/usr/bin/ll*')
-
 def make_appimage_in_docker():
     cmd = 'docker run -i -t -v %s:%s %s %s' % (WORK_FOLDER, WORK_FOLDER, DOCKER_IMAGE, 'bash -c "/clazy/dev-scripts/docker/make_appimage.sh %s %s"' % (CLAZY_SHA1, str(os.getuid())))
     if not run_command(cmd):
         print 'Error running docker. Make sure docker is running and that you have ' + DOCKER_IMAGE
-
-    remove_unneeded_files()
 
     os.environ['ARCH'] = 'x86_64'
     dest = WORK_FOLDER + '/Clazy-x86_64.AppImage'
