@@ -83,4 +83,17 @@ if not make_appimage_in_docker():
 if not run_tests():
     sys.exit(1)
 
+print ''
+run_command('sha1sum ' + DEST_FILE)
+run_command('sha256sum ' + DEST_FILE)
+
+sign_script = os.getenv('CLAZY_SIGN_SCRIPT', '')
+
+if sign_script:
+    os.chdir(WORK_FOLDER)
+    if not run_command(sign_script + ' ' + DEST_FILE):
+        print 'Error signing file'
+        sys.exit(1)
+
+print ''
 print 'Success: ' + DEST_FILE
