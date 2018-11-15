@@ -17,7 +17,7 @@ echo "Checking out $1..."
 git checkout $1
 
 echo "Building..."
-cmake3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/tmp/clazy_work/clazy.AppDir/usr . && make -j12 && make install
+cmake3 -DCMAKE_BUILD_TYPE=Release -DLINK_CLAZY_TO_LLVM=OFF -DCMAKE_INSTALL_PREFIX=/tmp/clazy_work/clazy.AppDir/usr . && make -j12 && make install
 
 echo "Fixing permissions..."
 chown -R $2 /tmp/clazy_work/clazy.AppDir/
