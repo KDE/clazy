@@ -6,7 +6,7 @@ sharedir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_SHAREDIR@")
 HELP() {
   echo "Usage: `basename $0` [options] [clang++-options]"
   echo
-  echo "Static analyzer for C++/Qt code"
+  echo "Static analyzer for C++/Qt code (https://phabricator.kde.org/source/clazy)"
   echo
   echo "Options:"
   echo "  --help             print program help"
@@ -33,7 +33,7 @@ HELP() {
 
 VERSION() {
     echo "clazy version: @CLAZY_PRINT_VERSION@"
-    ${CLANGXX:-clang++} --version | head -1 | awk '{printf("clang++ Version: %s\n",$3)}'
+    ${CLANGXX:-clang++} --version | head -1 | awk '{printf("clang version: %s\n",$3)}'
 }
 
 PRLIST() {

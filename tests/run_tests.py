@@ -4,6 +4,8 @@ import sys, os, subprocess, string, re, json, threading, multiprocessing, argpar
 from threading import Thread
 from sys import platform as _platform
 
+_verbose = False
+
 def isWindows():
     return _platform == 'win32'
 
@@ -79,6 +81,8 @@ class Check:
 
 def get_command_output(cmd, test_env = os.environ):
     try:
+        if _verbose:
+            print cmd
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
     except subprocess.CalledProcessError, e:
         return e.output,False
@@ -226,6 +230,11 @@ def clazy_cpp_args():
 def more_clazy_args():
     return " -Xclang -plugin-arg-clazy -Xclang no-inplace-fixits " + clazy_cpp_args()
 
+def clazy_standalone_binary():
+    if 'CLAZYSTANDALONE_CXX' in os.environ: # in case we want to use "clazy.AppImage --standalone" instead
+        return os.environ['CLAZYSTANDALONE_CXX']
+    return 'clazy-standalone'
+
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
     result = " -no-inplace-fixits -checks=" + string.join(test.checks, ',') + " " + result
@@ -290,19 +299,6 @@ def compiler_name():
     return os.getenv('CLANGXX', 'clang')
 
 #-------------------------------------------------------------------------------
-# Get clang version
-version,success = get_command_output(compiler_name() + ' --version')
-
-match = re.search('clang version (.*?)[ -]', version)
-try:
-    version = match.group(1)
-except:
-    print "Could not determine clang version, is it in PATH?"
-    sys.exit(-1)
-
-CLANG_VERSION = int(version.replace('.', ''))
-
-#-------------------------------------------------------------------------------
 # Setup argparse
 
 parser = argparse.ArgumentParser()
@@ -335,6 +331,26 @@ _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 
 #-------------------------------------------------------------------------------
 # utility functions #2
+
+version,success = get_command_output(compiler_name() + ' --version')
+
+match = re.search('clang version (.*?)[ -]', version)
+try:
+    version = match.group(1)
+except:
+    # Now try the Clazy.AppImage way
+    match = re.search('clang version: (.*)', version)
+
+    try:
+        version = match.group(1)
+    except:
+        print "Could not determine clang version, is it in PATH?"
+        sys.exit(-1)
+
+if _verbose:
+    print 'Found clang version: ' + str(version)
+
+CLANG_VERSION = int(version.replace('.', ''))
 
 def qt_installation(major_version):
     if major_version == 5:
@@ -430,12 +446,12 @@ def run_unit_test(test, is_standalone):
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
-            print "Skipping " + test.check_name + " because required version is not available"
+            print "Skipping " + test.check.name + " because required version is not available"
         return True
 
     if _platform in test.blacklist_platforms:
         if (_verbose):
-            print "Skipping " + test.check_name + " because it is blacklisted for this platform"
+            print "Skipping " + test.check.name + " because it is blacklisted for this platform"
         return True
 
     checkname = test.check.name
@@ -449,7 +465,7 @@ def run_unit_test(test, is_standalone):
         return True
 
     if is_standalone:
-        cmd_to_run = "clazy-standalone " + filename + " " + clazy_standalone_command(test, qt)
+        cmd_to_run = clazy_standalone_binary() + " " + filename + " " + clazy_standalone_command(test, qt)
     else:
         cmd_to_run = clazy_command(qt, test, filename)
 
