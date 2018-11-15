@@ -333,8 +333,17 @@ match = re.search('clang version (.*?)[ -]', version)
 try:
     version = match.group(1)
 except:
-    print "Could not determine clang version, is it in PATH?"
-    sys.exit(-1)
+    # Now try the Clazy.AppImage way
+    match = re.search('clang version: (.*)', version)
+
+    try:
+        version = match.group(1)
+    except:
+        print "Could not determine clang version, is it in PATH?"
+        sys.exit(-1)
+
+if _verbose:
+    print 'Found clang version: ' + str(version)
 
 CLANG_VERSION = int(version.replace('.', ''))
 
