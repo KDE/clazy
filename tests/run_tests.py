@@ -4,6 +4,8 @@ import sys, os, subprocess, string, re, json, threading, multiprocessing, argpar
 from threading import Thread
 from sys import platform as _platform
 
+_verbose = False
+
 def isWindows():
     return _platform == 'win32'
 
@@ -79,6 +81,8 @@ class Check:
 
 def get_command_output(cmd, test_env = os.environ):
     try:
+        if _verbose:
+            print cmd
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
     except subprocess.CalledProcessError, e:
         return e.output,False
@@ -290,19 +294,6 @@ def compiler_name():
     return os.getenv('CLANGXX', 'clang')
 
 #-------------------------------------------------------------------------------
-# Get clang version
-version,success = get_command_output(compiler_name() + ' --version')
-
-match = re.search('clang version (.*?)[ -]', version)
-try:
-    version = match.group(1)
-except:
-    print "Could not determine clang version, is it in PATH?"
-    sys.exit(-1)
-
-CLANG_VERSION = int(version.replace('.', ''))
-
-#-------------------------------------------------------------------------------
 # Setup argparse
 
 parser = argparse.ArgumentParser()
@@ -335,6 +326,17 @@ _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 
 #-------------------------------------------------------------------------------
 # utility functions #2
+
+version,success = get_command_output(compiler_name() + ' --version')
+
+match = re.search('clang version (.*?)[ -]', version)
+try:
+    version = match.group(1)
+except:
+    print "Could not determine clang version, is it in PATH?"
+    sys.exit(-1)
+
+CLANG_VERSION = int(version.replace('.', ''))
 
 def qt_installation(major_version):
     if major_version == 5:
