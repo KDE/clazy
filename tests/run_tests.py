@@ -230,6 +230,11 @@ def clazy_cpp_args():
 def more_clazy_args():
     return " -Xclang -plugin-arg-clang-lazy -Xclang no-inplace-fixits " + clazy_cpp_args()
 
+def clazy_standalone_binary():
+    if 'CLAZYSTANDALONE_CXX' in os.environ: # in case we want to use "clazy.AppImage --standalone" instead
+        return os.environ['CLAZYSTANDALONE_CXX']
+    return 'clazy-standalone'
+
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
     result = " -no-inplace-fixits -checks=" + string.join(test.checks, ',') + " " + result
@@ -460,7 +465,7 @@ def run_unit_test(test, is_standalone):
         return True
 
     if is_standalone:
-        cmd_to_run = "clazy-standalone " + filename + " " + clazy_standalone_command(test, qt)
+        cmd_to_run = clazy_standalone_binary() + " " + filename + " " + clazy_standalone_command(test, qt)
     else:
         cmd_to_run = clazy_command(qt, test, filename)
 
