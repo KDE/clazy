@@ -9,13 +9,13 @@ Table of contents
 =================
 
    * [Source Code](#source-code)
+   * [](#pre-built-binaries)
    * [Build Instructions](#build-instructions)
       * [Linux](#linux)
          * [Install dependencies](#install-dependencies)
          * [Build and install clang](#build-and-install-clang)
          * [Build clazy](#build-clazy)
       * [Windows](#windows)
-         * [3rdparty pre-built msvc2015 clang and clazy binaries](#3rdparty-pre-built-msvc2015-clang-and-clazy-binaries)
          * [Build and install clang](#build-and-install-clang-1)
          * [Build clazy](#build-clazy-1)
       * [macOS with MacPorts](#macos-with-macports)
@@ -45,6 +45,11 @@ You can get clazy from:
 - <https://github.com/KDE/clazy>
 - git@git.kde.org:clazy
 - git://anongit.kde.org/clazy
+
+# Pre-built binaries
+
+Pre-built binaries are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
+Currently MSVC2015, MSVC2017 and Linux AppImage packages are provided. All of them are based on clang 7.0.
 
 # Build Instructions
 ## Linux
@@ -82,14 +87,6 @@ If your distro provides clang then you can skip this step.
 See troubleshooting section if you have problems.
 
 ## Windows
-
-### 3rdparty pre-built msvc2015 clang and clazy binaries
-
-Building for Windows is a lengthy and tedious task, therefore the maintainer won't be creating them anymore on his free/KDE time.
-KDAB however has offered to produce these binaries and they will appear on their website.
-
-If you really want to build clang and clazy yourself then read on, otherwise skip the building topic.
-
 
 ### Build and install clang
 These instructions assume your terminal is suitable for development (msvc2015).
@@ -174,7 +171,7 @@ $ brew install --with-clang llvm
 
 # Setting up your project to build with clazy
 
-Note: Wherever `clazy` it mentioned, replace with `clazy-cl.bat` if you're on Windows.
+Note: Wherever `clazy` it mentioned, replace with `clazy-cl.bat` if you're on Windows, or replace with `Clazy-x86_64.AppImage` if you're using AppImage.
 Note: If you prefer running clazy over a JSON compilation database instead of using it as a plugin, jump to [clazy-standalone](#clazy-standalone-and-json-database-support).
 
 You should now have the clazy command available to you, in `<prefix>/bin/`.
@@ -328,6 +325,8 @@ Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify f
 The `clazy-standalone` binary allows you to run clazy over a compilation database JSON file, in the same
 way you would use `clang-tidy` or other clang tooling. This way you don't need to build your application,
 only the static analysis is performed.
+
+Note: If you're using the AppImage, use `Clazy-x86_64.AppImage --standalone` instead of `clazy-standalone`.
 
 `clazy-standalone` supports the same env variables as the clazy plugin. You can also specify a list of checks via
 the `-checks` argument.
