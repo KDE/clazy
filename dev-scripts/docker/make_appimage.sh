@@ -25,12 +25,6 @@ chown -R $2 /tmp/clazy_work/clazy.AppDir/
 cp /clazy/README.md /tmp/clazy_work/clazy.AppDir/
 cp /clazy/COPYING-LGPL2.txt /tmp/clazy_work/clazy.AppDir/
 
-echo "Cleanup..."
-rm -rf /tmp/clazy_work/clazy.AppDir/usr/share/
-rm -rf /tmp/clazy_work/clazy.AppDir/usr/include/
-cd /tmp/clazy_work/clazy.AppDir/usr/bin/
-rm ll* bugpoint clang-format clang-import-test clang-refactor diagtool git-clang-format obj2yaml sancov scan-build verify-uselistorder c-index-test clang-check clang-cpp clang-func-mapping clang-offload-bundler clang-rename dsymutil hmaptool opt sanstats scan-view yaml2obj
-
 
 echo "Done"
 echo
