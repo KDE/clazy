@@ -61,6 +61,17 @@ def make_appimage_in_docker():
 
     return True
 
+
+def clazy_source_directory():
+    return os.path.dirname(os.path.realpath(__file__)) + '/../'
+
+def run_tests():
+    os.chdir(clazy_source_directory() + '/tests/')
+    os.environ['CLAZY_CXX'] = '/tmp/clazy_work//Clazy-x86_64.AppImage'
+    os.environ['CLAZYSTANDALONE_CXX'] = '/tmp/clazy_work//Clazy-x86_64.AppImage --standalone'
+    return run_command("./run_tests.py --verbose")
+
+
 if len(sys.argv) != 2:
     print_usage();
     sys.exit(1)
@@ -71,4 +82,7 @@ CLAZY_SHA1 = sys.argv[1]
 prepare_folder()
 
 if not make_appimage_in_docker():
+    sys.exit(1)
+
+if not run_tests():
     sys.exit(1)
