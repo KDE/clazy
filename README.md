@@ -236,6 +236,7 @@ clazy runs all checks from level1 by default.
     - [fully-qualified-moc-types](docs/checks/README-fully-qualified-moc-types.md)
     - [lambda-in-connect](docs/checks/README-lambda-in-connect.md)
     - [lambda-unique-connection](docs/checks/README-lambda-unique-connection.md)
+    - [lowercase-qml-type-name](docs/checks/README-lowercase-qml-type-name.md)
     - [mutable-container-key](docs/checks/README-mutable-container-key.md)
     - [qcolor-from-literal](docs/checks/README-qcolor-from-literal.md)
     - [qdatetime-utc](docs/checks/README-qdatetime-utc.md)    (fix-qdatetime-utc)

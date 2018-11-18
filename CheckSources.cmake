@@ -17,6 +17,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/fully-qualified-moc-types.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-in-connect.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lambda-unique-connection.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/lowercase-qml-type-name.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/mutable-container-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qcolor-from-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qdatetime-utc.cpp

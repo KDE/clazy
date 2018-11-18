@@ -260,7 +260,12 @@
             "categories" : ["performance"],
             "visits_stmts" : true
         },
-
+        {
+            "name" : "lowercase-qml-type-name",
+            "level" : 0,
+            "categories" : ["qml", "bug"],
+            "visits_stmts" : true
+        },
         {
             "name"  : "auto-unexpected-qstringbuilder",
             "class_name" : "AutoUnexpectedQStringBuilder",

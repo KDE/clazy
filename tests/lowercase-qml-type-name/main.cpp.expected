@@ -1,0 +1,1 @@
+lowercase-qml-type-name/main.cpp:10:40: warning: QML types must begin with uppercase [-Wclazy-lowercase-qml-type-name]
