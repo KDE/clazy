@@ -386,7 +386,13 @@ For better results don't use parallel builds, otherwise a fixit being applied in
   (There are reports that /usr/share/llvm/cmake/LLVM-Config.cmake is buggy).
 
 - [Fedora] CommandLine Error: `Option 'opt-bisect-limit' registered more than once!`
-  Remove the llvm-static package and use the dynamically linked libraries instead
+  Remove the llvm-static package and use the dynamically linked libraries instead.
+  Alternatively, if you want to use llvm-static, see next item.
+
+- CommandLine Error: `Option 'foo' registered more than once!`
+  Means you're building against a static version of LLVM (*.a files instead of *.so).
+  Try passing to cmake -DLINK_CLAZY_TO_LLVM=OFF when building clazy, this was tested
+  successfully against a static LLVM 7.0, and might work with other versions.
 
 - Some checks are mysteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off.
