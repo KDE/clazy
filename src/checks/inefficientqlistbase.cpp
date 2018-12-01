@@ -107,8 +107,9 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
     if (!qt2.getTypePtrOrNull() || qt2->isIncompleteType())
         return;
 
-    const int size_of_ptr = TypeUtils::sizeOfPointer(&m_astContext, qt2); // in bits
-    const int size_of_T = m_astContext.getTypeSize(qt2);
+    // Assume size of pointer is 64, even on 32-bit. So code is portable to 64-bit too.
+    const uint64_t size_of_ptr = 64; // TypeUtils::sizeOfPointer(&m_astContext, qt2); // in bits
+    const uint64_t size_of_T = m_astContext.getTypeSize(qt2);
 
     if (size_of_T > size_of_ptr && !shouldIgnoreVariable(varDecl)) {
         string s = string("Use QVector instead of QList for type with size " + to_string(size_of_T / 8) + " bytes");

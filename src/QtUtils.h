@@ -186,7 +186,9 @@ bool isJavaIterator(clang::CXXMemberCallExpr *call);
  */
 inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *context)
 {
-    return (int)context->getTypeSize(qt) <= TypeUtils::sizeOfPointer(context, qt);
+    // Assume size of pointer is 64, even on 32-bit. So code is portable to 64-bit too.
+    const uint64_t sizeOfPointer = 64; // TypeUtils::sizeOfPointer(context, qt;
+    return context->getTypeSize(qt) <= sizeOfPointer;
 }
 
 /**
