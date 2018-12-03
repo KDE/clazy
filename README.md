@@ -274,7 +274,7 @@ clazy runs all checks from level1 by default.
     - [qlatin1string-non-ascii](docs/checks/README-qlatin1string-non-ascii.md)
     - [qproperty-without-notify](docs/checks/README-qproperty-without-notify.md)
     - [qstring-left](docs/checks/README-qstring-left.md)
-    - [range-loop](docs/checks/README-range-loop.md)
+    - [range-loop](docs/checks/README-range-loop.md)    (fix-range-loop-add-ref)
     - [returning-data-from-temporary](docs/checks/README-returning-data-from-temporary.md)
     - [rule-of-two-soft](docs/checks/README-rule-of-two-soft.md)
     - [skipped-base-method](docs/checks/README-skipped-base-method.md)

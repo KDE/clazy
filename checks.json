@@ -363,7 +363,12 @@
             "name"  : "range-loop",
             "level" : 1,
             "categories" : ["containers", "performance"],
-            "visits_stmts" : true
+            "visits_stmts" : true,
+            "fixits" : [
+                {
+                    "name" : "range-loop-add-ref"
+                }
+            ]
         },
         {
             "name"  : "returning-data-from-temporary",

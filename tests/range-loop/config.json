@@ -4,6 +4,10 @@
             "filename" : "main.cpp"
         },
         {
+            "filename" : "main.cpp_fixed.cpp",
+            "isFixedFile" : true
+        },
+        {
             "filename" : "bug370609.cpp"
         }
     ]

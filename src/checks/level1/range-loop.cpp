@@ -30,6 +30,7 @@
 #include "LoopUtils.h"
 #include "StmtBodyRange.h"
 #include "SourceCompatibilityHelpers.h"
+#include "FixItUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -101,8 +102,21 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         const string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
+        std::vector<FixItHint> fixits;
+        if (isFixitEnabled()) {
+            const bool isConst = varDecl->getType().isConstQualified();
+
+            if (!isConst) {
+                SourceLocation start = getLocStart(varDecl);
+                fixits.push_back(clazy::createInsertion(start, "const "));
+            }
+
+            SourceLocation end = varDecl->getLocation();
+            fixits.push_back(clazy::createInsertion(end, "&"));
+        }
+
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(getLocStart(varDecl), msg.c_str());
+        emitWarning(getLocStart(varDecl), msg.c_str(), fixits);
     }
 }

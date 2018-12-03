@@ -179,6 +179,7 @@ void CheckManager::registerChecks()
     registerCheck(check<QPropertyWithoutNotify>("qproperty-without-notify", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QStringLeft>("qstring-left", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RangeLoop>("range-loop", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-range-loop-add-ref", "range-loop");
     registerCheck(check<ReturningDataFromTemporary>("returning-data-from-temporary", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfTwoSoft>("rule-of-two-soft", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<SkippedBaseMethod>("skipped-base-method", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));

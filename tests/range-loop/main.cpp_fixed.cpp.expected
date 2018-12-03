@@ -120,7 +120,7 @@ void test_missing_ref()
     }
 
     // Test #4: Warning
-    for (SmallNonTrivial t : smallNonTrivials) {
+    for (const SmallNonTrivial &t : smallNonTrivials) {
         nop();
     }
 
@@ -198,8 +198,8 @@ std::vector<Foo> doSomething(const std::vector<Foo> &fooVec)
 void test_add_ref_fixits()
 {
     QStringList strlist;
-    for (const QString s : strlist) {} // should add &
-    for (QString s : strlist) {} // should add const-&
+    for (const QString &s : strlist) {} // should add &
+    for (const QString &s : strlist) {} // should add const-&
 
     for (QString s : strlist) {  // shouldn't warn
         s = s.toLower();
