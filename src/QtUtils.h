@@ -187,9 +187,7 @@ CLAZYLIB_EXPORT bool isJavaIterator(clang::CXXMemberCallExpr *call);
  */
 inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *context)
 {
-    // Assume size of pointer is 64, even on 32-bit. So code is portable to 64-bit too.
-    const uint64_t sizeOfPointer = 64; // TypeUtils::sizeOfPointer(context, qt;
-    return context->getTypeSize(qt) <= sizeOfPointer;
+    return (int)context->getTypeSize(qt) <= TypeUtils::sizeOfPointer(context, qt);
 }
 
 /**
