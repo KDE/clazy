@@ -10,7 +10,7 @@
 
 
 struct SmallType {
-    char a[8];
+    char a[sizeof(void*)];
 };
 
 
