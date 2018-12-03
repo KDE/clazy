@@ -91,6 +91,9 @@ void IfndefDefineTypo::VisitEndif(SourceLocation, SourceLocation)
 
 void IfndefDefineTypo::maybeWarn(const string &define, SourceLocation loc)
 {
+    if (m_lastIfndef == "Q_CONSTRUCTOR_FUNCTION") // Transform into a list if more false-positives need to be added
+        return;
+
     if (define == m_lastIfndef) {
         m_lastIfndef.clear();
         return;
