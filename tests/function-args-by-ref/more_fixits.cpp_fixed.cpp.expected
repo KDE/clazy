@@ -4,6 +4,7 @@ class Test
 {
 public:
     void foo(const QString&);
+    void bar(const QString&) {}
 };
 
 void Test::foo(const QString&)
