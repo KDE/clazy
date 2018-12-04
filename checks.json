@@ -450,6 +450,11 @@
                     "name" : "warn-for-overridden-methods"
                 }
             ],
+            "fixits" : [
+                {
+                    "name" : "function-args-by-ref"
+                }
+            ],
             "visits_decls" : true,
             "visits_stmts" : true
         },

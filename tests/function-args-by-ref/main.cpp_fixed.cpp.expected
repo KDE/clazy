@@ -147,7 +147,7 @@ void testDefaultButNotTrivialCopyable(DefaultButNotTrivialCopyable)
 
 }
 
-void shouldBeByValue(Trivial nt)
+void shouldBeByValue(const Trivial &nt)
 {
 
 }
@@ -162,42 +162,42 @@ void foo1(const Trivial & = Trivial());
 void foo2(const Trivial &t);
 void foo3(const Trivial&);
 
-void foo4(Trivial t);
-void foo4(Trivial t)
+void foo4(const Trivial &t);
+void foo4(const Trivial &t)
 {
 }
 
-void foo5(Trivial t)
+void foo5(const Trivial &t)
 {
 }
 
-void foo6(Trivial t = {})
+void foo6(const Trivial &t = {})
 {
 }
 
 
 struct Base // Test that fixits fix both Base and Derived
 {
-    void foo(Trivial );
+    void foo(const Trivial &);
 };
 
-void Base::foo(Trivial )
+void Base::foo(const Trivial &)
 {
 }
 
 struct Derived : public Base
 {
-    void foo(Trivial );
+    void foo(const Trivial &);
 };
 
-void Derived::foo(Trivial )
+void Derived::foo(const Trivial &)
 {
 }
 
-struct QDBusMessage
-{
-    void createErrorReply(QString) {}
-};
+
+
+
+
 
 struct DeletedCtor // bug #360112
 {
@@ -212,4 +212,36 @@ struct CopyCtor // bug #360112
 struct Ctors
 {
     Ctors (NonTrivial) {}
+};
+
+
+struct Ctors2
+{
+    Ctors2(NonTrivial n) : m(std::move(n)), i(0) {} // Ok
+    NonTrivial m;
+    int i;
+};
+
+struct Ctors3
+{
+    Ctors3(NonTrivial n) : m(n), i(0) {} // Warning
+    NonTrivial m;
+    int i;
+};
+
+
+// #381812
+class BaseWithVirtuals
+{
+public:
+    virtual void virtualMethod1(NonTrivial) {}; // Warn
+    virtual void virtualMethod2(NonTrivial) {}; // Warn
+    void nonVirtualMethod(NonTrivial) {}; // Warn
+};
+
+class DerivedWithVirtuals : BaseWithVirtuals {
+public:
+    void virtualMethod1(NonTrivial) override {}; // OK
+    void virtualMethod2(NonTrivial) {}; // OK
+    void nonVirtualMethod(NonTrivial) {}; // Warn
 };

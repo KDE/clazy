@@ -29,6 +29,7 @@
 #include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
+#include "FixItUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -113,7 +114,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
     if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
         return;
 
-    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods");
+    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods") || isFixitEnabled();
     if (!warnForOverriddenMethods && Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
         // When overriding you can't change the signature. You should fix the base classes first
         return;
@@ -149,6 +150,18 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
                 error = warningMsgForSmallType(classif.size_of_T, paramStr);
             } else if (classif.passNonTriviallyCopyableByConstRef) {
                 error = "Missing reference on non-trivial type (" + paramStr + ')';
+            }
+
+            if (isFixitEnabled()) {
+                const bool isConst = paramQt.isConstQualified();
+
+                if (!isConst) {
+                    SourceLocation start = getLocStart(param);
+                    fixits.push_back(clazy::createInsertion(start, "const "));
+                }
+
+                SourceLocation end = param->getLocation();
+                fixits.push_back(clazy::createInsertion(end, "&"));
             }
 
             emitWarning(getLocStart(param), error.c_str(), fixits);

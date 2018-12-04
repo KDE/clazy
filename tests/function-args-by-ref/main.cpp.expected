@@ -13,4 +13,6 @@ function-args-by-ref/main.cpp:227:12: warning: Missing reference on non-trivial 
 function-args-by-ref/main.cpp:237:33: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:238:33: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:239:27: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/main.cpp:244:25: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
+function-args-by-ref/main.cpp:245:25: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:246:27: warning: Missing reference on non-trivial type (struct NonTrivial) [-Wclazy-function-args-by-ref]

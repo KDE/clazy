@@ -284,7 +284,7 @@ clazy runs all checks from level1 by default.
     - [base-class-event](docs/checks/README-base-class-event.md)
     - [copyable-polymorphic](docs/checks/README-copyable-polymorphic.md)
     - [ctor-missing-parent-argument](docs/checks/README-ctor-missing-parent-argument.md)
-    - [function-args-by-ref](docs/checks/README-function-args-by-ref.md)
+    - [function-args-by-ref](docs/checks/README-function-args-by-ref.md)    (fix-function-args-by-ref)
     - [function-args-by-value](docs/checks/README-function-args-by-value.md)
     - [global-const-char-pointer](docs/checks/README-global-const-char-pointer.md)
     - [implicit-casts](docs/checks/README-implicit-casts.md)

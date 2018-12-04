@@ -188,6 +188,7 @@ void CheckManager::registerChecks()
     registerCheck(check<CopyablePolymorphic>("copyable-polymorphic", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<CtorMissingParentArgument>("ctor-missing-parent-argument", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<FunctionArgsByRef>("function-args-by-ref", CheckLevel2,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
+    registerFixIt(1, "fix-function-args-by-ref", "function-args-by-ref");
     registerCheck(check<FunctionArgsByValue>("function-args-by-value", CheckLevel2,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<GlobalConstCharPointer>("global-const-char-pointer", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ImplicitCasts>("implicit-casts", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
