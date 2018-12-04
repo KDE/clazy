@@ -16,6 +16,13 @@
         {
             "filename" : "warn-for-overridden-methods.cpp",
             "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-ref-warn-for-overridden-methods" }
+        },
+        {
+            "filename" : "more_fixits.cpp"
+        },
+        {
+            "filename" : "more_fixits.cpp_fixed.cpp",
+            "isFixedFile" : true
         }
     ]
 }

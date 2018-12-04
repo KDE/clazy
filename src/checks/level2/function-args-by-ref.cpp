@@ -161,23 +161,24 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *func, unsigned int parmIndex)
 {
     if (isFixitEnabled()) {
+        for (auto funcRedecl : func->redecls()) {
+            auto funcParams = Utils::functionParameters(funcRedecl);
+            if (funcParams.size() <= parmIndex)
+                return;
 
-        auto funcParams = Utils::functionParameters(func);
-        if (funcParams.size() <= parmIndex)
-            return;
+            ParmVarDecl *param = funcParams[parmIndex];
+            QualType paramQt = TypeUtils::unrefQualType(param->getType());
 
-        ParmVarDecl *param = funcParams[parmIndex];
-        QualType paramQt = TypeUtils::unrefQualType(param->getType());
+            const bool isConst = paramQt.isConstQualified();
 
-        const bool isConst = paramQt.isConstQualified();
+            if (!isConst) {
+                SourceLocation start = getLocStart(param);
+                fixits.push_back(clazy::createInsertion(start, "const "));
+            }
 
-        if (!isConst) {
-            SourceLocation start = getLocStart(param);
-            fixits.push_back(clazy::createInsertion(start, "const "));
+            SourceLocation end = param->getLocation();
+            fixits.push_back(clazy::createInsertion(end, "&"));
         }
-
-        SourceLocation end = param->getLocation();
-        fixits.push_back(clazy::createInsertion(end, "&"));
     }
 }
 

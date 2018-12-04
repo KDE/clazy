@@ -1,0 +1,12 @@
+#include <QtCore/QString>
+
+class Test
+{
+public:
+    void foo(const QString&);
+};
+
+void Test::foo(const QString&)
+{
+
+}

@@ -1,0 +1,1 @@
+function-args-by-ref/more_fixits.cpp:9:16: warning: Missing reference on non-trivial type (class QString) [-Wclazy-function-args-by-ref]
