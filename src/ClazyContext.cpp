@@ -40,7 +40,10 @@ public:
     ClazyFixItOptions(const ClazyFixItOptions &other) = delete;
     ClazyFixItOptions(bool inplace)
     {
-        InPlace = inplace;
+        if (const char *suffix = getenv("CLAZY_FIXIT_SUFFIX"))
+            m_suffix = suffix;
+
+        InPlace = inplace && m_suffix.empty();
         FixWhatYouCan = true;
         FixOnlyWarnings = true;
         Silent = false;
@@ -49,8 +52,11 @@ public:
     std::string RewriteFilename(const std::string &filename, int &fd) override
     {
         fd = -1;
-        return InPlace ? filename : filename + "_fixed.cpp";
+        return InPlace ? filename
+                       : filename + m_suffix;
     }
+
+    std::string m_suffix;
 };
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,

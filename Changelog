@@ -101,5 +101,6 @@
   - New Fixits:
     range-loop now supports adding missing refs or const-ref
     function-args-by-ref now adding missing refs or const-ref (experimental)
+    Introduced CLAZY_FIXIT_SUFFIX env variable
   - Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt
   - Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so

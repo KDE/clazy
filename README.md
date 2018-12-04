@@ -371,6 +371,10 @@ Only one fixit can be enabled each time.
 **WARNING**: Backup your code, don't blame me if a fixit is not applied correctly.
 For better results don't use parallel builds, otherwise a fixit being applied in an header file might be done twice.
 
+By default clazy will rewrite your file, but it's suggested that you set the `CLAZY_FIXIT_SUFFIX` env variable to something like
+`_clazy`. This will make clazy generate a new file with the fixes, suffixed with a string of your choice instead of overwriting the original
+one. Otherwise the build would most likely fail due to rewriting code and compiling at the same time.
+
 # Troubleshooting
 
 - clang: symbol lookup error: `/usr/lib/x86_64-linux-gnu/ClazyPlugin.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv`.

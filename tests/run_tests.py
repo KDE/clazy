@@ -559,6 +559,7 @@ if 'CLAZY_NO_WERROR' in os.environ:
     del os.environ['CLAZY_NO_WERROR']
 
 os.environ['CLAZY_CHECKS'] = ''
+os.environ['CLAZY_FIXIT_SUFFIX'] = '_fixed.cpp'
 
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)
