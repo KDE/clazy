@@ -25,18 +25,18 @@ int foo1(const Trivial nt) // Test #1: No warning
     return nt.a;
 }
 
-int foo2(const NonTrivial nt) // Test #2: Warning
+int foo2(const NonTrivial &nt) // Test #2: Warning
 {
     nt.constFunction();
     return nt.a;
 }
 
-int foo3(NonTrivial nt) // Test #3: Warning
+int foo3(const NonTrivial &nt) // Test #3: Warning
 {
     return nt.a;
 }
 
-int foo4(NonTrivial nt) // Test #4: Warning
+int foo4(const NonTrivial &nt) // Test #4: Warning
 {
     return nt.a;
 }
@@ -60,19 +60,19 @@ int foo7(NonTrivial nt) // Test #7: No warning
     return nt.a;
 }
 
-int foo8(NonTrivial nt) // Test #8: Warning
+int foo8(const NonTrivial &nt) // Test #8: Warning
 {
     nt.constFunction();
     return nt.a;
 }
 
-int foo9(NonTrivial nt) // Test #9: Warning
+int foo9(const NonTrivial &nt) // Test #9: Warning
 {
     by_constRef(nt);
     return nt.a;
 }
 
-int foo10(NonTrivial nt) // Test #10: Warning
+int foo10(const NonTrivial &nt) // Test #10: Warning
 {
     by_const_pointer(&nt);
     return nt.a;
@@ -99,7 +99,7 @@ struct StringConstPtr
     StringConstPtr(const QString *s) {}
 };
 
-void func2(QString text)
+void func2(const QString &text)
 {
     StringConstPtr s(&text); // Warning, it's a const ptr
 }
@@ -118,7 +118,7 @@ struct NoUserCtorsButNotTrivial
     NonTrivial t;
 };
 
-void testNoUserCtorsButNotTrivial(NoUserCtorsButNotTrivial)
+void testNoUserCtorsButNotTrivial(const NoUserCtorsButNotTrivial&)
 {
 
 }
@@ -142,7 +142,7 @@ struct DefaultButNotTrivialCopyable
     NonTrivial t;
 };
 
-void testDefaultButNotTrivialCopyable(DefaultButNotTrivialCopyable)
+void testDefaultButNotTrivialCopyable(const DefaultButNotTrivialCopyable&)
 {
 
 }
@@ -211,7 +211,7 @@ struct CopyCtor // bug #360112
 
 struct Ctors
 {
-    Ctors (NonTrivial) {}
+    Ctors (const NonTrivial&) {}
 };
 
 
@@ -224,7 +224,7 @@ struct Ctors2
 
 struct Ctors3
 {
-    Ctors3(NonTrivial n) : m(n), i(0) {} // Warning
+    Ctors3(const NonTrivial &n) : m(n), i(0) {} // Warning
     NonTrivial m;
     int i;
 };
@@ -234,14 +234,14 @@ struct Ctors3
 class BaseWithVirtuals
 {
 public:
-    virtual void virtualMethod1(NonTrivial) {}; // Warn
-    virtual void virtualMethod2(NonTrivial) {}; // Warn
-    void nonVirtualMethod(NonTrivial) {}; // Warn
+    virtual void virtualMethod1(const NonTrivial&) {}; // Warn
+    virtual void virtualMethod2(const NonTrivial&) {}; // Warn
+    void nonVirtualMethod(const NonTrivial&) {}; // Warn
 };
 
 class DerivedWithVirtuals : BaseWithVirtuals {
 public:
-    void virtualMethod1(NonTrivial) override {}; // OK
-    void virtualMethod2(NonTrivial) {}; // OK
-    void nonVirtualMethod(NonTrivial) {}; // Warn
+    void virtualMethod1(const NonTrivial&) override {}; // OK
+    void virtualMethod2(const NonTrivial&) {}; // OK
+    void nonVirtualMethod(const NonTrivial&) {}; // Warn
 };
