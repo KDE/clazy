@@ -122,9 +122,9 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 
     Stmt *body = func->getBody();
 
-    int i = -1;
-    for (auto param : Utils::functionParameters(func)) {
-        i++;
+    auto funcParams = Utils::functionParameters(func);
+    for (unsigned int i = 0; i < funcParams.size(); ++i) {
+        ParmVarDecl* param = funcParams[i];
         QualType paramQt = TypeUtils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
@@ -152,20 +152,32 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
                 error = "Missing reference on non-trivial type (" + paramStr + ')';
             }
 
-            if (isFixitEnabled()) {
-                const bool isConst = paramQt.isConstQualified();
-
-                if (!isConst) {
-                    SourceLocation start = getLocStart(param);
-                    fixits.push_back(clazy::createInsertion(start, "const "));
-                }
-
-                SourceLocation end = param->getLocation();
-                fixits.push_back(clazy::createInsertion(end, "&"));
-            }
-
+            addFixits(fixits, func, i);
             emitWarning(getLocStart(param), error.c_str(), fixits);
         }
+    }
+}
+
+void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *func, unsigned int parmIndex)
+{
+    if (isFixitEnabled()) {
+
+        auto funcParams = Utils::functionParameters(func);
+        if (funcParams.size() <= parmIndex)
+            return;
+
+        ParmVarDecl *param = funcParams[parmIndex];
+        QualType paramQt = TypeUtils::unrefQualType(param->getType());
+
+        const bool isConst = paramQt.isConstQualified();
+
+        if (!isConst) {
+            SourceLocation start = getLocStart(param);
+            fixits.push_back(clazy::createInsertion(start, "const "));
+        }
+
+        SourceLocation end = param->getLocation();
+        fixits.push_back(clazy::createInsertion(end, "&"));
     }
 }
 

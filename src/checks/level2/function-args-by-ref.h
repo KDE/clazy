@@ -56,6 +56,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void processFunction(clang::FunctionDecl *);
+    void addFixits(std::vector<clang::FixItHint> &fixits, clang::FunctionDecl *, unsigned int parmIndex);
     clang::FixItHint fixit(const clang::ParmVarDecl *, TypeUtils::QualTypeClassification);
 };
 
