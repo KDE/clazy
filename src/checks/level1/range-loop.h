@@ -47,6 +47,7 @@ public:
     RangeLoop(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    bool islvalue(clang::Expr *exp, clang::SourceLocation &endLoc);
     void processForRangeLoop(clang::CXXForRangeStmt *rangeLoop);
     void checkPassByConstRefCorrectness(clang::CXXForRangeStmt *rangeLoop);
 };

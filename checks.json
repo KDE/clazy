@@ -367,6 +367,9 @@
             "fixits" : [
                 {
                     "name" : "range-loop-add-ref"
+                },
+                {
+                    "name" : "range-loop-add-qasconst"
                 }
             ]
         },

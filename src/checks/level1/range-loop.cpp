@@ -31,6 +31,8 @@
 #include "StmtBodyRange.h"
 #include "SourceCompatibilityHelpers.h"
 #include "FixItUtils.h"
+#include "ClazyContext.h"
+#include "PreProcessorVisitor.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -46,9 +48,17 @@ class ClazyContext;
 using namespace clang;
 using namespace std;
 
+enum Fixit {
+    Fixit_AddRef = 1,
+    Fixit_AddqAsConst = 2
+};
+
 RangeLoop::RangeLoop(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
+    if (isFixitEnabled(Fixit_AddqAsConst)) {
+        context->enablePreprocessorVisitor();
+    }
 }
 
 void RangeLoop::VisitStmt(clang::Stmt *stmt)
@@ -56,6 +66,25 @@ void RangeLoop::VisitStmt(clang::Stmt *stmt)
     if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
         processForRangeLoop(rangeLoop);
     }
+}
+
+bool RangeLoop::islvalue(Expr *exp, SourceLocation &endLoc)
+{
+     if (isa<DeclRefExpr>(exp)) {
+         endLoc = clazy::locForEndOfToken(&m_astContext, exp->getLocStart());
+         return true;
+     }
+
+     if (auto me = dyn_cast<MemberExpr>(exp)) {
+         auto decl = me->getMemberDecl();
+         if (!decl || isa<FunctionDecl>(decl))
+             return false;
+
+         endLoc = clazy::locForEndOfToken(&m_astContext, me->getMemberLoc());
+         return true;
+     }
+
+     return false;
 }
 
 void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
@@ -86,7 +115,20 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange))
         return;
 
-    emitWarning(getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')');
+    std::vector<FixItHint> fixits;
+
+    SourceLocation end;
+    if (isFixitEnabled(Fixit_AddqAsConst) && islvalue(containerExpr, end)) {
+        PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+        if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
+            SourceLocation start = getLocStart(containerExpr);
+            fixits.push_back(clazy::createInsertion(start, "qAsConst("));
+            //SourceLocation end = getLocEnd(containerExpr);
+            fixits.push_back(clazy::createInsertion(end, ")"));
+        }
+    }
+
+    emitWarning(getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')', fixits);
 }
 
 void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
@@ -103,7 +145,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         std::vector<FixItHint> fixits;
-        if (isFixitEnabled()) {
+        if (isFixitEnabled(Fixit_AddRef)) {
             const bool isConst = varDecl->getType().isConstQualified();
 
             if (!isConst) {

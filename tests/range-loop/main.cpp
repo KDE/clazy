@@ -209,3 +209,31 @@ void test_add_ref_fixits()
         s.clear();
     }
 }
+
+struct SomeStruct
+{
+    QStringList m_list;
+    void test_add_qasconst_fixits()
+    {
+         for (const auto &s : m_list) {} // Warn
+    }
+
+    QStringList getList();
+};
+
+
+void test_add_qasconst_fixits()
+{
+    SomeStruct f;
+    for (const auto &s : f.m_list) {}  // Warn
+
+    SomeStruct *f2;
+    for (const auto &s : f2->m_list) {}  // Warn
+
+    QStringList locallist = f.getList();
+    for (const auto &s : locallist) {} // Warn
+
+    for (const auto &s : getQtList()) {} // Warn
+
+    for (const auto &s : f.getList()) {} // Warn
+}

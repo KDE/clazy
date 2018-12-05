@@ -34,7 +34,7 @@ void testQtContainer()
 {
     QList<int> qt_container;
     receivingList(qt_container);
-    for (int i : qt_container) { // Warning
+    for (int i : qAsConst(qt_container)) { // Warning
     }
 
     const QList<int> const_qt_container;
@@ -44,8 +44,8 @@ void testQtContainer()
     for (int i : getQtList()) { // Warning
     }
 
-    for (int i : qt_container) { }  // Warning
-    for (const int &i : qt_container) { } // Warning
+    for (int i : qAsConst(qt_container)) { }  // Warning
+    for (const int &i : qAsConst(qt_container)) { } // Warning
     for (int &i : qt_container) { } // OK
 
 
@@ -76,7 +76,7 @@ void testQMultiMapDetach()
 {
     QMultiMap<int,int> m;
     receivingMap(m);
-    for (int i : m) {
+    for (int i : qAsConst(m)) {
     }
 }
 
@@ -166,7 +166,7 @@ void testBug367485()
 
     QList<int> list2;
     receivingList(list2);
-    for (auto a : list2) {} // Warning
+    for (auto a : qAsConst(list2)) {} // Warning
 
     QList<int> list3;
     for (auto a : list3) {} // OK
@@ -208,4 +208,32 @@ void test_add_ref_fixits()
     for (QString s : strlist) {  // shouldn't warn
         s.clear();
     }
+}
+
+struct SomeStruct
+{
+    QStringList m_list;
+    void test_add_qasconst_fixits()
+    {
+         for (const auto &s : qAsConst(m_list)) {} // Warn
+    }
+
+    QStringList getList();
+};
+
+
+void test_add_qasconst_fixits()
+{
+    SomeStruct f;
+    for (const auto &s : qAsConst(f.m_list)) {}  // Warn
+
+    SomeStruct *f2;
+    for (const auto &s : qAsConst(f2->m_list)) {}  // Warn
+
+    QStringList locallist = f.getList();
+    for (const auto &s : locallist) {} // Warn
+
+    for (const auto &s : getQtList()) {} // Warn
+
+    for (const auto &s : f.getList()) {} // Warn
 }
