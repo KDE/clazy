@@ -71,7 +71,7 @@ void RangeLoop::VisitStmt(clang::Stmt *stmt)
 bool RangeLoop::islvalue(Expr *exp, SourceLocation &endLoc)
 {
      if (isa<DeclRefExpr>(exp)) {
-         endLoc = clazy::locForEndOfToken(&m_astContext, exp->getLocStart());
+         endLoc = clazy::locForEndOfToken(&m_astContext, getLocStart(exp));
          return true;
      }
 
