@@ -64,14 +64,14 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
     if (!varDecl || varDecl->isConstexpr() || varDecl->isExternallyVisible() || !varDecl->isFileVarDecl())
         return;
 
-    if (shouldIgnoreFile(getLocStart(stm)))
+    if (shouldIgnoreFile(clazy::getLocStart(stm)))
         return;
 
     StorageDuration sd = varDecl->getStorageDuration();
     if (sd != StorageDuration::SD_Static)
         return;
 
-    const SourceLocation declStart = getLocStart(varDecl);
+    const SourceLocation declStart = clazy::getLocStart(varDecl);
 
     if (declStart.isMacroID()) {
         auto macroName = Lexer::getImmediateMacroName(declStart, sm(), lo());

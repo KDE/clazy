@@ -195,7 +195,7 @@ inline void printRange(const clang::SourceManager &sm, clang::SourceRange range,
 inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, bool newLine = true)
 {
     if (s)
-        printLocation(sm, getLocStart(s), newLine);
+        printLocation(sm, clazy::getLocStart(s), newLine);
 }
 
 inline void printLocation(const clang::PresumedLoc &loc, bool newLine = true)

@@ -106,7 +106,7 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     if (AccessSpecifierManager *a = m_context->accessSpecifierManager) // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
 
-    const SourceLocation locStart = getLocStart(decl);
+    const SourceLocation locStart = clazy::getLocStart(decl);
     if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart))
         return true;
 
@@ -126,7 +126,7 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 {
-    const SourceLocation locStart = getLocStart(stm);
+    const SourceLocation locStart = clazy::getLocStart(stm);
     if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart))
         return true;
 

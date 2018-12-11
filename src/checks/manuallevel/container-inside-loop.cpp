@@ -73,5 +73,5 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
     if (Utils::isPassedToFunction(StmtBodyRange(loopStmt), varDecl, true))
         return;
 
-    emitWarning(getLocStart(stmt), "container inside loop causes unneeded allocations");
+    emitWarning(clazy::getLocStart(stmt), "container inside loop causes unneeded allocations");
 }

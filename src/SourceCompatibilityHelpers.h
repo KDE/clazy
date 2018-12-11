@@ -26,6 +26,8 @@
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 
+namespace clazy {
+
 template <typename T>
 inline clang::SourceLocation getLocStart(const T *t)
 {
@@ -54,6 +56,8 @@ inline clang::CharSourceRange getImmediateExpansionRange(clang::SourceLocation m
     auto pair = sm.getImmediateExpansionRange(macroLoc);
     return clang::CharSourceRange(clang::SourceRange(pair.first, pair.second), false);
 #endif
+}
+
 }
 
 #endif

@@ -81,7 +81,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!callExpr)
         return;
 
-    if (shouldIgnoreFile(getLocStart(stmt)))
+    if (shouldIgnoreFile(clazy::getLocStart(stmt)))
         return;
 
     // For a chain like getFoo().setBar(), returns {setBar(), getFoo()}
@@ -124,5 +124,5 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (isDisallowedMethod(methodName))
         return;
 
-    emitWarning(getLocStart(stmt), "Call to temporary is a no-op: " + methodName);
+    emitWarning(clazy::getLocStart(stmt), "Call to temporary is a no-op: " + methodName);
 }

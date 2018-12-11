@@ -73,7 +73,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
     if (!method || !accessSpecifierManager)
         return;
 
-    if (shouldIgnoreFile(getLocStart(stmt)))
+    if (shouldIgnoreFile(clazy::getLocStart(stmt)))
         return;
 
     if (Stmt *parent = clazy::parent(m_context->parentMap, methodCall)) {
@@ -116,12 +116,12 @@ void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
     if (clazy::getFirstParentOfType<LambdaExpr>(m_context->parentMap, callExpr) != nullptr)
         return; // Emit is inside a lambda, it's fine
 
-    emitWarning(getLocStart(callExpr), "Emitting inside constructor has no effect");
+    emitWarning(clazy::getLocStart(callExpr), "Emitting inside constructor has no effect");
 }
 
 bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
 {
-    SourceLocation callLoc = getLocStart(call);
+    SourceLocation callLoc = clazy::getLocStart(call);
     if (callLoc.isMacroID())
         callLoc = sm().getFileLoc(callLoc);
 

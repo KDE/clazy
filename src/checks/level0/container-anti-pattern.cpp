@@ -80,7 +80,7 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingCall(callexpr1))
         return;
 
-    emitWarning(getLocStart(stmt), "allocating an unneeded temporary container");
+    emitWarning(clazy::getLocStart(stmt), "allocating an unneeded temporary container");
 }
 
 bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
@@ -107,7 +107,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
     if (!firstMethod || clazy::qualifiedMethodName(firstMethod) != "QSet::intersect")
         return false;
 
-    emitWarning(getLocStart(stmt), "Use QSet::intersects() instead");
+    emitWarning(clazy::getLocStart(stmt), "Use QSet::intersects() instead");
     return true;
 }
 
@@ -119,7 +119,7 @@ bool ContainerAntiPattern::handleLoop(Stmt *stm)
 
     auto memberExpr = clazy::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
     if (isInterestingCall(memberExpr)) {
-        emitWarning(getLocStart(stm), "allocating an unneeded temporary container");
+        emitWarning(clazy::getLocStart(stm), "allocating an unneeded temporary container");
         return true;
     }
 

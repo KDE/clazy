@@ -178,7 +178,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
     if (isFixitEnabled())
         fixits = fixit(firstMemberCall);
 
-    emitWarning(getLocEnd(firstMemberCall), "Use " + firstMethodName + "Ref() instead", fixits);
+    emitWarning(clazy::getLocEnd(firstMemberCall), "Use " + firstMethodName + "Ref() instead", fixits);
     return true;
 }
 
@@ -222,7 +222,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
         fixits = fixit(innerMemberCall);
     }
 
-    emitWarning(getLocStart(call), "Use " + innerMethod->getNameAsString() + "Ref() instead", fixits);
+    emitWarning(clazy::getLocStart(call), "Use " + innerMethod->getNameAsString() + "Ref() instead", fixits);
     return true;
 }
 
@@ -230,14 +230,14 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
     MemberExpr *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
-        queueManualFixitWarning(getLocStart(call), "Internal error 1");
+        queueManualFixitWarning(clazy::getLocStart(call), "Internal error 1");
         return {};
     }
 
-    auto insertionLoc = Lexer::getLocForEndOfToken(getLocEnd(memberExpr), 0, sm(), lo());
+    auto insertionLoc = Lexer::getLocForEndOfToken(clazy::getLocEnd(memberExpr), 0, sm(), lo());
     // llvm::errs() << insertionLoc.printToString(sm()) << "\n";
     if (!insertionLoc.isValid()) {
-        queueManualFixitWarning(getLocStart(call), "Internal error 2");
+        queueManualFixitWarning(clazy::getLocStart(call), "Internal error 2");
         return {};
     }
 

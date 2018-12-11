@@ -85,7 +85,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     if (numCtors > 0 && !hasQObjectParam) {
         clang::CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
         const bool baseHasQObjectParam = clazy::recordHasCtorWithParam(baseClass, parentType, /*by-ref*/ok, /*by-ref*/numCtors);
-        if (ok && !baseHasQObjectParam && sm().isInSystemHeader(getLocStart(baseClass))) {
+        if (ok && !baseHasQObjectParam && sm().isInSystemHeader(clazy::getLocStart(baseClass))) {
             // If the base class ctors don't accept QObject, and it's declared in a system header don't warn
             return;
         }

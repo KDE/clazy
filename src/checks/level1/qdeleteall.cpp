@@ -75,7 +75,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                             }
                         }
 
-                        emitWarning(getLocStart(p), msg);
+                        emitWarning(clazy::getLocStart(p), msg);
                     }
                     break;
                 }

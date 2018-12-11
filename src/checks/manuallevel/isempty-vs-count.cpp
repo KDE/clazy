@@ -60,5 +60,5 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
     if (!clazy::classIsOneOf(method->getParent(), clazy::qtContainers()))
         return;
 
-    emitWarning(getLocStart(stmt), "use isEmpty() instead");
+    emitWarning(clazy::getLocStart(stmt), "use isEmpty() instead");
 }

@@ -119,6 +119,6 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     normalized.erase(0, 1);
     original.erase(0, 1);
 
-    emitWarning(getLocStart(callExpr), "Signature is not normalized. Use " + normalized + " instead of " + original);
+    emitWarning(clazy::getLocStart(callExpr), "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
 }

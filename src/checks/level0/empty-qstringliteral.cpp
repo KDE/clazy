@@ -62,10 +62,10 @@ void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
     if (!literal || literal->getByteLength() != 0)
         return;
 
-    if (!getLocStart(stmt).isMacroID())
+    if (!clazy::getLocStart(stmt).isMacroID())
         return;
 
-    if (maybeIgnoreUic(getLocStart(stmt)))
+    if (maybeIgnoreUic(clazy::getLocStart(stmt)))
         return;
 
     emitWarning(stmt, "Use QString instead of an empty QStringLiteral");

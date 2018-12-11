@@ -50,7 +50,7 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
         !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace() || varDecl->hasExternalStorage())
         return;
 
-    if (shouldIgnoreFile(getLocStart(decl)))
+    if (shouldIgnoreFile(clazy::getLocStart(decl)))
         return;
 
     QualType qt = varDecl->getType();
@@ -63,5 +63,5 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
     if (!pointeeType || !pointeeType->isCharType())
         return;
 
-    emitWarning(getLocStart(decl), "non const global char *");
+    emitWarning(clazy::getLocStart(decl), "non const global char *");
 }

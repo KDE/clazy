@@ -165,7 +165,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         // It's old style, but check if all macros are literals
         int numLiterals = 0;
         for (auto arg : connectCall->arguments()) {
-            auto argLocation = getLocStart(arg);
+            auto argLocation = clazy::getLocStart(arg);
             string dummy;
             if (isSignalOrSlot(argLocation, dummy))
                 ++numLiterals;
@@ -244,11 +244,11 @@ void OldStyleConnect::VisitStmt(Stmt *s)
         return;
 
     if (classification & ConnectFlag_Bogus) {
-        emitWarning(getLocStart(s), "Internal error");
+        emitWarning(clazy::getLocStart(s), "Internal error");
         return;
     }
 
-    emitWarning(getLocStart(s), "Old Style Connect", fixits(classification, call));
+    emitWarning(clazy::getLocStart(s), "Old Style Connect", fixits(classification, call));
 }
 
 void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
@@ -279,7 +279,7 @@ string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     if (!macroLoc.isMacroID())
         return "error";
 
-    CharSourceRange expansionRange = getImmediateExpansionRange(macroLoc, sm());
+    CharSourceRange expansionRange = clazy::getImmediateExpansionRange(macroLoc, sm());
     SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
     const string text = Lexer::getSourceText(charRange, sm(), lo());
@@ -321,20 +321,20 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 2 args";
-        queueManualFixitWarning(getLocStart(call), msg);
+        queueManualFixitWarning(clazy::getLocStart(call), msg);
         return {};
     }
 
     if (classification & ConnectFlag_3ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 3 args";
-        queueManualFixitWarning(getLocStart(call), msg);
+        queueManualFixitWarning(clazy::getLocStart(call), msg);
         return {};
     }
 
     if (classification & ConnectFlag_QMessageBoxOpen) {
         string msg = "Fix it not implemented for QMessageBox::open()";
-        queueManualFixitWarning(getLocStart(call), msg);
+        queueManualFixitWarning(clazy::getLocStart(call), msg);
         return {};
     }
 
@@ -344,7 +344,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     string macroName;
     CXXMethodDecl *senderMethod = nullptr;
     for (auto arg : call->arguments()) {
-        SourceLocation s = getLocStart(arg);
+        SourceLocation s = clazy::getLocStart(arg);
         static const CXXRecordDecl *lastRecordDecl = nullptr;
         if (isSignalOrSlot(s, macroName)) {
             macroNum++;
@@ -454,16 +454,16 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             string qualifiedName;
             auto contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
-            const bool isInInclude = sm().getMainFileID() != sm().getFileID(getLocStart(call));
+            const bool isInInclude = sm().getMainFileID() != sm().getFileID(clazy::getLocStart(call));
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
             } else {
-                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, getLocStart(call), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, clazy::getLocStart(call), !isInInclude); // (In includes ignore using directives)
             }
 
-            CharSourceRange expansionRange = getImmediateExpansionRange(s, sm());
+            CharSourceRange expansionRange = clazy::getImmediateExpansionRange(s, sm());
             SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
 
             const string functionPointer = '&' + qualifiedName;
@@ -480,7 +480,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = clazy::locForNextToken(&m_astContext, getLocStart(arg), tok::comma);
+                    auto endLoc = clazy::locForNextToken(&m_astContext, clazy::getLocStart(arg), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

@@ -58,10 +58,10 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (record != record->getDefinition())
         return;
 
-    if (shouldIgnoreFile(getLocStart(decl)))
+    if (shouldIgnoreFile(clazy::getLocStart(decl)))
         return;
 
-    const SourceLocation recordStart = getLocStart(record);
+    const SourceLocation recordStart = clazy::getLocStart(record);
     if (recordStart.isMacroID()) {
         if (clazy::isInMacro(&m_astContext, recordStart, "Q_GLOBAL_STATIC_INTERNAL"))
             return;
@@ -154,5 +154,5 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
             msg += ", ";
     }
 
-    emitWarning(getLocStart(decl), msg);
+    emitWarning(clazy::getLocStart(decl), msg);
 }

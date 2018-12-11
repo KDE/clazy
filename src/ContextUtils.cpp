@@ -91,7 +91,7 @@ string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
     for (UsingDirectiveDecl *u : usings) {
         NamespaceDecl *ns = u->getNominatedNamespace();
         if (ns) {
-            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, getLocStart(u)))
+            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, clazy::getLocStart(u)))
                 continue;
 
             visibleContexts.push_back(ns->getOriginalNamespace());

@@ -176,7 +176,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
 
     if (!error.empty())
-        emitWarning(getLocStart(stm), error.c_str());
+        emitWarning(clazy::getLocStart(stm), error.c_str());
 }
 
 bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const

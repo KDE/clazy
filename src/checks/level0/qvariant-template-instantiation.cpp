@@ -96,6 +96,6 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         if (typeName[0] == 'Q')
             typeName2.erase(0, 1); // Remove first letter
         std::string error = std::string("Use QVariant::to" + typeName2 + "() instead of QVariant::value<" + typeName + ">()");
-        emitWarning(getLocStart(stm), error.c_str());
+        emitWarning(clazy::getLocStart(stm), error.c_str());
     }
 }

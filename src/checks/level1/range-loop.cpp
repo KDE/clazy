@@ -71,7 +71,7 @@ void RangeLoop::VisitStmt(clang::Stmt *stmt)
 bool RangeLoop::islvalue(Expr *exp, SourceLocation &endLoc)
 {
      if (isa<DeclRefExpr>(exp)) {
-         endLoc = clazy::locForEndOfToken(&m_astContext, getLocStart(exp));
+         endLoc = clazy::locForEndOfToken(&m_astContext, clazy::getLocStart(exp));
          return true;
      }
 
@@ -111,7 +111,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record)))
         return;
 
-    StmtBodyRange bodyRange(nullptr, &sm(), getLocStart(rangeLoop));
+    StmtBodyRange bodyRange(nullptr, &sm(), clazy::getLocStart(rangeLoop));
     if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange))
         return;
 
@@ -121,14 +121,14 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (isFixitEnabled(Fixit_AddqAsConst) && islvalue(containerExpr, end)) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
-            SourceLocation start = getLocStart(containerExpr);
+            SourceLocation start = clazy::getLocStart(containerExpr);
             fixits.push_back(clazy::createInsertion(start, "qAsConst("));
             //SourceLocation end = getLocEnd(containerExpr);
             fixits.push_back(clazy::createInsertion(end, ")"));
         }
     }
 
-    emitWarning(getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')', fixits);
+    emitWarning(clazy::getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')', fixits);
 }
 
 void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
@@ -149,7 +149,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
             const bool isConst = varDecl->getType().isConstQualified();
 
             if (!isConst) {
-                SourceLocation start = getLocStart(varDecl);
+                SourceLocation start = clazy::getLocStart(varDecl);
                 fixits.push_back(clazy::createInsertion(start, "const "));
             }
 
@@ -159,6 +159,6 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(getLocStart(varDecl), msg.c_str(), fixits);
+        emitWarning(clazy::getLocStart(varDecl), msg.c_str(), fixits);
     }
 }

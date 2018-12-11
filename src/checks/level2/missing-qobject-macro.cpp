@@ -65,13 +65,13 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
     if (m_context->usingPreCompiledHeaders())
         return;
 
-    const SourceLocation startLoc = getLocStart(decl);
+    const SourceLocation startLoc = clazy::getLocStart(decl);
 
     for (const SourceLocation &loc : m_qobjectMacroLocations) {
         if (sm().getFileID(loc) != sm().getFileID(startLoc))
             continue; // Different file
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, getLocEnd(decl)))
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(decl)))
             return; // We found a Q_OBJECT after start and before end, it's ours.
     }
 

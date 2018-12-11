@@ -159,7 +159,7 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
     if (!body)
         return;
 
-    SourceLocation locStart = getLocStart(varDecl);
+    SourceLocation locStart = clazy::getLocStart(varDecl);
     locStart = sm().getExpansionLoc(locStart);
     auto declRefs = clazy::getStatements<DeclRefExpr>(body, &sm(), locStart);
 

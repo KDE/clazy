@@ -79,5 +79,5 @@ void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingCall1(call1) || !isInterestingCall2(call2))
         return;
 
-    emitWarning(getLocStart(stmt), "unneeded allocation");
+    emitWarning(clazy::getLocStart(stmt), "unneeded allocation");
 }

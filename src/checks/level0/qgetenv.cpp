@@ -98,11 +98,11 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         if (isFixitEnabled()) {
             const bool success = clazy::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
             if (!success) {
-                queueManualFixitWarning(getLocStart(memberCall));
+                queueManualFixitWarning(clazy::getLocStart(memberCall));
             }
         }
 
         errorMsg += " Use " + replacement + "() instead";
-        emitWarning(getLocStart(memberCall), errorMsg.c_str(), fixits);
+        emitWarning(clazy::getLocStart(memberCall), errorMsg.c_str(), fixits);
     }
 }

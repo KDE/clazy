@@ -57,5 +57,5 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
             return;
     }
 
-    emitWarning(getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.");
+    emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.");
 }

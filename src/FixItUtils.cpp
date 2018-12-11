@@ -68,7 +68,7 @@ SourceRange clazy::rangeForLiteral(const ASTContext *context, StringLiteral *lt)
     }
 
     SourceRange range;
-    range.setBegin(getLocStart(lt));
+    range.setBegin(clazy::getLocStart(lt));
 
     SourceLocation end = Lexer::getLocForEndOfToken(lastTokenLoc, 0,
                                                     context->getSourceManager(),
@@ -150,7 +150,7 @@ bool clazy::transformTwoCallsIntoOne(const ASTContext *context, CallExpr *call1,
     if (!implicitArgument)
         return false;
 
-    const SourceLocation start1 = getLocStart(call1);
+    const SourceLocation start1 = clazy::getLocStart(call1);
     const SourceLocation end1 = clazy::locForEndOfToken(context, start1, -1); // -1 of offset, so we don't need to insert '('
     if (end1.isInvalid())
         return false;
@@ -178,7 +178,7 @@ bool clazy::transformTwoCallsIntoOneV2(const ASTContext *context, CXXMemberCallE
     if (!implicitArgument)
         return false;
 
-    SourceLocation start = getLocStart(implicitArgument);
+    SourceLocation start = clazy::getLocStart(implicitArgument);
     start = clazy::locForEndOfToken(context, start, 0);
     const SourceLocation end = getLocEnd(call2);
     if (start.isInvalid() || end.isInvalid())
@@ -192,7 +192,7 @@ FixItHint clazy::fixItReplaceWordWithWord(const ASTContext *context, clang::Stmt
                                                const string &replacement, const string &replacee)
 {
     auto &sm = context->getSourceManager();
-    SourceLocation rangeStart = getLocStart(begin);
+    SourceLocation rangeStart = clazy::getLocStart(begin);
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm, context->getLangOpts());
 
     if (rangeEnd.isInvalid()) {
@@ -211,7 +211,7 @@ FixItHint clazy::fixItReplaceWordWithWord(const ASTContext *context, clang::Stmt
 
 vector<FixItHint> clazy::fixItRemoveToken(const ASTContext *context, Stmt *stmt, bool removeParenthesis)
 {
-    SourceLocation start = getLocStart(stmt);
+    SourceLocation start = clazy::getLocStart(stmt);
     SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1,
                                                     context->getSourceManager(), context->getLangOpts());
 
@@ -222,7 +222,7 @@ vector<FixItHint> clazy::fixItRemoveToken(const ASTContext *context, Stmt *stmt,
 
         if (removeParenthesis) {
             // Remove the last parenthesis
-            fixits.push_back(FixItHint::CreateRemoval(SourceRange(getLocEnd(stmt), getLocEnd(stmt))));
+            fixits.push_back(FixItHint::CreateRemoval(SourceRange(clazy::getLocEnd(stmt), clazy::getLocEnd(stmt))));
         }
     }
 

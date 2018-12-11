@@ -70,5 +70,5 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
         return;
 
 
-    emitWarning(getLocStart(decl), "Associative container key might be modified externally");
+    emitWarning(clazy::getLocStart(decl), "Associative container key might be modified externally");
 }

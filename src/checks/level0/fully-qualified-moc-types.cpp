@@ -114,12 +114,12 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, string &qualifiedT
 
 bool FullyQualifiedMocTypes::isGadget(CXXRecordDecl *record) const
 {
-    SourceLocation startLoc = getLocStart(record);
+    SourceLocation startLoc = clazy::getLocStart(record);
     for (const SourceLocation &loc : m_qgadgetMacroLocations) {
         if (sm().getFileID(loc) != sm().getFileID(startLoc))
             continue; // Different file
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, getLocEnd(record)))
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(record)))
             return true; // We found a Q_GADGET after start and before end, it's ours.
     }
     return false;
@@ -161,7 +161,7 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                     if (nameAsWritten != fullyQualifiedName) {
                         // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
                         // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
-                        emitWarning(getLocStart(method->getParent()), "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
+                        emitWarning(clazy::getLocStart(method->getParent()), "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
                     }
                 }
                 return true;

@@ -63,7 +63,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (!memberCall && !operatorExpr)
         return;
 
-    if (shouldIgnoreFile(getLocStart(stm)))
+    if (shouldIgnoreFile(clazy::getLocStart(stm)))
         return;
 
     CXXMethodDecl *method = nullptr;
@@ -145,5 +145,5 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    emitWarning(getLocStart(stm), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
+    emitWarning(clazy::getLocStart(stm), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }
