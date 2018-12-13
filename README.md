@@ -221,6 +221,7 @@ clazy runs all checks from level1 by default.
     - [inefficient-qlist](docs/checks/README-inefficient-qlist.md)
     - [isempty-vs-count](docs/checks/README-isempty-vs-count.md)
     - [qhash-with-char-pointer-key](docs/checks/README-qhash-with-char-pointer-key.md)
+    - [qrequiredresult-candidates](docs/checks/README-qrequiredresult-candidates.md)
     - [qstring-varargs](docs/checks/README-qstring-varargs.md)
     - [qt-keywords](docs/checks/README-qt-keywords.md)    (fix-qt-keywords)
     - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)

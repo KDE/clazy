@@ -29,6 +29,13 @@
             "visits_stmts" : true
         },
         {
+            "name"   : "qrequiredresult-candidates",
+            "class_name" : "QRequiredResultCandidates",
+            "level"  : -1,
+            "categories" : ["bug"],
+            "visits_decls" : true
+        },
+        {
             "name"   : "qstring-varargs",
             "level"  : -1,
             "categories" : ["bug"],

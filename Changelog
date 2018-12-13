@@ -98,6 +98,7 @@
   - New Checks:
     ifndef-define-typo
     lowercase-qml-type-name
+    qrequiredresult-candidates
   - New Fixits:
     range-loop now supports adding missing refs or const-ref
     range-loop now supports adding qAsConst()

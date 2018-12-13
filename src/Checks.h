@@ -32,6 +32,7 @@
 #include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
+#include "checks/manuallevel/qrequiredresult-candidates.h"
 #include "checks/manuallevel/qstring-varargs.h"
 #include "checks/manuallevel/qt-keywords.h"
 #include "checks/manuallevel/qt4-qstring-from-array.h"
@@ -121,6 +122,7 @@ void CheckManager::registerChecks()
     registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringVarargs>("qstring-varargs", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QtKeywords>("qt-keywords", ManualCheckLevel, RegisteredCheck::Option_None));
     registerFixIt(1, "fix-qt-keywords", "qt-keywords");

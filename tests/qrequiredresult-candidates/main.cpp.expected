@@ -1,0 +1,3 @@
+qrequiredresult-candidates/main.cpp:9:5: warning: Add Q_REQUIRED_RESULT to Foo::changed() [-Wclazy-qrequiredresult-candidates]
+qrequiredresult-candidates/main.cpp:10:5: warning: Add Q_REQUIRED_RESULT to Foo::chang2ed() [-Wclazy-qrequiredresult-candidates]
+qrequiredresult-candidates/main.cpp:11:5: warning: Add Q_REQUIRED_RESULT to Foo::chang3ed() [-Wclazy-qrequiredresult-candidates]
