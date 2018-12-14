@@ -37,12 +37,12 @@
 #include <vector>
 
 namespace clang {
-    class CompilerInstance;
-    class SourceManager;
-    class SourceRange;
-    class Token;
-    class MacroDefinition;
-    class MacroArgs;
+class CompilerInstance;
+class SourceManager;
+class SourceRange;
+class Token;
+class MacroDefinition;
+class MacroArgs;
 class SourceLocation;
 }
 

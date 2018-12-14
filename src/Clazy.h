@@ -44,7 +44,7 @@ class raw_ostream;
 }  // namespace llvm
 
 namespace clang {
-    class CompilerInstance;
+class CompilerInstance;
 class ASTContext;
 class Decl;
 class Stmt;

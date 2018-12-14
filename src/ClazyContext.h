@@ -41,11 +41,11 @@
 // ClazyContext is just a struct to share data and code between all checks
 
 namespace clang {
-    class CompilerInstance;
-    class ASTContext;
-    class ParentMap;
-    class SourceManager;
-    class FixItRewriter;
+class CompilerInstance;
+class ASTContext;
+class ParentMap;
+class SourceManager;
+class FixItRewriter;
 class CXXMethodDecl;
 class Decl;
 }

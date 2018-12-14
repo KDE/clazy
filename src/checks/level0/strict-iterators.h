@@ -29,9 +29,9 @@
 class ClazyContext;
 
 namespace clang {
-    class CXXConstructExpr;
-    class ImplicitCastExpr;
-    class CXXOperatorCallExpr;
+class CXXConstructExpr;
+class ImplicitCastExpr;
+class CXXOperatorCallExpr;
 class Stmt;
 }
 

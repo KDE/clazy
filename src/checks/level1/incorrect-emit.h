@@ -33,7 +33,7 @@
 class ClazyContext;
 
 namespace clang {
-    class CXXMemberCallExpr;
+class CXXMemberCallExpr;
 class MacroInfo;
 class Stmt;
 class Token;

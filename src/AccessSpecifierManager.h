@@ -47,11 +47,11 @@
 
 namespace clang
 {
-    class SourceManager;
-    class LangOptions;
-    class Decl;
-    class CXXRecordDecl;
-    class SourceLocation;
+class SourceManager;
+class LangOptions;
+class Decl;
+class CXXRecordDecl;
+class SourceLocation;
 class CXXMethodDecl;
 class CompilerInstance;
 }

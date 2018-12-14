@@ -30,9 +30,9 @@
 class ClazyContext;
 
 namespace clang {
-    class CXXConstructExpr;
-    class CallExpr;
-    class Expr;
+class CXXConstructExpr;
+class CallExpr;
+class Expr;
 class Stmt;
 }
 
