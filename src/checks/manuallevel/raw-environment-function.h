@@ -34,7 +34,8 @@ class Stmt;
 /**
  * See README-raw-environment-function.md for more info.
  */
-class RawEnvironmentFunction : public CheckBase
+class RawEnvironmentFunction
+    : public CheckBase
 {
 public:
     explicit RawEnvironmentFunction(const std::string &name, ClazyContext *context);

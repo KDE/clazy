@@ -38,7 +38,8 @@ class Token;
 /**
  * See README-qt-keywords.md for more info.
  */
-class QtKeywords : public CheckBase
+class QtKeywords
+    : public CheckBase
 {
 public:
     explicit QtKeywords(const std::string &name, ClazyContext *context);

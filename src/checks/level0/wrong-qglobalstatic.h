@@ -38,7 +38,8 @@ class Stmt;
  *
  * See README-wrong-qglobalstatic for more information
  */
-class WrongQGlobalStatic : public CheckBase
+class WrongQGlobalStatic
+    : public CheckBase
 {
 public:
     explicit WrongQGlobalStatic(const std::string &name, ClazyContext *context);

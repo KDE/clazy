@@ -36,7 +36,8 @@ class Stmt;
 /**
  * See README-qlatin1string-non-ascii.md for more info.
  */
-class QLatin1StringNonAscii : public CheckBase
+class QLatin1StringNonAscii
+    : public CheckBase
 {
 public:
     explicit QLatin1StringNonAscii(const std::string &name, ClazyContext *context);

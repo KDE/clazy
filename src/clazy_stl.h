@@ -36,12 +36,12 @@ namespace clazy {
 template<typename C>
 bool contains(const C &container, const typename C::value_type &value)
 {
-   return std::find(container.begin(), container.end(), value) != container.end();
+    return std::find(container.begin(), container.end(), value) != container.end();
 }
 
 inline bool contains(const std::string &haystack, const std::string &needle)
 {
-   return haystack.find(needle) != std::string::npos;
+    return haystack.find(needle) != std::string::npos;
 }
 
 template<typename C>
@@ -140,8 +140,8 @@ inline bool startsWith(const std::string &target, const std::string &maybeBeginn
 inline bool startsWithAny(const std::string &target, const std::vector<std::string> &beginningCandidates)
 {
     return clazy::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
-        return clazy::startsWith(target, maybeBeginning);
-    });
+            return clazy::startsWith(target, maybeBeginning);
+        });
 }
 
 /**
@@ -150,8 +150,8 @@ inline bool startsWithAny(const std::string &target, const std::vector<std::stri
 inline bool equalsAny(const std::string &target, const std::vector<std::string> &candidates)
 {
     return clazy::any_of(candidates, [target](const std::string &candidate) {
-        return candidate == target;
-    });
+            return candidate == target;
+        });
 }
 
 /**
@@ -160,7 +160,7 @@ inline bool equalsAny(const std::string &target, const std::vector<std::string> 
 inline bool endsWith(const std::string &target, const std::string &maybeEnding)
 {
     return target.size() >= maybeEnding.size() &&
-            target.compare(target.size() - maybeEnding.size(), maybeEnding.size(), maybeEnding) == 0;
+           target.compare(target.size() - maybeEnding.size(), maybeEnding.size(), maybeEnding) == 0;
 }
 
 /**
@@ -169,8 +169,8 @@ inline bool endsWith(const std::string &target, const std::string &maybeEnding)
 inline bool endsWithAny(const std::string &target, const std::vector<std::string> &endingCandidates)
 {
     return clazy::any_of(endingCandidates, [target](const std::string &maybeEnding) {
-        return clazy::endsWith(target, maybeEnding);
-    });
+            return clazy::endsWith(target, maybeEnding);
+        });
 }
 
 

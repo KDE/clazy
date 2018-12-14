@@ -53,8 +53,8 @@ TemporaryIterator::TemporaryIterator(const std::string &name, ClazyContext *cont
 {
     m_methodsByType["vector"] = {"begin", "end", "cbegin", "cend" }; // TODO: More stl support
     m_methodsByType["QList"] = { "begin", "end", "constBegin", "constEnd", "cbegin", "cend" };
-    m_methodsByType["QVector"] = { "begin", "end","constBegin","constEnd", "cbegin", "cend", "insert" };
-    m_methodsByType["QMap"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "lowerBound","upperBound", "cbegin", "cend", "equal_range" };
+    m_methodsByType["QVector"] = { "begin", "end", "constBegin", "constEnd", "cbegin", "cend", "insert" };
+    m_methodsByType["QMap"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "lowerBound", "upperBound", "cbegin", "cend", "equal_range" };
     m_methodsByType["QHash"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend", "find", "constFind", "insert", "insertMulti" };
     m_methodsByType["QLinkedList"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend"};
     m_methodsByType["QSet"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "cbegin", "cend"};

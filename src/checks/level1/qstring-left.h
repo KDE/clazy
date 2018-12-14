@@ -35,7 +35,8 @@ class Stmt;
 /**
  * See README-qstring-left for more info.
  */
-class QStringLeft : public CheckBase
+class QStringLeft
+    : public CheckBase
 {
 public:
     QStringLeft(const std::string &name, ClazyContext *context);

@@ -80,7 +80,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
 
     Stmt *body = method->getBody();
     std::vector<ReturnStmt*> returns;
-    clazy::getChilds<ReturnStmt>(body, /*by-ref*/returns);
+    clazy::getChilds<ReturnStmt>(body, /*by-ref*/ returns);
     for (ReturnStmt *returnStmt : returns) {
         Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);
         if (!maybeBoolExpr)

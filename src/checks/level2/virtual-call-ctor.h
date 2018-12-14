@@ -47,7 +47,8 @@ class Decl;
  * This plugin only checks for pure virtuals, ignoring non-pure, which in theory you shouldn't call,
  * but seems common practice.
  */
-class VirtualCallCtor : public CheckBase
+class VirtualCallCtor
+    : public CheckBase
 {
 public:
     VirtualCallCtor(const std::string &name, ClazyContext *context);

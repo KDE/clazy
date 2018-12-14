@@ -36,7 +36,8 @@ class ClazyContext;
  *
  * See README-inefficient-qlist.
  */
-class InefficientQList : public InefficientQListBase
+class InefficientQList
+    : public InefficientQListBase
 {
 public:
     explicit InefficientQList(const std::string &name, ClazyContext *context);

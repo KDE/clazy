@@ -62,7 +62,7 @@ void QStringVarargs::VisitStmt(clang::Stmt *stmt)
     if (!record)
         return;
 
-     StringRef name = clazy::name(record);
-     if (name == "QString" || name == "QByteArray")
-         emitWarning(stmt, string("Passing ") + name.data() + string(" to variadic function"));
+    StringRef name = clazy::name(record);
+    if (name == "QString" || name == "QByteArray")
+        emitWarning(stmt, string("Passing ") + name.data() + string(" to variadic function"));
 }

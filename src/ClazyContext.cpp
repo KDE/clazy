@@ -34,7 +34,8 @@
 using namespace std;
 using namespace clang;
 
-class ClazyFixItOptions : public FixItOptions
+class ClazyFixItOptions
+    : public FixItOptions
 {
 public:
     ClazyFixItOptions(const ClazyFixItOptions &other) = delete;
@@ -126,7 +127,7 @@ bool ClazyContext::isQt() const
                 return true;
         }
         return false;
-    }();
+    } ();
 
     return s_isQt;
 }

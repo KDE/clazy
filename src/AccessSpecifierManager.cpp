@@ -77,7 +77,8 @@ static void sorted_insert(ClazySpecifierList &v, const ClazyAccessSpecifier &ite
     v.insert(std::upper_bound(v.begin(), v.end(), item, pred), item);
 }
 
-class AccessSpecifierPreprocessorCallbacks : public clang::PPCallbacks
+class AccessSpecifierPreprocessorCallbacks
+    : public clang::PPCallbacks
 {
     AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
 public:

@@ -92,7 +92,7 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     {
         // Only warn in connect statements, not disconnect, since there there's no optimization in Qt's side
         auto parentCallExpr = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap,
-                                                                             m_context->parentMap->getParent(callExpr), -1);
+                                                                    m_context->parentMap->getParent(callExpr), -1);
         if (!parentCallExpr)
             return false;
 

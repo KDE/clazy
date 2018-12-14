@@ -46,7 +46,8 @@ struct QualTypeClassification;
  *
  * See README-function-args-by-value for more info
  */
-class FunctionArgsByValue : public CheckBase
+class FunctionArgsByValue
+    : public CheckBase
 {
 public:
     explicit FunctionArgsByValue(const std::string &name, ClazyContext *context);

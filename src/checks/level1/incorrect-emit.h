@@ -42,7 +42,8 @@ class Token;
 /**
  * See README-incorrect-emit.md for more info.
  */
-class IncorrectEmit : public CheckBase
+class IncorrectEmit
+    : public CheckBase
 {
 public:
     explicit IncorrectEmit(const std::string &name, ClazyContext *context);

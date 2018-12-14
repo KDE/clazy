@@ -109,7 +109,7 @@ enum QtUnregularlyNamedEventTypes {
     WhatsThis = 111,
     ContextMenu = 82,
     QueryWhatsThis = 123
-    // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
+                     // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
 };
 
 

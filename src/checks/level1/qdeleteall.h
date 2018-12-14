@@ -37,7 +37,8 @@ class Stmt;
  *
  *  See README-qdeleteall for more information
  */
-class QDeleteAll : public CheckBase
+class QDeleteAll
+    : public CheckBase
 {
 public:
     QDeleteAll(const std::string &name, ClazyContext *context);

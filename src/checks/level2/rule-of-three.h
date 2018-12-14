@@ -38,7 +38,8 @@ class Decl;
  *
  * See README-rule-of-three for more information
  */
-class RuleOfThree : public RuleOfBase
+class RuleOfThree
+    : public RuleOfBase
 {
 public:
     explicit RuleOfThree(const std::string &name, ClazyContext *context);

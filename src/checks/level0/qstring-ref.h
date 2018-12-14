@@ -41,7 +41,8 @@ class FixItHint;
  *
  * See README-qstringref for more info.
  */
-class StringRefCandidates : public CheckBase
+class StringRefCandidates
+    : public CheckBase
 {
 public:
     StringRefCandidates(const std::string &name, ClazyContext *context);

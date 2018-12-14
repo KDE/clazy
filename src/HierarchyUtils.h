@@ -54,8 +54,8 @@ inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
         return false;
 
     return clazy::any_of(parent->children(), [child](clang::Stmt *c) {
-        return c == child || isChildOf(child, c);
-    });
+            return c == child || isChildOf(child, c);
+        });
 }
 
 /**
@@ -74,8 +74,8 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
     }
 
     return clazy::any_of(stm->children(), [name] (clang::Stmt *child) {
-        return isParentOfMemberFunctionCall(child, name);
-    });
+            return isParentOfMemberFunctionCall(child, name);
+        });
 
     return false;
 }
@@ -175,7 +175,7 @@ inline clang::Stmt * getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
         return s;
 
     return clazy::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
-                                     : nullptr;
+                                 : nullptr;
 }
 
 template <typename T>

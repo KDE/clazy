@@ -44,25 +44,25 @@ std::string clazy::simpleArgTypeName(clang::FunctionDecl *func, unsigned int ind
 }
 
 bool clazy::anyArgIsOfSimpleType(clang::FunctionDecl *func,
-                                       const std::string &simpleType,
-                                       const clang::LangOptions &lo)
+                                 const std::string &simpleType,
+                                 const clang::LangOptions &lo)
 {
     if (!func)
         return false;
 
-    return clazy::any_of(Utils::functionParameters(func), [simpleType,lo](ParmVarDecl *p){
+    return clazy::any_of(Utils::functionParameters(func), [simpleType, lo](ParmVarDecl *p){
         return simpleTypeName(p, lo) == simpleType;
     });
 }
 
 bool clazy::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
-                                          const vector<string> &simpleTypes,
-                                          const clang::LangOptions &lo)
+                                    const vector<string> &simpleTypes,
+                                    const clang::LangOptions &lo)
 {
     if (!func)
         return false;
 
-    return clazy::any_of(simpleTypes, [func,lo](const string &simpleType) {
+    return clazy::any_of(simpleTypes, [func, lo](const string &simpleType) {
         return clazy::anyArgIsOfSimpleType(func, simpleType, lo);
     });
 }

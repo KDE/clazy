@@ -27,7 +27,8 @@
 /**
  * See README-ifndef-define-typo.md for more info.
  */
-class IfndefDefineTypo : public CheckBase
+class IfndefDefineTypo
+    : public CheckBase
 {
 public:
     explicit IfndefDefineTypo(const std::string &name, ClazyContext *context);

@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-qhash-with-char-pointer-key.md for more info.
  */
-class QHashWithCharPointerKey : public CheckBase
+class QHashWithCharPointerKey
+    : public CheckBase
 {
 public:
     explicit QHashWithCharPointerKey(const std::string &name, ClazyContext *context);

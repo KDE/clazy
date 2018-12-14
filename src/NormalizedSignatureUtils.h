@@ -51,7 +51,7 @@ inline bool is_ident_start(char s)
     return ((s >= 'a' && s <= 'z')
             || (s >= 'A' && s <= 'Z')
             || s == '_' || s == '$'
-       );
+            );
 }
 
 inline bool is_ident_char(char s)
@@ -60,7 +60,7 @@ inline bool is_ident_char(char s)
             || (s >= 'A' && s <= 'Z')
             || (s >= '0' && s <= '9')
             || s == '_' || s == '$'
-       );
+            );
 }
 
 static void qRemoveWhitespace(const char *s, char *d)
@@ -141,12 +141,12 @@ static std::string normalizeTypeInternal(const char *t, const char *e, bool fixS
             } else if (strncmp(" long", t+8, 5) == 0) {
                 if ((strlen(t + 8 + 5) < 4 || strncmp(t + 8 + 5, " int", 4) != 0) // preserve '[unsigned] long int'
                     && (strlen(t + 8 + 5) < 5 || strncmp(t + 8 + 5, " long", 5) != 0) // preserve '[unsigned] long long'
-                   ) {
+                    ) {
                     t += 8+5;
                     result += "ulong";
                 }
             } else if (strncmp(" short", t+8, 6) != 0  // preserve unsigned short
-                && strncmp(" char", t+8, 5) != 0) {    // preserve unsigned char
+                       && strncmp(" char", t+8, 5) != 0) { // preserve unsigned char
                 //  treat rest (unsigned) as uint
                 t += 8;
                 result += "uint";
@@ -244,7 +244,7 @@ inline char *qNormalizeType(char *d, int &templdepth, std::string &result)
 {
     const char *t = d;
     while (*d && (templdepth
-                   || (*d != ',' && *d != ')'))) {
+                  || (*d != ',' && *d != ')'))) {
         if (*d == '<')
             ++templdepth;
         if (*d == '>')

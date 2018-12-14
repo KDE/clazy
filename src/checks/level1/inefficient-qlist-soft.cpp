@@ -28,7 +28,7 @@ using namespace std;
 
 InefficientQListSoft::InefficientQListSoft(const std::string &name, ClazyContext *context)
     : InefficientQListBase(name, context, IgnoreNonLocalVariable | IgnoreInFunctionWithSameReturnType |
-                                          IgnoreIsAssignedToInFunction | IgnoreIsPassedToFunctions|
-                                          IgnoreIsInitializedByFunctionCall)
+                           IgnoreIsAssignedToInFunction | IgnoreIsPassedToFunctions|
+                           IgnoreIsInitializedByFunctionCall)
 {
 }

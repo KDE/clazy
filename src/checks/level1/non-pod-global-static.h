@@ -39,7 +39,8 @@ class Stmt;
  *
  * See README-non-pod-global-static.
  */
-class NonPodGlobalStatic : public CheckBase
+class NonPodGlobalStatic
+    : public CheckBase
 {
 public:
     explicit NonPodGlobalStatic(const std::string &name, ClazyContext *context);

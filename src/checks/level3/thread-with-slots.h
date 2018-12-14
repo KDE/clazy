@@ -36,7 +36,8 @@ class Stmt;
 /**
  * See README-thread-with-slots.md for more info.
  */
-class ThreadWithSlots : public CheckBase
+class ThreadWithSlots
+    : public CheckBase
 {
 public:
     explicit ThreadWithSlots(const std::string &name, ClazyContext *context);

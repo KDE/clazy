@@ -39,7 +39,8 @@ class Decl;
  * Finds where you're using const char *foo; instead of const char *const foo; or const char []foo;
  * The first case adds a pointer in .data, pointing to .rodata, the other cases only use .rodata
  */
-class GlobalConstCharPointer : public CheckBase
+class GlobalConstCharPointer
+    : public CheckBase
 {
 public:
     GlobalConstCharPointer(const std::string &name, ClazyContext *context);

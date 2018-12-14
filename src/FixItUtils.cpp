@@ -89,9 +89,9 @@ void clazy::insertParentMethodCall(const std::string &method, SourceRange range,
 }
 
 bool clazy::insertParentMethodCallAroundStringLiteral(const ASTContext *context,
-                                                           const std::string &method,
-                                                           StringLiteral *lt,
-                                                           std::vector<FixItHint> &fixits)
+                                                      const std::string &method,
+                                                      StringLiteral *lt,
+                                                      std::vector<FixItHint> &fixits)
 {
     if (!lt)
         return false;
@@ -100,7 +100,7 @@ bool clazy::insertParentMethodCallAroundStringLiteral(const ASTContext *context,
     if (range.isInvalid())
         return false;
 
-    insertParentMethodCall(method, range, /*by-ref*/fixits);
+    insertParentMethodCall(method, range, /*by-ref*/ fixits);
     return true;
 }
 
@@ -144,7 +144,7 @@ SourceLocation clazy::locForEndOfToken(const ASTContext *context, SourceLocation
 }
 
 bool clazy::transformTwoCallsIntoOne(const ASTContext *context, CallExpr *call1, CXXMemberCallExpr *call2,
-                                          const string &replacement, vector<FixItHint> &fixits)
+                                     const string &replacement, vector<FixItHint> &fixits)
 {
     Expr *implicitArgument = call2->getImplicitObjectArgument();
     if (!implicitArgument)
@@ -172,7 +172,7 @@ bool clazy::transformTwoCallsIntoOne(const ASTContext *context, CallExpr *call1,
 }
 
 bool clazy::transformTwoCallsIntoOneV2(const ASTContext *context, CXXMemberCallExpr *call2,
-                                            const string &replacement, std::vector<FixItHint> &fixits)
+                                       const string &replacement, std::vector<FixItHint> &fixits)
 {
     Expr *implicitArgument = call2->getImplicitObjectArgument();
     if (!implicitArgument)
@@ -189,7 +189,7 @@ bool clazy::transformTwoCallsIntoOneV2(const ASTContext *context, CXXMemberCallE
 }
 
 FixItHint clazy::fixItReplaceWordWithWord(const ASTContext *context, clang::Stmt *begin,
-                                               const string &replacement, const string &replacee)
+                                          const string &replacement, const string &replacee)
 {
     auto &sm = context->getSourceManager();
     SourceLocation rangeStart = clazy::getLocStart(begin);

@@ -57,7 +57,7 @@ bool ReturningDataFromTemporary::handleReturn(ReturnStmt *ret)
         return false;
 
     auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups |
-                                                                clazy::IgnoreImplicitCasts);
+                                                       clazy::IgnoreImplicitCasts);
     handleMemberCall(memberCall, false);
     return true;
 }
@@ -80,7 +80,7 @@ void ReturningDataFromTemporary::handleDeclStmt(DeclStmt *declStmt)
             continue;
 
         auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups |
-                                                                    clazy::IgnoreImplicitCasts);
+                                                           clazy::IgnoreImplicitCasts);
 
 
         handleMemberCall(memberCall, true);

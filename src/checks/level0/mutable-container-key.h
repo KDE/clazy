@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-mutable-container-key for more info.
  */
-class MutableContainerKey : public CheckBase
+class MutableContainerKey
+    : public CheckBase
 {
 public:
     explicit MutableContainerKey(const std::string &name, ClazyContext *context);

@@ -35,7 +35,8 @@ class Stmt;
 /**
  * See README-empty-qstringliteral.md for more info.
  */
-class EmptyQStringliteral : public CheckBase
+class EmptyQStringliteral
+    : public CheckBase
 {
 public:
     explicit EmptyQStringliteral(const std::string &name, ClazyContext *context);

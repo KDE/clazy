@@ -81,14 +81,14 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     string typeName;
     for (auto param : method->parameters()) {
         QualType t = TypeUtils::pointeeQualType(param->getType());
-        if (!typeIsFullyQualified(t, /*by-ref*/qualifiedTypeName, /*by-ref*/typeName)) {
+        if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
     }
 
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
         QualType returnT = TypeUtils::pointeeQualType(method->getReturnType());
-        if (!typeIsFullyQualified(returnT, /*by-ref*/qualifiedTypeName, /*by-ref*/typeName)) {
+        if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
     }

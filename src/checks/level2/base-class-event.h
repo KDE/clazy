@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-base-class-event.md for more info.
  */
-class BaseClassEvent : public CheckBase
+class BaseClassEvent
+    : public CheckBase
 {
 public:
     explicit BaseClassEvent(const std::string &name, ClazyContext *context);

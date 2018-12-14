@@ -48,7 +48,8 @@ struct QualTypeClassification;
  * Finds functions where big non-trivial types are passed by value instead of const-ref.
  * Looks into the body of the functions to see if the argument are read-only, it doesn't emit a warning otherwise.
  */
-class FunctionArgsByRef : public CheckBase
+class FunctionArgsByRef
+    : public CheckBase
 {
 public:
     FunctionArgsByRef(const std::string &name, ClazyContext *context);

@@ -133,7 +133,7 @@ int clazy_dummy()
         ClazyAnchor_UnneededCast +
         ClazyAnchor_DetachingMember +
         ClazyAnchor_ThreadWithSlots +
-    0;
+        0;
 }
 
 #endif

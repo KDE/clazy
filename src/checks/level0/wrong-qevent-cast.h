@@ -35,7 +35,8 @@ class Stmt;
 /**
  * See README-wrong-qevent-cast.md for more info.
  */
-class WrongQEventCast : public CheckBase
+class WrongQEventCast
+    : public CheckBase
 {
 public:
     explicit WrongQEventCast(const std::string &name, ClazyContext *context);

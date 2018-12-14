@@ -36,7 +36,8 @@ class Stmt;
 /**
  * See README-connect-3arg-lambda.md for more info.
  */
-class Connect3ArgLambda : public CheckBase
+class Connect3ArgLambda
+    : public CheckBase
 {
 public:
     explicit Connect3ArgLambda(const std::string &name, ClazyContext *context);

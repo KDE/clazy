@@ -37,7 +37,8 @@ class Stmt;
  *
  * See README-qstring-insensitive-allocation for more information
  */
-class QStringInsensitiveAllocation : public CheckBase
+class QStringInsensitiveAllocation
+    : public CheckBase
 {
 public:
     explicit QStringInsensitiveAllocation(const std::string &name, ClazyContext *context);

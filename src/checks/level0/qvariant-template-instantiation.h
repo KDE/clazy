@@ -39,7 +39,8 @@ class Stmt;
  *
  * TODO: Missing QVariants of QHash<QString,QVariant>, QList<QVariant> and QMap<QString, QVariant>
  */
-class QVariantTemplateInstantiation : public CheckBase
+class QVariantTemplateInstantiation
+    : public CheckBase
 {
 public:
     QVariantTemplateInstantiation(const std::string &name, ClazyContext *context);

@@ -122,7 +122,7 @@ private:
     CheckBase* createCheck(const std::string &name, ClazyContext *context);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
-    std::unordered_map<std::string, std::vector<RegisteredFixIt> > m_fixitsByCheckName;
+    std::unordered_map<std::string, std::vector<RegisteredFixIt>> m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
 };
 

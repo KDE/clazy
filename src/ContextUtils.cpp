@@ -57,7 +57,7 @@ static string nameForContext(DeclContext *context)
         return rec->getNameAsString();
     } else if (auto *method = dyn_cast<CXXMethodDecl>(context)) {
         return method->getNameAsString();
-    } else if (dyn_cast<TranslationUnitDecl>(context)){
+    } else if (dyn_cast<TranslationUnitDecl>(context)) {
         return {};
     } else {
         llvm::errs() << "Unhandled kind: " << context->getDeclKindName() << "\n";
@@ -67,9 +67,9 @@ static string nameForContext(DeclContext *context)
 }
 
 string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
-                                                CXXMethodDecl *method,
-                                                DeclContext *currentScope,
-                                                SourceLocation usageLoc, bool honourUsingDirectives)
+                                         CXXMethodDecl *method,
+                                         DeclContext *currentScope,
+                                         SourceLocation usageLoc, bool honourUsingDirectives)
 {
     if (!currentScope)
         return method->getQualifiedNameAsString();
@@ -83,7 +83,7 @@ string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
     // Collect using directives
     vector<UsingDirectiveDecl*> usings;
     if (honourUsingDirectives) {
-        for (DeclContext *context : visibleContexts) {;
+        for (DeclContext *context : visibleContexts) {
             clazy::append(context->using_directives(), usings);
         }
     }
@@ -102,13 +102,13 @@ string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
 
         if (context != method->getParent()) { // Don't remove the most immediate
             auto it = clazy::find_if(methodContexts, [context](DeclContext *c) {
-                    if (c == context)
-                        return true;
-                    auto ns1 = dyn_cast<NamespaceDecl>(c);
-                    auto ns2 = dyn_cast<NamespaceDecl>(context);
-                    return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
+                if (c == context)
+                    return true;
+                auto ns1 = dyn_cast<NamespaceDecl>(c);
+                auto ns2 = dyn_cast<NamespaceDecl>(context);
+                return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
 
-                });
+            });
             if (it != methodContexts.end()) {
                 methodContexts.erase(it, it + 1);
             }

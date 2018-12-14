@@ -45,7 +45,8 @@ class Stmt;
  * For example getList().first(), which would detach if the container is shared.
  * See README-deatching-temporary for more information
  */
-class DetachingTemporary : public DetachingBase
+class DetachingTemporary
+    : public DetachingBase
 {
 public:
     DetachingTemporary(const std::string &name, ClazyContext *context);

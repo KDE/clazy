@@ -44,7 +44,8 @@ class FunctionDecl;
  *
  * See README-implicit-casts for more information
  */
-class ImplicitCasts : public CheckBase
+class ImplicitCasts
+    : public CheckBase
 {
 public:
     ImplicitCasts(const std::string &name, ClazyContext *context);

@@ -38,7 +38,8 @@ class Stmt;
 /**
  * See README-strict-iterators.md for more info.
  */
-class StrictIterators : public CheckBase
+class StrictIterators
+    : public CheckBase
 {
 public:
     explicit StrictIterators(const std::string &name, ClazyContext *context);

@@ -86,7 +86,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (clazy::name(decl) == "QTypeInfo") {
-        const string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
+        const string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/ true);
         if (!typeName.empty())
             m_typeInfos.insert(typeName);
     }

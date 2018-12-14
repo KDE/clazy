@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-qhash-namespace.md for more info.
  */
-class QHashNamespace : public CheckBase
+class QHashNamespace
+    : public CheckBase
 {
 public:
     explicit QHashNamespace(const std::string &name, ClazyContext *context);

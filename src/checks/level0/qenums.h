@@ -37,7 +37,8 @@ class Token;
 /**
  * See README-qenums for more info.
  */
-class QEnums : public CheckBase
+class QEnums
+    : public CheckBase
 {
 public:
     explicit QEnums(const std::string &name, ClazyContext *context);

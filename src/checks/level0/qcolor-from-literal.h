@@ -38,7 +38,8 @@ class MatchFinder;
 /**
  * See README-qcolor-from-literal.md for more info.
  */
-class QColorFromLiteral : public CheckBase
+class QColorFromLiteral
+    : public CheckBase
 {
 public:
     explicit QColorFromLiteral(const std::string &name, ClazyContext *context);

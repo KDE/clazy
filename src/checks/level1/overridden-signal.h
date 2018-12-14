@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-overridden-signal.md for more info.
  */
-class OverriddenSignal : public CheckBase
+class OverriddenSignal
+    : public CheckBase
 {
 public:
     explicit OverriddenSignal(const std::string &name, ClazyContext *context);

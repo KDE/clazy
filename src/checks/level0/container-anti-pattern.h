@@ -40,7 +40,8 @@ class CXXConstructExpr;
  *
  * See README-anti-pattern for more information
  */
-class ContainerAntiPattern : public CheckBase
+class ContainerAntiPattern
+    : public CheckBase
 {
 public:
     explicit ContainerAntiPattern(const std::string &name, ClazyContext *context);

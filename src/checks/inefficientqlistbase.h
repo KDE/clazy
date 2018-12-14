@@ -39,7 +39,8 @@ class Decl;
 /**
  * Base class for inefficient-qlist and inefficient-qlist-soft
  */
-class InefficientQListBase : public CheckBase
+class InefficientQListBase
+    : public CheckBase
 {
 public:
     enum IgnoreMode {

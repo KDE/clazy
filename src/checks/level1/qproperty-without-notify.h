@@ -38,7 +38,8 @@ class Token;
 /**
  * See README-qproperty-without-notify.md for more info.
  */
-class QPropertyWithoutNotify : public CheckBase
+class QPropertyWithoutNotify
+    : public CheckBase
 {
 public:
     explicit QPropertyWithoutNotify(const std::string &name, ClazyContext *context);

@@ -37,7 +37,8 @@ class Stmt;
  *
  * See README-isempty-vs-count
  */
-class IsEmptyVSCount : public CheckBase
+class IsEmptyVSCount
+    : public CheckBase
 {
 public:
     explicit IsEmptyVSCount(const std::string &name, ClazyContext *context);

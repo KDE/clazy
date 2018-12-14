@@ -48,7 +48,8 @@ class Stmt;
  *
  * There some chance of false-positives.
  */
-class ReserveCandidates : public CheckBase
+class ReserveCandidates
+    : public CheckBase
 {
 public:
     ReserveCandidates(const std::string &name, ClazyContext *context);

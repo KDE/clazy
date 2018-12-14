@@ -36,7 +36,8 @@ class Stmt;
 /**
  * See README-tr-non-literal.md for more info.
  */
-class TrNonLiteral : public CheckBase
+class TrNonLiteral
+    : public CheckBase
 {
 public:
     explicit TrNonLiteral(const std::string &name, ClazyContext *context);

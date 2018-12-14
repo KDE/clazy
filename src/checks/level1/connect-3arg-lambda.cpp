@@ -148,10 +148,10 @@ void Connect3ArgLambda::processQMenu(FunctionDecl *func, Stmt *stmt)
     // QMenu::addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0)
     const uint numParams = func->getNumParams();
     if (numParams == 3) {
-           if (func->getParamDecl(0)->getNameAsString() == "text"  &&
-               func->getParamDecl(1)->getNameAsString() == "slot" &&
-               func->getParamDecl(2)->getNameAsString() == "shortcut") {
-               emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
-           }
-       }
+        if (func->getParamDecl(0)->getNameAsString() == "text"  &&
+            func->getParamDecl(1)->getNameAsString() == "slot" &&
+            func->getParamDecl(2)->getNameAsString() == "shortcut") {
+            emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
+        }
+    }
 }

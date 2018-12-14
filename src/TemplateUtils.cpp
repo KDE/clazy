@@ -91,7 +91,7 @@ ClassTemplateSpecializationDecl *clazy::templateDecl(Decl *decl)
 }
 
 string clazy::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
-                                                 unsigned int index, const LangOptions &lo, bool recordOnly)
+                                         unsigned int index, const LangOptions &lo, bool recordOnly)
 {
     if (!specialization)
         return {};

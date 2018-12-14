@@ -143,7 +143,7 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
     if (memberCall) {
         auto methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
         if (methodDecl && !methodDecl->isConst() && !methodDecl->isStatic() &&
-                !clazy::contains(method_blacklist, clazy::name(methodDecl)))
+            !clazy::contains(method_blacklist, clazy::name(methodDecl)))
             return true;
     }
 
@@ -243,7 +243,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
 clang::ValueDecl * Utils::valueDeclForCallExpr(clang::CallExpr *expr)
 {
     if (auto memberExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
-       return valueDeclForMemberCall(memberExpr);
+        return valueDeclForMemberCall(memberExpr);
     } else if (auto operatorExpr = dyn_cast<CXXOperatorCallExpr>(expr)) {
         return valueDeclForOperatorCall(operatorExpr);
     }
@@ -554,7 +554,7 @@ bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::Pr
 {
     return l1.isValid() && l2.isValid() && l1.getColumn() == l2.getColumn() &&
            l1.getLine()   == l2.getLine()   &&
-            StringRef(l1.getFilename()) == StringRef(l2.getFilename());
+           StringRef(l1.getFilename()) == StringRef(l2.getFilename());
 }
 
 CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
@@ -906,7 +906,7 @@ SourceLocation Utils::locForNextToken(SourceLocation loc, const clang::SourceMan
     // Calculate how much whitespace needs to be skipped if any.
     unsigned NumWhitespaceChars = 0;
     const char *TokenEnd = sm.getCharacterData(TokenLoc) +
-            Tok.getLength();
+                           Tok.getLength();
     unsigned char C = *TokenEnd;
     while (isHorizontalWhitespace(C)) {
         C = *(++TokenEnd);

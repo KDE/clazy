@@ -39,7 +39,8 @@ class Decl;
  *
  * See README-qmap-with-pointer-key for more information.
  */
-class QMapWithPointerKey : public CheckBase {
+class QMapWithPointerKey
+    : public CheckBase {
 public:
     QMapWithPointerKey(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;

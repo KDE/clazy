@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-static-pmf.md for more info.
  */
-class StaticPmf : public CheckBase
+class StaticPmf
+    : public CheckBase
 {
 public:
     explicit StaticPmf(const std::string &name, ClazyContext *context);

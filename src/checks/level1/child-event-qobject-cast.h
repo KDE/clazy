@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-child-event-qobject-cast for more info.
  */
-class ChildEventQObjectCast : public CheckBase
+class ChildEventQObjectCast
+    : public CheckBase
 {
 public:
     explicit ChildEventQObjectCast(const std::string &name, ClazyContext *context);

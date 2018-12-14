@@ -44,7 +44,8 @@ class CXXMemberCallExpr;
  *
  * Run only in Qt 4 code.
  */
-class Qt4QStringFromArray : public CheckBase
+class Qt4QStringFromArray
+    : public CheckBase
 {
 public:
     explicit Qt4QStringFromArray(const std::string &name, ClazyContext *context);

@@ -38,7 +38,8 @@ class CallExpr;
 /**
  * Finds misuse of QString::arg()
  */
-class QStringArg : public CheckBase
+class QStringArg
+    : public CheckBase
 {
 public:
     explicit QStringArg(const std::string &name, ClazyContext *context);

@@ -43,7 +43,8 @@ class QualType;
  *
  * See README-unused-non-trivial-variable.md for more information
  */
-class UnusedNonTrivialVariable : public CheckBase
+class UnusedNonTrivialVariable
+    : public CheckBase
 {
 public:
     explicit UnusedNonTrivialVariable(const std::string &name, ClazyContext *context);

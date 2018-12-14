@@ -176,8 +176,8 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
     auto callExprs = clazy::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1,
-                                                             /*includeParent=*/ true,
-                                                             clazy::IgnoreExprWithCleanups);
+                                                    /*includeParent=*/ true,
+                                                    clazy::IgnoreExprWithCleanups);
 
 
     for (CallExpr *callExpr : callExprs) {

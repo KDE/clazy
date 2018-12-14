@@ -65,20 +65,20 @@ namespace clazy {
 // Copied from Clang's Expr.cpp and added "|| !DerivedType->isRecordType()" to avoid a crash
 const CXXRecordDecl *getBestDynamicClassType(Expr *expr)
 {
-  if (!expr)
-      return nullptr;
+    if (!expr)
+        return nullptr;
 
-  const Expr *E = expr->getBestDynamicClassTypeExpr();
-  QualType DerivedType = E->getType();
-  if (const PointerType *PTy = DerivedType->getAs<PointerType>())
-    DerivedType = PTy->getPointeeType();
+    const Expr *E = expr->getBestDynamicClassTypeExpr();
+    QualType DerivedType = E->getType();
+    if (const PointerType *PTy = DerivedType->getAs<PointerType>())
+        DerivedType = PTy->getPointeeType();
 
-  if (DerivedType->isDependentType() || !DerivedType->isRecordType())
-    return nullptr;
+    if (DerivedType->isDependentType() || !DerivedType->isRecordType())
+        return nullptr;
 
-  const RecordType *Ty = DerivedType->castAs<RecordType>();
-  Decl *D = Ty->getDecl();
-  return cast<CXXRecordDecl>(D);
+    const RecordType *Ty = DerivedType->castAs<RecordType>();
+    Decl *D = Ty->getDecl();
+    return cast<CXXRecordDecl>(D);
 }
 }
 
@@ -446,7 +446,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
             DeclContext *context = m_context->lastDecl->getDeclContext();
 
             bool isSpecialProtectedCase = false;
-            if (!clazy::canTakeAddressOf(methodDecl, context, /*by-ref*/isSpecialProtectedCase)) {
+            if (!clazy::canTakeAddressOf(methodDecl, context, /*by-ref*/ isSpecialProtectedCase)) {
                 string msg = "Can't fix " + clazy::accessString(methodDecl->getAccess()) + ' ' + macroName + ' ' + methodDecl->getQualifiedNameAsString();
                 queueManualFixitWarning(s, msg);
                 return {};
@@ -458,7 +458,7 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
-                qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString() ;
+                qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString();
             } else {
                 qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, clazy::getLocStart(call), !isInInclude); // (In includes ignore using directives)
             }

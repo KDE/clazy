@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-virtual-signal.md for more info.
  */
-class VirtualSignal : public CheckBase
+class VirtualSignal
+    : public CheckBase
 {
 public:
     explicit VirtualSignal(const std::string &name, ClazyContext *context);

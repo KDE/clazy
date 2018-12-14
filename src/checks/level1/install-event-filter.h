@@ -35,7 +35,8 @@ class Stmt;
 /**
  * See README-install-event-filter.md for more info.
  */
-class InstallEventFilter : public CheckBase
+class InstallEventFilter
+    : public CheckBase
 {
 public:
     explicit InstallEventFilter(const std::string &name, ClazyContext *context);

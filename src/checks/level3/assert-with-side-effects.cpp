@@ -75,7 +75,7 @@ static bool methodIsOK(const string &name)
                                              "QVector::end", "QHash::begin", "QHash::end",
                                              "QByteArray::data", "QBasicMutex::isRecursive",
                                              "QLinkedList::begin", "QLinkedList::end", "QDataBuffer::first",
-                                            "QOpenGLFunctions::glIsRenderbuffer"};
+                                             "QOpenGLFunctions::glIsRenderbuffer"};
     return clazy::contains(whitelist, name);
 }
 

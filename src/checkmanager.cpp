@@ -204,7 +204,7 @@ RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context,
     // #3 Append checks specified from env variable
 
     vector<string> userDisabledChecks;
-    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(context, /*by-ref*/userDisabledChecks);
+    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(context, /*by-ref*/ userDisabledChecks);
     copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(result));
 
     if (result.empty() && requestedLevel == CheckLevelUndefined) {
@@ -221,7 +221,7 @@ RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context,
     if (context->options & ClazyContext::ClazyOption_Qt4Compat) {
         // #5 Remove Qt4 incompatible checks
         result.erase(remove_if(result.begin(), result.end(), [](const RegisteredCheck &c){
-           return c.options & RegisteredCheck::Option_Qt4Incompatible;
+            return c.options & RegisteredCheck::Option_Qt4Incompatible;
         }), result.end());
     }
 

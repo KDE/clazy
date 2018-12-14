@@ -38,7 +38,8 @@ class Stmt;
 /**
  * See README-returning-data-from-temporary.md for more info.
  */
-class ReturningDataFromTemporary : public CheckBase
+class ReturningDataFromTemporary
+    : public CheckBase
 {
 public:
     explicit ReturningDataFromTemporary(const std::string &name, ClazyContext *context);

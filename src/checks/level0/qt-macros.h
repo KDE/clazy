@@ -37,7 +37,8 @@ class Token;
 /**
  * See README-qt-macros for more info.
  */
-class QtMacros : public CheckBase
+class QtMacros
+    : public CheckBase
 {
 public:
     explicit QtMacros(const std::string &name, ClazyContext *context);

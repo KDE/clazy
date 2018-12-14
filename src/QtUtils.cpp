@@ -59,9 +59,9 @@ const vector<StringRef> & clazy::qtCOWContainers()
 }
 
 
-std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethods()
+std::unordered_map<string, std::vector<StringRef>> clazy::detachingMethods()
 {
-    static std::unordered_map<string, std::vector<StringRef> > map;
+    static std::unordered_map<string, std::vector<StringRef>> map;
     if (map.empty()) {
         map = detachingMethodsWithConstCounterParts();
         map["QVector"].push_back("fill");
@@ -70,9 +70,9 @@ std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethods()
     return map;
 }
 
-std::unordered_map<string, std::vector<StringRef> > clazy::detachingMethodsWithConstCounterParts()
+std::unordered_map<string, std::vector<StringRef>> clazy::detachingMethodsWithConstCounterParts()
 {
-    static std::unordered_map<string, std::vector<StringRef> > map;
+    static std::unordered_map<string, std::vector<StringRef>> map;
     if (map.empty()) {
         map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
         map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };

@@ -57,9 +57,10 @@ static bool handleStringLiteral(const StringLiteral *literal)
     return true;
 }
 
-class QColorFromLiteral_Callback : public ClazyAstMatcherCallback
+class QColorFromLiteral_Callback
+    : public ClazyAstMatcherCallback
 {
-public :
+public:
 
     QColorFromLiteral_Callback(CheckBase *base)
         : ClazyAstMatcherCallback(base)

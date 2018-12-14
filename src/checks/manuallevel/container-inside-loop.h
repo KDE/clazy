@@ -38,7 +38,8 @@ class Stmt;
  *
  * See README-container-inside-loop for more information
  */
-class ContainerInsideLoop : public CheckBase
+class ContainerInsideLoop
+    : public CheckBase
 {
 public:
     explicit ContainerInsideLoop(const std::string &name, ClazyContext *context);

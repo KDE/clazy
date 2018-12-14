@@ -36,7 +36,8 @@ class Stmt;
 /**
  * See README-const-signal-or-slot.md for more info.
  */
-class ConstSignalOrSlot : public CheckBase
+class ConstSignalOrSlot
+    : public CheckBase
 {
 public:
     explicit ConstSignalOrSlot(const std::string &name, ClazyContext *context);

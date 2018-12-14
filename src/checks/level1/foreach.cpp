@@ -157,7 +157,7 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     TypeUtils::QualTypeClassification classif;
-    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/classif, forStatements.at(0));
+    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/ classif, forStatements.at(0));
     if (!success)
         return;
 
@@ -192,7 +192,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
             if (recordDecl) {
                 const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
-                const std::unordered_map<string, std::vector<StringRef> > &detachingMethodsMap = clazy::detachingMethods();
+                const std::unordered_map<string, std::vector<StringRef>> &detachingMethodsMap = clazy::detachingMethods();
                 if (detachingMethodsMap.find(className) != detachingMethodsMap.end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap.at(className);

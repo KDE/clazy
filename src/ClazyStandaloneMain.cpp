@@ -57,27 +57,28 @@ static cl::opt<bool> s_onlyQt("only-qt", cl::desc("Won't emit warnings for non-Q
                               cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_qtDeveloper("qt-developer", cl::desc("For running clazy on Qt itself, optional, but honours specific guidelines"),
-                              cl::init(false), cl::cat(s_clazyCategory));
+                                   cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_visitImplicitCode("visit-implicit-code", cl::desc("For visiting implicit code like compiler generated constructors. None of the built-in checks benefit from this, but can be useful for custom checks"),
-                              cl::init(false), cl::cat(s_clazyCategory));
+                                         cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::opt<bool> s_ignoreIncludedFiles("ignore-included-files", cl::desc("Only emit warnings for the current file being compiled and ignore any includes. Useful for performance reasons."),
-                              cl::init(false), cl::cat(s_clazyCategory));
+                                           cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::opt<std::string> s_headerFilter("header-filter", cl::desc(R"(Regular expression matching the names of the
 headers to output diagnostics from. Diagnostics
 from the main file of each translation unit are
 always displayed.)"),
-                              cl::init(""), cl::cat(s_clazyCategory));
+                                           cl::init(""), cl::cat(s_clazyCategory));
 
 static cl::opt<std::string> s_ignoreDirs("ignore-dirs", cl::desc(R"(Regular expression matching the names of the
 directories for which diagnostics should never be emitted. Useful for ignoring 3rdparty code.)"),
-                              cl::init(""), cl::cat(s_clazyCategory));
+                                         cl::init(""), cl::cat(s_clazyCategory));
 
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
-class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
+class ClazyToolActionFactory
+    : public clang::tooling::FrontendActionFactory
 {
 public:
     ClazyToolActionFactory()

@@ -35,7 +35,8 @@ class Stmt;
 /**
  * See README-returning-void-expression.md for more info.
  */
-class ReturningVoidExpression : public CheckBase
+class ReturningVoidExpression
+    : public CheckBase
 {
 public:
     explicit ReturningVoidExpression(const std::string &name, ClazyContext *context);

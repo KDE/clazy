@@ -274,7 +274,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
                             queueManualFixitWarning(clazy::getLocStart(ctorExpr), "Can't use QStringLiteral in macro.", CharPtrAllocations);
                     } else {
 
-                        auto parentMemberCallExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
+                        auto parentMemberCallExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/ 6); // 6 seems like a nice max from the ASTs I've seen
 
                         string replacement = "QStringLiteral";
                         if (parentMemberCallExpr) {
@@ -348,7 +348,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::C
 // true for: QString s = QString::fromLatin1("foo")
 // false for: s += QString::fromLatin1("foo"), etc.
 static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions &lo,
-                                      const SourceManager &sm , int currentCall = 0)
+                                      const SourceManager &sm, int currentCall = 0)
 {
     if (!s)
         return false;
@@ -460,7 +460,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
             return {};
         }
 
-        clazy::insertParentMethodCall(revisedReplacement, range, /**by-ref*/fixits);
+        clazy::insertParentMethodCall(revisedReplacement, range, /**by-ref*/ fixits);
     }
 
     return fixits;

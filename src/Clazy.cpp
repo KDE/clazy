@@ -395,7 +395,7 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
         astConsumer->addCheck(check);
     }
 
-   return unique_ptr<ASTConsumer>(astConsumer);
+    return unique_ptr<ASTConsumer>(astConsumer);
 }
 
 volatile int ClazyPluginAnchorSource = 0;

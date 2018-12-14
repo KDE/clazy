@@ -35,7 +35,8 @@ class Decl;
 /**
  * See README-ctor-missing-parent-argument for more info.
  */
-class CtorMissingParentArgument : public CheckBase
+class CtorMissingParentArgument
+    : public CheckBase
 {
 public:
     explicit CtorMissingParentArgument(const std::string &name, ClazyContext *context);

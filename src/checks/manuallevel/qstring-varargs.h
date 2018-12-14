@@ -35,7 +35,8 @@ class Stmt;
 /**
  * See README-qstring-varargs.md for more info.
  */
-class QStringVarargs : public CheckBase
+class QStringVarargs
+    : public CheckBase
 {
 public:
     explicit QStringVarargs(const std::string &name, ClazyContext *context);

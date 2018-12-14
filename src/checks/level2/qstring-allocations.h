@@ -59,7 +59,8 @@ enum FromFunction {
  *
  * See README-qstring-allocations for more information.
  */
-class QStringAllocations : public CheckBase
+class QStringAllocations
+    : public CheckBase
 {
 public:
     QStringAllocations(const std::string &name, ClazyContext *context);

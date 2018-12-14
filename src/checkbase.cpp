@@ -156,12 +156,12 @@ void CheckBase::VisitIfndef(SourceLocation, const Token &)
 
 void CheckBase::VisitIf(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind)
 {
-   // Overriden in derived classes
+    // Overriden in derived classes
 }
 
 void CheckBase::VisitElif(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind, SourceLocation)
 {
-   // Overriden in derived classes
+    // Overriden in derived classes
 }
 
 void CheckBase::VisitElse(SourceLocation, SourceLocation)

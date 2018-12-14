@@ -74,7 +74,8 @@ enum CheckLevel { // See README.md for what each level does
     DefaultCheckLevel = CheckLevel1
 };
 
-class ClazyPreprocessorCallbacks : public clang::PPCallbacks
+class ClazyPreprocessorCallbacks
+    : public clang::PPCallbacks
 {
 public:
     ClazyPreprocessorCallbacks(const ClazyPreprocessorCallbacks &) = delete;
@@ -94,7 +95,8 @@ private:
     CheckBase *const check;
 };
 
-class ClazyAstMatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback
+class ClazyAstMatcherCallback
+    : public clang::ast_matchers::MatchFinder::MatchCallback
 {
 public:
     explicit ClazyAstMatcherCallback(CheckBase *check);

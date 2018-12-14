@@ -45,7 +45,8 @@ class QualType;
  *
  * See README-missing-type-info for more info.
  */
-class MissingTypeInfo : public CheckBase
+class MissingTypeInfo
+    : public CheckBase
 {
 public:
     MissingTypeInfo(const std::string &name, ClazyContext *context);

@@ -139,7 +139,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     StringRef className = clazy::name(classDecl);
 
-    const std::unordered_map<string, std::vector<StringRef> > &methodsByType = clazy::detachingMethods();
+    const std::unordered_map<string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(className);
     auto it2 = m_writeMethodsByType.find(className);
 

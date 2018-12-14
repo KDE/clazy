@@ -146,12 +146,12 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
             message = "QString(QByteArray) ctor being called";
         }
     } else if (operatorCall) {
-        if (!isInterestingOperatorCall(operatorCall, /*by-ref*/methodName, is_char_array, is_byte_array))
+        if (!isInterestingOperatorCall(operatorCall, /*by-ref*/ methodName, is_char_array, is_byte_array))
             return;
 
         fixits = fixOperatorCall(operatorCall);
     } else if (memberCall) {
-        if (!isInterestingMethodCall(memberCall->getMethodDecl(), /*by-ref*/methodName, is_char_array, is_byte_array))
+        if (!isInterestingMethodCall(memberCall->getMethodDecl(), /*by-ref*/ methodName, is_char_array, is_byte_array))
             return;
 
         fixits = fixMethodCallCall(memberCall);
@@ -196,7 +196,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
             return {};
         }
 
-        clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/fixits);
+        clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/ fixits);
 
     } else {
         emitWarning(clazy::getLocStart(op), "internal error");
@@ -221,7 +221,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
             return {};
         }
 
-        clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/fixits);
+        clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/ fixits);
     } else {
         emitWarning(clazy::getLocStart(memberExpr), "internal error");
     }

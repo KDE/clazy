@@ -37,7 +37,8 @@ class Stmt;
  *
  * See README-inefficient-qlist-soft and README-inefficient-qlist for more information.
  */
-class InefficientQListSoft : public InefficientQListBase
+class InefficientQListSoft
+    : public InefficientQListBase
 {
 public:
     explicit InefficientQListSoft(const std::string &name, ClazyContext *context);

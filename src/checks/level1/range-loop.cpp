@@ -70,21 +70,21 @@ void RangeLoop::VisitStmt(clang::Stmt *stmt)
 
 bool RangeLoop::islvalue(Expr *exp, SourceLocation &endLoc)
 {
-     if (isa<DeclRefExpr>(exp)) {
-         endLoc = clazy::locForEndOfToken(&m_astContext, clazy::getLocStart(exp));
-         return true;
-     }
+    if (isa<DeclRefExpr>(exp)) {
+        endLoc = clazy::locForEndOfToken(&m_astContext, clazy::getLocStart(exp));
+        return true;
+    }
 
-     if (auto me = dyn_cast<MemberExpr>(exp)) {
-         auto decl = me->getMemberDecl();
-         if (!decl || isa<FunctionDecl>(decl))
-             return false;
+    if (auto me = dyn_cast<MemberExpr>(exp)) {
+        auto decl = me->getMemberDecl();
+        if (!decl || isa<FunctionDecl>(decl))
+            return false;
 
-         endLoc = clazy::locForEndOfToken(&m_astContext, me->getMemberLoc());
-         return true;
-     }
+        endLoc = clazy::locForEndOfToken(&m_astContext, me->getMemberLoc());
+        return true;
+    }
 
-     return false;
+    return false;
 }
 
 void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
@@ -135,7 +135,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 {
     TypeUtils::QualTypeClassification classif;
     auto varDecl = rangeLoop->getLoopVariable();
-    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/classif, rangeLoop);
+    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/ classif, rangeLoop);
     if (!success)
         return;
 

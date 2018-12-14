@@ -72,8 +72,8 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
         return false;
 
     static const std::array<StringRef, 19> list = {{ "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
-                                                     "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
-                                                     "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" }};
+        "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
+        "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" }};
 
     if (!clazy::contains(list, clazy::name(method)))
         return false;

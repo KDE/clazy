@@ -66,7 +66,7 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
                                               "QtMetaTypePrivate::QAssociativeIterableImpl",
                                               "QVariantComparisonHelper",
                                               "QHashDummyValue", "QCharRef", "QString::Null"
-                                             };
+    };
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
@@ -90,7 +90,7 @@ static bool shouldIgnoreFunction(clang::FunctionDecl *function)
                                                        "QWidget::addActions", // Fixed in Qt6
                                                        "QSslCertificate::verify", // Fixed in Qt6
                                                        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
-                                                      };
+    };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }

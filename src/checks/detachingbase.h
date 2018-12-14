@@ -40,7 +40,8 @@ class CXXMethodDecl;
 /**
  * Base class for checks that look for detachments.
  */
-class DetachingBase : public CheckBase
+class DetachingBase
+    : public CheckBase
 {
 public:
     explicit DetachingBase(const std::string &name, ClazyContext *context, Options = Option_None);

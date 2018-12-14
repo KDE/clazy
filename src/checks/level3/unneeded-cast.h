@@ -44,7 +44,8 @@ class CXXNAmedCastExpr;
  * Finds redundant casts.
  * See README-unneeded-cast.md for more info.
  */
-class UnneededCast : public CheckBase
+class UnneededCast
+    : public CheckBase
 {
 public:
     UnneededCast(const std::string &name, ClazyContext *context);

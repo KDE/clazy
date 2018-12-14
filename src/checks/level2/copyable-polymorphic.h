@@ -38,7 +38,8 @@ class Decl;
  *
  * See README-copyable-polymorphic for more information
  */
-class CopyablePolymorphic : public CheckBase
+class CopyablePolymorphic
+    : public CheckBase
 {
 public:
     explicit CopyablePolymorphic(const std::string &name, ClazyContext *context);

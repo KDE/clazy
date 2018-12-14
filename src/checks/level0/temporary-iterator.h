@@ -44,7 +44,8 @@ class Stmt;
  * For example getList().constBegin(), getList().constEnd() would provoke a crash when dereferencing
  * the iterator.
  */
-class TemporaryIterator : public CheckBase
+class TemporaryIterator
+    : public CheckBase
 {
 public:
     TemporaryIterator(const std::string &name, ClazyContext *context);

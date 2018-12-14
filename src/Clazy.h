@@ -53,7 +53,8 @@ class Stmt;
 /**
  * This is the FrontendAction that is run with clazy is used as a plugin.
  */
-class ClazyASTAction : public clang::PluginASTAction
+class ClazyASTAction
+    : public clang::PluginASTAction
 {
 public:
     ClazyASTAction();
@@ -78,7 +79,8 @@ private:
  * This is the FrontendAction that is run with clazy is used standalone instead of as a plugin.
  * i.e: when you run clazy-standalone, this is the invoked FrontendAction
  */
-class ClazyStandaloneASTAction : public clang::ASTFrontendAction
+class ClazyStandaloneASTAction
+    : public clang::ASTFrontendAction
 {
 public:
     explicit ClazyStandaloneASTAction(const std::string &checkList,
@@ -97,8 +99,9 @@ private:
 /**
  * Clazy's AST Consumer.
  */
-class ClazyASTConsumer : public clang::ASTConsumer,
-                         public clang::RecursiveASTVisitor<ClazyASTConsumer>
+class ClazyASTConsumer
+    : public clang::ASTConsumer
+    , public clang::RecursiveASTVisitor<ClazyASTConsumer>
 {
 public:
     explicit ClazyASTConsumer(ClazyContext *context);

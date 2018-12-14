@@ -27,7 +27,8 @@
 /**
  * See README-lowercase-qml-type-name.md for more info.
  */
-class LowercaseQMlTypeName : public CheckBase
+class LowercaseQMlTypeName
+    : public CheckBase
 {
 public:
     explicit LowercaseQMlTypeName(const std::string &name, ClazyContext *context);

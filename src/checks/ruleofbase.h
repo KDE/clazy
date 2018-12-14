@@ -35,7 +35,8 @@ class CXXRecordDecl;
 /**
  * Base class for RuleOfTwo and RuleOfThree
  */
-class RuleOfBase : public CheckBase
+class RuleOfBase
+    : public CheckBase
 {
 public:
     explicit RuleOfBase(const std::string &name, ClazyContext *context);

@@ -43,7 +43,8 @@ class Token;
  *
  * See README-missing-qobject for more information
  */
-class MissingQObjectMacro : public CheckBase
+class MissingQObjectMacro
+    : public CheckBase
 {
 public:
     explicit MissingQObjectMacro(const std::string &name, ClazyContext *context);

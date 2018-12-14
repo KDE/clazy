@@ -39,7 +39,8 @@ class Stmt;
 /**
  * See README-connect-not-normalized.md for more info.
  */
-class ConnectNotNormalized : public CheckBase
+class ConnectNotNormalized
+    : public CheckBase
 {
 public:
     explicit ConnectNotNormalized(const std::string &name, ClazyContext *context);

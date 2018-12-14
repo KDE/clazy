@@ -40,7 +40,8 @@ class Stmt;
  *
  * See README-qgetenv for more information
  */
-class QGetEnv : public CheckBase
+class QGetEnv
+    : public CheckBase
 {
 public:
     explicit QGetEnv(const std::string &name, ClazyContext *context);

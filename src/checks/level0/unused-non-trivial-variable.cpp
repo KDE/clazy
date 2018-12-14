@@ -122,7 +122,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
                                                        "QNetworkCookie", "QNetworkRequest", "QNetworkConfiguration",
                                                        "QHostAddress", "QSqlQuery", "QSqlRecord", "QSqlField",
                                                        "QLine", "QLineF", "QRect", "QRectF", "QDomNode"
-                                                     };
+    };
 
     CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
     if (!record)

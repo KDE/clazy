@@ -42,7 +42,8 @@ class CallExpr;
  *
  * See README-writing-to-temporary for more information
  */
-class WritingToTemporary : public CheckBase
+class WritingToTemporary
+    : public CheckBase
 {
 public:
     explicit WritingToTemporary(const std::string &name, ClazyContext *context);

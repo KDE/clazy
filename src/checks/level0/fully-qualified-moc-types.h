@@ -41,7 +41,8 @@ class Token;
 /**
  * See README-fully-qualified-moc-types.md for more info.
  */
-class FullyQualifiedMocTypes : public CheckBase
+class FullyQualifiedMocTypes
+    : public CheckBase
 {
 public:
     explicit FullyQualifiedMocTypes(const std::string &name, ClazyContext *context);
