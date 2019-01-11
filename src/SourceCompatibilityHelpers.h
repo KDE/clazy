@@ -25,6 +25,8 @@
 
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/Expr.h>
 
 namespace clazy {
 
@@ -57,6 +59,27 @@ inline clang::CharSourceRange getImmediateExpansionRange(clang::SourceLocation m
     return clang::CharSourceRange(clang::SourceRange(pair.first, pair.second), false);
 #endif
 }
+
+inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
+{
+#if LLVM_VERSION_MAJOR >= 8
+    auto RetType = func->getReturnType();
+    if (const auto *Ret = RetType->getAsRecordDecl()) {
+        if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>())
+            return R != nullptr;
+    } else if (const auto *ET = RetType->getAs<clang::EnumType>()) {
+        if (const EnumDecl *ED = ET->getDecl()) {
+            if (const auto *R = ED->getAttr<clang::WarnUnusedResultAttr>())
+                return R != nullptr;
+        }
+    }
+    return clang::getAttr<clang::WarnUnusedResultAttr>() != nullptr;
+#else
+    return func->hasUnusedResultAttr();
+#endif
+
+}
+
 
 }
 

@@ -45,7 +45,7 @@ void QRequiredResultCandidates::VisitDecl(clang::Decl *decl)
     if (method->isThisDeclarationADefinition() && !method->hasInlineBody()) // Don't warn twice
         return;
 
-    if (method->hasUnusedResultAttr()) // Also catches nodiscard
+    if (clazy::hasUnusedResultAttr(method)) // Also catches nodiscard
         return;
 
     if (method->getAccess() == AS_private) // We're only interested on our public API
