@@ -233,3 +233,15 @@ public:
     void virtualMethod2(const Trivial &) {}; // OK
     void nonVirtualMethod(const Trivial &) {}; // Warn
 };
+
+
+// bug #403088
+void func(const std::atomic<int> &a) {} // Ok, since it's not trivially-copyable
+
+// generalization of bug #403088
+struct DeletedCopyCtor {
+    DeletedCopyCtor(const DeletedCopyCtor &) = delete;
+    int v;
+};
+
+void func(const DeletedCopyCtor &a) {}
