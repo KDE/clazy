@@ -23,10 +23,11 @@
 #ifndef SOURCE_COMPAT_HELPERS
 #define SOURCE_COMPAT_HELPERS
 
+#include <clang/AST/Attr.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/Decl.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
-#include <clang/AST/Decl.h>
-#include <clang/AST/Expr.h>
 
 namespace clazy {
 
@@ -68,12 +69,12 @@ inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
         if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>())
             return R != nullptr;
     } else if (const auto *ET = RetType->getAs<clang::EnumType>()) {
-        if (const EnumDecl *ED = ET->getDecl()) {
+        if (const clang::EnumDecl *ED = ET->getDecl()) {
             if (const auto *R = ED->getAttr<clang::WarnUnusedResultAttr>())
                 return R != nullptr;
         }
     }
-    return clang::getAttr<clang::WarnUnusedResultAttr>() != nullptr;
+    return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
 #else
     return func->hasUnusedResultAttr();
 #endif
