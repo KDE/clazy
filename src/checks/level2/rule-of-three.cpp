@@ -75,14 +75,22 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     const bool hasUserCopyCtor = copyCtor && copyCtor->isUserProvided();
     const bool hasUserCopyAssign = copyAssign && copyAssign->isUserProvided();
     const bool hasUserDtor = destructor && destructor->isUserProvided();
-    //const bool hasMoveCtor = record->hasNonTrivialMoveConstructor();
-    //const bool hasTrivialMoveAssignment = record->hasNonTrivialMoveAssignment();
-
 
     const bool copyCtorIsDeleted = copyCtor && copyCtor->isDeleted();
     const bool copyAssignIsDeleted = copyAssign && copyAssign->isDeleted();
 
-    if (hasUserDtor && (copyCtorIsDeleted || copyAssignIsDeleted)) {
+    bool hasImplicitDeletedCopy = false;
+    if (!copyCtor || !copyAssign) {
+        for (auto f : record->fields()) {
+            QualType qt = f->getType();
+            if (qt.isConstQualified() || qt->isRValueReferenceType()) {
+                hasImplicitDeletedCopy = true;
+                break;
+            }
+        }
+    }
+
+    if (hasUserDtor && (copyCtorIsDeleted || copyAssignIsDeleted || hasImplicitDeletedCopy)) {
         // One of the copy methods was explicitely deleted, it's safe.
         // The case we want to catch is when one is user-written and the other is
         // compiler-generated.
