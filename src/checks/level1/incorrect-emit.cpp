@@ -116,7 +116,7 @@ void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
     if (clazy::getFirstParentOfType<LambdaExpr>(m_context->parentMap, callExpr) != nullptr)
         return; // Emit is inside a lambda, it's fine
 
-    emitWarning(clazy::getLocStart(callExpr), "Emitting inside constructor has no effect");
+    emitWarning(clazy::getLocStart(callExpr), "Emitting inside constructor probably has no effect");
 }
 
 bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const

@@ -52,7 +52,8 @@ bool TypeUtils::classifyQualType(const ClazyContext *context, const VarDecl *var
     classif.size_of_T = context->astContext.getTypeSize(qualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-    classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor());
+    CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
+    classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor() || (copyCtor && copyCtor->isDeleted()));
     classif.isReference = varDecl->getType()->isLValueReferenceType();
     classif.isConst = qualType.isConstQualified();
 

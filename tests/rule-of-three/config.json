@@ -9,6 +9,9 @@
         },
         {
             "filename" : "bug388682.cpp"
+        },
+        {
+            "filename" : "bug403193.cpp"
         }
     ]
 }
