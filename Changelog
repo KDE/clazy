@@ -90,11 +90,7 @@
   - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction() without a context object
   - old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now
 
-* v1.4.1 (probably never)
-  - fully-qualified-moc-types now warns for slot/invokable return values too. They need to be fully qualified for QML.
-  - Fixed a crash (clang assert) in raw-environment-function
-
-* v1.5 (, 2019)
+* v1.5 (January, 2019)
   - New Checks:
     ifndef-define-typo
     lowercase-qml-type-name
@@ -106,3 +102,5 @@
     Introduced CLAZY_FIXIT_SUFFIX env variable
   - Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt
   - Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so
+  - fully-qualified-moc-types now warns for slot/invokable return values too. They need to be fully qualified for QML.
+  - Fixed a crash (clang assert) in raw-environment-function
