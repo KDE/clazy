@@ -104,3 +104,6 @@
   - Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so
   - fully-qualified-moc-types now warns for slot/invokable return values too. They need to be fully qualified for QML.
   - Fixed a crash (clang assert) in raw-environment-function
+
+
+* v1.6 (, 2019)
