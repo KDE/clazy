@@ -13,5 +13,5 @@ This check supports adding missing `&` or `const-&` with:
 
 
 - [1] <http://www.macieira.org/blog/2012/02/the-value-of-passing-by-value/>
-- [2] <http://en.cppreference.com/w/cpp/concept/TriviallyCopyable>
+- [2] <https://en.cppreference.com/w/cpp/named_req/TriviallyCopyable>
 - [3] <http://www.cplusplus.com/reference/type_traits/is_trivially_destructible/>
