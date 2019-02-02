@@ -149,19 +149,22 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
         if (enumRefs.size() == 1) {
             auto enumerator = dyn_cast<EnumConstantDecl>(enumRefs.at(0)->getDecl());
             if (enumerator && clazy::name(enumerator) == "ReadProperty") {
-                auto reinterprets = clazy::getStatements<CXXReinterpretCastExpr>(iff);
-                for (auto reinterpret : reinterprets) {
-                    QualType qt = TypeUtils::pointeeQualType(reinterpret->getTypeAsWritten());
-                    auto record = qt->getAsCXXRecordDecl();
-                    if (!record || !isGadget(record))
-                        continue;
+                auto switches = clazy::getStatements<SwitchStmt>(iff); // we only want the reinterpret_casts that are inside switches
+                for (auto s : switches) {
+                    auto reinterprets = clazy::getStatements<CXXReinterpretCastExpr>(s);
+                    for (auto reinterpret : reinterprets) {
+                        QualType qt = TypeUtils::pointeeQualType(reinterpret->getTypeAsWritten());
+                        auto record = qt->getAsCXXRecordDecl();
+                        if (!record || !isGadget(record))
+                            continue;
 
-                    string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/ true);
-                    string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/ false);
-                    if (nameAsWritten != fullyQualifiedName) {
-                        // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
-                        // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
-                        emitWarning(clazy::getLocStart(method->getParent()), "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
+                        string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/ true);
+                        string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/ false);
+                        if (nameAsWritten != fullyQualifiedName) {
+                            // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
+                            // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
+                            emitWarning(clazy::getLocStart(method->getParent()), "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
+                        }
                     }
                 }
                 return true;
