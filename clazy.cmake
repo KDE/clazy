@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-libdir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_LIBDIR@")
-sharedir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_SHAREDIR@")
+libdir=$("@READLINK_CMD@" -f "$(dirname ${0})/@BIN_RELATIVE_LIBDIR@")
+sharedir=$("@READLINK_CMD@" -f "$(dirname ${0})/@BIN_RELATIVE_SHAREDIR@")
 
 HELP() {
   echo "Usage: `basename $0` [options] [clang++-options]"
