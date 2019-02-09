@@ -9,7 +9,7 @@ Table of contents
 =================
 
    * [Source Code](#source-code)
-   * [](#pre-built-binaries)
+   * [Pre-built binaries](#pre-built-binaries)
    * [Build Instructions](#build-instructions)
       * [Linux](#linux)
          * [Install dependencies](#install-dependencies)
