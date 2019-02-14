@@ -106,6 +106,11 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, string &qualifiedT
             return true;
 
         qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/ false);
+        if (qualifiedTypeName.empty() || qualifiedTypeName[0] == '(') {
+            // We don't care about (anonymous namespace)::
+            return true;
+        }
+
         return typeName == qualifiedTypeName;
     } else {
         return true;
@@ -160,6 +165,11 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
 
                         string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/ true);
                         string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/ false);
+                        if (fullyQualifiedName.empty() || fullyQualifiedName[0] == '(') {
+                            // We don't care about (anonymous namespace)::
+                            continue;
+                        }
+
                         if (nameAsWritten != fullyQualifiedName) {
                             // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
                             // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
