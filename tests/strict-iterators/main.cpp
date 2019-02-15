@@ -79,3 +79,14 @@ void testStdVector()
     std::vector<int> v;
     std::vector<int>::const_iterator it = v.begin(); // OK
 }
+
+
+struct Bar {
+    bool foo() const
+    {
+        return mFooIt != mFoo.end(); // OK, since mFooIt is a member, it won't make anything detach
+    }
+    QVector<int> mFoo;
+    QVector<int>::iterator mFooIt;
+};
+

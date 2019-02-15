@@ -46,6 +46,17 @@
 using namespace clang;
 using namespace std;
 
+static bool isMemberVariable(Expr *expr)
+{
+    if (isa<MemberExpr>(expr))
+        return true;
+
+    if (auto ice = dyn_cast<ImplicitCastExpr>(expr))
+        return isMemberVariable(ice->getSubExpr());
+
+    return false;
+}
+
 // This got a bit messy since each Qt container produces a different AST, for example
 // QVector::iterator isn't even a class, it's a typedef.
 
@@ -81,6 +92,12 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
 
     assert(implicitCast->getSubExpr());
+
+    if (isMemberVariable(implicitCast->getSubExpr())) {
+        // Comparing a const_iterator against a member QVector<T>::iterator won't detach the container
+        return false;
+    }
+
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = TypeUtils::parentRecordForTypedef(typeFrom);
     if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom))
