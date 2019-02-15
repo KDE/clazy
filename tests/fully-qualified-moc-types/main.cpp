@@ -60,4 +60,17 @@ namespace NS {
     };
 }
 
+
+
+namespace { // annonymous
+    struct AnnonFoo {};
+};
+
+class MyObj2 : public QObject
+{
+Q_SIGNALS:
+    void mySig(AnnonFoo);
+};
+
+
 #include "main.moc_"
