@@ -90,9 +90,11 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
 
     if (matches) {
         string typeName = clazy::simpleTypeName(typeList[0], lo());
-        typeName[0] = toupper(typeName[0]);
 
         string typeName2 = typeName;
+        typeName2[0] = toupper(typeName2[0]);
+
+
         if (typeName[0] == 'Q')
             typeName2.erase(0, 1); // Remove first letter
         std::string error = std::string("Use QVariant::to" + typeName2 + "() instead of QVariant::value<" + typeName + ">()");
