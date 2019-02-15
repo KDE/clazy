@@ -61,6 +61,7 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
         return;
     }
 
+    // Gadgets can't have NOTIFY
     if (m_lastIsGadget || ii->getName() != "Q_PROPERTY")
         return;
 
