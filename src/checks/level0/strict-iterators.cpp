@@ -105,12 +105,6 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (!nameFromIsIterator)
         return false;
 
-    if (recordTo && clazy::startsWith(recordTo->getQualifiedNameAsString(), "OrderedSet")) {
-        string filename = m_sm.getFilename(clazy::getLocStart(implicitCast));
-        if (filename == "lalr.cpp") // Lots of false positives here, because of const_iterator -> iterator typedefs
-            return false;
-    }
-
     auto p = m_context->parentMap->getParent(implicitCast);
     if (dyn_cast<CXXOperatorCallExpr>(p))
         return false;
