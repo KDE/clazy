@@ -81,7 +81,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         return;
 
     bool matches = false;
-    if (t->isBooleanType() /*|| t->isIntegerType() || t->isFloatingType()*/) {
+    if (t->isBooleanType() || t->isFloatingType() || (t->isIntegerType() && !t->isEnumeralType())) {
         matches = true;
     } else {
         CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();

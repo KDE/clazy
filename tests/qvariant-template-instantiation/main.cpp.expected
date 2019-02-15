@@ -1,2 +1,4 @@
-qvariant-template-instantiation/main.cpp:21:5: warning: Use QVariant::toUrl() instead of QVariant::value<QUrl>() [-Wclazy-qvariant-template-instantiation]
-qvariant-template-instantiation/main.cpp:22:5: warning: Use QVariant::toBool() instead of QVariant::value<Bool>() [-Wclazy-qvariant-template-instantiation]
+qvariant-template-instantiation/main.cpp:16:5: warning: Use QVariant::toUrl() instead of QVariant::value<QUrl>() [-Wclazy-qvariant-template-instantiation]
+qvariant-template-instantiation/main.cpp:17:5: warning: Use QVariant::toBool() instead of QVariant::value<Bool>() [-Wclazy-qvariant-template-instantiation]
+qvariant-template-instantiation/main.cpp:18:5: warning: Use QVariant::toFloat() instead of QVariant::value<Float>() [-Wclazy-qvariant-template-instantiation]
+qvariant-template-instantiation/main.cpp:19:5: warning: Use QVariant::toInt() instead of QVariant::value<Int>() [-Wclazy-qvariant-template-instantiation]
