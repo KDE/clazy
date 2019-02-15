@@ -75,7 +75,8 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     bool found_read = false;
     bool found_constant = false;
     bool found_notify = false;
-    for (const std::string &token : split) {
+    for (std::string &token : split) {
+        clazy::rtrim(/*by-ref*/token);
         if (!found_read && token == "READ") {
             found_read = true;
             continue;

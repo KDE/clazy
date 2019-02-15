@@ -181,6 +181,11 @@ inline std::string toLower(const std::string &s)
     return result;
 }
 
+inline void rtrim(std::string &s)
+{
+    while (!s.empty() && std::isspace(s.back()))
+        s.pop_back();
+}
 
 inline std::vector<std::string> splitString(const std::string &str, char separator)
 {
