@@ -2,6 +2,11 @@
 
 libdir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_LIBDIR@")
 sharedir=$(readlink -f "$(dirname ${0})/@BIN_RELATIVE_SHAREDIR@")
+default_clangexe="@CLANG_EXE@"
+if [ -x "$default_clangexe" ] && [ -z "$CLANGXX" ]
+then
+    CLANGXX="$default_clangexe"
+fi
 
 HELP() {
   echo "Usage: `basename $0` [options] [clang++-options]"
