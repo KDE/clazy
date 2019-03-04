@@ -68,9 +68,8 @@ enum CheckLevel { // See README.md for what each level does
     CheckLevel0 = 0,
     CheckLevel1,
     CheckLevel2,
-    CheckLevel3 = 3,
     ManualCheckLevel,
-    MaxCheckLevel = CheckLevel3,
+    MaxCheckLevel = CheckLevel2,
     DefaultCheckLevel = CheckLevel1
 };
 

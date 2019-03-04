@@ -10,4 +10,4 @@ Finds places where member containers are potentially detached.
     }
 
 #### Pitfalls
-This check is disabled by default as it reports too many false positives for now.
+This check is disabled by default as it reports too many false positives.

@@ -424,7 +424,7 @@
         },
         {
             "name"  : "unneeded-cast",
-            "level" : 3,
+            "level" : -1,
             "categories" : ["cpp", "readability"],
             "options" : [
                 {
@@ -572,26 +572,26 @@
         },
         {
             "name"  : "assert-with-side-effects",
-            "level" : 3,
+            "level" : -1,
             "categories" : ["bug"],
             "visits_stmts" : true
         },
         {
             "name"  : "detaching-member",
-            "level" : 3,
+            "level" : -1,
             "categories" : ["containers", "performance"],
             "visits_stmts" : true
         },
         {
             "name"  : "thread-with-slots",
-            "level" : 3,
+            "level" : -1,
             "categories" : ["bug"],
             "visits_decls" : true,
             "visits_stmts" : true
         },
         {
             "name"  : "reserve-candidates",
-            "level" : 3,
+            "level" : -1,
             "categories" : ["containers"],
             "visits_stmts" : true
         }

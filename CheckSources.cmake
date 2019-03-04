@@ -1,5 +1,7 @@
 set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/assert-with-side-effects.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/container-inside-loop.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/detaching-member.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/ifndef-define-typo.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficient-qlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
@@ -9,7 +11,10 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keywords.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt4-qstring-from-array.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/raw-environment-function.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/reserve-candidates.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/thread-with-slots.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/tr-non-literal.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/unneeded-cast.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-by-name.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-not-normalized.cpp
@@ -74,11 +79,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/rule-of-three.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/static-pmf.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level2/virtual-call-ctor.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/assert-with-side-effects.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/detaching-member.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/reserve-candidates.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/thread-with-slots.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level3/unneeded-cast.cpp
 )
 
 if(HAS_STD_REGEX OR CLAZY_BUILD_WITH_CLANG)

@@ -10,4 +10,4 @@ Tries to find `Q_ASSERT`s with side-effects. Asserts are compiled-out in release
 
 #### Pitfalls
 
-As this is a level3 check, it will have many false positives and might be buggy. Patches accepted!
+This check is experimental and will have many false positives and might be buggy. Patches accepted!

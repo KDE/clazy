@@ -181,7 +181,7 @@ RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context,
     RegisteredCheck::List result;
 
     // #1 Check if a level was specified
-    static const vector<string> levels = { "level0", "level1", "level2", "level3", "level4" };
+    static const vector<string> levels = { "level0", "level1", "level2" };
     const int numLevels = levels.size();
     CheckLevel requestedLevel = CheckLevelUndefined;
     for (int i = 0; i < numLevels; ++i) {

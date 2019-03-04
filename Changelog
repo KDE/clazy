@@ -107,3 +107,5 @@
 
 
 * v1.6 (, 2019)
+  - Moved all level3 checks to manual level. Doesn't make sense to enable all of them. Each one must be
+  carefully considered.

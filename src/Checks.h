@@ -27,7 +27,9 @@
  */
 
 #include "checkmanager.h"
+#include "checks/manuallevel/assert-with-side-effects.h"
 #include "checks/manuallevel/container-inside-loop.h"
+#include "checks/manuallevel/detaching-member.h"
 #include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
@@ -37,7 +39,10 @@
 #include "checks/manuallevel/qt-keywords.h"
 #include "checks/manuallevel/qt4-qstring-from-array.h"
 #include "checks/manuallevel/raw-environment-function.h"
+#include "checks/manuallevel/reserve-candidates.h"
+#include "checks/manuallevel/thread-with-slots.h"
 #include "checks/manuallevel/tr-non-literal.h"
+#include "checks/manuallevel/unneeded-cast.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/connect-not-normalized.h"
@@ -102,11 +107,6 @@
 #include "checks/level2/rule-of-three.h"
 #include "checks/level2/static-pmf.h"
 #include "checks/level2/virtual-call-ctor.h"
-#include "checks/level3/assert-with-side-effects.h"
-#include "checks/level3/detaching-member.h"
-#include "checks/level3/reserve-candidates.h"
-#include "checks/level3/thread-with-slots.h"
-#include "checks/level3/unneeded-cast.h"
 
 template <typename T>
 RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options = RegisteredCheck::Option_None)
@@ -117,7 +117,9 @@ RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Optio
 
 void CheckManager::registerChecks()
 {
+    registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
@@ -129,7 +131,10 @@ void CheckManager::registerChecks()
     registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
@@ -209,9 +214,4 @@ void CheckManager::registerChecks()
     registerCheck(check<RuleOfThree>("rule-of-three", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<StaticPmf>("static-pmf", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<VirtualCallCtor>("virtual-call-ctor", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<DetachingMember>("detaching-member", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<ReserveCandidates>("reserve-candidates", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<ThreadWithSlots>("thread-with-slots", CheckLevel3,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<UnneededCast>("unneeded-cast", CheckLevel3,  RegisteredCheck::Option_VisitsStmts));
 }

@@ -1,5 +1,7 @@
 SET(README_manuallevel_FILES
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-assert-with-side-effects.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-container-inside-loop.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-member.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-ifndef-define-typo.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-inefficient-qlist.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md
@@ -9,7 +11,10 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-reserve-candidates.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-thread-with-slots.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-tr-non-literal.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md
 )
 
 SET(README_LEVEL0_FILES
@@ -84,12 +89,3 @@ SET(README_LEVEL2_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-static-pmf.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-virtual-call-ctor.md
 )
-
-SET(README_LEVEL3_FILES
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-assert-with-side-effects.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-member.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-reserve-candidates.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-thread-with-slots.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md
-)
-

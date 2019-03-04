@@ -382,7 +382,7 @@ def create_unittests(checks):
 
 #-------------------------------------------------------------------------------
 def search_in_all_levels(filename):
-    for level in ['manuallevel', 'level0', 'level1', 'level2', 'level3']:
+    for level in ['manuallevel', 'level0', 'level1', 'level2']:
         complete_filename = clazy_source_path() + 'src/checks/' + level + '/' + filename
         if os.path.exists(complete_filename):
             return complete_filename

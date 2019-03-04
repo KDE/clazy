@@ -210,13 +210,14 @@ There are many checks and they are divided in levels:
 - level0: Very stable checks, 99.99% safe, mostly no false-positives, very desirable
 - level1: The default level. Very similar to level 0, slightly more false-positives but very few.
 - level2: Also very few false-positives, but contains noisy checks which not everyone agree should be default.
-- level3: Contains checks with high rate of false-positives.
-- manual: Checks here need to be enabled explicitly, as they don't belong to any level. Checks here are very stable and have very few false-positives.
+- manual: Checks here need to be enabled explicitly, as they don't belong to any level. They can be very stable or very unstable.
 
 clazy runs all checks from level1 by default.
 
 - Checks from Manual Level:
+    - [assert-with-side-effects](docs/checks/README-assert-with-side-effects.md)
     - [container-inside-loop](docs/checks/README-container-inside-loop.md)
+    - [detaching-member](docs/checks/README-detaching-member.md)
     - [ifndef-define-typo](docs/checks/README-ifndef-define-typo.md)
     - [inefficient-qlist](docs/checks/README-inefficient-qlist.md)
     - [isempty-vs-count](docs/checks/README-isempty-vs-count.md)
@@ -226,7 +227,10 @@ clazy runs all checks from level1 by default.
     - [qt-keywords](docs/checks/README-qt-keywords.md)    (fix-qt-keywords)
     - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
     - [raw-environment-function](docs/checks/README-raw-environment-function.md)
+    - [reserve-candidates](docs/checks/README-reserve-candidates.md)
+    - [thread-with-slots](docs/checks/README-thread-with-slots.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)
+    - [unneeded-cast](docs/checks/README-unneeded-cast.md)
 
 - Checks from Level 0:
     - [connect-by-name](docs/checks/README-connect-by-name.md)
@@ -297,13 +301,6 @@ clazy runs all checks from level1 by default.
     - [rule-of-three](docs/checks/README-rule-of-three.md)
     - [static-pmf](docs/checks/README-static-pmf.md)
     - [virtual-call-ctor](docs/checks/README-virtual-call-ctor.md)
-
-- Checks from Level 3:
-    - [assert-with-side-effects](docs/checks/README-assert-with-side-effects.md)
-    - [detaching-member](docs/checks/README-detaching-member.md)
-    - [reserve-candidates](docs/checks/README-reserve-candidates.md)
-    - [thread-with-slots](docs/checks/README-thread-with-slots.md)
-    - [unneeded-cast](docs/checks/README-unneeded-cast.md)
 
 # Selecting which checks to enable
 
