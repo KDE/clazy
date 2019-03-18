@@ -171,7 +171,7 @@ $ brew install --with-clang llvm
 
 # Setting up your project to build with clazy
 
-Note: Wherever `clazy` it mentioned, replace with `clazy-cl.bat` if you're on Windows, or replace with `Clazy-x86_64.AppImage` if you're using AppImage.
+Note: Wherever `clazy` is mentioned, replace with `clazy-cl.bat` if you're on Windows, or replace with `Clazy-x86_64.AppImage` if you're using AppImage.
 Note: If you prefer running clazy over a JSON compilation database instead of using it as a plugin, jump to [clazy-standalone](#clazy-standalone-and-json-database-support).
 
 You should now have the clazy command available to you, in `<prefix>/bin/`.
