@@ -125,17 +125,17 @@ public:
             } else if (isSlot) {
                 m_individualSlots.push_back(loc.getRawEncoding());
             } else if (isInvokable) {
-                m_individualInvokables.push_back(loc.getRawEncoding());
+                m_invokables.push_back(loc.getRawEncoding());
             } else if (isScriptable) {
-                m_individualScriptables.push_back(loc.getRawEncoding());
+                m_scriptables.push_back(loc.getRawEncoding());
             }
         }
     }
 
     vector<unsigned> m_individualSignals; // Q_SIGNAL
     vector<unsigned> m_individualSlots;   // Q_SLOT
-    vector<unsigned> m_individualInvokables; // Q_INVOKABLE
-    vector<unsigned> m_individualScriptables; // Q_SCRIPTABLE
+    vector<unsigned> m_invokables; // Q_INVOKABLE
+    vector<unsigned> m_scriptables; // Q_SCRIPTABLE
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
@@ -224,13 +224,13 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     }
 
     // Process Q_INVOKABLE:
-    for (auto loc : m_preprocessorCallbacks->m_individualInvokables) {
+    for (auto loc : m_preprocessorCallbacks->m_invokables) {
         if (loc == methodLoc.getRawEncoding())
             return QtAccessSpecifier_Invokable;
     }
 
     // Process Q_SCRIPTABLE:
-    for (auto loc : m_preprocessorCallbacks->m_individualScriptables) {
+    for (auto loc : m_preprocessorCallbacks->m_scriptables) {
         if (loc == methodLoc.getRawEncoding())
             return QtAccessSpecifier_Scriptable;
     }
