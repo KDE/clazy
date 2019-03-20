@@ -103,7 +103,8 @@ public:
         const bool isSlot = (isSlots || isSignals) ? false : name == "Q_SLOT";
         const bool isSignal = (isSlots || isSignals || isSlot) ? false : name == "Q_SIGNAL";
         const bool isInvokable = (isSlots || isSignals || isSlot || isSignal) ? false : name == "Q_INVOKABLE";
-        if (!isSlots && !isSignals && !isSlot && !isSignal & !isInvokable)
+        const bool isScriptable = (isSlots || isSignals || isSlot || isSignal || isInvokable) ? false : name == "Q_SCRIPTABLE";
+        if (!isSlots && !isSignals && !isSlot && !isSignal && !isInvokable && !isScriptable)
             return;
 
         SourceLocation loc = range.getBegin();
@@ -125,6 +126,8 @@ public:
                 m_individualSlots.push_back(loc.getRawEncoding());
             } else if (isInvokable) {
                 m_individualInvokables.push_back(loc.getRawEncoding());
+            } else if (isScriptable) {
+                m_individualScriptables.push_back(loc.getRawEncoding());
             }
         }
     }
@@ -132,6 +135,7 @@ public:
     vector<unsigned> m_individualSignals; // Q_SIGNAL
     vector<unsigned> m_individualSlots;   // Q_SLOT
     vector<unsigned> m_individualInvokables; // Q_INVOKABLE
+    vector<unsigned> m_individualScriptables; // Q_SCRIPTABLE
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
@@ -225,6 +229,12 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
             return QtAccessSpecifier_Invokable;
     }
 
+    // Process Q_SCRIPTABLE:
+    for (auto loc : m_preprocessorCallbacks->m_individualScriptables) {
+        if (loc == methodLoc.getRawEncoding())
+            return QtAccessSpecifier_Scriptable;
+    }
+
     // Process Q_SLOTS and Q_SIGNALS:
 
     auto it = m_specifiersMap.find(record);
@@ -261,7 +271,9 @@ llvm::StringRef AccessSpecifierManager::qtAccessSpecifierTypeStr(QtAccessSpecifi
         return "signal";
     case QtAccessSpecifier_Invokable:
         return "invokable";
-    default:
-        return "";
+    case QtAccessSpecifier_Scriptable:
+        return "scriptable";
     }
+
+    return "";
 }
