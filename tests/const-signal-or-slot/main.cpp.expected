@@ -1,4 +1,4 @@
 const-signal-or-slot/main.cpp:11:5: warning: getter MyObject::slot1 possibly mismarked as a slot [-Wclazy-const-signal-or-slot]
 const-signal-or-slot/main.cpp:14:5: warning: getter MyObject::slot3 possibly mismarked as a slot [-Wclazy-const-signal-or-slot]
-const-signal-or-slot/main.cpp:19:5: warning: signal MyObject::signal1 shouldn't be const [-Wclazy-const-signal-or-slot]
-const-signal-or-slot/main.cpp:37:5: warning: MyObject::getter1 is not a slot, and is possibly a getter [-Wclazy-const-signal-or-slot]
+const-signal-or-slot/main.cpp:21:5: warning: signal MyObject::signal1 shouldn't be const [-Wclazy-const-signal-or-slot]
+const-signal-or-slot/main.cpp:44:5: warning: MyObject::getter1 is not a slot, and is possibly a getter [-Wclazy-const-signal-or-slot]

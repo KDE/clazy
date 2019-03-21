@@ -15,9 +15,16 @@ public Q_SLOTS:
     bool slot4(); // OK
     const int slot5(); // OK
     void slot6() const {} // OK
+    Q_INVOKABLE int invokable1() const; // OK
+    Q_SCRIPTABLE int scriptable1() const; // OK
 Q_SIGNALS:
     void signal1() const; // Warn
     void signal2(); // OK
+    Q_INVOKABLE int invokable2() const; // OK
+    Q_SCRIPTABLE int scriptable2() const; // OK
+public:
+    Q_INVOKABLE int invokable3() const; // OK
+    Q_SCRIPTABLE int scriptable3() const; // OK
 
 };
 
