@@ -24,7 +24,7 @@
 # This is my quick and dirty script to generate clazy app images on each release
 # Requires iamsergio/clazy-centos68 docker image to work
 
-import sys, os, getpass
+import sys, os
 
 CLAZY_SHA1 = ''
 WORK_FOLDER = '/tmp/clazy_work/'
