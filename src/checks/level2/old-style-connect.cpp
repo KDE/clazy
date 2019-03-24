@@ -139,7 +139,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
     else
         classification |= ConnectFlag_OldStyle;
 
-    const int numParams = connectFunc->getNumParams();
+    const unsigned int numParams = connectFunc->getNumParams();
 
     if (classification & ConnectFlag_Connect) {
         if (numParams == 5) {
@@ -318,23 +318,25 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
         return {};
     }
 
+    const SourceLocation locStart = clazy::getLocStart(call);
+
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 2 args";
-        queueManualFixitWarning(clazy::getLocStart(call), msg);
+        queueManualFixitWarning(locStart, msg);
         return {};
     }
 
     if (classification & ConnectFlag_3ArgsDisconnect) {
         // Not implemented yet
         string msg = "Fix it not implemented for disconnect with 3 args";
-        queueManualFixitWarning(clazy::getLocStart(call), msg);
+        queueManualFixitWarning(locStart, msg);
         return {};
     }
 
     if (classification & ConnectFlag_QMessageBoxOpen) {
         string msg = "Fix it not implemented for QMessageBox::open()";
-        queueManualFixitWarning(clazy::getLocStart(call), msg);
+        queueManualFixitWarning(locStart, msg);
         return {};
     }
 
@@ -454,13 +456,13 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 
             string qualifiedName;
             auto contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
-            const bool isInInclude = sm().getMainFileID() != sm().getFileID(clazy::getLocStart(call));
+            const bool isInInclude = sm().getMainFileID() != sm().getFileID(locStart);
 
             if (isSpecialProtectedCase && contextRecord) {
                 // We're inside a derived class trying to take address of a protected base member, must use &Derived::method instead of &Base::method.
                 qualifiedName = contextRecord->getNameAsString() + "::" + methodDecl->getNameAsString();
             } else {
-                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, clazy::getLocStart(call), !isInInclude); // (In includes ignore using directives)
+                qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, locStart, !isInInclude); // (In includes ignore using directives)
             }
 
             CharSourceRange expansionRange = clazy::getImmediateExpansionRange(s, sm());
