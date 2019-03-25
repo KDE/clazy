@@ -113,8 +113,12 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);
 
     m_context->lastDecl = decl;
-    if (auto mdecl = dyn_cast<CXXMethodDecl>(decl))
-        m_context->lastMethodDecl = mdecl;
+
+    if (auto fdecl = dyn_cast<FunctionDecl>(decl)) {
+        m_context->lastFunctionDecl = fdecl;
+        if (auto mdecl = dyn_cast<CXXMethodDecl>(fdecl))
+            m_context->lastMethodDecl = mdecl;
+    }
 
     for (CheckBase *check : m_checksToVisitDecls) {
         if (!(isFromIgnorableInclude && check->canIgnoreIncludes()))

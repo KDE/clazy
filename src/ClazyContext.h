@@ -184,6 +184,7 @@ public:
     bool allFixitsEnabled = false;
     std::string requestedFixitName;
     clang::CXXMethodDecl *lastMethodDecl = nullptr;
+    clang::FunctionDecl *lastFunctionDecl = nullptr;
     clang::Decl *lastDecl = nullptr;
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
