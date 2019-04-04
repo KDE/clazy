@@ -70,7 +70,10 @@ private:
     std::string signalOrSlotNameFromMacro(clang::SourceLocation macroLoc);
     std::vector<clang::FixItHint> fixits(int classification, clang::CallExpr *);
     bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
-    int classifyConnect(clang::FunctionDecl *connectFunc, clang::CallExpr *connectCall);
+
+    template <typename T>
+    int classifyConnect(clang::FunctionDecl *connectFunc, T *connectCall) const;
+
     bool isQPointer(clang::Expr *expr) const;
     bool isPrivateSlot(const std::string &name) const;
     PrivateSlot::List m_privateSlots;

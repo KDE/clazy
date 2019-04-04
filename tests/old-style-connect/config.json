@@ -36,6 +36,10 @@
         {
             "filename" : "q_private_slot.cpp",
             "link" : true
+        },
+        {
+            "filename" : "port_qsignalspy.cpp",
+            "link" : true
         }
     ]
 }

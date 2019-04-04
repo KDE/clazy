@@ -97,7 +97,8 @@ enum ConnectFlag {
     ConnectFlag_QStateAddTransition = 0x400,
     ConnectFlag_QMenuAddAction = 0x800,
     ConnectFlag_QMessageBoxOpen = 0x1000,
-    ConnectFlag_Bogus = 0x2000
+    ConnectFlag_QSignalSpy = 0x2000,
+    ConnectFlag_Bogus = 0x4000
 };
 
 static bool classIsOk(StringRef className)
@@ -113,7 +114,8 @@ OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
     context->enableAccessSpecifierManager();
 }
 
-int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connectCall)
+template <typename T>
+int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) const
 {
     int classification = ConnectFlag_None;
 
@@ -130,6 +132,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
         classification |= ConnectFlag_QMenuAddAction;
     else if (methodName == "QMessageBox::open")
         classification |= ConnectFlag_QMessageBoxOpen;
+    else if (methodName == "QSignalSpy::QSignalSpy")
+        classification |= ConnectFlag_QSignalSpy;
 
     if (classification == ConnectFlag_None)
         return classification;
@@ -185,6 +189,8 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, CallExpr *connec
             classification |= ConnectFlag_OldStyleButNonLiteral;
         } else if ((classification & ConnectFlag_QMessageBoxOpen) && numLiterals != 1) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
+        } else if ((classification & ConnectFlag_QSignalSpy) && numLiterals != 1) {
+            classification |= ConnectFlag_OldStyleButNonLiteral;
         }
     }
 
@@ -221,14 +227,16 @@ bool OldStyleConnect::isPrivateSlot(const string &name) const
 void OldStyleConnect::VisitStmt(Stmt *s)
 {
     auto call = dyn_cast<CallExpr>(s);
-    if (!call)
+    auto ctorExpr = call ? nullptr : dyn_cast<CXXConstructExpr>(s);
+    if (!call && !ctorExpr)
         return;
 
     if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent() &&
         clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") // Don't warn of stuff inside qobject.h
         return;
 
-    FunctionDecl *function = call->getDirectCallee();
+    FunctionDecl *function = call ? call->getDirectCallee()
+                                  : ctorExpr->getConstructor();
     if (!function)
         return;
 
@@ -236,7 +244,9 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!method)
         return;
 
-    const int classification = classifyConnect(method, call);
+    const int classification = call ? classifyConnect(method, call)
+                                    : classifyConnect(method, ctorExpr);
+
     if (!(classification & ConnectFlag_OldStyle))
         return;
 
@@ -310,7 +320,7 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) cons
 
 vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
 {
-    if (!isFixitEnabled())
+    if (!isFixitEnabled() || !call)
         return {};
 
     if (!call) {
