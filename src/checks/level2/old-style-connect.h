@@ -68,7 +68,10 @@ protected:
     void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr) override;
 private:
     std::string signalOrSlotNameFromMacro(clang::SourceLocation macroLoc);
-    std::vector<clang::FixItHint> fixits(int classification, clang::CallExpr *);
+
+    template <typename T>
+    std::vector<clang::FixItHint> fixits(int classification, T *callOrCtor);
+
     bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
 
     template <typename T>

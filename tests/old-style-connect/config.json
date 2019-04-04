@@ -40,6 +40,11 @@
         {
             "filename" : "port_qsignalspy.cpp",
             "link" : true
+        },
+        {
+            "filename" : "port_qsignalspy.cpp_fixed.cpp",
+            "link" : false,
+            "isFixedFile" : true
         }
     ]
 }

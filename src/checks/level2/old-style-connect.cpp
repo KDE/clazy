@@ -258,7 +258,8 @@ void OldStyleConnect::VisitStmt(Stmt *s)
         return;
     }
 
-    emitWarning(clazy::getLocStart(s), "Old Style Connect", fixits(classification, call));
+    emitWarning(clazy::getLocStart(s), "Old Style Connect", call ? fixits(classification, call)
+                                                                 : fixits(classification, ctorExpr));
 }
 
 void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
@@ -318,17 +319,18 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) cons
     return macroName == "SIGNAL" || macroName == "SLOT";
 }
 
-vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
+template <typename T>
+vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor)
 {
-    if (!isFixitEnabled() || !call)
+    if (!isFixitEnabled())
         return {};
 
-    if (!call) {
+    if (!callOrCtor) {
         llvm::errs() << "Call is invalid\n";
         return {};
     }
 
-    const SourceLocation locStart = clazy::getLocStart(call);
+    const SourceLocation locStart = clazy::getLocStart(callOrCtor);
 
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
@@ -355,14 +357,14 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
     string implicitCallee;
     string macroName;
     CXXMethodDecl *senderMethod = nullptr;
-    for (auto arg : call->arguments()) {
+    for (auto arg : callOrCtor->arguments()) {
         SourceLocation s = clazy::getLocStart(arg);
         static const CXXRecordDecl *lastRecordDecl = nullptr;
         if (isSignalOrSlot(s, macroName)) {
             macroNum++;
             if (!lastRecordDecl && (classification & ConnectFlag_4ArgsConnect)) {
                 // This means it's a connect with implicit receiver
-                lastRecordDecl = Utils::recordForMemberCall(dyn_cast<CXXMemberCallExpr>(call), implicitCallee);
+                lastRecordDecl = Utils::recordForMemberCall(dyn_cast<CXXMemberCallExpr>(callOrCtor), implicitCallee);
 
                 if (macroNum == 1)
                     llvm::errs() << "This first macro shouldn't enter this path";
@@ -406,7 +408,6 @@ vector<FixItHint> OldStyleConnect::fixits(int classification, CallExpr *call)
                 AccessSpecifierManager *a = m_context->accessSpecifierManager;
                 if (!a)
                     return {};
-
                 const bool isSignal = a->qtAccessSpecifierType(methods[0]) == QtAccessSpecifier_Signal;
                 if (isSignal && macroName == "SLOT") {
                     // The method is actually a signal and the user used SLOT()
