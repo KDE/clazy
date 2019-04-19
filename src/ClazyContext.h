@@ -52,6 +52,7 @@ class Decl;
 
 class AccessSpecifierManager;
 class PreProcessorVisitor;
+class FixItExporter;
 
 class ClazyContext
 {
@@ -181,6 +182,7 @@ public:
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;
     clang::FixItRewriter *rewriter = nullptr;
+    FixItExporter *exporter = nullptr;
     bool allFixitsEnabled = false;
     std::string requestedFixitName;
     clang::CXXMethodDecl *lastMethodDecl = nullptr;

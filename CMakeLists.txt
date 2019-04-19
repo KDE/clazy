@@ -113,6 +113,9 @@ macro(link_to_llvm name is_standalone)
   if(WIN32)
     target_link_libraries(${name} version.lib)
   endif()
+    target_link_libraries(${name} clangTooling)
+    target_link_libraries(${name} clangToolingCore)
+    target_link_libraries(${name} clangToolingRefactor)
 endmacro()
 
 macro(add_clang_plugin name)
@@ -216,6 +219,9 @@ else()
     ${CLAZY_PLUGIN_SRCS}
 
     LINK_LIBS
+    clangToolingCore
+    clangToolingInclusions
+    clangToolingRefactor
     clangFrontend
     clangDriver
     clangCodeGen

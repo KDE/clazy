@@ -22,6 +22,7 @@
 #include "connect-3arg-lambda.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
