@@ -28,6 +28,7 @@
 #include "checkbase.h"
 #include "AccessSpecifierManager.h"
 #include "SourceCompatibilityHelpers.h"
+#include "FixItExporter.h"
 
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Frontend/CompilerInstance.h>
@@ -167,6 +168,9 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 
 void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
 {
+    // FIXME: EndSourceFile() is called automatically, but not BeginsSourceFile()
+    m_context->exporter->BeginSourceFile(clang::LangOptions());
+
     if ((m_context->options & ClazyContext::ClazyOption_OnlyQt) && !m_context->isQt())
         return;
 

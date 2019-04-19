@@ -20,13 +20,14 @@
 */
 
 #include "AccessSpecifierManager.h"
-#include "PreProcessorVisitor.h"
 #include "ClazyContext.h"
+#include "PreProcessorVisitor.h"
+#include "FixItExporter.h"
 
 #include <clang/AST/ParentMap.h>
-#include <clang/Rewrite/Frontend/FixItRewriter.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
+#include <clang/Rewrite/Frontend/FixItRewriter.h>
 #include <llvm/Support/Regex.h>
 
 #include <stdlib.h>
@@ -89,6 +90,9 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
     if (fixitsEnabled() && !(options & ClazyOption_NoFixitsAutoWrite))
         rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
                                      ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()));
+
+    exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(),
+                                 new ClazyFixItOptions(fixitsAreInplace()));
 }
 
 ClazyContext::~ClazyContext()
@@ -96,6 +100,11 @@ ClazyContext::~ClazyContext()
     //delete preprocessorVisitor; // we don't own it
     delete accessSpecifierManager;
     delete parentMap;
+
+    if (exporter) {
+        exporter->Export();
+        delete exporter;
+    }
 
     if (rewriter) {
         rewriter->WriteFixedFiles();
