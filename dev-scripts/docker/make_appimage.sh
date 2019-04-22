@@ -5,6 +5,9 @@
 #   $1 clazy sha1 to build
 #   $2 user uid to chown the files to before leaving docker
 
+# edit here the LLVM version used
+export PATH=$PATH:/llvm800/bin/
+
 cp -r /clazy.AppDir /tmp/clazy_work/
 
 cd /llvm
