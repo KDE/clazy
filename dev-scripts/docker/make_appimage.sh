@@ -8,6 +8,9 @@
 # edit here the LLVM version used
 export PATH=$PATH:/llvm800/bin/
 
+export CC=gcc
+export CXX=g++
+
 cp -r /clazy.AppDir /tmp/clazy_work/
 
 cd /llvm
