@@ -49,7 +49,7 @@ You can get clazy from:
 # Pre-built binaries
 
 Pre-built binaries are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
-Currently MSVC2015, MSVC2017 and Linux AppImage packages are provided. All of them are based on clang 7.0.
+Currently MSVC2015, MSVC2017 (based on clang-7.0) and Linux AppImage packages (based on clang-8.0) are provided.
 
 # Build Instructions
 ## Linux
