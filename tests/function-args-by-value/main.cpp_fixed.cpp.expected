@@ -1,6 +1,6 @@
 #include <QtCore/QDebug>
 #include <QtGui/QColor>
-
+#include <atomic>
 
 
 struct Trivial {
