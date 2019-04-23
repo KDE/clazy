@@ -251,7 +251,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             }
         }
 
-        emitWarning(clazy::getLocStart(stm), msg, fixits);
+        maybeEmitWarning(clazy::getLocStart(stm), msg, fixits);
     } else {
         vector<FixItHint> fixits;
         if (clazy::hasChildren(ctorExpr)) {
@@ -293,7 +293,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             }
         }
 
-        emitWarning(clazy::getLocStart(stm), msg, fixits);
+        maybeEmitWarning(clazy::getLocStart(stm), msg, fixits);
     }
 }
 
@@ -302,7 +302,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
     StringLiteral *lt = stringLiteralForCall(begin);
     if (replacee == "QLatin1String") {
         if (lt && !Utils::isAscii(lt)) {
-            emitWarning(clazy::getLocStart(lt), "Don't use QLatin1String with non-latin1 literals");
+            maybeEmitWarning(clazy::getLocStart(lt), "Don't use QLatin1String with non-latin1 literals");
             return {};
         }
     }
@@ -517,7 +517,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     }
 
     string msg = string("QString(const char*) being called");
-    emitWarning(clazy::getLocStart(stm), msg, fixits);
+    maybeEmitWarning(clazy::getLocStart(stm), msg, fixits);
 }
 
 void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
@@ -552,7 +552,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (!ternaries.empty()) {
         auto ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {
-            emitWarning(clazy::getLocStart(stmt), string("QString::fromLatin1() being passed a literal"));
+            maybeEmitWarning(clazy::getLocStart(stmt), string("QString::fromLatin1() being passed a literal"));
         }
 
         return;
@@ -566,9 +566,9 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     }
 
     if (clazy::name(functionDecl) == "fromLatin1") {
-        emitWarning(clazy::getLocStart(stmt), string("QString::fromLatin1() being passed a literal"), fixits);
+        maybeEmitWarning(clazy::getLocStart(stmt), string("QString::fromLatin1() being passed a literal"), fixits);
     } else {
-        emitWarning(clazy::getLocStart(stmt), string("QString::fromUtf8() being passed a literal"), fixits);
+        maybeEmitWarning(clazy::getLocStart(stmt), string("QString::fromUtf8() being passed a literal"), fixits);
     }
 }
 
@@ -594,5 +594,16 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
                                     : fixItReplaceWordWithWordInTernary(ternary);
     }
 
-    emitWarning(clazy::getLocStart(stmt), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
+    maybeEmitWarning(clazy::getLocStart(stmt), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
+}
+
+void QStringAllocations::maybeEmitWarning(SourceLocation loc, string error, const std::vector<FixItHint> &fixits)
+{
+    if (clazy::isUIFile(loc, sm())) {
+        // Don't bother warning for generated UI files.
+        // We do the check here instead of at the beginning so users that don't use UI files don't have to pay the performance price.
+        return;
+    }
+
+    emitWarning(loc, error, fixits);
 }
