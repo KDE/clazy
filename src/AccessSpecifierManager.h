@@ -64,8 +64,7 @@ enum QtAccessSpecifierType
     QtAccessSpecifier_Unknown,
     QtAccessSpecifier_Slot,
     QtAccessSpecifier_Signal,
-    QtAccessSpecifier_Invokable,
-    QtAccessSpecifier_Scriptable
+    QtAccessSpecifier_Invokable
 };
 
 struct ClazyAccessSpecifier
@@ -87,6 +86,11 @@ public:
      * Returns if a method is a signal, a slot, or neither.
      */
     QtAccessSpecifierType qtAccessSpecifierType(const clang::CXXMethodDecl*) const;
+
+    /**
+     * Returns if a method is scriptable (Q_SCRIPTABLE)
+     */
+    bool isScriptable(const clang::CXXMethodDecl*) const;
 
     /**
      * Returns a string representations of a Qt Access Specifier Type

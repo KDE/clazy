@@ -103,7 +103,7 @@ public:
         const bool isSlot = (isSlots || isSignals) ? false : name == "Q_SLOT";
         const bool isSignal = (isSlots || isSignals || isSlot) ? false : name == "Q_SIGNAL";
         const bool isInvokable = (isSlots || isSignals || isSlot || isSignal) ? false : name == "Q_INVOKABLE";
-        const bool isScriptable = (isSlots || isSignals || isSlot || isSignal || isInvokable) ? false : name == "Q_SCRIPTABLE";
+        const bool isScriptable = (isSlot || isSignal || isInvokable) ? false : name == "Q_SCRIPTABLE";
         if (!isSlots && !isSignals && !isSlot && !isSignal && !isInvokable && !isScriptable)
             return;
 
@@ -229,12 +229,6 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
             return QtAccessSpecifier_Invokable;
     }
 
-    // Process Q_SCRIPTABLE:
-    for (auto loc : m_preprocessorCallbacks->m_scriptables) {
-        if (loc == methodLoc.getRawEncoding())
-            return QtAccessSpecifier_Scriptable;
-    }
-
     // Process Q_SLOTS and Q_SIGNALS:
 
     auto it = m_specifiersMap.find(record);
@@ -259,6 +253,23 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     return (*i).qtAccessSpecifier;
 }
 
+bool AccessSpecifierManager::isScriptable(const CXXMethodDecl *method) const
+{
+    if (!method)
+        return false;
+
+    const SourceLocation methodLoc = clazy::getLocStart(method);
+     if (methodLoc.isMacroID())
+         return false;
+
+    for (auto loc : m_preprocessorCallbacks->m_scriptables) {
+        if (loc == methodLoc.getRawEncoding())
+            return true;
+    }
+
+    return false;
+}
+
 llvm::StringRef AccessSpecifierManager::qtAccessSpecifierTypeStr(QtAccessSpecifierType t) const
 {
     switch (t) {
@@ -271,8 +282,6 @@ llvm::StringRef AccessSpecifierManager::qtAccessSpecifierTypeStr(QtAccessSpecifi
         return "signal";
     case QtAccessSpecifier_Invokable:
         return "invokable";
-    case QtAccessSpecifier_Scriptable:
-        return "scriptable";
     }
 
     return "";

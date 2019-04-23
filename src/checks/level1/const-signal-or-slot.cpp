@@ -92,9 +92,18 @@ void ConstSignalOrSlot::VisitDecl(Decl *decl)
 
     QtAccessSpecifierType specifierType = a->qtAccessSpecifierType(method);
 
-    if (specifierType == QtAccessSpecifier_Slot && !method->getReturnType()->isVoidType()) {
+    const bool isSlot = specifierType == QtAccessSpecifier_Slot;
+    const bool isSignal = specifierType == QtAccessSpecifier_Signal;
+
+    if (!isSlot && !isSignal)
+        return;
+
+    if (a->isScriptable(method))
+        return;
+
+    if (isSlot && !method->getReturnType()->isVoidType()) {
         emitWarning(decl, "getter " + method->getQualifiedNameAsString() + " possibly mismarked as a slot");
-    } else if (specifierType == QtAccessSpecifier_Signal) {
+    } else if (isSignal) {
         emitWarning(decl, "signal " + method->getQualifiedNameAsString() + " shouldn't be const");
     }
 }
