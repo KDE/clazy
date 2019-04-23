@@ -599,5 +599,11 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 
 void QStringAllocations::maybeEmitWarning(SourceLocation loc, string error, const std::vector<FixItHint> &fixits)
 {
+    if (clazy::isUIFile(loc, sm())) {
+        // Don't bother warning for generated UI files.
+        // We do the check here instead of at the beginning so users that don't use UI files don't have to pay the performance price.
+        return;
+    }
+
     emitWarning(loc, error, fixits);
 }
