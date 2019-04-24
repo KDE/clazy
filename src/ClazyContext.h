@@ -74,6 +74,7 @@ public:
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
+                          const std::string &exportFixes,
                           ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
@@ -95,6 +96,11 @@ public:
     bool fixitsEnabled() const
     {
         return allFixitsEnabled || !requestedFixitName.empty();
+    }
+
+    bool exportFixesEnabled() const
+    {
+        return !exportFixes.empty();
     }
 
     bool isQtDeveloper() const
@@ -185,6 +191,7 @@ public:
     FixItExporter *exporter = nullptr;
     bool allFixitsEnabled = false;
     std::string requestedFixitName;
+    std::string exportFixes;
     clang::CXXMethodDecl *lastMethodDecl = nullptr;
     clang::FunctionDecl *lastFunctionDecl = nullptr;
     clang::Decl *lastDecl = nullptr;

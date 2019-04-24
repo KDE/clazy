@@ -29,11 +29,12 @@ namespace clang {
 class FixItOptions;
 }
 
-class FixItExporter : public clang::DiagnosticConsumer
+class FixItExporter
+    : public clang::DiagnosticConsumer
 {
 public:
     FixItExporter(clang::DiagnosticsEngine &DiagEngine, clang::SourceManager &SourceMgr,
-                  const clang::LangOptions &LangOpts, clang::FixItOptions *FixItOpts);
+                  const clang::LangOptions &LangOpts, const std::string &exportFixes);
 
     ~FixItExporter() override;
 
@@ -56,12 +57,14 @@ private:
     clang::DiagnosticsEngine &DiagEngine;
     clang::SourceManager &SourceMgr;
     const clang::LangOptions &LangOpts;
-    clang::FixItOptions *FixItOpts;
-    DiagnosticConsumer *Client;
+    const std::string exportFixes;
+    DiagnosticConsumer *Client = nullptr;
     std::unique_ptr<DiagnosticConsumer> Owner;
     clang::tooling::TranslationUnitDiagnostics TUDiag;
+    bool m_recordNotes = false;
     clang::tooling::Diagnostic ConvertDiagnostic(const clang::Diagnostic &Info);
     clang::tooling::Replacement ConvertFixIt(const clang::FixItHint &Hint);
+
 };
 
 #endif // CLAZY_FIX_IT_EXPORTER_H

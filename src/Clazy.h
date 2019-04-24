@@ -86,6 +86,7 @@ public:
     explicit ClazyStandaloneASTAction(const std::string &checkList,
                                       const std::string &headerFilter,
                                       const std::string &ignoreDirs,
+                                      const std::string &exportFixes,
                                       ClazyContext::ClazyOptions = ClazyContext::ClazyOption_None);
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
@@ -93,6 +94,7 @@ private:
     const std::string m_checkList;
     const std::string m_headerFilter;
     const std::string m_ignoreDirs;
+    const std::string m_exportFixes;
     const ClazyContext::ClazyOptions m_options;
 };
 

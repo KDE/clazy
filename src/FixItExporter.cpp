@@ -26,18 +26,16 @@
 #include <clang/Basic/SourceManager.h>
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
 
-#define DEBUG_FIX_IT_EXPORTER
-
-#ifdef DEBUG_FIX_IT_EXPORTER
-# include <iostream>
-#endif
+// #define DEBUG_FIX_IT_EXPORTER
 
 using namespace clang;
 
 FixItExporter::FixItExporter(DiagnosticsEngine &DiagEngine, SourceManager &SourceMgr,
-                             const LangOptions &LangOpts, FixItOptions *FixItOpts)
-    : DiagEngine(DiagEngine), SourceMgr(SourceMgr), LangOpts(LangOpts)
-    , FixItOpts(FixItOpts)
+                             const LangOptions &LangOpts, const std::string &exportFixes)
+    : DiagEngine(DiagEngine)
+    , SourceMgr(SourceMgr)
+    , LangOpts(LangOpts)
+    , exportFixes(exportFixes)
 {
     Owner = DiagEngine.takeClient();
     Client = DiagEngine.getClient();
@@ -46,7 +44,8 @@ FixItExporter::FixItExporter(DiagnosticsEngine &DiagEngine, SourceManager &Sourc
 
 FixItExporter::~FixItExporter()
 {
-    DiagEngine.setClient(Client, Owner.release() != nullptr);
+    if (Client)
+        DiagEngine.setClient(Client, Owner.release() != nullptr);
 }
 
 void FixItExporter::BeginSourceFile(const LangOptions &LangOpts, const Preprocessor *PP)
@@ -72,8 +71,10 @@ void FixItExporter::EndSourceFile()
 
 tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
 {
-    SmallString<100> TmpMessageText;
+    SmallString<256> TmpMessageText;
     Info.FormatDiagnostic(TmpMessageText);
+    // TODO: This returns an empty string: DiagEngine->getDiagnosticIDs()->getWarningOptionForDiag(Info.getID());
+    // HACK: capture it at the end of the message: Message text [check-name]
     const auto MessageText = TmpMessageText.slice(0, TmpMessageText.find_last_of('[') - 1).str();
     const auto CheckName = TmpMessageText.slice(TmpMessageText.find_last_of('[') + 3,
                                                 TmpMessageText.find_last_of(']')).str();
@@ -82,12 +83,15 @@ tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
     tooling::Diagnostic ToolingDiag(CheckName,
                                     tooling::Diagnostic::Warning,
                                     CurrentBuildDir);
+    // FIXME: Sometimes the file path is an empty string.
     ToolingDiag.Message = tooling::DiagnosticMessage(MessageText, SourceMgr, Info.getLocation());
     return ToolingDiag;
 }
 
 tooling::Replacement FixItExporter::ConvertFixIt(const FixItHint &Hint)
 {
+    // TODO: Proper handling of macros
+    // https://stackoverflow.com/questions/24062989/clang-fails-replacing-a-statement-if-it-contains-a-macro
     tooling::Replacement Replacement;
     if (Hint.CodeToInsert.empty()) {
         if (Hint.InsertFromRange.isValid()) {
@@ -98,7 +102,7 @@ tooling::Replacement FixItExporter::ConvertFixIt(const FixItHint &Hint)
                 _e = SourceMgr.getSpellingLoc(_e);
             clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, SourceMgr, LangOpts));
             StringRef Text(SourceMgr.getCharacterData(b),
-                           SourceMgr.getCharacterData(e)-SourceMgr.getCharacterData(b));
+                           SourceMgr.getCharacterData(e) - SourceMgr.getCharacterData(b));
             return tooling::Replacement(SourceMgr, Hint.RemoveRange, Text);
         }
         return tooling::Replacement(SourceMgr, Hint.RemoveRange, "");
@@ -111,45 +115,57 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
     // Default implementation (Warnings/errors count).
     DiagnosticConsumer::HandleDiagnostic(DiagLevel, Info);
 
-    // Let origianl client do it's handling
+    // Let original client do it's handling
     if (Client)
         Client->HandleDiagnostic(DiagLevel, Info);
 
-    // We only deal with warnings
-    if (DiagLevel != DiagnosticsEngine::Warning)
-        return;
-
-    // Convert and record this diagnostic
-    auto ToolingDiag = ConvertDiagnostic(Info);
-    for (unsigned Idx = 0, Last = Info.getNumFixItHints();
-         Idx < Last; ++Idx) {
-        const FixItHint &Hint = Info.getFixItHint(Idx);
-        const auto replacement = ConvertFixIt(Hint);
+    // Convert and record warning diagnostics and their notes
+    if (DiagLevel == DiagnosticsEngine::Warning) {
+        auto ToolingDiag = ConvertDiagnostic(Info);
+        for (unsigned Idx = 0, Last = Info.getNumFixItHints();
+             Idx < Last; ++Idx) {
+            const FixItHint &Hint = Info.getFixItHint(Idx);
+            const auto replacement = ConvertFixIt(Hint);
+#ifdef DEBUG_FIX_IT_EXPORTER
+            const auto FileName = SourceMgr.getFilename(Info.getLocation());
+            llvm::errs() << "Handling Fixit #" << Idx << " for " << FileName.str() << "\n";
+            llvm::errs() << "F: "
+                      << Hint.RemoveRange.getBegin().printToString(SourceMgr) << ":"
+                      << Hint.RemoveRange.getEnd().printToString(SourceMgr) << " "
+                      << Hint.InsertFromRange.getBegin().printToString(SourceMgr) << ":"
+                      << Hint.InsertFromRange.getEnd().printToString(SourceMgr) << " "
+                      << Hint.BeforePreviousInsertions << " "
+                      << Hint.CodeToInsert << "\n";
+            llvm::errs() << "R: " << replacement.toString() << "\n";
+#endif
+            auto &Replacements = ToolingDiag.Fix[replacement.getFilePath()];
+            auto error = Replacements.add(ConvertFixIt(Hint));
+            if (error) {
+                Diag(Info.getLocation(), diag::note_fixit_failed);
+            }
+        }
+        TUDiag.Diagnostics.push_back(ToolingDiag);
+        m_recordNotes = true;
+    }
+    // FIXME: We do not receive notes.
+    else if (DiagLevel == DiagnosticsEngine::Note && m_recordNotes) {
 #ifdef DEBUG_FIX_IT_EXPORTER
         const auto FileName = SourceMgr.getFilename(Info.getLocation());
-        std::cerr << "Handling Fixit #" << Idx << " for " << FileName.str() << std::endl;
-        std::cerr << "F: "
-                  << Hint.RemoveRange.getBegin().printToString(SourceMgr) << ":"
-                  << Hint.RemoveRange.getEnd().printToString(SourceMgr) << " "
-                  << Hint.InsertFromRange.getBegin().printToString(SourceMgr) << ":"
-                  << Hint.InsertFromRange.getEnd().printToString(SourceMgr) << " "
-                  << Hint.BeforePreviousInsertions << " "
-                  << Hint.CodeToInsert << std::endl;
-        std::cerr << "R: " << replacement.toString() << std::endl;
+        llvm::errs() << "Handling Note for " << FileName.str() << "\n";
 #endif
-        auto &Replacements = ToolingDiag.Fix[replacement.getFilePath()];
-        auto error = Replacements.add(ConvertFixIt(Hint));
-        if (error) {
-            Diag(Info.getLocation(), diag::note_fixit_failed);
-        }
+        auto diags = TUDiag.Diagnostics.back();
+        auto diag = ConvertDiagnostic(Info);
+        diags.Notes.append(1, diag.Message);
     }
-    TUDiag.Diagnostics.push_back(ToolingDiag);
+    else {
+        m_recordNotes = false;
+    }
 }
 
 void FixItExporter::Export()
 {
     std::error_code EC;
-    llvm::raw_fd_ostream OS(TUDiag.MainSourceFile + ".yaml", EC, llvm::sys::fs::F_None);
+    llvm::raw_fd_ostream OS(exportFixes, EC, llvm::sys::fs::F_None);
     llvm::yaml::Output YAML(OS);
     YAML << TUDiag;
 }

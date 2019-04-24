@@ -50,6 +50,9 @@ static cl::opt<bool> s_noInplaceFixits("no-inplace-fixits", cl::desc("Fixits wil
 static cl::opt<bool> s_enableAllFixits("enable-all-fixits", cl::desc("Enables all fixits"),
                                        cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<std::string> s_exportFixes("export-fixes", cl::desc("YAML file to store suggested fixes in. The stored fixes can be applied to the input source code with clang-apply-replacements."),
+                                          cl::init(""), cl::cat(s_clazyCategory));
+
 static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not compatible with Qt 4"),
                                  cl::init(false), cl::cat(s_clazyCategory));
 
@@ -108,7 +111,8 @@ public:
         if (s_ignoreIncludedFiles.getValue())
             options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
-        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(), s_ignoreDirs.getValue(), options);
+        // TODO: We need to agregate the fixes with previous run
+        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(), s_ignoreDirs.getValue(), s_exportFixes.getValue(), options);
     }
 };
 

@@ -62,13 +62,14 @@ public:
 };
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
-                           const string &headerFilter, const string &ignoreDirs, ClazyOptions opts)
+                           const string &headerFilter, const string &ignoreDirs, const string &exportFixes, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
+    , exportFixes(exportFixes)
 {
     if (!headerFilter.empty())
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
@@ -87,12 +88,14 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
         }
     }
 
-    if (fixitsEnabled() && !(options & ClazyOption_NoFixitsAutoWrite))
-        rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
-                                     ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()));
-
-    exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(),
-                                 new ClazyFixItOptions(fixitsAreInplace()));
+    if (fixitsEnabled()) {
+        if (exportFixesEnabled())
+            exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(),
+                                         exportFixes);
+        else if (!(options & ClazyOption_NoFixitsAutoWrite))
+            rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
+                                         ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()));
+    }
 }
 
 ClazyContext::~ClazyContext()
@@ -131,12 +134,12 @@ void ClazyContext::enablePreprocessorVisitor()
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (auto s : ci.getPreprocessorOpts().Macros) {
-            if (s.first == "QT_CORE_LIB")
-                return true;
-        }
-        return false;
-    } ();
+                                   for (auto s : ci.getPreprocessorOpts().Macros) {
+                                       if (s.first == "QT_CORE_LIB")
+                                           return true;
+                                   }
+                                   return false;
+                               } ();
 
     return s_isQt;
 }
