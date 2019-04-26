@@ -36,6 +36,10 @@
             "filename" : "364092.cpp_fixed.cpp",
             "isFixedFile" : true,
             "blacklist_platforms" : ["win32"]
+        },
+        {
+            "filename" : "ui_foo.cpp",
+            "blacklist_platforms" : ["win32"]
         }
     ]
 }
