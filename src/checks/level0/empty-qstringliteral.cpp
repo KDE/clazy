@@ -68,7 +68,7 @@ void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
     if (maybeIgnoreUic(clazy::getLocStart(stmt)))
         return;
 
-    emitWarning(stmt, "Use QString instead of an empty QStringLiteral");
+    emitWarning(stmt, "Use an empty QLatin1String instead of an empty QStringLiteral");
 }
 
 bool EmptyQStringliteral::maybeIgnoreUic(SourceLocation loc) const

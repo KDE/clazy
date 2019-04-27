@@ -1,9 +1,9 @@
 # empty-qstringliteral
 
-Suggests to use an empty `QString` instead of an empty `QStringLiteral`.
-The later causes unneeded code bloat.
+Suggests to use `QLatin1String("")` instead of `QStringLiteral()` and `QStringLiteral("")`.
+`QStringLiteral` should only be used where it would reduce memory allocations.
 
-You should use `QString()` instead of `QStringLiteral()` and `QStringLiteral("")`.
+Note that, counterintuitively, both `QStringLiteral().isNull()` and `QStringLiteral("").isNull()` are `false`,
+so do use exactly `QLatin1String("")` and not `QLatin1String()`, in both cases.
 
-Note: Beware that `QString().isNull()` is `true` while both `QStringLiteral().isNull()` and `QStringLiteral("").isNull()` are `false`.
-So be sure not to introduce subtle bugs when doing such replacements. In most cases it's simply a matter of using `isEmpty()` instead, which is `true` for all cases above.
+If in your code `isNull()` and `isEmpty()` are interchangeable, then simply use `QString()`.
