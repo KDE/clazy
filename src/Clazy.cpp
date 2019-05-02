@@ -242,11 +242,6 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         return true;
     }
 
-    if (parseArgument("no-inplace-fixits", args)) {
-        // Unit-tests don't use inplace fixits
-        m_options |= ClazyContext::ClazyOption_NoFixitsInplace;
-    }
-
     if (parseArgument("enable-all-fixits", args)) {
         // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
         m_options |= ClazyContext::ClazyOption_AllFixitsEnabled;

@@ -228,7 +228,7 @@ def clazy_cpp_args():
     return "-Wno-unused-value -Qunused-arguments -std=c++14 "
 
 def more_clazy_args():
-    return " -Xclang -plugin-arg-clazy -Xclang no-inplace-fixits " + clazy_cpp_args()
+    return " " + clazy_cpp_args()
 
 def clazy_standalone_binary():
     if 'CLAZYSTANDALONE_CXX' in os.environ: # in case we want to use "clazy.AppImage --standalone" instead
@@ -237,7 +237,7 @@ def clazy_standalone_binary():
 
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
-    result = " -no-inplace-fixits -checks=" + string.join(test.checks, ',') + " " + result
+    result = " -export-fixes=" + test.check.name + "/fixes.yaml -checks=" + string.join(test.checks, ',') + " " + result
 
     if not test.isFixedFile:
         result = " -enable-all-fixits " + result

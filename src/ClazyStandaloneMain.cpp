@@ -44,9 +44,6 @@ static llvm::cl::OptionCategory s_clazyCategory("clazy options");
 static cl::opt<std::string> s_checks("checks", cl::desc("Comma-separated list of clazy checks. Default is level1"),
                                      cl::init(""), cl::cat(s_clazyCategory));
 
-static cl::opt<bool> s_noInplaceFixits("no-inplace-fixits", cl::desc("Fixits will be applied to a separate file (for unit-test use only)"),
-                                       cl::init(false), cl::cat(s_clazyCategory));
-
 static cl::opt<bool> s_enableAllFixits("enable-all-fixits", cl::desc("Enables all fixits"),
                                        cl::init(false), cl::cat(s_clazyCategory));
 
@@ -90,8 +87,6 @@ public:
     FrontendAction *create() override
     {
         ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
-        if (s_noInplaceFixits.getValue())
-            options |= ClazyContext::ClazyOption_NoFixitsInplace;
 
         if (s_enableAllFixits.getValue())
             options |= ClazyContext::ClazyOption_AllFixitsEnabled;

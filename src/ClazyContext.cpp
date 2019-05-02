@@ -40,12 +40,12 @@ class ClazyFixItOptions
 {
 public:
     ClazyFixItOptions(const ClazyFixItOptions &other) = delete;
-    ClazyFixItOptions(bool inplace)
+    ClazyFixItOptions()
     {
         if (const char *suffix = getenv("CLAZY_FIXIT_SUFFIX"))
             m_suffix = suffix;
 
-        InPlace = inplace && m_suffix.empty();
+        InPlace = m_suffix.empty();
         FixWhatYouCan = true;
         FixOnlyWarnings = true;
         Silent = false;
@@ -94,7 +94,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
                                          exportFixes);
         else if (!(options & ClazyOption_NoFixitsAutoWrite))
             rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
-                                         ci.getLangOpts(), new ClazyFixItOptions(fixitsAreInplace()));
+                                         ci.getLangOpts(), new ClazyFixItOptions());
     }
 }
 
