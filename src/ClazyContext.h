@@ -45,7 +45,6 @@ class CompilerInstance;
 class ASTContext;
 class ParentMap;
 class SourceManager;
-class FixItRewriter;
 class CXXMethodDecl;
 class Decl;
 }
@@ -60,7 +59,6 @@ public:
 
     enum ClazyOption {
         ClazyOption_None = 0,
-        ClazyOption_NoFixitsAutoWrite = 2, // If enabled then fixits are reported, but not applied
         ClazyOption_AllFixitsEnabled = 4,
         ClazyOption_Qt4Compat = 8,
         ClazyOption_OnlyQt = 16, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
@@ -181,7 +179,6 @@ public:
     clang::ParentMap *parentMap = nullptr;
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;
-    clang::FixItRewriter *rewriter = nullptr;
     FixItExporter *exporter = nullptr;
     bool allFixitsEnabled = false;
     std::string requestedFixitName;

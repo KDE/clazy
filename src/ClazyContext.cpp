@@ -88,14 +88,8 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
         }
     }
 
-    if (fixitsEnabled()) {
-        if (exportFixesEnabled())
-            exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(),
-                                         exportFixes);
-        else if (!(options & ClazyOption_NoFixitsAutoWrite))
-            rewriter = new FixItRewriter(ci.getDiagnostics(), sm,
-                                         ci.getLangOpts(), new ClazyFixItOptions());
-    }
+    if (fixitsEnabled() && exportFixesEnabled()) // TODO: A single one is enough
+        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(), exportFixes);
 }
 
 ClazyContext::~ClazyContext()
@@ -107,11 +101,6 @@ ClazyContext::~ClazyContext()
     if (exporter) {
         exporter->Export();
         delete exporter;
-    }
-
-    if (rewriter) {
-        rewriter->WriteFixedFiles();
-        delete rewriter;
     }
 
     preprocessorVisitor = nullptr;

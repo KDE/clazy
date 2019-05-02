@@ -30,3 +30,4 @@ clazy.1
 clanglazy_export.h
 CPackConfig.cmake
 CPackSourceConfig.cmake
+*yaml
