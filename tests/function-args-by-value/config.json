@@ -1,11 +1,8 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
-        },
-        {
-            "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true
+            "filename" : "main.cpp",
+            "has_fixits" : true
         },
         {
             "filename" : "lambdas.cpp"
@@ -18,12 +15,8 @@
         },
         {
             "filename" : "warn-for-overridden-methods.cpp",
+            "has_fixits" : true,
             "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-value-warn-for-overridden-methods" }
-        },
-        {
-            "filename" : "warn-for-overridden-methods.cpp_fixed.cpp",
-            "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-value-warn-for-overridden-methods" },
-            "isFixedFile" : true
         }
     ]
 }

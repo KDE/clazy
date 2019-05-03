@@ -3,48 +3,28 @@
     "tests" : [
         {
             "filename" : "main.cpp",
-            "link" : true
-        },
-        {
-            "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true,
-            "link" : true
+            "link" : true,
+            "has_fixits" : true
         },
         {
             "filename" : "usingnamespace.cpp",
-            "link" : true
-        },
-        {
-            "filename" : "usingnamespace.cpp_fixed.cpp",
-            "isFixedFile" : true,
-            "link" : true
+            "link" : true,
+            "has_fixits" : true
         },
         {
             "filename" : "namespaces.cpp",
-            "link" : true
-        },
-        {
-            "filename" : "namespaces.cpp_fixed.cpp",
-            "isFixedFile" : true,
-            "link" : true
-        },
-        {
-            "filename" : "namespaces.h_fixed.cpp",
-            "isFixedFile" : true,
-            "link" : false
+            "link" : true,
+            "has_fixits" : true
         },
         {
             "filename" : "q_private_slot.cpp",
-            "link" : true
+            "link" : true,
+            "has_fixits" : true
         },
         {
             "filename" : "port_qsignalspy.cpp",
-            "link" : true
-        },
-        {
-            "filename" : "port_qsignalspy.cpp_fixed.cpp",
-            "link" : false,
-            "isFixedFile" : true
+            "link" : true,
+            "has_fixits" : true
         }
     ]
 }

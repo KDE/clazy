@@ -2,12 +2,8 @@
     "tests" : [
         {
             "filename" : "main.cpp",
-            "qt_major_version": 4
-        },
-        {
-            "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true,
-            "qt_major_version": 4
+            "qt_major_version": 4,
+            "has_fixits" : true
         }
     ]
 }

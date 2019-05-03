@@ -1,11 +1,8 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
-        },
-        {
-            "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true
+            "filename" : "main.cpp",
+            "has_fixits" : true
         },
         {
             "filename" : "lambdas.cpp"
@@ -18,11 +15,8 @@
             "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-ref-warn-for-overridden-methods" }
         },
         {
-            "filename" : "more_fixits.cpp"
-        },
-        {
-            "filename" : "more_fixits.cpp_fixed.cpp",
-            "isFixedFile" : true
+            "filename" : "more_fixits.cpp",
+            "has_fixits" : true
         }
     ]
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 import sys, os, subprocess, string, re, json, threading, multiprocessing, argparse
+import shutil
 from threading import Thread
 from sys import platform as _platform
 
@@ -25,7 +26,6 @@ class Test:
         self.maximum_qt_version = 59999
         self.minimum_clang_version = 380
         self.compare_everything = False
-        self.isFixedFile = False
         self.link = False # If true we also call the linker
         self.check = check
         self.expects_failure = False
@@ -40,11 +40,25 @@ class Test:
         self.qt_developer = False
         self.header_filter = ""
         self.ignore_dirs = ""
+        self.has_fixits = False
 
     def filename(self):
         if len(self.filenames) == 1:
             return self.filenames[0]
         return ""
+
+    def relativeFilename(self):
+        return self.check.name + "/" + self.filename()
+
+    def yamlFilename(self):
+        # In case clazy-standalone generates a yaml file with fixits, this is what it will be called
+        return self.relativeFilename() + ".yaml"
+
+    def fixedFilename(self):
+        return self.relativeFilename() + ".fixed"
+
+    def expectedFixedFilename(self):
+        return self.relativeFilename() + ".fixed.expected"
 
     def isScript(self):
         return self.filename().endswith(".sh")
@@ -150,8 +164,6 @@ def load_json(check_name):
                 test.blacklist_platforms = t['blacklist_platforms']
             if 'compare_everything' in t:
                 test.compare_everything = t['compare_everything']
-            if 'isFixedFile' in t:
-                test.isFixedFile = t['isFixedFile']
             if 'link' in t:
                 test.link = t['link']
             if 'qt_major_version' in t:
@@ -164,6 +176,8 @@ def load_json(check_name):
                 test.flags = t['flags']
             if 'must_fail' in t:
                 test.must_fail = t['must_fail']
+            if 'has_fixits' in t:
+                test.has_fixits = t['has_fixits']
             if 'expects_failure' in t:
                 test.expects_failure = t['expects_failure']
             if 'qt4compat' in t:
@@ -181,10 +195,6 @@ def load_json(check_name):
                 test.checks.append(test.check.name)
 
             check.tests.append(test)
-            if test.isFixedFile:
-                fileToDelete = check_name + "/" + test.filename()
-                if os.path.exists(fileToDelete):
-                    os.remove(fileToDelete)
 
     return check
 
@@ -237,10 +247,10 @@ def clazy_standalone_binary():
 
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
-    result = " -export-fixes=" + test.check.name + "/fixes.yaml -checks=" + string.join(test.checks, ',') + " " + result
+    result = " -checks=" + string.join(test.checks, ',') + " " + result
 
-    if not test.isFixedFile:
-        result = " -enable-all-fixits " + result
+    if test.has_fixits:
+        result = " -enable-all-fixits -export-fixes=" + test.yamlFilename() + result
 
     if test.qt4compat:
         result = " -qt4-compat " + result
@@ -284,8 +294,7 @@ def clazy_command(qt, test, filename):
         result = result + " -c "
 
     result = result + test.flags + " -Xclang -plugin-arg-clazy -Xclang " + string.join(test.checks, ',') + " "
-    if not test.isFixedFile: # When compiling the already fixed file disable fixit, we don't want to fix twice
-        result += _enable_fixits_argument + " "
+    result += _enable_fixits_argument + " "
     result += filename
 
     return result
@@ -397,12 +406,55 @@ def files_are_equal(file1, file2):
     except:
         return False
 
+def compare_files(expected_file, result_file, message):
+    success = files_are_equal(expected_file, result_file)
+
+    if test.expects_failure:
+        if success:
+            print "[XOK]   " + message
+            return False
+        else:
+            print "[XFAIL] " + message
+            print_differences(expected_file, result_file)
+            return True
+    else:
+        if success:
+            print "[OK]   " + message
+            return True
+        else:
+            print "[FAIL] " + message
+            print_differences(expected_file, result_file)
+            return False
+
 def get_check_names():
     return filter(lambda entry: os.path.isdir(entry), os.listdir("."))
 
-# Returns all files with .cpp_fixed extension. These were rewritten by clang.
-def get_fixed_files():
-    return filter(lambda entry: entry.endswith('.cpp_fixed.cpp'), os.listdir("."))
+# The yaml file references the test file in our git repo, but we don't want
+# to rewrite that one, as we would need to discard git changes afterwards,
+# so patch the yaml file and add a ".fixed" suffix to those files
+def patch_fixit_yaml_file(test):
+
+    f = open(test.yamlFilename(), 'r')
+    lines = f.readlines()
+    f.close()
+    f = open(test.yamlFilename(), 'w')
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith('MainSourceFile') or stripped.startswith("FilePath") or stripped.startswith("- FilePath"):
+            line = line.replace(test.relativeFilename(), test.fixedFilename())
+        f.write(line)
+    f.close()
+
+    shutil.copyfile(test.relativeFilename(), test.fixedFilename())
+
+    return True
+
+def run_clang_apply_replacements(test):
+    result = run_command('clang-apply-replacements ' + test.check.name)
+    if os.path.exists(test.yamlFilename()):
+        os.remove(test.yamlFilename())
+    return result
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
@@ -472,10 +524,13 @@ def run_unit_test(test, is_standalone):
     if test.compare_everything:
         result_file = output_file
 
-    if test.isFixedFile:
-        result_file = filename
-
     must_fail = test.must_fail
+
+    if is_standalone and test.has_fixits:
+        if os.path.exists(test.yamlFilename()):
+            os.remove(test.yamlFilename())
+        if os.path.exists(test.fixedFilename()):
+            os.remove(test.fixedFilename())
 
     cmd_success = run_command(cmd_to_run, output_file, test.env)
 
@@ -491,7 +546,7 @@ def run_unit_test(test, is_standalone):
         print
         return False
 
-    if not test.compare_everything and not test.isFixedFile:
+    if not test.compare_everything:
         word_to_grep = "warning:" if not must_fail else "error:"
         extract_word(word_to_grep, output_file, result_file)
 
@@ -500,23 +555,29 @@ def run_unit_test(test, is_standalone):
         printableName += "/" + test.filename()
 
     if is_standalone:
+        if test.has_fixits:
+            printableNameFixits = printableName + " (standalone, fixits)"
         printableName += " (standalone)"
 
-    success = files_are_equal(expected_file, result_file)
+    # Check that it printed the expected warnings
+    if not compare_files(expected_file, result_file, printableName):
+        return False
 
-    if test.expects_failure:
-        if success:
-            print "[XOK]   " + printableName
+    # Test passed, let's run fixits, if any
+    if is_standalone and test.has_fixits:
+        if not os.path.exists(test.yamlFilename()):
+            print "[FAIL] " + test.yamlFilename() + " is missing!!"
             return False
-        else:
-            print "[XFAIL] " + printableName
-            print_differences(expected_file, result_file)
-    else:
-        if success:
-            print "[OK]   " + printableName
-        else:
-            print "[FAIL] " + printableName
-            print_differences(expected_file, result_file)
+
+        if not patch_fixit_yaml_file(test):
+            print "[FAIL] Could not patch " + test.yamlFilename()
+            return False
+        if not run_clang_apply_replacements(test):
+            print "[FAIL] Error applying fixits from " + test.yamlFilename()
+            return False
+
+        # Check that the rewritten file is identical to the expected one
+        if not compare_files(test.expectedFixedFilename(), test.fixedFilename(), printableNameFixits):
             return False
 
     return True
@@ -559,7 +620,6 @@ if 'CLAZY_NO_WERROR' in os.environ:
     del os.environ['CLAZY_NO_WERROR']
 
 os.environ['CLAZY_CHECKS'] = ''
-os.environ['CLAZY_FIXIT_SUFFIX'] = '_fixed.cpp'
 
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)
@@ -590,9 +650,7 @@ else:
     i = _num_threads
     for check in requested_checks:
         for test in check.tests:
-            if not test.isFixedFile:
-                i = (i + 1) % _num_threads
-
+            i = (i + 1) % _num_threads
             list_of_chunks[i].append(test)
 
     for tests in list_of_chunks:
