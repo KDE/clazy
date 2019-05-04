@@ -41,6 +41,7 @@ class Test:
         self.header_filter = ""
         self.ignore_dirs = ""
         self.has_fixits = False
+        self.should_run_fixits_test = False
 
     def filename(self):
         if len(self.filenames) == 1:
@@ -88,8 +89,8 @@ class Test:
         name = self.check.name
         if len(self.check.tests) > 1:
             name += "/" + self.filename()
-        if is_standalone and is_fixits:
-            name += " (standalone, fixits)"
+        if is_fixits:
+            name += " (fixits)"
         elif is_standalone:
             name += " (standalone)"
         return name
@@ -562,7 +563,14 @@ def run_unit_test(test, is_standalone):
 
     # Check that it printed the expected warnings
     if not compare_files(expected_file, result_file, test.printableName(is_standalone, False)):
+        if os.path.exists(test.yamlFilename()):
+            os.remove(test.yamlFilename())
+
         return False
+
+    if is_standalone and test.has_fixits:
+        # The normal tests succeeded, we can run the respective fixits then
+        test.should_run_fixits_test = True
 
     return True
 
@@ -588,7 +596,7 @@ def run_fixit_tests(requested_checks):
 
     for check in requested_checks:
         for test in check.tests:
-            if test.has_fixits:
+            if test.should_run_fixits_test:
                 if not os.path.exists(test.yamlFilename()):
                     print "[FAIL] " + test.yamlFilename() + " is missing!!"
                     success = False
@@ -609,7 +617,7 @@ def run_fixit_tests(requested_checks):
 
     for check in requested_checks:
         for test in check.tests:
-            if test.has_fixits:
+            if test.should_run_fixits_test:
                 # Check that the rewritten file is identical to the expected one
                 if not compare_files(test.expectedFixedFilename(), test.fixedFilename(), test.printableName(True, True)):
                     success = False
@@ -687,13 +695,12 @@ else:
 for thread in threads:
     thread.join()
 
+if not run_fixit_tests(requested_checks):
+    _was_successful = False
+
 if _was_successful:
-    if (run_fixit_tests(requested_checks)):
-        print "SUCCESS"
-        sys.exit(0)
-    else:
-        print "FAIL"
-        sys.exit(-1)
+    print "SUCCESS"
+    sys.exit(0)
 else:
     print "FAIL"
     sys.exit(-1)
