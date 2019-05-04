@@ -420,10 +420,10 @@ def files_are_equal(file1, file2):
     except:
         return False
 
-def compare_files(expected_file, result_file, message):
+def compare_files(expects_failure, expected_file, result_file, message):
     success = files_are_equal(expected_file, result_file)
 
-    if test.expects_failure:
+    if expects_failure:
         if success:
             print "[XOK]   " + message
             return False
@@ -562,7 +562,7 @@ def run_unit_test(test, is_standalone):
         extract_word(word_to_grep, output_file, result_file)
 
     # Check that it printed the expected warnings
-    if not compare_files(expected_file, result_file, test.printableName(is_standalone, False)):
+    if not compare_files(test.expects_failure, expected_file, result_file, test.printableName(is_standalone, False)):
         if os.path.exists(test.yamlFilename()):
             os.remove(test.yamlFilename())
 
@@ -619,7 +619,7 @@ def run_fixit_tests(requested_checks):
         for test in check.tests:
             if test.should_run_fixits_test:
                 # Check that the rewritten file is identical to the expected one
-                if not compare_files(test.expectedFixedFilename(), test.fixedFilename(), test.printableName(True, True)):
+                if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(), test.printableName(True, True)):
                     success = False
                     continue
 
