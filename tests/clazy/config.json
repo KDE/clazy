@@ -29,7 +29,8 @@
         },
         {
             "filename" : "qt4compat1.cpp",
-            "checks"   : ["old-style-connect"]
+            "checks"   : ["old-style-connect"],
+            "has_fixits" : true
         },
         {
             "filename" : "qt4compat2.cpp",
@@ -39,7 +40,8 @@
         {
             "filename" : "onlyQt1.cpp",
             "checks"   : ["old-style-connect"],
-            "only_qt"  : false
+            "only_qt"  : false,
+            "has_fixits" : true
         },
         {
             "filename" : "onlyQt2.cpp",
