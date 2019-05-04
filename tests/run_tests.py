@@ -84,6 +84,16 @@ class Test:
             key_str = key.encode('ascii', 'ignore')
             self.env[key_str] = e[key].encode('ascii', 'ignore')
 
+    def printableName(self, is_standalone, is_fixits):
+        name = self.check.name
+        if len(self.check.tests) > 1:
+            name += "/" + self.filename()
+        if is_standalone and is_fixits:
+            name += " (standalone, fixits)"
+        elif is_standalone:
+            name += " (standalone)"
+        return name
+
 class Check:
     def __init__(self, name):
         self.name = name
@@ -453,17 +463,14 @@ def patch_fixit_yaml_file(test):
 
     return True
 
-def run_clang_apply_replacements(test):
-    result = run_command('clang-apply-replacements ' + test.check.name)
-    return result
+def run_clang_apply_replacements():
+    return run_command('clang-apply-replacements .')
 
-def cleanup_fixit_files():
-    yamlfiles = filter(lambda entry: entry.endswith('.yaml'), os.listdir('.'))
-    fixedfiles = filter(lambda entry: entry.endswith('.fixed'), os.listdir('.'))
-    for f in yamlfiles:
-        os.remove(f)
-    for f in fixedfiles:
-        os.remove(f)
+def cleanup_fixit_files(checks):
+    for check in checks:
+        filestodelete = filter(lambda entry: entry.endswith('.fixed') or entry.endswith('.yaml'), os.listdir(check.name))
+        for f in filestodelete:
+            os.remove(check.name + '/' + f)
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
@@ -553,35 +560,9 @@ def run_unit_test(test, is_standalone):
         word_to_grep = "warning:" if not must_fail else "error:"
         extract_word(word_to_grep, output_file, result_file)
 
-    printableName = checkname
-    if len(test.check.tests) > 1:
-        printableName += "/" + test.filename()
-
-    if is_standalone:
-        if test.has_fixits:
-            printableNameFixits = printableName + " (standalone, fixits)"
-        printableName += " (standalone)"
-
     # Check that it printed the expected warnings
-    if not compare_files(expected_file, result_file, printableName):
+    if not compare_files(expected_file, result_file, test.printableName(is_standalone, False)):
         return False
-
-    # Test passed, let's run fixits, if any
-    if is_standalone and test.has_fixits:
-        if not os.path.exists(test.yamlFilename()):
-            print "[FAIL] " + test.yamlFilename() + " is missing!!"
-            return False
-
-        if not patch_fixit_yaml_file(test):
-            print "[FAIL] Could not patch " + test.yamlFilename()
-            return False
-        if not run_clang_apply_replacements(test):
-            print "[FAIL] Error applying fixits from " + test.yamlFilename()
-            return False
-
-        # Check that the rewritten file is identical to the expected one
-        if not compare_files(test.expectedFixedFilename(), test.fixedFilename(), printableNameFixits):
-            return False
 
     return True
 
@@ -597,6 +578,44 @@ def run_unit_tests(tests):
     global _was_successful, _lock
     with _lock:
         _was_successful = _was_successful and result
+
+# This is run sequentially, due to races. As clang-apply-replacements just applies all .yaml files it can find.
+# We run a single clang-apply-replacements invocation, which changes all files in the tests/ directory.
+def run_fixit_tests(requested_checks):
+    if _no_standalone:
+        # Only clazy-standalone supports fixits
+        return True
+
+    for check in requested_checks:
+        for test in check.tests:
+            if test.has_fixits:
+                if not os.path.exists(test.yamlFilename()):
+                    print "[FAIL] " + test.yamlFilename() + " is missing!!"
+                    success = False
+                    continue
+                if not patch_fixit_yaml_file(test):
+                    print "[FAIL] Could not patch " + test.yamlFilename()
+                    success = False
+                    continue
+
+
+    # Call clazy-apply-replacements[.exe]
+    if not run_clang_apply_replacements():
+        return False
+
+    # Now compare all the *.fixed files with the *.fixed.expected counterparts
+
+    success = True
+
+    for check in requested_checks:
+        for test in check.tests:
+            if test.has_fixits:
+                # Check that the rewritten file is identical to the expected one
+                if not compare_files(test.expectedFixedFilename(), test.fixedFilename(), test.printableName(True, True)):
+                    success = False
+                    continue
+
+    return success
 
 def dump_ast(check):
     for test in check.tests:
@@ -649,7 +668,7 @@ if _dump_ast:
         dump_ast(check)
         os.chdir("..")
 else:
-    cleanup_fixit_files()
+    cleanup_fixit_files(all_checks) # Remove stale stuff from all checks, as clang-apply-replacements will apply all .yaml files it can find, even checks that werent requested
     list_of_chunks = [[] for x in range(_num_threads)]  # Each list is a list of Test to be worked on by a thread
     i = _num_threads
     for check in requested_checks:
@@ -669,8 +688,12 @@ for thread in threads:
     thread.join()
 
 if _was_successful:
-    print "SUCCESS"
-    sys.exit(0)
+    if (run_fixit_tests(requested_checks)):
+        print "SUCCESS"
+        sys.exit(0)
+    else:
+        print "FAIL"
+        sys.exit(-1)
 else:
     print "FAIL"
     sys.exit(-1)
