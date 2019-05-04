@@ -453,14 +453,22 @@ def patch_fixit_yaml_file(test):
     f.close()
     f = open(test.yamlFilename(), 'w')
 
+    possible_headerfile = test.relativeFilename().replace(".cpp", ".h")
+
     for line in lines:
         stripped = line.strip()
         if stripped.startswith('MainSourceFile') or stripped.startswith("FilePath") or stripped.startswith("- FilePath"):
             line = line.replace(test.relativeFilename(), test.fixedFilename())
+
+            # Some tests also apply fix their to their headers:
+            line = line.replace(possible_headerfile, test.fixedFilename().replace(".cpp", ".h"))
         f.write(line)
     f.close()
 
     shutil.copyfile(test.relativeFilename(), test.fixedFilename())
+
+    if os.path.exists(possible_headerfile):
+        shutil.copyfile(possible_headerfile, test.fixedFilename().replace(".cpp", ".h"))
 
     return True
 
@@ -622,6 +630,15 @@ def run_fixit_tests(requested_checks):
                 if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(), test.printableName(True, True)):
                     success = False
                     continue
+
+
+                # Some fixed cpp files have an header that was also fixed. Compare it here too.
+                possible_headerfile_expected = test.expectedFixedFilename().replace('.cpp', '.h')
+                if os.path.exists(possible_headerfile_expected):
+                    possible_headerfile = test.fixedFilename().replace('.cpp', '.h')
+                    if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName(True, True).replace('.cpp', '.h')):
+                        success = False
+                        continue
 
     return success
 
