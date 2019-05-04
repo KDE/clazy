@@ -224,9 +224,6 @@ CaseStmt* getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *even
             auto switchStmt = clazy::getSwitchFromCase(pmap, caseStmt);
             if (switchStmt) {
                 auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(switchStmt->getCond());
-
-                switchStmt->getCond()->dump();
-
                 // Does this switch refer to the same QEvent ?
                 if (declRef && declRef->getDecl() == event->getDecl())
                     return caseStmt;
