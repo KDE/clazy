@@ -63,6 +63,9 @@ class Test:
     def isScript(self):
         return self.filename().endswith(".sh")
 
+    def dir(self):
+        return self.check.name
+
     def setQtMajorVersion(self, major_version):
         if major_version == 4:
             self.qt_major_version = 4
@@ -452,9 +455,15 @@ def patch_fixit_yaml_file(test):
 
 def run_clang_apply_replacements(test):
     result = run_command('clang-apply-replacements ' + test.check.name)
-    if os.path.exists(test.yamlFilename()):
-        os.remove(test.yamlFilename())
     return result
+
+def cleanup_fixit_files():
+    yamlfiles = filter(lambda entry: entry.endswith('.yaml'), os.listdir('.'))
+    fixedfiles = filter(lambda entry: entry.endswith('.fixed'), os.listdir('.'))
+    for f in yamlfiles:
+        os.remove(f)
+    for f in fixedfiles:
+        os.remove(f)
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
@@ -525,12 +534,6 @@ def run_unit_test(test, is_standalone):
         result_file = output_file
 
     must_fail = test.must_fail
-
-    if is_standalone and test.has_fixits:
-        if os.path.exists(test.yamlFilename()):
-            os.remove(test.yamlFilename())
-        if os.path.exists(test.fixedFilename()):
-            os.remove(test.fixedFilename())
 
     cmd_success = run_command(cmd_to_run, output_file, test.env)
 
@@ -646,6 +649,7 @@ if _dump_ast:
         dump_ast(check)
         os.chdir("..")
 else:
+    cleanup_fixit_files()
     list_of_chunks = [[] for x in range(_num_threads)]  # Each list is a list of Test to be worked on by a thread
     i = _num_threads
     for check in requested_checks:
