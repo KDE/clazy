@@ -73,7 +73,7 @@ private:
     void VisitAssignOperatorQLatin1String(clang::Stmt *);
 
     void maybeEmitWarning(clang::SourceLocation loc, std::string error,
-                          const std::vector<clang::FixItHint> &fixits = {});
+                          std::vector<clang::FixItHint> fixits = {});
 
     std::vector<clang::FixItHint> fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee, int fixitType);
     std::vector<clang::FixItHint> fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *);

@@ -610,12 +610,18 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     maybeEmitWarning(clazy::getLocStart(stmt), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
 
-void QStringAllocations::maybeEmitWarning(SourceLocation loc, string error, const std::vector<FixItHint> &fixits)
+void QStringAllocations::maybeEmitWarning(SourceLocation loc, string error, std::vector<FixItHint> fixits)
 {
     if (clazy::isUIFile(loc, sm())) {
         // Don't bother warning for generated UI files.
         // We do the check here instead of at the beginning so users that don't use UI files don't have to pay the performance price.
         return;
+    }
+
+    if (m_context->isQtDeveloper() && Utils::filenameForLoc(loc, sm()) == "qstring.cpp") {
+        // There's an error replacing an internal fromLatin1() because the replacement code doesn't expect to be working on QString itself
+        // not worth to fix, it's only 1 case in qstring.cpp, and related to Qt 1.x compat
+        fixits = {};
     }
 
     emitWarning(loc, error, fixits);
