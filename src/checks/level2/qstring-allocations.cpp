@@ -147,14 +147,14 @@ static bool containsStringLiteralNoCallExpr(Stmt *stmt)
     if (!stmt)
         return false;
 
-    StringLiteral *sl = dyn_cast<StringLiteral>(stmt);
+    auto sl = dyn_cast<StringLiteral>(stmt);
     if (sl)
         return true;
 
     for (auto child : stmt->children()) {
         if (!child)
             continue;
-        CallExpr *callExpr = dyn_cast<CallExpr>(child);
+        auto callExpr = dyn_cast<CallExpr>(child);
         if (!callExpr && containsStringLiteralNoCallExpr(child))
             return true;
     }
@@ -175,7 +175,7 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
 
 void QStringAllocations::VisitCtor(Stmt *stm)
 {
-    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
+    auto ctorExpr = dyn_cast<CXXConstructExpr>(stm);
     if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/ true))
         return;
 
@@ -257,7 +257,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
         if (clazy::hasChildren(ctorExpr)) {
             auto pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
             if (clazy::hasChildren(pointerDecay)) {
-                StringLiteral *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
+                auto lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt && isFixitEnabled(CharPtrAllocations)) {
                     Stmt *grandParent = clazy::parent(m_context->parentMap, lt, 2);
                     Stmt *grandGrandParent = clazy::parent(m_context->parentMap, lt, 3);
@@ -415,7 +415,6 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
 
     std::string replacement = isQStringLiteralCandidate(callExpr, m_context->parentMap, lo(), sm()) ? "QStringLiteral"
                                                                                                     : "QLatin1String";
-
     if (replacement == "QStringLiteral" && clazy::getLocStart(callExpr).isMacroID()) {
         queueManualFixitWarning(clazy::getLocStart(callExpr), "Can't use QStringLiteral in macro!", FromLatin1_FromUtf8Allocations);
         return {};
@@ -481,7 +480,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
 
 void QStringAllocations::VisitOperatorCall(Stmt *stm)
 {
-    CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
+    auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
     if (!operatorCall)
         return;
 
@@ -502,7 +501,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     if (!funcDecl)
         return;
 
-    CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
+    auto methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
     if (!clazy::isOfClass(methodDecl, "QString"))
         return;
 
@@ -535,7 +534,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
 
 void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 {
-    CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
+    auto callExpr = dyn_cast<CallExpr>(stmt);
     if (!callExpr)
         return;
 
@@ -543,7 +542,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     if (!clazy::functionIsOneOf(functionDecl, {"fromLatin1", "fromUtf8"}))
         return;
 
-    CXXMethodDecl *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    auto methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
     if (!clazy::isOfClass(methodDecl, "QString"))
         return;
 
@@ -587,7 +586,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 
 void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 {
-    CXXOperatorCallExpr *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
+    auto callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
     if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo()))
         return;
 
