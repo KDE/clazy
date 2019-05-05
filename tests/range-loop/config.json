@@ -5,7 +5,8 @@
             "has_fixits" : true
         },
         {
-            "filename" : "bug370609.cpp"
+            "filename" : "bug370609.cpp",
+            "has_fixits" : true
         }
     ]
 }

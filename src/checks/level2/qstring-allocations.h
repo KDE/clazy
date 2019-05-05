@@ -72,10 +72,8 @@ private:
     void VisitFromLatin1OrUtf8(clang::Stmt *);
     void VisitAssignOperatorQLatin1String(clang::Stmt *);
 
-    void maybeEmitWarning(clang::SourceLocation loc, std::string error,
-                          std::vector<clang::FixItHint> fixits = {});
-
-    std::vector<clang::FixItHint> fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee, int fixitType);
+    void maybeEmitWarning(clang::SourceLocation loc, std::string error, std::vector<clang::FixItHint> fixits = {});
+    std::vector<clang::FixItHint> fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee);
     std::vector<clang::FixItHint> fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *);
     std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr, FromFunction);
     std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt, const std::string &replacement);

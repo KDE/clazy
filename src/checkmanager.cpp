@@ -139,11 +139,6 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext
             requestedChecksThroughEnv = checksEnvStr == "all_checks" ? availableChecks(CheckLevel2)
                                                                      : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ disabledChecksThroughEnv);
         }
-
-        const string checkName = checkNameForFixIt(context->requestedFixitName);
-        if (!checkName.empty() && checkForName(requestedChecksThroughEnv, checkName) == requestedChecksThroughEnv.cend()) {
-            requestedChecksThroughEnv.push_back(*checkForName(m_registeredChecks, checkName));
-        }
     }
 
     std::copy(disabledChecksThroughEnv.begin(), disabledChecksThroughEnv.end(),
@@ -244,26 +239,11 @@ std::vector<std::pair<CheckBase*, RegisteredCheck>> CheckManager::createChecks(c
                                                                                ClazyContext *context)
 {
     assert(context);
-    const string fixitCheckName = checkNameForFixIt(context->requestedFixitName);
-    RegisteredFixIt fixit = m_fixitByName[context->requestedFixitName];
 
     std::vector<std::pair<CheckBase*, RegisteredCheck>> checks;
     checks.reserve(requestedChecks.size() + 1);
     for (const auto& check : requestedChecks) {
         checks.push_back({createCheck(check.name, context), check });
-        if (check.name == fixitCheckName) {
-            checks.back().first->setEnabledFixits(fixit.id);
-        }
-    }
-
-    if (!context->requestedFixitName.empty()) {
-        // We have one fixit enabled, we better have the check instance too.
-        if (!fixitCheckName.empty()) {
-            if (checkForName(requestedChecks, fixitCheckName) == requestedChecks.cend()) {
-                checks.push_back({createCheck(fixitCheckName, context), {} });
-                checks.back().first->setEnabledFixits(fixit.id);
-            }
-        }
     }
 
     return checks;

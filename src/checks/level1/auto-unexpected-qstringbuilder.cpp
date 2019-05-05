@@ -68,7 +68,7 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
         return;
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled()) {
+    if (fixitsEnabled()) {
         std::string replacement = "QString " + clazy::name(varDecl).str();
 
         if (qualtype.isConstQualified())

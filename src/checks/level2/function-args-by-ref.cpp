@@ -114,7 +114,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
     if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
         return;
 
-    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods") || isFixitEnabled();
+    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods") || fixitsEnabled();
     if (!warnForOverriddenMethods && Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
         // When overriding you can't change the signature. You should fix the base classes first
         return;
@@ -160,7 +160,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 
 void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *func, unsigned int parmIndex)
 {
-    if (isFixitEnabled()) {
+    if (fixitsEnabled()) {
         for (auto funcRedecl : func->redecls()) {
             auto funcParams = Utils::functionParameters(funcRedecl);
             if (funcParams.size() <= parmIndex)

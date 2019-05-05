@@ -69,7 +69,7 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
         return;
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled()) {
+    if (fixitsEnabled()) {
         std::string replacement = "Q_" + name;
         std::transform(replacement.begin(), replacement.end(), replacement.begin(), ::toupper);
         fixits.push_back(clazy::createReplacement(range, replacement));

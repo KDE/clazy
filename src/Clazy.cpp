@@ -242,10 +242,8 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         return true;
     }
 
-    if (parseArgument("enable-all-fixits", args)) {
-        // This is useful for unit-tests, where we also want to run fixits. Don't use it otherwise.
-        m_options |= ClazyContext::ClazyOption_AllFixitsEnabled;
-    }
+    if (parseArgument("export-fixes", args))
+        m_options |= ClazyContext::ClazyOption_ExportFixes;
 
     if (parseArgument("qt4-compat", args))
         m_options |= ClazyContext::ClazyOption_Qt4Compat;
@@ -370,20 +368,23 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
 }
 
-ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList, const string &headerFilter, const string &ignoreDirs, const string &exportFixes,
+ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList,
+                                                   const string &headerFilter,
+                                                   const string &ignoreDirs,
+                                                   const string &exportFixesFilename,
                                                    ClazyContext::ClazyOptions options)
     : clang::ASTFrontendAction()
     , m_checkList(checkList.empty() ? "level1" : checkList)
     , m_headerFilter(headerFilter.empty() ? getEnvVariable("CLAZY_HEADER_FILTER") : headerFilter)
     , m_ignoreDirs(ignoreDirs.empty() ? getEnvVariable("CLAZY_IGNORE_DIRS") : ignoreDirs)
-    , m_exportFixes(exportFixes)
+    , m_exportFixesFilename(exportFixesFilename)
     , m_options(options)
 {
 }
 
 unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    auto context = new ClazyContext(ci, m_headerFilter, m_ignoreDirs, m_exportFixes, m_options);
+    auto context = new ClazyContext(ci, m_headerFilter, m_ignoreDirs, m_exportFixesFilename, m_options);
     auto astConsumer = new ClazyASTConsumer(context);
 
     auto cm = CheckManager::instance();

@@ -122,10 +122,6 @@ public:
 
     std::string name() const { return m_name; }
 
-    void setEnabledFixits(int);
-    bool isFixitEnabled(int fixit) const;
-    bool isFixitEnabled() const;
-
     void emitWarning(const clang::Decl *, const std::string &error, bool printWarningTag = true);
     void emitWarning(const clang::Stmt *, const std::string &error, bool printWarningTag = true);
     void emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag = true);
@@ -158,10 +154,12 @@ protected:
     bool shouldIgnoreFile(clang::SourceLocation) const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);
 
-    void queueManualFixitWarning(clang::SourceLocation loc, const std::string &message = {}, int fixitType = 1);
+    void queueManualFixitWarning(clang::SourceLocation loc, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
     bool isOptionSet(const std::string &optionName) const;
+
+    bool fixitsEnabled() const { return true; } // Fixits are always shown
 
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::SourceManager &sm() const { return m_sm; }
@@ -179,7 +177,6 @@ private:
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
-    int m_enabledFixits = 0;
     const Options m_options;
     const std::string m_tag;
 };

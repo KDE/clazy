@@ -62,14 +62,14 @@ public:
 };
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
-                           const string &headerFilter, const string &ignoreDirs, const string &exportFixes, ClazyOptions opts)
+                           const string &headerFilter, const string &ignoreDirs,
+                           string exportFixesFilename, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
-    , exportFixes(exportFixes)
 {
     if (!headerFilter.empty())
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
@@ -77,19 +77,16 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
     if (!ignoreDirs.empty())
         ignoreDirsRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(ignoreDirs));
 
-    const char *fixitsEnv = getenv("CLAZY_FIXIT");
-    allFixitsEnabled = (options & ClazyOption_AllFixitsEnabled);
-    if (!allFixitsEnabled && fixitsEnv) {
-        const string fixitsEnvStr = clazy::unquoteString(fixitsEnv);
-        if (fixitsEnvStr == "all_fixits") {
-            allFixitsEnabled = true;
-        } else {
-            requestedFixitName = fixitsEnvStr;
+    if (exportFixesEnabled()) {
+        if (exportFixesFilename.empty()) {
+            // Only clazy-standalone sets the filename by argument.
+            // clazy plugin sets it automatically here:
+            const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
+            exportFixesFilename = fileEntry->getName().str() + ".clazy.yaml";
         }
-    }
 
-    if (fixitsEnabled() && exportFixesEnabled()) // TODO: A single one is enough
-        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(), exportFixes);
+        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(), exportFixesFilename);
+    }
 }
 
 ClazyContext::~ClazyContext()

@@ -49,14 +49,22 @@ class Test:
         return ""
 
     def relativeFilename(self):
+        # example: "auto-unexpected-qstringbuilder/main.cpp"
         return self.check.name + "/" + self.filename()
 
-    def yamlFilename(self):
-        # In case clazy-standalone generates a yaml file with fixits, this is what it will be called
-        return self.relativeFilename() + ".yaml"
+    def yamlFilename(self, is_standalone):
+        # The name of the yaml file with fixits
+        # example: "auto-unexpected-qstringbuilder/main.cpp.clazy.yaml"
+        if is_standalone:
+            return self.relativeFilename() + ".clazy-standalone.yaml"
+        else:
+            return self.relativeFilename() + ".clazy.yaml"
 
-    def fixedFilename(self):
-        return self.relativeFilename() + ".fixed"
+    def fixedFilename(self, is_standalone):
+        if is_standalone:
+            return self.relativeFilename() + ".clazy-standalone.fixed"
+        else:
+            return self.relativeFilename() + ".clazy.fixed"
 
     def expectedFixedFilename(self):
         return self.relativeFilename() + ".fixed.expected"
@@ -89,11 +97,20 @@ class Test:
         name = self.check.name
         if len(self.check.tests) > 1:
             name += "/" + self.filename()
-        if is_fixits:
-            name += " (fixits)"
+        if is_fixits and is_standalone:
+            name += " (standalone, fixits)"
         elif is_standalone:
             name += " (standalone)"
+        elif is_fixits:
+            name += " (plugin, fixits)"
+        else:
+            name += " (plugin)"
         return name
+
+    def removeYamlFiles(self):
+        for f in [test.yamlFilename(False), test.yamlFilename(True)]:
+            if os.path.exists(f):
+                os.remove(f)
 
 class Check:
     def __init__(self, name):
@@ -264,7 +281,7 @@ def clazy_standalone_command(test, qt):
     result = " -checks=" + string.join(test.checks, ',') + " " + result
 
     if test.has_fixits:
-        result = " -enable-all-fixits -export-fixes=" + test.yamlFilename() + result
+        result = " -export-fixes=" + test.yamlFilename(is_standalone=True) + result
 
     if test.qt4compat:
         result = " -qt4-compat " + result
@@ -308,7 +325,8 @@ def clazy_command(qt, test, filename):
         result = result + " -c "
 
     result = result + test.flags + " -Xclang -plugin-arg-clazy -Xclang " + string.join(test.checks, ',') + " "
-    result += _enable_fixits_argument + " "
+    if test.has_fixits:
+        result += _export_fixes_argument + " "
     result += filename
 
     return result
@@ -340,7 +358,7 @@ if args.only_standalone and args.no_standalone:
 #-------------------------------------------------------------------------------
 # Global variables
 
-_enable_fixits_argument = "-Xclang -plugin-arg-clazy -Xclang enable-all-fixits"
+_export_fixes_argument = "-Xclang -plugin-arg-clazy -Xclang export-fixes"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone
@@ -446,29 +464,32 @@ def get_check_names():
 # The yaml file references the test file in our git repo, but we don't want
 # to rewrite that one, as we would need to discard git changes afterwards,
 # so patch the yaml file and add a ".fixed" suffix to those files
-def patch_fixit_yaml_file(test):
+def patch_fixit_yaml_file(test, is_standalone):
 
-    f = open(test.yamlFilename(), 'r')
+    yamlfilename = test.yamlFilename(is_standalone)
+    fixedfilename = test.fixedFilename(is_standalone)
+
+    f = open(yamlfilename, 'r')
     lines = f.readlines()
     f.close()
-    f = open(test.yamlFilename(), 'w')
+    f = open(yamlfilename, 'w')
 
     possible_headerfile = test.relativeFilename().replace(".cpp", ".h")
 
     for line in lines:
         stripped = line.strip()
         if stripped.startswith('MainSourceFile') or stripped.startswith("FilePath") or stripped.startswith("- FilePath"):
-            line = line.replace(test.relativeFilename(), test.fixedFilename())
+            line = line.replace(test.relativeFilename(), fixedfilename)
 
             # Some tests also apply fix their to their headers:
-            line = line.replace(possible_headerfile, test.fixedFilename().replace(".cpp", ".h"))
+            line = line.replace(possible_headerfile, fixedfilename.replace(".cpp", ".h"))
         f.write(line)
     f.close()
 
-    shutil.copyfile(test.relativeFilename(), test.fixedFilename())
+    shutil.copyfile(test.relativeFilename(), fixedfilename)
 
     if os.path.exists(possible_headerfile):
-        shutil.copyfile(possible_headerfile, test.fixedFilename().replace(".cpp", ".h"))
+        shutil.copyfile(possible_headerfile, fixedfilename.replace(".cpp", ".h"))
 
     return True
 
@@ -571,12 +592,10 @@ def run_unit_test(test, is_standalone):
 
     # Check that it printed the expected warnings
     if not compare_files(test.expects_failure, expected_file, result_file, test.printableName(is_standalone, False)):
-        if os.path.exists(test.yamlFilename()):
-            os.remove(test.yamlFilename())
-
+        test.removeYamlFiles();
         return False
 
-    if is_standalone and test.has_fixits:
+    if test.has_fixits:
         # The normal tests succeeded, we can run the respective fixits then
         test.should_run_fixits_test = True
 
@@ -595,25 +614,51 @@ def run_unit_tests(tests):
     with _lock:
         _was_successful = _was_successful and result
 
-# This is run sequentially, due to races. As clang-apply-replacements just applies all .yaml files it can find.
-# We run a single clang-apply-replacements invocation, which changes all files in the tests/ directory.
-def run_fixit_tests(requested_checks):
-    if _no_standalone:
-        # Only clazy-standalone supports fixits
+def patch_yaml_files(requested_checks, is_standalone):
+    if (is_standalone and _no_standalone) or (not is_standalone and _only_standalone):
+        # Nothing to do
         return True
 
+    success = True
     for check in requested_checks:
         for test in check.tests:
             if test.should_run_fixits_test:
-                if not os.path.exists(test.yamlFilename()):
-                    print "[FAIL] " + test.yamlFilename() + " is missing!!"
+                yamlfilename = test.yamlFilename(is_standalone)
+                if not os.path.exists(yamlfilename):
+                    print "[FAIL] " + yamlfilename + " is missing!!"
                     success = False
                     continue
-                if not patch_fixit_yaml_file(test):
-                    print "[FAIL] Could not patch " + test.yamlFilename()
+                if not patch_fixit_yaml_file(test, is_standalone):
+                    print "[FAIL] Could not patch " + yamlfilename
                     success = False
                     continue
+    return success
 
+def compare_fixit_results(test, is_standalone):
+
+    if (is_standalone and _no_standalone) or (not is_standalone and _only_standalone):
+        # Nothing to do
+        return True
+
+    # Check that the rewritten file is identical to the expected one
+    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName(is_standalone, True)):
+        return False
+
+    # Some fixed cpp files have an header that was also fixed. Compare it here too.
+    possible_headerfile_expected = test.expectedFixedFilename().replace('.cpp', '.h')
+    if os.path.exists(possible_headerfile_expected):
+        possible_headerfile = test.fixedFilename(is_standalone).replace('.cpp', '.h')
+        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName(is_standalone, True).replace('.cpp', '.h')):
+            return False
+
+    return True
+
+# This is run sequentially, due to races. As clang-apply-replacements just applies all .yaml files it can find.
+# We run a single clang-apply-replacements invocation, which changes all files in the tests/ directory.
+def run_fixit_tests(requested_checks):
+
+    success = patch_yaml_files(requested_checks, is_standalone=False)
+    success = patch_yaml_files(requested_checks, is_standalone=True) and success
 
     # Call clazy-apply-replacements[.exe]
     if not run_clang_apply_replacements():
@@ -621,24 +666,17 @@ def run_fixit_tests(requested_checks):
 
     # Now compare all the *.fixed files with the *.fixed.expected counterparts
 
-    success = True
-
     for check in requested_checks:
         for test in check.tests:
             if test.should_run_fixits_test:
                 # Check that the rewritten file is identical to the expected one
-                if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(), test.printableName(True, True)):
+                if not compare_fixit_results(test, is_standalone=False):
                     success = False
                     continue
 
-
-                # Some fixed cpp files have an header that was also fixed. Compare it here too.
-                possible_headerfile_expected = test.expectedFixedFilename().replace('.cpp', '.h')
-                if os.path.exists(possible_headerfile_expected):
-                    possible_headerfile = test.fixedFilename().replace('.cpp', '.h')
-                    if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName(True, True).replace('.cpp', '.h')):
-                        success = False
-                        continue
+                if not compare_fixit_results(test, is_standalone=True):
+                    success = False
+                    continue
 
     return success
 

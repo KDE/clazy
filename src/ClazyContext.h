@@ -59,7 +59,7 @@ public:
 
     enum ClazyOption {
         ClazyOption_None = 0,
-        ClazyOption_AllFixitsEnabled = 4,
+        ClazyOption_ExportFixes = 1,
         ClazyOption_Qt4Compat = 8,
         ClazyOption_OnlyQt = 16, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
         ClazyOption_QtDeveloper = 32, // For running clazy on Qt itself, optional, but honours specific guidelines
@@ -71,7 +71,7 @@ public:
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
-                          const std::string &exportFixes,
+                          std::string exportFixesFilename,
                           ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
@@ -85,14 +85,9 @@ public:
         return m_noWerror;
     }
 
-    bool fixitsEnabled() const
-    {
-        return allFixitsEnabled || !requestedFixitName.empty();
-    }
-
     bool exportFixesEnabled() const
     {
-        return !exportFixes.empty();
+        return options & ClazyOption_ExportFixes;
     }
 
     bool isQtDeveloper() const
@@ -180,9 +175,6 @@ public:
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;
     FixItExporter *exporter = nullptr;
-    bool allFixitsEnabled = false;
-    std::string requestedFixitName;
-    std::string exportFixes;
     clang::CXXMethodDecl *lastMethodDecl = nullptr;
     clang::FunctionDecl *lastFunctionDecl = nullptr;
     clang::Decl *lastDecl = nullptr;

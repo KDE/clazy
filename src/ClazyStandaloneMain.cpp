@@ -44,9 +44,6 @@ static llvm::cl::OptionCategory s_clazyCategory("clazy options");
 static cl::opt<std::string> s_checks("checks", cl::desc("Comma-separated list of clazy checks. Default is level1"),
                                      cl::init(""), cl::cat(s_clazyCategory));
 
-static cl::opt<bool> s_enableAllFixits("enable-all-fixits", cl::desc("Enables all fixits"),
-                                       cl::init(false), cl::cat(s_clazyCategory));
-
 static cl::opt<std::string> s_exportFixes("export-fixes", cl::desc("YAML file to store suggested fixes in. The stored fixes can be applied to the input source code with clang-apply-replacements."),
                                           cl::init(""), cl::cat(s_clazyCategory));
 
@@ -88,8 +85,8 @@ public:
     {
         ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
 
-        if (s_enableAllFixits.getValue())
-            options |= ClazyContext::ClazyOption_AllFixitsEnabled;
+        if (!s_exportFixes.getValue().empty())
+            options |= ClazyContext::ClazyOption_ExportFixes;
 
         if (s_qt4Compat.getValue())
             options |= ClazyContext::ClazyOption_Qt4Compat;
@@ -107,7 +104,9 @@ public:
             options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
         // TODO: We need to agregate the fixes with previous run
-        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(), s_ignoreDirs.getValue(), s_exportFixes.getValue(), options);
+        return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(),
+                                            s_ignoreDirs.getValue(), s_exportFixes.getValue(),
+                                            options);
     }
 };
 

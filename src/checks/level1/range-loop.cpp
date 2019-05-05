@@ -56,7 +56,7 @@ enum Fixit {
 RangeLoop::RangeLoop(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    if (isFixitEnabled(Fixit_AddqAsConst)) {
+    if (fixitsEnabled()) {
         context->enablePreprocessorVisitor();
     }
 }
@@ -118,7 +118,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     std::vector<FixItHint> fixits;
 
     SourceLocation end;
-    if (isFixitEnabled(Fixit_AddqAsConst) && islvalue(containerExpr, end)) {
+    if (fixitsEnabled() && islvalue(containerExpr, end)) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
             SourceLocation start = clazy::getLocStart(containerExpr);
@@ -145,7 +145,7 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         std::vector<FixItHint> fixits;
-        if (isFixitEnabled(Fixit_AddRef)) {
+        if (fixitsEnabled()) {
             const bool isConst = varDecl->getType().isConstQualified();
 
             if (!isConst) {

@@ -175,7 +175,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 
     const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled())
+    if (fixitsEnabled())
         fixits = fixit(firstMemberCall);
 
     emitWarning(clazy::getLocEnd(firstMemberCall), "Use " + firstMethodName + "Ref() instead", fixits);
@@ -218,7 +218,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
         return false;
 
     std::vector<FixItHint> fixits;
-    if (isFixitEnabled()) {
+    if (fixitsEnabled()) {
         fixits = fixit(innerMemberCall);
     }
 
