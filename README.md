@@ -361,17 +361,11 @@ If that doesn't work, run `clang -v` and check what's the InstalledDir. Move cla
 
 # Enabling Fixits
 
-Some checks support fixits, in which clazy will re-write your source files whenever it can fix something.
-You can enable a fixit through the env variable, for example:
-`export CLAZY_FIXIT="fix-qlatin1string-allocations"`
+Some checks support fixits, in which clazy will help re-write your source files whenever it can fix something.
+Simply pass `-Xclang -plugin-arg-clazy -Xclang export-fixes` to clang, or `-export-fixes=somefile.yaml` for `clazy-standalone`.
+Then run `clang-apply-replacements <folder_with_yaml_files>`, which will modify your code.
 
-Only one fixit can be enabled each time.
-**WARNING**: Backup your code, don't blame me if a fixit is not applied correctly.
-For better results don't use parallel builds, otherwise a fixit being applied in an header file might be done twice.
-
-By default clazy will rewrite your file, but it's suggested that you set the `CLAZY_FIXIT_SUFFIX` env variable to something like
-`_clazy`. This will make clazy generate a new file with the fixes, suffixed with a string of your choice instead of overwriting the original
-one. Otherwise the build would most likely fail due to rewriting code and compiling at the same time.
+**WARNING**: Backup your code and make sure all changes done by clazy are correct.
 
 # Troubleshooting
 
@@ -467,6 +461,7 @@ with contributions from:
 - Hannah von Reth
 - Volker Krause
 - Christian Ehrlicher
+- Christian Gagneraud
 
 and thanks to:
 
