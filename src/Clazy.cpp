@@ -242,7 +242,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         return true;
     }
 
-    if (parseArgument("export-fixes", args))
+    if (parseArgument("export-fixes", args) || getenv("CLAZY_EXPORT_FIXES"))
         m_options |= ClazyContext::ClazyOption_ExportFixes;
 
     if (parseArgument("qt4-compat", args))

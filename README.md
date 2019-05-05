@@ -363,6 +363,7 @@ If that doesn't work, run `clang -v` and check what's the InstalledDir. Move cla
 
 Some checks support fixits, in which clazy will help re-write your source files whenever it can fix something.
 Simply pass `-Xclang -plugin-arg-clazy -Xclang export-fixes` to clang, or `-export-fixes=somefile.yaml` for `clazy-standalone`.
+Alternatively, set the `CLAZY_EXPORT_FIXES` env variable (works only with the plugin, not with standalone).
 Then run `clang-apply-replacements <folder_with_yaml_files>`, which will modify your code.
 
 **WARNING**: Backup your code and make sure all changes done by clazy are correct.
