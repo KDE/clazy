@@ -366,6 +366,9 @@ Simply pass `-Xclang -plugin-arg-clazy -Xclang export-fixes` to clang, or `-expo
 Alternatively, set the `CLAZY_EXPORT_FIXES` env variable (works only with the plugin, not with standalone).
 Then run `clang-apply-replacements <folder_with_yaml_files>`, which will modify your code.
 
+When using fixits, prefer to run only a single check each time, so they don't conflict
+with each other modifying the same source lines.
+
 **WARNING**: Backup your code and make sure all changes done by clazy are correct.
 
 # Troubleshooting
