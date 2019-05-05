@@ -108,7 +108,7 @@ class Test:
         return name
 
     def removeYamlFiles(self):
-        for f in [test.yamlFilename(False), test.yamlFilename(True)]:
+        for f in [self.yamlFilename(False), self.yamlFilename(True)]:
             if os.path.exists(f):
                 os.remove(f)
 
@@ -592,7 +592,6 @@ def run_unit_test(test, is_standalone):
 
     # Check that it printed the expected warnings
     if not compare_files(test.expects_failure, expected_file, result_file, test.printableName(is_standalone, False)):
-        test.removeYamlFiles();
         return False
 
     if test.has_fixits:
@@ -604,11 +603,17 @@ def run_unit_test(test, is_standalone):
 def run_unit_tests(tests):
     result = True
     for test in tests:
+        test_result = True
         if not _only_standalone:
-            result = result and run_unit_test(test, False)
+            test_result = run_unit_test(test, False)
+            result = result and test_result
 
         if not _no_standalone:
-            result = result and run_unit_test(test, True)
+            test_result = test_result and run_unit_test(test, True)
+            result = result and test_result
+
+        if not test_result:
+            test.removeYamlFiles();
 
     global _was_successful, _lock
     with _lock:
