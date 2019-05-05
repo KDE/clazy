@@ -324,18 +324,31 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
 vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
 {
     vector<CXXConstructExpr*> constructExprs;
-    clazy::getChilds<CXXConstructExpr>(ternary, constructExprs, 1); // depth = 1, only the two immediate expressions
+
+    auto addConstructExpr = [&constructExprs] (Expr* expr) {
+        if (auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(expr)) {
+            expr = functionalCast->getSubExpr();
+        }
+
+        if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
+            constructExprs.push_back(constructExpr);
+    };
+
+    addConstructExpr(ternary->getTrueExpr());
+    addConstructExpr(ternary->getFalseExpr());
+
+    if (constructExprs.size() != 2) {
+        llvm::errs() << "Weird ternary operator with " << constructExprs.size()
+                     << " constructExprs at " << clazy::getLocStart(ternary).printToString(sm()) << "\n";
+        ternary->dump();
+        assert(false);
+        return {};
+    }
 
     vector<FixItHint> fixits;
     fixits.reserve(2);
-    if (constructExprs.size() != 2) {
-        llvm::errs() << "Weird ternary operator with " << constructExprs.size() << " at " << clazy::getLocStart(ternary).printToString(sm()) << "\n";
-        assert(false);
-        return fixits;
-    }
-
-    for (int i = 0; i < 2; ++i) {
-        SourceLocation rangeStart = clazy::getLocStart(constructExprs[i]);
+    for (CXXConstructExpr *constructExpr : constructExprs) {
+        SourceLocation rangeStart = clazy::getLocStart(constructExpr);
         SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm(), lo());
         fixits.push_back(FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), "QStringLiteral"));
     }
