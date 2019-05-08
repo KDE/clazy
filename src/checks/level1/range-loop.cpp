@@ -118,7 +118,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     std::vector<FixItHint> fixits;
 
     SourceLocation end;
-    if (fixitsEnabled() && islvalue(containerExpr, end)) {
+    if (fixitsEnabled() && islvalue(containerExpr, /*by-ref*/end)) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
             SourceLocation start = clazy::getLocStart(containerExpr);
