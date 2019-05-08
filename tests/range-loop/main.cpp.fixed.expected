@@ -4,7 +4,7 @@
 #include <QtCore/QSequentialIterable>
 #include <QtCore/QVarLengthArray>
 #include <QtCore/QString>
-
+#include <QtCore/QJsonArray>
 
 
 
@@ -236,4 +236,11 @@ void test_add_qasconst_fixits()
     for (const auto &s : getQtList()) {} // Warn
 
     for (const auto &s : f.getList()) {} // Warn
+}
+
+
+void test_json_array()
+{
+    QJsonArray array;
+    for (const auto a : array) {}
 }
