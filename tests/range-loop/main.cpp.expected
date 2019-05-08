@@ -12,3 +12,4 @@ range-loop/main.cpp:228:5: warning: c++11 range-loop might detach Qt container (
 range-loop/main.cpp:231:5: warning: c++11 range-loop might detach Qt container (QStringList) [-Wclazy-range-loop]
 range-loop/main.cpp:236:5: warning: c++11 range-loop might detach Qt container (QList) [-Wclazy-range-loop]
 range-loop/main.cpp:238:5: warning: c++11 range-loop might detach Qt container (QStringList) [-Wclazy-range-loop]
+range-loop/main.cpp:247:10: warning: Missing reference in range-for with non trivial type (QJsonValue) [-Wclazy-range-loop]
