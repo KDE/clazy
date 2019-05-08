@@ -12,6 +12,4 @@ Also warns if you're passing structs with non-trivial copy-ctor or non-trivial d
 const-ref so that the copy-ctor and dtor don't get called.
 
 #### Fixits
-This check supports adding missing `&` or `const-&` with:
-
-    export CLAZY_FIXIT="fix-range-loop-add-ref"
+This check supports adding missing `&`, `const-&` or `qAsConst`.
