@@ -10,6 +10,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qvariant-template-instantiation.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-reserve-candidates.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-thread-with-slots.md
@@ -38,7 +39,6 @@ SET(README_LEVEL0_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-insensitive-allocation.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-ref.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-macros.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qvariant-template-instantiation.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-strict-iterators.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-temporary-iterator.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unused-non-trivial-variable.md

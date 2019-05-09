@@ -38,6 +38,7 @@
 #include "checks/manuallevel/qstring-varargs.h"
 #include "checks/manuallevel/qt-keywords.h"
 #include "checks/manuallevel/qt4-qstring-from-array.h"
+#include "checks/manuallevel/qvariant-template-instantiation.h"
 #include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/reserve-candidates.h"
 #include "checks/manuallevel/thread-with-slots.h"
@@ -63,7 +64,6 @@
 #include "checks/level0/qstring-insensitive-allocation.h"
 #include "checks/level0/qstring-ref.h"
 #include "checks/level0/qt-macros.h"
-#include "checks/level0/qvariant-template-instantiation.h"
 #include "checks/level0/strict-iterators.h"
 #include "checks/level0/temporary-iterator.h"
 #include "checks/level0/unused-non-trivial-variable.h"
@@ -130,6 +130,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt-keywords", "qt-keywords");
     registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
+    registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
@@ -160,7 +161,6 @@ void CheckManager::registerChecks()
     registerCheck(check<StringRefCandidates>("qstring-ref", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-missing-qstringref", "qstring-ref");
     registerCheck(check<QtMacros>("qt-macros", CheckLevel0, RegisteredCheck::Option_None));
-    registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<StrictIterators>("strict-iterators", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<TemporaryIterator>("temporary-iterator", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));

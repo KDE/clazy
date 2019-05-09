@@ -10,6 +10,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-varargs.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keywords.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt4-qstring-from-array.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qvariant-template-instantiation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/raw-environment-function.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/reserve-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/thread-with-slots.cpp
@@ -35,7 +36,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-insensitive-allocation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qt-macros.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qvariant-template-instantiation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/strict-iterators.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/temporary-iterator.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/unused-non-trivial-variable.cpp

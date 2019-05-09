@@ -148,8 +148,7 @@
         },
         {
             "name"  : "qvariant-template-instantiation",
-            "level" : 0,
-            "categories" : ["performance"],
+            "level" : -1,
             "visits_stmts" : true
         },
         {
