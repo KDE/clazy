@@ -87,7 +87,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
 
 void InefficientQListBase::VisitDecl(clang::Decl *decl)
 {
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    auto varDecl = dyn_cast<VarDecl>(decl);
     if (!varDecl)
         return;
 
@@ -97,7 +97,7 @@ void InefficientQListBase::VisitDecl(clang::Decl *decl)
         return;
 
     CXXRecordDecl *recordDecl = t->getAsCXXRecordDecl();
-    if (!recordDecl || clazy::name(recordDecl) != "QList")
+    if (!recordDecl || clazy::name(recordDecl) != "QList" || type.getAsString() == "QVariantList")
         return;
 
     const std::vector<clang::QualType> types = clazy::getTemplateArgumentsTypes(recordDecl);

@@ -1,5 +1,5 @@
 #include <QtCore/QList>
-
+#include <QtCore/QVariant>
 
 
 
@@ -46,4 +46,10 @@ void test_bug358740()
 {
     QList<int> list; // OK
     int a, b;
+}
+
+void testQVariantList()
+{
+    QList<QVariant> list1; // Warn
+    QVariantList list2; // OK, to interact with Qt api probably
 }
