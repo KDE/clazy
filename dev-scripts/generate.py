@@ -391,8 +391,9 @@ def search_in_all_levels(filename):
 #-------------------------------------------------------------------------------
 def create_checks(checks):
     generated = False
-    edit_changelog = False
+
     for check in checks:
+        edit_changelog = False
         include_file = check.path() + check.include()
         cpp_file = check.path() + check.cpp_filename()
         copyright = get_copyright()
