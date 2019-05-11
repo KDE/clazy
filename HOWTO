@@ -1,7 +1,9 @@
+TODO: Use .md
+
 Help on how to create a new check or a fixit
 
 --------------------------------------------------------------------------------
-Files to create or modify
+Files to create or modify:
 
 checks/levelX/my-check.cpp
 checks/levelX/my-check.h
@@ -9,6 +11,13 @@ checks/README-my-check.md
 tests/my-check/config.json
 tests/my-check/main.cpp
 ClazySources.cmake
+checks.json
+ChangeLog
+README.md
+
+Just add your check to checks.json and run dev-scripts/generate.py --generate
+which will generate the files you need to write, and edit others for you.
+
 --------------------------------------------------------------------------------
 Tips
 
@@ -39,20 +48,6 @@ Using ASTMatchers
 - See the qcolor-from-literal check for how to use ASTMatchers with clazy
 --------------------------------------------------------------------------------
 Tips for fixits
-
-- Don't forget to register your fixit with:
-  REGISTER_FIXIT(MyFixEnumerator, "fix-my-check", "my-check")
-  Where the 1st argument is some enum value, which your create, mostly useful if you have more than one fixit type.
-
-- When testing main.cpp, the unit-test framework will automatically have fixits enabled, and a main.cpp_fixed.cpp is created.
-  You should add this to config.json, so that main.cpp_fixed.cpp is also compiled:
-        {
-            "filename" : "main.cpp_fixed.cpp",
-            "isFixedFile" : true
-        }
-
-  The expected result is the main.cpp_fixed.cpp itself, so, if the file looks correctly fixed:
-      cp main.cpp_fixed.cpp main.cpp_fixed.cpp.expected
 
 - Usually you'll have to poke around and debug print getLocStart and getLocEnd of statements until
   you find the locations you want, otherwise you'll have to manipulate the locations with Lexer,
