@@ -5,6 +5,10 @@ import shutil
 from threading import Thread
 from sys import platform as _platform
 
+
+# cd into the folder containing this script
+os.chdir(os.path.dirname(sys.argv[0]))
+
 _verbose = False
 
 def isWindows():
