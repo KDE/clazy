@@ -78,7 +78,7 @@ struct QualTypeClassification {
  * The optional parameter body is in order to advise non-const-ref -> value, since the body
  * needs to be inspected to see if we that would compile.
  */
-bool classifyQualType(const ClazyContext *context, const clang::VarDecl *varDecl,
+bool classifyQualType(const ClazyContext *context, clang::QualType qualType, const clang::VarDecl *varDecl,
                       QualTypeClassification &classification,
                       clang::Stmt *body = nullptr);
 

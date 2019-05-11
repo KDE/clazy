@@ -145,7 +145,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
     int i = -1;
     for (auto param : Utils::functionParameters(func)) {
         i++;
-        QualType paramQt = TypeUtils::unrefQualType(param->getType());
+        const QualType paramQt = TypeUtils::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
             continue;
@@ -154,7 +154,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
             continue;
 
         TypeUtils::QualTypeClassification classif;
-        bool success = TypeUtils::classifyQualType(m_context, param, classif, body);
+        bool success = TypeUtils::classifyQualType(m_context, param->getType(), param, classif, body);
         if (!success)
             continue;
 

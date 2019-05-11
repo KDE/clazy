@@ -157,7 +157,7 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     TypeUtils::QualTypeClassification classif;
-    bool success = TypeUtils::classifyQualType(m_context, varDecl, /*by-ref*/ classif, forStatements.at(0));
+    bool success = TypeUtils::classifyQualType(m_context, varDecl->getType(), varDecl, /*by-ref*/ classif, forStatements.at(0));
     if (!success)
         return;
 

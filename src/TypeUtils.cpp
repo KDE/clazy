@@ -36,28 +36,27 @@
 
 using namespace clang;
 
-bool TypeUtils::classifyQualType(const ClazyContext *context, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
+bool TypeUtils::classifyQualType(const ClazyContext *context, clang::QualType qualType,
+                                 const VarDecl *varDecl, QualTypeClassification &classif,
+                                 clang::Stmt *body)
 {
-    if (!varDecl)
-        return false;
-
-    QualType qualType = TypeUtils::unrefQualType(varDecl->getType());
-    const Type *paramType = qualType.getTypePtrOrNull();
+    QualType unrefQualType = TypeUtils::unrefQualType(qualType);
+    const Type *paramType = unrefQualType.getTypePtrOrNull();
     if (!paramType || paramType->isIncompleteType())
         return false;
 
     if (isUndeducibleAuto(paramType))
         return false;
 
-    classif.size_of_T = context->astContext.getTypeSize(qualType) / 8;
+    classif.size_of_T = context->astContext.getTypeSize(unrefQualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
     classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor() || (copyCtor && copyCtor->isDeleted()));
-    classif.isReference = varDecl->getType()->isLValueReferenceType();
-    classif.isConst = qualType.isConstQualified();
+    classif.isReference = qualType->isLValueReferenceType();
+    classif.isConst = unrefQualType.isConstQualified();
 
-    if (varDecl->getType()->isRValueReferenceType()) // && ref, nothing to do here
+    if (qualType->isRValueReferenceType()) // && ref, nothing to do here
         return true;
 
     if (classif.isConst && !classif.isReference) {
@@ -67,7 +66,7 @@ bool TypeUtils::classifyQualType(const ClazyContext *context, const VarDecl *var
         }
     } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
         classif.passSmallTrivialByValue = true;
-    } else if (!classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
+    } else if (varDecl && !classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
         if (body && (Utils::containsNonConstMemberCall(context->parentMap, body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
             return true;
 
