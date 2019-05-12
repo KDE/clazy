@@ -47,7 +47,7 @@ class CXXBaseSpecifier;
 
 class ClazyContext;
 
-namespace TypeUtils
+namespace clazy
 {
 /**
  * Returns the sizeof(void*) for the platform we're compiling for, in bits.

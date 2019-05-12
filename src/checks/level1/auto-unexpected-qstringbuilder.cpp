@@ -47,7 +47,7 @@ using namespace std;
 
 static bool isQStringBuilder(QualType t)
 {
-    CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
+    CXXRecordDecl *record = clazy::typeAsRecord(t);
     return record && clazy::name(record) == "QStringBuilder";
 }
 

@@ -80,14 +80,14 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     string qualifiedTypeName;
     string typeName;
     for (auto param : method->parameters()) {
-        QualType t = TypeUtils::pointeeQualType(param->getType());
+        QualType t = clazy::pointeeQualType(param->getType());
         if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
     }
 
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
-        QualType returnT = TypeUtils::pointeeQualType(method->getReturnType());
+        QualType returnT = clazy::pointeeQualType(method->getReturnType());
         if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
@@ -158,7 +158,7 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                 for (auto s : switches) {
                     auto reinterprets = clazy::getStatements<CXXReinterpretCastExpr>(s);
                     for (auto reinterpret : reinterprets) {
-                        QualType qt = TypeUtils::pointeeQualType(reinterpret->getTypeAsWritten());
+                        QualType qt = clazy::pointeeQualType(reinterpret->getTypeAsWritten());
                         auto record = qt->getAsCXXRecordDecl();
                         if (!record || !isGadget(record))
                             continue;

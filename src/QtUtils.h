@@ -186,7 +186,7 @@ bool isJavaIterator(clang::CXXMemberCallExpr *call);
  */
 inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *context)
 {
-    return (int)context->getTypeSize(qt) <= TypeUtils::sizeOfPointer(context, qt);
+    return (int)context->getTypeSize(qt) <= clazy::sizeOfPointer(context, qt);
 }
 
 /**
@@ -295,7 +295,7 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
                     expr = implicitCast->getSubExpr();
                 }
             }
-            clang::QualType qt = TypeUtils::pointeeQualType(expr->getType());
+            clang::QualType qt = clazy::pointeeQualType(expr->getType());
             if (!qt.isNull()) {
                 clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
                 *castFrom = record ? record->getCanonicalDecl() : nullptr;
@@ -306,7 +306,7 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
             auto templateArgs = func->getTemplateSpecializationArgs();
             if (templateArgs->size() == 1) {
                 const clang::TemplateArgument &arg = templateArgs->get(0);
-                clang::QualType qt = TypeUtils::pointeeQualType(arg.getAsType());
+                clang::QualType qt = clazy::pointeeQualType(arg.getAsType());
                 if (!qt.isNull()) {
                     clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
                     *castTo = record ? record->getCanonicalDecl() : nullptr;

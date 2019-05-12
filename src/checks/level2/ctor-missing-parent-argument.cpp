@@ -45,11 +45,11 @@ CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, Cl
 
 static string expectedParentTypeFor(CXXRecordDecl *decl)
 {
-    if (TypeUtils::derivesFrom(decl, "QWidget")) {
+    if (clazy::derivesFrom(decl, "QWidget")) {
         return "QWidget";
-    } else if (TypeUtils::derivesFrom(decl, "QQuickItem")) {
+    } else if (clazy::derivesFrom(decl, "QQuickItem")) {
         return "QQuickItem";
-    } else if (TypeUtils::derivesFrom(decl, "Qt3DCore::QEntity")) {
+    } else if (clazy::derivesFrom(decl, "Qt3DCore::QEntity")) {
         return "Qt3DCore::QNode";
     }
 

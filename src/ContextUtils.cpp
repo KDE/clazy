@@ -180,10 +180,10 @@ bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
         return false;
 
     // For protected there's still hope, since record might be a derived or base class
-    if (TypeUtils::derivesFrom(record, contextRecord))
+    if (clazy::derivesFrom(record, contextRecord))
         return true;
 
-    if (TypeUtils::derivesFrom(contextRecord, record)) {
+    if (clazy::derivesFrom(contextRecord, record)) {
         isSpecialProtectedCase = true;
         return true;
     }

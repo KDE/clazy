@@ -36,11 +36,11 @@
 
 using namespace clang;
 
-bool TypeUtils::classifyQualType(const ClazyContext *context, clang::QualType qualType,
-                                 const VarDecl *varDecl, QualTypeClassification &classif,
-                                 clang::Stmt *body)
+bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualType,
+                             const VarDecl *varDecl, QualTypeClassification &classif,
+                             clang::Stmt *body)
 {
-    QualType unrefQualType = TypeUtils::unrefQualType(qualType);
+    QualType unrefQualType = clazy::unrefQualType(qualType);
     const Type *paramType = unrefQualType.getTypePtrOrNull();
     if (!paramType || paramType->isIncompleteType())
         return false;
@@ -79,7 +79,7 @@ bool TypeUtils::classifyQualType(const ClazyContext *context, clang::QualType qu
     return true;
 }
 
-bool TypeUtils::isSmallTrivial(const ClazyContext *context, QualType qualType)
+bool clazy::isSmallTrivial(const ClazyContext *context, QualType qualType)
 {
     if (qualType.isNull())
         return false;
@@ -90,7 +90,7 @@ bool TypeUtils::isSmallTrivial(const ClazyContext *context, QualType qualType)
     if (qualType->isPointerType()) // We don't care about ** (We can change this whenever we have a use case)
         return false;
 
-    QualType unrefQualType = TypeUtils::unrefQualType(qualType);
+    QualType unrefQualType = clazy::unrefQualType(qualType);
     const Type *paramType = unrefQualType.getTypePtrOrNull();
     if (!paramType || paramType->isIncompleteType())
         return false;
@@ -115,7 +115,7 @@ bool TypeUtils::isSmallTrivial(const ClazyContext *context, QualType qualType)
      return false;
 }
 
-void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
+void clazy::heapOrStackAllocated(Expr *arg, const std::string &type,
                                      const clang::LangOptions &lo,
                                      bool &isStack, bool &isHeap)
 {
@@ -156,7 +156,7 @@ void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 }
 
-bool TypeUtils::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase,
+bool clazy::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase,
                             std::vector<CXXRecordDecl*> *baseClasses)
 {
     if (!derived || !possibleBase || derived == possibleBase)
@@ -178,7 +178,7 @@ bool TypeUtils::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *p
     return false;
 }
 
-bool TypeUtils::derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase)
+bool clazy::derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
     if (!derived || !derived->hasDefinition())
         return false;
@@ -194,7 +194,7 @@ bool TypeUtils::derivesFrom(const clang::CXXRecordDecl *derived, const std::stri
     return false;
 }
 
-bool TypeUtils::derivesFrom(QualType derivedQT, const std::string &possibleBase)
+bool clazy::derivesFrom(QualType derivedQT, const std::string &possibleBase)
 {
     derivedQT = pointeeQualType(derivedQT);
     const auto t = derivedQT.getTypePtrOrNull();

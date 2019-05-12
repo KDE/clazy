@@ -132,7 +132,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
         }
     }
 
-    if (!hasUserDtor && (TypeUtils::derivesFrom(record, "QSharedData") || dtorDefaultedByUser))
+    if (!hasUserDtor && (clazy::derivesFrom(record, "QSharedData") || dtorDefaultedByUser))
         return;
 
     if (Utils::hasMember(record, "QSharedDataPointer"))

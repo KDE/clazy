@@ -60,7 +60,7 @@ void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
     const CXXRecordDecl *baseClass = memberCall->getRecordDecl();
 
     std::vector<CXXRecordDecl*> baseClasses;
-    if (!TypeUtils::derivesFrom(thisClass, baseClass, &baseClasses) || baseClasses.size() < 2)
+    if (!clazy::derivesFrom(thisClass, baseClass, &baseClasses) || baseClasses.size() < 2)
         return;
 
     // We're calling a grand-base method, so check if a more direct base also implements it

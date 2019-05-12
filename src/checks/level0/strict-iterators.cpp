@@ -83,11 +83,11 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     const string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
 
     const QualType typeTo = implicitCast->getType();
-    CXXRecordDecl *recordTo = TypeUtils::parentRecordForTypedef(typeTo);
+    CXXRecordDecl *recordTo = clazy::parentRecordForTypedef(typeTo);
     if (recordTo && !clazy::isQtCOWIterableClass(recordTo))
         return false;
 
-    recordTo = TypeUtils::typeAsRecord(typeTo);
+    recordTo = clazy::typeAsRecord(typeTo);
     if (recordTo && !clazy::isQtCOWIterator(recordTo))
         return false;
 
@@ -99,12 +99,12 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     }
 
     QualType typeFrom = implicitCast->getSubExpr()->getType();
-    CXXRecordDecl *recordFrom = TypeUtils::parentRecordForTypedef(typeFrom);
+    CXXRecordDecl *recordFrom = clazy::parentRecordForTypedef(typeFrom);
     if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom))
         return false;
 
     // const_iterator might be a typedef to pointer, like const T *, instead of a class, so just check for const qualification in that case
-    if (!(TypeUtils::pointeeQualType(typeTo).isConstQualified() || clazy::endsWith(nameTo, "const_iterator")))
+    if (!(clazy::pointeeQualType(typeTo).isConstQualified() || clazy::endsWith(nameTo, "const_iterator")))
         return false;
 
     if (implicitCast->getCastKind() == CK_ConstructorConversion) {
@@ -149,7 +149,7 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
         return false;
 
     ParmVarDecl *p = method->getParamDecl(0);
-    CXXRecordDecl *paramClass = p ? TypeUtils::typeAsRecord(TypeUtils::pointeeQualType(p->getType())) : nullptr;
+    CXXRecordDecl *paramClass = p ? clazy::typeAsRecord(clazy::pointeeQualType(p->getType())) : nullptr;
     if (!paramClass || clazy::name(paramClass) != "const_iterator")
         return false;
 

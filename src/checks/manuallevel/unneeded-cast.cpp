@@ -116,7 +116,7 @@ bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl 
     if (castFrom == castTo) {
         emitWarning(clazy::getLocStart(stmt), "Casting to itself");
         return true;
-    } else if (TypeUtils::derivesFrom(/*child=*/ castFrom, castTo)) {
+    } else if (clazy::derivesFrom(/*child=*/ castFrom, castTo)) {
         emitWarning(clazy::getLocStart(stmt), "explicitly casting to base is unnecessary");
         return true;
     }

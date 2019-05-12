@@ -49,7 +49,7 @@ static bool hasMutexes(Stmt *body)
     auto declrefs = clazy::getStatements<DeclRefExpr>(body);
     for (auto declref : declrefs) {
         ValueDecl *valueDecl = declref->getDecl();
-        if (CXXRecordDecl *record = TypeUtils::typeAsRecord(valueDecl->getType())) {
+        if (CXXRecordDecl *record = clazy::typeAsRecord(valueDecl->getType())) {
             if (clazy::name(record) == "QMutex" || clazy::name(record) == "QBasicMutex") {
                 return true;
             }
@@ -78,7 +78,7 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXMethodDecl *slot =  clazy::receiverMethodForConnect(callExpr);
-    if (!slot || !TypeUtils::derivesFrom(slot->getParent(), "QThread"))
+    if (!slot || !clazy::derivesFrom(slot->getParent(), "QThread"))
         return;
 
     if (clazy::name(slot->getParent()) == "QThread") // The slots in QThread are thread safe, we're only worried about derived classes
@@ -97,7 +97,7 @@ void ThreadWithSlots::VisitDecl(Decl *decl)
 
     auto method = dyn_cast<CXXMethodDecl>(decl);
     if (!method || !m_context->accessSpecifierManager || !method->isThisDeclarationADefinition() || !method->hasBody()
-        || !TypeUtils::derivesFrom(method->getParent(), "QThread"))
+        || !clazy::derivesFrom(method->getParent(), "QThread"))
         return;
 
     // The slots in QThread are thread safe, we're only worried about derived classes:
@@ -118,7 +118,7 @@ void ThreadWithSlots::VisitDecl(Decl *decl)
     auto memberexprs = clazy::getStatements<MemberExpr>(body);
     for (auto memberexpr : memberexprs) {
         ValueDecl *valueDecl = memberexpr->getMemberDecl();
-        if (CXXRecordDecl *record = TypeUtils::typeAsRecord(valueDecl->getType())) {
+        if (CXXRecordDecl *record = clazy::typeAsRecord(valueDecl->getType())) {
             if (clazy::name(record) == "QMutex" || clazy::name(record) == "QBasicMutex") {
                 return;
             }

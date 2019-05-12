@@ -61,7 +61,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
 
     bool isStack = false;
     bool isHeap = false;
-    TypeUtils::heapOrStackAllocated(event, "QEvent", lo(), isStack, isHeap);
+    clazy::heapOrStackAllocated(event, "QEvent", lo(), isStack, isHeap);
 
     if (isStack || isHeap) {
         if (isSendEvent && isHeap) {

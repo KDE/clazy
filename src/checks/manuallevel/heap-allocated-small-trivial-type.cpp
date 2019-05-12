@@ -47,7 +47,7 @@ void HeapAllocatedSmallTrivialType::VisitStmt(clang::Stmt *stmt)
         return;
 
     QualType qualType = newExpr->getType()->getPointeeType();
-    if (TypeUtils::isSmallTrivial(m_context, qualType)) {
+    if (clazy::isSmallTrivial(m_context, qualType)) {
         if (clazy::contains(qualType.getAsString(), "Private")) {
             // Possibly a pimpl, forward declared in header
             return;

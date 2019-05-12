@@ -145,7 +145,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
     int i = -1;
     for (auto param : Utils::functionParameters(func)) {
         i++;
-        const QualType paramQt = TypeUtils::unrefQualType(param->getType());
+        const QualType paramQt = clazy::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
             continue;
@@ -153,8 +153,8 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
         if (shouldIgnoreClass(paramType->getAsCXXRecordDecl()))
             continue;
 
-        TypeUtils::QualTypeClassification classif;
-        bool success = TypeUtils::classifyQualType(m_context, param->getType(), param, classif, body);
+        clazy::QualTypeClassification classif;
+        bool success = clazy::classifyQualType(m_context, param->getType(), param, classif, body);
         if (!success)
             continue;
 
@@ -199,9 +199,9 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
 }
 
 FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *param,
-                                     TypeUtils::QualTypeClassification)
+                                     clazy::QualTypeClassification)
 {
-    QualType qt = TypeUtils::unrefQualType(param->getType());
+    QualType qt = clazy::unrefQualType(param->getType());
     qt.removeLocalConst();
     const string typeName = qt.getAsString(PrintingPolicy(lo()));
     string replacement = typeName + ' ' + string(clazy::name(param));

@@ -65,7 +65,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     Expr *arg1 = memberCallExpr->getArg(0);
     arg1 = arg1 ? arg1->IgnoreCasts() : nullptr;
 
-    CXXRecordDecl *record = TypeUtils::typeAsRecord(arg1);
+    CXXRecordDecl *record = clazy::typeAsRecord(arg1);
     auto methods = Utils::methodsFromString(record, "eventFilter");
 
     for (auto method : methods) {

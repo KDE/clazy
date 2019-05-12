@@ -245,7 +245,7 @@ void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
     Expr *e = cast->getSubExpr();
 
     QualType t = e ? e->getType() : QualType();
-    QualType pointeeType = t.isNull() ? QualType() : TypeUtils::pointeeQualType(t);
+    QualType pointeeType = t.isNull() ? QualType() : clazy::pointeeQualType(t);
     CXXRecordDecl *rec = pointeeType.isNull() ? nullptr : pointeeType->getAsCXXRecordDecl();
 
     if (!rec || clazy::name(rec) != "QEvent")

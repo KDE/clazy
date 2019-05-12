@@ -104,7 +104,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     auto loopVariableType = rangeLoop->getLoopVariable()->getType();
-    if (!TypeUtils::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType())
+    if (!clazy::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType())
         return;
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
@@ -133,9 +133,9 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
 void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
 {
-    TypeUtils::QualTypeClassification classif;
+    clazy::QualTypeClassification classif;
     auto varDecl = rangeLoop->getLoopVariable();
-    bool success = varDecl && TypeUtils::classifyQualType(m_context, varDecl->getType(), varDecl, /*by-ref*/ classif, rangeLoop);
+    bool success = varDecl && clazy::classifyQualType(m_context, varDecl->getType(), varDecl, /*by-ref*/ classif, rangeLoop);
     if (!success)
         return;
 

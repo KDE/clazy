@@ -130,12 +130,12 @@ bool clazy::isQtAssociativeContainer(StringRef className)
 
 bool clazy::isQObject(const CXXRecordDecl *decl)
 {
-    return TypeUtils::derivesFrom(decl, "QObject");
+    return clazy::derivesFrom(decl, "QObject");
 }
 
 bool clazy::isQObject(clang::QualType qt)
 {
-    qt = TypeUtils::pointeeQualType(qt);
+    qt = clazy::pointeeQualType(qt);
     const auto t = qt.getTypePtrOrNull();
     return t ? isQObject(t->getAsCXXRecordDecl()) : false;
 }
@@ -161,9 +161,9 @@ bool clazy::isConvertibleTo(const Type *source, const Type *target)
         return true;
 
     // "QString" can convert to "const QString &" and vice versa
-    if (TypeUtils::isConstRef(source) && source->getPointeeType().getTypePtrOrNull() == target)
+    if (clazy::isConstRef(source) && source->getPointeeType().getTypePtrOrNull() == target)
         return true;
-    if (TypeUtils::isConstRef(target) && target->getPointeeType().getTypePtrOrNull() == source)
+    if (clazy::isConstRef(target) && target->getPointeeType().getTypePtrOrNull() == source)
         return true;
 
     return false;
@@ -190,7 +190,7 @@ bool clazy::isJavaIterator(CXXMemberCallExpr *call)
 
 bool clazy::isQtContainer(QualType t)
 {
-    CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
+    CXXRecordDecl *record = clazy::typeAsRecord(t);
     if (!record)
         return false;
 
@@ -233,7 +233,7 @@ bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
     static const std::vector<std::string> classes = {"QVector", "std::vector", "QList", "QSet"};
 
     return clazy::any_of(classes, [recordDecl](const string &className) {
-        return TypeUtils::derivesFrom(recordDecl, className);
+        return clazy::derivesFrom(recordDecl, className);
     });
 }
 
@@ -243,7 +243,7 @@ clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDec
         return nullptr;
 
     for (auto baseClass : recordDecl->bases()) {
-        CXXRecordDecl *record = TypeUtils::recordFromBaseSpecifier(baseClass);
+        CXXRecordDecl *record = clazy::recordFromBaseSpecifier(baseClass);
         if (isQObject(record))
             return record;
     }
@@ -362,8 +362,8 @@ bool clazy::recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::stri
             continue;
         numCtors++;
         for (auto param : ctor->parameters()) {
-            QualType qt = TypeUtils::pointeeQualType(param->getType());
-            if (!qt.isConstQualified() && TypeUtils::derivesFrom(qt, paramType)) {
+            QualType qt = clazy::pointeeQualType(param->getType());
+            if (!qt.isConstQualified() && clazy::derivesFrom(qt, paramType)) {
                 return true;
             }
         }

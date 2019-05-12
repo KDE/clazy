@@ -132,14 +132,14 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
 
     if (declRef) {
         VarDecl *varDecl = dyn_cast<VarDecl>(declRef->getDecl());
-        if (!varDecl || varDecl->isStaticLocal() || TypeUtils::valueIsConst(varDecl->getType()))
+        if (!varDecl || varDecl->isStaticLocal() || clazy::valueIsConst(varDecl->getType()))
             return;
 
         QualType qt = varDecl->getType();
         if (qt.isNull() || qt->isReferenceType())
             return;
     } else if (temporaryExpr) {
-        if (TypeUtils::valueIsConst(temporaryExpr->getType()))
+        if (clazy::valueIsConst(temporaryExpr->getType()))
             return;
     }
 

@@ -87,7 +87,7 @@ void ConstSignalOrSlot::VisitDecl(Decl *decl)
         return;
 
     CXXRecordDecl *record = method->getParent();
-    if (TypeUtils::derivesFrom(record, "QDBusAbstractInterface"))
+    if (clazy::derivesFrom(record, "QDBusAbstractInterface"))
         return;
 
     QtAccessSpecifierType specifierType = a->qtAccessSpecifierType(method);

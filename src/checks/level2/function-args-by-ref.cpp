@@ -125,7 +125,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
     auto funcParams = Utils::functionParameters(func);
     for (unsigned int i = 0; i < funcParams.size(); ++i) {
         ParmVarDecl* param = funcParams[i];
-        const QualType paramQt = TypeUtils::unrefQualType(param->getType());
+        const QualType paramQt = clazy::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
             continue;
@@ -133,8 +133,8 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         if (shouldIgnoreClass(paramType->getAsCXXRecordDecl()))
             continue;
 
-        TypeUtils::QualTypeClassification classif;
-        bool success = TypeUtils::classifyQualType(m_context, param->getType(), param, classif, body);
+        clazy::QualTypeClassification classif;
+        bool success = clazy::classifyQualType(m_context, param->getType(), param, classif, body);
         if (!success)
             continue;
 
@@ -167,7 +167,7 @@ void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *
                 return;
 
             ParmVarDecl *param = funcParams[parmIndex];
-            QualType paramQt = TypeUtils::unrefQualType(param->getType());
+            QualType paramQt = clazy::unrefQualType(param->getType());
 
             const bool isConst = paramQt.isConstQualified();
 
@@ -195,7 +195,7 @@ void FunctionArgsByRef::VisitStmt(Stmt *stmt)
     }
 }
 
-clang::FixItHint FunctionArgsByRef::fixit(const ParmVarDecl *, TypeUtils::QualTypeClassification)
+clang::FixItHint FunctionArgsByRef::fixit(const ParmVarDecl *, clazy::QualTypeClassification)
 {
     FixItHint fixit;
     return fixit;

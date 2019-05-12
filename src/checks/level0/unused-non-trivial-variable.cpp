@@ -124,7 +124,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
                                                        "QLine", "QLineF", "QRect", "QRectF", "QDomNode"
     };
 
-    CXXRecordDecl *record = TypeUtils::typeAsRecord(t);
+    CXXRecordDecl *record = clazy::typeAsRecord(t);
     if (!record)
         return false;
 

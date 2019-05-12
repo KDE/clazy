@@ -54,7 +54,7 @@ void QHashWithCharPointerKey::VisitDecl(clang::Decl *decl)
 
     QualType qt = templateArguments[0].getAsType();
     if (!qt.isNull() && qt->isPointerType()) {
-        qt = TypeUtils::pointeeQualType(qt);
+        qt = clazy::pointeeQualType(qt);
         if (!qt.isNull() && !qt->isPointerType() && qt->isCharType()) {
             emitWarning(clazy::getLocStart(decl), "Using QHash<const char *, T> is dangerous");
         }

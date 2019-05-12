@@ -48,7 +48,7 @@ void StaticPmf::VisitDecl(clang::Decl *decl)
     if (!vardecl || !vardecl->isStaticLocal())
         return;
 
-    const Type *t = TypeUtils::unpealAuto(vardecl->getType());
+    const Type *t = clazy::unpealAuto(vardecl->getType());
     if (!t)
         return;
 

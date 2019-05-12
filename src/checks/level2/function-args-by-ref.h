@@ -40,7 +40,7 @@ class FunctionDecl;
 class Stmt;
 }
 
-namespace TypeUtils {
+namespace clazy {
 struct QualTypeClassification;
 }
 
@@ -58,7 +58,7 @@ public:
 private:
     void processFunction(clang::FunctionDecl *);
     void addFixits(std::vector<clang::FixItHint> &fixits, clang::FunctionDecl *, unsigned int parmIndex);
-    clang::FixItHint fixit(const clang::ParmVarDecl *, TypeUtils::QualTypeClassification);
+    clang::FixItHint fixit(const clang::ParmVarDecl *, clazy::QualTypeClassification);
 };
 
 #endif
