@@ -79,6 +79,42 @@ bool TypeUtils::classifyQualType(const ClazyContext *context, clang::QualType qu
     return true;
 }
 
+bool TypeUtils::isSmallTrivial(const ClazyContext *context, QualType qualType)
+{
+    if (qualType.isNull())
+        return false;
+
+    if (qualType->isPointerType())
+        qualType = qualType->getPointeeType();
+
+    if (qualType->isPointerType()) // We don't care about ** (We can change this whenever we have a use case)
+        return false;
+
+    QualType unrefQualType = TypeUtils::unrefQualType(qualType);
+    const Type *paramType = unrefQualType.getTypePtrOrNull();
+    if (!paramType || paramType->isIncompleteType())
+        return false;
+
+    if (isUndeducibleAuto(paramType))
+        return false;
+
+    if (qualType->isRValueReferenceType()) // && ref, nothing to do here
+        return false;
+
+     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
+     CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
+     const bool hasDeletedCopyCtor = copyCtor && copyCtor->isDeleted();
+     const bool isTrivial = recordDecl && !recordDecl->hasNonTrivialCopyConstructor() && !recordDecl->hasNonTrivialDestructor() && !hasDeletedCopyCtor;
+
+     if (isTrivial) {
+         const auto typeSize = context->astContext.getTypeSize(unrefQualType) / 8;
+         const bool isSmall = typeSize <= 16;
+         return isSmall;
+     }
+
+     return false;
+}
+
 void TypeUtils::heapOrStackAllocated(Expr *arg, const std::string &type,
                                      const clang::LangOptions &lo,
                                      bool &isStack, bool &isHeap)

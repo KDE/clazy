@@ -83,6 +83,14 @@ bool classifyQualType(const ClazyContext *context, clang::QualType qualType, con
                       clang::Stmt *body = nullptr);
 
 /**
+ * @brief Lighter version of classifyQualType in case you just want to know if it's small and trivially copyable&destructible
+ * @param context The clazy context
+ * @param qualType The QualType we're testing.
+ * @return true if the type specified by QualType (or its pointee) are small and trivially copyable/destructible.
+ */
+bool isSmallTrivial(const ClazyContext *context, clang::QualType qualType);
+
+/**
  * If qt is a reference, return it without a reference.
  * If qt is not a reference, return qt.
  *
