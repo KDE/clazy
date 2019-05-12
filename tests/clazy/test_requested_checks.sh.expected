@@ -113,9 +113,6 @@ To specify which checks to enable set the CLAZY_CHECKS env variable, for example
 or pass as compiler arguments, for example:
     -Xclang -plugin-arg-clazy -Xclang reserve-candidates,qstring-allocations
 
-To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:
-    export CLAZY_FIXIT="fix-qlatin1string-allocations"
-
 FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.
 Specifying a list of different FixIts is not supported.
 Backup your code before running them.
