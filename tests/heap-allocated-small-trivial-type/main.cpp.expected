@@ -1,0 +1,1 @@
+heap-allocated-small-trivial-type/main.cpp:29:14: warning: Don't heap-allocate small trivially copyable/destructible types: struct SmallTrivial [-Wclazy-heap-allocated-small-trivial-type]

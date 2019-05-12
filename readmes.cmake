@@ -2,6 +2,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-assert-with-side-effects.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-container-inside-loop.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-member.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-heap-allocated-small-trivial-type.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-ifndef-define-typo.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-inefficient-qlist.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md

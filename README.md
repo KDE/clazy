@@ -218,6 +218,7 @@ clazy runs all checks from level1 by default.
     - [assert-with-side-effects](docs/checks/README-assert-with-side-effects.md)
     - [container-inside-loop](docs/checks/README-container-inside-loop.md)
     - [detaching-member](docs/checks/README-detaching-member.md)
+    - [heap-allocated-small-trivial-type](docs/checks/README-heap-allocated-small-trivial-type.md)
     - [ifndef-define-typo](docs/checks/README-ifndef-define-typo.md)
     - [inefficient-qlist](docs/checks/README-inefficient-qlist.md)
     - [isempty-vs-count](docs/checks/README-isempty-vs-count.md)

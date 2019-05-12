@@ -11,6 +11,12 @@
             ]
         },
         {
+            "name"  : "heap-allocated-small-trivial-type",
+            "level" : -1,
+            "categories" : ["performance"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "ifndef-define-typo",
             "level" : -1,
             "categories" : ["bug"]
