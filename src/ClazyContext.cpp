@@ -35,31 +35,6 @@
 using namespace std;
 using namespace clang;
 
-class ClazyFixItOptions
-    : public FixItOptions
-{
-public:
-    ClazyFixItOptions(const ClazyFixItOptions &other) = delete;
-    ClazyFixItOptions()
-    {
-        if (const char *suffix = getenv("CLAZY_FIXIT_SUFFIX"))
-            m_suffix = suffix;
-
-        InPlace = m_suffix.empty();
-        FixWhatYouCan = true;
-        FixOnlyWarnings = true;
-        Silent = false;
-    }
-
-    std::string RewriteFilename(const std::string &filename, int &fd) override
-    {
-        fd = -1;
-        return InPlace ? filename
-                       : filename + m_suffix;
-    }
-
-    std::string m_suffix;
-};
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
                            const string &headerFilter, const string &ignoreDirs,
