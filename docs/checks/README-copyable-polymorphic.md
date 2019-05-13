@@ -1,8 +1,28 @@
 # copyable-polymorphic
 
 Finds polymorphic classes that are copyable.
-These classes are usually vulnerable to slicing [1].
+Classes with virtual methods are usually handled by pointer, as passing
+then by value would allow up-casting to the base-class and slicing off the vtable.
+Example:
 
-To fix these warnings use Q_DISABLE_COPY or delete the copy-ctor yourself.
+```
+struct Base {
+    virtual int getNumber() const { return 41; }
+};
 
-[1] <https://en.wikipedia.org/wiki/Object_slicing>
+struct Derived : public Base {
+    int getNumber() const override { return 42; }
+};
+
+void printNumber(Base b)
+{
+    qDebug() << b.getNumber(); // Always prints 41!
+}
+
+(...)
+Derived d;
+foo(d);
+
+```
+
+To fix these warnings use `Q_DISABLE_COPY` or delete the copy-ctor yourself.
