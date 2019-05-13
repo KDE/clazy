@@ -51,7 +51,7 @@ class Stmt;
 }
 
 /**
- * This is the FrontendAction that is run with clazy is used as a plugin.
+ * This is the FrontendAction that is run when clazy is used as a clang plugin.
  */
 class ClazyASTAction
     : public clang::PluginASTAction
@@ -76,8 +76,7 @@ private:
 };
 
 /**
- * This is the FrontendAction that is run with clazy is used standalone instead of as a plugin.
- * i.e: when you run clazy-standalone, this is the invoked FrontendAction
+ * This is the FrontendAction that is run when clazy is invoked via clazy-standalone.
  */
 class ClazyStandaloneASTAction
     : public clang::ASTFrontendAction
