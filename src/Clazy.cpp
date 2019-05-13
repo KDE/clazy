@@ -363,9 +363,6 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     ros << "or pass as compiler arguments, for example:\n";
     ros << "    -Xclang -plugin-arg-clazy -Xclang reserve-candidates,qstring-allocations\n";
     ros << "\n";
-    ros << "To enable FixIts for a check, also set the env variable CLAZY_FIXIT, for example:\n";
-    ros << "    export CLAZY_FIXIT=\"fix-qlatin1string-allocations\"\n\n";
-    ros << "FixIts are experimental and rewrite your code therefore only one FixIt is allowed per build.\nSpecifying a list of different FixIts is not supported.\nBackup your code before running them.\n";
 }
 
 ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList,
