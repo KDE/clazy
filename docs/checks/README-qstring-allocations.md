@@ -30,12 +30,7 @@ Here's a summary of usages that allocate:
 
 #### Fixits
 
-    fix-qlatin1string-allocations        // To replace QLatin1String with QStringLiteral only where it was allocating before
-    fix-fromLatin1_fromUtf8-allocations  // To replace fromLatin1() and fromUtf8() so it doesn't allocate
-    fix-fromCharPtrAllocations           // To replace raw string literals so it doesn't allocate
-
-    Example:
-        export CLAZY_FIXIT="fix-fromCharPtrAllocations"
+This check supports a fixit to rewrite your code. See the README.md on how to enable it.
 
 #### Pitfalls
 

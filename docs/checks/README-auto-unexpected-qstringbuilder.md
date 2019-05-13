@@ -13,4 +13,4 @@ Also warns for lambdas returning `QStringBuilder`.
 
 #### Fixits
 
-    export CLAZY_FIXIT="fix-auto-unexpected-qstringbuilder"
+This check supports a fixit to rewrite your code. See the README.md on how to enable it.

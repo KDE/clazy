@@ -13,5 +13,4 @@ And `toInt()` can be any of: `compare`, `contains`, `count`, `startsWith`, `ends
 
 #### FixIts
 
-Fixing the above cases can be automated with:
-`export CLAZY_FIXIT="fix-missing-qstringref"`
+This check supports a fixit to rewrite your code. See the README.md on how to enable it.

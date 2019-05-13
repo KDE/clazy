@@ -7,9 +7,8 @@ This check will ignore shared pointers, you're on your own. Most of the times pa
 
 
 #### Fixits
-This check supports adding missing `&` or `const-&` with:
 
-    export CLAZY_FIXIT="fix-function-args-by-ref"
+This check supports adding missing `&` or `const-&`. See the README.md on how to enable it.
 
 
 - [1] <http://www.macieira.org/blog/2012/02/the-value-of-passing-by-value/>

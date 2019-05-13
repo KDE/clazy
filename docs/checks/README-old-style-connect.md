@@ -10,8 +10,8 @@ Here's however a non-exhaustive list of caveats you should be aware of:
 
 #### Fixits
 
-You can convert the most simple cases with `export CLAZY_FIXIT=fix-old-style-connect`.
-Be careful, as PMF is not a 100% drop-in replacement.
+This check supports a fixit to rewrite your code to the new connect syntax. See the README.md on how to enable it.
+Be careful, as PMF is not a 100% drop-in replacement and the fixit might introduce bugs.
 
 #### Pitfalls
 
