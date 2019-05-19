@@ -28,6 +28,8 @@
 #include <clang/AST/Decl.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/FrontendDiagnostic.h>
+#include <clang/Tooling/Core/Diagnostic.h>
 
 namespace clazy {
 
@@ -81,6 +83,14 @@ inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
 
 }
 
+inline clang::tooling::Replacements& DiagnosticFix(clang::tooling::Diagnostic &diag, llvm::StringRef filePath)
+{
+#if LLVM_VERSION_MAJOR >= 9
+    return diag.Message.Fix[filePath];
+#else
+    return diag.Fix[filePath];
+#endif
+}
 
 }
 

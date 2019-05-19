@@ -20,6 +20,7 @@
 */
 
 #include "FixItExporter.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/Frontend/FrontendDiagnostic.h>
 #include <clang/Tooling/DiagnosticsYaml.h>
@@ -138,8 +139,8 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
                       << Hint.CodeToInsert << "\n";
             llvm::errs() << "R: " << replacement.toString() << "\n";
 #endif
-            auto &Replacements = ToolingDiag.Fix[replacement.getFilePath()];
-            auto error = Replacements.add(ConvertFixIt(Hint));
+            clang::tooling::Replacements &Replacements = clazy::DiagnosticFix(ToolingDiag, replacement.getFilePath());
+            llvm::Error error = Replacements.add(ConvertFixIt(Hint));
             if (error) {
                 Diag(Info.getLocation(), diag::note_fixit_failed);
             }
