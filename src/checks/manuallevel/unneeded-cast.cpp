@@ -105,10 +105,10 @@ bool UnneededCast::handleQObjectCast(Stmt *stm)
     if (!clazy::is_qobject_cast(stm, &castTo, &castFrom))
         return false;
 
-    return maybeWarn(stm, castFrom, castTo);
+    return maybeWarn(stm, castFrom, castTo, /*isQObjectCast=*/ true);
 }
 
-bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl *castTo)
+bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl *castTo, bool isQObjectCast)
 {
     castFrom = castFrom->getCanonicalDecl();
     castTo = castTo->getCanonicalDecl();
@@ -117,7 +117,17 @@ bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl 
         emitWarning(clazy::getLocStart(stmt), "Casting to itself");
         return true;
     } else if (clazy::derivesFrom(/*child=*/ castFrom, castTo)) {
-        emitWarning(clazy::getLocStart(stmt), "explicitly casting to base is unnecessary");
+        if (isQObjectCast) {
+            const bool isTernaryOperator = clazy::getFirstParentOfType<ConditionalOperator>(m_context->parentMap, stmt) != nullptr;
+            if (isTernaryOperator) {
+                emitWarning(clazy::getLocStart(stmt), "use static_cast instead of qobject_cast");
+            } else {
+                emitWarning(clazy::getLocStart(stmt), "explicitly casting to base is unnecessary");
+            }
+        } else {
+            emitWarning(clazy::getLocStart(stmt), "explicitly casting to base is unnecessary");
+        }
+
         return true;
     }
 

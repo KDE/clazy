@@ -53,7 +53,7 @@ public:
 private:
     bool handleNamedCast(clang::CXXNamedCastExpr *);
     bool handleQObjectCast(clang::Stmt *);
-    bool maybeWarn(clang::Stmt *, clang::CXXRecordDecl *from, clang::CXXRecordDecl *to);
+    bool maybeWarn(clang::Stmt *, clang::CXXRecordDecl *from, clang::CXXRecordDecl *to, bool isQObjectCast = false);
 };
 
 #endif
