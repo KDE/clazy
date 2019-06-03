@@ -109,6 +109,7 @@
 * v1.6 (, 2019)
   - New Checks:
     - heap-allocated-small-trivial-type
+    - signal-with-return-value
   - Moved all level3 checks to manual level. Doesn't make sense to enable all of them. Each one must be
   carefully considered.
   - Fixit infrastructure was overhauled

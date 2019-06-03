@@ -14,6 +14,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qvariant-template-instantiation.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-reserve-candidates.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-signal-with-return-value.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-thread-with-slots.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-tr-non-literal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md

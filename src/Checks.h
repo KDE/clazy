@@ -42,6 +42,7 @@
 #include "checks/manuallevel/qvariant-template-instantiation.h"
 #include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/reserve-candidates.h"
+#include "checks/manuallevel/signal-with-return-value.h"
 #include "checks/manuallevel/thread-with-slots.h"
 #include "checks/manuallevel/tr-non-literal.h"
 #include "checks/manuallevel/unneeded-cast.h"
@@ -135,6 +136,7 @@ void CheckManager::registerChecks()
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<SignalWithReturnValue>("signal-with-return-value", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));

@@ -11,6 +11,12 @@
             ]
         },
         {
+            "name"  : "signal-with-return-value",
+            "level" : -1,
+            "visits_decls" : true
+
+        },
+        {
             "name"  : "heap-allocated-small-trivial-type",
             "level" : -1,
             "categories" : ["performance"],
