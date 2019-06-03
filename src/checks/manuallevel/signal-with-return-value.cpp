@@ -50,12 +50,16 @@ void SignalWithReturnValue::VisitDecl(clang::Decl *decl)
         return;
 
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
-    if (!methodIsSignal)
+    if (!methodIsSignal || accessSpecifierManager->isScriptable(method))
         return;
 
-    if (!method->getReturnType()->isVoidType()) {
-        if (!accessSpecifierManager->isScriptable(method)) {
-            emitWarning(decl, std::string(clazy::name(method)) + "() should return void. For a clean design signals shouldn't assume a single slot are connected to them.");
+    if (!method->getReturnType()->isVoidType())
+        emitWarning(decl, std::string(clazy::name(method)) + "() should return void. For a clean design signals shouldn't assume a single slot are connected to them.");
+
+    for (auto param : method->parameters()) {
+        QualType qt = param->getType();
+        if (qt->isReferenceType() && !qt->getPointeeType().isConstQualified()) {
+            emitWarning(decl, std::string(clazy::name(method)) + "() shouldn't receive parameters by ref. For a clean design signals shouldn't assume a single slot are connected to them.");
         }
     }
 }
