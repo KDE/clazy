@@ -106,7 +106,7 @@ class ClazyASTConsumer
 {
 public:
     explicit ClazyASTConsumer(ClazyContext *context);
-    ~ClazyASTConsumer();
+    ~ClazyASTConsumer() override;
     bool shouldVisitImplicitCode() const { return m_context->isVisitImplicitCode(); }
 
     bool VisitDecl(clang::Decl *decl);
