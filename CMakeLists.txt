@@ -140,7 +140,8 @@ endmacro()
 set(SYMBOL_FILE Lazy.exports)
 
 if (NOT CLAZY_BUILD_WITH_CLANG)
-  add_clang_plugin(ClazyPlugin ${CLAZY_PLUGIN_SRCS})
+  set(CLAZY_MINI_AST_DUMPER_SRCS src/MiniAstDumper.cpp)
+  add_clang_plugin(ClazyPlugin ${CLAZY_PLUGIN_SRCS} ${CLAZY_MINI_AST_DUMPER_SRCS})
   set_target_properties(ClazyPlugin PROPERTIES
     LINKER_LANGUAGE CXX
     PREFIX ""
