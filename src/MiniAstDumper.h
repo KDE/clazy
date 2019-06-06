@@ -23,6 +23,8 @@
 #ifndef CLAZY_MINI_AST_DUMPER
 #define CLAZY_MINI_AST_DUMPER
 
+#include "cbor.h"
+
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/AST/RecursiveASTVisitor.h>
@@ -54,7 +56,7 @@ class MiniASTDumperConsumer
     , public clang::RecursiveASTVisitor<MiniASTDumperConsumer>
 {
 public:
-    explicit MiniASTDumperConsumer();
+    explicit MiniASTDumperConsumer(clang::CompilerInstance &ci);
     ~MiniASTDumperConsumer() override;
 
     bool VisitDecl(clang::Decl *decl);
@@ -63,6 +65,10 @@ public:
 
 private:
     MiniASTDumperConsumer(const MiniASTDumperConsumer &) = delete;
+
+    uint8_t m_cborBuf[1600];
+    CborEncoder m_cborEncoder, m_cborRootMapEncoder, m_cborStuffArray;
+    clang::CompilerInstance &m_ci;
 };
 
 #endif
