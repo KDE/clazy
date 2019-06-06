@@ -1,0 +1,2 @@
+SET(TINY_CBOR_SOURCES ${CMAKE_CURRENT_LIST_DIR}/cborencoder.c)
+include_directories(${CMAKE_CURRENT_LIST_DIR})

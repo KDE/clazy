@@ -11,6 +11,7 @@ cmake_minimum_required(VERSION 3.3)
 include(FeatureSummary)
 include(GenerateExportHeader)
 include("GNUInstallDirs")
+include(3rdparty/tinycbor/tinycbor.cmake)
 
 # Version setup
 set(CLAZY_VERSION_MAJOR "1")
@@ -140,7 +141,7 @@ endmacro()
 set(SYMBOL_FILE Lazy.exports)
 
 if (NOT CLAZY_BUILD_WITH_CLANG)
-  set(CLAZY_MINI_AST_DUMPER_SRCS src/MiniAstDumper.cpp)
+  set(CLAZY_MINI_AST_DUMPER_SRCS src/MiniAstDumper.cpp ${TINY_CBOR_SOURCES})
   add_clang_plugin(ClazyPlugin ${CLAZY_PLUGIN_SRCS} ${CLAZY_MINI_AST_DUMPER_SRCS})
   set_target_properties(ClazyPlugin PROPERTIES
     LINKER_LANGUAGE CXX
