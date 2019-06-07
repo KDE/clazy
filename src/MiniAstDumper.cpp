@@ -22,7 +22,8 @@
 
 #include "MiniAstDumper.h"
 #include "SourceCompatibilityHelpers.h"
-
+#include "clazy_stl.h"
+#include "StringUtils.h"
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 
@@ -52,7 +53,7 @@ MiniASTDumperConsumer::MiniASTDumperConsumer(CompilerInstance &ci)
     auto &sm = m_ci.getASTContext().getSourceManager();
     const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
 
-    m_cborBuf = (uint8_t*)malloc(m_bufferSize);
+    m_cborBuf = reinterpret_cast<uint8_t*>(malloc(m_bufferSize));
 
     const std::string currentCppFile = fileEntry->getName();
 
@@ -73,9 +74,7 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 
     std::ofstream myFile ("data.bin", std::ios::out | ios::binary);
     myFile.write(reinterpret_cast<char*>(m_cborBuf), long(size));
-
-    llvm::errs() << "Finished " << m_bufferSize << "\n";
-
+    delete m_cborBuf;
 }
 
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
@@ -93,23 +92,7 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
             return true;
         }
 
-        CborEncoder recordMap;
-        cbor_encoder_create_map(&m_cborStuffArray, &recordMap, 4);
-
-        cborEncodeString(recordMap, "type");
-        cborEncodeInt(recordMap, rec->getDeclKind());
-
-        cborEncodeString(recordMap, "name");
-        cborEncodeString(recordMap, rec->getQualifiedNameAsString().c_str());
-
-        cborEncodeString(recordMap, "id");
-        cborEncodeInt(recordMap, int64_t(rec));
-
-        cborEncodeString(recordMap, "loc");
-        cborEncodeString(recordMap, clazy::getLocStart(rec).printToString(m_ci.getSourceManager()).c_str());
-
-        cbor_encoder_close_container(&m_cborStuffArray, &recordMap);
-
+        dumpCXXRecordDecl(rec, &m_cborStuffArray);
     } else if (auto ctd = dyn_cast<ClassTemplateDecl>(decl)) {
         llvm::errs() << "Found template: " << ctd->getNameAsString()
                      << "; this=" << ctd
@@ -123,21 +106,85 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
                 llvm::errs() << "\n";
             }
         }
-    } else if () {
-
     }
 
     return true;
 }
 
-bool MiniASTDumperConsumer::VisitStmt(Stmt *)
+bool MiniASTDumperConsumer::VisitStmt(Stmt *stmt)
 {
+    if (auto callExpr = dyn_cast<CallExpr>(stmt)) {
+        dumpCallExpr(callExpr, &m_cborStuffArray);
+    }
+
     return true;
 }
 
 void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
 {
     TraverseDecl(ctx.getTranslationUnitDecl());
+}
+
+void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder *encoder)
+{
+    CborEncoder recordMap;
+    cbor_encoder_create_map(encoder, &recordMap, 5);
+
+    //cborEncodeString(recordMap, "type");
+    //cborEncodeInt(recordMap, method->getDeclKind());
+
+    cborEncodeString(recordMap, "name");
+    cborEncodeString(recordMap, method->getQualifiedNameAsString().c_str());
+
+    cborEncodeString(recordMap, "id");
+    cborEncodeInt(recordMap, int64_t(method));
+
+    //cborEncodeString(recordMap, "loc");
+    //cborEncodeString(recordMap, clazy::getLocStart(method).printToString(m_ci.getSourceManager()).c_str());
+
+    cbor_encoder_close_container(encoder, &recordMap);
+}
+
+void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *encoder)
+{
+    CborEncoder recordMap;
+    cbor_encoder_create_map(encoder, &recordMap, 4);
+
+    cborEncodeString(recordMap, "type");
+    cborEncodeInt(recordMap, rec->getDeclKind());
+
+    cborEncodeString(recordMap, "name");
+    cborEncodeString(recordMap, rec->getQualifiedNameAsString().c_str());
+
+    cborEncodeString(recordMap, "id");
+    cborEncodeInt(recordMap, int64_t(rec));
+
+    cborEncodeString(recordMap, "loc"); // TODO: replace with file id
+    cborEncodeString(recordMap, clazy::getLocStart(rec).printToString(m_ci.getSourceManager()).c_str());
+
+    cbor_encoder_close_container(&m_cborStuffArray, &recordMap);
+
+    CborEncoder cborMethodList;
+    cbor_encoder_create_array(encoder, &cborMethodList, CborIndefiniteLength);
+    for (auto method : rec->methods()) {
+        dumpCXXMethodDecl(method, &cborMethodList);
+    }
+    cbor_encoder_close_container(encoder, &cborMethodList);
+
+}
+
+void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encoder)
+{
+    if (!callExpr->getDirectCallee())
+        return;
+
+    CborEncoder callMap;
+    cbor_encoder_create_map(encoder, &callMap, 1);
+
+    cborEncodeString(callMap, "calleeName"); // TODO: replace with ID
+    cborEncodeString(callMap, clazy::name(callExpr->getDirectCallee()).str().c_str());
+
+    cbor_encoder_close_container(encoder, &callMap);
 }
 
 void MiniASTDumperConsumer::cborEncodeString(CborEncoder &enc, const char *str)
