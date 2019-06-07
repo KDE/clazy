@@ -21,6 +21,7 @@
 */
 
 #include "MiniAstDumper.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
@@ -29,6 +30,7 @@
 
 using namespace clang;
 using namespace std;
+
 
 MiniAstDumperASTAction::MiniAstDumperASTAction()
 {
@@ -50,21 +52,16 @@ MiniASTDumperConsumer::MiniASTDumperConsumer(CompilerInstance &ci)
     auto &sm = m_ci.getASTContext().getSourceManager();
     const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
 
-    llvm::errs() << "Found TU: " << fileEntry->getName() << "\n";
+    m_cborBuf = (uint8_t*)malloc(m_bufferSize);
 
     const std::string currentCppFile = fileEntry->getName();
 
-
-    cbor_encoder_init(&m_cborEncoder, m_cborBuf, sizeof(m_cborBuf), 0);
+    cbor_encoder_init(&m_cborEncoder, m_cborBuf, m_bufferSize, 0);
     cbor_encoder_create_map(&m_cborEncoder, &m_cborRootMapEncoder, 2);
     cbor_encode_text_stringz(&m_cborRootMapEncoder, "tu");
     cbor_encode_text_stringz(&m_cborRootMapEncoder, currentCppFile.c_str());
     cbor_encode_text_stringz(&m_cborRootMapEncoder, "stuff");
     cbor_encoder_create_array(&m_cborRootMapEncoder, &m_cborStuffArray, CborIndefiniteLength);
-
-
-    //cbor_encode_boolean(&m_cborRootMapEncoder, some_value);
-    //
 }
 
 MiniASTDumperConsumer::~MiniASTDumperConsumer()
@@ -76,6 +73,9 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 
     std::ofstream myFile ("data.bin", std::ios::out | ios::binary);
     myFile.write(reinterpret_cast<char*>(m_cborBuf), long(size));
+
+    llvm::errs() << "Finished " << m_bufferSize << "\n";
+
 }
 
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
@@ -92,9 +92,24 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
             // This is a template. We'll rather print it's specializations when catching ClassTemplateDecl
             return true;
         }
-        llvm::errs() << "Found record: " << rec->getQualifiedNameAsString()
-                     << "; this=" << rec
-                     << "\n";
+
+        CborEncoder recordMap;
+        cbor_encoder_create_map(&m_cborStuffArray, &recordMap, 4);
+
+        cborEncodeString(recordMap, "type");
+        cborEncodeInt(recordMap, rec->getDeclKind());
+
+        cborEncodeString(recordMap, "name");
+        cborEncodeString(recordMap, rec->getQualifiedNameAsString().c_str());
+
+        cborEncodeString(recordMap, "id");
+        cborEncodeInt(recordMap, int64_t(rec));
+
+        cborEncodeString(recordMap, "loc");
+        cborEncodeString(recordMap, clazy::getLocStart(rec).printToString(m_ci.getSourceManager()).c_str());
+
+        cbor_encoder_close_container(&m_cborStuffArray, &recordMap);
+
     } else if (auto ctd = dyn_cast<ClassTemplateDecl>(decl)) {
         llvm::errs() << "Found template: " << ctd->getNameAsString()
                      << "; this=" << ctd
@@ -108,6 +123,8 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
                 llvm::errs() << "\n";
             }
         }
+    } else if () {
+
     }
 
     return true;
@@ -121,6 +138,16 @@ bool MiniASTDumperConsumer::VisitStmt(Stmt *)
 void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
 {
     TraverseDecl(ctx.getTranslationUnitDecl());
+}
+
+void MiniASTDumperConsumer::cborEncodeString(CborEncoder &enc, const char *str)
+{
+    cbor_encode_text_stringz(&enc, str);
+}
+
+void MiniASTDumperConsumer::cborEncodeInt(CborEncoder &enc, int64_t v)
+{
+    cbor_encode_int(&enc, v);
 }
 
 static FrontendPluginRegistry::Add<MiniAstDumperASTAction>
