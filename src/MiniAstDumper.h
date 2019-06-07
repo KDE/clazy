@@ -65,8 +65,11 @@ public:
 
 private:
     MiniASTDumperConsumer(const MiniASTDumperConsumer &) = delete;
+    void cborEncodeString(CborEncoder&, const char *);
+    void cborEncodeInt(CborEncoder&, int64_t);
 
-    uint8_t m_cborBuf[1600];
+    uint8_t *m_cborBuf = nullptr;
+    int m_bufferSize = 1024 * 1024 * 20; // 20MB to start with
     CborEncoder m_cborEncoder, m_cborRootMapEncoder, m_cborStuffArray;
     clang::CompilerInstance &m_ci;
 };
