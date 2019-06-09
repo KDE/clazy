@@ -66,10 +66,13 @@ MiniASTDumperConsumer::MiniASTDumperConsumer(CompilerInstance &ci)
 
 MiniASTDumperConsumer::~MiniASTDumperConsumer()
 {
+    cbor_encoder_close_container(&m_cborRootMapEncoder, &m_cborStuffArray);
+
+    cbor_encode_text_stringz(&m_cborRootMapEncoder, "files");
     dumpFileMap(&m_cborRootMapEncoder);
 
-    cbor_encoder_close_container(&m_cborRootMapEncoder, &m_cborRootMapEncoder);
-    cbor_encoder_close_container(&m_cborEncoder, &m_cborStuffArray);
+    cbor_encoder_close_container(&m_cborEncoder, &m_cborRootMapEncoder);
+
 
     size_t size = cbor_encoder_get_buffer_size(&m_cborEncoder, m_cborBuf);
 
@@ -170,7 +173,6 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
         dumpCXXMethodDecl(method, &cborMethodList);
     }
     cbor_encoder_close_container(encoder, &cborMethodList);
-
 }
 
 void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encoder)
@@ -218,12 +220,11 @@ void MiniASTDumperConsumer::dumpLocation(SourceLocation loc, CborEncoder *encode
 
 void MiniASTDumperConsumer::dumpFileMap(CborEncoder *encoder)
 {
-    cborEncodeString(*encoder, "files");
     CborEncoder fileMap;
     cbor_encoder_create_map(encoder, &fileMap, m_fileIds.size());
 
     for (auto it : m_fileIds) {
-        cborEncodeInt(fileMap, it.first);
+        cborEncodeString(fileMap, std::to_string(it.first).c_str());
         cborEncodeString(fileMap, it.second.c_str());
     }
 
