@@ -52,27 +52,30 @@ MiniASTDumperConsumer::MiniASTDumperConsumer(CompilerInstance &ci)
 {
     auto &sm = m_ci.getASTContext().getSourceManager();
     const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
+    m_currentCppFile = fileEntry->getName();
 
     m_cborBuf = reinterpret_cast<uint8_t*>(malloc(m_bufferSize));
 
-    const std::string currentCppFile = fileEntry->getName();
-
     cbor_encoder_init(&m_cborEncoder, m_cborBuf, m_bufferSize, 0);
-    cbor_encoder_create_map(&m_cborEncoder, &m_cborRootMapEncoder, 2);
+    cbor_encoder_create_map(&m_cborEncoder, &m_cborRootMapEncoder, 3);
     cbor_encode_text_stringz(&m_cborRootMapEncoder, "tu");
-    cbor_encode_text_stringz(&m_cborRootMapEncoder, currentCppFile.c_str());
+    cbor_encode_text_stringz(&m_cborRootMapEncoder, m_currentCppFile.c_str());
     cbor_encode_text_stringz(&m_cborRootMapEncoder, "stuff");
     cbor_encoder_create_array(&m_cborRootMapEncoder, &m_cborStuffArray, CborIndefiniteLength);
 }
 
 MiniASTDumperConsumer::~MiniASTDumperConsumer()
 {
+    dumpFileMap(&m_cborRootMapEncoder);
+
     cbor_encoder_close_container(&m_cborRootMapEncoder, &m_cborRootMapEncoder);
     cbor_encoder_close_container(&m_cborEncoder, &m_cborStuffArray);
 
     size_t size = cbor_encoder_get_buffer_size(&m_cborEncoder, m_cborBuf);
 
-    std::ofstream myFile ("data.bin", std::ios::out | ios::binary);
+    const std::string cborFileName = m_currentCppFile + ".cbor";
+
+    std::ofstream myFile(cborFileName, std::ios::out | ios::binary);
     myFile.write(reinterpret_cast<char*>(m_cborBuf), long(size));
     delete m_cborBuf;
 }
@@ -80,7 +83,7 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
     if (auto tsd = dyn_cast<ClassTemplateSpecializationDecl>(decl)) {
-        llvm::errs() << "ClassTemplateSpecializationDecl: "  + tsd->getQualifiedNameAsString() + "\n";
+        //llvm::errs() << "ClassTemplateSpecializationDecl: "  + tsd->getQualifiedNameAsString() + "\n";
     } else if (auto rec = dyn_cast<CXXRecordDecl>(decl)) {
         if (!rec->isThisDeclarationADefinition()) {
             // No forward-declarations
@@ -94,17 +97,17 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 
         dumpCXXRecordDecl(rec, &m_cborStuffArray);
     } else if (auto ctd = dyn_cast<ClassTemplateDecl>(decl)) {
-        llvm::errs() << "Found template: " << ctd->getNameAsString()
+        /*llvm::errs() << "Found template: " << ctd->getNameAsString()
                      << "; this=" << ctd
-                     << "\n";
+                     << "\n";*/
         for (auto s : ctd->specializations()) {
-            llvm::errs() << "Found specialization: " << s->getQualifiedNameAsString() << "\n";
+           /* llvm::errs() << "Found specialization: " << s->getQualifiedNameAsString() << "\n";
             auto &args = s->getTemplateArgs();
             const unsigned int count = args.size();
             for (unsigned int i = 0; i < count; ++i) {
                 args.get(i).print(PrintingPolicy({}), llvm::errs());
                 llvm::errs() << "\n";
-            }
+            }*/
         }
     }
 
@@ -128,10 +131,7 @@ void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
 void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder *encoder)
 {
     CborEncoder recordMap;
-    cbor_encoder_create_map(encoder, &recordMap, 5);
-
-    //cborEncodeString(recordMap, "type");
-    //cborEncodeInt(recordMap, method->getDeclKind());
+    cbor_encoder_create_map(encoder, &recordMap, 2);
 
     cborEncodeString(recordMap, "name");
     cborEncodeString(recordMap, method->getQualifiedNameAsString().c_str());
@@ -179,12 +179,55 @@ void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encode
         return;
 
     CborEncoder callMap;
-    cbor_encoder_create_map(encoder, &callMap, 1);
+    cbor_encoder_create_map(encoder, &callMap, 3);
+
+    cborEncodeString(callMap, "type"); // TODO: replace with ID
+    cborEncodeInt(callMap, callExpr->getStmtClass());
 
     cborEncodeString(callMap, "calleeName"); // TODO: replace with ID
     cborEncodeString(callMap, clazy::name(callExpr->getDirectCallee()).str().c_str());
 
+    cborEncodeString(callMap, "loc");
+    dumpLocation(clazy::getLocStart(callExpr), &callMap);
+
     cbor_encoder_close_container(encoder, &callMap);
+}
+
+void MiniASTDumperConsumer::dumpLocation(SourceLocation loc, CborEncoder *encoder)
+{
+    CborEncoder locMap;
+    cbor_encoder_create_map(encoder, &locMap, 3);
+
+    auto &sm = m_ci.getSourceManager();
+    const FileID fileId = sm.getFileID(loc);
+
+    m_fileIds[fileId.getHashValue()] = sm.getFilename(loc).str();
+    cborEncodeString(locMap, "fileId");
+    cborEncodeInt(locMap, fileId.getHashValue());
+
+    auto ploc = sm.getPresumedLoc(loc);
+    cborEncodeString(locMap, "line");
+
+    cborEncodeInt(locMap,  ploc.getLine());
+    cborEncodeString(locMap, "column");
+    cborEncodeInt(locMap,  ploc.getColumn());
+
+
+    cbor_encoder_close_container(encoder, &locMap);
+}
+
+void MiniASTDumperConsumer::dumpFileMap(CborEncoder *encoder)
+{
+    cborEncodeString(*encoder, "files");
+    CborEncoder fileMap;
+    cbor_encoder_create_map(encoder, &fileMap, m_fileIds.size());
+
+    for (auto it : m_fileIds) {
+        cborEncodeInt(fileMap, it.first);
+        cborEncodeString(fileMap, it.second.c_str());
+    }
+
+    cbor_encoder_close_container(encoder, &fileMap);
 }
 
 void MiniASTDumperConsumer::cborEncodeString(CborEncoder &enc, const char *str)

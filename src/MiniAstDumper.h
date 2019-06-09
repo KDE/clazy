@@ -68,6 +68,9 @@ private:
     void dumpCXXMethodDecl(clang::CXXMethodDecl *, CborEncoder *encoder);
     void dumpCXXRecordDecl(clang::CXXRecordDecl *, CborEncoder *encoder);
     void dumpCallExpr(clang::CallExpr *, CborEncoder *encoder);
+    void dumpLocation(clang::SourceLocation, CborEncoder *encoder);
+    void dumpFileMap(CborEncoder *encoder);
+
     void cborEncodeString(CborEncoder&, const char *);
     void cborEncodeInt(CborEncoder&, int64_t);
 
@@ -75,6 +78,9 @@ private:
     size_t m_bufferSize = 1024 * 1024 * 20; // 20MB to start with
     CborEncoder m_cborEncoder, m_cborRootMapEncoder, m_cborStuffArray;
     clang::CompilerInstance &m_ci;
+    std::unordered_map<unsigned int, std::string> m_fileIds;
+
+    std::string m_currentCppFile;
 };
 
 #endif
