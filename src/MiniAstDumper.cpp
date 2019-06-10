@@ -24,6 +24,7 @@
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 #include "StringUtils.h"
+#include "QtUtils.h"
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 
@@ -142,16 +143,13 @@ void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder
     cborEncodeString(recordMap, "id");
     cborEncodeInt(recordMap, int64_t(method));
 
-    //cborEncodeString(recordMap, "loc");
-    //cborEncodeString(recordMap, clazy::getLocStart(method).printToString(m_ci.getSourceManager()).c_str());
-
     cbor_encoder_close_container(encoder, &recordMap);
 }
 
 void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *encoder)
 {
     CborEncoder recordMap;
-    cbor_encoder_create_map(encoder, &recordMap, 4);
+    cbor_encoder_create_map(encoder, &recordMap, CborIndefiniteLength);
 
     cborEncodeString(recordMap, "type");
     cborEncodeInt(recordMap, rec->getDeclKind());
@@ -162,17 +160,22 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
     cborEncodeString(recordMap, "id");
     cborEncodeInt(recordMap, int64_t(rec));
 
-    cborEncodeString(recordMap, "loc"); // TODO: replace with file id
-    cborEncodeString(recordMap, clazy::getLocStart(rec).printToString(m_ci.getSourceManager()).c_str());
+    cborEncodeString(recordMap, "loc");
+    dumpLocation(clazy::getLocStart(rec), &recordMap);
 
-    cbor_encoder_close_container(&m_cborStuffArray, &recordMap);
+    if (clazy::isQObject(rec)) { // TODO: Use flags
+        cborEncodeString(recordMap, "isQObject");
+        cbor_encode_boolean(&recordMap, true);
+    }
 
+    cborEncodeString(recordMap, "methods");
     CborEncoder cborMethodList;
-    cbor_encoder_create_array(encoder, &cborMethodList, CborIndefiniteLength);
+    cbor_encoder_create_array(&recordMap, &cborMethodList, CborIndefiniteLength);
     for (auto method : rec->methods()) {
         dumpCXXMethodDecl(method, &cborMethodList);
     }
-    cbor_encoder_close_container(encoder, &cborMethodList);
+    cbor_encoder_close_container(encoder, &cborMethodList);*/
+    cbor_encoder_close_container(&m_cborStuffArray, &recordMap);
 }
 
 void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encoder)
@@ -214,7 +217,6 @@ void MiniASTDumperConsumer::dumpLocation(SourceLocation loc, CborEncoder *encode
     cborEncodeString(locMap, "column");
     cborEncodeInt(locMap,  ploc.getColumn());
 
-
     cbor_encoder_close_container(encoder, &locMap);
 }
 
@@ -233,12 +235,38 @@ void MiniASTDumperConsumer::dumpFileMap(CborEncoder *encoder)
 
 void MiniASTDumperConsumer::cborEncodeString(CborEncoder &enc, const char *str)
 {
-    cbor_encode_text_stringz(&enc, str);
+    if (cbor_encode_text_stringz(&enc, str) != CborNoError)
+        llvm::errs() << "cborEncodeString error\n";
 }
 
 void MiniASTDumperConsumer::cborEncodeInt(CborEncoder &enc, int64_t v)
 {
-    cbor_encode_int(&enc, v);
+    if (cbor_encode_int(&enc, v) != CborNoError)
+        llvm::errs() << "cborEncodeInt error\n";
+}
+
+void MiniASTDumperConsumer::cborEncodeBool(CborEncoder &enc, bool b)
+{
+    if (cbor_encode_boolean(&enc, b) != CborNoError)
+        llvm::errs() << "cborEncodeBool error\n";
+}
+
+void MiniASTDumperConsumer::cborCreateMap(CborEncoder *encoder, CborEncoder *mapEncoder, size_t length)
+{
+    if (cbor_encoder_create_map(encoder, mapEncoder, length) != CborNoError)
+        llvm::errs() << "cborCreateMap error\n";
+}
+
+void MiniASTDumperConsumer::cborCreateArray(CborEncoder *encoder, CborEncoder *arrayEncoder, size_t length)
+{
+    if (cbor_encoder_create_array(encoder, arrayEncoder, length) != CborNoError)
+        llvm::errs() << "cborCreateMap error\n";
+}
+
+void MiniASTDumperConsumer::cborCloseContainer(CborEncoder *encoder, const CborEncoder *containerEncoder)
+{
+    if (cbor_encoder_close_container(encoder, containerEncoder) != CborNoError)
+        llvm::errs() << "cborCloseContainer error\n";
 }
 
 static FrontendPluginRegistry::Add<MiniAstDumperASTAction>

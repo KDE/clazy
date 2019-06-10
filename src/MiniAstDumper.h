@@ -73,6 +73,11 @@ private:
 
     void cborEncodeString(CborEncoder&, const char *);
     void cborEncodeInt(CborEncoder&, int64_t);
+    void cborEncodeBool(CborEncoder &enc, bool);
+    void cborCreateMap(CborEncoder *encoder, CborEncoder *mapEncoder, size_t length);
+    void cborCreateArray(CborEncoder *encoder, CborEncoder *mapEncoder, size_t length);
+    void cborCloseContainer(CborEncoder *encoder, const CborEncoder *containerEncoder);
+
 
     uint8_t *m_cborBuf = nullptr;
     size_t m_bufferSize = 1024 * 1024 * 20; // 20MB to start with
