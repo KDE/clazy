@@ -66,6 +66,7 @@ public:
 private:
     MiniASTDumperConsumer(const MiniASTDumperConsumer &) = delete;
     void dumpCXXMethodDecl(clang::CXXMethodDecl *, CborEncoder *encoder);
+    void dumpFunctionDecl(clang::FunctionDecl *, CborEncoder *encoder);
     void dumpCXXRecordDecl(clang::CXXRecordDecl *, CborEncoder *encoder);
     void dumpCallExpr(clang::CallExpr *, CborEncoder *encoder);
     void dumpLocation(clang::SourceLocation, CborEncoder *encoder);
