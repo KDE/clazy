@@ -155,6 +155,9 @@ void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder
 
 void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *encoder)
 {
+    if (rec->isUnion())
+        return;
+
     CborEncoder recordMap;
     cborCreateMap(encoder, &recordMap, CborIndefiniteLength);
 
@@ -165,7 +168,8 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
     cborEncodeString(recordMap, rec->getQualifiedNameAsString().c_str());
 
     cborEncodeString(recordMap, "loc");
-    dumpLocation(clazy::getLocStart(rec), &recordMap);
+    const SourceLocation loc = clazy::getLocStart(rec);
+    dumpLocation(loc, &recordMap);
 
     if (clazy::isQObject(rec)) { // TODO: Use flags
         cborEncodeString(recordMap, "isQObject");
@@ -180,6 +184,11 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
     }
     cborCloseContainer(&recordMap, &cborMethodList);
     cborCloseContainer(&m_cborStuffArray, &recordMap);
+
+    // Sanity:
+    if (rec->getQualifiedNameAsString().empty()) {
+        llvm::errs() << "Record has no name. loc=" << loc.printToString(m_ci.getSourceManager()) << "\n";
+    }
 }
 
 void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encoder)
@@ -194,8 +203,8 @@ void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encode
     cborEncodeString(callMap, "type");
     cborEncodeInt(callMap, callExpr->getStmtClass());
 
-    cborEncodeString(callMap, "calleeName"); // TODO: replace with ID
-    cborEncodeString(callMap, func->getQualifiedNameAsString().c_str());
+    cborEncodeString(callMap, "calleeId");
+    cborEncodeInt(callMap, int64_t(func));
 
     cborEncodeString(callMap, "loc");
     dumpLocation(clazy::getLocStart(callExpr), &callMap);
@@ -206,12 +215,37 @@ void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encode
 void MiniASTDumperConsumer::dumpLocation(SourceLocation loc, CborEncoder *encoder)
 {
     CborEncoder locMap;
-    cborCreateMap(encoder, &locMap, 3);
+    cborCreateMap(encoder, &locMap, CborIndefiniteLength);
 
     auto &sm = m_ci.getSourceManager();
-    const FileID fileId = sm.getFileID(loc);
 
+    if (loc.isMacroID()) {
+        /// The place where the macro is defined:
+        SourceLocation spellingLoc = sm.getSpellingLoc(loc);
+        const FileID fileId = sm.getFileID(spellingLoc);
+        m_fileIds[fileId.getHashValue()] = sm.getFilename(spellingLoc).str();
+
+        cborEncodeString(locMap, "spellingFileId");
+        cborEncodeInt(locMap, fileId.getHashValue());
+
+        cborEncodeString(locMap, "spellingLine");
+        cborEncodeInt(locMap, sm.getSpellingLineNumber(loc));
+
+        cborEncodeString(locMap, "spellingColumn");
+        cborEncodeInt(locMap, sm.getSpellingColumnNumber(loc));
+
+        /// Get the place where the macro is used:
+        loc = sm.getExpansionLoc(loc);
+    }
+
+    const FileID fileId = sm.getFileID(loc);
     m_fileIds[fileId.getHashValue()] = sm.getFilename(loc).str();
+
+    if (sm.getFilename(loc).empty()) {
+        // Shouldn't happen
+        llvm::errs() << "Invalid filename for " << loc.printToString(sm) <<  "\n";
+    }
+
     cborEncodeString(locMap, "fileId");
     cborEncodeInt(locMap, fileId.getHashValue());
 

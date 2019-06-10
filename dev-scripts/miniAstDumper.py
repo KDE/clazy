@@ -14,11 +14,22 @@ class SourceLocation:
     def dump(self):
         print(self.asString())
 
+    def check_sanity(self):
+        if self.lineNumber < 0 or self.columnNumber < 0:
+            print("SourceLocation::check_sanity: loc numbers are invalid! " + self.lineNumber + " ; " + self.columnNumber)
+
+        if not self.filename:
+            print("SourceLocation::check_sanity: loc filename is invalid!")
 
 class FunctionCall:
     def __init__(self):
-        self.callee_name = ""
+        self.callee_id = -1
         self.loc_start = SourceLocation()
+
+    def check_sanity(self):
+        if self.callee_id == -1:
+            print("FunctionCall::check_sanity: callee_id is -1!")
+        self.loc_start.check_sanity()
 
 class CXXMethod:
     def __init__(self):
@@ -26,18 +37,43 @@ class CXXMethod:
         self.qualified_name = ""
         self.method_flags = 0
 
+    def check_sanity(self):
+        if self.id == -1:
+            print("CXXMethod::check_sanity: id is -1!")
+
+        if not self.qualified_name:
+            print("CXXMethod::check_sanity: qualified_name is empty!")
+
+
 class CXXClass:
     def __init__(self):
-        self.id = 0
+        # self.id = -1
         self.qualified_name = ""
         self.methods = []
         self.class_flags = 0
+
+    def check_sanity(self):
+        #if self.id == -1:
+        #    print("CXXClass::check_sanity: id is -1!")
+
+        if not self.qualified_name:
+            print("CXXClass::check_sanity: qualified_name is empty!")
+
+        for m in self.methods:
+            m.check_sanity()
+
 
 class GlobalAST:
     def __init__(self):
         self.cxx_classes = []
         self.function_calls = []
 
+
+    def check_sanity(self):
+        for c in self.cxx_classes:
+            c.check_sanity()
+        for f in self.function_calls:
+            f.check_sanity()
 
 _globalAST = GlobalAST()
 
@@ -97,31 +133,32 @@ def load_cbor(filename, globalAST):
                     globalAST.cxx_classes.append(cxxclass)
                 elif stuff['type'] == 48: # CallExpr
                     funccall = FunctionCall()
-                    funccall.callee_name = stuff['calleeName']
+                    funccall.callee_id = stuff['calleeId']
                     funccall.loc_start = parse_loc(stuff['loc'], file_map, current_tu_cwd)
                     globalAST.function_calls.append(funccall)
 
+#def get_class_by_name(qualified_name):
+#    result = []
+#    for c in _globalAST.cxx_classes:
+#       if c.qualified_name == qualified_name:
+#           result.append(c)
+#    return result
 
-def get_class_by_name(qualified_name):
-    result = []
-    for c in _globalAST.cxx_classes:
-       if c.qualified_name == qualified_name:
-           result.append(c)
-    return result
-
-def get_calls_by_name(callee_name):
-    result = []
-    for f in _globalAST.function_calls:
-       if f.callee_name == callee_name:
-           result.append(f)
-    return result
+#def get_calls_by_name(callee_name):
+#    result = []
+#    for f in _globalAST.function_calls:
+#if f.callee_name == callee_name:
+#           result.append(f)
+    #return result
 
 load_cbor(sys.argv[1], _globalAST)
 
+_globalAST.check_sanity()
+
 #string_class = get_class_by_name("QString")[0]
 
-for f in get_calls_by_name("QObject::connect"):
-    print(f.loc_start.dump())
+#for f in get_calls_by_name("QObject::connect"):
+    #print(f.loc_start.dump())
 
 #for f in _globalAST.function_calls:
  #   print(f.callee_name)
