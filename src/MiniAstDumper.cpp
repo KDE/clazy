@@ -29,6 +29,8 @@
 #include <clang/Frontend/FrontendPluginRegistry.h>
 
 #include <fstream>
+#include <unistd.h>
+#include <limits.h>
 
 using namespace clang;
 using namespace std;
@@ -58,21 +60,26 @@ MiniASTDumperConsumer::MiniASTDumperConsumer(CompilerInstance &ci)
     m_cborBuf = reinterpret_cast<uint8_t*>(malloc(m_bufferSize));
 
     cbor_encoder_init(&m_cborEncoder, m_cborBuf, m_bufferSize, 0);
-    cbor_encoder_create_map(&m_cborEncoder, &m_cborRootMapEncoder, 3);
-    cbor_encode_text_stringz(&m_cborRootMapEncoder, "tu");
-    cbor_encode_text_stringz(&m_cborRootMapEncoder, m_currentCppFile.c_str());
-    cbor_encode_text_stringz(&m_cborRootMapEncoder, "stuff");
-    cbor_encoder_create_array(&m_cborRootMapEncoder, &m_cborStuffArray, CborIndefiniteLength);
+    cborCreateMap(&m_cborEncoder, &m_cborRootMapEncoder, 4);
+    cborEncodeString(m_cborRootMapEncoder, "tu");
+    cborEncodeString(m_cborRootMapEncoder, m_currentCppFile.c_str());
+
+    char cwd[4096]; // TODO: Just use std::filesystem::current_path
+    cborEncodeString(m_cborRootMapEncoder, "cwd");
+    cborEncodeString(m_cborRootMapEncoder, std::string(getcwd(cwd, sizeof(cwd))).c_str());
+
+    cborEncodeString(m_cborRootMapEncoder, "stuff");
+    cborCreateArray(&m_cborRootMapEncoder, &m_cborStuffArray, CborIndefiniteLength);
 }
 
 MiniASTDumperConsumer::~MiniASTDumperConsumer()
 {
-    cbor_encoder_close_container(&m_cborRootMapEncoder, &m_cborStuffArray);
+    cborCloseContainer(&m_cborRootMapEncoder, &m_cborStuffArray);
 
-    cbor_encode_text_stringz(&m_cborRootMapEncoder, "files");
+    cborEncodeString(m_cborRootMapEncoder, "files");
     dumpFileMap(&m_cborRootMapEncoder);
 
-    cbor_encoder_close_container(&m_cborEncoder, &m_cborRootMapEncoder);
+    cborCloseContainer(&m_cborEncoder, &m_cborRootMapEncoder);
 
 
     size_t size = cbor_encoder_get_buffer_size(&m_cborEncoder, m_cborBuf);
@@ -135,7 +142,7 @@ void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
 void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder *encoder)
 {
     CborEncoder recordMap;
-    cbor_encoder_create_map(encoder, &recordMap, 2);
+    cborCreateMap(encoder, &recordMap, 2);
 
     cborEncodeString(recordMap, "name");
     cborEncodeString(recordMap, method->getQualifiedNameAsString().c_str());
@@ -143,13 +150,13 @@ void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder
     cborEncodeString(recordMap, "id");
     cborEncodeInt(recordMap, int64_t(method));
 
-    cbor_encoder_close_container(encoder, &recordMap);
+    cborCloseContainer(encoder, &recordMap);
 }
 
 void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *encoder)
 {
     CborEncoder recordMap;
-    cbor_encoder_create_map(encoder, &recordMap, CborIndefiniteLength);
+    cborCreateMap(encoder, &recordMap, CborIndefiniteLength);
 
     cborEncodeString(recordMap, "type");
     cborEncodeInt(recordMap, rec->getDeclKind());
@@ -157,51 +164,49 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
     cborEncodeString(recordMap, "name");
     cborEncodeString(recordMap, rec->getQualifiedNameAsString().c_str());
 
-    cborEncodeString(recordMap, "id");
-    cborEncodeInt(recordMap, int64_t(rec));
-
     cborEncodeString(recordMap, "loc");
     dumpLocation(clazy::getLocStart(rec), &recordMap);
 
     if (clazy::isQObject(rec)) { // TODO: Use flags
         cborEncodeString(recordMap, "isQObject");
-        cbor_encode_boolean(&recordMap, true);
+        cborEncodeBool(recordMap, true);
     }
 
     cborEncodeString(recordMap, "methods");
     CborEncoder cborMethodList;
-    cbor_encoder_create_array(&recordMap, &cborMethodList, CborIndefiniteLength);
+    cborCreateArray(&recordMap, &cborMethodList, CborIndefiniteLength);
     for (auto method : rec->methods()) {
         dumpCXXMethodDecl(method, &cborMethodList);
     }
-    cbor_encoder_close_container(encoder, &cborMethodList);*/
-    cbor_encoder_close_container(&m_cborStuffArray, &recordMap);
+    cborCloseContainer(&recordMap, &cborMethodList);
+    cborCloseContainer(&m_cborStuffArray, &recordMap);
 }
 
 void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encoder)
 {
-    if (!callExpr->getDirectCallee())
+    FunctionDecl *func = callExpr->getDirectCallee();
+    if (!func || !func->getDeclName().isIdentifier())
         return;
 
     CborEncoder callMap;
-    cbor_encoder_create_map(encoder, &callMap, 3);
+    cborCreateMap(encoder, &callMap, 3);
 
-    cborEncodeString(callMap, "type"); // TODO: replace with ID
+    cborEncodeString(callMap, "type");
     cborEncodeInt(callMap, callExpr->getStmtClass());
 
     cborEncodeString(callMap, "calleeName"); // TODO: replace with ID
-    cborEncodeString(callMap, clazy::name(callExpr->getDirectCallee()).str().c_str());
+    cborEncodeString(callMap, func->getQualifiedNameAsString().c_str());
 
     cborEncodeString(callMap, "loc");
     dumpLocation(clazy::getLocStart(callExpr), &callMap);
 
-    cbor_encoder_close_container(encoder, &callMap);
+    cborCloseContainer(encoder, &callMap);
 }
 
 void MiniASTDumperConsumer::dumpLocation(SourceLocation loc, CborEncoder *encoder)
 {
     CborEncoder locMap;
-    cbor_encoder_create_map(encoder, &locMap, 3);
+    cborCreateMap(encoder, &locMap, 3);
 
     auto &sm = m_ci.getSourceManager();
     const FileID fileId = sm.getFileID(loc);
@@ -217,20 +222,20 @@ void MiniASTDumperConsumer::dumpLocation(SourceLocation loc, CborEncoder *encode
     cborEncodeString(locMap, "column");
     cborEncodeInt(locMap,  ploc.getColumn());
 
-    cbor_encoder_close_container(encoder, &locMap);
+    cborCloseContainer(encoder, &locMap);
 }
 
 void MiniASTDumperConsumer::dumpFileMap(CborEncoder *encoder)
 {
     CborEncoder fileMap;
-    cbor_encoder_create_map(encoder, &fileMap, m_fileIds.size());
+    cborCreateMap(encoder, &fileMap, m_fileIds.size());
 
     for (auto it : m_fileIds) {
         cborEncodeString(fileMap, std::to_string(it.first).c_str());
         cborEncodeString(fileMap, it.second.c_str());
     }
 
-    cbor_encoder_close_container(encoder, &fileMap);
+    cborCloseContainer(encoder, &fileMap);
 }
 
 void MiniASTDumperConsumer::cborEncodeString(CborEncoder &enc, const char *str)
