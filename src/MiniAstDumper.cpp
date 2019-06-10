@@ -94,7 +94,7 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
     if (auto tsd = dyn_cast<ClassTemplateSpecializationDecl>(decl)) {
-        //llvm::errs() << "ClassTemplateSpecializationDecl: "  + tsd->getQualifiedNameAsString() + "\n";
+        // llvm::errs() << "ClassTemplateSpecializationDecl: "  + tsd->getQualifiedNameAsString() + "\n";
     } else if (auto rec = dyn_cast<CXXRecordDecl>(decl)) {
         if (!rec->isThisDeclarationADefinition()) {
             // No forward-declarations
@@ -110,15 +110,32 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
     } else if (auto ctd = dyn_cast<ClassTemplateDecl>(decl)) {
         /*llvm::errs() << "Found template: " << ctd->getNameAsString()
                      << "; this=" << ctd
-                     << "\n";*/
+                     << "\n";
         for (auto s : ctd->specializations()) {
-           /* llvm::errs() << "Found specialization: " << s->getQualifiedNameAsString() << "\n";
+            llvm::errs() << "Found specialization: " << s->getQualifiedNameAsString() << "\n";
             auto &args = s->getTemplateArgs();
             const unsigned int count = args.size();
             for (unsigned int i = 0; i < count; ++i) {
                 args.get(i).print(PrintingPolicy({}), llvm::errs());
                 llvm::errs() << "\n";
-            }*/
+            }
+        } */
+    } else if (auto func = dyn_cast<FunctionDecl>(decl)) {
+        if (isa<CXXMethodDecl>(decl)) // Methods are handled when processing the class
+            return true;
+
+        if (func->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate) {
+            // Already handled when catching FunctionTemplateDecl. When we write func->getTemplatedDecl().
+            return true;
+        }
+
+        dumpFunctionDecl(func, &m_cborStuffArray);
+    } else if (auto func = dyn_cast<FunctionTemplateDecl>(decl)) {
+
+        dumpFunctionDecl(func->getTemplatedDecl(), &m_cborStuffArray);
+
+        for (auto s : func->specializations()) {
+            dumpFunctionDecl(s, &m_cborStuffArray);
         }
     }
 
@@ -153,6 +170,23 @@ void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder
     cborCloseContainer(encoder, &recordMap);
 }
 
+void MiniASTDumperConsumer::dumpFunctionDecl(FunctionDecl *func, CborEncoder *encoder)
+{
+    CborEncoder recordMap;
+    cborCreateMap(encoder, &recordMap, 3);
+
+    cborEncodeString(recordMap, "name");
+    cborEncodeString(recordMap, func->getQualifiedNameAsString().c_str());
+
+    cborEncodeString(recordMap, "type");
+    cborEncodeInt(recordMap, func->FunctionDecl::getDeclKind());
+
+    cborEncodeString(recordMap, "id");
+    cborEncodeInt(recordMap, int64_t(func));
+
+    cborCloseContainer(encoder, &recordMap);
+}
+
 void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *encoder)
 {
     if (rec->isUnion())
@@ -182,6 +216,7 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
     for (auto method : rec->methods()) {
         dumpCXXMethodDecl(method, &cborMethodList);
     }
+
     cborCloseContainer(&recordMap, &cborMethodList);
     cborCloseContainer(&m_cborStuffArray, &recordMap);
 
@@ -197,10 +232,16 @@ void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encode
     if (!func || !func->getDeclName().isIdentifier())
         return;
 
+    const bool isBuiltin = func->getBuiltinID() != 0;
+    if (isBuiltin) //We don't need them now
+        return;
+
+    func = func->getCanonicalDecl();
+
     CborEncoder callMap;
     cborCreateMap(encoder, &callMap, 3);
 
-    cborEncodeString(callMap, "type");
+    cborEncodeString(callMap, "stmt_type");
     cborEncodeInt(callMap, callExpr->getStmtClass());
 
     cborEncodeString(callMap, "calleeId");
