@@ -59,6 +59,7 @@ class CXXClass:
     def __init__(self):
         # self.id = -1
         self.qualified_name = ""
+        self.loc_start = SourceLocation()
         self.methods = []
         self.class_flags = 0
 
@@ -72,16 +73,18 @@ class CXXClass:
         for m in self.methods:
             m.check_sanity()
 
+    def hash(self):
+        return self.qualified_name + self.loc_start.asString()
 
 class GlobalAST:
     def __init__(self):
-        self.cxx_classes = []
+        self.cxx_classes = {} # indexed by hash
         self.functions = []
         self.function_calls = []
 
 
     def check_sanity(self):
-        for c in self.cxx_classes:
+        for c in self.cxx_classes.values():
             c.check_sanity()
         for f in self.function_calls:
             f.check_sanity()
@@ -151,6 +154,8 @@ def load_cbor(filename, globalAST):
                     if 'class_flags' in stuff:
                         cxxclass.class_flags = stuff['class_flags']
 
+                    cxxclass.loc_start = parse_loc(stuff['loc'], file_map, current_tu_cwd)
+
                     if 'methods' in stuff:
                         for m in stuff['methods']:
                             method = CXXMethod()
@@ -169,7 +174,7 @@ def load_cbor(filename, globalAST):
                                 print('method is duplicated! ' + method.qualified_name)
                             tu_function_map[local_id_in_tu] = method
 
-                    globalAST.cxx_classes.append(cxxclass)
+                    globalAST.cxx_classes[cxxclass.hash()] = cxxclass
 
                 if stuff['type'] == 48: # FunctionDecl
                     func = Function()
@@ -204,13 +209,13 @@ def load_cbor(filename, globalAST):
 
 def get_all_method_names():
     total_methods = []
-    for c in _globalAST.cxx_classes:
+    for c in _globalAST.cxx_classes.values():
         for m in c.methods:
             total_methods.append(m.qualified_name)
     return total_methods
 
 def print_qobjects(ast):
-    for c in ast.cxx_classes:
+    for c in ast.cxx_classes.values():
         if c.class_flags & ClassFlag_QObject:
             print(c.qualified_name)
 
@@ -221,7 +226,7 @@ def calculate_call_counts(ast):
             _function_map[c.callee_id].num_called += 1
 
 def print_unused_signals(ast):
-    for c in ast.cxx_classes:
+    for c in ast.cxx_classes.values():
         for m in c.methods:
             if (m.method_flags & MethodFlag_Signal) and m.num_called == 0:
                 print("Signal " + m.qualified_name + " never called")
@@ -286,6 +291,6 @@ if not process_all_files(sys.argv[1:]):
     print('Error processing files')
     sys.exit(1)
 
-calculate_call_counts(_globalAST)
-print_unused_signals(_globalAST)
-#print_qobjects(_globalAST)
+#calculate_call_counts(_globalAST)
+#print_unused_signals(_globalAST)
+print_qobjects(_globalAST)
