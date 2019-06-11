@@ -114,5 +114,25 @@ inline bool classImplementsMethod(const clang::CXXRecordDecl *record, const clan
     return false;
 }
 
+inline clang::FunctionDecl* getFunctionDeclaration(clang::CXXMethodDecl *method)
+{
+    if (!method->doesThisDeclarationHaveABody() || method->hasInlineBody())
+        return method;
+
+    for (auto redecl : method->redecls()) {
+        auto redecl_method = llvm::dyn_cast<clang::CXXMethodDecl>(redecl);
+        if (!redecl_method->doesThisDeclarationHaveABody() || redecl_method->hasInlineBody()) {
+            return redecl;
+        }
+    }
+
+    if (method->isTemplateInstantiation()) {
+        // When specializing a method template we don't declarate it again. The definition is the declaration.
+        return method;
+    }
+
+    return nullptr;
+}
+
 }
 #endif
