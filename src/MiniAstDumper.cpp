@@ -22,9 +22,11 @@
 
 #include "MiniAstDumper.h"
 #include "SourceCompatibilityHelpers.h"
+#include "AccessSpecifierManager.h"
 #include "clazy_stl.h"
-#include "StringUtils.h"
+#include "FunctionUtils.h"
 #include "QtUtils.h"
+#include "StringUtils.h"
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 
@@ -35,6 +37,15 @@
 using namespace clang;
 using namespace std;
 
+enum ClassFlag {
+    ClassFlag_None = 0,
+    ClassFlag_QObject = 1
+};
+
+enum MethodFlag {
+    MethodFlag_None = 0,
+    MethodFlag_Signal = 1
+};
 
 MiniAstDumperASTAction::MiniAstDumperASTAction()
 {
@@ -52,6 +63,7 @@ std::unique_ptr<ASTConsumer> MiniAstDumperASTAction::CreateASTConsumer(CompilerI
 
 MiniASTDumperConsumer::MiniASTDumperConsumer(CompilerInstance &ci)
     : m_ci(ci)
+    , m_accessSpecifierManager(new AccessSpecifierManager(ci))
 {
     auto &sm = m_ci.getASTContext().getSourceManager();
     const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
@@ -93,6 +105,8 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
+    m_accessSpecifierManager->VisitDeclaration(decl);
+
     if (auto tsd = dyn_cast<ClassTemplateSpecializationDecl>(decl)) {
         // llvm::errs() << "ClassTemplateSpecializationDecl: "  + tsd->getQualifiedNameAsString() + "\n";
     } else if (auto rec = dyn_cast<CXXRecordDecl>(decl)) {
@@ -126,6 +140,11 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 
         if (func->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate) {
             // Already handled when catching FunctionTemplateDecl. When we write func->getTemplatedDecl().
+
+            if (func->getQualifiedNameAsString() == "qobject_cast") {
+                llvm::errs() << "skipping! " << func << "\n";
+            }
+
             return true;
         }
 
@@ -158,20 +177,38 @@ void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
 
 void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder *encoder)
 {
-    CborEncoder recordMap;
-    cborCreateMap(encoder, &recordMap, 2);
+    CborEncoder methodMap;
+    cborCreateMap(encoder, &methodMap, CborIndefiniteLength);
 
-    cborEncodeString(recordMap, "name");
-    cborEncodeString(recordMap, method->getQualifiedNameAsString().c_str());
+    cborEncodeString(methodMap, "name");
+    cborEncodeString(methodMap, method->getQualifiedNameAsString().c_str());
 
-    cborEncodeString(recordMap, "id");
-    cborEncodeInt(recordMap, int64_t(method));
+    cborEncodeString(methodMap, "id");
+    cborEncodeInt(methodMap, int64_t(method));
 
-    cborCloseContainer(encoder, &recordMap);
+    int64_t flags = 0;
+
+    if (m_accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal)
+        flags |= MethodFlag_Signal;
+
+    if (flags) {
+        cborEncodeString(methodMap, "method_flags");
+        cborEncodeInt(methodMap, flags);
+    }
+
+    cborCloseContainer(encoder, &methodMap);
 }
 
 void MiniASTDumperConsumer::dumpFunctionDecl(FunctionDecl *func, CborEncoder *encoder)
 {
+
+    if (func->getQualifiedNameAsString() == "qobject_cast") {
+        llvm::errs() << "registering! " << func
+                     << " " << func->getBeginLoc().printToString(m_ci.getSourceManager())
+                     << "\n";
+    }
+
+
     CborEncoder recordMap;
     cborCreateMap(encoder, &recordMap, 3);
 
@@ -205,9 +242,14 @@ void MiniASTDumperConsumer::dumpCXXRecordDecl(CXXRecordDecl *rec, CborEncoder *e
     const SourceLocation loc = clazy::getLocStart(rec);
     dumpLocation(loc, &recordMap);
 
-    if (clazy::isQObject(rec)) { // TODO: Use flags
-        cborEncodeString(recordMap, "isQObject");
-        cborEncodeBool(recordMap, true);
+    int64_t flags = 0;
+
+    if (clazy::isQObject(rec))
+        flags |= ClassFlag_QObject;
+
+    if (flags) {
+        cborEncodeString(recordMap, "class_flags");
+        cborEncodeInt(recordMap, flags);
     }
 
     cborEncodeString(recordMap, "methods");
@@ -236,7 +278,24 @@ void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encode
     if (isBuiltin) //We don't need them now
         return;
 
-    func = func->getCanonicalDecl();
+    auto method = dyn_cast<CXXMethodDecl>(func);
+    if (method) {
+        // For methods we store the declaration
+        func = clazy::getFunctionDeclaration(method);
+    }
+
+    if (func->getQualifiedNameAsString() == "qobject_cast") {
+        llvm::errs() << "foo-call "
+                     << func
+                     << "; original=" << callExpr->getDirectCallee()
+                     << "; funcloc " << func->getBeginLoc().printToString(m_ci.getSourceManager())
+                     << "; original-loc= " << callExpr->getDirectCallee()->getBeginLoc().printToString(m_ci.getSourceManager())
+
+                     << "; " << func->getTemplatedKind() << " ; " << callExpr->getDirectCallee()->getTemplatedKind()
+
+                     << "\n";
+    }
+
 
     CborEncoder callMap;
     cborCreateMap(encoder, &callMap, 3);

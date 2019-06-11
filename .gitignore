@@ -36,3 +36,5 @@ checks.json.h
 .ninja*
 *.ninja
 .cmake
+*.cbor
+*.tmp
