@@ -32,3 +32,5 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 *.yaml
 *.fixed
+*.cbor
+*.tmp

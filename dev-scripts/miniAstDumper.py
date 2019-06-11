@@ -2,6 +2,12 @@
 
 import cbor, sys, time, os
 
+ClassFlag_None = 0
+ClassFlag_QObject = 1
+
+MethodFlag_None = 0
+MethodFlag_Signal = 1
+
 class SourceLocation:
     def __init__(self):
         self.filename = ""
@@ -35,6 +41,7 @@ class Function:
     def __init__(self):
         self.id = 0
         self.qualified_name = ""
+        self.num_called = 0 # How many times this function was called
 
     def check_sanity(self):
         if self.id == -1:
@@ -47,7 +54,6 @@ class CXXMethod(Function):
     def __init__(self):
         Function.__init__(self)
         self.method_flags = 0
-
 
 class CXXClass:
     def __init__(self):
@@ -80,8 +86,12 @@ class GlobalAST:
         for f in self.function_calls:
             f.check_sanity()
 
+
+_check_sanity = False
 _globalAST = GlobalAST()
 _next_function_id = 1
+_function_map = {}
+
 def next_function_id():
     global _next_function_id
     result = _next_function_id
@@ -138,14 +148,20 @@ def load_cbor(filename, globalAST):
                     cxxclass = CXXClass()
                     # cxxclass.id = stuff['id']
                     cxxclass.qualified_name = stuff['name']
+                    if 'class_flags' in stuff:
+                        cxxclass.class_flags = stuff['class_flags']
 
                     if 'methods' in stuff:
                         for m in stuff['methods']:
                             method = CXXMethod()
                             method.id = next_function_id() # Attribute a sequential id, that's unique across TUs
+                            _function_map[method.id] = method
 
                             method.qualified_name = m['name']
                             cxxclass.methods.append(method)
+
+                            if 'method_flags' in m:
+                                method.method_flags = m['method_flags']
 
                             local_id_in_tu = m['id']
 
@@ -158,6 +174,7 @@ def load_cbor(filename, globalAST):
                 if stuff['type'] == 48: # FunctionDecl
                     func = Function()
                     func.id = next_function_id() # Attribute a sequential id, that's unique across TUs
+                    _function_map[func.id] = func
                     func.qualified_name = stuff['name']
                     globalAST.functions.append(func)
                     local_id_in_tu = stuff['id']
@@ -184,6 +201,41 @@ def load_cbor(filename, globalAST):
                     funccall.loc_start = source_loc
                     globalAST.function_calls.append(funccall)
 
+
+def get_all_method_names():
+    total_methods = []
+    for c in _globalAST.cxx_classes:
+        for m in c.methods:
+            total_methods.append(m.qualified_name)
+    return total_methods
+
+def print_qobjects(ast):
+    for c in ast.cxx_classes:
+        if c.class_flags & ClassFlag_QObject:
+            print(c.qualified_name)
+
+
+def calculate_call_counts(ast):
+    for c in ast.function_calls:
+        if c.callee_id in _function_map:
+            _function_map[c.callee_id].num_called += 1
+
+def print_unused_signals(ast):
+    for c in ast.cxx_classes:
+        for m in c.methods:
+            if (m.method_flags & MethodFlag_Signal) and m.num_called == 0:
+                print("Signal " + m.qualified_name + " never called")
+
+
+
+def process_all_files(files):
+    for f in files:
+        load_cbor(f, _globalAST)
+
+    return True
+
+
+
 #def get_class_by_name(qualified_name):
 #    result = []
 #    for c in _globalAST.cxx_classes:
@@ -198,10 +250,18 @@ def load_cbor(filename, globalAST):
 #           result.append(f)
     #return result
 
-load_cbor(sys.argv[1], _globalAST)
 
 
-print ("Functions: " + str(len(_globalAST.functions)))
+
+# load_cbor(sys.argv[1], _globalAST)
+
+
+#print ("Functions: " + str(len(_globalAST.functions)))
+
+
+
+#print(str(total_methods))
+
 
 #_globalAST.check_sanity()
 
@@ -220,3 +280,12 @@ print ("Functions: " + str(len(_globalAST.functions)))
  #   print(c.qualified_name)
 
 #print(cborData)
+
+
+if not process_all_files(sys.argv[1:]):
+    print('Error processing files')
+    sys.exit(1)
+
+calculate_call_counts(_globalAST)
+print_unused_signals(_globalAST)
+#print_qobjects(_globalAST)

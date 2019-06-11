@@ -42,6 +42,8 @@ class Decl;
 class Stmt;
 }
 
+class AccessSpecifierManager;
+
 class MiniAstDumperASTAction : public clang::PluginASTAction
 {
 public:
@@ -87,6 +89,8 @@ private:
     std::unordered_map<unsigned int, std::string> m_fileIds;
 
     std::string m_currentCppFile;
+
+    AccessSpecifierManager *const m_accessSpecifierManager;
 };
 
 #endif
