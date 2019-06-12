@@ -13,9 +13,15 @@ class SourceLocation:
         self.filename = ""
         self.lineNumber = -1
         self.columnNumber = -1
+        self.spellingFilename = ""
+        self.spellingLineNumber = -1
+        self.spellingColumnNumber = -1
 
     def asString(self):
-        return self.filename + ":" + str(self.lineNumber) + ":" + str(self.columnNumber)
+        result = self.filename + ":" + str(self.lineNumber) + ":" + str(self.columnNumber)
+        if self.spellingFilename: # if the loc is the same then the spelling filename is the same in both, so don't add it. They only diverge on line/column, as a macro can't be defined in two files
+            result += ":" + str(self.spellingLineNumber) + ":" + str(self.spellingColumnNumber)
+        return result
 
     def dump(self):
         print(self.asString())
@@ -101,20 +107,27 @@ def next_function_id():
     _next_function_id += 1
     return result
 
+def absolute_file(filename, tu_cwd):
+    if not filename.startswith('/'): # TODO windows
+        filename = tu_cwd + '/' + filename
+
+    # Normalize
+    filename = os.path.normpath(filename)
+    return filename
 
 def parse_loc(cborLoc, file_map, tu_cwd):
     loc = SourceLocation()
     loc.filename = file_map[str(cborLoc['fileId'])]
-
-    # Make absolute
-    if not loc.filename.startswith('/'): # TODO windows
-        loc.filename = tu_cwd + '/' + loc.filename
-
-    # Normalize
-    loc.filename = os.path.normpath(loc.filename)
+    loc.filename = absolute_file(loc.filename, tu_cwd)
 
     loc.lineNumber = cborLoc['line']
     loc.columnNumber = cborLoc['column']
+
+    if 'spellingFileId' in cborLoc:
+        loc.spellingFilename = file_map[str(cborLoc['spellingFileId'])]
+        loc.lineNumber = cborLoc['spellingLineNumber']
+        loc.columnNumber = cborLoc['spellingColumnNumber']
+
     return loc
 
 def read_file(filename):
