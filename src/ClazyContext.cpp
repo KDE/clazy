@@ -38,13 +38,15 @@ using namespace clang;
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
                            const string &headerFilter, const string &ignoreDirs,
-                           string exportFixesFilename, ClazyOptions opts)
+                           string exportFixesFilename,
+                           const std::vector<string> &translationUnitPaths, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
+    , m_translationUnitPaths(translationUnitPaths)
 {
     if (!headerFilter.empty())
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
@@ -60,7 +62,9 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
             exportFixesFilename = fileEntry->getName().str() + ".clazy.yaml";
         }
 
-        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(), exportFixesFilename);
+        const bool isClazyStandalone = !translationUnitPaths.empty();
+        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(),
+                                     exportFixesFilename, isClazyStandalone);
     }
 }
 
@@ -70,8 +74,16 @@ ClazyContext::~ClazyContext()
     delete accessSpecifierManager;
     delete parentMap;
 
+    static unsigned long count = 0;
+    count++;
+
     if (exporter) {
-        exporter->Export();
+        // With clazy-standalone we use the same YAML file for all translation-units, so only
+        // write out the last one. With clazy-plugin there's a YAML file per translation unit.
+        const bool isClazyPlugin = m_translationUnitPaths.empty();
+        const bool isLast = count == m_translationUnitPaths.size();
+        if (isLast || isClazyPlugin)
+            exporter->Export();
         delete exporter;
     }
 

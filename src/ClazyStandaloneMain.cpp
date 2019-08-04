@@ -78,8 +78,11 @@ class ClazyToolActionFactory
     : public clang::tooling::FrontendActionFactory
 {
 public:
-    ClazyToolActionFactory()
-        : FrontendActionFactory() {}
+    ClazyToolActionFactory(std::vector<std::string> paths)
+        : FrontendActionFactory()
+        , m_paths(std::move(paths))
+    {
+    }
 
     FrontendAction *create() override
     {
@@ -106,8 +109,9 @@ public:
         // TODO: We need to agregate the fixes with previous run
         return new ClazyStandaloneASTAction(s_checks.getValue(), s_headerFilter.getValue(),
                                             s_ignoreDirs.getValue(), s_exportFixes.getValue(),
-                                            options);
+                                            m_paths, options);
     }
+    std::vector<std::string> m_paths;
 };
 
 int main(int argc, const char **argv)
@@ -115,5 +119,5 @@ int main(int argc, const char **argv)
     CommonOptionsParser optionsParser(argc, argv, s_clazyCategory);
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
-    return tool.run(new ClazyToolActionFactory());
+    return tool.run(new ClazyToolActionFactory(optionsParser.getSourcePathList()));
 }

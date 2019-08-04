@@ -31,13 +31,26 @@
 
 using namespace clang;
 
+static clang::tooling::TranslationUnitDiagnostics& getTuDiag()
+{
+    static clang::tooling::TranslationUnitDiagnostics s_tudiag;
+    return s_tudiag;
+}
+
 FixItExporter::FixItExporter(DiagnosticsEngine &DiagEngine, SourceManager &SourceMgr,
-                             const LangOptions &LangOpts, const std::string &exportFixes)
+                             const LangOptions &LangOpts, const std::string &exportFixes,
+                             bool isClazyStandalone)
     : DiagEngine(DiagEngine)
     , SourceMgr(SourceMgr)
     , LangOpts(LangOpts)
     , exportFixes(exportFixes)
+    , m_isClazyStandalone(isClazyStandalone)
 {
+    if (!isClazyStandalone) {
+        // When using clazy as plugin each translation unit fixes goes to a separate YAML file
+        getTuDiag().Diagnostics.clear();
+    }
+
     Owner = DiagEngine.takeClient();
     Client = DiagEngine.getClient();
     DiagEngine.setClient(this, false);
@@ -56,7 +69,7 @@ void FixItExporter::BeginSourceFile(const LangOptions &LangOpts, const Preproces
 
     const auto id = SourceMgr.getMainFileID();
     const auto entry = SourceMgr.getFileEntryForID(id);
-    TUDiag.MainSourceFile = entry->getName();
+    getTuDiag().MainSourceFile = entry->getName();
 }
 
 bool FixItExporter::IncludeInDiagnosticCounts() const
@@ -145,7 +158,7 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
                 Diag(Info.getLocation(), diag::note_fixit_failed);
             }
         }
-        TUDiag.Diagnostics.push_back(ToolingDiag);
+        getTuDiag().Diagnostics.push_back(ToolingDiag);
         m_recordNotes = true;
     }
     // FIXME: We do not receive notes.
@@ -154,7 +167,7 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
         const auto FileName = SourceMgr.getFilename(Info.getLocation());
         llvm::errs() << "Handling Note for " << FileName.str() << "\n";
 #endif
-        auto diags = TUDiag.Diagnostics.back();
+        auto diags = getTuDiag().Diagnostics.back();
         auto diag = ConvertDiagnostic(Info);
         diags.Notes.append(1, diag.Message);
     }
@@ -168,7 +181,7 @@ void FixItExporter::Export()
     std::error_code EC;
     llvm::raw_fd_ostream OS(exportFixes, EC, llvm::sys::fs::F_None);
     llvm::yaml::Output YAML(OS);
-    YAML << TUDiag;
+    YAML << getTuDiag();
 }
 
 void FixItExporter::Diag(SourceLocation Loc, unsigned DiagID)

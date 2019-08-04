@@ -71,6 +71,7 @@ public:
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
+                          const std::vector<std::string> &translationUnitPaths,
                           ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
@@ -179,6 +180,7 @@ public:
     clang::Decl *lastDecl = nullptr;
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
+    const std::vector<std::string> m_translationUnitPaths;
 };
 
 #endif
