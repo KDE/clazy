@@ -234,10 +234,11 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     const string headerFilter = getEnvVariable("CLAZY_HEADER_FILTER");
     const string ignoreDirs = getEnvVariable("CLAZY_IGNORE_DIRS");
-    std::string exportFixes;
+    std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(ci, headerFilter, ignoreDirs, exportFixes, ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(ci, headerFilter, ignoreDirs,
+                                     exportFixesFilename, ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -261,9 +262,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         m_options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
 
     if (parseArgument("export-fixes", args))
-        exportFixes = args.at(0);
+        exportFixesFilename = args.at(0);
 
-    m_context = new ClazyContext(ci, headerFilter, ignoreDirs, exportFixes, m_options);
+    m_context = new ClazyContext(ci, headerFilter, ignoreDirs, exportFixesFilename, m_options);
 
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
