@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="console-application">
+  <id>org.kde.clazy</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LGPL-2.1-or-later</project_license>
+  <name>Clazy</name>
+  <summary>A Clang compiler plugin which emits warnings related to Qt best practices.</summary>
+  <description>
+    <p>Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
+  </description>
+  <categories>
+​    <category>Development</category>
+​  </categories>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://cdn.kde.org/screenshots/clazy/clazy.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://www.kde.org/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=clazy</url>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>clazy</binary>
+  </provides>
+</component>
