@@ -4,7 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-or-later</project_license>
   <name>Clazy</name>
-  <summary>A Clang compiler plugin which emits warnings related to Qt best practices.</summary>
+  <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
   <description>
     <p>Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
   </description>
