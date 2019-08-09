@@ -22,4 +22,5 @@
   <provides>
     <binary>clazy</binary>
   </provides>
+  <icon type="stock">clazy</icon>
 </component>
