@@ -1,2 +1,3 @@
 signal-with-return-value/main.cpp:9:5: warning: intSig() should return void. For a clean design signals shouldn't assume a single slot are connected to them. [-Wclazy-signal-with-return-value]
 signal-with-return-value/main.cpp:10:5: warning: voidStarSig() should return void. For a clean design signals shouldn't assume a single slot are connected to them. [-Wclazy-signal-with-return-value]
+signal-with-return-value/main.cpp:16:5: warning: withArgs4() shouldn't receive parameters by ref. For a clean design signals shouldn't assume a single slot are connected to them. [-Wclazy-signal-with-return-value]
