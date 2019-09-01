@@ -84,7 +84,7 @@ void test2()
     MyObj *o1;
     MyObj2 *o2;
     true ? static_cast<QObject*>(o1) : static_cast<QObject*>(o2); // Ok
-    true ? qobject_cast<QObject*>(o1) : qobject_cast<QObject*>(o2); // Ok
+    true ? static_cast<QObject*>(o1) : static_cast<QObject*>(o2); // Ok
 }
 class MyObj4 : public QObject
 {
