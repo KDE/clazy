@@ -89,16 +89,27 @@ tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
     Info.FormatDiagnostic(TmpMessageText);
     // TODO: This returns an empty string: DiagEngine->getDiagnosticIDs()->getWarningOptionForDiag(Info.getID());
     // HACK: capture it at the end of the message: Message text [check-name]
-    const auto MessageText = TmpMessageText.slice(0, TmpMessageText.find_last_of('[') - 1).str();
-    const auto CheckName = TmpMessageText.slice(TmpMessageText.find_last_of('[') + 3,
-                                                TmpMessageText.find_last_of(']')).str();
+
+    std::string checkName = DiagEngine.getDiagnosticIDs()->getWarningOptionForDiag(Info.getID());
+    std::string messageText;
+
+    if (checkName.empty()) {
+        messageText = TmpMessageText.slice(0, TmpMessageText.find_last_of('[') - 1).str();
+
+        checkName = TmpMessageText.slice(TmpMessageText.find_last_of('[') + 3,
+                                         TmpMessageText.find_last_of(']')).str();
+    } else {
+         messageText = TmpMessageText.c_str();
+    }
+
+
     llvm::StringRef CurrentBuildDir; // Not needed?
 
-    tooling::Diagnostic ToolingDiag(CheckName,
+    tooling::Diagnostic ToolingDiag(checkName,
                                     tooling::Diagnostic::Warning,
                                     CurrentBuildDir);
     // FIXME: Sometimes the file path is an empty string.
-    ToolingDiag.Message = tooling::DiagnosticMessage(MessageText, SourceMgr, Info.getLocation());
+    ToolingDiag.Message = tooling::DiagnosticMessage(messageText, SourceMgr, Info.getLocation());
     return ToolingDiag;
 }
 
