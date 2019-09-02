@@ -252,4 +252,7 @@ else()
   install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 endif()
 
+file(READ checks.json SUPPORTED_CHECKS_JSON_STR)
+configure_file(checks.json.h.in checks.json.h)
+
 install(FILES org.kde.clazy.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)

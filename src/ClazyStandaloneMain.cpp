@@ -24,12 +24,15 @@
 #include "Clazy.h"
 #include "ClazyContext.h"
 
+#include "checks.json.h"
+
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
 #include <llvm/Support/CommandLine.h>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 
+#include <iostream>
 #include <string>
 
 namespace clang {
@@ -71,6 +74,9 @@ always displayed.)"),
 static cl::opt<std::string> s_ignoreDirs("ignore-dirs", cl::desc(R"(Regular expression matching the names of the
 directories for which diagnostics should never be emitted. Useful for ignoring 3rdparty code.)"),
                                          cl::init(""), cl::cat(s_clazyCategory));
+
+static cl::opt<bool> s_supportedChecks("supported-checks-json", cl::desc("Dump meta information about supported checks in JSON format."),
+                                       cl::init(false), cl::cat(s_clazyCategory));
 
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
@@ -116,7 +122,13 @@ public:
 
 int main(int argc, const char **argv)
 {
-    CommonOptionsParser optionsParser(argc, argv, s_clazyCategory);
+    CommonOptionsParser optionsParser(argc, argv, s_clazyCategory, cl::ZeroOrMore);
+
+    if (s_supportedChecks.getValue()) {
+        std::cout << SUPPORTED_CHECKS_JSON_STR;
+        return 0;
+    }
+
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
     return tool.run(new ClazyToolActionFactory(optionsParser.getSourcePathList()));
