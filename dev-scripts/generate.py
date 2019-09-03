@@ -499,7 +499,7 @@ def generate_readmes_cmake_install(checks):
         f.close();
 
     new_text_to_insert = ""
-    for level in ['-1', '0', '1', '2', '3']:
+    for level in ['-1', '0', '1', '2']:
         new_text_to_insert += 'SET(' + level_num_to_cmake_readme_variable(int(level)) + "\n"
         for c in checks:
             if str(c.level) == level:
