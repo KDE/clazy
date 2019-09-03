@@ -87,6 +87,7 @@
 #include "checks/level1/qdeleteall.h"
 #include "checks/level1/qhash-namespace.h"
 #include "checks/level1/qlatin1string-non-ascii.h"
+#include "checks/level1/qproperty-type-mismatch.h"
 #include "checks/level1/qproperty-without-notify.h"
 #include "checks/level1/qstring-left.h"
 #include "checks/level1/range-loop.h"
@@ -187,6 +188,7 @@ void CheckManager::registerChecks()
     registerCheck(check<QDeleteAll>("qdeleteall", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashNamespace>("qhash-namespace", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QLatin1StringNonAscii>("qlatin1string-non-ascii", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyWithoutNotify>("qproperty-without-notify", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QStringLeft>("qstring-left", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RangeLoop>("range-loop", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));

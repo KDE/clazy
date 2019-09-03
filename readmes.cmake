@@ -65,6 +65,7 @@ SET(README_LEVEL1_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qdeleteall.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-namespace.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qlatin1string-non-ascii.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-without-notify.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-left.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop.md

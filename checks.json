@@ -311,6 +311,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "qproperty-type-mismatch",
+            "level" : 1,
+            "categories" : ["bug"],
+            "visits_decls" : true
+        },
+        {
             "name"  : "detaching-temporary",
             "level" : 1,
             "categories" : ["containers", "performance"],

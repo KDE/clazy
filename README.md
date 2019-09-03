@@ -279,6 +279,7 @@ clazy runs all checks from level1 by default.
     - [qdeleteall](docs/checks/README-qdeleteall.md)
     - [qhash-namespace](docs/checks/README-qhash-namespace.md)
     - [qlatin1string-non-ascii](docs/checks/README-qlatin1string-non-ascii.md)
+    - [qproperty-type-mismatch](docs/checks/README-qproperty-type-mismatch.md)
     - [qproperty-without-notify](docs/checks/README-qproperty-without-notify.md)
     - [qstring-left](docs/checks/README-qstring-left.md)
     - [range-loop](docs/checks/README-range-loop.md)    (fix-range-loop-add-ref,fix-range-loop-add-qasconst)
