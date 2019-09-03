@@ -7,6 +7,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficient-qlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qproperty-type-mismatch.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qrequiredresult-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-varargs.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keywords.cpp
@@ -59,7 +60,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qdeleteall.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qhash-namespace.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qlatin1string-non-ascii.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qproperty-type-mismatch.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qproperty-without-notify.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qstring-left.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/range-loop.cpp

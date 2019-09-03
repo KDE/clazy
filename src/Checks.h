@@ -35,6 +35,7 @@
 #include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
+#include "checks/manuallevel/qproperty-type-mismatch.h"
 #include "checks/manuallevel/qrequiredresult-candidates.h"
 #include "checks/manuallevel/qstring-varargs.h"
 #include "checks/manuallevel/qt-keywords.h"
@@ -87,7 +88,6 @@
 #include "checks/level1/qdeleteall.h"
 #include "checks/level1/qhash-namespace.h"
 #include "checks/level1/qlatin1string-non-ascii.h"
-#include "checks/level1/qproperty-type-mismatch.h"
 #include "checks/level1/qproperty-without-notify.h"
 #include "checks/level1/qstring-left.h"
 #include "checks/level1/range-loop.h"
@@ -128,6 +128,7 @@ void CheckManager::registerChecks()
     registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringVarargs>("qstring-varargs", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QtKeywords>("qt-keywords", ManualCheckLevel, RegisteredCheck::Option_None));
@@ -188,7 +189,6 @@ void CheckManager::registerChecks()
     registerCheck(check<QDeleteAll>("qdeleteall", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashNamespace>("qhash-namespace", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QLatin1StringNonAscii>("qlatin1string-non-ascii", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyWithoutNotify>("qproperty-without-notify", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QStringLeft>("qstring-left", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RangeLoop>("range-loop", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));

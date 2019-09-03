@@ -7,6 +7,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-inefficient-qlist.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qrequiredresult-candidates.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
@@ -65,7 +66,6 @@ SET(README_LEVEL1_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qdeleteall.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-namespace.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qlatin1string-non-ascii.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-without-notify.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-left.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop.md
@@ -92,3 +92,4 @@ SET(README_LEVEL2_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-static-pmf.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-virtual-call-ctor.md
 )
+

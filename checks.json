@@ -312,7 +312,7 @@
         },
         {
             "name"  : "qproperty-type-mismatch",
-            "level" : 1,
+            "level" : -1,
             "categories" : ["bug"],
             "visits_decls" : true
         },
