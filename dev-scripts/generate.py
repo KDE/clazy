@@ -452,7 +452,7 @@ def generate_readme(checks):
     f.close();
 
     new_text_to_insert = ""
-    for level in ['-1', '0', '1', '2', '3']:
+    for level in ['-1', '0', '1', '2']:
         new_text_to_insert += "- Checks from %s:" % level_num_to_name(int(level)) + "\n"
         for c in checks:
             if str(c.level) == level:
