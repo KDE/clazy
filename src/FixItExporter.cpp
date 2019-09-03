@@ -94,6 +94,7 @@ tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
     std::string messageText;
 
     if (checkName.empty()) {
+        // Non-built-in clang warnings have the [checkName] in the message
         messageText = TmpMessageText.slice(0, TmpMessageText.find_last_of('[') - 1).str();
 
         checkName = TmpMessageText.slice(TmpMessageText.find_last_of('[') + 3,
