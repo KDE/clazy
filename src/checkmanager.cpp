@@ -171,7 +171,7 @@ static bool takeArgument(const string &arg, vector<string> &args)
     return false;
 }
 
-RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context, std::vector<std::string> &args)
+RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &args, bool qt4Compat)
 {
     RegisteredCheck::List result;
 
@@ -213,7 +213,7 @@ RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context,
     clazy::sort_and_remove_dups(result, checkLessThan);
     CheckManager::removeChecksFromList(result, userDisabledChecks);
 
-    if (context->options & ClazyContext::ClazyOption_Qt4Compat) {
+    if (qt4Compat) {
         // #5 Remove Qt4 incompatible checks
         result.erase(remove_if(result.begin(), result.end(), [](const RegisteredCheck &c){
             return c.options & RegisteredCheck::Option_Qt4Incompatible;

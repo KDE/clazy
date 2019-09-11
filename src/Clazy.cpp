@@ -271,7 +271,8 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     {
         std::lock_guard<std::mutex> lock(CheckManager::lock());
-        m_checks = m_checkManager->requestedChecks(m_context, args);
+        m_checks = m_checkManager->requestedChecks(args,
+                                                   m_options & ClazyContext::ClazyOption_Qt4Compat);
     }
 
     if (args.size() > 1) {
@@ -390,7 +391,8 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
     auto cm = CheckManager::instance();
 
     vector<string> checks; checks.push_back(m_checkList);
-    const RegisteredCheck::List requestedChecks = cm->requestedChecks(context, checks);
+    const bool qt4Compat = m_options & ClazyContext::ClazyOption_Qt4Compat;
+    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks, qt4Compat);
 
     if (requestedChecks.size() == 0) {
         llvm::errs() << "No checks were requested!\n" << "\n";

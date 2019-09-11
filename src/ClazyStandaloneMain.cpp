@@ -78,6 +78,9 @@ directories for which diagnostics should never be emitted. Useful for ignoring 3
 static cl::opt<bool> s_supportedChecks("supported-checks-json", cl::desc("Dump meta information about supported checks in JSON format."),
                                        cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<bool> s_listEnabledChecks("list-checks", cl::desc("List all enabled checks and exit."),
+                                         cl::init(false), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory
@@ -126,6 +129,23 @@ int main(int argc, const char **argv)
 
     if (s_supportedChecks.getValue()) {
         std::cout << SUPPORTED_CHECKS_JSON_STR;
+        return 0;
+    }
+
+    if (s_listEnabledChecks.getValue()) {
+        std::string checksFromArgs = s_checks.getValue();
+        std::vector<std::string> checks = { checksFromArgs.empty() ? "level1" : checksFromArgs };
+        const RegisteredCheck::List enabledChecks
+                = CheckManager::instance()->requestedChecks(checks, s_qt4Compat.getValue());
+
+        if (!enabledChecks.empty()) {
+            llvm::outs() << "Enabled checks:";
+            for (const auto &check : enabledChecks) {
+                llvm::outs() << "\n    " << check.name;
+            }
+            llvm::outs() << "\n";
+        }
+
         return 0;
     }
 

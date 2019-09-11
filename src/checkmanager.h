@@ -105,7 +105,7 @@ public:
      * Returns all the requested checks.
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
-    RegisteredCheck::List requestedChecks(const ClazyContext *context, std::vector<std::string> &args);
+    RegisteredCheck::List requestedChecks(std::vector<std::string> &args, bool qt4Compat);
     std::vector<std::pair<CheckBase*, RegisteredCheck>> createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
