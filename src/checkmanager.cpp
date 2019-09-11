@@ -128,7 +128,7 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv(const ClazyContext *context, vector<string> &userDisabledChecks) const
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &userDisabledChecks) const
 {
     static RegisteredCheck::List requestedChecksThroughEnv;
     static vector<string> disabledChecksThroughEnv;
@@ -199,7 +199,7 @@ RegisteredCheck::List CheckManager::requestedChecks(const ClazyContext *context,
     // #3 Append checks specified from env variable
 
     vector<string> userDisabledChecks;
-    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(context, /*by-ref*/ userDisabledChecks);
+    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(/*by-ref*/ userDisabledChecks);
     copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(result));
 
     if (result.empty() && requestedLevel == CheckLevelUndefined) {
