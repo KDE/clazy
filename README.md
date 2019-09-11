@@ -314,7 +314,7 @@ You can disable checks by prefixing with `no-`, in case you don't want all check
 
 ## Example via env variable
 ```
-export CLAZY_CHECKS="unneeded-cast,qmap-with-key-pointer,virtual-call-ctor" # Enables only these 3 checks
+export CLAZY_CHECKS="unneeded-cast,qmap-with-pointer-key,virtual-call-ctor" # Enables only these 3 checks
 export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except for qenums
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```
