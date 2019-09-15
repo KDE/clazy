@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import sys, os, subprocess, string, re, json, threading, multiprocessing, argparse
 import shutil
@@ -131,10 +131,13 @@ class Check:
 def get_command_output(cmd, test_env = os.environ):
     try:
         if _verbose:
-            print cmd
+            print(cmd)
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         return e.output,False
+
+    if type(output) is bytes:
+        output = output.decode('utf-8')
 
     return output,True
 
@@ -248,11 +251,11 @@ def find_qt_installation(major_version, qmakes):
                 ver = qmake_version_str.split('.')
                 installation.int_version = int(ver[0]) * 10000 + int(ver[1]) * 100 + int(ver[2])
                 if _verbose:
-                    print "Found Qt " + str(installation.int_version) + " using qmake " + qmake
+                    print("Found Qt " + str(installation.int_version) + " using qmake " + qmake)
             break
 
     if installation.int_version == 0 and major_version >= 5: # Don't warn for missing Qt4 headers
-        print "Error: Couldn't find a Qt" + str(major_version) + " installation"
+        print("Error: Couldn't find a Qt" + str(major_version) + " installation")
     return installation
 
 def libraryName():
@@ -282,7 +285,7 @@ def clazy_standalone_binary():
 
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
-    result = " -checks=" + string.join(test.checks, ',') + " " + result
+    result = " -checks=" + ','.join(test.checks) + " " + result
 
     if test.has_fixits:
         result = " -export-fixes=" + test.yamlFilename(is_standalone=True) + result
@@ -328,7 +331,7 @@ def clazy_command(qt, test, filename):
     else:
         result = result + " -c "
 
-    result = result + test.flags + " -Xclang -plugin-arg-clazy -Xclang " + string.join(test.checks, ',') + " "
+    result = result + test.flags + " -Xclang -plugin-arg-clazy -Xclang " + ','.join(test.checks) + " "
     if test.has_fixits:
         result += _export_fixes_argument + " "
     result += filename
@@ -356,7 +359,7 @@ parser.add_argument("check_names", nargs='*', help="The name of the check who's 
 args = parser.parse_args()
 
 if args.only_standalone and args.no_standalone:
-    print "Error: --only-standalone is incompatible with --no-standalone"
+    print("Error: --only-standalone is incompatible with --no-standalone")
     sys.exit(1)
 
 #-------------------------------------------------------------------------------
@@ -378,7 +381,6 @@ _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 # utility functions #2
 
 version,success = get_command_output(compiler_name() + ' --version')
-
 match = re.search('clang version (.*?)[ -]', version)
 try:
     version = match.group(1)
@@ -389,11 +391,11 @@ except:
     try:
         version = match.group(1)
     except:
-        print "Could not determine clang version, is it in PATH?"
+        print("Could not determine clang version, is it in PATH?")
         sys.exit(-1)
 
 if _verbose:
-    print 'Found clang version: ' + str(version)
+    print('Found clang version: ' + str(version))
 
 CLANG_VERSION = int(version.replace('.', ''))
 
@@ -411,12 +413,12 @@ def run_command(cmd, output_file = "", test_env = os.environ):
     lines = lines.replace("std::__1::__vector_base_common", "std::_Vector_base") # Hack for macOS
     lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
     if not success and not output_file:
-        print lines
+        print(lines)
         return False
 
     if _verbose:
-        print "Running: " + cmd
-        print "output_file=" + output_file
+        print("Running: " + cmd)
+        print("output_file=" + output_file)
 
     lines = lines.replace('\r\n', '\n')
     if output_file:
@@ -424,7 +426,7 @@ def run_command(cmd, output_file = "", test_env = os.environ):
         f.writelines(lines)
         f.close()
     else:
-        print lines
+        print(lines)
 
     return success
 
@@ -447,23 +449,23 @@ def compare_files(expects_failure, expected_file, result_file, message):
 
     if expects_failure:
         if success:
-            print "[XOK]   " + message
+            print("[XOK]   " + message)
             return False
         else:
-            print "[XFAIL] " + message
+            print("[XFAIL] " + message)
             print_differences(expected_file, result_file)
             return True
     else:
         if success:
-            print "[OK]   " + message
+            print("[OK]   " + message)
             return True
         else:
-            print "[FAIL] " + message
+            print("[FAIL] " + message)
             print_differences(expected_file, result_file)
             return False
 
 def get_check_names():
-    return filter(lambda entry: os.path.isdir(entry), os.listdir("."))
+    return list(filter(lambda entry: os.path.isdir(entry), os.listdir(".")))
 
 # The yaml file references the test file in our git repo, but we don't want
 # to rewrite that one, as we would need to discard git changes afterwards,
@@ -502,7 +504,7 @@ def run_clang_apply_replacements():
 
 def cleanup_fixit_files(checks):
     for check in checks:
-        filestodelete = filter(lambda entry: entry.endswith('.fixed') or entry.endswith('.yaml'), os.listdir(check.name))
+        filestodelete = list(filter(lambda entry: entry.endswith('.fixed') or entry.endswith('.yaml'), os.listdir(check.name)))
         for f in filestodelete:
             os.remove(check.name + '/' + f)
 
@@ -526,7 +528,7 @@ def extract_word(word, in_file, out_file):
 
 def print_file(filename):
     f = open(filename, 'r')
-    print f.read()
+    print(f.read())
     f.close()
 
 def file_contains(filename, text):
@@ -543,17 +545,17 @@ def run_unit_test(test, is_standalone):
 
     if _verbose:
         print
-        print "Qt version: " + str(qt.int_version)
-        print "Qt headers: " + qt.qmake_header_path
+        print("Qt version: " + str(qt.int_version))
+        print("Qt headers: " + qt.qmake_header_path)
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
-            print "Skipping " + test.check.name + " because required version is not available"
+            print("Skipping " + test.check.name + " because required version is not available")
         return True
 
     if _platform in test.blacklist_platforms:
         if (_verbose):
-            print "Skipping " + test.check.name + " because it is blacklisted for this platform"
+            print("Skipping " + test.check.name + " because it is blacklisted for this platform")
         return True
 
     checkname = test.check.name
@@ -582,11 +584,11 @@ def run_unit_test(test, is_standalone):
         return True
 
     if (not cmd_success and not must_fail) or (cmd_success and must_fail):
-        print "[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)"
-        print "-------------------"
-        print "Contents of %s:" % output_file
+        print("[FAIL] " + checkname + " (Failed to build test. Check " + output_file + " for details)")
+        print("-------------------")
+        print("Contents of %s:" % output_file)
         print_file(output_file)
-        print "-------------------"
+        print("-------------------")
         print
         return False
 
@@ -634,11 +636,11 @@ def patch_yaml_files(requested_checks, is_standalone):
             if test.should_run_fixits_test:
                 yamlfilename = test.yamlFilename(is_standalone)
                 if not os.path.exists(yamlfilename):
-                    print "[FAIL] " + yamlfilename + " is missing!!"
+                    print("[FAIL] " + yamlfilename + " is missing!!")
                     success = False
                     continue
                 if not patch_fixit_yaml_file(test, is_standalone):
-                    print "[FAIL] Could not patch " + yamlfilename
+                    print("[FAIL] Could not patch " + yamlfilename)
                     success = False
                     continue
     return success
@@ -693,7 +695,7 @@ def dump_ast(check):
     for test in check.tests:
         ast_filename = test.filename() + ".ast"
         run_command(dump_ast_command(test) + " > " + ast_filename)
-        print "Dumped AST to " + os.getcwd() + "/" + ast_filename
+        print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
 #-------------------------------------------------------------------------------
 def load_checks(all_check_names):
     checks = []
@@ -703,7 +705,7 @@ def load_checks(all_check_names):
             if check.enabled:
                 checks.append(check)
         except:
-            print "Error while loading " + name
+            print("Error while loading " + name)
             raise
             sys.exit(-1)
     return checks
@@ -718,19 +720,19 @@ os.environ['CLAZY_CHECKS'] = ''
 all_check_names = get_check_names()
 all_checks = load_checks(all_check_names)
 requested_check_names = args.check_names
-requested_check_names = map(lambda x: x.strip("/\\"), requested_check_names)
+requested_check_names = list(map(lambda x: x.strip("/\\"), requested_check_names))
 
 for check_name in requested_check_names:
     if check_name not in all_check_names:
-        print "Unknown check: " + check_name
+        print("Unknown check: " + check_name)
         print
         sys.exit(-1)
 
 if not requested_check_names:
     requested_check_names = all_check_names
 
-requested_checks = filter(lambda check: check.name in requested_check_names and check.name not in _excluded_checks, all_checks)
-requested_checks = filter(lambda check: check.minimum_clang_version <= CLANG_VERSION, requested_checks)
+requested_checks = list(filter(lambda check: check.name in requested_check_names and check.name not in _excluded_checks, all_checks))
+requested_checks = list(filter(lambda check: check.minimum_clang_version <= CLANG_VERSION, requested_checks))
 
 threads = []
 
@@ -763,8 +765,8 @@ if not run_fixit_tests(requested_checks):
     _was_successful = False
 
 if _was_successful:
-    print "SUCCESS"
+    print("SUCCESS")
     sys.exit(0)
 else:
-    print "FAIL"
+    print("FAIL")
     sys.exit(-1)
