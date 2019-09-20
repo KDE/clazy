@@ -8,6 +8,8 @@
 project(clazy)
 
 cmake_minimum_required(VERSION 3.3)
+cmake_policy(SET CMP0074 NEW)
+
 include(FeatureSummary)
 include(GenerateExportHeader)
 include("GNUInstallDirs")
