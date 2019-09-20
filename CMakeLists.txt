@@ -76,6 +76,12 @@ include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
+if (${LLVM_VERSION} VERSION_GREATER_EQUAL "9.0.0")
+    set(clang_tooling_refactoring_lib clangToolingRefactoring)
+else()
+    set(clang_tooling_refactoring_lib clangToolingRefactor)
+endif()
+
 macro(link_to_llvm name is_standalone)
   foreach(clang_lib ${CLANG_LIBS})
     if(MSVC)
@@ -115,7 +121,7 @@ macro(link_to_llvm name is_standalone)
   endif()
     target_link_libraries(${name} clangTooling)
     target_link_libraries(${name} clangToolingCore)
-    target_link_libraries(${name} clangToolingRefactor)
+    target_link_libraries(${name} ${clang_tooling_refactoring_lib})
 endmacro()
 
 macro(add_clang_plugin name)
@@ -222,7 +228,7 @@ else()
     LINK_LIBS
     clangToolingCore
     clangToolingInclusions
-    clangToolingRefactor
+    ${clang_tooling_refactoring_lib}
     clangFrontend
     clangDriver
     clangCodeGen
