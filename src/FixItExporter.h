@@ -64,7 +64,6 @@ private:
     bool m_recordNotes = false;
     clang::tooling::Diagnostic ConvertDiagnostic(const clang::Diagnostic &Info);
     clang::tooling::Replacement ConvertFixIt(const clang::FixItHint &Hint);
-    const bool m_isClazyStandalone;
 };
 
 #endif // CLAZY_FIX_IT_EXPORTER_H

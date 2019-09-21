@@ -44,7 +44,6 @@ FixItExporter::FixItExporter(DiagnosticsEngine &DiagEngine, SourceManager &Sourc
     , SourceMgr(SourceMgr)
     , LangOpts(LangOpts)
     , exportFixes(exportFixes)
-    , m_isClazyStandalone(isClazyStandalone)
 {
     if (!isClazyStandalone) {
         // When using clazy as plugin each translation unit fixes goes to a separate YAML file
