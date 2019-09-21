@@ -519,8 +519,8 @@ def normalizedCwd():
     return os.getcwd().replace('\\', '/')
 
 def extract_word(word, in_file, out_file):
-    in_f = open(in_file, 'r')
-    out_f = open(out_file, 'w')
+    in_f = io.open(in_file, 'r', encoding='utf-8')
+    out_f = io.open(out_file, 'w', encoding='utf-8')
     for line in in_f:
         if word in line:
             line = line.replace('\\', '/')
