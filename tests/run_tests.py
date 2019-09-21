@@ -129,17 +129,20 @@ class Check:
 # utility functions #1
 
 def get_command_output(cmd, test_env = os.environ):
+    success = True
+
     try:
         if _verbose:
             print(cmd)
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
     except subprocess.CalledProcessError as e:
-        return e.output,False
+        output = e.output
+        success = False
 
     if type(output) is bytes:
         output = output.decode('utf-8')
 
-    return output,True
+    return output,success
 
 def load_json(check_name):
     check = Check(check_name)
