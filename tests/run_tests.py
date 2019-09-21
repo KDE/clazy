@@ -535,7 +535,7 @@ def print_file(filename):
     f.close()
 
 def file_contains(filename, text):
-    f = open(filename, 'r')
+    f = io.open(filename, 'r', encoding='utf-8')
     contents = f.read()
     f.close()
     return text in contents
