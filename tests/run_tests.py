@@ -355,7 +355,7 @@ parser.add_argument("--no-standalone", action='store_true', help="Don\'t run cla
 parser.add_argument("--only-standalone", action='store_true', help='Only run clazy-standalone')
 parser.add_argument("--dump-ast", action='store_true', help='Dump a unit-test AST to file')
 parser.add_argument("--exclude", help='Comma separated list of checks to ignore')
-parser.add_argument("check_names", nargs='*', help="The name of the check who's unit-tests will be run. Defaults to running all checks.")
+parser.add_argument("check_names", nargs='*', help="The name of the check whose unit-tests will be run. Defaults to running all checks.")
 args = parser.parse_args()
 
 if args.only_standalone and args.no_standalone:

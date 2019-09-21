@@ -403,7 +403,7 @@ with each other modifying the same source lines.
 - fatal error: 'stddef.h' file not found, while using `clazy-standalone`
   Be sure the clazy-standalone binary is located in the same folder as the clang binary.
 
-- Be sure to disble pch.
+- Be sure to disable pch.
 
 - macOS: Be sure you're not using Apple Clang
 
