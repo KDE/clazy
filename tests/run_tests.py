@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, os, subprocess, string, re, json, threading, multiprocessing, argparse
+import sys, os, subprocess, string, re, json, threading, multiprocessing, argparse, io
 import shutil
 from threading import Thread
 from sys import platform as _platform
@@ -425,7 +425,7 @@ def run_command(cmd, output_file = "", test_env = os.environ):
 
     lines = lines.replace('\r\n', '\n')
     if output_file:
-        f = open(output_file, 'w')
+        f = io.open(output_file, 'w', encoding='utf8')
         f.writelines(lines)
         f.close()
     else:
