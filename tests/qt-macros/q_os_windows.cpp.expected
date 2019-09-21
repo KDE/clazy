@@ -1,0 +1,1 @@
+qt-macros/q_os_windows.cpp:3:5: warning: Q_OS_WINDOWS was only introduced in Qt 5.12.4, use Q_OS_WIN instead [-Wclazy-qt-macros]
