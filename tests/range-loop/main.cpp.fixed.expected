@@ -231,7 +231,7 @@ void test_add_qasconst_fixits()
     for (const auto &s : qAsConst(f2->m_list)) {}  // Warn
 
     QStringList locallist = f.getList();
-    for (const auto &s : locallist) {} // Warn
+    for (const auto &s : qAsConst(locallist)) {} // Warn
 
     for (const auto &s : getQtList()) {} // Warn
 
