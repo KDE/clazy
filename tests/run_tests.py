@@ -522,6 +522,9 @@ def extract_word(word, in_file, out_file):
     in_f = io.open(in_file, 'r', encoding='utf-8')
     out_f = io.open(out_file, 'w', encoding='utf-8')
     for line in in_f:
+        if '[-Wdeprecated-declarations]' in line:
+            continue
+
         if word in line:
             line = line.replace('\\', '/')
             line = line.replace(normalizedCwd() + '/', "") # clazy-standalone prints the complete cpp file path for some reason. Normalize it so it compares OK with the expected output.
