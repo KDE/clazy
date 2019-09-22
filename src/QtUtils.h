@@ -198,18 +198,6 @@ inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *contex
 bool recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &paramType, bool &ok, int &numCtors);
 
 /**
- * Returns true if we can prove the container doesn't detach.
- * Returns false otherwise, meaning that you can't conclude anything if false is returned.
- *
- * For true to be returned, all these conditions must verify:
- * - Container is a local variable
- * - It's not passed to any function
- * - It's not assigned to another variable
- */
-bool containerNeverDetaches(const clang::VarDecl *varDecl,
-                            StmtBodyRange bodyRange);
-
-/**
  * Returns true if recordDecl is one of the container classes that supports reserve(), such
  * as QList, QVector, etc.
  */

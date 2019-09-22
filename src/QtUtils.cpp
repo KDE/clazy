@@ -205,39 +205,6 @@ bool clazy::isQtContainer(const CXXRecordDecl *record)
     });
 }
 
-bool clazy::containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange) // clazy:exclude=function-args-by-value
-{
-    // This helps for bug 367485
-
-    if (!valDecl)
-        return false;
-
-    const auto context = dyn_cast<FunctionDecl>(valDecl->getDeclContext());
-    if (!context)
-        return false;
-
-    bodyRange.body = context->getBody();
-    if (!bodyRange.body)
-        return false;
-
-    if (valDecl->hasInit()) {
-        if (auto cleanupExpr = dyn_cast<clang::ExprWithCleanups>(valDecl->getInit())) {
-            if (auto ce = dyn_cast<clang::CXXConstructExpr>(cleanupExpr->getSubExpr())) {
-                if (!ce->isListInitialization() && !ce->isStdInitListInitialization()) {
-                    // When initing via copy or move ctor there's possible detachments.
-                    return false;
-                }
-            }
-        }
-    }
-
-    // TODO1: Being passed to a function as const should be OK
-    if (Utils::isPassedToFunction(bodyRange, valDecl, false))
-        return false;
-
-    return true;
-}
-
 bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
 {
     if (!recordDecl)

@@ -53,6 +53,51 @@ enum Fixit {
     Fixit_AddqAsConst = 2
 };
 
+namespace clazy {
+/**
+ * Returns true if we can prove the container doesn't detach.
+ * Returns false otherwise, meaning that you can't conclude anything if false is returned.
+ *
+ * For true to be returned, all these conditions must verify:
+ * - Container is a local variable
+ * - It's not passed to any function
+ * - It's not assigned to another variable
+ */
+bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRange) // clazy:exclude=function-args-by-value
+{
+    // This helps for bug 367485
+
+    if (!valDecl)
+        return false;
+
+    const auto context = dyn_cast<FunctionDecl>(valDecl->getDeclContext());
+    if (!context)
+        return false;
+
+    bodyRange.body = context->getBody();
+    if (!bodyRange.body)
+        return false;
+
+    if (valDecl->hasInit()) {
+        if (auto cleanupExpr = dyn_cast<clang::ExprWithCleanups>(valDecl->getInit())) {
+            if (auto ce = dyn_cast<clang::CXXConstructExpr>(cleanupExpr->getSubExpr())) {
+                if (!ce->isListInitialization() && !ce->isStdInitListInitialization()) {
+                    // When initing via copy or move ctor there's possible detachments.
+                    return false;
+                }
+            }
+        }
+    }
+
+    // TODO1: Being passed to a function as const should be OK
+    if (Utils::isPassedToFunction(bodyRange, valDecl, false))
+        return false;
+
+    return true;
+}
+}
+
+
 RangeLoop::RangeLoop(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
