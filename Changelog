@@ -119,3 +119,5 @@
     The way to enable code rewrite is now: -Xclang -plugin-arg-clazy -Xclang export-fixes for clang or -export-fixes=somefile.yaml for clazy-standalone
     All other fixit arguments and fixit env variables were removed
     Thanks to Christian Gagneraud for contributing the fixit yaml exporter!
+
+* v1.7 (, 2020)
