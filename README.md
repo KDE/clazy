@@ -469,6 +469,7 @@ with contributions from:
 - Volker Krause
 - Christian Ehrlicher
 - Christian Gagneraud
+- Nikolai Kosjar
 
 and thanks to:
 
