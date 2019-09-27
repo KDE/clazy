@@ -1,4 +1,4 @@
-*WARNING:* master is the development branch. Please use the v1.5 branch.
+*WARNING:* master is the development branch. Please use the v1.6 branch.
 
 clazy v1.6
 ===========
@@ -477,7 +477,7 @@ and thanks to:
 
 # Contributing patches
 
-New features go to master and bug fixes go to the 1.5 branch.
+New features go to master and bug fixes go to the 1.6 branch.
 The prefered way to contributing is by using KDE's phabricator, see:
 - <https://community.kde.org/Infrastructure/Phabricator>
 - <https://phabricator.kde.org/differential/>
