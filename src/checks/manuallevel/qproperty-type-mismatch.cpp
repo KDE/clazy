@@ -64,6 +64,8 @@ void QPropertyTypeMismatch::VisitDecl(clang::Decl *decl)
         VisitMethod(*method);
     else if (auto field = dyn_cast<FieldDecl>(decl))
         VisitField(*field);
+    else if (auto typedefdecl = dyn_cast<TypedefDecl>(decl))
+        VisitTypedef(*typedefdecl);
 }
 
 void QPropertyTypeMismatch::VisitMethod(const clang::CXXMethodDecl & method)
@@ -99,7 +101,15 @@ void QPropertyTypeMismatch::VisitField(const FieldDecl & field)
     }
 }
 
-std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped)
+void QPropertyTypeMismatch::VisitTypedef(const TypedefDecl &td)
+{
+    // Since when processing Q_PROPERTY we're at the pre-processor stage we don't have access
+    // to the Qualtypes, so catch any typedefs here
+    QualType underlyingType = td.getUnderlyingType();
+    m_typedefMap[td.getNameAsString()] = underlyingType;
+}
+
+std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped) const
 {
     type = type.getNonReferenceType().getCanonicalType().getUnqualifiedType();
 
@@ -117,12 +127,9 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
     auto error_begin = [&] { return "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with "; };
 
     if (prop.read == methodName) {
-        auto retTypeStr = cleanupType(method.getReturnType());
-        if (prop.type != retTypeStr) {
-            // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
-            auto retTypeStrUnscopped = cleanupType(method.getReturnType(), /*unscopped=*/ true);
-            if (prop.type != retTypeStrUnscopped)
-                emitWarning(&method, error_begin() + "method '" + methodName + "' of return type '"+ retTypeStr +"'");
+        std::string retTypeStr;
+        if (!typesMatch(prop.type, method.getReturnType(), retTypeStr)) {
+            emitWarning(&method, error_begin() + "method '" + methodName + "' of return type '"+ retTypeStr +"'");
         }
     }
     else if(prop.write == methodName)
@@ -134,11 +141,9 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
             break;
         case 1:
         {
-            auto parmTypeStr = cleanupType(method.getParamDecl(0)->getType());
-            if(prop.type != parmTypeStr)
-            {
+            std::string parmTypeStr;
+            if (!typesMatch(prop.type, method.getParamDecl(0)->getType(), parmTypeStr))
                 emitWarning(&method, error_begin() + "method '" + methodName + "' with parameter of type '"+ parmTypeStr +"'");
-            }
             break;
         }
         default:
@@ -166,11 +171,9 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
         }
         case 1:
         {
-            auto param0TypeStr = cleanupType(method.getParamDecl(0)->getType());
-            if(prop.type != param0TypeStr)
-            {
+            std::string param0TypeStr;
+            if (!typesMatch(prop.type, method.getParamDecl(0)->getType(), param0TypeStr))
                 emitWarning(&method, error_begin() + "signal '" + methodName + "' with parameter of type '"+ param0TypeStr +"'");
-            }
             break;
         }
         default:
@@ -184,14 +187,25 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
 
 void QPropertyTypeMismatch::checkFieldAgainstProperty (const Property& prop, const FieldDecl& field, const std::string& fieldName)
 {
-    if(prop.member && prop.name == fieldName)
-    {
-        auto typeStr = cleanupType(field.getType());
-        if(prop.type != typeStr)
-        {
+    if (prop.member && prop.name == fieldName) {
+        std::string typeStr;
+        if (!typesMatch(prop.type, field.getType(), typeStr))
             emitWarning(&field, "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with member '" + fieldName + "' of type '"+ typeStr +"'");
-        }
     }
+}
+
+bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, std::string &cleaned) const
+{
+    cleaned = cleanupType(type2Qt);
+    if (type1 == cleaned)
+        return true;
+
+    // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
+    cleaned = cleanupType(type2Qt, /*unscopped=*/ true);
+    if (type1 == cleaned)
+        return true;
+
+    return false;
 }
 
 void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)

@@ -28,6 +28,7 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 class ClazyContext;
 namespace clang {
@@ -50,6 +51,7 @@ public:
 private:
     void VisitMethod(const clang::CXXMethodDecl &);
     void VisitField(const clang::FieldDecl &);
+    void VisitTypedef(const clang::TypedefDecl &);
     void VisitMacroExpands(const clang::Token &MacroNameTok,
                            const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 
@@ -65,9 +67,12 @@ private:
     };
 
     std::vector<Property> m_qproperties;
-    std::string cleanupType(clang::QualType type, bool unscoped = false);
+    std::string cleanupType(clang::QualType type, bool unscoped = false) const;
     void checkMethodAgainstProperty(const Property &prop, const clang::CXXMethodDecl &method, const std::string &methodName);
     void checkFieldAgainstProperty(const Property &prop, const clang::FieldDecl &method, const std::string &methodName);
+
+    bool typesMatch(const std::string &type1, clang::QualType type2Qt, std::string &cleaned) const;
+    std::unordered_map<std::string, clang::QualType> m_typedefMap;
 };
 
 #endif
