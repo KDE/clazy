@@ -178,7 +178,6 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
         }
         default:
         {
-            emitWarning(&method, error_begin() + "signal '" + methodName + "' with too many parameters");
             break;
         }
         }
