@@ -205,6 +205,13 @@ bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, st
     if (type1 == cleaned)
         return true;
 
+    // Maybe it's a typedef
+    auto it = m_typedefMap.find(type1);
+    if (it != m_typedefMap.cend()) {
+        return it->second == type2Qt;
+
+    }
+
     return false;
 }
 

@@ -10,6 +10,8 @@ public:
 };
 }
 
+typedef int FooInt;
+
 enum Enum1 {};
 
 
@@ -40,6 +42,8 @@ class MyObj : public QObject
     Q_PROPERTY(Enum1 enumTest READ enumTest NOTIFY zeroArgsSignal)
     Q_PROPERTY(InnerEnum innerEnum READ innerEnum CONSTANT)
     Q_PROPERTY(MyObj::InnerEnum innerEnum1 READ innerEnum1 CONSTANT)
+    Q_PROPERTY(FooInt intTypedef1 READ intTypedef1 CONSTANT)
+    Q_PROPERTY(int intTypedef2 READ intTypedef2 CONSTANT)
 
     enum InnerEnum {};
 
@@ -75,6 +79,9 @@ class MyObj : public QObject
     Enum1 enumTest() const;
     InnerEnum innerEnum () const;
     InnerEnum innerEnum1 () const;
+
+    int intTypedef1() const;
+    FooInt intTypedef2() const;
 
 signals:
     void rw_good_changed(int); // OK
