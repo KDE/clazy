@@ -37,7 +37,7 @@ class MyObj : public QObject
     Q_PROPERTY(NS::A* classTest3 READ classTest3 CONSTANT)
     Q_PROPERTY(NS::A classTest4 READ classTest4 CONSTANT)
     Q_PROPERTY(Enum1 enumTest READ enumTest CONSTANT)
-
+    Q_PROPERTY(Enum1 enumTest READ enumTest NOTIFY zeroArgsSignal)
 
     int r_good(); // OK    
     float r_bad(); // Warn
@@ -77,6 +77,7 @@ signals:
     void rw_bad_cref_changed(const float&); // Warn
     void rw_good_ptr_changed(int*); // OK
     void rw_bad_ptr_changed(float*); // Warn
+    void zeroArgsSignal();
 };
 
 class MyGadget

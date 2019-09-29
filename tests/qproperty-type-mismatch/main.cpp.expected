@@ -9,4 +9,4 @@ qproperty-type-mismatch/main.cpp:64:5: warning: Q_PROPERTY 'rw_bad_ptr' of type 
 qproperty-type-mismatch/main.cpp:75:5: warning: Q_PROPERTY 'rw_bad' of type 'int' is mismatched with signal 'rw_bad_changed' with parameter of type 'float' [-Wclazy-qproperty-type-mismatch]
 qproperty-type-mismatch/main.cpp:77:5: warning: Q_PROPERTY 'rw_bad_cref' of type 'int' is mismatched with signal 'rw_bad_cref_changed' with parameter of type 'float' [-Wclazy-qproperty-type-mismatch]
 qproperty-type-mismatch/main.cpp:79:5: warning: Q_PROPERTY 'rw_bad_ptr' of type 'int*' is mismatched with signal 'rw_bad_ptr_changed' with parameter of type 'float*' [-Wclazy-qproperty-type-mismatch]
-qproperty-type-mismatch/main.cpp:89:5: warning: Q_PROPERTY 'bad' of type 'int' is mismatched with member 'bad' of type 'float' [-Wclazy-qproperty-type-mismatch]
+qproperty-type-mismatch/main.cpp:90:5: warning: Q_PROPERTY 'bad' of type 'int' is mismatched with member 'bad' of type 'float' [-Wclazy-qproperty-type-mismatch]

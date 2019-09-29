@@ -148,10 +148,6 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
         switch(method.getNumParams())
         {
         case 0:
-            // Should this case be ok ?
-            // I don't think it is good practice to have signals of a property without
-            // the property value in parameter, but afaik it's valid in Qt.
-            emitWarning(&method, "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with signal '" + methodName + "' with no parameters");
             break;
         case 2:
         {
