@@ -65,7 +65,7 @@ private:
     };
 
     std::vector<Property> m_qproperties;
-    std::string cleanupType(clang::QualType type);
+    std::string cleanupType(clang::QualType type, bool unscoped = false);
     void checkMethodAgainstProperty(const Property &prop, const clang::CXXMethodDecl &method, const std::string &methodName);
     void checkFieldAgainstProperty(const Property &prop, const clang::FieldDecl &method, const std::string &methodName);
 };

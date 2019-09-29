@@ -99,11 +99,13 @@ void QPropertyTypeMismatch::VisitField(const FieldDecl & field)
     }
 }
 
-std::string QPropertyTypeMismatch::cleanupType(QualType type) {
+std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped)
+{
     type = type.getNonReferenceType().getCanonicalType().getUnqualifiedType();
 
     PrintingPolicy po(lo());
     po.SuppressTagKeyword = true;
+    po.SuppressScope = unscoped;
 
     std::string str = type.getAsString(po);
     str.erase(std::remove_if(str.begin(), str.end(), [] (char c) { return std::isspace(c); }), str.end());
@@ -114,12 +116,13 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
 
     auto error_begin = [&] { return "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with "; };
 
-    if(prop.read == methodName)
-    {
+    if (prop.read == methodName) {
         auto retTypeStr = cleanupType(method.getReturnType());
-        if(prop.type != retTypeStr)
-        {
-            emitWarning(&method, error_begin() + "method '" + methodName + "' of return type '"+ retTypeStr +"'");
+        if (prop.type != retTypeStr) {
+            // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
+            auto retTypeStrUnscopped = cleanupType(method.getReturnType(), /*unscopped=*/ true);
+            if (prop.type != retTypeStrUnscopped)
+                emitWarning(&method, error_begin() + "method '" + methodName + "' of return type '"+ retTypeStr +"'");
         }
     }
     else if(prop.write == methodName)

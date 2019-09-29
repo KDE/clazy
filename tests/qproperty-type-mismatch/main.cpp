@@ -38,6 +38,10 @@ class MyObj : public QObject
     Q_PROPERTY(NS::A classTest4 READ classTest4 CONSTANT)
     Q_PROPERTY(Enum1 enumTest READ enumTest CONSTANT)
     Q_PROPERTY(Enum1 enumTest READ enumTest NOTIFY zeroArgsSignal)
+    Q_PROPERTY(InnerEnum innerEnum READ innerEnum CONSTANT)
+    Q_PROPERTY(MyObj::InnerEnum innerEnum1 READ innerEnum1 CONSTANT)
+
+    enum InnerEnum {};
 
     int r_good(); // OK    
     float r_bad(); // Warn
@@ -69,6 +73,8 @@ class MyObj : public QObject
     NS::A* classTest3() const;
     NS::A classTest4() const;
     Enum1 enumTest() const;
+    InnerEnum innerEnum () const;
+    InnerEnum innerEnum1 () const;
 
 signals:
     void rw_good_changed(int); // OK
