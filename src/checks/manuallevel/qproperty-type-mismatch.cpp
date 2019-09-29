@@ -101,16 +101,12 @@ void QPropertyTypeMismatch::VisitField(const FieldDecl & field)
 
 std::string QPropertyTypeMismatch::cleanupType(QualType type) {
     type = type.getNonReferenceType().getCanonicalType().getUnqualifiedType();
-    //type.removeLocalCVRQualifiers(Qualifiers::CVRMask);
 
-    std::string str = type.getAsString();
-    if(str.compare(0, 6, "class ") == 0)
-        str = str.substr(6);
-    else if(str.compare(0, 7, "struct ") == 0)
-        str = str.substr(7);
+    PrintingPolicy po(lo());
+    po.SuppressTagKeyword = true;
 
+    std::string str = type.getAsString(po);
     str.erase(std::remove_if(str.begin(), str.end(), [] (char c) { return std::isspace(c); }), str.end());
-
     return str;
 }
 
