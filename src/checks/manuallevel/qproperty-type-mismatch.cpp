@@ -147,7 +147,8 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
             break;
         }
         default:
-            emitWarning(&method, error_begin() + "method '" + methodName + "' with too many parameters");
+            // Commented out: Too verbose and it's not a bug, maybe wrap with an option for the purists
+            // emitWarning(&method, error_begin() + "method '" + methodName + "' with too many parameters");
             break;
         }
     }
@@ -159,6 +160,8 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
             break;
         case 2:
         {
+            /*
+             // Commented out: Too verbose and it's not a bug, maybe wrap with an option for the purists
             auto param1TypeStr = cleanupType(method.getParamDecl(1)->getType());
             if(param1TypeStr.find("QPrivateSignal") == std::string::npos)
             {
@@ -167,7 +170,7 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
             }
 
             // We want to check the first parameter too :
-            [[fallthrough]];
+            [[fallthrough]];*/
         }
         case 1:
         {
