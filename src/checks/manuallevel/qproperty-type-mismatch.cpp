@@ -118,7 +118,10 @@ std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped) con
     po.SuppressScope = unscoped;
 
     std::string str = type.getAsString(po);
-    str.erase(std::remove_if(str.begin(), str.end(), [] (char c) { return std::isspace(c); }), str.end());
+    str.erase(std::remove_if(str.begin(), str.end(), [] (char c) {
+        return std::isspace(c);
+    }), str.end());
+
     return str;
 }
 
@@ -244,6 +247,17 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
     // Handle name
     clazy::rtrim(split[1]);
     p.name = split[1];
+
+    // FIXME: This is getting hairy, better use regexps
+    for (uint i = 0; i < p.name.size(); ++i) {
+        if (p.name[i] == '*') {
+            p.type += '*';
+        } else {
+            break;
+        }
+    }
+
+    p.name.erase(std::remove(p.name.begin(), p.name.end(), '*'), p.name.end());
 
     // Handle Q_PROPERTY functions
     enum {

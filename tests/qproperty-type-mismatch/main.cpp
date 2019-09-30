@@ -38,6 +38,7 @@ class MyObj : public QObject
     Q_PROPERTY(A classTest2 READ classTest2 CONSTANT)
     Q_PROPERTY(NS::A* classTest3 READ classTest3 CONSTANT)
     Q_PROPERTY(NS::A classTest4 READ classTest4 CONSTANT)
+    Q_PROPERTY(A *classTest5 READ classTest3 CONSTANT)
     Q_PROPERTY(Enum1 enumTest READ enumTest CONSTANT)
     Q_PROPERTY(Enum1 enumTest READ enumTest NOTIFY zeroArgsSignal)
     Q_PROPERTY(InnerEnum innerEnum READ innerEnum CONSTANT)
@@ -76,6 +77,7 @@ class MyObj : public QObject
     A classTest2() const;
     NS::A* classTest3() const;
     NS::A classTest4() const;
+    A* classTest5() const;
     Enum1 enumTest() const;
     InnerEnum innerEnum () const;
     InnerEnum innerEnum1 () const;
