@@ -71,7 +71,7 @@ private:
     void checkMethodAgainstProperty(const Property &prop, const clang::CXXMethodDecl &method, const std::string &methodName);
     void checkFieldAgainstProperty(const Property &prop, const clang::FieldDecl &method, const std::string &methodName);
 
-    bool typesMatch(const std::string &type1, clang::QualType type2Qt, std::string &cleaned) const;
+    bool typesMatch(const std::string &type1, clang::QualType type2Qt, std::string &type2Cleaned) const;
     std::unordered_map<std::string, clang::QualType> m_typedefMap;
 };
 

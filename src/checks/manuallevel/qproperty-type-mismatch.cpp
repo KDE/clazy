@@ -202,22 +202,21 @@ void QPropertyTypeMismatch::checkFieldAgainstProperty (const Property& prop, con
     }
 }
 
-bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, std::string &cleaned) const
+bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, std::string &type2Cleaned) const
 {
-    cleaned = cleanupType(type2Qt);
-    if (type1 == cleaned)
+    type2Cleaned = cleanupType(type2Qt);
+    if (type1 == type2Cleaned)
         return true;
 
     // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
-    cleaned = cleanupType(type2Qt, /*unscopped=*/ true);
-    if (type1 == cleaned)
+    type2Cleaned = cleanupType(type2Qt, /*unscopped=*/ true);
+    if (type1 == type2Cleaned)
         return true;
 
     // Maybe it's a typedef
     auto it = m_typedefMap.find(type1);
     if (it != m_typedefMap.cend()) {
-        return it->second == type2Qt;
-
+        return it->second == type2Qt || cleanupType(it->second) == type2Cleaned;
     }
 
     return false;

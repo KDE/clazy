@@ -45,6 +45,7 @@ class MyObj : public QObject
     Q_PROPERTY(MyObj::InnerEnum innerEnum1 READ innerEnum1 CONSTANT)
     Q_PROPERTY(FooInt intTypedef1 READ intTypedef1 CONSTANT)
     Q_PROPERTY(int intTypedef2 READ intTypedef2 CONSTANT)
+    Q_PROPERTY(FooInt intTypedef3 READ intTypedef3 CONSTANT)
 
     enum InnerEnum {};
 
@@ -84,6 +85,7 @@ class MyObj : public QObject
 
     int intTypedef1() const;
     FooInt intTypedef2() const;
+    FooInt intTypedef3() const;
 
 signals:
     void rw_good_changed(int); // OK
