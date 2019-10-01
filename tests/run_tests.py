@@ -503,7 +503,8 @@ def patch_fixit_yaml_file(test, is_standalone):
     return True
 
 def run_clang_apply_replacements():
-    return run_command('clang-apply-replacements .')
+    command = os.getenv('CLAZY_CLANG_APPLY_REPLACEMENTS', 'clang-apply-replacements')
+    return run_command(command + ' .')
 
 def cleanup_fixit_files(checks):
     for check in checks:
