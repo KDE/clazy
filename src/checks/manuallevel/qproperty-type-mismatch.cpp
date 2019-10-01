@@ -56,6 +56,7 @@ QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name, ClazyConte
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
+    context->enableVisitallTypeDefs();
 }
 
 void QPropertyTypeMismatch::VisitDecl(clang::Decl *decl)
@@ -64,8 +65,8 @@ void QPropertyTypeMismatch::VisitDecl(clang::Decl *decl)
         VisitMethod(*method);
     else if (auto field = dyn_cast<FieldDecl>(decl))
         VisitField(*field);
-    else if (auto typedefdecl = dyn_cast<TypedefDecl>(decl))
-        VisitTypedef(*typedefdecl);
+    else if (auto typedefdecl = dyn_cast<TypedefNameDecl>(decl))
+        VisitTypedef(typedefdecl);
 }
 
 void QPropertyTypeMismatch::VisitMethod(const clang::CXXMethodDecl & method)
@@ -101,12 +102,12 @@ void QPropertyTypeMismatch::VisitField(const FieldDecl & field)
     }
 }
 
-void QPropertyTypeMismatch::VisitTypedef(const TypedefDecl &td)
+void QPropertyTypeMismatch::VisitTypedef(const clang::TypedefNameDecl *td)
 {
     // Since when processing Q_PROPERTY we're at the pre-processor stage we don't have access
     // to the Qualtypes, so catch any typedefs here
-    QualType underlyingType = td.getUnderlyingType();
-    m_typedefMap[td.getNameAsString()] = underlyingType;
+    QualType underlyingType = td->getUnderlyingType();
+    m_typedefMap[td->getQualifiedNameAsString()] = underlyingType;
 }
 
 std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped) const
@@ -208,16 +209,16 @@ bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, st
     if (type1 == type2Cleaned)
         return true;
 
-    // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
-    type2Cleaned = cleanupType(type2Qt, /*unscopped=*/ true);
-    if (type1 == type2Cleaned)
-        return true;
-
     // Maybe it's a typedef
     auto it = m_typedefMap.find(type1);
     if (it != m_typedefMap.cend()) {
         return it->second == type2Qt || cleanupType(it->second) == type2Cleaned;
     }
+
+    // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
+    type2Cleaned = cleanupType(type2Qt, /*unscopped=*/ true);
+    if (type1 == type2Cleaned)
+        return true;
 
     return false;
 }

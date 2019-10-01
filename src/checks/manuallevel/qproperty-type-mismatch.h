@@ -37,6 +37,7 @@ class FieldDecl;
 class Decl;
 class MacroInfo;
 class Token;
+class TypeAliasDecl;
 }  // namespace clang
 
 /**
@@ -51,7 +52,8 @@ public:
 private:
     void VisitMethod(const clang::CXXMethodDecl &);
     void VisitField(const clang::FieldDecl &);
-    void VisitTypedef(const clang::TypedefDecl &);
+    void VisitTypedef(const clang::TypedefNameDecl *);
+
     void VisitMacroExpands(const clang::Token &MacroNameTok,
                            const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 

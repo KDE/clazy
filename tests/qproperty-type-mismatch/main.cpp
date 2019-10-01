@@ -46,7 +46,7 @@ class MyObj : public QObject
     Q_PROPERTY(FooInt intTypedef1 READ intTypedef1 CONSTANT)
     Q_PROPERTY(int intTypedef2 READ intTypedef2 CONSTANT)
     Q_PROPERTY(FooInt intTypedef3 READ intTypedef3 CONSTANT)
-
+    Q_PROPERTY(Qt::Alignment intTypedef4 READ intTypedef4 CONSTANT)
     enum InnerEnum {};
 
     int r_good(); // OK    
@@ -86,7 +86,7 @@ class MyObj : public QObject
     int intTypedef1() const;
     FooInt intTypedef2() const;
     FooInt intTypedef3() const;
-
+    Qt::Alignment intTypedef4() const;
 signals:
     void rw_good_changed(int); // OK
     void rw_bad_changed(float); // Warn
