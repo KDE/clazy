@@ -178,8 +178,11 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
         case 1:
         {
             std::string param0TypeStr;
-            if (!typesMatch(prop.type, method.getParamDecl(0)->getType(), param0TypeStr))
-                emitWarning(&method, error_begin() + "signal '" + methodName + "' with parameter of type '"+ param0TypeStr +"'");
+            if (!typesMatch(prop.type, method.getParamDecl(0)->getType(), param0TypeStr)) {
+                const bool isPrivateSignal = param0TypeStr.find("QPrivateSignal") != std::string::npos;
+                if (!isPrivateSignal)
+                    emitWarning(&method, error_begin() + "signal '" + methodName + "' with parameter of type '"+ param0TypeStr +"'");
+            }
             break;
         }
         default:
