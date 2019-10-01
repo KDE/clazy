@@ -104,6 +104,18 @@ void ClazyContext::enablePreprocessorVisitor()
         preprocessorVisitor = new PreProcessorVisitor(ci);
 }
 
+void ClazyContext::enableVisitallTypeDefs()
+{
+    // By default we only process decls from the .cpp file we're processing, not stuff included (for performance)
+    /// But we might need to process all typedefs, not only the ones in our current .cpp files
+    m_visitsAllTypeDefs = true;
+}
+
+bool ClazyContext::visitsAllTypedefs() const
+{
+    return m_visitsAllTypeDefs;
+}
+
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
