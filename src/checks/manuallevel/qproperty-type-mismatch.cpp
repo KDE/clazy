@@ -108,6 +108,10 @@ void QPropertyTypeMismatch::VisitTypedef(const clang::TypedefNameDecl *td)
     // to the Qualtypes, so catch any typedefs here
     QualType underlyingType = td->getUnderlyingType();
     m_typedefMap[td->getQualifiedNameAsString()] = underlyingType;
+    m_typedefMap[td->getNameAsString()] = underlyingType; // It might be written unqualified in the Q_PROPERTY
+
+    // FIXME: All the above is a bit flaky, as we don't know the actual namespace when the type is written without namespace in Q_PROPERTY
+    // Proper solution would be to process the .moc instead of doing text manipulation with the macros we receive
 }
 
 std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped) const
