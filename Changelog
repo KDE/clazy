@@ -106,13 +106,13 @@
   - Fixed a crash (clang assert) in raw-environment-function
 
 
-* v1.6 (, 2019)
+* v1.6 (October, 2019)
   - New Checks:
     - heap-allocated-small-trivial-type
     - signal-with-return-value
     - qproperty-type-mismatch
-  - Moved all level3 checks to manual level. Doesn't make sense to enable all of them. Each one must be
-  carefully considered.
+  - Moved all level3 checks to manual level. Doesn't make sense to enable all of them. Each one must be carefully considered.
+  - Minimum LLVM was bumped to 5.0
   - Fixit infrastructure was overhauled
     Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.
     Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements. The same way other clang tooling do it.
