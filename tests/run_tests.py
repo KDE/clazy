@@ -7,7 +7,7 @@ from sys import platform as _platform
 
 
 # cd into the folder containing this script
-os.chdir(os.path.dirname(sys.argv[0]))
+os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 
 _verbose = False
 
