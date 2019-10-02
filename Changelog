@@ -111,7 +111,7 @@
     - heap-allocated-small-trivial-type
     - signal-with-return-value
     - qproperty-type-mismatch
-  - Moved all level3 checks to manual level. Doesn't make sense to enable all of them. Each one must be carefully considered.
+  - Removed level3. Moved all level3 checks to manual level. Doesn't make sense to enable all of them. Each one must be carefully considered.
   - Minimum LLVM was bumped to 5.0
   - Fixit infrastructure was overhauled
     Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.
