@@ -1,12 +1,6 @@
 {
     "tests" : [
         {
-            "name" : "ubuntu-17.04",
-            "url" : "iamsergio/clazy-ubuntu-17.04",
-            "prefix" : "/usr/",
-            "comment" : "llvm-4;Qt-5.7.1"
-        },
-        {
             "name" : "ubuntu-18.04",
             "url" : "iamsergio/clazy-ubuntu-18.04",
             "prefix" : "/usr/",
@@ -17,14 +11,6 @@
             "url" : "iamsergio/clazy-opensuse-tumbleweed",
             "prefix" : "/usr/",
             "comment" : "llvm-6;Qt-5.11.1"
-        },
-        {
-            "name" : "debian-unstable-llvm4",
-            "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-4.0/",
-            "llvm_root" : "/usr/lib/llvm-4.0/",
-            "ignore_checks" : "qcolor-from-literal",
-            "comment" : "llvm4;Qt-5.11.1"
         },
         {
             "name" : "debian-unstable-llvm5",
