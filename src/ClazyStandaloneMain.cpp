@@ -125,7 +125,20 @@ public:
 
 int main(int argc, const char **argv)
 {
-    CommonOptionsParser optionsParser(argc, argv, s_clazyCategory, cl::ZeroOrMore);
+#if LLVM_VERSION_MAJOR >= 9
+    /* HACK: cl::ZeroOrMore makes clazy-standalone stop working for some reason (with llvm-9).
+     * optionsParser.getSourcePathList() returns 0, even with a command as simple as:
+     *     clang-standalone main.cpp
+     * The exact same command line works in clang-tidy, which has the same CommonOptionsParser code.
+     * Commented for now to figure if it's a compiler bug on my archlinux.
+     */
+    auto numOccurrencesFlag = cl::OneOrMore;
+#else
+    auto numOccurrencesFlag = cl::ZeroOrMore;
+#endif
+
+    CommonOptionsParser optionsParser(argc, argv, s_clazyCategory, numOccurrencesFlag);
+    llvm::errs() << optionsParser.getSourcePathList().size() << "\n";
 
     if (s_supportedChecks.getValue()) {
         std::cout << SUPPORTED_CHECKS_JSON_STR;
