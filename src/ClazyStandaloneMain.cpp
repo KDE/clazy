@@ -138,7 +138,7 @@ int main(int argc, const char **argv)
 #endif
 
     CommonOptionsParser optionsParser(argc, argv, s_clazyCategory, numOccurrencesFlag);
-    llvm::errs() << optionsParser.getSourcePathList().size() << "\n";
+    // llvm::errs() << optionsParser.getSourcePathList().size() << "\n";
 
     if (s_supportedChecks.getValue()) {
         std::cout << SUPPORTED_CHECKS_JSON_STR;
