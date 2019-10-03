@@ -7,7 +7,7 @@ from sys import platform as _platform
 
 
 # cd into the folder containing this script
-os.chdir(os.path.dirname(sys.argv[0]))
+os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 
 _verbose = False
 
@@ -503,7 +503,8 @@ def patch_fixit_yaml_file(test, is_standalone):
     return True
 
 def run_clang_apply_replacements():
-    return run_command('clang-apply-replacements .')
+    command = os.getenv('CLAZY_CLANG_APPLY_REPLACEMENTS', 'clang-apply-replacements')
+    return run_command(command + ' .')
 
 def cleanup_fixit_files(checks):
     for check in checks:

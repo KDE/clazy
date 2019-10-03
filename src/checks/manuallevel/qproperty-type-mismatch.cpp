@@ -56,6 +56,7 @@ QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name, ClazyConte
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
+    context->enableVisitallTypeDefs();
 }
 
 void QPropertyTypeMismatch::VisitDecl(clang::Decl *decl)
@@ -64,6 +65,8 @@ void QPropertyTypeMismatch::VisitDecl(clang::Decl *decl)
         VisitMethod(*method);
     else if (auto field = dyn_cast<FieldDecl>(decl))
         VisitField(*field);
+    else if (auto typedefdecl = dyn_cast<TypedefNameDecl>(decl))
+        VisitTypedef(typedefdecl);
 }
 
 void QPropertyTypeMismatch::VisitMethod(const clang::CXXMethodDecl & method)
@@ -99,17 +102,30 @@ void QPropertyTypeMismatch::VisitField(const FieldDecl & field)
     }
 }
 
-std::string QPropertyTypeMismatch::cleanupType(QualType type) {
+void QPropertyTypeMismatch::VisitTypedef(const clang::TypedefNameDecl *td)
+{
+    // Since when processing Q_PROPERTY we're at the pre-processor stage we don't have access
+    // to the Qualtypes, so catch any typedefs here
+    QualType underlyingType = td->getUnderlyingType();
+    m_typedefMap[td->getQualifiedNameAsString()] = underlyingType;
+    m_typedefMap[td->getNameAsString()] = underlyingType; // It might be written unqualified in the Q_PROPERTY
+
+    // FIXME: All the above is a bit flaky, as we don't know the actual namespace when the type is written without namespace in Q_PROPERTY
+    // Proper solution would be to process the .moc instead of doing text manipulation with the macros we receive
+}
+
+std::string QPropertyTypeMismatch::cleanupType(QualType type, bool unscoped) const
+{
     type = type.getNonReferenceType().getCanonicalType().getUnqualifiedType();
-    //type.removeLocalCVRQualifiers(Qualifiers::CVRMask);
 
-    std::string str = type.getAsString();
-    if(str.compare(0, 6, "class ") == 0)
-        str = str.substr(6);
-    else if(str.compare(0, 7, "struct ") == 0)
-        str = str.substr(7);
+    PrintingPolicy po(lo());
+    po.SuppressTagKeyword = true;
+    po.SuppressScope = unscoped;
 
-    str.erase(std::remove_if(str.begin(), str.end(), [] (char c) { return std::isspace(c); }), str.end());
+    std::string str = type.getAsString(po);
+    str.erase(std::remove_if(str.begin(), str.end(), [] (char c) {
+        return std::isspace(c);
+    }), str.end());
 
     return str;
 }
@@ -118,11 +134,9 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
 
     auto error_begin = [&] { return "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with "; };
 
-    if(prop.read == methodName)
-    {
-        auto retTypeStr = cleanupType(method.getReturnType());
-        if(prop.type != retTypeStr)
-        {
+    if (prop.read == methodName) {
+        std::string retTypeStr;
+        if (!typesMatch(prop.type, method.getReturnType(), retTypeStr)) {
             emitWarning(&method, error_begin() + "method '" + methodName + "' of return type '"+ retTypeStr +"'");
         }
     }
@@ -135,15 +149,14 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
             break;
         case 1:
         {
-            auto parmTypeStr = cleanupType(method.getParamDecl(0)->getType());
-            if(prop.type != parmTypeStr)
-            {
+            std::string parmTypeStr;
+            if (!typesMatch(prop.type, method.getParamDecl(0)->getType(), parmTypeStr))
                 emitWarning(&method, error_begin() + "method '" + methodName + "' with parameter of type '"+ parmTypeStr +"'");
-            }
             break;
         }
         default:
-            emitWarning(&method, error_begin() + "method '" + methodName + "' with too many parameters");
+            // Commented out: Too verbose and it's not a bug, maybe wrap with an option for the purists
+            // emitWarning(&method, error_begin() + "method '" + methodName + "' with too many parameters");
             break;
         }
     }
@@ -152,13 +165,11 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
         switch(method.getNumParams())
         {
         case 0:
-            // Should this case be ok ?
-            // I don't think it is good practice to have signals of a property without
-            // the property value in parameter, but afaik it's valid in Qt.
-            emitWarning(&method, "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with signal '" + methodName + "' with no parameters");
             break;
         case 2:
         {
+            /*
+             // Commented out: Too verbose and it's not a bug, maybe wrap with an option for the purists
             auto param1TypeStr = cleanupType(method.getParamDecl(1)->getType());
             if(param1TypeStr.find("QPrivateSignal") == std::string::npos)
             {
@@ -167,20 +178,20 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
             }
 
             // We want to check the first parameter too :
-            [[fallthrough]];
+            [[fallthrough]];*/
         }
         case 1:
         {
-            auto param0TypeStr = cleanupType(method.getParamDecl(0)->getType());
-            if(prop.type != param0TypeStr)
-            {
-                emitWarning(&method, error_begin() + "signal '" + methodName + "' with parameter of type '"+ param0TypeStr +"'");
+            std::string param0TypeStr;
+            if (!typesMatch(prop.type, method.getParamDecl(0)->getType(), param0TypeStr)) {
+                const bool isPrivateSignal = param0TypeStr.find("QPrivateSignal") != std::string::npos;
+                if (!isPrivateSignal)
+                    emitWarning(&method, error_begin() + "signal '" + methodName + "' with parameter of type '"+ param0TypeStr +"'");
             }
             break;
         }
         default:
         {
-            emitWarning(&method, error_begin() + "signal '" + methodName + "' with too many parameters");
             break;
         }
         }
@@ -189,14 +200,31 @@ void QPropertyTypeMismatch::checkMethodAgainstProperty (const Property& prop, co
 
 void QPropertyTypeMismatch::checkFieldAgainstProperty (const Property& prop, const FieldDecl& field, const std::string& fieldName)
 {
-    if(prop.member && prop.name == fieldName)
-    {
-        auto typeStr = cleanupType(field.getType());
-        if(prop.type != typeStr)
-        {
+    if (prop.member && prop.name == fieldName) {
+        std::string typeStr;
+        if (!typesMatch(prop.type, field.getType(), typeStr))
             emitWarning(&field, "Q_PROPERTY '" + prop.name + "' of type '" + prop.type + "' is mismatched with member '" + fieldName + "' of type '"+ typeStr +"'");
-        }
     }
+}
+
+bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, std::string &type2Cleaned) const
+{
+    type2Cleaned = cleanupType(type2Qt);
+    if (type1 == type2Cleaned)
+        return true;
+
+    // Maybe it's a typedef
+    auto it = m_typedefMap.find(type1);
+    if (it != m_typedefMap.cend()) {
+        return it->second == type2Qt || cleanupType(it->second) == type2Cleaned;
+    }
+
+    // Maybe the difference is just the scope, if yes then don't warn. We already have a check for complaining about lack of scope
+    type2Cleaned = cleanupType(type2Qt, /*unscopped=*/ true);
+    if (type1 == type2Cleaned)
+        return true;
+
+    return false;
 }
 
 void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
@@ -226,6 +254,17 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
     // Handle name
     clazy::rtrim(split[1]);
     p.name = split[1];
+
+    // FIXME: This is getting hairy, better use regexps
+    for (uint i = 0; i < p.name.size(); ++i) {
+        if (p.name[i] == '*') {
+            p.type += '*';
+        } else {
+            break;
+        }
+    }
+
+    p.name.erase(std::remove(p.name.begin(), p.name.end(), '*'), p.name.end());
 
     // Handle Q_PROPERTY functions
     enum {

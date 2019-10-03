@@ -107,8 +107,9 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     if (AccessSpecifierManager *a = m_context->accessSpecifierManager) // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
 
+    const bool isTypeDefToVisit = m_context->visitsAllTypedefs() && isa<TypedefNameDecl>(decl);
     const SourceLocation locStart = clazy::getLocStart(decl);
-    if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart))
+    if (locStart.isInvalid() || (m_context->sm.isInSystemHeader(locStart) && !isTypeDefToVisit))
         return true;
 
     const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);

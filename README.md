@@ -62,8 +62,7 @@ Currently MSVC2015, MSVC2017 (based on clang-7.0) and Linux AppImage packages (b
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 4.0 are required.
-Use clazy v1.1 if you need 3.7 support, or v1.3 for 3.8 support.
+clang and LLVM >= 5.0 are required.
 
 If your distro provides clang then you can skip this step.
 
@@ -92,7 +91,7 @@ See troubleshooting section if you have problems.
 These instructions assume your terminal is suitable for development (msvc2015).
 jom, nmake, git, cmake and cl should be in your PATH.
 
-clang and LLVM >= 4.0 are required.
+clang and LLVM >= 5.0 are required.
 
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
 

@@ -13,12 +13,7 @@ else
     IGNORE_CHECKS=" --exclude ${IGNORE_CHECKS} "
 fi
 
-if [ "$5" = "none" ]
-then
-    unset LLVM_ROOT
-fi
+export PATH=$LLVM_ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$LLVM_ROOT/lib:$LLVM_ROOT/lib64:$LD_LIBRARY_PATH
 
-export PATH=$CLAZY_PREFIX/bin:$PATH
-export LD_LIBRARY_PATH=$CLAZY_PREFIX/lib:$CLAZY_PREFIX/lib64:$LD_LIBRARY_PATH
-
-cd /root/clazy && git fetch && git checkout origin/$BRANCH && cmake -DCMAKE_INSTALL_PREFIX=$CLAZY_PREFIX -DCMAKE_BUILD_TYPE=RelWithDebInfo . && make $J_FLAG && make install && cd tests && ./run_tests.py $IGNORE_CHECKS
+cd /root/clazy && git fetch && git checkout origin/$BRANCH && cmake -DCMAKE_INSTALL_PREFIX=$LLVM_ROOT -DCMAKE_BUILD_TYPE=RelWithDebInfo . && make $J_FLAG && make install && cd tests && ./run_tests.py $IGNORE_CHECKS
