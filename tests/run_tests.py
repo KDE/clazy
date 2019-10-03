@@ -435,11 +435,11 @@ def run_command(cmd, output_file = "", test_env = os.environ):
 
 def files_are_equal(file1, file2):
     try:
-        f = open(file1, 'r')
+        f = io.open(file1, 'r', encoding='utf-8')
         lines1 = f.readlines()
         f.close()
 
-        f = open(file2, 'r')
+        f = io.open(file2, 'r', encoding='utf-8')
         lines2 = f.readlines()
         f.close()
 
