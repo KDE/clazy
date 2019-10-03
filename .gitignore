@@ -32,3 +32,4 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 *.yaml
 *.fixed
+checks.json.h

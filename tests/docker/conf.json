@@ -3,38 +3,50 @@
         {
             "name" : "ubuntu-18.04",
             "url" : "iamsergio/clazy-ubuntu-18.04",
-            "prefix" : "/usr/",
+            "llvm_root" : "/usr/lib/llvm-6.0/",
             "comment" : "llvm-6;Qt-5.9.5"
+        },
+        {
+            "name" : "ubuntu-18.04",
+            "url" : "iamsergio/clazy-ubuntu-18.04",
+            "llvm_root" : "/usr/lib/llvm-7",
+            "comment" : "llvm-7;Qt-5.9.5"
+        },
+        {
+            "name" : "ubuntu-18.04",
+            "url" : "iamsergio/clazy-ubuntu-18.04",
+            "llvm_root" : "/usr/lib/llvm-8",
+            "comment" : "llvm-8;Qt-5.9.5"
+        },
+        {
+            "name" : "debian-unstable",
+            "url" : "iamsergio/clazy-debian-unstable",
+            "llvm_root" : "/usr/lib/llvm-9",
+            "comment" : "llvm-9;Qt-5.11.3"
+        },
+        {
+            "name" : "archlinux",
+            "url" : "iamsergio/clazy-archlinux",
+            "llvm_root" : "/usr",
+            "comment" : "llvm-8;Qt-5.13.1"
+        },
+        {
+            "name" : "opensuse-leap",
+            "url" : "iamsergio/clazy-opensuse-leap",
+            "llvm_root" : "/usr",
+            "comment" : "llvm-7;Qt-5.9.7"
         },
         {
             "name" : "opensuse-tumbleweed",
             "url" : "iamsergio/clazy-opensuse-tumbleweed",
-            "prefix" : "/usr/",
-            "comment" : "llvm-6;Qt-5.11.1"
+            "llvm_root" : "/usr",
+            "comment" : "llvm-7;Qt-5.13.1"
         },
         {
-            "name" : "debian-unstable-llvm5",
-            "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-5.0/",
-            "llvm_root" : "/usr/lib/llvm-5.0/",
-            "ignore_checks" : "qcolor-from-literal",
-            "comment" : "llvm5;Qt-5.11.1"
-        },
-        {
-            "name" : "debian-unstable-llvm6",
-            "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-6.0/",
-            "llvm_root" : "/usr/lib/llvm-6.0/",
-            "ignore_checks" : "qcolor-from-literal",
-            "comment" : "llvm6;Qt-5.11.1"
-        },
-        {
-            "name" : "debian-unstable-llvm7",
-            "url" : "iamsergio/clazy-debian-unstable",
-            "prefix" : "/usr/lib/llvm-7/",
-            "llvm_root" : "/usr/lib/llvm-7/",
-            "ignore_checks" : "qcolor-from-literal",
-            "comment" : "llvm7;Qt-5.11.1"
+            "name" : "fedora-31",
+            "url" : "iamsergio/clazy-fedora-31",
+            "llvm_root" : "/usr",
+            "comment" : "llvm-9;Qt-5.12.5"
         }
     ]
 }
