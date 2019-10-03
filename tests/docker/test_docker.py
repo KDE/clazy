@@ -11,7 +11,6 @@ class DockerTest:
     def __init__(self, name, url):
         self.name = name
         self.url = url
-        self.prefix = '/opt/clazy'
         self.ignore_checks = 'none'
         self.llvm_root = 'none'
 
@@ -31,8 +30,6 @@ def read_json_config():
         for test in tests:
             if 'name' in test and 'url' in test:
                 dockerTest = DockerTest(test['name'], test['url'])
-                if 'prefix' in test:
-                    dockerTest.prefix = test['prefix']
                 if 'llvm_root' in test:
                     dockerTest.llvm_root = test['llvm_root']
                 if 'ignore_checks' in test:
@@ -44,7 +41,7 @@ def read_json_config():
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.prefix, dockerTest.ignore_checks, dockerTest.llvm_root)
+    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.ignore_checks, dockerTest.llvm_root)
     print cmd
     return os.system(cmd) == 0
 
