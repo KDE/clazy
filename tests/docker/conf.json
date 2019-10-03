@@ -37,6 +37,12 @@
             "comment" : "llvm-7;Qt-5.9.7"
         },
         {
+            "name" : "opensuse-tumbleweed",
+            "url" : "iamsergio/clazy-opensuse-tumbleweed",
+            "llvm_root" : "/usr",
+            "comment" : "llvm-7;Qt-5.13.1"
+        },
+        {
             "name" : "fedora-31",
             "url" : "iamsergio/clazy-fedora-31",
             "llvm_root" : "/usr",
