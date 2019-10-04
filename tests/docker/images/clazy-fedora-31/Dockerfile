@@ -6,7 +6,7 @@ FROM fedora:31
 MAINTAINER Sergio Martins (sergio.martins@kdab.com)
 
 RUN yum -y update
-RUN yum -y install make cmake git ninja-build gcc llvm-devel clang-devel qt5-qtbase-devel qt5-qtdeclarative-devel
+RUN yum -y install make cmake git ninja-build gcc llvm-devel clang-devel qt5-qtbase-devel qt5-qtdeclarative-devel diffutils
 
 WORKDIR /root
 RUN git clone https://github.com/KDE/clazy.git
