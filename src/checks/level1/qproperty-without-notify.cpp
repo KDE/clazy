@@ -70,6 +70,9 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
     string text = Lexer::getSourceText(crange, sm(), lo());
+    if (text.back() == ')')
+        text.pop_back();
+
     vector<string> split = clazy::splitString(text, ' ');
 
     bool found_read = false;
