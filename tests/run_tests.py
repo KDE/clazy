@@ -355,6 +355,7 @@ def compiler_name():
 parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--verbose", action='store_true')
 parser.add_argument("--no-standalone", action='store_true', help="Don\'t run clazy-standalone")
+parser.add_argument("--no-fixits", action='store_true', help='Don\'t run fixits')
 parser.add_argument("--only-standalone", action='store_true', help='Only run clazy-standalone')
 parser.add_argument("--dump-ast", action='store_true', help='Dump a unit-test AST to file')
 parser.add_argument("--exclude", help='Comma separated list of checks to ignore')
@@ -372,6 +373,7 @@ _export_fixes_argument = "-Xclang -plugin-arg-clazy -Xclang export-fixes"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone
+_no_fixits = args.no_fixits
 _only_standalone = args.only_standalone
 _num_threads = multiprocessing.cpu_count()
 _lock = threading.Lock()
@@ -760,7 +762,7 @@ else:
 
     for tests in list_of_chunks:
         if not tests:
-            continue;
+            continue
 
         t = Thread(target=run_unit_tests, args=(tests,))
         t.start()
@@ -769,7 +771,7 @@ else:
 for thread in threads:
     thread.join()
 
-if not run_fixit_tests(requested_checks):
+if not _no_fixits and not run_fixit_tests(requested_checks):
     _was_successful = False
 
 if _was_successful:
