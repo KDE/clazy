@@ -259,7 +259,7 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
     p.name = split[1];
 
     // FIXME: This is getting hairy, better use regexps
-    for (uint i = 0; i < p.name.size(); ++i) {
+    for (unsigned int i = 0; i < p.name.size(); ++i) {
         if (p.name[i] == '*') {
             p.type += '*';
         } else {
