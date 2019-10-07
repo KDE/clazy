@@ -134,7 +134,13 @@ def get_command_output(cmd, test_env = os.environ):
     try:
         if _verbose:
             print(cmd)
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
+
+        # Polish up the env to fix "TypeError: environment can only contain strings" exception
+        str_env = {}
+        for key in test_env.keys():
+            str_env[str(key)] = str(test_env[key])
+
+        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=str_env)
     except subprocess.CalledProcessError as e:
         output = e.output
         success = False
