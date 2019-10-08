@@ -499,6 +499,9 @@ def patch_fixit_yaml_file(test, is_standalone):
         if stripped.startswith('MainSourceFile') or stripped.startswith("FilePath") or stripped.startswith("- FilePath"):
             line = line.replace(test.relativeFilename(), fixedfilename)
 
+            # For Windows:
+            line = line.replace(test.relativeFilename().replace('/', '\\'), fixedfilename.replace('/', '\\'))
+
             # Some tests also apply fix their to their headers:
             line = line.replace(possible_headerfile, fixedfilename.replace(".cpp", ".h"))
         f.write(line)
@@ -635,7 +638,7 @@ def run_unit_tests(tests):
             result = result and test_result
 
         if not test_result:
-            test.removeYamlFiles();
+            test.removeYamlFiles()
 
     global _was_successful, _lock
     with _lock:
