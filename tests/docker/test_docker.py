@@ -13,6 +13,7 @@ class DockerTest:
         self.url = url
         self.ignore_checks = 'none'
         self.llvm_root = 'none'
+        self.extra_cmake_args = 'none'
 
 def read_json_config():
     dockerTests = []
@@ -32,6 +33,8 @@ def read_json_config():
                 dockerTest = DockerTest(test['name'], test['url'])
                 if 'llvm_root' in test:
                     dockerTest.llvm_root = test['llvm_root']
+                if 'extra_cmake_args' in test:
+                    dockerTest.extra_cmake_args = test['extra_cmake_args']
                 if 'ignore_checks' in test:
                     dockerTest.ignore_checks = test['ignore_checks']
 
@@ -41,7 +44,7 @@ def read_json_config():
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.ignore_checks, dockerTest.llvm_root)
+    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.ignore_checks, dockerTest.llvm_root dockerTest.extra_cmake_args)
     print cmd
     return os.system(cmd) == 0
 
