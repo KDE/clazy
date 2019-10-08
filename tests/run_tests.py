@@ -94,8 +94,10 @@ class Test:
     def setEnv(self, e):
         self.env = os.environ.copy()
         for key in e:
-            key_str = key.encode('ascii', 'ignore')
-            self.env[key_str] = e[key].encode('ascii', 'ignore')
+            if type(key) is bytes:
+                key = key.decode('utf-8')
+
+            self.env[key] = e[key]
 
     def printableName(self, is_standalone, is_fixits):
         name = self.check.name
