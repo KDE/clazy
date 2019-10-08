@@ -47,7 +47,7 @@
             "url" : "iamsergio/clazy-fedora-31",
             "llvm_root" : "/usr",
             "comment" : "llvm-9;Qt-5.12.5",
-            "extra_cmake_args" : "-DLINK_CLAZY_TO_LLVM=ON"
+            "extra_cmake_args" : "-DLINK_CLAZY_TO_LLVM=OFF"
         }
     ]
 }
