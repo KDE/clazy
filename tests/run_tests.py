@@ -523,7 +523,7 @@ def cleanup_fixit_files(checks):
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
-    return run_command("diff -Naur {} {}".format(file1, file2))
+    return run_command("diff -Naur --strip-trailing-cr {} {}".format(file1, file2))
 
 def normalizedCwd():
     return os.getcwd().replace('\\', '/')
