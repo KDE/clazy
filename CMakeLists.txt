@@ -263,7 +263,35 @@ else()
   install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 endif()
 
+function(to_raw_string_literal input_string output_string)
+    if (MSVC)
+        # Work around "C2026: string too big, trailing characters truncated"
+        #   https://docs.microsoft.com/en-us/cpp/error-messages/compiler-errors-1/compiler-error-c2026?view=vs-2019
+        # The limit is 16380 single-byte characters, so split up the string as
+        # suggested on the site.
+        set(str ${input_string})
+        set(chunk_size 1000)
+        set(result "\n")
+        string(LENGTH ${str} str_size)
+        while (${str_size} GREATER ${chunk_size})
+            string(SUBSTRING ${str} 0 ${chunk_size} chunk)
+            string(SUBSTRING ${str} ${chunk_size} -1 str)
+            set(chunk "R\"meta(${chunk})meta\"\n")
+            string(APPEND result ${chunk})
+            string(LENGTH ${str} str_size)
+        endwhile()
+        if (str_size GREATER 0)
+            string(APPEND result "R\"meta(${str})meta\"\n")
+        endif()
+        set(${output_string} ${result} PARENT_SCOPE)
+    else()
+        set(result "\nR\"meta(${input_string})meta\"\n")
+        set(${output_string} ${result} PARENT_SCOPE)
+    endif()
+endfunction()
+
 file(READ checks.json SUPPORTED_CHECKS_JSON_STR)
+to_raw_string_literal(${SUPPORTED_CHECKS_JSON_STR} SUPPORTED_CHECKS_JSON_STR)
 configure_file(checks.json.h.in checks.json.h)
 
 install(FILES org.kde.clazy.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
