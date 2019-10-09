@@ -44,7 +44,7 @@ def read_json_config():
 
 
 def run_test(dockerTest):
-    cmd = 'docker run -i -t %s sh %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.ignore_checks, dockerTest.llvm_root dockerTest.extra_cmake_args)
+    cmd = 'docker run -i -t %s sh %s %s %s %s %s %s' % (dockerTest.url, BUILD_SCRIPT, BRANCH, MAKEFLAGS, dockerTest.ignore_checks, dockerTest.llvm_root, dockerTest.extra_cmake_args)
     print cmd
     return os.system(cmd) == 0
 
