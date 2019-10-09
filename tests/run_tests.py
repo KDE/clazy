@@ -94,8 +94,10 @@ class Test:
     def setEnv(self, e):
         self.env = os.environ.copy()
         for key in e:
-            key_str = key.encode('ascii', 'ignore')
-            self.env[key_str] = e[key].encode('ascii', 'ignore')
+            if type(key) is bytes:
+                key = key.decode('utf-8')
+
+            self.env[key] = e[key]
 
     def printableName(self, is_standalone, is_fixits):
         name = self.check.name
@@ -134,7 +136,13 @@ def get_command_output(cmd, test_env = os.environ):
     try:
         if _verbose:
             print(cmd)
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=test_env)
+
+        # Polish up the env to fix "TypeError: environment can only contain strings" exception
+        str_env = {}
+        for key in test_env.keys():
+            str_env[str(key)] = str(test_env[key])
+
+        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, env=str_env)
     except subprocess.CalledProcessError as e:
         output = e.output
         success = False
@@ -355,6 +363,7 @@ def compiler_name():
 parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--verbose", action='store_true')
 parser.add_argument("--no-standalone", action='store_true', help="Don\'t run clazy-standalone")
+parser.add_argument("--no-fixits", action='store_true', help='Don\'t run fixits')
 parser.add_argument("--only-standalone", action='store_true', help='Only run clazy-standalone')
 parser.add_argument("--dump-ast", action='store_true', help='Dump a unit-test AST to file')
 parser.add_argument("--exclude", help='Comma separated list of checks to ignore')
@@ -372,6 +381,7 @@ _export_fixes_argument = "-Xclang -plugin-arg-clazy -Xclang export-fixes"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone
+_no_fixits = args.no_fixits
 _only_standalone = args.only_standalone
 _num_threads = multiprocessing.cpu_count()
 _lock = threading.Lock()
@@ -491,6 +501,9 @@ def patch_fixit_yaml_file(test, is_standalone):
         if stripped.startswith('MainSourceFile') or stripped.startswith("FilePath") or stripped.startswith("- FilePath"):
             line = line.replace(test.relativeFilename(), fixedfilename)
 
+            # For Windows:
+            line = line.replace(test.relativeFilename().replace('/', '\\'), fixedfilename.replace('/', '\\'))
+
             # Some tests also apply fix their to their headers:
             line = line.replace(possible_headerfile, fixedfilename.replace(".cpp", ".h"))
         f.write(line)
@@ -515,7 +528,7 @@ def cleanup_fixit_files(checks):
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
-    return run_command("diff -Naur {} {}".format(file1, file2))
+    return run_command("diff -Naur --strip-trailing-cr {} {}".format(file1, file2))
 
 def normalizedCwd():
     return os.getcwd().replace('\\', '/')
@@ -627,7 +640,7 @@ def run_unit_tests(tests):
             result = result and test_result
 
         if not test_result:
-            test.removeYamlFiles();
+            test.removeYamlFiles()
 
     global _was_successful, _lock
     with _lock:
@@ -760,7 +773,7 @@ else:
 
     for tests in list_of_chunks:
         if not tests:
-            continue;
+            continue
 
         t = Thread(target=run_unit_tests, args=(tests,))
         t.start()
@@ -769,7 +782,7 @@ else:
 for thread in threads:
     thread.join()
 
-if not run_fixit_tests(requested_checks):
+if not _no_fixits and not run_fixit_tests(requested_checks):
     _was_successful = False
 
 if _was_successful:

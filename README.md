@@ -88,8 +88,8 @@ See troubleshooting section if you have problems.
 ## Windows
 
 ### Build and install clang
-These instructions assume your terminal is suitable for development (msvc2015).
-jom, nmake, git, cmake and cl should be in your PATH.
+These instructions assume your terminal is suitable for development.
+jom and nmake (or ninja), git, cmake, and cl (msvc2015 or later) should be in your PATH.
 
 clang and LLVM >= 5.0 are required.
 
@@ -98,9 +98,9 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
 ```
   > git clone https://github.com/llvm-mirror/llvm.git <some_directory>
   > cd <some_directory>\tools\ && git clone https://github.com/llvm-mirror/clang.git
-  > git checkout release_40
+  > git checkout release_90
   > cd clang
-  > git checkout release_40
+  > git checkout release_90
   > mkdir <some_directory>\build && cd <some_directory>\build
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
   > jom
@@ -111,8 +111,11 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
 ### Build clazy
 
 Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LLVM build dir since it doesn't get installed.
+We'll build clazy with clang, since MSVC errors-out with "C2026: C++ string too big, trailing characters truncated" when compiling checks.json.h
 
 ```
+  > export CXX=clang-cl
+  > export CC=clang-cl
   > cd clazy\
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCLANG_LIBRARY_IMPORT=C:\path\to\llvm-build\lib\clang.lib -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM"
   > jom && nmake install
