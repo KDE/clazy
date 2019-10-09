@@ -26,6 +26,7 @@
 #include <clang/AST/Stmt.h>
 
 #include <algorithm>
+#include <cctype>
 #include <sstream>
 
 namespace clazy {
