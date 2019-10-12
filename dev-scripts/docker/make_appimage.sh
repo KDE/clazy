@@ -8,7 +8,7 @@
 PATH=/opt/rh/python27/root/usr/bin:/opt/rh/devtoolset-6/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # edit here the LLVM version used
-PATH=$PATH:/llvm800/bin/
+PATH=$PATH:/llvm900/bin/
 
 CC=gcc
 CXX=g++
