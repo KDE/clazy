@@ -111,11 +111,8 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
 ### Build clazy
 
 Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LLVM build dir since it doesn't get installed.
-We'll build clazy with clang, since MSVC errors-out with "C2026: C++ string too big, trailing characters truncated" when compiling checks.json.h
 
 ```
-  > export CXX=clang-cl
-  > export CC=clang-cl
   > cd clazy\
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCLANG_LIBRARY_IMPORT=C:\path\to\llvm-build\lib\clang.lib -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM"
   > jom && nmake install
