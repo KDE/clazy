@@ -47,7 +47,7 @@ def prepare_folder():
     os.mkdir(WORK_FOLDER)
 
 def make_appimage_in_docker():
-    cmd = 'docker run -i -t -v %s:%s %s %s' % (WORK_FOLDER, WORK_FOLDER, DOCKER_IMAGE, 'bash -c "/clazy/dev-scripts/docker/make_appimage.sh %s %s"' % (CLAZY_SHA1, str(os.getuid())))
+    cmd = 'docker run -i -t -v %s:%s %s %s' % (WORK_FOLDER, WORK_FOLDER, DOCKER_IMAGE, 'bash -c "cd /clazy/ && git pull && /clazy/dev-scripts/docker/make_appimage.sh %s %s"' % (CLAZY_SHA1, str(os.getuid())))
     if not run_command(cmd):
         print 'Error running docker. Make sure docker is running and that you have ' + DOCKER_IMAGE
 
