@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Clazy
+Exec=clazy
+Icon=clazy
+Type=Application
+Categories=Development;
