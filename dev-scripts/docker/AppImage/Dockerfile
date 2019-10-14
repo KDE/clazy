@@ -50,7 +50,7 @@ RUN rm -rf /clazy.AppDir/usr/lib/*.so*
 RUN rm -rf /clazy.AppDir/usr/lib/cmake
 RUN rm -rf /clazy.AppDir/usr/bin/ll*
 WORKDIR /clazy.AppDir/usr/bin/
-RUN rm -rf bugpoint clang-change-namespace clang-doc clang-format clang-include-fixer clang-query clang-rename clang-scan-deps diagtool find-all-symbols hmaptool obj2yaml sancov scan-build verify-uselistorderc-index-test clang-check clang-extdef-mapping clang-import-test clang-offload-bundler clang-refactor clang-reorder-fields clang-tidy dsymutil git-clang-format modularize opt sanstats scan-view yaml2obj
+RUN rm -rf bugpoint clang-change-namespace clang-doc clang-format verify-uselistorder c-index-test clang-include-fixer clang-query clang-rename clang-scan-deps diagtool find-all-symbols hmaptool obj2yaml sancov scan-build verify-uselistorderc-index-test clang-check clang-extdef-mapping clang-import-test clang-offload-bundler clang-refactor clang-reorder-fields clang-tidy dsymutil git-clang-format modularize opt sanstats scan-view yaml2obj
 
 #Clone clazy
 WORKDIR /
