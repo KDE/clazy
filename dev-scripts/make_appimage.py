@@ -47,7 +47,7 @@ def prepare_folder():
     os.mkdir(WORK_FOLDER)
 
 def make_appimage_in_docker():
-    cmd = 'docker run -i -t -v %s:%s %s %s' % (WORK_FOLDER, WORK_FOLDER, DOCKER_IMAGE, 'bash -c "/clazy/dev-scripts/docker/make_appimage.sh %s %s"' % (CLAZY_SHA1, str(os.getuid())))
+    cmd = 'docker run -i -t -v %s:%s %s %s' % (WORK_FOLDER, WORK_FOLDER, DOCKER_IMAGE, 'bash -c "cd /clazy/ && git pull && /clazy/dev-scripts/docker/make_appimage.sh %s %s"' % (CLAZY_SHA1, str(os.getuid())))
     if not run_command(cmd):
         print 'Error running docker. Make sure docker is running and that you have ' + DOCKER_IMAGE
 
@@ -65,7 +65,7 @@ def run_tests():
     os.chdir(clazy_source_directory() + '/tests/')
     os.environ['CLAZY_CXX'] = '/tmp/clazy_work//Clazy-x86_64.AppImage'
     os.environ['CLAZYSTANDALONE_CXX'] = '/tmp/clazy_work//Clazy-x86_64.AppImage --standalone'
-    return run_command("./run_tests.py --verbose")
+    return run_command("./run_tests.py --verbose --exclude clazy,old-style-connect") # Centos68 doesn't have std::regexp support, so the suppressions and old-style-connect checks fail. TODO: Port to llvm regexps.
 
 
 if len(sys.argv) != 2:

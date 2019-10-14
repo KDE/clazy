@@ -1,5 +1,10 @@
 unset CLAZY_CHECKS
-CLAZY_COMMAND="clazy -c -o /dev/null -xc++ -Xclang -plugin-arg-clazy -Xclang print-requested-checks "
+
+if [ -z "${CLAZY_CXX}" ]; then
+    CLAZY_CXX=clazy
+fi
+
+CLAZY_COMMAND="${CLAZY_CXX} -c -o /dev/null -xc++ -Xclang -plugin-arg-clazy -Xclang print-requested-checks "
 CLAZY_COMMAND_STDIN=$CLAZY_COMMAND"-"
 
 # Test without checks:
