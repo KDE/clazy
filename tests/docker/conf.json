@@ -19,6 +19,12 @@
             "comment" : "llvm-8;Qt-5.9.5"
         },
         {
+            "name" : "ubuntu-19.10",
+            "url" : "iamsergio/clazy-ubuntu-19.10-32bit",
+            "llvm_root" : "/usr/lib/llvm-9",
+            "comment" : "llvm-9;Qt-5.12.4;32bit"
+        },
+        {
             "name" : "debian-unstable",
             "url" : "iamsergio/clazy-debian-unstable",
             "llvm_root" : "/usr/lib/llvm-9",
