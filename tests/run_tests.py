@@ -4,7 +4,7 @@ import sys, os, subprocess, string, re, json, threading, multiprocessing, argpar
 import shutil
 from threading import Thread
 from sys import platform as _platform
-
+import platform
 
 # cd into the folder containing this script
 os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
@@ -585,6 +585,10 @@ def run_unit_test(test, is_standalone):
     output_file = filename + ".out"
     result_file = filename + ".result"
     expected_file = filename + ".expected"
+
+    # Some tests have different output on 32 bit
+    if platform.architecture()[0] == '32bit' and os.path.exists(expected_file + '.x86'):
+        expected_file = expected_file + '.x86'
 
     if is_standalone and test.isScript():
         return True
