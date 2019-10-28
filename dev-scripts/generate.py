@@ -317,20 +317,11 @@ void CheckManager::registerChecks()
 #-------------------------------------------------------------------------------
 def generate_cmake_file(checks):
     text = "set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}\n"
-    checks_with_regexp = []
     for level in [-1, 0, 1, 2, 3]:
         for check in checks:
             if check.level == level:
                 text += "  ${CMAKE_CURRENT_LIST_DIR}/src/" + check.qualified_cpp_filename() + "\n"
-                if check.ifndef == "NO_STD_REGEX":
-                    checks_with_regexp.append(check)
     text += ")\n"
-
-    if checks_with_regexp:
-        text += "\nif(HAS_STD_REGEX OR CLAZY_BUILD_WITH_CLANG)\n"
-        for check in checks_with_regexp:
-            text += "  set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS} ${CMAKE_CURRENT_LIST_DIR}/src/" + check.qualified_cpp_filename() + ")\n"
-        text += "endif()\n"
 
     filename = clazy_source_path() + "CheckSources.cmake"
     old_text = read_file(filename)
