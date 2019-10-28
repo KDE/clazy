@@ -31,6 +31,17 @@
 #include <clang/Frontend/FrontendDiagnostic.h>
 #include <clang/Tooling/Core/Diagnostic.h>
 
+#if defined(CLAZY_USES_BOOST_REGEX)
+# define BOOST_NO_EXCEPTIONS
+# include <boost/throw_exception.hpp>
+inline void boost::throw_exception(std::exception const &){}
+# include <boost/regex.hpp>
+using namespace boost;
+#else
+# include <regex>
+using namespace std;
+#endif
+
 namespace clazy {
 
 template <typename T>

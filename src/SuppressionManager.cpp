@@ -20,6 +20,7 @@
 */
 
 #include "SuppressionManager.h"
+#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
 #include <clang/Basic/SourceManager.h>
@@ -32,10 +33,6 @@
 
 #include <vector>
 
-#ifndef NO_STD_REGEX
-# include <regex>
-#endif
-
 using namespace clang;
 using namespace std;
 
@@ -46,10 +43,6 @@ SuppressionManager::SuppressionManager()
 bool SuppressionManager::isSuppressed(const std::string &checkName, clang::SourceLocation loc,
                                       const clang::SourceManager &sm, const clang::LangOptions &lo) const
 {
-#ifdef NO_STD_REGEX
-    return false;
-#endif
-
     if (loc.isMacroID())
         loc = sm.getExpansionLoc(loc);
 
@@ -86,7 +79,6 @@ bool SuppressionManager::isSuppressed(const std::string &checkName, clang::Sourc
 
 void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const clang::LangOptions &lo) const
 {
-#ifndef NO_STD_REGEX
     const unsigned hash = id.getHashValue();
     auto it = m_processedFileIDs.insert({hash, Suppressions()}).first;
     Suppressions &suppressions = (*it).second;
@@ -120,7 +112,6 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
             }
 
-
             const int lineNumber = sm.getSpellingLineNumber(token.getLocation());
             if (lineNumber < 0) {
                 llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << lineNumber << "\n";
@@ -137,5 +128,4 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             }
         }
     }
-#endif
 }

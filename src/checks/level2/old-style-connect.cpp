@@ -52,8 +52,6 @@
 #include <llvm/Support/Casting.h>
 #include <llvm/Support/raw_ostream.h>
 
-#include <regex>
-
 namespace clang {
 class MacroInfo;
 }  // namespace clang
