@@ -189,10 +189,13 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
 
 void FixItExporter::Export()
 {
-    std::error_code EC;
-    llvm::raw_fd_ostream OS(exportFixes, EC, llvm::sys::fs::F_None);
-    llvm::yaml::Output YAML(OS);
-    YAML << getTuDiag();
+    auto tuDiag = getTuDiag();
+    if (!tuDiag.Diagnostics.empty()) {
+        std::error_code EC;
+        llvm::raw_fd_ostream OS(exportFixes, EC, llvm::sys::fs::F_None);
+        llvm::yaml::Output YAML(OS);
+        YAML << getTuDiag();
+    }
 }
 
 void FixItExporter::Diag(SourceLocation Loc, unsigned DiagID)
