@@ -33,3 +33,5 @@ CPackSourceConfig.cmake
 *.yaml
 *.fixed
 checks.json.h
+.ninja*
+*.ninja
