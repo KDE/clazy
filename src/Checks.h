@@ -57,6 +57,7 @@
 #include "checks/level0/lambda-unique-connection.h"
 #include "checks/level0/lowercase-qml-type-name.h"
 #include "checks/level0/mutable-container-key.h"
+#include "checks/level0/overloaded-signal.h"
 #include "checks/level0/qcolor-from-literal.h"
 #include "checks/level0/qdatetime-utc.h"
 #include "checks/level0/qenums.h"
@@ -152,6 +153,7 @@ void CheckManager::registerChecks()
     registerCheck(check<LambdaUniqueConnection>("lambda-unique-connection", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LowercaseQMlTypeName>("lowercase-qml-type-name", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<MutableContainerKey>("mutable-container-key", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<OverloadedSignal>("overloaded-signal", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
 #ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<QColorFromLiteral>("qcolor-from-literal", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
 #endif

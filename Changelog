@@ -122,3 +122,5 @@
     Thanks to Christian Gagneraud for contributing the fixit yaml exporter!
 
 * v1.7 (, 2020)
+  - New Checks:
+    - overloaded signal

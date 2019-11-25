@@ -1,0 +1,3 @@
+overloaded-signal/main.cpp:10:5: warning: signal foo is overloaded [-Wclazy-overloaded-signal]
+overloaded-signal/main.cpp:11:5: warning: signal foo is overloaded [-Wclazy-overloaded-signal]
+overloaded-signal/main.cpp:20:5: warning: signal bar is overloaded (with overloaded-signal/main.cpp:4:1) [-Wclazy-overloaded-signal]
