@@ -417,9 +417,6 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
             continue;
 
         Expr *rhs = binaryOperator->getRHS();
-        llvm::errs() << "Testing binary brah " << binaryOperator << " " << rhs->getStmtClassName() << "\n";
-        rhs->dump();
-
         auto declRef = clazy::unpeal<DeclRefExpr>(rhs, clazy::IgnoreImplicitCasts);
         if (!declRef)
             continue;

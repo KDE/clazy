@@ -33,5 +33,15 @@ void test()
 
     auto e = new(0) SmallTrivial;
     auto f = new SmallTrivial[100];
-
 }
+
+class MyClass
+{
+    void myMethod()
+    {
+        auto a = new SmallTrivial(); // OK
+        m_smallTrivial = a;
+    }
+
+    SmallTrivial *m_smallTrivial = nullptr;
+};
