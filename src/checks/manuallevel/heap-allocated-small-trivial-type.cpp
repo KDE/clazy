@@ -24,6 +24,7 @@
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "ClazyContext.h"
 
 #include <clang/AST/AST.h>
 
@@ -37,14 +38,28 @@ HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &
 {
 }
 
-void HeapAllocatedSmallTrivialType::VisitStmt(clang::Stmt *stmt)
+void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
 {
-    auto newExpr = dyn_cast<CXXNewExpr>(stmt);
+    auto varDecl = dyn_cast<VarDecl>(decl);
+    if (!varDecl)
+        return;
+
+    Expr *init = varDecl->getInit();
+    if (!init)
+        return;
+
+    auto newExpr = dyn_cast<CXXNewExpr>(init);
     if (!newExpr || newExpr->getNumPlacementArgs() > 0) // Placement new, user probably knows what he's doing
         return;
 
     if (newExpr->isArray())
         return;
+
+    DeclContext *context = varDecl->getDeclContext();
+    FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
+    if (!fDecl)
+        return;
+
 
     QualType qualType = newExpr->getType()->getPointeeType();
     if (clazy::isSmallTrivial(m_context, qualType)) {
@@ -53,6 +68,10 @@ void HeapAllocatedSmallTrivialType::VisitStmt(clang::Stmt *stmt)
             return;
         }
 
-        emitWarning(stmt, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());
+        if (Utils::isAssignedTo(fDecl->getBody(), varDecl))
+            return;
+
+        emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());
     }
+
 }

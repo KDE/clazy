@@ -32,7 +32,7 @@ class HeapAllocatedSmallTrivialType : public CheckBase
 {
 public:
     explicit HeapAllocatedSmallTrivialType(const std::string &name, ClazyContext *context);
-    void VisitStmt(clang::Stmt *) override;
+    void VisitDecl(clang::Decl *decl) override;
 private:
 };
 

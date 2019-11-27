@@ -20,7 +20,7 @@
             "name"  : "heap-allocated-small-trivial-type",
             "level" : -1,
             "categories" : ["performance"],
-            "visits_stmts" : true
+            "visits_decls" : true
         },
         {
             "name"  : "ifndef-define-typo",

@@ -124,6 +124,10 @@ bool containsNonConstMemberCall(clang::ParentMap *map, clang::Stmt *body, const 
 // Example: our_var = something_else
 bool isAssignedFrom(clang::Stmt *body, const clang::VarDecl *varDecl);
 
+// Returns true if varDecl is assigned to something
+// Example: something_else = our_var
+bool isAssignedTo(clang::Stmt *body, const clang::VarDecl *varDecl);
+
 // Returns true if a body of statements contains a function call that takes our variable (varDecl)
 // By ref or pointer
 bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl,

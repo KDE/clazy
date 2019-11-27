@@ -405,6 +405,32 @@ bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const 
     });
 }
 
+bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
+{
+    if (!body)
+        return false;
+
+    std::vector<BinaryOperator*> operatorCalls;
+    clazy::getChilds<BinaryOperator>(body, operatorCalls);
+    for (BinaryOperator *binaryOperator : operatorCalls) {
+        if (binaryOperator->getOpcode() != clang::BO_Assign)
+            continue;
+
+        Expr *rhs = binaryOperator->getRHS();
+        llvm::errs() << "Testing binary brah " << binaryOperator << " " << rhs->getStmtClassName() << "\n";
+        rhs->dump();
+
+        auto declRef = clazy::unpeal<DeclRefExpr>(rhs, clazy::IgnoreImplicitCasts);
+        if (!declRef)
+            continue;
+
+        if (declRef->getDecl() == varDecl)
+            return true;
+    }
+
+    return false;
+}
+
 bool Utils::isAssignedFrom(Stmt *body, const VarDecl *varDecl)
 {
     if (!body)
