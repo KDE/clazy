@@ -92,7 +92,8 @@
         {
             "name"  : "overloaded-signal",
             "level" : 0,
-            "visits_decls" : true
+            "visits_decls" : true,
+            "categories" : ["readability"]
         },
         {
             "name"  : "connect-by-name",
