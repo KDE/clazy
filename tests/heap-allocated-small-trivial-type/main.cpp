@@ -63,3 +63,9 @@ SmallTrivial* test3()
     receivesSmallTrivial(a);
     return a;
 }
+
+SmallTrivial* test4()
+{
+    auto a = new SmallTrivial(); // OK
+    return a;
+}

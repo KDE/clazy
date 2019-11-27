@@ -69,10 +69,11 @@ void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
         }
 
         auto body = fDecl->getBody();
-        if (Utils::isAssignedTo(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false))
+        if (Utils::isAssignedTo(body, varDecl) ||
+            Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false) ||
+            Utils::isReturned(body, varDecl))
             return;
 
         emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());
     }
-
 }

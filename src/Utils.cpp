@@ -405,6 +405,27 @@ bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const 
     });
 }
 
+bool Utils::isReturned(Stmt *body, const VarDecl *varDecl)
+{
+    if (!body)
+        return false;
+
+    std::vector<ReturnStmt*> returns;
+    clazy::getChilds<ReturnStmt>(body, returns);
+    for (ReturnStmt *returnStmt : returns) {
+        Expr* retValue = returnStmt->getRetValue();
+        if (!retValue)
+            continue;
+        auto declRef = clazy::unpeal<DeclRefExpr>(retValue, clazy::IgnoreImplicitCasts);
+        if (!declRef)
+            continue;
+        if (declRef->getDecl() == varDecl)
+            return true;
+    }
+
+    return false;
+}
+
 bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
 {
     if (!body)

@@ -128,6 +128,9 @@ bool isAssignedFrom(clang::Stmt *body, const clang::VarDecl *varDecl);
 // Example: something_else = our_var
 bool isAssignedTo(clang::Stmt *body, const clang::VarDecl *varDecl);
 
+// Returns whether the variable is returned in body
+bool isReturned(clang::Stmt *body, const clang::VarDecl *varDecl);
+
 // Returns true if a body of statements contains a function call that takes our variable (varDecl)
 // By ref or pointer
 bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl,
