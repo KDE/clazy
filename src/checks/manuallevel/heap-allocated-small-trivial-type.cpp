@@ -21,6 +21,7 @@
 
 #include "heap-allocated-small-trivial-type.h"
 #include "Utils.h"
+#include "StmtBodyRange.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
@@ -60,7 +61,6 @@ void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
     if (!fDecl)
         return;
 
-
     QualType qualType = newExpr->getType()->getPointeeType();
     if (clazy::isSmallTrivial(m_context, qualType)) {
         if (clazy::contains(qualType.getAsString(), "Private")) {
@@ -68,7 +68,8 @@ void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
             return;
         }
 
-        if (Utils::isAssignedTo(fDecl->getBody(), varDecl))
+        auto body = fDecl->getBody();
+        if (Utils::isAssignedTo(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false))
             return;
 
         emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());

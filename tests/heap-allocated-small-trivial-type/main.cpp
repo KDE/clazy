@@ -41,7 +41,25 @@ class MyClass
     {
         auto a = new SmallTrivial(); // OK
         m_smallTrivial = a;
+        m_smallTrivial = new SmallTrivial(); // OK
     }
 
     SmallTrivial *m_smallTrivial = nullptr;
 };
+
+void receivesSmallTrivial(SmallTrivial *)
+{
+}
+
+
+SmallTrivial* test2()
+{
+    return new SmallTrivial(); // OK
+}
+
+SmallTrivial* test3()
+{
+    auto a = new SmallTrivial(); // OK
+    receivesSmallTrivial(a);
+    return a;
+}
