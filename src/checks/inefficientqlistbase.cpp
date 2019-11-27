@@ -70,7 +70,7 @@ bool InefficientQListBase::shouldIgnoreVariable(VarDecl *varDecl) const
     }
 
     Stmt *body = fDecl ? fDecl->getBody() : nullptr;
-    if ((m_ignoreMode & IgnoreIsAssignedToInFunction) && Utils::isAssignedTo(body, varDecl)) {
+    if ((m_ignoreMode & IgnoreIsAssignedToInFunction) && Utils::isAssignedFrom(body, varDecl)) {
         return true;
     }
 

@@ -405,7 +405,7 @@ bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const 
     });
 }
 
-bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
+bool Utils::isAssignedFrom(Stmt *body, const VarDecl *varDecl)
 {
     if (!body)
         return false;
