@@ -4,9 +4,25 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-or-later</project_license>
   <name>Clazy</name>
+  <name xml:lang="ca">Clazy</name>
+  <name xml:lang="es">Clazy</name>
+  <name xml:lang="sv">Clazy</name>
+  <name xml:lang="uk">Clazy</name>
+  <name xml:lang="x-test">xxClazyxx</name>
+  <name xml:lang="zh-TW">Clazy</name>
   <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
+  <summary xml:lang="ca">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
+  <summary xml:lang="es">Un complemento del compilador Clang que emite advertencias relacionadas con las prácticas adecuadas de Qt</summary>
+  <summary xml:lang="sv">Ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt</summary>
+  <summary xml:lang="uk">Додаток до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt</summary>
+  <summary xml:lang="x-test">xxA Clang compiler plugin which emits warnings related to Qt best practicesxx</summary>
   <description>
     <p>Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
+    <p xml:lang="ca">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
+    <p xml:lang="es">Clazy es un complemento del compilador clang que emite advertencias relacionadas con las prácticas adecuadas de Qt.</p>
+    <p xml:lang="sv">Clazy är ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt.</p>
+    <p xml:lang="uk">Clazy є додатком до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt.</p>
+    <p xml:lang="x-test">xxClazy is a clang compiler plugin which emits warnings related to Qt best practices.xx</p>
   </description>
   <categories>
 ​    <category>Development</category>
