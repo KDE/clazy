@@ -455,7 +455,7 @@ def files_are_equal(file1, file2):
 
         return lines1 == lines2
     except Exception as ex:
-        print("Errot comparing files:" + str(ex))
+        print("Error comparing files:" + str(ex))
         return False
 
 def compare_files(expects_failure, expected_file, result_file, message):
