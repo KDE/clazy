@@ -35,3 +35,4 @@ CPackSourceConfig.cmake
 checks.json.h
 .ninja*
 *.ninja
+.cmake
