@@ -25,6 +25,8 @@
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
+#include "ClazyContext.h"
+#include "PreProcessorVisitor.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -48,6 +50,7 @@ QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = { "qstring.h" };
+    context->enablePreprocessorVisitor();
 }
 
 static string variableNameFromArg(Expr *arg)
@@ -62,7 +65,7 @@ static string variableNameFromArg(Expr *arg)
     return {};
 }
 
-static CXXMethodDecl* isArgMethod(FunctionDecl *func)
+static CXXMethodDecl* isArgMethod(FunctionDecl *func, const char *className)
 {
     if (!func)
         return nullptr;
@@ -72,7 +75,7 @@ static CXXMethodDecl* isArgMethod(FunctionDecl *func)
         return nullptr;
 
     CXXRecordDecl *record = method->getParent();
-    if (!record || clazy::name(record) != "QString")
+    if (!record || clazy::name(record) != className)
         return nullptr;
 
     return method;
@@ -83,7 +86,7 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
     if (!callExpr)
         return false;
 
-    CXXMethodDecl *method = isArgMethod(callExpr->getDirectCallee());
+    CXXMethodDecl *method = isArgMethod(callExpr->getDirectCallee(), "QString");
     if (!method)
         return false;
 
@@ -140,6 +143,29 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
     checkMultiArgWarningCase(argCalls);
 }
 
+bool QStringArg::checkQLatin1StringCase(CXXMemberCallExpr *memberCall)
+{
+    PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 51400) {
+        // QLatin1String::arg() was introduced in Qt 5.14
+        return false;
+    }
+
+    if (!isArgMethod(memberCall->getDirectCallee(), "QLatin1String"))
+        return false;
+
+    if (memberCall->getNumArgs() == 0)
+        return false;
+
+    Expr *arg = memberCall->getArg(0);
+    QualType t = arg->getType();
+    if (!t->isIntegerType() || t->isCharType())
+        return false;
+
+    emitWarning(memberCall, "Argument passed to QLatin1String::arg() will be implicitly cast to QChar");
+    return true;
+}
+
 void QStringArg::VisitStmt(clang::Stmt *stmt)
 {
     auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
@@ -151,10 +177,13 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
 
     checkForMultiArgOpportunities(memberCall);
 
+    if (checkQLatin1StringCase(memberCall))
+        return;
+
     if (!isOptionSet("fillChar-overloads"))
         return;
 
-    CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee());
+    CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee(), "QString");
     if (!method)
         return;
 

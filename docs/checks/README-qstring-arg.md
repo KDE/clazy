@@ -1,13 +1,16 @@
 # qstring-arg
 
-Implements two warnings:
+Implements three warnings:
 
 1. Detects when you're using chained `QString::arg()` calls and should instead use the multi-arg overload to save memory allocations
 
         QString("%1 %2").arg(a).arg(b);
         QString("%1 %2").arg(a, b); // one less temporary heap allocation
 
-2. Detects when you're using misleading `QString::arg()` overloads
+2. Detects when you're passing an integer to QLatin1String::arg() as that gets implicitly cast to QChar.
+It's preferable to state your intention and cast to QChar explicitly.
+
+3. Detects when you're using misleading `QString::arg()` overloads
 
         QString arg(qlonglong a, int fieldwidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const
         QString arg(qulonglong a, int fieldwidth = 0, int base = 10, QChar fillChar = QLatin1Char(' ')) const

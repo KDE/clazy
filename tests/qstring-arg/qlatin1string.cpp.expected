@@ -1,0 +1,2 @@
+qstring-arg/qlatin1string.cpp:6:5: warning: Argument passed to QLatin1String::arg() will be implicitly cast to QChar [-Wclazy-qstring-arg]
+qstring-arg/qlatin1string.cpp:7:5: warning: Argument passed to QLatin1String::arg() will be implicitly cast to QChar [-Wclazy-qstring-arg]

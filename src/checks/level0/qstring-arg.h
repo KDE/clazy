@@ -46,6 +46,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 private:
+    bool checkQLatin1StringCase(clang::CXXMemberCallExpr *);
     bool checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls);
     std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
 };

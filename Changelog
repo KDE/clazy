@@ -124,3 +124,4 @@
 * v1.7 (, 2020)
   - New Checks:
     - overloaded signal
+  - qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar

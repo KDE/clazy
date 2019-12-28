@@ -9,6 +9,10 @@
                 {
                     "CLAZY_EXTRA_OPTIONS" : "qstring-arg-fillChar-overloads"
                 }
+        },
+        {
+            "filename" : "qlatin1string.cpp",
+            "minimum_qt_version" : 51400
         }
     ]
 }
