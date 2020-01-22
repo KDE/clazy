@@ -7,6 +7,7 @@
   <name xml:lang="ca">Clazy</name>
   <name xml:lang="en-GB">Clazy</name>
   <name xml:lang="es">Clazy</name>
+  <name xml:lang="et">Clazy</name>
   <name xml:lang="lt">Clazy</name>
   <name xml:lang="nl">Clazy</name>
   <name xml:lang="pt">Clazy</name>
@@ -20,6 +21,7 @@
   <summary xml:lang="ca">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
   <summary xml:lang="en-GB">A Clang compiler plugin which emits warnings related to Qt best practices</summary>
   <summary xml:lang="es">Un complemento del compilador Clang que emite advertencias relacionadas con las prácticas adecuadas de Qt</summary>
+  <summary xml:lang="et">Clangi kompilaatori plugin, mis väljastab Qt parima praktikaga seonduvaid hoiatusi</summary>
   <summary xml:lang="lt">Clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi</summary>
   <summary xml:lang="nl">Een Clang-compilerplug-in die waarschuwingen uitstuurt gerelateerd aan de beste praktijken van Qt</summary>
   <summary xml:lang="pt">Um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt</summary>
@@ -31,6 +33,7 @@
     <p xml:lang="ca">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
     <p xml:lang="en-GB">Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
     <p xml:lang="es">Clazy es un complemento del compilador clang que emite advertencias relacionadas con las prácticas adecuadas de Qt.</p>
+    <p xml:lang="et">Clazy on Clangi kompilaatori plugin, mis väljastab Qt parima praktikaga seonduvaid hoiatusi.</p>
     <p xml:lang="lt">Clang yra clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi.</p>
     <p xml:lang="nl">Clazy is een clang-compilerplug-in die waarschuwingen uitstuurt gerelateerd aan de beste praktijken van Qt.</p>
     <p xml:lang="pt">O Clazy é um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt.</p>
