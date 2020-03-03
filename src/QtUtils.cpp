@@ -305,6 +305,8 @@ CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
         // QOverload case, go deeper one level to get to the UnaryOperator
         if (callexpr->getNumArgs() == 1)
             return pmfFromUnary(callexpr->getArg(0));
+    } else if (auto impl = dyn_cast<ImplicitCastExpr>(expr)) {
+        return pmfFromUnary(impl->getSubExpr());
     }
 
     return nullptr;
