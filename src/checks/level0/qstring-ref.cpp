@@ -117,7 +117,11 @@ static bool containsChild(Stmt *s, Stmt *target)
         return true;
 
     if (auto mte = dyn_cast<MaterializeTemporaryExpr>(s)) {
+#if LLVM_VERSION_MAJOR >= 10
+        return containsChild(mte->getSubExpr(), target);
+#else
         return containsChild(mte->getTemporary(), target);
+#endif
     } else if (auto ice = dyn_cast<ImplicitCastExpr>(s)) {
         return containsChild(ice->getSubExpr(), target);
     } else if (auto bte = dyn_cast<CXXBindTemporaryExpr>(s)) {
