@@ -21,7 +21,7 @@ void printNumber(Base b)
 
 (...)
 Derived d;
-foo(d);
+printNumber(d);
 
 ```
 
