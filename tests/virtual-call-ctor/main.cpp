@@ -1,4 +1,4 @@
-
+#include <QtCore/QObject>
 
 
 
@@ -28,4 +28,14 @@ struct A
     void some_non_virtual_method()
     {
     }
+};
+
+class B : public QObject {
+public:
+    B() {
+        QObject::connect(this, &QObject::destroyed, this, [this] {
+            some_virtual_method();
+        });
+    }
+     virtual void some_virtual_method() = 0;
 };
