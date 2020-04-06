@@ -23,6 +23,12 @@
             "visits_decls" : true
         },
         {
+            "name"  : "keeping-unstable-ref",
+            "level" : -1,
+            "categories" : ["bug"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "ifndef-define-typo",
             "level" : -1,
             "categories" : ["bug"]

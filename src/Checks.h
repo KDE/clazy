@@ -34,6 +34,7 @@
 #include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
+#include "checks/manuallevel/keeping-unstable-ref.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
 #include "checks/manuallevel/qproperty-type-mismatch.h"
 #include "checks/manuallevel/qrequiredresult-candidates.h"
@@ -128,6 +129,7 @@ void CheckManager::registerChecks()
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<KeepingUnstableRef>("keeping-unstable-ref", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));

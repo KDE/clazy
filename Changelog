@@ -125,3 +125,5 @@
   - New Checks:
     - overloaded signal
   - qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar
+
+  - <dont forget changelog entry for keeping-unstable-ref>
