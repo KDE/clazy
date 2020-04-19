@@ -68,6 +68,7 @@ public:
 
 private:
     void VisitCtor(clang::Stmt *);
+    void VisitCtor(clang::CXXConstructExpr *);
     void VisitOperatorCall(clang::Stmt *);
     void VisitFromLatin1OrUtf8(clang::Stmt *);
     void VisitAssignOperatorQLatin1String(clang::Stmt *);

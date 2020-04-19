@@ -176,14 +176,39 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
 void QStringAllocations::VisitCtor(Stmt *stm)
 {
     auto ctorExpr = dyn_cast<CXXConstructExpr>(stm);
+    if (!ctorExpr)
+        return;
+
     if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/ true))
         return;
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
+#if LLVM_VERSION_MAJOR >= 10
+    // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
+    // Do it manually.
+    if (clazy::isOfClass(ctorDecl, "QStringList")) {
+        auto p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
+        while (p) {
+            if (clazy::isOfClass(p, "QString")) {
+                VisitCtor(p);
+            }
+            p = clazy::getFirstChildOfType2<CXXConstructExpr>(p);
+        }
+    } else {
+        VisitCtor(ctorExpr);
+    }
+#else
+    VisitCtor(ctorExpr);
+#endif
+}
+
+void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
+{
+    CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
     if (!clazy::isOfClass(ctorDecl, "QString"))
         return;
 
-    if (Utils::insideCTORCall(m_context->parentMap, stm, { "QRegExp", "QIcon" })) {
+    if (Utils::insideCTORCall(m_context->parentMap, ctorExpr, { "QRegExp", "QIcon" })) {
         // https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
         return;
     }
@@ -193,7 +218,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
         if (initializerList != nullptr)
             return; // Nothing to do here, MSVC doesn't like it
 
-        StringLiteral *lt = stringLiteralForCall(stm);
+        StringLiteral *lt = stringLiteralForCall(ctorExpr);
         if (lt && lt->getNumConcatenated() > 1) {
             return; // Nothing to do here, MSVC doesn't like it
         }
@@ -214,7 +239,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
     if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
-        Latin1Expr qlatin1expr = qlatin1CtorExpr(stm, ternary);
+        Latin1Expr qlatin1expr = qlatin1CtorExpr(ctorExpr, ternary);
         if (!qlatin1expr.isValid()) {
             return;
         }
@@ -233,7 +258,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             if (!clazy::getLocStart(qlatin1Ctor).isMacroID()) {
                 if (!ternary) {
                     fixits = fixItReplaceWordWithWord(qlatin1Ctor, "QStringLiteral", "QLatin1String");
-                    bool shouldRemoveQString = clazy::getLocStart(qlatin1Ctor).getRawEncoding() != clazy::getLocStart(stm).getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(clazy::parent(m_context->parentMap, ctorExpr));
+                    bool shouldRemoveQString = clazy::getLocStart(qlatin1Ctor).getRawEncoding() != clazy::getLocStart(ctorExpr).getRawEncoding() && dyn_cast_or_null<CXXBindTemporaryExpr>(clazy::parent(m_context->parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
                         auto removalFixits = clazy::fixItRemoveToken(&m_astContext, ctorExpr, true);
@@ -251,7 +276,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             }
         }
 
-        maybeEmitWarning(clazy::getLocStart(stm), msg, fixits);
+        maybeEmitWarning(clazy::getLocStart(ctorExpr), msg, fixits);
     } else {
         vector<FixItHint> fixits;
         if (clazy::hasChildren(ctorExpr)) {
@@ -293,7 +318,7 @@ void QStringAllocations::VisitCtor(Stmt *stm)
             }
         }
 
-        maybeEmitWarning(clazy::getLocStart(stm), msg, fixits);
+        maybeEmitWarning(clazy::getLocStart(ctorExpr), msg, fixits);
     }
 }
 
