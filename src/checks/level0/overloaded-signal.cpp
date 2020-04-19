@@ -66,7 +66,7 @@ void OverloadedSignal::VisitDecl(clang::Decl *decl)
                         emitWarning(decl, "signal " + methodName.str() + " is overloaded");
                         continue; // No point in spitting more warnings for the same signal
                     } else {
-                        emitWarning(decl, "signal " + methodName.str() + " is overloaded (with " + p->getBeginLoc().printToString(sm()) + ")");
+                        emitWarning(decl, "signal " + methodName.str() + " is overloaded (with " + clazy::getLocStart(p).printToString(sm()) + ")");
                     }
                 }
             }
