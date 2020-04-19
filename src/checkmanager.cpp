@@ -317,3 +317,28 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
 
     return result;
 }
+
+vector<string> CheckManager::checksAsErrors() const
+{
+    auto checksAsErrosEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
+
+    if (checksAsErrosEnv) {
+        auto checkNames = clazy::splitString(checksAsErrosEnv, ',');
+        vector<string> result;
+
+        // Check whether all supplied check names are valid
+        for (const string &name : checkNames) {
+            auto it = clazy::find_if(m_registeredChecks, [&name](const RegisteredCheck &check)
+            {
+                return check.name == name;
+            });
+            if (it == m_registeredChecks.end())
+                llvm::errs() << "Invalid check: " << name << '\n';
+            else
+                result.emplace_back(name);
+        }
+        return result;
+    }
+    else
+        return {};
+}

@@ -20,6 +20,7 @@
 */
 
 #include "AccessSpecifierManager.h"
+#include "checkmanager.h"
 #include "ClazyContext.h"
 #include "FixItExporter.h"
 #include "PreProcessorVisitor.h"
@@ -44,6 +45,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
+    , m_checksPromotedToErrors(CheckManager::instance()->checksAsErrors())
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
     , m_translationUnitPaths(translationUnitPaths)

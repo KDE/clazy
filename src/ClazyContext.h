@@ -156,6 +156,11 @@ public:
         return sm.isInFileID(loc, sm.getMainFileID());
     }
 
+    bool treatAsError(const std::string &checkName) const
+    {
+        return clazy::contains(m_checksPromotedToErrors, checkName);
+    }
+
     /**
      * We only enable it if a check needs it, for performance reasons
      */
@@ -174,6 +179,7 @@ public:
     PreProcessorVisitor *preprocessorVisitor = nullptr;
     SuppressionManager suppressionManager;
     const bool m_noWerror;
+    std::vector<std::string> m_checksPromotedToErrors;
     bool m_visitsAllTypeDefs = false;
     clang::ParentMap *parentMap = nullptr;
     const ClazyOptions options;

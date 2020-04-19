@@ -93,6 +93,7 @@ public:
     static std::mutex &lock() { return m_lock; }
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv(std::vector<std::string> &userDisabledChecks) const;
+    std::vector<std::string> checksAsErrors() const;
 
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;

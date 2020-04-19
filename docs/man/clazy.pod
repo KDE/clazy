@@ -202,6 +202,9 @@ B<CLAZY_NO_WERROR> - if this is variable is set, clazy will not treat warnings a
 even if the -Werror compiler option is specified.  This is useful if you want to use -Werror
 only for the regular gcc/clang warnings but not for clazy warnings.
 
+B<CLAZY_CHECKS_AS_ERRORS> - comma-separated list of checks that will be promoted
+to compiler errors. Note that this does not enable the checks specified here.
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2015-2017 Klaralvdalens Datakonsult AB, a KDAB Group company, <info@kdab.com>
