@@ -616,6 +616,12 @@
             "level" : -1,
             "categories" : ["containers"],
             "visits_stmts" : true
+        },
+        {
+            "name"  : "jni-signatures",
+            "level" : -1,
+            "categories" : ["bug"],
+            "visits_stmts" : true
         }
     ]
 }

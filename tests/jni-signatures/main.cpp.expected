@@ -1,0 +1,5 @@
+jni-signatures/main.cpp:23:23: warning: Invalid method signature: '(' [-Wclazy-jni-signatures]
+jni-signatures/main.cpp:26:5: warning: Invalid method signature: '(III' [-Wclazy-jni-signatures]
+jni-signatures/main.cpp:30:5: warning: Invalid method signature: '()Ljava/lang/String' [-Wclazy-jni-signatures]
+jni-signatures/main.cpp:32:5: warning: Invalid method signature: '()Ljava/lang/String' [-Wclazy-jni-signatures]
+jni-signatures/main.cpp:34:5: warning: Invalid method signature: '(II)' [-Wclazy-jni-signatures]

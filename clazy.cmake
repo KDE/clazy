@@ -107,6 +107,18 @@ then
   ExtraClangOptions="-Xclang -plugin-arg-clazy -Xclang visit-implicit-code"
 fi
 
+if [[ $CLAZY_CHECKS == *"jni-signatures"* ]]
+then
+
+    if [[ -z $ANDROID_NDK ]]
+    then
+        echo "To test JNI signatures you need to set ANDROID_NDK to your Android NDK installation."
+        exit
+    fi
+
+    ExtraClangOptions=$ExtraClangOptions" -idirafter"$ANDROID_NDK"/sysroot/usr/include"
+fi
+
 ClazyPluginLib=ClazyPlugin@CMAKE_SHARED_LIBRARY_SUFFIX@
 
 if ( test -f "$libdir/$ClazyPluginLib" )
