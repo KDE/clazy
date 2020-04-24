@@ -48,21 +48,25 @@ class ClazyContext;
 using namespace clang;
 using namespace std;
 
+static const regex methodSignatureRegex("\\((\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;))*\\)\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;|V)");
+
+static const regex classNameRegex("([a-zA-Z]+\\/)*[a-zA-Z]+");
+
+static const regex methodNameRegex("[a-zA-Z]+");
+
 JniSignatures::JniSignatures(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
-bool checkSignature(std::string signature)
+bool checkSignature(std::string signature, const regex &expr)
 {
-    static regex rx("\\((\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;))*\\)\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;|V)");
-
     smatch match;
-    return regex_match(signature, match, rx);
+    return regex_match(signature, match, expr);
 }
 
 template<typename T>
-void JniSignatures::checkArgAt(T *call, unsigned int index)
+void JniSignatures::checkArgAt(T *call, unsigned int index, const regex &expr, const std::string &errorMessage)
 {
     if (call->getNumArgs() < index + 1)
         return;
@@ -77,25 +81,11 @@ void JniSignatures::checkArgAt(T *call, unsigned int index)
 
     const std::string signature = stringLiteral->getString().str();
 
-    const bool valid = checkSignature(signature);
+    const bool valid = checkSignature(signature, expr);
 
     if (!valid) {
-        emitWarning(call, "Invalid method signature: '" + signature + "'");
+        emitWarning(call, errorMessage + ": '" + signature + "'");
     }
-}
-
-bool JniSignatures::functionShouldBeChecked(FunctionDecl *funDecl)
-{
-    const std::string qualifiedName = funDecl->getQualifiedNameAsString();
-    if (!clazy::startsWith(qualifiedName, "QAndroidJniObject::")) {
-        return false;
-    }
-
-    const std::string name = clazy::name(funDecl);
-    return name == "callObjectMethod"
-        || name == "callMethod"
-        || name == "callStaticObjectMethod"
-        || name == "callStaticMethod";
 }
 
 void JniSignatures::checkFunctionCall(Stmt *stm)
@@ -108,11 +98,21 @@ void JniSignatures::checkFunctionCall(Stmt *stm)
         return;
     }
 
-    if (!functionShouldBeChecked(funDecl)) {
+    const std::string qualifiedName = funDecl->getQualifiedNameAsString();
+    if (!clazy::startsWith(qualifiedName, "QAndroidJniObject::")) {
         return;
     }
 
-    checkArgAt(callExpr, 1);
+    const std::string name = clazy::name(funDecl);
+
+    if (name == "callObjectMethod" || name == "callMethod") {
+        checkArgAt(callExpr, 0, methodNameRegex, "Invalid method name");
+        checkArgAt(callExpr, 1, methodSignatureRegex, "Invalid method signature");
+    } else if (name == "callStaticObjectMethod" || name == "callStaticMethod") {
+        checkArgAt(callExpr, 0, classNameRegex, "Invalid class name");
+        checkArgAt(callExpr, 1, methodNameRegex, "Invalid method name");
+        checkArgAt(callExpr, 2, methodSignatureRegex, "Invalid method signature");
+    }
 }
 
 void JniSignatures::checkConstructorCall(Stmt *stm)
@@ -128,7 +128,8 @@ void JniSignatures::checkConstructorCall(Stmt *stm)
         return;
     }
 
-    checkArgAt(constructExpr, 1);
+    checkArgAt(constructExpr, 0, classNameRegex, "Invalid class name");
+    checkArgAt(constructExpr, 1, methodSignatureRegex, "Invalid constructor signature");
 }
 
 void JniSignatures::VisitStmt(Stmt *stm)
