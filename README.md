@@ -221,6 +221,7 @@ clazy runs all checks from level1 by default.
     - [ifndef-define-typo](docs/checks/README-ifndef-define-typo.md)
     - [inefficient-qlist](docs/checks/README-inefficient-qlist.md)
     - [isempty-vs-count](docs/checks/README-isempty-vs-count.md)
+    - [jni-signatures](docs/checks/README-jni-signatures.md)
     - [qhash-with-char-pointer-key](docs/checks/README-qhash-with-char-pointer-key.md)
     - [qproperty-type-mismatch](docs/checks/README-qproperty-type-mismatch.md)
     - [qrequiredresult-candidates](docs/checks/README-qrequiredresult-candidates.md)
@@ -234,7 +235,6 @@ clazy runs all checks from level1 by default.
     - [thread-with-slots](docs/checks/README-thread-with-slots.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)
     - [unneeded-cast](docs/checks/README-unneeded-cast.md)
-    - [jni-sigantures](docs/checks/README-jni-signatures.md)
 
 - Checks from Level 0:
     - [connect-by-name](docs/checks/README-connect-by-name.md)
@@ -255,6 +255,7 @@ clazy runs all checks from level1 by default.
     - [qgetenv](docs/checks/README-qgetenv.md)    (fix-qgetenv)
     - [qmap-with-pointer-key](docs/checks/README-qmap-with-pointer-key.md)
     - [qstring-arg](docs/checks/README-qstring-arg.md)
+    - [qstring-comparison-to-implicit-char](docs/checks/README-qstring-comparison-to-implicit-char.md)
     - [qstring-insensitive-allocation](docs/checks/README-qstring-insensitive-allocation.md)
     - [qstring-ref](docs/checks/README-qstring-ref.md)    (fix-missing-qstringref)
     - [qt-macros](docs/checks/README-qt-macros.md)

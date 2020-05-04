@@ -6,6 +6,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/ifndef-define-typo.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficient-qlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/jnisignatures.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qproperty-type-mismatch.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qrequiredresult-candidates.cpp
@@ -19,7 +20,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/thread-with-slots.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/tr-non-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/unneeded-cast.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/jnisignatures.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-by-name.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-not-normalized.cpp
@@ -38,6 +38,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qgetenv.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qmap-with-pointer-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-arg.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-comparison-to-implicit-char.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-insensitive-allocation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qt-macros.cpp

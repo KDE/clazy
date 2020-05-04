@@ -125,4 +125,6 @@
   - New Checks:
     - overloaded signal
     - invalid JNI signatures
+    - qstring-comparison-to-implicit-char
   - qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar
+

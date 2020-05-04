@@ -109,6 +109,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "qstring-comparison-to-implicit-char",
+            "level" : 0,
+            "categories" : ["bug"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "wrong-qevent-cast",
             "level" : 0,
             "categories" : ["bug"],

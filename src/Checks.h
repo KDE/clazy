@@ -34,6 +34,7 @@
 #include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
+#include "checks/manuallevel/jnisignatures.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
 #include "checks/manuallevel/qproperty-type-mismatch.h"
 #include "checks/manuallevel/qrequiredresult-candidates.h"
@@ -47,7 +48,6 @@
 #include "checks/manuallevel/thread-with-slots.h"
 #include "checks/manuallevel/tr-non-literal.h"
 #include "checks/manuallevel/unneeded-cast.h"
-#include "checks/manuallevel/jnisignatures.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
 #include "checks/level0/connect-not-normalized.h"
@@ -66,6 +66,7 @@
 #include "checks/level0/qgetenv.h"
 #include "checks/level0/qmap-with-pointer-key.h"
 #include "checks/level0/qstring-arg.h"
+#include "checks/level0/qstring-comparison-to-implicit-char.h"
 #include "checks/level0/qstring-insensitive-allocation.h"
 #include "checks/level0/qstring-ref.h"
 #include "checks/level0/qt-macros.h"
@@ -129,6 +130,7 @@ void CheckManager::registerChecks()
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
@@ -144,7 +146,6 @@ void CheckManager::registerChecks()
     registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
@@ -167,6 +168,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qgetenv", "qgetenv");
     registerCheck(check<QMapWithPointerKey>("qmap-with-pointer-key", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringArg>("qstring-arg", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QStringComparisonToImplicitChar>("qstring-comparison-to-implicit-char", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QStringInsensitiveAllocation>("qstring-insensitive-allocation", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<StringRefCandidates>("qstring-ref", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-missing-qstringref", "qstring-ref");
