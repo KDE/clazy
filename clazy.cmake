@@ -38,8 +38,13 @@ VERSION() {
 
 PRLIST() {
   echo ""
-  echo "Checks from level$1. $2:"
-  ls -1 $sharedir/doc/clazy/level$1/README* | awk -F/ '{printf("    %s\n", $NF)}' | sed s/README-// | sed s/\.md$// | sort
+  if ( test -d "$sharedir/doc/clazy/level$1" )
+  then
+    echo "Checks from level$1. $2:"
+    ls -1 $sharedir/doc/clazy/level$1/README* | awk -F/ '{printf("    %s\n", $NF)}' | sed s/README-// | sed s/\.md$// | sort
+  else
+    echo "There are no checkers available for level$1"
+  fi
 }
 
 PRINFO() {
@@ -79,7 +84,7 @@ then
   PRLIST 0 "Very stable checks, 100% safe, no false-positives"
   PRLIST 1 "Mostly stable and safe, rare false-positives"
   PRLIST 2 "Sometimes has false-positives (20-30%)"
-  PRLIST 3 "Not always correct, high rate of false-positives"
+  #PRLIST 3 "Not always correct, high rate of false-positives"
   exit
 fi
 
