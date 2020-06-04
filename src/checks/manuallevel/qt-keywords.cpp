@@ -59,12 +59,12 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
     }
 
     static const vector<StringRef> keywords = { "foreach", "signals", "slots", "emit" };
-    std::string name = ii->getName();
+    std::string name = static_cast<std::string>(ii->getName());
     if (!clazy::contains(keywords, name))
         return;
 
     // Make sure the macro is Qt's. It must be defined in Qt's headers, not 3rdparty
-    std::string qtheader = sm().getFilename(sm().getSpellingLoc(minfo->getDefinitionLoc()));
+    std::string qtheader = static_cast<std::string>(sm().getFilename(sm().getSpellingLoc(minfo->getDefinitionLoc())));
     if (!clazy::endsWith(qtheader, "qglobal.h") && !clazy::endsWith(qtheader, "qobjectdefs.h"))
         return;
 
