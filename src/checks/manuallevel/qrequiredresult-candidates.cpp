@@ -65,7 +65,7 @@ void QRequiredResultCandidates::VisitDecl(clang::Decl *decl)
 
 
     if (returnClass == classDecl) {
-        const std::string methodName = clazy::name(method);
+        const std::string methodName = static_cast<std::string>(clazy::name(method));
         if (methodName.empty()) // fixes assert
             return;
 

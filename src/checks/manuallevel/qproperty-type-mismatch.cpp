@@ -237,7 +237,7 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
 
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
-    string text = Lexer::getSourceText(crange, sm(), lo());
+    string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
     if (!text.empty() && text.back() == ')')
         text.pop_back();
 

@@ -140,7 +140,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const string className = record->getNameAsString();
     const string classQualifiedName = record->getQualifiedNameAsString();
-    const string filename = sm().getFilename(recordStart);
+    const string filename = static_cast<std::string>(sm().getFilename(recordStart));
     if (clazy::endsWith(className, "Private") && clazy::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 

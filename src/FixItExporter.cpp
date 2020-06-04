@@ -68,7 +68,7 @@ void FixItExporter::BeginSourceFile(const LangOptions &LangOpts, const Preproces
 
     const auto id = SourceMgr.getMainFileID();
     const auto entry = SourceMgr.getFileEntryForID(id);
-    getTuDiag().MainSourceFile = entry->getName();
+    getTuDiag().MainSourceFile = static_cast<std::string>(entry->getName());
 }
 
 bool FixItExporter::IncludeInDiagnosticCounts() const
@@ -89,7 +89,8 @@ tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
     // TODO: This returns an empty string: DiagEngine->getDiagnosticIDs()->getWarningOptionForDiag(Info.getID());
     // HACK: capture it at the end of the message: Message text [check-name]
 
-    std::string checkName = DiagEngine.getDiagnosticIDs()->getWarningOptionForDiag(Info.getID());
+    std::string checkName =
+        static_cast<std::string>(DiagEngine.getDiagnosticIDs()->getWarningOptionForDiag(Info.getID()));
     std::string messageText;
 
     if (checkName.empty()) {

@@ -140,7 +140,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     StringRef className = clazy::name(classDecl);
 
     const std::unordered_map<string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
-    auto it = methodsByType.find(className);
+    auto it = methodsByType.find(static_cast<std::string>(className));
     auto it2 = m_writeMethodsByType.find(className);
 
     std::vector<StringRef> allowedFunctions;
