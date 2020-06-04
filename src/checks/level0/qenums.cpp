@@ -59,7 +59,7 @@ void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
         // We simply check if :: is present because it's very cumbersome to to check for different classes when dealing with the pre-processor
 
         CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
-        string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
+        string text = static_cast<string>(Lexer::getSourceText(crange, sm(), lo()));
         if (clazy::contains(text, "::"))
             return;
     }
