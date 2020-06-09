@@ -150,5 +150,5 @@ then
     $(dirname $0)/bin/clazy-standalone "$@"
   fi
 else
-  ${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClazyPluginLib -Xclang -add-plugin -Xclang clazy $ExtraClangOptions "$@"
+  ${CLANGXX:-clang++} -Qunused-arguments -Xclang -load -Xclang $ClazyPluginLib -Xclang -add-plugin -Xclang clazyMiniAstDumper $ExtraClangOptions "$@"
 fi

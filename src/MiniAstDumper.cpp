@@ -107,6 +107,14 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
     m_accessSpecifierManager->VisitDeclaration(decl);
 
+    auto &sm = m_ci.getSourceManager();
+    const SourceLocation loc = clazy::getLocStart(decl);
+
+    if (sm.isInSystemHeader(loc)) {
+        // We're not interested in those
+        return true;
+    }
+
     if (auto tsd = dyn_cast<ClassTemplateSpecializationDecl>(decl)) {
         // llvm::errs() << "ClassTemplateSpecializationDecl: "  + tsd->getQualifiedNameAsString() + "\n";
     } else if (auto rec = dyn_cast<CXXRecordDecl>(decl)) {
@@ -163,6 +171,14 @@ bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 
 bool MiniASTDumperConsumer::VisitStmt(Stmt *stmt)
 {
+    auto &sm = m_ci.getSourceManager();
+    const SourceLocation loc = clazy::getLocStart(stmt);
+
+    if (sm.isInSystemHeader(loc)) {
+        // We're not interested in those
+        return true;
+    }
+
     if (auto callExpr = dyn_cast<CallExpr>(stmt)) {
         dumpCallExpr(callExpr, &m_cborStuffArray);
     }
@@ -196,6 +212,14 @@ void MiniASTDumperConsumer::dumpCXXMethodDecl(CXXMethodDecl *method, CborEncoder
         cborEncodeInt(methodMap, flags);
     }
 
+    cborEncodeString(methodMap, "overrides");
+    CborEncoder cborOverriddenMethodsList;
+    cborCreateArray(&methodMap, &cborOverriddenMethodsList, CborIndefiniteLength);
+    for (auto om : method->overridden_methods()) {
+        cborEncodeInt(cborOverriddenMethodsList, int64_t(om));
+    }
+    cborCloseContainer(&methodMap, &cborOverriddenMethodsList);
+
     cborCloseContainer(encoder, &methodMap);
 }
 
@@ -208,9 +232,8 @@ void MiniASTDumperConsumer::dumpFunctionDecl(FunctionDecl *func, CborEncoder *en
                      << "\n";
     }
 
-
     CborEncoder recordMap;
-    cborCreateMap(encoder, &recordMap, 3);
+    cborCreateMap(encoder, &recordMap, 5);
 
     cborEncodeString(recordMap, "name");
     cborEncodeString(recordMap, func->getQualifiedNameAsString().c_str());
@@ -220,6 +243,10 @@ void MiniASTDumperConsumer::dumpFunctionDecl(FunctionDecl *func, CborEncoder *en
 
     cborEncodeString(recordMap, "id");
     cborEncodeInt(recordMap, int64_t(func));
+
+    cborEncodeString(recordMap, "loc");
+    const SourceLocation loc = clazy::getLocStart(func);
+    dumpLocation(loc, &recordMap);
 
     cborCloseContainer(encoder, &recordMap);
 }

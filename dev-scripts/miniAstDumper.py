@@ -125,8 +125,8 @@ def parse_loc(cborLoc, file_map, tu_cwd):
 
     if 'spellingFileId' in cborLoc:
         loc.spellingFilename = file_map[str(cborLoc['spellingFileId'])]
-        loc.lineNumber = cborLoc['spellingLineNumber']
-        loc.columnNumber = cborLoc['spellingColumnNumber']
+        #loc.lineNumber = cborLoc['spellingLineNumber']
+        #loc.columnNumber = cborLoc['spellingColumnNumber']
 
     return loc
 
@@ -139,6 +139,16 @@ def read_file(filename):
 def read_cbor(filename):
     contents = read_file(filename);
     return cbor.loads(contents)
+
+def createMethod(m):
+
+    method = CXXMethod()
+    method.id = next_function_id() # Attribute a sequential id, that's unique across TUs
+    method.qualified_name = m['name']
+    if 'method_flags' in m:
+        method.method_flags = m['method_flags']
+
+    return method
 
 def load_cbor(filename, globalAST):
     cborData = read_cbor(filename)
@@ -160,7 +170,7 @@ def load_cbor(filename, globalAST):
         # Process classes and methods
         for stuff in cborData['stuff']:
             if 'type' in stuff:
-                if stuff['type'] == 31: # CXXRecordDecl
+                if stuff['type'] == 33: # CXXRecordDecl
                     cxxclass = CXXClass()
                     # cxxclass.id = stuff['id']
                     cxxclass.qualified_name = stuff['name']
@@ -171,15 +181,11 @@ def load_cbor(filename, globalAST):
 
                     if 'methods' in stuff:
                         for m in stuff['methods']:
-                            method = CXXMethod()
-                            method.id = next_function_id() # Attribute a sequential id, that's unique across TUs
+
+                            method = createMethod(m)
+
                             _function_map[method.id] = method
-
-                            method.qualified_name = m['name']
                             cxxclass.methods.append(method)
-
-                            if 'method_flags' in m:
-                                method.method_flags = m['method_flags']
 
                             local_id_in_tu = m['id']
 
@@ -189,13 +195,14 @@ def load_cbor(filename, globalAST):
 
                     globalAST.cxx_classes[cxxclass.hash()] = cxxclass
 
-                if stuff['type'] == 48: # FunctionDecl
+                if stuff['type'] == 50: # FunctionDecl
                     func = Function()
                     func.id = next_function_id() # Attribute a sequential id, that's unique across TUs
                     _function_map[func.id] = func
                     func.qualified_name = stuff['name']
                     globalAST.functions.append(func)
                     local_id_in_tu = stuff['id']
+
                     if local_id_in_tu in tu_function_map.keys():
                         print('function is duplicated! ' + method.qualified_name)
                     tu_function_map[local_id_in_tu] = func
@@ -206,7 +213,7 @@ def load_cbor(filename, globalAST):
 
         # Process CallExprs
         for stuff in cborData['stuff']:
-            if 'stmt_type' in stuff and stuff['stmt_type'] == 48: # CallExpr
+            if 'stmt_type' in stuff and (stuff['stmt_type'] == 124 or stuff['stmt_type'] == 122): # member call or function call
                 funccall = FunctionCall()
                 local_callee_id_in_tu = stuff['calleeId']
                 source_loc = parse_loc(stuff['loc'], file_map, current_tu_cwd);
@@ -307,3 +314,9 @@ if not process_all_files(sys.argv[1:]):
 #calculate_call_counts(_globalAST)
 #print_unused_signals(_globalAST)
 print_qobjects(_globalAST)
+
+calculate_call_counts(_globalAST)
+
+for key in _function_map.keys():
+    print(_function_map[key].qualified_name, _function_map[key].num_called)
+
