@@ -20,7 +20,6 @@ Name[sk]=Clazy
 Name[sl]=Clazy
 Name[sv]=Clazy
 Name[uk]=Clazy
-Name[x-test]=xxClazyxx
 Name[zh_TW]=Clazy
 Exec=clazy
 Icon=clazy
