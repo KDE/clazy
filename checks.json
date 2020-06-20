@@ -1,5 +1,5 @@
 {
-    "available_categories" : ["readability", "qt4", "containers", "qstring", "cpp", "bug", "performance", "deprecation", "qml"],
+    "available_categories" : ["readability", "qt4", "qt6", "containers", "qstring", "cpp", "bug", "performance", "deprecation", "qml"],
     "checks" : [
         {
             "name"  : "qt-keywords",
@@ -61,6 +61,18 @@
             "fixits" : [
                 {
                     "name" : "qt4-qstring-from-array"
+                }
+            ],
+            "visits_stmts" : true
+        },
+	{
+            "name"  : "qt6-qlatin1string-to-u",
+            "class_name" : "Qt6QLatin1StringToU",
+            "level" : -1,
+            "categories" : ["qt6", "qstring"],
+            "fixits" : [
+                {
+                    "name" : "qt6-qlatin1string-to-u"
                 }
             ],
             "visits_stmts" : true
