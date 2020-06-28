@@ -132,3 +132,4 @@
   - Building clazy itself is 30% faster
   - heap-allocated-small-trivial-type: less false-positives
 
+* v1.8 (2020)
