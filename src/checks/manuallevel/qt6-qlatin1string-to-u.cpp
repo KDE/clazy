@@ -77,7 +77,7 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor)
 
 void Qt6QLatin1StringToU::VisitStmt(clang::Stmt *stmt)
 {
-    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
+    auto ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
     if (!ctorExpr)
         return;
 
@@ -90,7 +90,7 @@ void Qt6QLatin1StringToU::VisitStmt(clang::Stmt *stmt)
             return;
         message = "QLatin1String(const char *) ctor being called";
         for (auto macro_pos : m_listingMacroExpand) {
-            if ( m_sm.isPointWithin(macro_pos , stmt->getBeginLoc(), stmt->getEndLoc())) {
+            if (m_sm.isPointWithin(macro_pos, clazy::getLocStart(stmt), clazy::getLocEnd(stmt))) {
                emitWarning(clazy::getLocStart(stmt), message, fixits);
                return;
             }
