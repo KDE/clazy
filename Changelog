@@ -121,10 +121,14 @@
     All other fixit arguments and fixit env variables were removed
     Thanks to Christian Gagneraud for contributing the fixit yaml exporter!
 
-* v1.7 (, 2020)
+* v1.7 (June 29th, 2020)
   - New Checks:
     - overloaded signal
     - invalid JNI signatures
     - qstring-comparison-to-implicit-char
+    - qt6-qlatin1string-to-u
+  - connect-non-signal: Fix case where it didn't find the pmf
   - qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar
+  - Building clazy itself is 30% faster
+  - heap-allocated-small-trivial-type: less false-positives
 
