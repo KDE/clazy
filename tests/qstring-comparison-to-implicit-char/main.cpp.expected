@@ -1,0 +1,1 @@
+qstring-comparison-to-implicit-char/main.cpp:7:9: warning: QString being compared to implicit QChar [-Wclazy-qstring-comparison-to-implicit-char]
