@@ -14,6 +14,6 @@ if(UNIX)
     )
     add_custom_target(man ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/clazy.1)
 
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/clazy.1 DESTINATION ${MAN_INSTALL_DIR})
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/clazy.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
   endif()
 endif()
