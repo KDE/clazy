@@ -117,11 +117,13 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
 
 ## macOS with MacPorts
 
+Note: clazy-standalone isn't parsing arguments correctly on LLVM > 8.0. Feel free to use LLVM 10 if you don't need clazy-standalone.
+
 ### Install clang
 ```
-$ sudo port install clang-3.9 llvm-3.9
-$ sudo ln -sf /opt/local/bin/llvm-config-mp-3.9 /opt/local/bin/llvm-config
-$ sudo port select --set clang mp-clang-3.9
+$ sudo port install llvm-8.0 clang-8.0 cmake ninja coreutils
+$ sudo ln -sf /opt/local/bin/llvm-config-mp-8.0 /opt/local/bin/llvm-config
+$ sudo port select --set clang mp-clang-8.0
 ```
 
 ### Build clazy
@@ -406,6 +408,9 @@ with each other modifying the same source lines.
 - Be sure to disable pch.
 
 - macOS: Be sure you're not using Apple Clang
+
+- macOS: System Integrity Protection blocks the use of DYLD_LIBRARY_PATH. With SIP enabled you need to pass the full path
+  to ClazyPlugin.dylib, otherwise you'll get `image not found` error.
 
 - Windows: fatal error LNK1112: module machine type ‘X86’ conflicts with target machine type ‘x64’
   If you're building in 32-bit, open clazy-cl.bat and insert a -m32 argument.
