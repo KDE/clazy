@@ -14,6 +14,9 @@ _verbose = False
 def isWindows():
     return _platform == 'win32'
 
+def isMacOS():
+    return _platform == 'darwin'
+
 class QtInstallation:
     def __init__(self):
         self.int_version = 000
@@ -21,7 +24,12 @@ class QtInstallation:
         self.qmake_lib_path = "/usr/lib"
 
     def compiler_flags(self):
-        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path
+
+        extra_includes = ''
+        if isMacOS():
+            extra_includes = ' -iframework ' + self.qmake_header_path + '/../lib/ '
+
+        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + extra_includes
 
 class Test:
     def __init__(self, check):
