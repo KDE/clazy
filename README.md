@@ -353,11 +353,12 @@ finding builtin headers, like stddef.h. Alternatively, you can symlink to the fo
 (Assuming clazy was built with `-DCMAKE_INSTALL_PREFIX=/myprefix/`)
 
 ```
-$ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
+$ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource # Make sure this clang here is not Apple clang. Use for example clang++-mp-8.0 if on macOS and haven't run `port select` yet.
   "-resource-dir"
-  "/usr/bin/../lib/clang/4.0.1" # this is the interesting path (without the version)
-$ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
-$ ln -sf /usr/bin/../include/c++/ /myprefix/include/c++ # Required on macOS
+  "/opt/local/libexec/llvm-8.0/lib/clang/8.0.1" # The interesting part is /opt/local/libexec/llvm-8.0
+$ ln -sf /opt/local/libexec/llvm-8.0/lib/clang/ /myprefix/lib/clang
+$ mkdir /myprefix/include/
+$ ln -sf /opt/local/libexec/llvm-8.0/include/c++/ /myprefix/include/c++ # Required on macOS
 ```
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
