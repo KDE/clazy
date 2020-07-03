@@ -3,7 +3,7 @@ MAINTAINER Sergio Martins (sergio.martins@kdab.com)
 
 WORKDIR /
 RUN yum update -y
-RUN yum install -y git wget boost-regex
+RUN yum install -y git wget boost-regex boost-devel
 
 RUN wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
 RUN yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
