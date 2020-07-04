@@ -21,7 +21,7 @@ CLAZY_SRC_ZIP = "clazy_v%s-src.zip" % CLAZY_VERSION
 
 
 def run_command(cmd, abort_on_error = True):
-    print cmd
+    print(cmd)
     success = (os.system(cmd) == 0)
     if abort_on_error and not success:
         sys.exit(1)
@@ -33,11 +33,11 @@ def copy(src, dest):
 
 def check_env():
     if MSVC_VERSION not in ['2019']:
-        print "Error: Set MSVC_VERSION to a proper value. Exiting..."
+        print("Error: Set MSVC_VERSION to a proper value. Exiting...")
         sys.exit(1)
 
     if not LLVM_INSTALL_DIR:
-        print "Error: Set LLVM_INSTALL_DIR to a proper value. Exiting..."
+        print("Error: Set LLVM_INSTALL_DIR to a proper value. Exiting...")
         sys.exit(1)
 
     run_command('rm -rf ' + PACKAGE_DIR)
@@ -92,7 +92,7 @@ def zip_package():
     run_command('sha256sum %s >> sums.txt' % CLAZY_SRC_ZIP)
 
     run_command("unzip %s -d %s" % (CLAZY_ZIP, CLAZY_ZIP_WITHOUT_EXTENSION))
-    print "Don't forget to delete %s after testing" % CLAZY_ZIP_WITHOUT_EXTENSION
+    print("Don't forget to delete %s after testing" % CLAZY_ZIP_WITHOUT_EXTENSION)
     os.chdir('..')
 
 check_env()
