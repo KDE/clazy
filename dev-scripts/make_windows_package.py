@@ -51,8 +51,8 @@ def clone_clazy(sha1, work_dir):
 def build_clazy():
     cmd = 'cmake -DCMAKE_INSTALL_PREFIX=%s -DCMAKE_BUILD_TYPE=Release -DCLANG_LIBRARY_IMPORT=%s\lib\clang.lib -G "Ninja" .' % (LLVM_INSTALL_DIR, LLVM_INSTALL_DIR)
     run_command(cmd)
-    run_command('jom')
-    run_command('jom install')
+    run_command('cmake --build .')
+    run_command('cmake --build . --target install')
 
 def copy_files(work_dir):
 
