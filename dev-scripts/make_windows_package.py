@@ -19,8 +19,6 @@ CLAZY_ZIP_WITHOUT_EXTENSION = "clazy_v%s-msvc%s" % (CLAZY_VERSION, MSVC_VERSION)
 CLAZY_ZIP = CLAZY_ZIP_WITHOUT_EXTENSION + '.zip'
 CLAZY_SRC_ZIP = "clazy_v%s-src.zip" % CLAZY_VERSION
 
-IS_FIRST_RUN = (MSVC_VERSION == '2015')
-
 
 def run_command(cmd, abort_on_error = True):
     print cmd
@@ -34,7 +32,7 @@ def copy(src, dest):
     run_command('cp %s %s' % (src, dest))
 
 def check_env():
-    if MSVC_VERSION not in ['2015', '2017', '2019']:
+    if MSVC_VERSION not in ['2019']:
         print "Error: Set MSVC_VERSION to a proper value. Exiting..."
         sys.exit(1)
 
@@ -42,8 +40,7 @@ def check_env():
         print "Error: Set LLVM_INSTALL_DIR to a proper value. Exiting..."
         sys.exit(1)
 
-    if IS_FIRST_RUN:
-        run_command('rm -rf ' + PACKAGE_DIR)
+    run_command('rm -rf ' + PACKAGE_DIR)
 
 def clone_clazy(sha1, work_dir):
     if os.path.exists(work_dir):
@@ -88,15 +85,11 @@ def zip_package():
     run_command('zip -r %s clazy/' % (CLAZY_ZIP))
     run_command('rm -rf clazy')
 
-    if IS_FIRST_RUN:
-        run_command('wget --no-check-certificate https://github.com/KDE/clazy/archive/%s.zip -O %s' % (CANDIDATE_SHA1, CLAZY_SRC_ZIP))
-        run_command('sha1sum %s > sums.txt' % CLAZY_ZIP)
-        run_command('sha256sum %s >> sums.txt' % CLAZY_ZIP)
-        run_command('sha1sum %s >> sums.txt' % CLAZY_SRC_ZIP)
-        run_command('sha256sum %s >> sums.txt' % CLAZY_SRC_ZIP)
-    else:
-        run_command('sha1sum %s >> sums.txt' % CLAZY_ZIP)
-        run_command('sha256sum %s >> sums.txt' % CLAZY_ZIP)
+    run_command('wget --no-check-certificate https://github.com/KDE/clazy/archive/%s.zip -O %s' % (CANDIDATE_SHA1, CLAZY_SRC_ZIP))
+    run_command('sha1sum %s > sums.txt' % CLAZY_ZIP)
+    run_command('sha256sum %s >> sums.txt' % CLAZY_ZIP)
+    run_command('sha1sum %s >> sums.txt' % CLAZY_SRC_ZIP)
+    run_command('sha256sum %s >> sums.txt' % CLAZY_SRC_ZIP)
 
     run_command("unzip %s -d %s" % (CLAZY_ZIP, CLAZY_ZIP_WITHOUT_EXTENSION))
     print "Don't forget to delete %s after testing" % CLAZY_ZIP_WITHOUT_EXTENSION
