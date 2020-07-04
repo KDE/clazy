@@ -14,6 +14,9 @@ _verbose = False
 def isWindows():
     return _platform == 'win32'
 
+def isMacOS():
+    return _platform == 'darwin'
+
 class QtInstallation:
     def __init__(self):
         self.int_version = 000
@@ -21,7 +24,12 @@ class QtInstallation:
         self.qmake_lib_path = "/usr/lib"
 
     def compiler_flags(self):
-        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path
+
+        extra_includes = ''
+        if isMacOS():
+            extra_includes = ' -iframework ' + self.qmake_header_path + '/../lib/ '
+
+        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + extra_includes
 
 class Test:
     def __init__(self, check):
@@ -46,6 +54,7 @@ class Test:
         self.ignore_dirs = ""
         self.has_fixits = False
         self.should_run_fixits_test = False
+        self.should_run_on_32bit = True
 
     def filename(self):
         if len(self.filenames) == 1:
@@ -239,6 +248,8 @@ def load_json(check_name):
                 test.header_filter = t['header_filter']
             if 'ignore_dirs' in t:
                 test.ignore_dirs = t['ignore_dirs']
+            if 'should_run_on_32bit' in t:
+                test.should_run_on_32bit = t['should_run_on_32bit']
 
             if not test.checks:
                 test.checks.append(test.check.name)
@@ -558,6 +569,9 @@ def file_contains(filename, text):
     f.close()
     return text in contents
 
+def is32Bit():
+    return platform.architecture()[0] == '32bit'
+
 def run_unit_test(test, is_standalone):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
@@ -579,6 +593,11 @@ def run_unit_test(test, is_standalone):
             print("Skipping " + test.check.name + " because it is blacklisted for this platform")
         return True
 
+    if not test.should_run_on_32bit and is32Bit():
+        if (_verbose):
+            print("Skipping " + test.check.name + " because it is blacklisted on 32bit")
+        return True;
+
     checkname = test.check.name
     filename = checkname + "/" + test.filename()
 
@@ -587,7 +606,7 @@ def run_unit_test(test, is_standalone):
     expected_file = filename + ".expected"
 
     # Some tests have different output on 32 bit
-    if platform.architecture()[0] == '32bit' and os.path.exists(expected_file + '.x86'):
+    if is32Bit() and os.path.exists(expected_file + '.x86'):
         expected_file = expected_file + '.x86'
 
     if is_standalone and test.isScript():

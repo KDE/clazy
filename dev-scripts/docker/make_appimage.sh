@@ -5,9 +5,6 @@
 #   $1 clazy sha1 to build
 #   $2 user uid to chown the files to before leaving docker
 
-CC=gcc
-CXX=g++
-
 mkdir /tmp/clazy_work/
 cp -r /clazy.AppDir/ /tmp/clazy_work/
 

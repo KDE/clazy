@@ -119,11 +119,13 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
 
 ## macOS with MacPorts
 
+Note: clazy-standalone isn't parsing arguments correctly on LLVM > 8.0. Feel free to use LLVM 10 if you don't need clazy-standalone.
+
 ### Install clang
 ```
-$ sudo port install clang-3.9 llvm-3.9
-$ sudo ln -sf /opt/local/bin/llvm-config-mp-3.9 /opt/local/bin/llvm-config
-$ sudo port select --set clang mp-clang-3.9
+$ sudo port install llvm-8.0 clang-8.0 cmake ninja coreutils
+$ sudo ln -sf /opt/local/bin/llvm-config-mp-8.0 /opt/local/bin/llvm-config
+$ sudo port select --set clang mp-clang-8.0
 ```
 
 ### Build clazy
@@ -353,11 +355,12 @@ finding builtin headers, like stddef.h. Alternatively, you can symlink to the fo
 (Assuming clazy was built with `-DCMAKE_INSTALL_PREFIX=/myprefix/`)
 
 ```
-$ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource
+$ touch foo.c && clang++ '-###' -c foo.c 2>&1 | tr ' ' '\n' | grep -A1 resource # Make sure this clang here is not Apple clang. Use for example clang++-mp-8.0 if on macOS and haven't run `port select` yet.
   "-resource-dir"
-  "/usr/bin/../lib/clang/4.0.1" # this is the interesting path (without the version)
-$ ln -sf /usr/bin/../lib/clang/ /myprefix/lib/clang
-$ ln -sf /usr/bin/../include/c++/ /myprefix/include/c++ # Required on macOS
+  "/opt/local/libexec/llvm-8.0/lib/clang/8.0.1" # The interesting part is /opt/local/libexec/llvm-8.0
+$ ln -sf /opt/local/libexec/llvm-8.0/lib/clang/ /myprefix/lib/clang
+$ mkdir /myprefix/include/
+$ ln -sf /opt/local/libexec/llvm-8.0/include/c++/ /myprefix/include/c++ # Required on macOS
 ```
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
@@ -408,6 +411,9 @@ with each other modifying the same source lines.
 - Be sure to disable pch.
 
 - macOS: Be sure you're not using Apple Clang
+
+- macOS: System Integrity Protection blocks the use of DYLD_LIBRARY_PATH. With SIP enabled you need to pass the full path
+  to ClazyPlugin.dylib, otherwise you'll get `image not found` error.
 
 - Windows: fatal error LNK1112: module machine type ‘X86’ conflicts with target machine type ‘x64’
   If you're building in 32-bit, open clazy-cl.bat and insert a -m32 argument.
