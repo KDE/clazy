@@ -7,11 +7,11 @@ from shutil import copyfile
 # Change here:
 CLAZY_VERSION = '1.7'
 CANDIDATE_SHA1 = 'v1.7'
-PACKAGE_DIR = '/c/d/clazy-msvc-package/'
-PACKAGE_DIR_WIN = 'c:\\d\\clazy-msvc-package\\'
+PACKAGE_DIR = '/d/clazy-msvc-package/'
+PACKAGE_DIR_WIN = 'd:\\clazy-msvc-package\\'
 #--------------------------------------------------
 
-CLAZY_REPO_URL = "https://github.com/KDE/clazy.git"
+CLAZY_REPO_URL = "https://invent.kde.org/sdk/clazy.git"
 MSVC_VERSION = os.getenv('MSVC_VERSION', '')
 LLVM_INSTALL_DIR = os.getenv('LLVM_INSTALL_DIR', '')
 CLAZY_WORK_DIR = 'work' + MSVC_VERSION
@@ -34,7 +34,7 @@ def copy(src, dest):
     run_command('cp %s %s' % (src, dest))
 
 def check_env():
-    if MSVC_VERSION not in ['2015', '2017']:
+    if MSVC_VERSION not in ['2015', '2017', '2019']:
         print "Error: Set MSVC_VERSION to a proper value. Exiting..."
         sys.exit(1)
 
@@ -52,7 +52,7 @@ def clone_clazy(sha1, work_dir):
     run_command("git checkout " + sha1)
 
 def build_clazy():
-    cmd = 'cmake -DCMAKE_INSTALL_PREFIX=%s -DCMAKE_BUILD_TYPE=Release -DCLANG_LIBRARY_IMPORT=%s\lib\clang.lib -G "NMake Makefiles JOM" .' % (LLVM_INSTALL_DIR, LLVM_INSTALL_DIR)
+    cmd = 'cmake -DCMAKE_INSTALL_PREFIX=%s -DCMAKE_BUILD_TYPE=Release -DCLANG_LIBRARY_IMPORT=%s\lib\clang.lib -G "Ninja" .' % (LLVM_INSTALL_DIR, LLVM_INSTALL_DIR)
     run_command(cmd)
     run_command('jom')
     run_command('jom install')
