@@ -3,7 +3,7 @@ MAINTAINER Sergio Martins (sergio.martins@kdab.com)
 
 WORKDIR /
 RUN yum update -y
-RUN yum install -y git wget boost-regex boost-devel svn flex zip texinfo
+RUN yum install -y git wget zip texinfo bison flex svn boost-regex boost-devel
 
 RUN wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
 RUN yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
@@ -12,12 +12,16 @@ ENV PATH=/opt/rh/devtoolset-2/root/usr/bin/:$PATH
 
 # Build GCC
 WORKDIR /
-svn co svn://gcc.gnu.org/svn/gcc/tags/gcc_5_1_0_release/
-WORKDIR /gcc_5_1_0_release/
+RUN svn co svn://gcc.gnu.org/svn/gcc/tags/gcc_5_4_0_release/
+WORKDIR /gcc_5_4_0_release/
 RUN ./contrib/download_prerequisites
-RUN mkdir /gcc_5_1_0_release_build/
-WORKDIR /gcc_5_1_0_release_build/
-RUN ../gcc_5_1_0_release/configure --disable-multilib && make -j12 && make install
+RUN mkdir /gcc_5_4_0_release_build/
+WORKDIR /gcc_5_4_0_release_build/
+RUN ../gcc_5_4_0_release/configure --disable-multilib
+RUN make -j12
+RUN make install
+RUN echo "/usr/local/lib64" > /etc/ld.so.conf.d/newStdLib.conf
+RUN ldconfig
 
 ENV CXX=/usr/local/bin/g++
 ENV CC=/usr/local/bin/gcc
@@ -26,6 +30,7 @@ ENV CC=/usr/local/bin/gcc
 ADD clazy.AppDir /clazy.AppDir/
 
 # Build Python
+WORKDIR /
 RUN wget https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tgz
 RUN tar xzf Python-2.7.16.tgz
 WORKDIR /Python-2.7.16
