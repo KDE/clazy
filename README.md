@@ -47,9 +47,7 @@ You can get clazy from:
 
 # Pre-built binaries
 
-Pre-built binaries are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
-Currently MSVC2015, MSVC2017 (clazy-1.5 based on clang-7.0) and Linux AppImage packages (clazy 1.7 based on clang-10.0) are provided.
-
+Pre-built clazy-1.7 binaries based on clang-10 for MSVC2019 and Linux AppImage are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
 
 # Build Instructions
 ## Linux
