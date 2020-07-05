@@ -32,10 +32,10 @@ DOCKER_IMAGE = 'iamsergio/clazy-centos68'
 DEST_FILE = WORK_FOLDER + '/Clazy-x86_64.AppImage'
 
 def print_usage():
-    print sys.argv[0] + ' <clazy sha1>'
+    print(sys.argv[0] + ' <clazy sha1>')
 
 def run_command(cmd, abort_on_error = True):
-    print cmd
+    print(cmd)
     success = (os.system(cmd) == 0)
     if abort_on_error and not success:
         sys.exit(1)
@@ -49,7 +49,7 @@ def prepare_folder():
 def make_appimage_in_docker():
     cmd = 'docker run -i -t -v %s:%s %s %s' % (WORK_FOLDER, WORK_FOLDER, DOCKER_IMAGE, 'bash -c "cd /clazy/ && git pull && /clazy/dev-scripts/docker/make_appimage.sh %s %s"' % (CLAZY_SHA1, str(os.getuid())))
     if not run_command(cmd):
-        print 'Error running docker. Make sure docker is running and that you have ' + DOCKER_IMAGE
+        print('Error running docker. Make sure docker is running and that you have ' + DOCKER_IMAGE)
 
     os.environ['ARCH'] = 'x86_64'
     if not run_command('appimagetool-x86_64.AppImage %s/clazy.AppDir/ %s' % (WORK_FOLDER, DEST_FILE)):
@@ -83,7 +83,7 @@ if not make_appimage_in_docker():
 if not run_tests():
     sys.exit(1)
 
-print ''
+print('')
 run_command('sha1sum ' + DEST_FILE)
 run_command('sha256sum ' + DEST_FILE)
 
@@ -92,8 +92,8 @@ sign_script = os.getenv('CLAZY_SIGN_SCRIPT', '')
 if sign_script:
     os.chdir(WORK_FOLDER)
     if not run_command(sign_script + ' ' + DEST_FILE):
-        print 'Error signing file'
+        print('Error signing file')
         sys.exit(1)
 
-print ''
-print 'Success: ' + DEST_FILE
+print('')
+print('Success: ' + DEST_FILE)
