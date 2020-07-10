@@ -233,7 +233,7 @@ void MiniASTDumperConsumer::dumpFunctionDecl(FunctionDecl *func, CborEncoder *en
     }
 
     CborEncoder recordMap;
-    cborCreateMap(encoder, &recordMap, 5);
+    cborCreateMap(encoder, &recordMap, 4);
 
     cborEncodeString(recordMap, "name");
     cborEncodeString(recordMap, func->getQualifiedNameAsString().c_str());
