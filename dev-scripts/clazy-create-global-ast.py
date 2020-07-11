@@ -577,7 +577,7 @@ class LocalCborLoader:
                             for method in cxxclass.methods:
                                 self.add_function(method)
 
-                    elif stuff['type'] == 50:#StuffType_FunctionDecl:
+                    elif stuff['type'] == 50 or stuff['type'] == 52:#StuffType_FunctionDecl or template stuff(?):
                         func = Function(self.globalAST)
                         func.from_local_cbor(stuff, self, True)
                         self.add_function(func)
