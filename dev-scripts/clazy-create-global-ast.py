@@ -650,72 +650,26 @@ def calculate_call_counts(ast):
     return list(map(lambda x: (ast.function_map[x], calls[x]), calls))
 
 def print_unused_signals(ast):
-    for c in ast.cxx_classes.values():
-        for m in c.methods:
-            if (m.method_flags & MethodFlag_Signal) and m.num_called == 0:
-                print("Signal " + m.qualified_name + " never called")
 
-def print_signal_counts(ast):
-    for c in ast.cxx_classes:
-        for m in c.methods:
-            if m.method_flags & MethodFlag_Signal:
-                print("Signal %s: %d %s" % (m.qualified_name, m.num_called, ("UNUSED" if  m.num_called == 0 else "")))
+    calls = calculate_call_counts(globalAST)
+    unused_funs = filter(lambda x: x[1] == 0, calls)
+    unused_signals = filter(lambda x: isinstance(x[0], CXXMethod) and x[0].method_flags == 1, unused_funs)
 
+    print()
+    print("Unused signals:")
 
-def print_calls(ast):
-    for c in ast.function_calls:
-        if c.callee_global_id in ast.function_map:
-            func = ast.function_map[c.callee_global_id]
-            print('CALL: ' + func.qualified_name)
-        else:
-            print("Call not found %s" % (c.callee_global_id))
+    for fun in unused_signals:
+        print(fun[0].qualified_name)
 
+def print_unused_functions(ast):
+    calls = calculate_call_counts(globalAST)
+    unused_funs = filter(lambda x: x[1] == 0, calls)
 
-#def get_class_by_name(qualified_name):
-#    result = []
-#    for c in _globalAST.cxx_classes:
-#       if c.qualified_name == qualified_name:
-#           result.append(c)
-#    return result
+    print()
+    print("Unused functions:")
 
-#def get_calls_by_name(callee_name):
-#    result = []
-#    for f in _globalAST.function_calls:
-#if f.callee_name == callee_name:
-#           result.append(f)
-    #return result
-
-
-
-
-# load_local_cbor(sys.argv[1], _globalAST)
-
-
-#print ("Functions: " + str(len(_globalAST.functions)))
-
-
-
-#print(str(total_methods))
-
-
-#_globalAST.check_sanity()
-
-#string_class = get_class_by_name("QString")[0]
-
-#for f in get_calls_by_name("QObject::connect"):
-    #print(f.loc_start.dump())
-
-#for f in _globalAST.function_calls:
- #   print(f.callee_name)
-
-#for m in string_class.methods:
- #   print(m.qualified_name)
-
-#for c in _globalAST.cxx_classes:
- #   print(c.qualified_name)
-
-#print(cborData)
-
+    for fun in unused_funs:
+        print(fun[0].qualified_name)
 
 is_global_ast = sys.argv[1] == 'global.ast'
 globalAST = GlobalAST()
@@ -734,26 +688,4 @@ else:
     localCborLoader.load_local_cbor_from_files(local_cbor_files)
     globalAST.dump_global_cbor_to_file('global.ast')
 
-#print(globalAST.function_map)
-
-
-#print_calls(globalAST)
-
-calls = calculate_call_counts(globalAST)
-#print_signal_counts(globalAST)
-
-#print("Printing QObjects")
-#print_qobjects(_globalAST)
-
-#for fun in calls:
-    #print("{}: {} calls".format(fun[0].qualified_name, fun[1]))
-
-unused_funs = filter(lambda x: x[1] == 0, calls)
-
-unused_signals = filter(lambda x: isinstance(x[0], CXXMethod) and x[0].method_flags == 1, unused_funs)
-
-print()
-print("Unused signals:")
-
-for fun in unused_signals:
-    print(fun[0].qualified_name)
+print_unused_functions(globalAST)
