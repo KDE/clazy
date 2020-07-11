@@ -206,10 +206,6 @@ class Function:
         self.specialization_loc = None
         self.globalAST = globalAST
         self.template_args = ""
-        self.__isMethod = False
-
-    def isMethod(self):
-        return self.__isMethod
 
     def check_sanity(self):
         if not self.global_id:
@@ -244,11 +240,11 @@ class Function:
             self.specialization_loc.from_local_cbor(cborData['specialization_loc'], localCborLoader)
 
         if assign_id:
-            self.assign_global_id(self.hash(), localCborLoader, cborData['id'])
+            self.assign_global_id(self.hash(), localCborLoader)
 
         localCborLoader.current_tu.add_function(self, cborData['id'])
 
-    def assign_global_id(self, hash, localCborLoader, local_id):
+    def assign_global_id(self, hash, localCborLoader):
         # Function might already been added by another TU, in that case don't generate another global id
         if hash in self.globalAST.function_by_hash:
             self.global_id = globalAST.function_by_hash[hash].global_id
@@ -260,7 +256,6 @@ class Function:
         self.qualified_name = cborData['qualified_name']
         self.loc_start = SourceLocation(self.globalAST)
         self.loc_start.from_global_cbor(cborData['loc_start'])
-        self.__isMethod =  cborData['is_method']
 
         if 'template_args' in cborData:
             self.template_args = cborData['template_args']
@@ -272,7 +267,6 @@ class Function:
 
     def to_global_cbor(self):
         cborData = {}
-        cborData['is_method'] = self.__isMethod
         if self.template_args:
             cborData['template_args'] = self.template_args
 
@@ -287,7 +281,6 @@ class Function:
 class CXXMethod(Function):
     def __init__(self, globalAST, cxx_class):
         Function.__init__(self, globalAST)
-        self.__isMethod = True
         self.method_flags = 0
         self.overrides = [] # id of methods this overrides
         self.overridden_by = [] # id of methods that override this
@@ -302,7 +295,7 @@ class CXXMethod(Function):
         Function.from_local_cbor(self, cborData, localCborLoader, False)
         if 'method_flags' in cborData:
             self.method_flags = cborData['method_flags']
-        self.assign_global_id(self.hash(), localCborLoader, cborData['id'])
+        self.assign_global_id(self.hash(), localCborLoader)
 
         for ov in cborData['overrides']:
             # This results in ignoring overridded functions in system headers. Problem?
@@ -469,10 +462,9 @@ class GlobalAST:
                     self.add_function(method)
         if 'functions' in cborData:
             for f in cborData['functions']:
-                if not f['is_method']:
-                    func = Function(globalAST)
-                    func.from_global_cbor(f)
-                    self.add_function(func)
+                func = Function(globalAST)
+                func.from_global_cbor(f)
+                self.add_function(func)
 
         if 'function_calls' in cborData:
             for fc in cborData['function_calls']:
@@ -494,7 +486,7 @@ class GlobalAST:
 
         for func_global_id in self.function_map:
             func = self.function_map[func_global_id]
-            if not func.isMethod(): # Methods already dumped by the class
+            if not isinstance(func, CXXMethod): # Methods already dumped by the class
                 cborData['functions'].append(func.to_global_cbor())
 
         return cborData
