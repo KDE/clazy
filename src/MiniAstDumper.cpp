@@ -305,6 +305,15 @@ void MiniASTDumperConsumer::dumpCallExpr(CallExpr *callExpr, CborEncoder *encode
     if (isBuiltin) //We don't need them now
         return;
 
+    auto &sm = m_ci.getSourceManager();
+    const SourceLocation loc = clazy::getLocStart(func);
+
+    if (sm.isInSystemHeader(loc)) {
+
+        // We're not interested in those
+        return;
+    }
+
     auto method = dyn_cast<CXXMethodDecl>(func);
     if (method) {
         // For methods we store the declaration
