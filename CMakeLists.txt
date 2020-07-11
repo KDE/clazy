@@ -143,10 +143,10 @@ macro(add_clang_plugin name)
 
   add_library(${name} SHARED ${srcs})
 
-  if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
-      # 30% speedup
-      target_precompile_headers(${name} PRIVATE src/checkbase.h)
-  endif()
+#   if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
+#       # 30% speedup
+#       target_precompile_headers(${name} PRIVATE src/checkbase.h)
+#   endif()
 
   if(SYMBOL_FILE)
     set_target_properties(${name} PROPERTIES LINK_FlAGS "-exported_symbols_list ${SYMBOL_FILE}")
