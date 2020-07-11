@@ -308,12 +308,18 @@ class CXXMethod(Function):
         if 'method_flags' in cborData:
             self.method_flags = cborData['method_flags']
 
+        self.overrides = cborData["overrides"]
+        self.overridden_by = cborData["overridden_by"]
 
 
     def to_global_cbor(self):
         cborData = Function.to_global_cbor(self)
         if self.method_flags:
             cborData['method_flags'] = self.method_flags
+
+        cborData["overrides"] = self.overrides
+        cborData["overridden_by"] = self.overridden_by
+
         return cborData
 
 
