@@ -133,3 +133,5 @@
   - heap-allocated-small-trivial-type: less false-positives
 
 * v1.8 (2020)
+    - New Checks:
+      - qt6-qhash-signature
