@@ -228,7 +228,7 @@ clazy runs all checks from level1 by default.
     - [qstring-varargs](docs/checks/README-qstring-varargs.md)
     - [qt-keywords](docs/checks/README-qt-keywords.md)    (fix-qt-keywords)
     - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
-    - [qt6-qhash-signature](docs/checks/README-qt6-qhash-signature.md)
+    - [qt6-qhash-signature](docs/checks/README-qt6-qhash-signature.md)    (fix-qt6-qhash-signature)
     - [qt6-qlatin1string-to-u](docs/checks/README-qt6-qlatin1string-to-u.md)    (fix-qt6-qlatin1string-to-u)
     - [qvariant-template-instantiation](docs/checks/README-qvariant-template-instantiation.md)
     - [raw-environment-function](docs/checks/README-raw-environment-function.md)
