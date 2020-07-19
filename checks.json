@@ -81,7 +81,7 @@
             "name"  : "qt6-qhash-signature",
             "class_name" : "Qt6QHashSignature",
             "level" : -1,
-            "categories" : ["qt6", "qhash"],
+            "categories" : ["qt6", "containers"],
             "fixits" : [
                 {
                     "name" : "qt6-qhash-signature"
