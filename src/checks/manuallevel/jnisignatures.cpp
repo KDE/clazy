@@ -103,7 +103,7 @@ void JniSignatures::checkFunctionCall(Stmt *stm)
         return;
     }
 
-    const std::string name = clazy::name(funDecl);
+    const std::string name = static_cast<std::string>(clazy::name(funDecl));
 
     if (name == "callObjectMethod" || name == "callMethod") {
         checkArgAt(callExpr, 0, methodNameRegex, "Invalid method name");

@@ -57,7 +57,7 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
 
     const std::unordered_map<string, std::vector<StringRef>> &methodsByType = detachingMethodType == DetachingMethod ? clazy::detachingMethods()
                                                                                                                      : clazy::detachingMethodsWithConstCounterParts();
-    auto it = methodsByType.find(className);
+    auto it = methodsByType.find(static_cast<std::string>(className));
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
         if (clazy::contains(methods, clazy::name(method)))
