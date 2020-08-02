@@ -922,7 +922,7 @@ string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
     if (loc.isMacroID())
         loc = sm.getExpansionLoc(loc);
 
-    const string filename = sm.getFilename(loc);
+    const string filename = static_cast<string>(sm.getFilename(loc));
     auto splitted = clazy::splitString(filename, '/');
     if (splitted.empty())
         return {};

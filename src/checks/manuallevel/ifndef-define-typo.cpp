@@ -44,7 +44,7 @@ void IfndefDefineTypo::VisitMacroDefined(const Token &macroNameTok)
 {
     if (!m_lastIfndef.empty()) {
         if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
-            maybeWarn(ii->getName(), macroNameTok.getLocation());
+            maybeWarn(static_cast<std::string>(ii->getName()), macroNameTok.getLocation());
         }
     }
 }
@@ -53,7 +53,7 @@ void IfndefDefineTypo::VisitDefined(const Token &macroNameTok, const SourceRange
 {
     if (!m_lastIfndef.empty()) {
         if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
-            maybeWarn(ii->getName(), macroNameTok.getLocation());
+            maybeWarn(static_cast<std::string>(ii->getName()), macroNameTok.getLocation());
         }
     }
 }
@@ -66,7 +66,7 @@ void IfndefDefineTypo::VisitIfdef(SourceLocation, const Token &)
 void IfndefDefineTypo::VisitIfndef(SourceLocation, const Token &macroNameTok)
 {
     if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo())
-        m_lastIfndef = ii->getName();
+        m_lastIfndef = static_cast<std::string>(ii->getName());
 }
 
 void IfndefDefineTypo::VisitIf(SourceLocation, SourceRange, PPCallbacks::ConditionValueKind)

@@ -24,6 +24,7 @@
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
+#include <clang/Basic/FileManager.h>
 
 using namespace clang;
 using namespace std;
