@@ -7,6 +7,7 @@
   <name xml:lang="ca">Clazy</name>
   <name xml:lang="ca-valencia">Clazy</name>
   <name xml:lang="cs">Clazy</name>
+  <name xml:lang="el">Clazy</name>
   <name xml:lang="en-GB">Clazy</name>
   <name xml:lang="es">Clazy</name>
   <name xml:lang="et">Clazy</name>
@@ -29,6 +30,7 @@
   <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
   <summary xml:lang="ca">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
   <summary xml:lang="ca-valencia">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
+  <summary xml:lang="el">Ένα πρόσθετο μεταγλωττιστή Clang με προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt</summary>
   <summary xml:lang="en-GB">A Clang compiler plugin which emits warnings related to Qt best practices</summary>
   <summary xml:lang="es">Un complemento del compilador Clang que emite advertencias relacionadas con las prácticas adecuadas de Qt</summary>
   <summary xml:lang="et">Clangi kompilaatori plugin, mis väljastab Qt parima praktikaga seonduvaid hoiatusi</summary>
@@ -50,6 +52,7 @@
     <p>Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
     <p xml:lang="ca">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
     <p xml:lang="ca-valencia">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
+    <p xml:lang="el">Το Clazy είναι ένα πρόσθετο μεταγλωττιστή clang το οποίο στέλνει προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt.</p>
     <p xml:lang="en-GB">Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
     <p xml:lang="es">Clazy es un complemento del compilador clang que emite advertencias relacionadas con las prácticas adecuadas de Qt.</p>
     <p xml:lang="et">Clazy on Clangi kompilaatori plugin, mis väljastab Qt parima praktikaga seonduvaid hoiatusi.</p>
