@@ -238,6 +238,7 @@ clazy runs all checks from level1 by default.
     - [thread-with-slots](docs/checks/README-thread-with-slots.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)
     - [unneeded-cast](docs/checks/README-unneeded-cast.md)
+    - [use-chrono-in-qtimer](docs/checks/README-use-chrono-in-qtimer.md)
 
 - Checks from Level 0:
     - [connect-by-name](docs/checks/README-connect-by-name.md)
@@ -479,6 +480,7 @@ with contributions from:
 - Christian Ehrlicher
 - Christian Gagneraud
 - Nikolai Kosjar
+- Jesper K. Pedersen
 
 and thanks to:
 

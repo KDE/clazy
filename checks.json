@@ -665,6 +665,13 @@
             "level" : -1,
             "categories" : ["bug"],
             "visits_stmts" : true
+        },
+        {
+            "name"   : "use-chrono-in-qtimer",
+            "class_name" : "UseChronoInQTimer",
+            "level"  : -1,
+            "categories" : ["readability"],
+            "visits_stmts" : true
         }
     ]
 }
