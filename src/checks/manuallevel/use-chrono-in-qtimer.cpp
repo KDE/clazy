@@ -22,9 +22,19 @@
 #include "use-chrono-in-qtimer.h"
 #include "HierarchyUtils.h"
 #include <clang/AST/AST.h>
+#include "ClazyContext.h"
+#include "FixItUtils.h"
+#include "PreProcessorVisitor.h"
 
 using namespace clang;
 using namespace std;
+
+
+UseChronoInQTimer::UseChronoInQTimer(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context, Option_CanIgnoreIncludes)
+{
+    context->enablePreprocessorVisitor();
+}
 
 static int unpackValue(clang::Expr* expr)
 {
@@ -36,15 +46,18 @@ static int unpackValue(clang::Expr* expr)
     if (!binaryOp)
         return -1;
 
-    if (binaryOp->getOpcode() != BO_Mul)
-        return -1;
-
     int left = unpackValue(binaryOp->getLHS());
     int right = unpackValue(binaryOp->getRHS());
     if (left == -1 || right == -1)
         return -1;
 
-    return left * right;
+    if (binaryOp->getOpcode() == BO_Mul)
+        return left * right;
+
+    if (binaryOp->getOpcode() == BO_Div)
+        return left / right;
+
+    return -1;
 }
 
 void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
@@ -61,7 +74,19 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
         suggestion = std::to_string(value/1000) + "s";
     else
         suggestion = std::to_string(value) + "ms";
-    emitWarning(stmt, "make code more robust: use " + suggestion +" instead.");
+
+    vector<FixItHint> fixits;
+    fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), suggestion));
+
+    if (!m_hasInsertedInclude && !m_context->preprocessorVisitor->hasInclude("chrono", true)) {
+        fixits.push_back(clazy::createInsertion(m_context->preprocessorVisitor->endOfIncludeSection(),
+                                                "\n"
+                                                "#include <chrono>\n\n"
+                                                "using namespace std::chrono_literals;"));
+    }
+    m_hasInsertedInclude = true;
+
+    emitWarning(clazy::getLocStart(stmt), "make code more robust: use " + suggestion +" instead.", fixits);
 }
 
 static std::string functionName(CallExpr* callExpr)

@@ -1,7 +1,12 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
+            "filename" : "main.cpp",
+            "has_fixits" : true
+        },
+        {
+            "filename" : "missing-include.cpp",
+            "has_fixits" : true
         }
     ]
 }

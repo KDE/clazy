@@ -31,10 +31,13 @@
 class UseChronoInQTimer : public CheckBase
 {
 public:
-    using CheckBase::CheckBase;
+    UseChronoInQTimer(const std::string &name, ClazyContext *context);
+
     void VisitStmt(clang::Stmt *) override;
+
 private:
     void warn(const clang::Stmt* stmt, int value);
+    bool m_hasInsertedInclude = false;
 };
 
 #endif

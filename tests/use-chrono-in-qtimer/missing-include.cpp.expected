@@ -1,0 +1,1 @@
+use-chrono-in-qtimer/missing-include.cpp:8:23: warning: make code more robust: use 1s instead. [-Wclazy-use-chrono-in-qtimer]

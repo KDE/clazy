@@ -1,0 +1,29 @@
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QTimer>
+#include <chrono>
+
+using namespace std::chrono_literals;
+
+void test()
+{
+    QTimer timer;
+
+    timer.setInterval(1s); // Warn
+    timer.setInterval(1200ms); // Warn
+    timer.setInterval(2min); // Warn
+    timer.setInterval(5h); // Warn
+    timer.setInterval(1min); // Warn
+    timer.setInterval(15min); // Warn
+    timer.setInterval(1000+1000); // Not really worth it
+    timer.setInterval(1s); // OK
+    timer.setInterval(1200ms); // OK
+    timer.setInterval(0); // OK
+
+    timer.start(15s); // Warn
+    timer.start(15s); // OK
+    timer.start(); // OK
+
+    timer.singleShot(1s, [] {}); // Warn
+    QTimer::singleShot(1s, [] {}); // Warn
+}

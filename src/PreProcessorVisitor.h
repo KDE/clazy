@@ -63,9 +63,16 @@ public:
     // Returns true if QT_NO_KEYWORDS is defined
     bool isQT_NO_KEYWORDS() const { return m_isQtNoKeywords; }
 
+    bool hasInclude(const std::string& fileName, bool IsAngled) const;
+    clang::SourceLocation endOfIncludeSection() const;
+
 protected:
     void MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDefinition &,
                       clang::SourceRange range, const clang::MacroArgs *) override;
+    void InclusionDirective (clang::SourceLocation HashLoc, const clang::Token &IncludeTok,
+                             clang::StringRef FileName, bool IsAngled, clang::CharSourceRange FilenameRange,
+                             const clang::FileEntry *File, clang::StringRef SearchPath, clang::StringRef RelativePath,
+                             const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType) override;
 private:
     std::string getTokenSpelling(const clang::MacroDefinition &) const;
     void updateQtVersion();
@@ -81,6 +88,14 @@ private:
     // Indexed by FileId, has a list of QT_BEGIN_NAMESPACE/QT_END_NAMESPACE location
     std::unordered_map<uint, std::vector<clang::SourceRange>> m_q_namespace_macro_locations;
     const clang::SourceManager &m_sm;
+
+    struct IncludeInfo {
+        clang::StringRef fileName;
+        bool IsAngled;
+        clang::CharSourceRange filenameRange;
+    };
+
+    std::vector<IncludeInfo> m_includeInfo;
 };
 
 #endif

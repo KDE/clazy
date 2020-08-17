@@ -1,0 +1,12 @@
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QTimer>
+#include <chrono>
+
+using namespace std::chrono_literals;
+
+void test()
+{
+    QTimer timer;
+    timer.setInterval(1s); // Warn
+}

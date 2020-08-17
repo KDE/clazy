@@ -42,8 +42,8 @@
 #include "checks/manuallevel/qt-keywords.h"
 #include "checks/manuallevel/qt4-qstring-from-array.h"
 #include "checks/manuallevel/qt6-qhash-signature.h"
-#include "checks/manuallevel/qt6-qlatin1string-to-u.h"
 #include "checks/manuallevel/qt6-qlatin1char-to-u.h"
+#include "checks/manuallevel/qt6-qlatin1string-to-u.h"
 #include "checks/manuallevel/qvariant-template-instantiation.h"
 #include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/reserve-candidates.h"
@@ -145,10 +145,10 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<Qt6QHashSignature>("qt6-qhash-signature", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-qt6-qhash-signature", "qt6-qhash-signature");
-    registerCheck(check<Qt6QLatin1StringToU>("qt6-qlatin1string-to-u", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerFixIt(1, "fix-qt6-qlatin1string-to-u", "qt6-qlatin1string-to-u");
     registerCheck(check<Qt6QLatin1CharToU>("qt6-qlatin1char-to-u", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt6-qlatin1char-to-u", "qt6-qlatin1char-to-u");
+    registerCheck(check<Qt6QLatin1StringToU>("qt6-qlatin1string-to-u", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-qt6-qlatin1string-to-u", "qt6-qlatin1string-to-u");
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));

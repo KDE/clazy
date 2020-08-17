@@ -75,6 +75,21 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
     return false;
 }
 
+bool PreProcessorVisitor::hasInclude(const std::string &fileName, bool IsAngled) const
+{
+    auto it = std::find_if(m_includeInfo.cbegin(), m_includeInfo.cend(), [&] (const IncludeInfo& info) {
+        return info.fileName == fileName && info.IsAngled == IsAngled;
+    });
+    return (it != m_includeInfo.cend());
+}
+
+SourceLocation PreProcessorVisitor::endOfIncludeSection() const
+{
+    if (m_includeInfo.empty())
+        return {};
+    return m_includeInfo.back().filenameRange.getEnd();
+}
+
 std::string PreProcessorVisitor::getTokenSpelling(const MacroDefinition &def) const
 {
     if (!def)
@@ -165,5 +180,15 @@ void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDef
     if (name == "QT_VERSION_PATCH") {
         m_qtPatchVersion = stringToNumber(getTokenSpelling(def));
         updateQtVersion();
+    }
+}
+
+void PreProcessorVisitor::InclusionDirective (clang::SourceLocation, const clang::Token &,
+                                              clang::StringRef FileName, bool IsAngled, clang::CharSourceRange FilenameRange,
+                                              const clang::FileEntry *, clang::StringRef, clang::StringRef,
+                                              const clang::Module *, clang::SrcMgr::CharacteristicKind)
+{
+   if (m_ci.getPreprocessor().isInPrimaryFile() && !clazy::endsWith(FileName.str(), ".moc")) {
+        m_includeInfo.push_back(IncludeInfo{FileName, IsAngled, FilenameRange});
     }
 }
