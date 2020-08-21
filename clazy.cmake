@@ -38,12 +38,12 @@ VERSION() {
 
 PRLIST() {
   echo ""
-  if ( test -d "$sharedir/doc/clazy/level$1" )
+  if ( test -d "$sharedir/doc/clazy/$1" )
   then
-    echo "Checks from level$1. $2:"
-    ls -1 $sharedir/doc/clazy/level$1/README* | awk -F/ '{printf("    %s\n", $NF)}' | sed s/README-// | sed s/\.md$// | sort
+    echo "$2:"
+    ls -1 $sharedir/doc/clazy/$1/README* | awk -F/ '{printf("    %s\n", $NF)}' | sed s/README-// | sed s/\.md$// | sort
   else
-    echo "There are no checkers available for level$1"
+    echo "There are no checkers available for $1"
   fi
 }
 
@@ -81,10 +81,11 @@ fi
 if ( test $# -gt 0 -a "$1" = "--list" )
 then
   echo "List of available clazy checkers:"
-  PRLIST 0 "Very stable checks, 100% safe, no false-positives"
-  PRLIST 1 "Mostly stable and safe, rare false-positives"
-  PRLIST 2 "Sometimes has false-positives (20-30%)"
-  #PRLIST 3 "Not always correct, high rate of false-positives"
+  PRLIST level0 "Checks from level0. Very stable checks, 100% safe, no false-positives"
+  PRLIST level1 "Checks from level1. Mostly stable and safe, rare false-positives"
+  PRLIST level2 "Checks form level2. Sometimes has false-positives (20-30%)"
+  #PRLIST level3 "Checks from level3. Not always correct, high rate of false-positives"
+  PRLIST manuallevel "Manual checks. Stability varies. must be explicitly enabled"
   exit
 fi
 
