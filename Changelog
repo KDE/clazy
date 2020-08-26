@@ -136,3 +136,4 @@
     - New Checks:
       - qt6-qhash-signature
       - use-chrono-in-qtimer
+      - qt6-qdir-fixes

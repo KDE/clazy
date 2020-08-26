@@ -13,9 +13,9 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qdir-fixes.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qhash-signature.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qlatin1char-to-u.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qdir-fixes.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qlatin1string-to-u.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qvariant-template-instantiation.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
