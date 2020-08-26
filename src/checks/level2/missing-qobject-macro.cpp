@@ -23,6 +23,7 @@
 #include "ClazyContext.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "FixItUtils.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
@@ -32,6 +33,10 @@
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
+
+#ifdef HAS_STD_FILESYSTEM
+# include <filesystem>
+#endif
 
 namespace clang {
 class MacroInfo;
@@ -75,7 +80,22 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
             return; // We found a Q_OBJECT after start and before end, it's ours.
     }
 
-    emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro");
+    vector<FixItHint> fixits;
+#if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
+    const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
+    fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
+
+# ifdef HAS_STD_FILESYSTEM
+    const std::string fileName = static_cast<string>(sm().getFilename(startLoc));
+    if (clazy::endsWith(fileName, ".cpp")) {
+        const SourceLocation pos = sm().getLocForEndOfFile(sm().getFileID(startLoc));
+        const std::string basename = std::filesystem::path(fileName).stem().string();
+        fixits.push_back(clazy::createInsertion(pos, "\n#include \"" + basename + ".moc\"\n"));
+    }
+# endif
+#endif
+
+    emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro", fixits);
 }
 
 void MissingQObjectMacro::registerQ_OBJECT(SourceLocation loc)

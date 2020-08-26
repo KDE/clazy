@@ -579,7 +579,13 @@
             "name"  : "missing-qobject-macro",
             "level" : 2,
             "categories" : ["bug"],
-            "visits_decls" : true
+            "visits_decls" : true,
+            "fixits" : [
+                {
+                    "name" : "missing-qobject-macro"
+                }
+            ]
+
         },
         {
             "name"  : "missing-typeinfo",

@@ -303,7 +303,7 @@ clazy runs all checks from level1 by default.
     - [function-args-by-value](docs/checks/README-function-args-by-value.md)
     - [global-const-char-pointer](docs/checks/README-global-const-char-pointer.md)
     - [implicit-casts](docs/checks/README-implicit-casts.md)
-    - [missing-qobject-macro](docs/checks/README-missing-qobject-macro.md)
+    - [missing-qobject-macro](docs/checks/README-missing-qobject-macro.md)    (fix-missing-qobject-macro)
     - [missing-typeinfo](docs/checks/README-missing-typeinfo.md)
     - [old-style-connect](docs/checks/README-old-style-connect.md)    (fix-old-style-connect)
     - [qstring-allocations](docs/checks/README-qstring-allocations.md)    (fix-qlatin1string-allocations,fix-fromLatin1_fromUtf8-allocations,fix-fromCharPtrAllocations)

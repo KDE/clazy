@@ -227,6 +227,7 @@ void CheckManager::registerChecks()
     registerCheck(check<GlobalConstCharPointer>("global-const-char-pointer", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ImplicitCasts>("implicit-casts", CheckLevel2,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<MissingQObjectMacro>("missing-qobject-macro", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
+    registerFixIt(1, "fix-missing-qobject-macro", "missing-qobject-macro");
     registerCheck(check<MissingTypeInfo>("missing-typeinfo", CheckLevel2,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<OldStyleConnect>("old-style-connect", CheckLevel2, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-old-style-connect", "old-style-connect");

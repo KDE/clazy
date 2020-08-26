@@ -1,0 +1,2 @@
+missing-qobject-macro/fixit.cpp:11:1: warning: MissingMacro is missing a Q_OBJECT macro [-Wclazy-missing-qobject-macro]
+missing-qobject-macro/fixit.cpp:22:1: warning: Derived1 is missing a Q_OBJECT macro [-Wclazy-missing-qobject-macro]

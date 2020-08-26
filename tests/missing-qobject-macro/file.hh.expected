@@ -1,0 +1,1 @@
+missing-qobject-macro/file.hh:6:1: warning: MissingMacro is missing a Q_OBJECT macro [-Wclazy-missing-qobject-macro]
