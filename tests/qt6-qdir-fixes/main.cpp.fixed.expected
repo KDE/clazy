@@ -1,0 +1,29 @@
+#include <QtCore/QDir>
+#define MYSTRING "myDirPath"
+
+void test()
+{
+    QDir dir;
+    dir.setPath("myStuff");;
+
+    QDir dir2;
+    dir2 = MYSTRING;
+
+    QDir dir3;
+    dir3.setPath("myStuff");;
+
+    QDir dir4;
+    char *pathName = "myStuff";
+    dir4.setPath(pathName);;
+
+    QDir dir5;
+    bool cond = true;
+    dir5.setPath(cond ? "mystuff":"yourStuff");;
+
+    QDir dir6;
+    dir6.setPath(true ? (cond ? "path1":"path2"):(cond ? "path3":"path4"));;
+
+    QDir::addResourceSearchPath("somePath");
+
+}
+

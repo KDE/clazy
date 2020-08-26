@@ -1,0 +1,8 @@
+qt6-qdir-fixes/main.cpp:16:22: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+qt6-qdir-fixes/main.cpp:7:9: warning:  function setPath("") has to be used in Qt6 [-Wclazy-qt6-qdir-fixes]
+qt6-qdir-fixes/main.cpp:10:10: warning:  function setPath("") has to be used in Qt6 [-Wclazy-qt6-qdir-fixes]
+qt6-qdir-fixes/main.cpp:13:10: warning:  function setPath("") has to be used in Qt6 [-Wclazy-qt6-qdir-fixes]
+qt6-qdir-fixes/main.cpp:17:10: warning:  function setPath("") has to be used in Qt6 [-Wclazy-qt6-qdir-fixes]
+qt6-qdir-fixes/main.cpp:21:10: warning:  function setPath("") has to be used in Qt6 [-Wclazy-qt6-qdir-fixes]
+qt6-qdir-fixes/main.cpp:24:10: warning:  function setPath("") has to be used in Qt6 [-Wclazy-qt6-qdir-fixes]
+qt6-qdir-fixes/main.cpp:26:5: warning:  use function QDir::addSearchPath() with prefix instead [-Wclazy-qt6-qdir-fixes]

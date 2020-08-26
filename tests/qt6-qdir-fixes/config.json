@@ -1,0 +1,11 @@
+{
+    "tests" : [
+        {
+            "filename" : "main.cpp",
+            "qt_major_version": 5,
+            "minimum_qt_version" : 50000,
+            "maximum_qt_version" : 60000,
+            "has_fixits" : true
+        }
+    ]
+}

@@ -103,6 +103,18 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "qt6-qdir-fixes",
+            "class_name" : "Qt6QDirFixes",
+            "level" : -1,
+            "categories" : ["qt6"],
+            "fixits" : [
+                {
+                    "name" : "qt6-qdir-fixes"
+                }
+            ],
+            "visits_stmts" : true
+        },
+        {
             "name"   : "tr-non-literal",
             "level"  : -1,
             "categories" : ["bug"],
