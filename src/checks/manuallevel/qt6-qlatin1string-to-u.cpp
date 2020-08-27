@@ -95,7 +95,12 @@ void Qt6QLatin1StringToU::VisitStmt(clang::Stmt *stmt)
                return;
             }
         }
-        fixits = fixitReplace(stmt);
+        bool noFix = false;
+        std::string replacement = buildReplacement(stmt, noFix);
+        if (!noFix) {
+            fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));
+        }
+
     } else {
         return;
     }
@@ -103,61 +108,62 @@ void Qt6QLatin1StringToU::VisitStmt(clang::Stmt *stmt)
     emitWarning(clazy::getLocStart(stmt), message, fixits);
 }
 
-std::vector<FixItHint> Qt6QLatin1StringToU::fixitReplace(clang::Stmt *stmt)
-{   
-    string replacement = "";
+std::string Qt6QLatin1StringToU::buildReplacement(clang::Stmt *stmt, bool &noFix, bool ancestorIsCondition,
+                                                  int ancestorConditionChildNumber)
+{
+    std::string replacement;
+    Stmt *current_stmt = stmt;
 
-    // Iterating over the stmt's children to build the replacement
     int i = 0;
-    Stmt *current_stm = stmt;
-    for (auto it = current_stm->child_begin() ; it !=current_stm->child_end() ; it++) {
-        Stmt *child = clazy::childAt(current_stm, i);
-        if (!child)
-            break;
-        ConditionalOperator *parent_condOp = dyn_cast<ConditionalOperator>(current_stm);
 
-        ImplicitCastExpr *child_dynCastExp = dyn_cast<ImplicitCastExpr>(child);
-        StringLiteral *child_stringliteral = dyn_cast<StringLiteral>(child);
+    for (auto it = current_stmt->child_begin() ; it !=current_stmt->child_end() ; it++) {
+
+        Stmt *child = *it;
+        ConditionalOperator *parent_condOp = dyn_cast<ConditionalOperator>(current_stmt);
         ConditionalOperator *child_condOp = dyn_cast<ConditionalOperator>(child);
-        CXXBoolLiteralExpr *child_boolLitExp = dyn_cast<CXXBoolLiteralExpr>(child);
-        DeclRefExpr *child_declRefExp = dyn_cast<DeclRefExpr>(child);
 
-         if (child_dynCastExp || child_condOp) {// skipping those.
-            current_stm = child;
-            i = 0;
-        } else if (child_stringliteral) {
+        if (parent_condOp) {
+            ancestorIsCondition = true;
+            ancestorConditionChildNumber = i;
+            if (ancestorConditionChildNumber == 2)
+                replacement += " : ";
+        }
+
+        // to handle nested condition
+        if (child_condOp && ancestorIsCondition) {
+            replacement += "(";
+        }
+
+        replacement += buildReplacement(child, noFix, ancestorIsCondition, ancestorConditionChildNumber);
+
+        DeclRefExpr *child_declRefExp = dyn_cast<DeclRefExpr>(child);
+        CXXBoolLiteralExpr *child_boolLitExp = dyn_cast<CXXBoolLiteralExpr>(child);
+        StringLiteral *child_stringliteral = dyn_cast<StringLiteral>(child);
+
+        if (child_stringliteral) {
             replacement += "u\"";
             replacement += child_stringliteral->getString();
             replacement += "\"";
-            if (parent_condOp && i == 1) // the first string is the second child of the ConditionalOperator.
-                replacement += " : ";
-            i++;
         } else if (child_boolLitExp) {
             replacement = child_boolLitExp->getValue() ? "true" : "false";
-            if (parent_condOp)
                     replacement += " ? ";
-            i++;
-        } else if (child_declRefExp) { // not replacing those cases.
-             // would have to check that the ancestor is a QString, and that the type is something accepted by
-             // the QString constructor.
-             // The NameInfo would then be the replacement.
-            return {};
-        } else {
-            if (it == current_stm->child_end()) {
-                current_stm = child;
-                i = 0;
+        } else if (child_declRefExp) {
+            if (ancestorIsCondition && ancestorConditionChildNumber == 0
+                    && child_declRefExp->getType().getAsString() == "_Bool") {
+                replacement += child_declRefExp->getNameInfo().getAsString();
+                replacement += " ? ";
             } else {
-                i++;
+                // not replacing those cases.
+                noFix = true;
+                return {};
             }
-        }
+       } else if (child_condOp && ancestorIsCondition) {
+            replacement += ")";
+       }
+
+        i++;
     }
-
-    if (replacement.size() < 3)
-        return {};
-
-    vector<FixItHint> fixits;
-    fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));
-    return fixits;
+    return replacement;
 }
 
 void Qt6QLatin1StringToU::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)

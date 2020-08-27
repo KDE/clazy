@@ -15,6 +15,9 @@ void test()
     s1 = QLatin1String(true ? "foo" : "bar");
     s1.append(QLatin1String("appending"));
 
+    bool myBool = false;
+    s1 = QLatin1String(myBool ? (true ? "foo" : "bar") : "bar");
+
     receivingQString( QLatin1String("str"));
     receivingQLatin1String( QLatin1String("latin"));
 
@@ -22,6 +25,7 @@ void test()
 
     const char* myChar = "foo";
     QString ww = QLatin1String(myChar); // should not be fixed
+    s1 = QLatin1String(myBool ? (true ? "foo" : myChar) : "bar"); //should not be fixed
     QString string_with_macro = QLatin1String(PREFIX "bar"); // should not be fixed
 
 }
