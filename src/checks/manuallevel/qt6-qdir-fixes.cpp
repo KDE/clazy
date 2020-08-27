@@ -140,8 +140,9 @@ void Qt6QDirFixes::VisitStmt(clang::Stmt *stmt)
 
     if (oppCallExpr) {
         // check if the return type is QDir
-        clang::StringRef returnType = oppCallExpr->getCallReturnType(m_astContext).getAsString();
-        if ( !returnType.contains("class QDir"))
+        //clang::StringRef returnType = oppCallExpr->getCallReturnType(m_astContext).getAsString();
+        //if ( !returnType.contains("class QDir"))
+        if ( !clazy::isOfClass(oppCallExpr, "QDir") )
             return;
 
         // only interested in '=' operator
