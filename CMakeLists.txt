@@ -65,9 +65,9 @@ endif()
 
 # Look for std::regex support
 message("Looking for std::regex support...")
-try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
+try_run(REGEX_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
 
-if(NOT RUN_RESULT EQUAL 0)
+if(NOT REGEX_RUN_RESULT EQUAL 0)
   message("Using boost::regex instead of std::regex")
   set(CLAZY_USES_BOOST_REGEX TRUE)
   add_definitions(-DCLAZY_USES_BOOST_REGEX)
