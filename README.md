@@ -117,8 +117,6 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
 
 ## macOS with MacPorts
 
-Note: clazy-standalone isn't parsing arguments correctly on LLVM > 8.0. Feel free to use LLVM 10 if you don't need clazy-standalone.
-
 ### Install clang
 ```
 $ sudo port install llvm-8.0 clang-8.0 cmake ninja coreutils
