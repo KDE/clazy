@@ -42,9 +42,9 @@ class CXXFunctionalCastExpr;
 }
 
 /**
- * Replaces qhash signature uint with size_t.
+ * Idenfify and replace when possible QDir deprecated API
  *
- * Run only in Qt 6 code.
+ * Run only with Qt 5.
  */
 class Qt6QDirFixes
     : public CheckBase
