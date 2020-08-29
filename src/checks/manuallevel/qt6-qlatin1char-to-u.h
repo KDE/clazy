@@ -44,7 +44,6 @@ class CXXFunctionalCastExpr;
 /**
  * Replaces QLatin1String(char*) calls with u(char*).
  *
- * Run only in Qt 6 code.
  */
 class Qt6QLatin1CharToU
     : public CheckBase
@@ -56,7 +55,8 @@ public:
                            const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 private:
     std::vector<clang::SourceLocation> m_listingMacroExpand;
-    std::vector<clang::FixItHint> fixitReplace(clang::Stmt *stmt);
+    std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool ancestorIsCondition = false,
+                                 int ancestorConditionChildNumber = 0);
 
 };
 

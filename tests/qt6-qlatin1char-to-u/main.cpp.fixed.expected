@@ -26,6 +26,9 @@ void test()
     QChar quotes[] = { u'"', u'"' };
     QChar c2 = true ? u'*' : u'/';
 
+    bool myBool = true;
+    QChar c3 = myBool ? (true ? u'*' : u'/') : u'/';
+
     int i = s.lastIndexOf(u'*');
 
     const QString sc = "sc";
@@ -37,12 +40,8 @@ void test()
     receivingQChar(u'/');
 
     receivingQLatin1Char(u'/');
-    //error: no matching function for call to 'receivingQLatin1Char'
-    //receivingQLatin1Char(u'/'); // remove check
 
     QLatin1Char toto = u'/';
-    //error: no viable conversion from 'char16_t' to 'QLatin1Char'
-    //QLatin1Char totoo = u'/'; // remove check
 
     QChar char_with_macro = QLatin1Char(PREFIX); // should not be fixed
 }
