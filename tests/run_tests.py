@@ -37,6 +37,7 @@ class Test:
         self.minimum_qt_version = 500
         self.maximum_qt_version = 59999
         self.minimum_clang_version = 380
+        self.minimum_clang_version_for_fixits = 380
         self.compare_everything = False
         self.link = False # If true we also call the linker
         self.check = check
@@ -218,6 +219,9 @@ def load_json(check_name):
             else:
                 test.minimum_clang_version = check.minimum_clang_version
 
+            if 'minimum_clang_version_for_fixits' in t:
+                test.minimum_clang_version_for_fixits = t['minimum_clang_version_for_fixits']
+
             if 'blacklist_platforms' in t:
                 test.blacklist_platforms = t['blacklist_platforms']
             if 'compare_everything' in t:
@@ -235,7 +239,7 @@ def load_json(check_name):
             if 'must_fail' in t:
                 test.must_fail = t['must_fail']
             if 'has_fixits' in t:
-                test.has_fixits = t['has_fixits']
+                test.has_fixits = t['has_fixits'] and test.minimum_clang_version_for_fixits <= CLANG_VERSION
             if 'expects_failure' in t:
                 test.expects_failure = t['expects_failure']
             if 'qt4compat' in t:

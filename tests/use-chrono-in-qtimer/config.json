@@ -2,11 +2,13 @@
     "tests" : [
         {
             "filename" : "main.cpp",
-            "has_fixits" : true
+            "has_fixits" : true,
+            "minimum_clang_version_for_fixits" : 1100
         },
         {
             "filename" : "missing-include.cpp",
-            "has_fixits" : true
+            "has_fixits" : true,
+            "minimum_clang_version_for_fixits" : 1100
         }
     ]
 }

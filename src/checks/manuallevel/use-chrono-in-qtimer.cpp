@@ -76,6 +76,7 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
         suggestion = std::to_string(value) + "ms";
 
     vector<FixItHint> fixits;
+#if LLVM_VERSION_MAJOR >= 11 // LLVM < 11 has a problem with \n in the yaml replacements file
     fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), suggestion));
 
     if (!m_hasInsertedInclude && !m_context->preprocessorVisitor->hasInclude("chrono", true)) {
@@ -84,6 +85,7 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
                                                 "#include <chrono>\n\n"
                                                 "using namespace std::chrono_literals;"));
     }
+#endif
     m_hasInsertedInclude = true;
 
     emitWarning(clazy::getLocStart(stmt), "make code more robust: use " + suggestion +" instead.", fixits);
