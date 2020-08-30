@@ -101,9 +101,7 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
 RangeLoop::RangeLoop(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    if (fixitsEnabled()) {
-        context->enablePreprocessorVisitor();
-    }
+    context->enablePreprocessorVisitor();
 }
 
 void RangeLoop::VisitStmt(clang::Stmt *stmt)
@@ -163,7 +161,7 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     std::vector<FixItHint> fixits;
 
     SourceLocation end;
-    if (fixitsEnabled() && islvalue(containerExpr, /*by-ref*/end)) {
+    if (islvalue(containerExpr, /*by-ref*/end)) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
             SourceLocation start = clazy::getLocStart(containerExpr);
@@ -190,17 +188,16 @@ void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         std::vector<FixItHint> fixits;
-        if (fixitsEnabled()) {
-            const bool isConst = varDecl->getType().isConstQualified();
+        const bool isConst = varDecl->getType().isConstQualified();
 
-            if (!isConst) {
-                SourceLocation start = clazy::getLocStart(varDecl);
-                fixits.push_back(clazy::createInsertion(start, "const "));
-            }
-
-            SourceLocation end = varDecl->getLocation();
-            fixits.push_back(clazy::createInsertion(end, "&"));
+        if (!isConst) {
+            SourceLocation start = clazy::getLocStart(varDecl);
+            fixits.push_back(clazy::createInsertion(start, "const "));
         }
+
+        SourceLocation end = varDecl->getLocation();
+        fixits.push_back(clazy::createInsertion(end, "&"));
+
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.

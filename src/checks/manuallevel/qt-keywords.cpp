@@ -69,11 +69,9 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
         return;
 
     std::vector<FixItHint> fixits;
-    if (fixitsEnabled()) {
-        std::string replacement = "Q_" + name;
-        std::transform(replacement.begin(), replacement.end(), replacement.begin(), ::toupper);
-        fixits.push_back(clazy::createReplacement(range, replacement));
-    }
+    std::string replacement = "Q_" + name;
+    std::transform(replacement.begin(), replacement.end(), replacement.begin(), ::toupper);
+    fixits.push_back(clazy::createReplacement(range, replacement));
 
     emitWarning(range.getBegin(), "Using a Qt keyword (" + string(ii->getName()) + ")", fixits);
 }

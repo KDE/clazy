@@ -183,7 +183,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
             std::vector<FixItHint> fixits;
             auto method = dyn_cast<CXXMethodDecl>(func);
             const bool isVirtualMethod = method && method->isVirtual();
-            if ((!isVirtualMethod || warnForOverriddenMethods) && fixitsEnabled()) { // Don't try to fix virtual methods, as build can fail
+            if (!isVirtualMethod || warnForOverriddenMethods) { // Don't try to fix virtual methods, as build can fail
                 for (auto redecl : func->redecls()) { // Fix in both header and .cpp
                     auto fdecl = dyn_cast<FunctionDecl>(redecl);
                     const ParmVarDecl *param = fdecl->getParamDecl(i);

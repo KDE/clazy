@@ -78,12 +78,11 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<FixItHint> fixits;
-    if (fixitsEnabled()) {
-        const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
-        if (!success) {
-            queueManualFixitWarning(clazy::getLocStart(secondCall));
-        }
+    const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
+    if (!success) {
+        queueManualFixitWarning(clazy::getLocStart(secondCall));
     }
+
 
     emitWarning(clazy::getLocStart(stmt), "Use QDateTime" + replacement + " instead", fixits);
 }

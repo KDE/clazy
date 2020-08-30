@@ -320,9 +320,6 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, string &macroName) cons
 template <typename T>
 vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor)
 {
-    if (!fixitsEnabled())
-        return {};
-
     if (!callOrCtor) {
         llvm::errs() << "Call is invalid\n";
         return {};

@@ -159,8 +159,6 @@ protected:
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
     bool isOptionSet(const std::string &optionName) const;
 
-    bool fixitsEnabled() const { return true; } // Fixits are always shown
-
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::SourceManager &sm() const { return m_sm; }
     const clang::LangOptions &lo() const { return m_astContext.getLangOpts(); }

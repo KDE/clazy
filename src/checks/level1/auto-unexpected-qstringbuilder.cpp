@@ -67,17 +67,15 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
     if (!type || !type->isRecordType() || !dyn_cast<AutoType>(type) || !isQStringBuilder(qualtype))
         return;
 
+    std::string replacement = "QString " + clazy::name(varDecl).str();
+
+    if (qualtype.isConstQualified())
+        replacement = "const " + replacement;
+
+    SourceLocation start = clazy::getLocStart(varDecl);
+    SourceLocation end = varDecl->getLocation();
     std::vector<FixItHint> fixits;
-    if (fixitsEnabled()) {
-        std::string replacement = "QString " + clazy::name(varDecl).str();
-
-        if (qualtype.isConstQualified())
-            replacement = "const " + replacement;
-
-        SourceLocation start = clazy::getLocStart(varDecl);
-        SourceLocation end = varDecl->getLocation();
-        fixits.push_back(clazy::createReplacement({ start, end }, replacement));
-    }
+    fixits.push_back(clazy::createReplacement({ start, end }, replacement));
 
     emitWarning(clazy::getLocStart(decl), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);
 }

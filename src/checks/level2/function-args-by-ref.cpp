@@ -114,12 +114,6 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
     if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
         return;
 
-    const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods") || fixitsEnabled();
-    if (!warnForOverriddenMethods && Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
-        // When overriding you can't change the signature. You should fix the base classes first
-        return;
-    }
-
     Stmt *body = func->getBody();
 
     auto funcParams = Utils::functionParameters(func);
@@ -159,26 +153,24 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 }
 
 void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *func, unsigned int parmIndex)
-{
-    if (fixitsEnabled()) {
-        for (auto funcRedecl : func->redecls()) {
-            auto funcParams = Utils::functionParameters(funcRedecl);
-            if (funcParams.size() <= parmIndex)
-                return;
+{    
+    for (auto funcRedecl : func->redecls()) {
+        auto funcParams = Utils::functionParameters(funcRedecl);
+        if (funcParams.size() <= parmIndex)
+            return;
 
-            ParmVarDecl *param = funcParams[parmIndex];
-            QualType paramQt = clazy::unrefQualType(param->getType());
+        ParmVarDecl *param = funcParams[parmIndex];
+        QualType paramQt = clazy::unrefQualType(param->getType());
 
-            const bool isConst = paramQt.isConstQualified();
+        const bool isConst = paramQt.isConstQualified();
 
-            if (!isConst) {
-                SourceLocation start = clazy::getLocStart(param);
-                fixits.push_back(clazy::createInsertion(start, "const "));
-            }
-
-            SourceLocation end = param->getLocation();
-            fixits.push_back(clazy::createInsertion(end, "&"));
+        if (!isConst) {
+            SourceLocation start = clazy::getLocStart(param);
+            fixits.push_back(clazy::createInsertion(start, "const "));
         }
+
+        SourceLocation end = param->getLocation();
+        fixits.push_back(clazy::createInsertion(end, "&"));
     }
 }
 

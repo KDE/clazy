@@ -264,7 +264,7 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
 
 void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const string &message)
 {
-    if (fixitsEnabled() && !manualFixitAlreadyQueued(loc)) {
+    if (!manualFixitAlreadyQueued(loc)) {
         m_queuedManualInterventionWarnings.push_back({loc, message});
         m_emittedManualFixItsWarningsInMacro.push_back(loc.getRawEncoding());
     }
