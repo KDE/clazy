@@ -81,6 +81,9 @@ static cl::opt<bool> s_supportedChecks("supported-checks-json", cl::desc("Dump m
 static cl::opt<bool> s_listEnabledChecks("list-checks", cl::desc("List all enabled checks and exit."),
                                          cl::init(false), cl::cat(s_clazyCategory));
 
+static cl::opt<std::string> s_vfsoverlay("vfsoverlay", cl::desc("YAML file to overlay the virtual filesystem described by file over the real file system."),
+                                          cl::init(""), cl::cat(s_clazyCategory));
+
 static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 
 class ClazyToolActionFactory
@@ -133,6 +136,26 @@ public:
     std::vector<std::string> m_paths;
 };
 
+llvm::IntrusiveRefCntPtr<vfs::FileSystem> getVfsFromFile(const std::string &overlayFile, llvm::IntrusiveRefCntPtr<vfs::FileSystem> BaseFS)
+{
+    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> buffer = BaseFS->getBufferForFile(
+        overlayFile);
+    if (!buffer) {
+        llvm::errs() << "Can't load virtual filesystem overlay file '" << overlayFile
+                     << "': " << buffer.getError().message() << ".\n";
+        return nullptr;
+    }
+
+    IntrusiveRefCntPtr<vfs::FileSystem> fs = vfs::getVFSFromYAML(std::move(buffer.get()),
+                                                                 /*DiagHandler*/ nullptr,
+                                                                 overlayFile);
+    if (!fs) {
+        llvm::errs() << "Error: invalid virtual filesystem overlay file '" << overlayFile << "'.\n";
+        return nullptr;
+    }
+    return fs;
+}
+
 int main(int argc, const char **argv)
 {
     CommonOptionsParser optionsParser(argc, argv, s_clazyCategory, cl::ZeroOrMore);
@@ -160,7 +183,33 @@ int main(int argc, const char **argv)
         return 0;
     }
 
-    ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
+    llvm::IntrusiveRefCntPtr<vfs::OverlayFileSystem> fs(
+        new vfs::OverlayFileSystem(vfs::getRealFileSystem()));
+    const std::string &overlayFile = s_vfsoverlay.getValue();
+    if (!s_vfsoverlay.getValue().empty()) {
+        llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> buffer = fs->getBufferForFile(
+            overlayFile);
+        if (!buffer) {
+            llvm::errs() << "Can't load virtual filesystem overlay file '" << overlayFile
+                         << "': " << buffer.getError().message() << ".\n";
+            return 0;
+        }
+
+        IntrusiveRefCntPtr<vfs::FileSystem> vfso = vfs::getVFSFromYAML(std::move(buffer.get()),
+                                                                       /*DiagHandler*/ nullptr,
+                                                                       overlayFile);
+        if (!vfso) {
+            llvm::errs() << "Error: invalid virtual filesystem overlay file '" << overlayFile
+                         << "'.\n";
+            return 0;
+        }
+        fs->pushOverlay(vfso);
+    }
+
+    ClangTool tool(optionsParser.getCompilations(),
+                   optionsParser.getSourcePathList(),
+                   std::make_shared<PCHContainerOperations>(),
+                   fs);
 
     return tool.run(new ClazyToolActionFactory(optionsParser.getSourcePathList()));
 }
