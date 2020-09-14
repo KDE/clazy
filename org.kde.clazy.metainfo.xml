@@ -23,6 +23,7 @@
   <name xml:lang="nn">Clazy</name>
   <name xml:lang="pt">Clazy</name>
   <name xml:lang="pt-BR">Clazy</name>
+  <name xml:lang="ro">Clazy</name>
   <name xml:lang="sk">Clazy</name>
   <name xml:lang="sl">Clazy</name>
   <name xml:lang="sv">Clazy</name>
@@ -47,6 +48,7 @@
   <summary xml:lang="nn">Kompilatortillegg for Clang som viser åtvaringar knytte til mønsterpraksis for Qt-utvikling</summary>
   <summary xml:lang="pt">Um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt</summary>
   <summary xml:lang="pt-BR">Um plugin do compilador Clang que emite avisos relacionados às melhores práticas do Qt</summary>
+  <summary xml:lang="ro">Extensie de compilator Clang ce emite avertizări legate de practicile recomandate Qt</summary>
   <summary xml:lang="sl">Vtičnik za prevajalnik Clang, ki oddaja opozorila, povezana z najboljšimi praksami Qt</summary>
   <summary xml:lang="sv">Ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt</summary>
   <summary xml:lang="uk">Додаток до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt</summary>
@@ -70,6 +72,7 @@
     <p xml:lang="nn">Clazy er eit kompilatortillegg for Clang som viser åtvaringar knytte til mønsterpraksis for Qt-utvikling.</p>
     <p xml:lang="pt">O Clazy é um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt.</p>
     <p xml:lang="pt-BR">O Clazy é um plugin do compilador Clang que emite avisos relacionados às melhores práticas do Qt</p>
+    <p xml:lang="ro">Clazy e o extensie de compilator Clang ce emite avertizări legate de practicile recomandate Qt.</p>
     <p xml:lang="sl">Clazy je vtičnik prevajalnika clang, ki oddaja opozorila povezana z najboljšimi praksami Qt.</p>
     <p xml:lang="sv">Clazy är ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt.</p>
     <p xml:lang="uk">Clazy є додатком до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt.</p>
