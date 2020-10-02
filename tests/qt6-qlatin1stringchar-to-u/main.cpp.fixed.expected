@@ -1,0 +1,97 @@
+#include <QtCore/QLatin1Char>
+#include <QtCore/QChar>
+#include <QtCore/QString>
+#include <QtCore/QDir>
+
+void receivingQChar(QChar s1) {}
+void receivingQLatin1Char(QLatin1Char s1) {}
+
+void receivingQString(QString s1) {}
+void receivingQLatin1String(QLatin1String s1) {}
+
+#define PREFIXX '*'
+#define PREFIX "foo"
+void test()
+{
+    QChar c1 = u'*';
+    QChar c11 = u'*'; // remove the check
+
+    QString s = "aaa";
+    bool b = s.startsWith(u'/');
+
+    s += u'.';
+
+    QString appPrefix = s + u'\\';
+    appPrefix = s + u'\'';
+
+    if (s.at(1) == u'*')
+        b = true;
+
+    QChar quotes[] = { u'"', u'"' };
+    QChar c2 = true ? u'*' : u'/';
+
+    bool myBool = true;
+    QChar c3 = myBool ? (true ? u'*' : u'/') : u'/';
+
+    int i = s.lastIndexOf(u'*');
+
+    const QString sc = "sc";
+    QString s2 = QDir::cleanPath(sc + u'*');
+
+    s2.insert(1, u'*');
+
+
+    receivingQChar(u'/');
+
+    receivingQLatin1Char(u'/');
+
+    QLatin1Char toto = u'/';
+
+    QChar char_with_macro = QLatin1Char(PREFIXX); // should not be fixed
+
+    QChar ccc = u'/';
+    c1 = true ? (true ? u'*' : u'/') : u'*';
+    // nested QLatin1String should not be picked explicitly
+
+    c1 = QLatin1Char(s.startsWith(u"sd") ? '/' : '*');// fix not supported (bool under CXXMemberCallExpr)
+
+    // The outer QLatin1Char fix is not supported, but the inside ones are.
+    c1 = QLatin1Char(s.startsWith(u'_') ? '*' : '/');
+    c1 = QLatin1Char(s.startsWith(u"aa") ?
+                           (true ? u'_' : u'_') : u'_');
+    c1 = QLatin1Char(s.startsWith(u'/') ?
+                           u'_' : QLatin1Char(s.startsWith(u'_') ? '*' : '/'));
+    // Support fixit for the QLatin1Char("_") calls in the above cases
+
+    QString s1 = u"str";
+    s2 = QString(u"s2");
+    s1 += u"str";
+    s1 = true ? u"foo" : u"bar";
+    s1.append(u"appending");
+
+    s1 = myBool ? (true ? u"foo" : u"bar") : u"bar";
+
+    receivingQString( u"str");
+    receivingQLatin1String( u"latin");
+
+    QLatin1String totoo = u"toto";
+
+    QString sss = u"str";
+    s1 = true ? (true ? u"foo" : u"bar") : u"bar";
+    // nested QLatin1String should not be picked explicitly
+
+    const char* myChar = "foo";
+    QString ww = QLatin1String(myChar); // fix not supported
+    s1 = QLatin1String(myBool ? (true ? "foo" : myChar) : "bar"); // fix not supported (because of myChar)
+    QString string_with_macro = QLatin1String(PREFIX "bar"); // fix not supported (macro present)
+    s1 = QLatin1String(s.startsWith(u'/') ? "foo" : "bar");// fix not supported (bool under CXXMemberCallExpr)
+
+    // The outer QLatin1String fix is not supported, but the inside ones are.
+    s1 = QLatin1String(s.startsWith(u"fixme") ? "foo" : "bar");//
+    s1 = QLatin1String(s.startsWith(u'/') ?
+                           (true ? u"fixme" : u"fixme") : u"fixme");
+    s1 = QLatin1String(s.startsWith(u'/') ?
+                           u"fixme" : QLatin1String(s.startsWith(u"fixme") ? "foo" : "bar"));
+    // Support fixit for the QLatin1Literal("fixme") calls in the above cases
+
+}
