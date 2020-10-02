@@ -55,7 +55,9 @@ public:
                            const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 private:
     std::vector<clang::SourceLocation> m_listingMacroExpand;
-    std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool ancestorIsCondition = false,
+    bool checkCTorExpr(clang::Stmt *stmt, bool check_parents);
+    void lookForLeftOver(clang::Stmt *stmt, bool keep_looking = true);
+    std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false,
                                  int ancestorConditionChildNumber = 0);
 
 };

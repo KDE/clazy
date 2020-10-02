@@ -44,4 +44,19 @@ void test()
     QLatin1Char toto = QLatin1Char('/');
 
     QChar char_with_macro = QLatin1Char(PREFIX); // should not be fixed
+
+    QChar ccc = QLatin1Char(QLatin1Char(QLatin1Char('/')));
+    c1 = QLatin1Char(true ? QLatin1Char(true ? '*' : '/') : QLatin1Char('*'));
+    // nested QLatin1String should not be picked explicitly
+
+    c1 = QLatin1Char(s.startsWith(QLatin1String("sd")) ? '/' : '*');// fix not supported (bool under CXXMemberCallExpr)
+
+    // The outer QLatin1Char fix is not supported, but the inside ones are.
+    c1 = QLatin1Char(s.startsWith(QLatin1Char('_')) ? '*' : '/');
+    c1 = QLatin1Char(s.startsWith(QLatin1String(("aa"))) ?
+                           QLatin1Char(true ? QLatin1Char('_') : QLatin1Char('_')) : QLatin1Char('_'));
+    c1 = QLatin1Char(s.startsWith(QLatin1Char('/')) ?
+                           QLatin1Char('_') : QLatin1Char(s.startsWith(QLatin1Char('_')) ? '*' : '/'));
+    // Support fixit for the QLatin1Char("_") calls in the above cases
+
 }
