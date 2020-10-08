@@ -14,7 +14,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-header-fixes.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qdir-fixes.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-deprecated-api-fixes.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qhash-signature.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qlatin1stringchar-to-u.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qvariant-template-instantiation.md
