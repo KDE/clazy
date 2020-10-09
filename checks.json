@@ -97,6 +97,18 @@
             "categories" : ["qt6"],
             "fixits" : [
                 {
+                    "name" : "qt6-header-fixes"
+                }
+            ],
+            "visits_stmts" : true
+        },
+        {
+            "name"  : "qt6-qdir-fixes",
+            "class_name" : "Qt6QDirFixes",
+            "level" : -1,
+            "categories" : ["qt6"],
+            "fixits" : [
+                {
                     "name" : "qt6-qdir-fixes"
                 }
             ],
