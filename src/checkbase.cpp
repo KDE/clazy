@@ -104,6 +104,13 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
+void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
+                                                    clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
+                                                    clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType)
+{
+    check->VisitInclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported, FileType);
+}
+
 CheckBase::CheckBase(const string &name, const ClazyContext *context, Options options)
     : m_sm(context->ci.getSourceManager())
     , m_name(name)
@@ -170,6 +177,13 @@ void CheckBase::VisitElse(SourceLocation, SourceLocation)
 }
 
 void CheckBase::VisitEndif(SourceLocation, SourceLocation)
+{
+    // Overriden in derived classes
+}
+
+void CheckBase::VisitInclusionDirective(clang::SourceLocation , const clang::Token &, clang::StringRef , bool ,
+                        clang::CharSourceRange , const clang::FileEntry *, clang::StringRef ,
+                        clang::StringRef , const clang::Module *, clang::SrcMgr::CharacteristicKind )
 {
     // Overriden in derived classes
 }

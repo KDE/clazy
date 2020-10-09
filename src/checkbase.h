@@ -90,6 +90,9 @@ public:
     void Elif(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind ConditionValue, clang::SourceLocation ifLoc) override;
     void Else(clang::SourceLocation loc, clang::SourceLocation ifLoc) override;
     void Endif(clang::SourceLocation loc, clang::SourceLocation ifLoc) override;
+    void InclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
+                            clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
+                            clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType) override;
 private:
     CheckBase *const check;
 };
@@ -147,6 +150,9 @@ protected:
     virtual void VisitElif(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind ConditionValue, clang::SourceLocation ifLoc);
     virtual void VisitElse(clang::SourceLocation loc, clang::SourceLocation ifLoc);
     virtual void VisitEndif(clang::SourceLocation loc, clang::SourceLocation ifLoc);
+    virtual void VisitInclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
+                            clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
+                            clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType);
 
     void enablePreProcessorCallbacks();
 
