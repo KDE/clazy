@@ -246,7 +246,7 @@ void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc, cons
         return;
 
     string newFileName = "";
-    if (!newOldHeaderFileMatch(FileName, newFileName))
+    if (!newOldHeaderFileMatch(FileName.str(), newFileName))
         return;
 
     string replacement = "";
