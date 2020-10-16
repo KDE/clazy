@@ -146,6 +146,21 @@ void replacementForQResource(string functionName, string &message, string &repla
     }
 }
 
+static std::set<std::string> qSetDeprecatedOperators = {"operator--", "operator+", "operator-", "operator+=", "operator-="};
+static std::set<std::string> qSetDeprecatedFunctions = {"rbegin", "rend", "crbegin", "crend", "hasPrevious", "previous",
+                                                       "peekPrevious", "findPrevious"};
+
+bool isQSetDepreprecatedOperator(string functionName, string contextName, string &message)
+{
+    if (qSetDeprecatedOperators.find(functionName) == qSetDeprecatedOperators.end())
+        return false;
+    if (clazy::startsWith(contextName, "QSet<") && clazy::endsWith(contextName, "iterator")) {
+        message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
+        return true;
+    }
+    return false;
+}
+
 static std::set<std::string> qMapFunctions = {"insertMulti", "uniqueKeys", "values", "unite"};
 
 static std::set<std::string> qTextStreamFunctions = {
@@ -230,6 +245,8 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         fixitRange = stmt->getSourceRange();
 
     } else if (declRefExp) {
+
+        warningLocation = declRefExp->getBeginLoc();
         auto decl = declRefExp->getDecl();
         if (!decl)
             return;
@@ -244,11 +261,37 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
                 enclosingNameSpace = ns->getNameAsString();
         }
 
-        if (functionName != "addResourceSearchPath" && functionName != "MatchRegExp" &&
-                enclosingNameSpace != "QTextStreamFunctions" &&
-                functionName != "KeepEmptyParts" && functionName != "SkipEmptyParts" )
+        // To catch QDir and QSet
+        string contextName;
+        if (declContext) {
+            if (clang::isa<clang::CXXRecordDecl>(declContext)) {
+                clang::CXXRecordDecl *recordDecl = llvm::dyn_cast<clang::CXXRecordDecl>(declContext);
+                contextName = recordDecl->getQualifiedNameAsString();
+            }
+        }
+
+        //llvm::outs() << "functionName " << functionName << "\n";
+        //llvm::outs() << "enclosingNameSpace " << enclosingNameSpace << "\n";
+        //llvm::outs() << "contextName " << contextName << "\n";
+        //llvm::outs() << "declType " << declType << "\n";
+
+        if (isQSetDepreprecatedOperator(functionName, contextName, message)) {
+            emitWarning(warningLocation, message, fixits);
+            return;
+        }
+        if (functionName == "addResourceSearchPath" && contextName == "QDir") {
+            message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
+            emitWarning(warningLocation, message, fixits);
+            return;
+        }
+
+        if (functionName != "MatchRegExp" && enclosingNameSpace != "QTextStreamFunctions" &&
+            functionName != "KeepEmptyParts" && functionName != "SkipEmptyParts")
             return;
 
+        // To catch enum Qt::MatchFlag and enum QString::SplitBehavior
+        string declType;
+        declType = decl->getType().getAsString();
         // Get out of this DeclRefExp to catch the potential Qt namespace surrounding it
         bool isQtNamespaceExplicit = false;
         DeclContext *newcontext =  clazy::contextForDecl(m_context->lastDecl);
@@ -262,28 +305,12 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
              }
             newcontext = newcontext->getParent();
         }
-        // To catch enum Qt::MatchFlag and enum QString::SplitBehavior
-        string declType;
-        declType = decl->getType().getAsString();
-        // To catch QDir
-        string contextName;
-        if (declContext) {
-            if (clang::isa<clang::CXXRecordDecl>(declContext)) {
-                clang::CXXRecordDecl *recordDecl = llvm::dyn_cast<clang::CXXRecordDecl>(declContext);
-                contextName = recordDecl->getQualifiedNameAsString();
-            }
-        }
 
-        warningLocation = declRefExp->getBeginLoc();
         if (enclosingNameSpace == "QTextStreamFunctions") {
             replacementForQTextStreamFunctions(functionName, message, replacement, isQtNamespaceExplicit);
         } else if ((functionName == "KeepEmptyParts" || functionName == "SkipEmptyParts") &&
                    declType == "enum QString::SplitBehavior") {
             replacementForQStringSplitBehavior(functionName, message, replacement, isQtNamespaceExplicit);
-        } else if (functionName == "addResourceSearchPath" && contextName == "QDir") {
-            message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
-            emitWarning(warningLocation, message, fixits);
-            return;
         } else if (functionName == "MatchRegExp" && declType == "enum Qt::MatchFlag") {
             message = "call Qt::MatchRegExp. Use Qt::MatchRegularExpression instead.";
             if (isQtNamespaceExplicit)
@@ -294,6 +321,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             return;
         }
         fixitRange = declRefExp->getSourceRange();
+
     }else if (membExpr) {
         Stmt *child = clazy::childAt(stmt, 0);
         DeclRefExpr *decl = dyn_cast<DeclRefExpr>(child);
@@ -309,19 +337,24 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         string functionName = membExpr->getMemberNameInfo().getAsString();
         string className = decl->getType().getAsString();
         warningLocation = membExpr->getEndLoc();
-        if ( clazy::startsWith(className, "QMap<") && qMapFunctions.find(functionName) != qMapFunctions.end()) {
+        if (clazy::startsWith(className, "QMap<") && qMapFunctions.find(functionName) != qMapFunctions.end()) {
             message = "Use QMultiMap for maps storing multiple values with the same key.";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if ( clazy::startsWith(className, "class QProcess")) {
+        } else if (clazy::startsWith(className, "class QProcess")) {
             replacementForQProcess(functionName, message, replacement);
-        } else if ( clazy::startsWith(className, "class QResource")) {
+        } else if (clazy::startsWith(className, "class QResource")) {
             replacementForQResource(functionName, message, replacement);
-        } else if ( clazy::startsWith(className, "class QDir") && functionName == "addResourceSearchPath") {
+        } else if (clazy::startsWith(className, "class QDir") && functionName == "addResourceSearchPath") {
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else {
+        } else if (clazy::startsWith(className, "QSet") &&
+                   qSetDeprecatedFunctions.find(functionName) != qSetDeprecatedFunctions.end()) {
+            message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
+            emitWarning(warningLocation, message, fixits);
+            return;
+        }else {
             return;
         }
         fixitRange = SourceRange(membExpr->getEndLoc());
