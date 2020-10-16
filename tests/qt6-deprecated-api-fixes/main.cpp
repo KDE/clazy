@@ -3,6 +3,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QProcess>
 #include <QtCore/QResource>
+#include <QtCore/QSet>
 #define MYSTRING "myDirPath"
 
 void test()
@@ -56,6 +57,33 @@ void test()
     QString a_string = "eeoaaoii";
     QString sep = "o";
     QStringList my_list =  a_string.split(sep, QString::KeepEmptyParts);
+
+    QSet<QString> my_set;
+    QSet<QString>::iterator it_set = my_set.begin();
+    QSet<QString>::const_iterator cit_set = my_set.cbegin();
+    --it_set;
+    it_set + 1;
+    it_set - 1;
+    it_set += 1;
+    it_set -= 1;
+    ++it_set; //ok
+    cit_set -= 2;
+    cit_set += 1;
+    cit_set + 1;
+    cit_set - 1;
+
+    QSetIterator<QString> i(my_set);
+    i.hasPrevious();
+    i.previous();
+    i.peekPrevious();
+    i.findPrevious(a_string);
+
+    QSet<int> s;
+    s << 1 << 17 << 61 << 127 << 911;
+    s.rbegin();
+    s.rend();
+    s.crbegin();
+    s.crend();
 }
 
 namespace Qt {
