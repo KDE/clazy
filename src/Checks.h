@@ -146,7 +146,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(check<Qt6HeaderFixes>("qt6-header-fixes", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qt6-header-fixes", "qt6-header-fixes");
-    registerCheck(check<Qt6DeprecatedAPIFixes>("qt6-deprecated-api-fixes", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<Qt6DeprecatedAPIFixes>("qt6-deprecated-api-fixes", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-qt6-deprecated-api-fixes", "qt6-deprecated-api-fixes");
     registerCheck(check<Qt6QHashSignature>("qt6-qhash-signature", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-qt6-qhash-signature", "qt6-qhash-signature");

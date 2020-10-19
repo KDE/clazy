@@ -231,6 +231,38 @@ void replacementForQStringSplitBehavior(string functionName, string &message, st
     replacement += functionName;
 }
 
+void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
+{
+    auto funcDecl = decl->getAsFunction();
+    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    FieldDecl *fieldDecl = dyn_cast<FieldDecl>(decl);
+
+    if (!funcDecl && !varDecl && !fieldDecl)
+        return;
+
+    vector<FixItHint> fixits;
+    auto warningLocation = decl->getBeginLoc();
+    string message = "Using QLinkedList. Use std::list instead";
+    if (funcDecl) {
+        // Only checking for return type. If part of parameter will be caught a a VarDecl
+        if (!clazy::contains(funcDecl->getReturnType().getAsString(), "QLinkedList"))
+            return;
+        emitWarning(warningLocation, message, fixits);
+        return;
+    } else if (varDecl) {
+        if (!clazy::contains(varDecl->getType().getAsString(), "QLinkedList"))
+            return;
+        emitWarning(warningLocation, message, fixits);
+        return;
+    } else if (fieldDecl) {
+        if (!clazy::contains(fieldDecl->getType().getAsString(), "QLinkedList"))
+            return;
+        emitWarning(warningLocation, message, fixits);
+        return;
+    }
+    return;
+}
+
 void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 {
     CXXOperatorCallExpr *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);

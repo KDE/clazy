@@ -112,6 +112,7 @@
                     "name" : "qt6-deprecatedAPI-fixes"
                 }
             ],
+            "visits_decls" : true,
             "visits_stmts" : true
         },
         {
