@@ -126,24 +126,58 @@ std::string Qt6DeprecatedAPIFixes::findPathArgument(clang::Stmt *stmt, bool ance
     return replacement;
 }
 
+static std::set<std::string> qProcessDeprecatedFunctions = {"start", "execute", "startDetached"};
+
 void replacementForQProcess(string functionName, string &message, string &replacement) {
-    if (functionName == "start") {
-        message = "call function QProcess::start(). Use function QProcess::startCommand() instead.";
-        replacement = "startCommand";
-    } else if (functionName == "execute") {
-        message = "call function QProcess::execute(). Use function QProcess::executeCommand() instead.";
-        replacement = "executeCommand";
-    } else if (functionName == "startDetached") {
-        message = "call function QProcess::startDetached(). Use function QProcess::startDetachedCommand() instead.";
-        replacement = "startDetachedCommand";
+    message = "call function QProcess::";
+    message += functionName;
+    message += "(). Use function QProcess::";
+    message += functionName;
+    message += "Command() instead";
+
+    replacement = functionName;
+    replacement += "Command";
+}
+
+void replacementForQSignalMapper(clang::MemberExpr * membExpr, string &message, string &replacement) {
+
+    auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
+    string paramType;
+    for (auto param : Utils::functionParameters(declfunc)) {
+        paramType = param->getType().getAsString();
     }
+
+    string functionNameExtention;
+    string paramTypeCor;
+    if (paramType == "int") {
+        functionNameExtention = "Int";
+        paramTypeCor = "int";
+    } else if (paramType == "const class QString &") {
+        functionNameExtention = "String";
+        paramTypeCor = "const QString &";
+    } else if (paramType == "class QWidget *") {
+        functionNameExtention = "Widget";
+        paramTypeCor = "QWidget *";
+    } else if (paramType == "class QObject *") {
+        functionNameExtention = "Object";
+        paramTypeCor = "QObject *";
+    }
+
+    message = "call function QSignalMapper::mapped(";
+    message += paramTypeCor;
+    message += "). Use function QSignalMapper::mapped";
+    message += functionNameExtention;
+    message += "(";
+    message += paramTypeCor;
+    message += ") instead.";
+
+    replacement = "mapped";
+    replacement += functionNameExtention;
 }
 
 void replacementForQResource(string functionName, string &message, string &replacement) {
-    if (functionName == "isCompressed") {
-        message = "call function QRessource::isCompressed(). Use function QProcess::compressionAlgorithm() instead.";
-        replacement = "compressionAlgorithm";
-    }
+    message = "call function QRessource::isCompressed(). Use function QProcess::compressionAlgorithm() instead.";
+    replacement = "compressionAlgorithm";
 }
 
 static std::set<std::string> qSetDeprecatedOperators = {"operator--", "operator+", "operator-", "operator+=", "operator-="};
@@ -173,7 +207,7 @@ void replacementForQTextStreamFunctions(string functionName, string &message, st
         return;
     message = "call function QTextStream::";
     message += functionName;
-    message += "Use function Qt::";
+    message += ". Use function Qt::";
     message += functionName;
     message += " instead";
 
@@ -270,11 +304,6 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             }
         }
 
-        //llvm::outs() << "functionName " << functionName << "\n";
-        //llvm::outs() << "enclosingNameSpace " << enclosingNameSpace << "\n";
-        //llvm::outs() << "contextName " << contextName << "\n";
-        //llvm::outs() << "declType " << declType << "\n";
-
         if (isQSetDepreprecatedOperator(functionName, contextName, message)) {
             emitWarning(warningLocation, message, fixits);
             return;
@@ -337,18 +366,22 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         string functionName = membExpr->getMemberNameInfo().getAsString();
         string className = decl->getType().getAsString();
         warningLocation = membExpr->getEndLoc();
+
         if (clazy::startsWith(className, "QMap<") && qMapFunctions.find(functionName) != qMapFunctions.end()) {
             message = "Use QMultiMap for maps storing multiple values with the same key.";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QProcess")) {
-            replacementForQProcess(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QResource")) {
-            replacementForQResource(functionName, message, replacement);
         } else if (clazy::startsWith(className, "class QDir") && functionName == "addResourceSearchPath") {
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
             return;
+        } else if (clazy::startsWith(className, "class QProcess") &&
+                   qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
+            replacementForQProcess(functionName, message, replacement);
+        } else if (clazy::startsWith(className, "class QResource") && functionName == "isCompressed") {
+            replacementForQResource(functionName, message, replacement);
+        } else if (clazy::startsWith(className, "class QSignalMapper") && functionName == "mapped") {
+            replacementForQSignalMapper(membExpr, message, replacement);
         } else if (clazy::startsWith(className, "QSet") &&
                    qSetDeprecatedFunctions.find(functionName) != qSetDeprecatedFunctions.end()) {
             message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
