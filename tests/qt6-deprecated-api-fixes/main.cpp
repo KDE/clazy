@@ -1,6 +1,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QDir>
 #include <QtCore/QHash>
+#include <QtCore/QLinkedList>
 #include <QtCore/QMap>
 #include <QtCore/QProcess>
 #include <QtCore/QResource>
@@ -117,7 +118,20 @@ void test()
     ih.previous();
     ih.peekPrevious();
     ih.findPrevious(a_string);
+
+    QLinkedList<QString> linkList;
+
 }
+
+void function1(QLinkedList<QString> arg) {};
+QLinkedList<QString> function2() {};
+
+class aclass
+{
+public:
+     QLinkedList<QString> m_linkList;
+     void m_function1(QLinkedList<QString> arg) {};
+};
 
 namespace Qt {
     void test_1() {
