@@ -183,13 +183,21 @@ void replacementForQResource(string functionName, string &message, string &repla
 static std::set<std::string> qSetDeprecatedOperators = {"operator--", "operator+", "operator-", "operator+=", "operator-="};
 static std::set<std::string> qSetDeprecatedFunctions = {"rbegin", "rend", "crbegin", "crend", "hasPrevious", "previous",
                                                        "peekPrevious", "findPrevious"};
+static std::set<std::string> qHashDeprecatedFunctions = {"hasPrevious", "previous",
+                                                       "peekPrevious", "findPrevious"};
 
 bool isQSetDepreprecatedOperator(string functionName, string contextName, string &message)
 {
     if (qSetDeprecatedOperators.find(functionName) == qSetDeprecatedOperators.end())
         return false;
-    if (clazy::startsWith(contextName, "QSet<") && clazy::endsWith(contextName, "iterator")) {
-        message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
+    if ((clazy::startsWith(contextName, "QSet<") || clazy::startsWith(contextName, "QHash<")) &&
+            clazy::endsWith(contextName, "iterator")) {
+
+        if (clazy::startsWith(contextName, "QSet<"))
+            message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
+        else
+            message = "QHash iterator categories changed from bidirectional to forward. Please port your code manually";
+
         return true;
     }
     return false;
@@ -371,6 +379,11 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "Use QMultiMap for maps storing multiple values with the same key.";
             emitWarning(warningLocation, message, fixits);
             return;
+        } else if (clazy::startsWith(className, "QHash<") && qMapFunctions.find(functionName) != qMapFunctions.end()) {
+          // the name of the deprecated function are the same
+            message = "Use QMultiHash for maps storing multiple values with the same key.";
+            emitWarning(warningLocation, message, fixits);
+            return;
         } else if (clazy::startsWith(className, "class QDir") && functionName == "addResourceSearchPath") {
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
@@ -382,9 +395,12 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             replacementForQResource(functionName, message, replacement);
         } else if (clazy::startsWith(className, "class QSignalMapper") && functionName == "mapped") {
             replacementForQSignalMapper(membExpr, message, replacement);
-        } else if (clazy::startsWith(className, "QSet") &&
-                   qSetDeprecatedFunctions.find(functionName) != qSetDeprecatedFunctions.end()) {
+        } else if (clazy::startsWith(className, "QSet") && qSetDeprecatedFunctions.find(functionName) != qSetDeprecatedFunctions.end()) {
             message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
+            emitWarning(warningLocation, message, fixits);
+            return;
+        } else if (clazy::startsWith(className, "QHash") && qHashDeprecatedFunctions.find(functionName) != qHashDeprecatedFunctions.end()) {
+            message = "QHash iterator categories changed from bidirectional to forward. Please port your code manually";
             emitWarning(warningLocation, message, fixits);
             return;
         }else {
