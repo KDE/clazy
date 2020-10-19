@@ -1,5 +1,6 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QDir>
+#include <QtCore/QHash>
 #include <QtCore/QMap>
 #include <QtCore/QProcess>
 #include <QtCore/QResource>
@@ -96,6 +97,26 @@ void test()
     sigMap.mappedString(a_string);
     sigMap.mappedWidget(my_qwidget);
     sigMap.mappedObject(my_qobject);
+
+    QHash<QString, QString> my_hash;
+    QHash<QString, QString>::iterator it_hash = my_hash.begin();
+    QHash<QString, QString>::const_iterator cit_hash = my_hash.cbegin();
+    --it_hash;
+    it_hash + 1;
+    it_hash - 1;
+    it_hash += 1;
+    it_hash -= 1;
+    ++it_hash; //ok
+    cit_hash -= 2;
+    cit_hash += 1;
+    cit_hash + 1;
+    cit_hash - 1;
+
+    QHashIterator<QString, QString> ih(my_hash);
+    ih.hasPrevious();
+    ih.previous();
+    ih.peekPrevious();
+    ih.findPrevious(a_string);
 }
 
 namespace Qt {
