@@ -4,6 +4,7 @@
 #include <QtCore/QProcess>
 #include <QtCore/QResource>
 #include <QtCore/QSet>
+#include <QtCore/QSignalMapper>
 #define MYSTRING "myDirPath"
 
 void test()
@@ -84,6 +85,17 @@ void test()
     s.rend();
     s.crbegin();
     s.crend();
+
+    int my_int = 2;
+    QWidget* my_qwidget;
+    QObject* my_qobject;
+    QSignalMapper sigMap;
+    sigMap.mapped(1);
+    sigMap.mapped(my_int);
+    sigMap.mapped("astring");
+    sigMap.mapped(a_string);
+    sigMap.mapped(my_qwidget);
+    sigMap.mapped(my_qobject);
 }
 
 namespace Qt {
