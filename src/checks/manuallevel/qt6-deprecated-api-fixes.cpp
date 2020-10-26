@@ -268,6 +268,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
     CXXOperatorCallExpr *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
     DeclRefExpr *declRefExp = dyn_cast<DeclRefExpr>(stmt);
     MemberExpr *membExpr = dyn_cast<MemberExpr>(stmt);
+    CXXConstructExpr *consExpr = dyn_cast<CXXConstructExpr>(stmt);
 
     SourceLocation warningLocation;
     std::string replacement;
@@ -276,7 +277,42 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 
     vector<FixItHint> fixits;
 
-    if (oppCallExpr) {
+    if (consExpr) {
+        auto constructor = consExpr->getConstructor();
+        if (!constructor)
+            return;
+        if (constructor->getDeclName().getAsString() != "QDateTime")
+            return;
+        if ( consExpr->getNumArgs() != 1)
+            return;
+        if ( consExpr->getArg(0)->getType().getAsString() != "const class QDate")
+            return;
+        Stmt *child = clazy::childAt(stmt, 0);
+        DeclRefExpr *decl;
+        while(child) {
+            decl = dyn_cast<DeclRefExpr>(child);
+            if ( !decl ) {
+                child = clazy::childAt(child, 0);
+                continue;
+            } else {
+                break;
+            }
+        }
+        if (!decl)
+            return;
+
+        replacement = decl->getNameInfo().getAsString();
+        QualType qualtype = decl->getType();
+        if (qualtype->isPointerType())
+            replacement += "->";
+        else
+        replacement += ".";
+        replacement += "startOfDay()";
+
+        warningLocation = stmt->getBeginLoc();
+        fixitRange = stmt->getSourceRange();
+        message = "deprecated constructor. Use QDate::startOfDay() instead.";
+    } else if (oppCallExpr) {
         // dir = "foo" case
         if ( !clazy::isOfClass(oppCallExpr, "QDir") )
             return;
@@ -298,9 +334,16 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 
         // get the name of the QDir variable from child2 value
         child = clazy::childAt(stmt, 1);
-        if (!child)
-            return;
-        DeclRefExpr *declb = dyn_cast<DeclRefExpr>(child);
+        DeclRefExpr *declb = NULL;
+        while (child) {
+            declb = dyn_cast<DeclRefExpr>(child);
+            if ( !declb ) {
+                child = clazy::childAt(child, 0);
+                continue;
+            } else {
+                break;
+            }
+        }
         if ( !declb )
             return;
         message = " function setPath() has to be used in Qt6";
@@ -312,9 +355,15 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             }
         }
         replacement = declb->getNameInfo().getAsString();
-        replacement += ".setPath(";
+        // TODO: what if it's "->setPath("
+        QualType qualtype = declb->getType();
+        if (qualtype->isPointerType())
+            replacement += "->";
+        else
+        replacement += ".";
+        replacement += "setPath(";
         replacement += findPathArgument(clazy::childAt(stmt, 2));
-        replacement += ");";
+        replacement += ")";
 
         fixitRange = stmt->getSourceRange();
 
@@ -352,6 +401,15 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
             return;
+        }
+        if (functionName == "qrand" || functionName == "qsrand") {
+            // To catch qrand and qsrand from qglobal.
+            string location = decl->getSourceRange().printToString(m_sm);
+            if (clazy::contains(location, "corelib/global/qglobal.h")) {
+                message = "use QRandomGenerator instead";
+                emitWarning(warningLocation, message, fixits);
+                return;
+            }
         }
 
         if (functionName != "MatchRegExp" && enclosingNameSpace != "QTextStreamFunctions" &&
@@ -420,13 +478,15 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QProcess") &&
-                   qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
-            replacementForQProcess(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QResource") && functionName == "isCompressed") {
-            replacementForQResource(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QSignalMapper") && functionName == "mapped") {
-            replacementForQSignalMapper(membExpr, message, replacement);
+        } else if (clazy::startsWith(className, "class QTimeLine") &&
+                   (functionName == "curveShape" || functionName == "setCurveShape")) {
+            if (functionName == "curveShape") {
+                message = "call QTimeLine::curveShape. Use QTimeLine::easingCurve instead";
+            } else {
+                message = "call QTimeLine::setCurveShape. Use QTimeLine::setEasingCurve instead";
+            }
+            emitWarning(warningLocation, message, fixits);
+            return;
         } else if (clazy::startsWith(className, "QSet") && qSetDeprecatedFunctions.find(functionName) != qSetDeprecatedFunctions.end()) {
             message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
             emitWarning(warningLocation, message, fixits);
@@ -435,6 +495,45 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "QHash iterator categories changed from bidirectional to forward. Please port your code manually";
             emitWarning(warningLocation, message, fixits);
             return;
+        } else if ( functionName == "toString" && className == "class QDate") {
+            // The one with two arguments: Qt::DateFormat format, QCalendar cal
+            Stmt *parent = clazy::parent(m_context->parentMap, stmt);
+            CXXMemberCallExpr *callExp = dyn_cast<CXXMemberCallExpr>(parent);
+            if (!callExp)
+                return;
+            auto func = callExp->getDirectCallee();
+            if (!func)
+                return;
+            int i = 1;
+            if (func->getNumParams() != 2)
+                return;
+            for (auto it = func->param_begin() ; it !=func->param_end() ; it++) {
+                ParmVarDecl *param = *it;
+                if (i == 1 && param->getType().getAsString() != "Qt::DateFormat")
+                    return;
+                if (i == 2 && param->getType().getAsString() != "class QCalendar")
+                    return;
+                i++;
+            }
+            Stmt * firstArg = clazy::childAt(parent, 1);
+            Stmt * secondArg = clazy::childAt(parent, 2);
+            DeclRefExpr *declFirstArg = dyn_cast<DeclRefExpr>(firstArg);
+            if (!firstArg || !secondArg || !declFirstArg)
+                return;
+            fixitRange = SourceRange(firstArg->getEndLoc(), secondArg->getEndLoc());
+            message = "replacing with function omitting the calendar. Change manually and use QLocale if you want to keep the calendar.";
+            warningLocation = secondArg->getBeginLoc();
+            replacement  = declFirstArg->getNameInfo().getAsString();
+            fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));
+            emitWarning(warningLocation, message, fixits);
+            return;
+        }else if (clazy::startsWith(className, "class QProcess") &&
+                   qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
+            replacementForQProcess(functionName, message, replacement);
+        } else if (clazy::startsWith(className, "class QResource") && functionName == "isCompressed") {
+            replacementForQResource(functionName, message, replacement);
+        } else if (clazy::startsWith(className, "class QSignalMapper") && functionName == "mapped") {
+            replacementForQSignalMapper(membExpr, message, replacement);
         }else {
             return;
         }

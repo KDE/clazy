@@ -1,4 +1,6 @@
 #include <QtCore/QTextStream>
+#include <QtCore/QCalendar>
+#include <QtCore/QDateTime>
 #include <QtCore/QDir>
 #include <QtCore/QHash>
 #include <QtCore/QLinkedList>
@@ -7,6 +9,7 @@
 #include <QtCore/QResource>
 #include <QtCore/QSet>
 #include <QtCore/QSignalMapper>
+#include <QtCore/QTimeLine>
 #define MYSTRING "myDirPath"
 
 void test()
@@ -30,6 +33,9 @@ void test()
 
     QDir dir6;
     dir6 = true ? (cond ? "path1" : "path2") : (cond ? "path3" : "path4");
+
+    QDir *dir7 = new QDir("apath");
+    *dir7 = "adir";
 
     QDir::addResourceSearchPath("somePath1");
     dir6.addResourceSearchPath("somePath2");
@@ -120,6 +126,21 @@ void test()
     ih.findPrevious(a_string);
 
     QLinkedList<QString> linkList;
+
+    qrand();
+    qsrand(1);
+
+    QTimeLine timeline;
+    timeline.setCurveShape(QTimeLine::CurveShape::EaseInCurve);
+    timeline.curveShape();
+
+    QDate myDate;
+    QDate *myOtherDate = new QDate();
+    QCalendar myCalendar;
+    myDate.toString(Qt::DateFormat::TextDate, myCalendar);
+    myDate.toString("format", myCalendar);
+    QDateTime myDateTime = QDateTime(myDate);
+    myDateTime = QDateTime(*myOtherDate);
 
 }
 
