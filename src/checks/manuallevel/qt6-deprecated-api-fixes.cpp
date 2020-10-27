@@ -263,6 +263,127 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     return;
 }
 
+static std::set<std::string> qVariantDeprecatedOperator = {"operator<", "operator<=", "operator>", "operator>="};
+
+bool foundQDirDeprecatedOperator(DeclRefExpr *decl)
+{
+    if (decl->getNameInfo().getAsString() == "operator=" )
+         return true;
+    else
+        return false;
+}
+
+string Qt6DeprecatedAPIFixes::buildReplacementforQDir(Stmt* stmt, DeclRefExpr* declb)
+{
+    string replacement = declb->getNameInfo().getAsString();
+    QualType qualtype = declb->getType();
+    if (qualtype->isPointerType())
+        replacement += "->";
+    else
+    replacement += ".";
+    replacement += "setPath(";
+    replacement += findPathArgument(clazy::childAt(stmt, 2));
+    replacement += ")";
+    return replacement;
+}
+
+string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(Stmt* stmt, DeclRefExpr* decl,  DeclRefExpr* declb)
+{
+    string replacement = declb->getNameInfo().getAsString();
+    QualType qualtype = declb->getType();
+    if (qualtype->isPointerType())
+        replacement += "->";
+    else
+    replacement += ".";
+    replacement += "compare(";
+    replacement += findPathArgument(clazy::childAt(stmt, 2));
+    replacement += ") ";
+    replacement += decl->getNameInfo().getAsString().substr(8,2);
+    replacement += " 0" ;
+    return replacement;
+}
+
+bool foundQVariantDeprecatedOperator(DeclRefExpr *decl)
+{
+    if (qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qTextStreamFunctions.end())
+        return true;
+    else
+        return false;
+}
+
+void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, string className)
+{
+    // only interested in '=' operator for QDir
+    vector<FixItHint> fixits;
+    string message;
+    string replacement;
+    SourceLocation warningLocation;
+    SourceRange fixitRange;
+    Stmt *child = clazy::childAt(stmt, 0);
+    bool foundOperator = false;
+    DeclRefExpr *decl = NULL;
+    while (child) {
+        decl = dyn_cast<DeclRefExpr>(child);
+        if ( !decl ) {
+            child = clazy::childAt(child, 0);
+            continue;
+        }
+
+        if (className == "QDir") {
+                foundOperator = foundQDirDeprecatedOperator(decl);
+        }
+        else if (className == "QVariant") {
+                foundOperator = foundQVariantDeprecatedOperator(decl);
+        }
+
+        if (foundOperator) {
+            warningLocation = decl->getLocation();
+            break;
+        }
+        child = clazy::childAt(child, 0);
+    }
+
+    if (!foundOperator)
+        return;
+
+    // get the name of the QDir variable from child2 value
+    child = clazy::childAt(stmt, 1);
+    DeclRefExpr *declb = NULL;
+    while (child) {
+        declb = dyn_cast<DeclRefExpr>(child);
+        if ( !declb ) {
+            child = clazy::childAt(child, 0);
+            continue;
+        } else {
+            break;
+        }
+    }
+    if ( !declb )
+        return;
+
+    if (className == "QDir") {
+        message = " function setPath() has to be used in Qt6";
+        // need to make sure there is no macro
+        for (auto macro_pos : m_listingMacroExpand) {
+            if (m_sm.isPointWithin(macro_pos, clazy::getLocStart(stmt), clazy::getLocEnd(stmt))) {
+               emitWarning(warningLocation, message, fixits);
+               return;
+            }
+        }
+            replacement = buildReplacementforQDir(stmt, declb);
+     } else if (className == "QVariant") {
+            message = " operator does not exist in Qt6. Using QVariant::compare() instead";
+            replacement = buildReplacementForQVariant(stmt, decl, declb);
+    }
+
+    fixitRange = stmt->getSourceRange();
+    fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));
+    emitWarning(warningLocation, message, fixits);
+
+    return;
+
+}
+
 void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 {
     CXXOperatorCallExpr *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
@@ -314,58 +435,15 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         message = "deprecated constructor. Use QDate::startOfDay() instead.";
     } else if (oppCallExpr) {
         // dir = "foo" case
-        if ( !clazy::isOfClass(oppCallExpr, "QDir") )
+        if ( clazy::isOfClass(oppCallExpr, "QDir")) {
+            fixForDeprecatedOperator(stmt, "QDir");
             return;
-
-        // only interested in '=' operator
-        Stmt *child = clazy::childAt(stmt, 0);
-        while (child) {
-            DeclRefExpr *decl = dyn_cast<DeclRefExpr>(child);
-            if ( !decl ) {
-                child = clazy::childAt(child, 0);
-                continue;
-            }
-            if ( decl->getNameInfo().getAsString() == "operator=" ) {
-                warningLocation = decl->getLocation();
-                break;
-            }
-            child = clazy::childAt(child, 0);
-        }
-
-        // get the name of the QDir variable from child2 value
-        child = clazy::childAt(stmt, 1);
-        DeclRefExpr *declb = NULL;
-        while (child) {
-            declb = dyn_cast<DeclRefExpr>(child);
-            if ( !declb ) {
-                child = clazy::childAt(child, 0);
-                continue;
-            } else {
-                break;
-            }
-        }
-        if ( !declb )
+        } else if (clazy::isOfClass(oppCallExpr, "QVariant")) {
+            fixForDeprecatedOperator(stmt, "QVariant");
             return;
-        message = " function setPath() has to be used in Qt6";
-        // need to make sure there is no macro
-        for (auto macro_pos : m_listingMacroExpand) {
-            if (m_sm.isPointWithin(macro_pos, clazy::getLocStart(stmt), clazy::getLocEnd(stmt))) {
-               emitWarning(warningLocation, message, fixits);
-               return;
-            }
         }
-        replacement = declb->getNameInfo().getAsString();
-        // TODO: what if it's "->setPath("
-        QualType qualtype = declb->getType();
-        if (qualtype->isPointerType())
-            replacement += "->";
-        else
-        replacement += ".";
-        replacement += "setPath(";
-        replacement += findPathArgument(clazy::childAt(stmt, 2));
-        replacement += ")";
+        return;
 
-        fixitRange = stmt->getSourceRange();
 
     } else if (declRefExp) {
 

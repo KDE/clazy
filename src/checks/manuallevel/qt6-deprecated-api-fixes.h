@@ -58,7 +58,9 @@ public:
 private:
     std::string findPathArgument(clang::Stmt *stmt, bool ancesterIsCondition = false, int ancestorConditionChildNumber = 0);
     std::vector<clang::SourceLocation> m_listingMacroExpand;
-
+    void fixForDeprecatedOperator(clang::Stmt* stmt, std::string className);
+    string buildReplacementforQDir(clang::Stmt* stmt, clang::DeclRefExpr* declb);
+    string buildReplacementForQVariant(clang::Stmt* stmt, clang::DeclRefExpr* decl, clang::DeclRefExpr* declb);
 };
 
 #endif
