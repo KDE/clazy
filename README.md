@@ -87,22 +87,19 @@ See troubleshooting section if you have problems.
 
 ### Build and install clang
 These instructions assume your terminal is suitable for development.
-jom and nmake (or ninja), git, cmake, and cl (msvc2015 or later) should be in your PATH.
+jom and nmake (or ninja), git, cmake, and cl (msvc2019) should be in your PATH.
 
-clang and LLVM >= 5.0 are required.
+clang and LLVM >= 9.0 are required.
 
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
 
 ```
-  > git clone https://github.com/llvm-mirror/llvm.git <some_directory>
-  > cd <some_directory>\tools\ && git clone https://github.com/llvm-mirror/clang.git
-  > git checkout release_90
-  > cd clang
-  > git checkout release_90
-  > mkdir <some_directory>\build && cd <some_directory>\build
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM" ..
-  > jom
-  > nmake install
+  > git clone https://github.com/llvm/llvm-project.git -b llvmorg-10.0.0 <some_directory>
+  > mkdir build # Important that this is outside of the source directory
+  > cd build
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release -G "Ninja" ../<some_directory>/llvm # Or -G "NMake Makefiles JOM" if you want to use JOM
+  > cmake --build .
+  > cmake --build . --target install
   > Add c:\my_install_folder\llvm\bin\ to PATH
 ```
 
