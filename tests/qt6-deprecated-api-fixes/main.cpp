@@ -142,6 +142,14 @@ void test()
     QDateTime myDateTime = QDateTime(myDate);
     myDateTime = QDateTime(*myOtherDate);
 
+    QVariant var1;
+    QVariant *var3;
+    QVariant var2;
+    bool bool1 = (var1 > var2);
+    bool bool2 = (var1 >= var2);
+    bool bool3 = (*var3 < var2);
+    bool bool4 = (*var3 <= var2);
+
 }
 
 void function1(QLinkedList<QString> arg) {};
