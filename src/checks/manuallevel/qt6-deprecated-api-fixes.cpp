@@ -434,7 +434,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         fixitRange = stmt->getSourceRange();
         message = "deprecated constructor. Use QDate::startOfDay() instead.";
     } else if (oppCallExpr) {
-        // dir = "foo" case
+
         if ( clazy::isOfClass(oppCallExpr, "QDir")) {
             fixForDeprecatedOperator(stmt, "QDir");
             return;
@@ -443,7 +443,6 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             return;
         }
         return;
-
 
     } else if (declRefExp) {
 
