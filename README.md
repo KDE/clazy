@@ -70,15 +70,17 @@ If your distro provides clang then you can skip this step.
   $ cd <some_directory>/tools/ && git clone https://github.com/llvm-mirror/clang.git
   $ cd <some_directory>/projects && git clone https://github.com/llvm-mirror/compiler-rt.git
   $ mkdir <some_directory>/build && cd <some_directory>/build
-  $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DLLVM_TARGETS_TO_BUILD=X86 -DCMAKE_BUILD_TYPE=Release ..
-  $ make -jX && make install
+  $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DLLVM_TARGETS_TO_BUILD=X86 -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+  $ cmake --build .
+  $ cmake --build . --target install
 ```
 
 ### Build clazy
 ```
   $ cd clazy/
-  $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release
-  $ make && make install
+  $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release -G Ninja
+  $ cmake --build .
+  $ cmake --build . --target install
 ```
 
 See troubleshooting section if you have problems.
@@ -87,7 +89,7 @@ See troubleshooting section if you have problems.
 
 ### Build and install clang
 These instructions assume your terminal is suitable for development.
-jom and nmake (or ninja), git, cmake, and cl (msvc2019) should be in your PATH.
+Ninja (or equivalent), git, cmake, and cl (msvc2019) should be in your PATH.
 
 clang and LLVM >= 9.0 are required.
 
@@ -97,7 +99,7 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
   > git clone https://github.com/llvm/llvm-project.git -b llvmorg-10.0.0 <some_directory>
   > mkdir build # Important that this is outside of the source directory
   > cd build
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release -G "Ninja" ../<some_directory>/llvm # Or -G "NMake Makefiles JOM" if you want to use JOM
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release -G "Ninja" ../<some_directory>/llvm
   > cmake --build .
   > cmake --build . --target install
   > Add c:\my_install_folder\llvm\bin\ to PATH
@@ -109,8 +111,9 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
 
 ```
   > cd clazy\
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCLANG_LIBRARY_IMPORT=C:\path\to\llvm-build\lib\clang.lib -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles JOM"
-  > jom && nmake install
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DCLANG_LIBRARY_IMPORT=C:\path\to\llvm-build\lib\clang.lib -DCMAKE_BUILD_TYPE=Release -G "Ninja"
+  > cmake --build .
+  > cmake --build . --target install
 ```
 
 ## macOS with MacPorts
@@ -125,9 +128,9 @@ $ sudo port select --set clang mp-clang-8.0
 ### Build clazy
 ```
   $ export CXX=clang++
-  $ cmake
-  $ make
-  $ make install
+  $ cmake -G Ninja
+  $ cmake --build .
+  $ cmake --build . --target install
 ```
 
 ## macOS with Homebrew
@@ -158,9 +161,9 @@ $ brew install --with-clang llvm
 ```
   $ export CXX=clang++
   $ export LLVM_ROOT=/usr/local/opt/llvm
-  $ cmake
-  $ make
-  $ make install
+  $ cmake -G Ninja
+  $ cmake --build .
+  $ cmake --build . --target install
 ```
 
 # Setting up your project to build with clazy
