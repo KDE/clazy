@@ -105,6 +105,9 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
   > Add c:\my_install_folder\llvm\bin\ to PATH
 ```
 
+Also be sure to copy the generated `C:\path\to\llvm-build\lib\clang.lib` to your installation folder somewhere. It contains the exported symbols of clang.exe, which the plugins need.
+Unfortunately LLVM doesn't install it. You can put it anywhere, just save it so you can delete the build directory.
+
 ### Build clazy
 
 Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LLVM build dir since it doesn't get installed.
