@@ -99,7 +99,7 @@ Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM
   > git clone https://github.com/llvm/llvm-project.git -b llvmorg-10.0.0 <some_directory>
   > mkdir build # Important that this is outside of the source directory
   > cd build
-  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release -G "Ninja" ../<some_directory>/llvm
+  > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DCMAKE_BUILD_TYPE=Release -G "Ninja" ../<some_directory>/llvm
   > cmake --build .
   > cmake --build . --target install
   > Add c:\my_install_folder\llvm\bin\ to PATH
