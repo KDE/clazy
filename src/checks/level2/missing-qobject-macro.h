@@ -54,6 +54,8 @@ private:
                            const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     void registerQ_OBJECT(clang::SourceLocation);
     std::vector<clang::SourceLocation> m_qobjectMacroLocations;
+
+    bool m_hasAddedMocFile = false;
 };
 
 #endif

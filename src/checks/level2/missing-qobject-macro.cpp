@@ -24,6 +24,7 @@
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "FixItUtils.h"
+#include "PreProcessorVisitor.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
@@ -49,6 +50,7 @@ MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *
     : CheckBase(name, context)
 {
     enablePreProcessorCallbacks();
+    context->enablePreprocessorVisitor();
 }
 
 void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
@@ -88,9 +90,13 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
 # ifdef HAS_STD_FILESYSTEM
     const std::string fileName = static_cast<string>(sm().getFilename(startLoc));
     if (clazy::endsWith(fileName, ".cpp")) {
-        const SourceLocation pos = sm().getLocForEndOfFile(sm().getFileID(startLoc));
         const std::string basename = std::filesystem::path(fileName).stem().string();
-        fixits.push_back(clazy::createInsertion(pos, "\n#include \"" + basename + ".moc\"\n"));
+
+        if (!m_hasAddedMocFile && !m_context->preprocessorVisitor->hasInclude(basename+".moc", false)) {
+            const SourceLocation pos = sm().getLocForEndOfFile(sm().getFileID(startLoc));
+            fixits.push_back(clazy::createInsertion(pos, "\n#include \"" + basename + ".moc\"\n"));
+            m_hasAddedMocFile = true;
+        }
     }
 # endif
 #endif

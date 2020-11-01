@@ -10,7 +10,7 @@
 
 class MissingMacro : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public: // Warning
 };
 
@@ -22,7 +22,7 @@ public:
 
 class Derived1 : public HasMacro
 {
-    Q_OBJECT
+	Q_OBJECT
 public: // Warning
 };
 
@@ -34,4 +34,4 @@ template <typename T> class DerivedTemplate : public Derived1
     public:
 };
 
-#include "main.moc"
+#include "fixit.moc"
