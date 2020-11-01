@@ -66,8 +66,8 @@
     <p xml:lang="x-test">xxClazy is a clang compiler plugin which emits warnings related to Qt best practices.xx</p>
   </description>
   <categories>
-​    <category>Development</category>
-​  </categories>
+    <category>Development</category>
+  </categories>
   <screenshots>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/clazy/clazy.png</image>
