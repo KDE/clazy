@@ -22,6 +22,10 @@
 #include "copyable-polymorphic.h"
 #include "Utils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
+#include "FixItUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/Basic/LLVM.h>
@@ -40,6 +44,7 @@ using namespace std;
 CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
+    context->enableAccessSpecifierManager();
 }
 
 void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
@@ -57,5 +62,53 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
             return;
     }
 
-    emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.");
+    emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.", fixits(record));
+}
+
+vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
+{
+    vector<FixItHint> result;
+
+#if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
+    const StringRef className = clazy::name(record);
+
+    // Insert Q_DISABLE_COPY(classname) in the private section if one exists,
+    // otherwise at the end of the class declaration
+    SourceLocation pos =
+        m_context->accessSpecifierManager->firstLocationOfSection(
+            clang::AccessSpecifier::AS_private, record);
+
+    if (pos.isValid()) {
+        pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
+                                            false);
+        result.push_back(clazy::createInsertion(
+            pos, string("\n\tQ_DISABLE_COPY(") + className.data() + string(")")));
+    } else {
+        pos = record->getBraceRange().getEnd();
+        result.push_back(clazy::createInsertion(
+            pos, string("\tQ_DISABLE_COPY(") + className.data() + string(")\n")));
+    }
+
+    // If the class has a default constructor, then we need to readd it,
+    // as the disabled copy constructor removes it.
+    // Add it in the public section if one exists, otherwise add a
+    // public section at the top of the class declaration.
+    if (record->hasDefaultConstructor()) {
+        pos = m_context->accessSpecifierManager->firstLocationOfSection(
+            clang::AccessSpecifier::AS_public, record);
+        if (pos.isInvalid()) {
+            pos = record->getBraceRange().getBegin().getLocWithOffset(1);
+            result.push_back(clazy::createInsertion(
+                pos, string("\npublic:\n\t") + className.data() + string("() = default;")));
+        }
+        else {
+            pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
+                                                false);
+            result.push_back(clazy::createInsertion(
+                pos, string("\n\t") + className.data() + string("() = default;")));
+        }
+    }
+#endif
+
+    return result;
 }
