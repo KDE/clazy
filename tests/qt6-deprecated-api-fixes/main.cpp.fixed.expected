@@ -10,6 +10,17 @@
 #include <QtCore/QSet>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QTimeLine>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDirModel>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QMacCocoaViewContainer>
+#include <QtWidgets/QMacNativeWidget>
+#include <QtWidgets/QSplashScreen>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QWizard>
 #define MYSTRING "myDirPath"
 
 void test()
@@ -177,3 +188,55 @@ namespace Qt {
     }
 }
 
+void test_widgets()
+{
+    QWizard wizard;
+    wizard.visitedIds();
+
+    QButtonGroup buttonGroup;
+    buttonGroup.idClicked(1);
+    buttonGroup.idPressed(1);
+    buttonGroup.idReleased(1);
+    buttonGroup.idToggled(1, true);
+
+    QComboBox combobox;
+    combobox.setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLength);
+    QString astring = "asdf";
+    combobox.currentIndexChanged(astring);
+    combobox.textActivated(astring);
+    combobox.textHighlighted(astring);
+
+    QMacCocoaViewContainer *cocoa = NULL;
+    QMacNativeWidget *native = NULL;
+
+    QWidget *a_widget = NULL;
+    QSplashScreen *splash1 = new QSplashScreen(a_widget);
+    QScreen *a_screen = NULL;
+    QSplashScreen *splash2 = new QSplashScreen(a_screen);
+
+    QTextBrowser browser;
+    QString a_string = "aaa";
+    browser.highlighted(a_string);
+    QUrl a_url;
+    browser.highlighted(a_url);
+
+    QDockWidget dock;
+    dock.setFeatures(QDockWidget::AllDockWidgetFeatures);
+
+    QDirModel dirModel;
+
+    QGraphicsView graphview;
+    QMatrix matrix = graphview.matrix();
+    graphview.setMatrix(matrix);
+    graphview.resetMatrix();
+
+    QStyle *style = NULL;
+    style->pixelMetric(QStyle::PixelMetric::PM_DefaultTopLevelMargin);
+    style->pixelMetric(QStyle::PixelMetric::PM_DefaultChildMargin);
+    style->pixelMetric(QStyle::PixelMetric::PM_DefaultLayoutSpacing);
+    style->subElementRect(QStyle::SubElement::SE_DialogButtonBoxLayoutItem, NULL);
+
+}
+
+void func_coco (QMacCocoaViewContainer *cocoa) {}
+void func_native (QMacNativeWidget *native){}
