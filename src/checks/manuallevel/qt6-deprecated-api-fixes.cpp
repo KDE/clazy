@@ -719,12 +719,12 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 
     }else if (membExpr) {
         Stmt *child = clazy::childAt(stmt, 0);
-        DeclRefExpr *decl = dyn_cast<DeclRefExpr>(child);
+        DeclRefExpr *decl = NULL;
         while (child) {
+            decl = dyn_cast<DeclRefExpr>(child);
             if (decl)
                 break;
             child = clazy::childAt(child, 0);
-            decl = dyn_cast<DeclRefExpr>(child);
         }
 
         if (!decl)
@@ -814,6 +814,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
     emitWarning(warningLocation, message, fixits);
 
     return;
+
 }
 
 void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
