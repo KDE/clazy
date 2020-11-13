@@ -483,6 +483,9 @@ with contributions from:
 - Christian Gagneraud
 - Nikolai Kosjar
 - Jesper K. Pedersen
+- Lucie Gerard
+
+qt6-* porting checks written by Lucie Gerard <lucie.gerard@qt.io>
 
 and thanks to:
 
