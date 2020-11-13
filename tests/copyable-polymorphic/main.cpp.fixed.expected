@@ -38,11 +38,15 @@ struct PolymorphicClass4 // Warning, copyable
     virtual void foo();
     PolymorphicClass4(const PolymorphicClass4 &);
     PolymorphicClass4& operator=(const PolymorphicClass4 &);
+	Q_DISABLE_COPY(PolymorphicClass4)
 };
 
 struct PolymorphicClass5 // Warning, copyable
 {
+public:
+	PolymorphicClass5() = default;
     virtual void foo();
+	Q_DISABLE_COPY(PolymorphicClass5)
 };
 
 struct DerivedFromNotCopyable : public PolymorphicClass3 // OK, not copyable
@@ -51,13 +55,18 @@ struct DerivedFromNotCopyable : public PolymorphicClass3 // OK, not copyable
 
 struct DerivedFromCopyable : public PolymorphicClass4 // Warning, copyable
 {
+public:
+	DerivedFromCopyable() = default;
+	Q_DISABLE_COPY(DerivedFromCopyable)
 };
 
 class ClassWithPrivateSection
 {
 public:
+	ClassWithPrivateSection() = default;
     virtual void foo();
 private:
+	Q_DISABLE_COPY(ClassWithPrivateSection)
     void bar();
     int i;
 };
