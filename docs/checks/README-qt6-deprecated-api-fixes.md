@@ -31,7 +31,7 @@ QButtonGroup buttonClicked/Pressed/Released/Toggled(int) is replaced with QButto
 
 QCombobox::activated(const QString &) and highlighted(const QString &) are replaced with QComboBox::textActivated or textHighlighted respectively.
 
-Warning for:
+Warning for:  
 Usage of QMap::insertMulti, uniqueKeys, values, unite, to be replaced manumally with QMultiMap versions.
 Usage of QHash::uniqueKeys, to be replaced manumally with QMultiHash versions.
 Usage of QLinkedList, to be replaced manually with std::list.
