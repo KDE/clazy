@@ -20,8 +20,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLAZY_QT6_QDIR_FIXES
-#define CLAZY_QT6_QDIR_FIXES
+#ifndef CLAZY_QT6_DEPRECATEDAPI_FIXES
+#define CLAZY_QT6_DEPRECATEDAPI_FIXES
 
 #include "checkbase.h"
 
@@ -42,22 +42,25 @@ class CXXFunctionalCastExpr;
 }
 
 /**
- * Idenfify and replace when possible QDir deprecated API
+ * Idenfify deprecated API and replace them when possible
  *
  * Run only with Qt 5.
  */
-class Qt6QDirFixes
+class Qt6DeprecatedAPIFixes
     : public CheckBase
 {
 public:
-    explicit Qt6QDirFixes(const std::string &name, ClazyContext *context);
+    explicit Qt6DeprecatedAPIFixes(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+    void VisitDecl(clang::Decl *decl) override;
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *) override;
 
 private:
     std::string findPathArgument(clang::Stmt *stmt, bool ancesterIsCondition = false, int ancestorConditionChildNumber = 0);
     std::vector<clang::SourceLocation> m_listingMacroExpand;
-
+    void fixForDeprecatedOperator(clang::Stmt* stmt, std::string className);
+    string buildReplacementforQDir(clang::Stmt* stmt, clang::DeclRefExpr* declb);
+    string buildReplacementForQVariant(clang::Stmt* stmt, clang::DeclRefExpr* decl, clang::DeclRefExpr* declb);
 };
 
 #endif
