@@ -25,7 +25,7 @@ QTextStream functions are replaced by the one under the Qt namespace.
 QVariant operators '<' '<=' '>' '>=' are replaced with QVariant::compare() function.
 QVariant v1; QVariant v2; 'v1 < v2' becomes 'v1.compare(v2) < 0'.
 
-QWizard::visitedPages() is replaces with QWizard::visitedIds().
+QWizard::visitedPages() is replaced with QWizard::visitedIds().
 
 QButtonGroup buttonClicked/Pressed/Released/Toggled(int) is replaced with QButtonGroup::idClicked/Pressed/Released/Toggled(int).
 
@@ -35,7 +35,7 @@ Warning for:
 Usage of QMap::insertMulti, uniqueKeys, values, unite, to be replaced manumally with QMultiMap versions.  
 Usage of QHash::uniqueKeys, to be replaced manumally with QMultiHash versions.  
 Usage of QLinkedList, to be replaced manually with std::list.  
-Usage of global qrand() and qsrand(), to be replaces manually using QRandomGenerator.  
+Usage of global qrand() and qsrand(), to be replaced manually using QRandomGenerator.  
 Usage of QTimeLine::curveShape and setCurveShape, to be replaced manually using QTimeLine::easingCurve and QTimeLine::setEasingCurve.  
 Usage of QSet and QHash biderectional iterator. Code has to be ported manually using forward iterator.  
 Usage of QMacCocoaViewContainer, to be replaced manually using QWindow::fromWinId and QWidget::createWindowContainer instead.  
