@@ -13,8 +13,8 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-varargs.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keywords.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt4-qstring-from-array.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-header-fixes.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-deprecated-api-fixes.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-header-fixes.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-qhash-signature.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-qlatin1stringchar-to-u.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qvariant-template-instantiation.cpp

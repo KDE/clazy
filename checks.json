@@ -103,13 +103,13 @@
             "visits_stmts" : true
         },
         {
-            "name"  : "qt6-deprecatedAPI-fixes",
-            "class_name" : "Qt6QDirFixes",
+            "name"  : "qt6-deprecated-api-fixes",
+            "class_name" : "Qt6DeprecatedAPIFixes",
             "level" : -1,
             "categories" : ["qt6", "containers"],
             "fixits" : [
                 {
-                    "name" : "qt6-deprecatedAPI-fixes"
+                    "name" : "qt6-deprecated-api-fixes"
                 }
             ],
             "visits_decls" : true,

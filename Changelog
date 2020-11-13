@@ -137,5 +137,6 @@
       - qt6-qhash-signature
       - qt6-qdir-fixes
       - qt6-header-fixes
+      - qt6-deprecated-api-fixes
       - use-chrono-in-qtimer
       - fixit for missing-qobject-macro
