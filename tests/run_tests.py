@@ -419,8 +419,12 @@ except:
     try:
         version = match.group(1)
     except:
-        print("Could not determine clang version, is it in PATH?")
-        sys.exit(-1)
+        splitted = version.split()
+        if len(splitted) > 2:
+            version = splitted[2]
+        else:
+            print("Could not determine clang version, is it in PATH?")
+            sys.exit(-1)
 
 if _verbose:
     print('Found clang version: ' + str(version))
