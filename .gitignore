@@ -36,3 +36,4 @@ checks.json.h
 .ninja*
 *.ninja
 .cmake
+file.hh.gch
