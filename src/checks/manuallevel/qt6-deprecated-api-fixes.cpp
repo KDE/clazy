@@ -652,12 +652,9 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         }
         if (functionName == "qrand" || functionName == "qsrand") {
             // To catch qrand and qsrand from qglobal.
-            string location = decl->getSourceRange().printToString(m_sm);
-            if (clazy::contains(location, "corelib/global/qglobal.h")) {
-                message = "use QRandomGenerator instead";
-                emitWarning(warningLocation, message, fixits);
-                return;
-            }
+            message = "use QRandomGenerator instead";
+            emitWarning(warningLocation, message, fixits);
+            return;
         }
 
         string declType;
