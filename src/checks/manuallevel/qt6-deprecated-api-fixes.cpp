@@ -483,7 +483,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, string classNam
     SourceRange fixitRange;
     Stmt *child = clazy::childAt(stmt, 0);
     bool foundOperator = false;
-    DeclRefExpr *decl = NULL;
+    DeclRefExpr *decl = nullptr;
     while (child) {
         decl = dyn_cast<DeclRefExpr>(child);
         if ( !decl ) {
@@ -510,7 +510,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, string classNam
 
     // get the name of the QDir variable from child2 value
     child = clazy::childAt(stmt, 1);
-    DeclRefExpr *declb = NULL;
+    DeclRefExpr *declb = nullptr;
     while (child) {
         declb = dyn_cast<DeclRefExpr>(child);
         if ( !declb ) {
@@ -716,7 +716,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 
     }else if (membExpr) {
         Stmt *child = clazy::childAt(stmt, 0);
-        DeclRefExpr *decl = NULL;
+        DeclRefExpr *decl = nullptr;
         while (child) {
             decl = dyn_cast<DeclRefExpr>(child);
             if (decl)

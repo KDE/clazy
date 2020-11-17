@@ -73,9 +73,9 @@ static int uintToSizetParam(clang::FunctionDecl *funcDecl)
 
 static clang::ParmVarDecl* getInterestingParam(clang::FunctionDecl *funcDecl)
 {
-    if (uintToSizetParam(funcDecl)>0)
+    if (uintToSizetParam(funcDecl) > 0)
         return funcDecl->getParamDecl(uintToSizetParam(funcDecl));
-    return NULL;
+    return nullptr;
 }
 
 static bool isWrongParamType(clang::FunctionDecl *funcDecl)
