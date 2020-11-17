@@ -27,6 +27,13 @@ set(CLAZY_PRINT_VERSION "${CLAZY_VERSION_MAJOR}.${CLAZY_VERSION_MINOR}")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake)
 if (NOT CLAZY_BUILD_WITH_CLANG)
   find_package(Clang 5.0 MODULE REQUIRED)
+
+  if (CLANG_CLANG-CPP_LIB AND NOT APPLE)
+    set(default_use_clang_cpp ON)
+  else()
+    set(default_use_clang_cpp OFF)
+  endif()
+  option(CLAZY_LINK_CLANG_DYLIB "Link clazy to dynamic Clang C++ library clang-cpp." ${default_use_clang_cpp})
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -65,14 +72,23 @@ endif()
 
 # Look for std::regex support
 message("Looking for std::regex support...")
-try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
+try_run(REGEX_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
 
-if(NOT RUN_RESULT EQUAL 0)
+if(NOT REGEX_RUN_RESULT EQUAL 0)
   message("Using boost::regex instead of std::regex")
   set(CLAZY_USES_BOOST_REGEX TRUE)
   add_definitions(-DCLAZY_USES_BOOST_REGEX)
   find_package(Boost REQUIRED COMPONENTS regex)
   include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+# Compiler might support c++17 but not have std::filesystem in the standard library
+message("Looking for std::filesystem support...")
+try_run(FILESYSTEM_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
+
+if (FILESYSTEM_RUN_RESULT EQUAL 0 AND COMPILE_RESULT)
+    set(CMAKE_CXX_STANDARD 17)
+    add_definitions(-DHAS_STD_FILESYSTEM)
 endif()
 
 include(ClazySources.cmake)
@@ -88,19 +104,26 @@ else()
 endif()
 
 macro(link_to_llvm name is_standalone)
-  foreach(clang_lib ${CLANG_LIBS})
-    if(MSVC)
-      get_filename_component(LIB_FILENAME ${clang_lib} NAME)
-      if(LIB_FILENAME STREQUAL "clangFrontend.lib")
-        # On MSVC we don't link against clangFrontend.lib, instead we link against clang.exe (via clang.lib)
-        # Otherwise the clazy plugin would have it's own plugin registry and clang wouldn't see it.
-        # This way clazy registers with clang.
-        continue()
+  if (CLAZY_LINK_CLANG_DYLIB)
+    target_link_libraries(${name} clang-cpp)
+  else()
+    foreach(clang_lib ${CLANG_LIBS})
+      if(MSVC)
+        get_filename_component(LIB_FILENAME ${clang_lib} NAME)
+        if(LIB_FILENAME STREQUAL "clangFrontend.lib")
+          # On MSVC we don't link against clangFrontend.lib, instead we link against clang.exe (via clang.lib)
+          # Otherwise the clazy plugin would have it's own plugin registry and clang wouldn't see it.
+          # This way clazy registers with clang.
+          continue()
+        endif()
       endif()
-    endif()
 
-    target_link_libraries(${name} ${clang_lib})
-  endforeach()
+      target_link_libraries(${name} ${clang_lib})
+    endforeach()
+    target_link_libraries(${name} clangTooling)
+    target_link_libraries(${name} clangToolingCore)
+    target_link_libraries(${name} ${clang_tooling_refactoring_lib})
+  endif()
 
   foreach(llvm_lib ${LLVM_LIBS})
     if(NOT ${is_standalone} AND NOT APPLE AND NOT MINGW AND NOT MSVC)
@@ -123,14 +146,6 @@ macro(link_to_llvm name is_standalone)
 
   if(WIN32)
     target_link_libraries(${name} version.lib)
-  endif()
-  # clang >= 9.0 can provide a single shared library instead of split ones
-  if(CLANG_CLANG-CPP_LIB)
-    target_link_libraries(${name} clang-cpp)
-  else()
-    target_link_libraries(${name} clangTooling)
-    target_link_libraries(${name} clangToolingCore)
-    target_link_libraries(${name} ${clang_tooling_refactoring_lib})
   endif()
   if (CLAZY_USES_BOOST_REGEX)
     target_link_libraries(${name} ${Boost_LIBRARIES})
