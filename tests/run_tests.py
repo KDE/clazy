@@ -524,7 +524,8 @@ def patch_fixit_yaml_file(test, is_standalone):
             line = line.replace(test.relativeFilename().replace('/', '\\'), fixedfilename.replace('/', '\\'))
 
             # Some tests also apply fix their to their headers:
-            line = line.replace(possible_headerfile, fixedfilename.replace(".cpp", ".h"))
+            if not test.relativeFilename().endswith(".hh"):
+                line = line.replace(possible_headerfile, fixedfilename.replace(".cpp", ".h"))
         f.write(line)
     f.close()
 
