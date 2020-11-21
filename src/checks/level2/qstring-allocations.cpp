@@ -182,11 +182,10 @@ void QStringAllocations::VisitCtor(Stmt *stm)
     if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/ true))
         return;
 
-    CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
 #if LLVM_VERSION_MAJOR >= 10
     // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
     // Do it manually.
-    if (clazy::isOfClass(ctorDecl, "QStringList")) {
+    if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")) {
         auto p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
         while (p) {
             if (clazy::isOfClass(p, "QString")) {
