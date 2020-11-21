@@ -132,7 +132,7 @@
   - Building clazy itself is 30% faster
   - heap-allocated-small-trivial-type: less false-positives
 
-* v1.8 (2020)
+* v1.8 (November 2020)
     - New Checks:
       - qt6-qhash-signature
       - qt6-qdir-fixes
