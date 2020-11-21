@@ -58,7 +58,7 @@ Pre-built clazy-1.7 binaries based on clang-10 for MSVC2019 and Linux AppImage a
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 5.0 are required.
+clang and LLVM >= 7.0 are required.
 
 If your distro provides clang then you can skip this step.
 

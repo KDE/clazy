@@ -3,12 +3,6 @@
         {
             "name" : "ubuntu-18.04",
             "url" : "iamsergio/clazy-ubuntu-18.04",
-            "llvm_root" : "/usr/lib/llvm-6.0/",
-            "comment" : "llvm-6;Qt-5.9.5"
-        },
-        {
-            "name" : "ubuntu-18.04",
-            "url" : "iamsergio/clazy-ubuntu-18.04",
             "llvm_root" : "/usr/lib/llvm-7",
             "comment" : "llvm-7;Qt-5.9.5"
         },
@@ -46,7 +40,7 @@
             "name" : "opensuse-tumbleweed",
             "url" : "iamsergio/clazy-opensuse-tumbleweed",
             "llvm_root" : "/usr",
-            "comment" : "llvm-7;Qt-5.13.1"
+            "comment" : "llvm-8;Qt-5.13.1"
         },
         {
             "name" : "fedora-31",
