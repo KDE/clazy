@@ -3,7 +3,7 @@
         {
             "filename" : "main.cpp",
             "qt_major_version": 5,
-            "minimum_qt_version" : 50000,
+            "minimum_qt_version" : 51400,
             "maximum_qt_version" : 60000,
             "has_fixits" : true
         }
