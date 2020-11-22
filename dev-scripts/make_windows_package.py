@@ -5,8 +5,8 @@ from shutil import copyfile
 
 #--------------------------------------------------
 # Change here:
-CLAZY_VERSION = '1.8'
-CANDIDATE_SHA1 = 'v1.8'
+CLAZY_VERSION = '1.9'
+CANDIDATE_SHA1 = 'v1.9'
 PACKAGE_DIR = '/d/clazy-msvc-package/'
 PACKAGE_DIR_WIN = 'd:\\clazy-msvc-package\\'
 #--------------------------------------------------
