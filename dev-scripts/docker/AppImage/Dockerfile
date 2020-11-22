@@ -49,7 +49,7 @@ RUN make install
 
 #Build LLVM
 WORKDIR /
-RUN wget -O - https://github.com/llvm/llvm-project/tarball/llvmorg-10.0.0 | tar xz
+RUN wget -O - https://github.com/llvm/llvm-project/tarball/llvmorg-11.0.0 | tar xz
 RUN mv llvm-llvm-project-* llvm-project
 WORKDIR /llvm-project/
 RUN echo "LLVM sha1: `git rev-parse HEAD`" > /clazy.AppDir/sha1
