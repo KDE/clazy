@@ -164,7 +164,7 @@ void test()
 }
 
 void function1(QLinkedList<QString> arg) {};
-QLinkedList<QString> function2() {};
+QLinkedList<QString> function2() { return {}; };
 
 class aclass
 {
