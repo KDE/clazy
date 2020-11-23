@@ -45,7 +45,7 @@ You can get clazy from:
 
 # Pre-built binaries
 
-Pre-built clazy-1.7 binaries based on clang-10 for MSVC2019 and Linux AppImage are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
+Pre-built clazy binaries for MSVC and Linux AppImage are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
 
 # Build Instructions
 ## Linux
@@ -94,7 +94,7 @@ clang and LLVM >= 9.0 are required.
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
 
 ```
-  > git clone https://github.com/llvm/llvm-project.git -b llvmorg-10.0.0 <some_directory>
+  > git clone https://github.com/llvm/llvm-project.git -b llvmorg-11.0.0 <some_directory>
   > mkdir build # Important that this is outside of the source directory
   > cd build
   > cmake -DCMAKE_INSTALL_PREFIX=c:\my_install_folder\llvm\ -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DCMAKE_BUILD_TYPE=Release -G "Ninja" ../<some_directory>/llvm
