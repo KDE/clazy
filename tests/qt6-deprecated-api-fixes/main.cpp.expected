@@ -1,5 +1,4 @@
 qt6-deprecated-api-fixes/main.cpp:38:22: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
-qt6-deprecated-api-fixes/main.cpp:167:35: warning: non-void function does not return a value [-Wreturn-type]
 qt6-deprecated-api-fixes/main.cpp:29:9: warning:  function setPath() has to be used in Qt6 [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:32:10: warning:  function setPath() has to be used in Qt6 [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:35:10: warning:  function setPath() has to be used in Qt6 [-Wclazy-qt6-deprecated-api-fixes]
