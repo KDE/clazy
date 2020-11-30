@@ -1,0 +1,9 @@
+#include <QtCore/qglobal.h>
+
+class myClass
+{
+  class QStringList; // this is ignored
+};
+
+#include <QtCore/qcontainerfwd.h>
+class SomeClass;

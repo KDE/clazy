@@ -115,6 +115,18 @@
             "visits_decls" : true,
             "visits_stmts" : true
         },
+	{
+            "name"  : "qt6-fwd-fixes",
+            "class_name" : "Qt6FwdFixes",
+            "level" : -1,
+            "categories" : ["qt6"],
+            "fixits" : [
+                {
+                    "name" : "qt6-fwd-fixes"
+                }
+            ],
+            "visits_decls" : true
+        },
         {
             "name"   : "tr-non-literal",
             "level"  : -1,
