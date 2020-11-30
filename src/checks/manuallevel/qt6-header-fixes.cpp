@@ -233,6 +233,39 @@ static bool newOldHeaderFileMatch(string FileNameOld, string &FileNameNew)
 Qt6HeaderFixes::Qt6HeaderFixes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
+    m_filesToIgnore = { "qeventtransition.h",
+                        "qfinalstate.h",
+                        "qhistorystate.h",
+                        "qsignaltransition.h",
+                        "qstate.h",
+                        "qstatemachine.h",
+                        "qopenglcontext.h",
+                        "qopenglfunctions_1_0.h",
+                        "qopenglfunctions_1_1.h",
+                        "qopenglfunctions_1_2.h",
+                        "qopenglfunctions_1_3.h",
+                        "qopenglfunctions_1_4.h",
+                        "qopenglfunctions_1_5.h",
+                        "qopenglfunctions_2_0.h",
+                        "qopenglfunctions_2_1.h",
+                        "qopenglfunctions_3_0.h",
+                        "qopenglfunctions_3_1.h",
+                        "qopenglfunctions_3_2_compatibility.h",
+                        "qopenglfunctions_3_2_core.h",
+                        "qopenglfunctions_3_3_compatibility.h",
+                        "qopenglfunctions_3_3_core.h",
+                        "qopenglfunctions_4_0_compatibility.h",
+                        "qopenglfunctions_4_0_core.h",
+                        "qopenglfunctions_4_1_compatibility.h",
+                        "qopenglfunctions_4_1_core.h",
+                        "qopenglfunctions_4_2_compatibility.h",
+                        "qopenglfunctions_4_2_core.h",
+                        "qopenglfunctions_4_3_compatibility.h",
+                        "qopenglfunctions_4_3_core.h",
+                        "qopenglfunctions_4_4_compatibility.h",
+                        "qopenglfunctions_4_4_core.h",
+                        "qopenglfunctions_4_5_compatibility.h",
+                        "qopenglfunctions_4_5_core.h"};
     enablePreProcessorCallbacks();
 }
 
@@ -240,9 +273,7 @@ void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc, cons
                         clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
                         clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType)
 {
-    auto current_file = m_sm.getFilename(HashLoc);
-    auto main_file = m_sm.getFileEntryForID(m_sm.getMainFileID())->getName();
-    if ( current_file != main_file)
+    if (shouldIgnoreFile(HashLoc))
         return;
 
     string newFileName = "";
