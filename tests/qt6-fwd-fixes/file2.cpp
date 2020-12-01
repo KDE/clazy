@@ -1,3 +1,2 @@
-#include "header1.h"
+#include <QtCore/qcontainerfwd.h>
 template <typename Key, typename T> class QCache  ;
-class SomeClass;

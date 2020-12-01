@@ -1,3 +1,2 @@
-#include "header1.h"
 #include <QtCore/qcontainerfwd.h>
 class SomeClass;

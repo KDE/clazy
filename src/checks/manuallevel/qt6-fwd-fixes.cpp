@@ -52,6 +52,8 @@ using namespace std;
 Qt6FwdFixes::Qt6FwdFixes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
+    enablePreProcessorCallbacks();
+    context->enablePreprocessorVisitor();
 }
 
 static std::set<std::string> interestingFwdDecl = {"QCache", "QHash", "QMap", "QMultiHash", "QMultiMap", "QPair", "QQueue",
@@ -59,8 +61,7 @@ static std::set<std::string> interestingFwdDecl = {"QCache", "QHash", "QMap", "Q
                                                    "QByteArrayList", "QMetaType", "QVariant", "QVariantList", "QVariantMap",
                                                    "QVariantHash", "QVariantPair"};
 
-SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManager &sm, const clang::LangOptions &lo,
-                                   bool &need_new_line){
+SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManager &sm, const clang::LangOptions &lo){
 
     std::pair<FileID, unsigned> locInfo = sm.getDecomposedLoc(loc);
     bool InvalidTemp = false;
@@ -108,14 +109,7 @@ SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManage
 void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
 {
 
-    auto currentFile = m_sm.getFilename(decl->getLocation());
-    if (m_currentFile != currentFile) {
-        m_currentFile = currentFile;
-        m_including_qcontainerfwd = false;
-    }
-
     CXXRecordDecl *recDecl = dyn_cast<CXXRecordDecl>(decl);
-
     if (!recDecl)
         return;
     auto parent = recDecl->getParent();
@@ -127,8 +121,14 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
     if (interestingFwdDecl.find(recDecl->getNameAsString()) == interestingFwdDecl.end())
         return;
 
-    bool need_new_line = false;
-    SourceLocation endLoc = locForNextSemiColon(recDecl->getBeginLoc(), m_sm, lo(), need_new_line);
+    auto currentFile = m_sm.getFilename(decl->getLocation());
+    if (m_currentFile != currentFile) {        m_currentFile = currentFile;
+        m_including_qcontainerfwd = false;
+        if (m_qcontainerfwd_included_in_files.find(currentFile) != m_qcontainerfwd_included_in_files.end())
+            m_including_qcontainerfwd = true;
+    }
+
+    SourceLocation endLoc = locForNextSemiColon(recDecl->getBeginLoc(), m_sm, lo());
 
     SourceLocation beginLoc;
     auto *tempclass = recDecl->getDescribedClassTemplate();
@@ -145,12 +145,11 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
 
     string replacement;
     CharSourceRange controledFixitRange = CharSourceRange(fixitRange, false);
-    fixits.push_back(FixItHint::CreateRemoval(controledFixitRange));
     if (!m_including_qcontainerfwd) {
-        replacement += "#include <QtCore/qcontainerfwd.h>";
-        fixits.push_back(FixItHint::CreateInsertion(beginLoc, replacement));
-        replacement = "\n";
-        fixits.push_back(FixItHint::CreateInsertion(endLoc, replacement));
+        replacement += "#include <QtCore/qcontainerfwd.h>\n";
+        fixits.push_back(FixItHint::CreateReplacement(controledFixitRange, replacement));
+    } else {
+        fixits.push_back(FixItHint::CreateRemoval(controledFixitRange));
     }
 
     message += "Using forward declaration of ";
@@ -163,4 +162,15 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
     emitWarning(warningLocation, message, fixits);
     m_including_qcontainerfwd = true;
     return;
+}
+
+void Qt6FwdFixes::VisitInclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
+                        clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
+                        clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType)
+{
+    auto current_file = m_sm.getFilename(HashLoc);
+    if (FileName.str() == "QtCore/qcontainerfwd.h") {
+        m_qcontainerfwd_included_in_files.insert(current_file);
+        return;
+    }
 }
