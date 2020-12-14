@@ -2,6 +2,34 @@
 #include <QtCore/QChar>
 #include <QtCore/QString>
 #include <QtCore/QDir>
+//static const type var{QLatin1String(value)};
+#define MY_CONSTANT(type, name, value)                \
+static const type &name() {                           \
+    static const type var{QLatin1String(QLatin1String(value))};      \
+return var;                                           \
+}
+#define MY_STRING_CONSTANT(name, value) MY_CONSTANT(QString, name, value)
+
+MY_STRING_CONSTANT(fooProperty, "foo")
+MY_STRING_CONSTANT(barProperty, "bar") // Don't warn
+MY_STRING_CONSTANT(bobProperty, QLatin1String(QLatin1String("bob")))
+
+#define MY_CONSTANT_TEST(type, name, value)                \
+static const type &name() {                           \
+    static const type var{QString(value)};      \
+return var;                                           \
+}
+#define MY_STRING_CONSTANT_TEST(name, value) MY_CONSTANT_TEST(QString, name, value)
+MY_STRING_CONSTANT_TEST(bobProperty_test, QLatin1String("bob_test"))
+MY_STRING_CONSTANT_TEST(bobProperty_test1, QLatin1String(QLatin1String("bob_test1")))
+MY_STRING_CONSTANT_TEST(bobProperty_test2, QLatin1Char(false ? (true ? '*' : '/') : '/'))
+#define MY_OTHER_CONSTANT(QString, name, value)                \
+static const QString &name() {                           \
+    static const QString var{QLatin1String(QLatin1String(value))};      \
+return var;                                           \
+}
+
+MY_OTHER_CONSTANT(QString, other_test, QLatin1String("otherbob"))
 
 void receivingQChar(QChar s1) {}
 void receivingQLatin1Char(QLatin1Char s1) {}
@@ -95,3 +123,4 @@ void test()
     // Support fixit for the QLatin1Literal("fixme") calls in the above cases
 
 }
+

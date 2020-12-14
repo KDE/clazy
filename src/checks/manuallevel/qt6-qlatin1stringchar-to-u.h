@@ -56,10 +56,14 @@ public:
                            const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 private:
     std::vector<clang::SourceLocation> m_listingMacroExpand;
+    std::vector<clang::SourceLocation> m_emittedWarningsInMacro;
+    bool warningAlreadyEmitted(clang::SourceLocation sploc);
     bool checkCTorExpr(clang::Stmt *stmt, bool check_parents);
     void lookForLeftOver(clang::Stmt *stmt, bool keep_looking = true);
     std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false,
                                  int ancestorConditionChildNumber = 0);
+
+    bool isInterestingCtorCall(clang::CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true);
 
 };
 

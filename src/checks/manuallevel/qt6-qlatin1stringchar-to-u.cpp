@@ -75,7 +75,7 @@ static bool isQLatin1StringDecl(CXXConstructorDecl *decl)
  *    This is done by looking for CXXFunctionalCastExpr with name QLatin1String among parents
  *    QLatin1String call nesting in other QLatin1String call are treating while visiting the outer call.
  */
-static bool isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true)
+bool Qt6QLatin1StringCharToU::isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent)
 {
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
     if (!isQLatin1CharDecl(ctorDecl) && !isQLatin1StringDecl(ctorDecl))
@@ -85,7 +85,7 @@ static bool isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext
     if (!parent_stmt)
         return false;
     bool oneFunctionalCast = false;
-    // A given QLatin1Char call will has two ctorExpr passing the isQLatin1CharDecl
+    // A given QLatin1Char call will have two ctorExpr passing the isQLatin1CharDecl
     // To avoid creating multiple fixit in case of nested QLatin1String calls
     // it is important to only test the one right after a CXXFunctionalCastExpr with QLatin1String name
     if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
@@ -106,13 +106,26 @@ static bool isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext
     // If an other CXXFunctionalCastExpr QLatin1String is found among the parents
     // the present QLatin1String call is nested in an other QLatin1String call and should be ignored.
     // The outer call will take care of it.
+    // Unless the outer call is from a Macro, in which case the current call should not be ignored
     while(parent_stmt) {
         if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
             CXXFunctionalCastExpr* parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
             NamedDecl *ndecl = parent->getConversionFunction();
             if (ndecl) {
                 if (ndecl->getNameAsString() == "QLatin1Char" || ndecl->getNameAsString() == "QLatin1String") {
-                return false;
+                    if (parent_stmt->getBeginLoc().isMacroID()) {
+                        auto parent_stmt_begin = parent_stmt->getBeginLoc();
+                        auto parent_stmt_end = parent_stmt->getEndLoc();
+                        auto parent_spl_begin = sm().getSpellingLoc(parent_stmt_begin);
+                        auto parent_spl_end = sm().getSpellingLoc(parent_stmt_end);
+                        auto ctorSpelling_loc = sm().getSpellingLoc(ctorExpr->getBeginLoc());
+                        if(m_sm.isPointWithin(ctorSpelling_loc,parent_spl_begin,parent_spl_end)) {
+                            return false;
+                        } else {
+                            return oneFunctionalCast;
+                        }
+                    }
+                    return false;
                 }
             }
         }
@@ -122,6 +135,16 @@ static bool isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext
     return oneFunctionalCast;
 }
 
+bool Qt6QLatin1StringCharToU::warningAlreadyEmitted(SourceLocation sploc) {
+
+    for (auto loc : m_emittedWarningsInMacro) {
+        if (sploc == loc) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
 {
@@ -131,8 +154,10 @@ void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingCtorCall(ctorExpr, m_context, true))
         return;
 
+
     vector<FixItHint> fixits;
     string message;
+
     for (auto macro_pos : m_listingMacroExpand) {
         if (m_sm.isPointWithin(macro_pos, clazy::getLocStart(stmt), clazy::getLocEnd(stmt))) {
            message = "QLatin1Char or QLatin1String is being called (fix it not supported because of macro)";
@@ -140,6 +165,7 @@ void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
            return;
         }
     }
+
     checkCTorExpr(stmt, true);
 }
 
@@ -157,10 +183,29 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
     bool extra_parentheses = !check_parents;
 
     bool noFix = false;
+
+    SourceLocation warningLocation = clazy::getLocStart(stmt);
+
     if (ctorExpr) {
         if (!isInterestingCtorCall(ctorExpr, m_context, check_parents))
             return false;
         message = "QLatin1Char or QLatin1String is being called";
+        if (clazy::getLocStart(stmt).isMacroID()) {
+            SourceLocation callLoc = clazy::getLocStart(stmt);
+            message += " in macro ";
+            message += Lexer::getImmediateMacroName(callLoc, m_sm, lo());
+            message += ". Please replace with `u` call manually.";
+            SourceLocation sploc = sm().getSpellingLoc(callLoc);
+            warningLocation = sploc;
+            if (warningAlreadyEmitted(sploc))
+                return false;
+
+            m_emittedWarningsInMacro.push_back(sploc);
+            //We don't support fixit within macro. (because the replacement is wrong within the #define)
+            emitWarning(sploc, message, fixits);
+            return true;
+        }
+
         std::string replacement = buildReplacement(stmt, noFix, extra_parentheses);
         if (!noFix) {
             fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));
@@ -170,7 +215,7 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
         return false;
     }
 
-    emitWarning(clazy::getLocStart(stmt), message, fixits);
+    emitWarning(warningLocation, message, fixits);
 
     if (noFix) {
         lookForLeftOver(stmt);
@@ -201,8 +246,8 @@ std::string Qt6QLatin1StringCharToU::buildReplacement(clang::Stmt *stmt, bool &n
 
     int i = 0;
 
-    for (auto it = current_stmt->child_begin() ; it !=current_stmt->child_end() ; it++) {
 
+    for (auto it = current_stmt->child_begin() ; it !=current_stmt->child_end() ; it++) {
         Stmt *child = *it;
         ConditionalOperator *parent_condOp = dyn_cast<ConditionalOperator>(current_stmt);
         ConditionalOperator *child_condOp = dyn_cast<ConditionalOperator>(child);
@@ -267,7 +312,7 @@ std::string Qt6QLatin1StringCharToU::buildReplacement(clang::Stmt *stmt, bool &n
     return replacement;
 }
 
-void Qt6QLatin1StringCharToU::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
+void Qt6QLatin1StringCharToU::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *info)
 {
     m_listingMacroExpand.push_back(range.getBegin());
     return;
