@@ -46,6 +46,7 @@ add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 option(CLAZY_AST_MATCHERS_CRASH_WORKAROUND "Disable AST Matchers if being built with clang. See bug #392223" ON)
 option(LINK_CLAZY_TO_LLVM "Links the clazy plugin to LLVM. Switch to OFF if your clang binary has all symbols already. Might need to be OFF if your LLVM is static." ON)
 option(APPIMAGE_HACK "Links the clazy plugin to the clang tooling libs only. For some reason this is needed when building on our old CentOS 6.8 to create the AppImage." OFF)
+option(CLAZY_MAN_PAGE "Builds the man page." ON)
 
 if (CLAZY_AST_MATCHERS_CRASH_WORKAROUND AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message("Enabling AST Matchers workaround. Consider building with gcc instead. See bug #392223.")
@@ -231,7 +232,9 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   install(FILES README.md COPYING-LGPL2.txt checks.json DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
   # Build docs
-  add_subdirectory(docs)
+  if (CLAZY_MAN_PAGE)
+    add_subdirectory(docs)
+  endif()
 
   # rpath
   set(CMAKE_SKIP_BUILD_RPATH FALSE)
