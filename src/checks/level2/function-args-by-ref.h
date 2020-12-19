@@ -56,6 +56,9 @@ public:
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 private:
+    static bool shouldIgnoreClass(clang::CXXRecordDecl *);
+    static bool shouldIgnoreOperator(clang::FunctionDecl *);
+    static bool shouldIgnoreFunction(clang::FunctionDecl *);
     void processFunction(clang::FunctionDecl *);
     void addFixits(std::vector<clang::FixItHint> &fixits, clang::FunctionDecl *, unsigned int parmIndex);
     clang::FixItHint fixit(const clang::ParmVarDecl *, clazy::QualTypeClassification);

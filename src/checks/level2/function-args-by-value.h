@@ -55,6 +55,9 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     void processFunction(clang::FunctionDecl *);
+    static bool shouldIgnoreClass(clang::CXXRecordDecl *);
+    static bool shouldIgnoreOperator(clang::FunctionDecl *);
+    static bool shouldIgnoreFunction(clang::FunctionDecl *);
     clang::FixItHint fixit(clang::FunctionDecl *func, const clang::ParmVarDecl *param,
                            clazy::QualTypeClassification);
 };

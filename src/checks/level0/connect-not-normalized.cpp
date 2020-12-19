@@ -66,7 +66,7 @@ bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
     if (name != "QArgument" && name != "QReturnArgument")
         return false;
 
-    StringLiteral *sl = clazy::getFirstChildOfType2<StringLiteral>(expr->getArg(0));
+    auto sl = clazy::getFirstChildOfType2<clang::StringLiteral>(expr->getArg(0));
     if (!sl)
         return false;
 
@@ -102,7 +102,7 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     }
 
     Expr *arg1 = callExpr->getArg(0);
-    StringLiteral *sl = clazy::getFirstChildOfType2<StringLiteral>(arg1);
+    auto sl = clazy::getFirstChildOfType2<clang::StringLiteral>(arg1);
     if (!sl)
         return false;
     std::string original = sl->getString().str();

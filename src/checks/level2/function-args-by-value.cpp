@@ -55,7 +55,7 @@ using namespace clang;
 using namespace std;
 
 // TODO, go over all these
-static bool shouldIgnoreClass(CXXRecordDecl *record)
+bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
 {
     if (!record)
         return false;
@@ -78,7 +78,7 @@ static bool shouldIgnoreClass(CXXRecordDecl *record)
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
-static bool shouldIgnoreOperator(FunctionDecl *function)
+bool FunctionArgsByValue::shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
     static const vector<StringRef> ignoreList = { "operator<<" };
@@ -86,7 +86,7 @@ static bool shouldIgnoreOperator(FunctionDecl *function)
     return clazy::contains(ignoreList, clazy::name(function));
 }
 
-static bool shouldIgnoreFunction(clang::FunctionDecl *function)
+bool FunctionArgsByValue::shouldIgnoreFunction(clang::FunctionDecl *function)
 {
     static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
                                                        "QMenu::exec", // Fixed in Qt6
