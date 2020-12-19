@@ -157,20 +157,10 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
     bool extra_parentheses = !check_parents;
 
     bool noFix = false;
-
     if (ctorExpr) {
         if (!isInterestingCtorCall(ctorExpr, m_context, check_parents))
             return false;
         message = "QLatin1Char or QLatin1String is being called";
-        if (clazy::getLocStart(stmt).isMacroID()) {
-            SourceLocation callLoc = clazy::getLocStart(stmt);
-            message += " in macro ";
-            message += Lexer::getImmediateMacroName(callLoc, m_sm, lo());
-            message += ". Please replace with `u` call manually.";
-            emitWarning(callLoc, message, fixits);
-            return true;
-        }
-
         std::string replacement = buildReplacement(stmt, noFix, extra_parentheses);
         if (!noFix) {
             fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));

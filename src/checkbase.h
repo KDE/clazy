@@ -162,7 +162,6 @@ protected:
 
     void queueManualFixitWarning(clang::SourceLocation loc, const std::string &message = {});
     bool warningAlreadyEmitted(clang::SourceLocation loc) const;
-    bool warningAlreadyEmittedSpelling(clang::SourceLocation loc) const;
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
     bool isOptionSet(const std::string &optionName) const;
 

@@ -234,9 +234,8 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
         return;
 
     if (loc.isMacroID()) {
-        if (warningAlreadyEmitted(loc) || warningAlreadyEmittedSpelling(loc)) {
+        if (warningAlreadyEmitted(loc))
             return; // For warnings in macro arguments we get a warning in each place the argument is used within the expanded macro, so filter all the dups
-        }
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
@@ -292,19 +291,6 @@ bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
         SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
         PresumedLoc p = sm().getPresumedLoc(l);
         if (Utils::presumedLocationsEqual(p, ploc))
-            return true;
-    }
-
-    return false;
-}
-
-bool CheckBase::warningAlreadyEmittedSpelling(SourceLocation loc) const
-{
-    SourceLocation sploc = sm().getSpellingLoc(loc);
-    for (auto rawLoc : m_emittedWarningsInMacro) {
-        SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
-        SourceLocation spl = sm().getSpellingLoc(l);
-        if (sploc == spl)
             return true;
     }
 

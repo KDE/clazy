@@ -3,16 +3,6 @@
 #include <QtCore/QString>
 #include <QtCore/QDir>
 
-#define MY_CONSTANT(type, name, value)                \
-static const type &name() {                           \
-    static const type var{QLatin1String(value)};      \
-return var;                                           \
-}
-#define MY_STRING_CONSTANT(name, value) MY_CONSTANT(QString, name, value)
-
-MY_STRING_CONSTANT(fooProperty, "foo")
-MY_STRING_CONSTANT(barProperty, "bar")
-
 void receivingQChar(QChar s1) {}
 void receivingQLatin1Char(QLatin1Char s1) {}
 
