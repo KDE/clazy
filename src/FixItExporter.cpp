@@ -110,7 +110,12 @@ tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
                                     tooling::Diagnostic::Warning,
                                     CurrentBuildDir);
     // FIXME: Sometimes the file path is an empty string.
-    ToolingDiag.Message = tooling::DiagnosticMessage(messageText, SourceMgr, Info.getLocation());
+    if (Info.getLocation().isMacroID()) {
+        auto MacroLoc = SourceMgr.getFileLoc(Info.getLocation());
+        ToolingDiag.Message = tooling::DiagnosticMessage(messageText, SourceMgr, MacroLoc);
+    } else {
+        ToolingDiag.Message = tooling::DiagnosticMessage(messageText, SourceMgr, Info.getLocation());
+    }
     return ToolingDiag;
 }
 
