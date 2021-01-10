@@ -466,6 +466,14 @@ Don't include the `clazy-` prefix. If, for example, you want to disable qstring-
 - IRC: #kde-clazy (freenode)
 - E-mail: <smartins at kde.org>
 
+When reporting a bug *please* include a minimal compilable testcase. No matter
+how simple it is, it saves me time from deciphering a bug report. Time spent
+doing triaging is time not spent writing fixes.
+
+A minimal testcase is also something I can copy to the test suite.
+
+
+
 # Authors
 
 - Sérgio Martins
