@@ -1,18 +1,16 @@
 {
+    "minimum_qt_version" : 51500,
     "tests" : [
         {
             "filename" : "main.cpp",
-            "qt_major_version": 6,
             "has_fixits" : true
         },
         {
             "filename" : "file1.cpp",
-            "qt_major_version": 6,
             "has_fixits" : true
         },
         {
             "filename" : "file2.cpp",
-            "qt_major_version": 6,
             "has_fixits" : true
         }
     ]
