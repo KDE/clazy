@@ -97,7 +97,7 @@ ClazyContext::~ClazyContext()
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders())
-        accessSpecifierManager = new AccessSpecifierManager(ci);
+        accessSpecifierManager = new AccessSpecifierManager(this);
 }
 
 void ClazyContext::enablePreprocessorVisitor()

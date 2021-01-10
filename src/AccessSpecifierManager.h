@@ -57,6 +57,7 @@ class CompilerInstance;
 }
 
 class AccessSpecifierPreprocessorCallbacks;
+class ClazyContext;
 
 enum QtAccessSpecifierType
 {
@@ -79,7 +80,7 @@ using ClazySpecifierList = std::vector<ClazyAccessSpecifier>;
 class AccessSpecifierManager
 {
 public:
-    explicit AccessSpecifierManager(const clang::CompilerInstance &ci);
+    explicit AccessSpecifierManager(ClazyContext *);
     void VisitDeclaration(clang::Decl *decl);
 
     /**
@@ -106,6 +107,7 @@ private:
     const clang::CXXRecordDecl *classDefinitionForLoc(clang::SourceLocation loc) const;
     std::unordered_map<const clang::CXXRecordDecl*, ClazySpecifierList> m_specifiersMap;
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
+    const bool m_fixitsEnabled;
 };
 
 #endif
