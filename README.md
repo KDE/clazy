@@ -123,9 +123,9 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
 
 ### Install clang
 ```
-$ sudo port install llvm-8.0 clang-8.0 cmake ninja coreutils
-$ sudo ln -sf /opt/local/bin/llvm-config-mp-8.0 /opt/local/bin/llvm-config
-$ sudo port select --set clang mp-clang-8.0
+$ sudo port install llvm-11 clang-11 cmake ninja coreutils
+$ sudo ln -sf /opt/local/bin/llvm-config-mp-11 /opt/local/bin/llvm-config
+$ sudo port select --set clang mp-clang-11
 ```
 
 ### Build clazy
