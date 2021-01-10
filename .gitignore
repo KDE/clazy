@@ -37,3 +37,6 @@ checks.json.h
 *.ninja
 .cmake
 file.hh.gch
+/build-dev
+/build-profile
+/build-release
