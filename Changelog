@@ -139,3 +139,6 @@
       - qt6-deprecated-api-fixes
       - use-chrono-in-qtimer
       - fixit for missing-qobject-macro
+
+* v1.9 (2021)
+    - Fixed clazy slowdown introduced in 1.8. I can be up to 4x faster now.
