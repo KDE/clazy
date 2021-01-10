@@ -22,6 +22,17 @@
                 "CMAKE_UNITY_BUILD" : "ON",
                 "CLAZY_MAN_PAGE" : "OFF"
             }
+        },
+        {
+            "name": "release",
+            "displayName": "release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "ON"
+            }
         }
     ]
 }
