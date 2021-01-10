@@ -11,6 +11,17 @@
                 "CMAKE_UNITY_BUILD" : "ON",
                 "CLAZY_MAN_PAGE" : "OFF"
             }
+        },
+        {
+            "name": "profile",
+            "displayName": "profile",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-profile",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            }
         }
     ]
 }
