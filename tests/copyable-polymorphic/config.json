@@ -2,6 +2,11 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "fixits.cpp",
+            "has_fixits" : true,
+            "minimum_clang_version" : 1100
         }
     ]
 }

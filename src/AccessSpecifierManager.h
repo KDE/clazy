@@ -97,6 +97,9 @@ public:
      */
     llvm::StringRef qtAccessSpecifierTypeStr(QtAccessSpecifierType) const;
 
+    clang::SourceLocation firstLocationOfSection(clang::AccessSpecifier specifier,
+                                                 clang::CXXRecordDecl *decl) const;
+
 private:
     ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl*);
     const clang::CompilerInstance &m_ci;
