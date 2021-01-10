@@ -346,7 +346,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
             continue;
 
         QualType qt = paramDecl->getType();
-        const Type *t = qt.getTypePtrOrNull();
+        const clang::Type *t = qt.getTypePtrOrNull();
         if (!t)
             continue;
 

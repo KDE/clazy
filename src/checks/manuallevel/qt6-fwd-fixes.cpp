@@ -121,8 +121,9 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
     if (interestingFwdDecl.find(recDecl->getNameAsString()) == interestingFwdDecl.end())
         return;
 
-    auto currentFile = m_sm.getFilename(decl->getLocation());
-    if (m_currentFile != currentFile) {        m_currentFile = currentFile;
+    const std::string currentFile = m_sm.getFilename(decl->getLocation()).str();
+    if (m_currentFile != currentFile) {
+        m_currentFile = currentFile;
         m_including_qcontainerfwd = false;
         if (m_qcontainerfwd_included_in_files.find(currentFile) != m_qcontainerfwd_included_in_files.end())
             m_including_qcontainerfwd = true;
