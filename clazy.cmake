@@ -29,6 +29,9 @@ HELP() {
   echo
   echo "See the clang++ manual for a list of the very large set of options available"
   echo
+  echo "Environment Variables:"
+  echo "  CLANGXX            Path to the clang++ executable to use"
+  echo
 }
 
 VERSION() {
