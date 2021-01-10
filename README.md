@@ -1,5 +1,3 @@
-*WARNING:* master is the development branch. Please use the v1.8 branch.
-
 clazy v1.9
 ===========
 
@@ -503,7 +501,7 @@ and thanks to:
 
 # Contributing patches
 
-New features go to master and bug fixes go to the 1.8 branch.
+New features go to master and bug fixes go to the 1.9 branch.
 The prefered way to contributing is by using KDE's GitLab instance,
 see <https://community.kde.org/Infrastructure/GitLab>.
 
