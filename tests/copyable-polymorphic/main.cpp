@@ -52,12 +52,3 @@ struct DerivedFromNotCopyable : public PolymorphicClass3 // OK, not copyable
 struct DerivedFromCopyable : public PolymorphicClass4 // Warning, copyable
 {
 };
-
-class ClassWithPrivateSection
-{
-public:
-    virtual void foo();
-private:
-    void bar();
-    int i;
-};

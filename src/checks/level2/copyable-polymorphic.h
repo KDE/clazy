@@ -44,7 +44,6 @@ class CopyablePolymorphic
 public:
     explicit CopyablePolymorphic(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
-    std::vector<clang::FixItHint> fixits(clang::CXXRecordDecl* record);
 };
 
 #endif

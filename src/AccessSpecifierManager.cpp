@@ -167,7 +167,7 @@ const CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocatio
 void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 {
     auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record)
+    if (!clazy::isQObject(record))
         return;
 
     const auto &sm = m_ci.getSourceManager();
@@ -177,7 +177,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 
     auto it = m_preprocessorCallbacks->m_qtAccessSpecifiers.begin();
     while (it != m_preprocessorCallbacks->m_qtAccessSpecifiers.end()) {
-         if (classDefinitionForLoc((*it).loc) == record) {
+        if (classDefinitionForLoc((*it).loc) == record) {
             sorted_insert(specifiers, *it, sm);
             it = m_preprocessorCallbacks->m_qtAccessSpecifiers.erase(it);
         } else {
@@ -285,19 +285,4 @@ llvm::StringRef AccessSpecifierManager::qtAccessSpecifierTypeStr(QtAccessSpecifi
     }
 
     return "";
-}
-
-SourceLocation AccessSpecifierManager::firstLocationOfSection(
-    AccessSpecifier specifier, clang::CXXRecordDecl *decl) const {
-
-    auto it = m_specifiersMap.find(decl);
-    if (it == m_specifiersMap.end())
-        return {};
-
-    for (const auto &record : it->second) {
-        if (record.accessSpecifier == specifier) {
-            return record.loc;
-        }
-    }
-    return {};
 }
