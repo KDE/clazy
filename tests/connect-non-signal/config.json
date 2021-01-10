@@ -20,6 +20,9 @@
         },
         {
             "filename" : "bug376137.cpp"
+        },
+        {
+            "filename" : "bug431186.cpp"
         }
     ]
 }
