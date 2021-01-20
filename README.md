@@ -472,6 +472,8 @@ doing triaging is time not spent writing fixes.
 
 A minimal testcase is also something I can copy to the test suite.
 
+Make sure you can reproduce with clazy (outside of QtCreator), otherwise it can be a QtCreator bug instead,
+which you can report at <https://bugreports.qt.io/>.
 
 
 # Authors
