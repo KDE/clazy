@@ -551,7 +551,10 @@ def print_differences(file1, file2):
     return run_command("diff -Naur --strip-trailing-cr {} {}".format(file1, file2))
 
 def normalizedCwd():
-    return os.getcwd().replace('\\', '/')
+    if _platform.startswith('linux'):
+        return subprocess.check_output("pwd -L", shell=True, text=True).rstrip('\n')
+    else:
+        return os.getcwd().replace('\\', '/')
 
 def extract_word(word, in_file, out_file):
     in_f = io.open(in_file, 'r', encoding='utf-8')
@@ -562,7 +565,7 @@ def extract_word(word, in_file, out_file):
 
         if word in line:
             line = line.replace('\\', '/')
-            line = line.replace(normalizedCwd() + '/', "") # clazy-standalone prints the complete cpp file path for some reason. Normalize it so it compares OK with the expected output.
+            line = line.replace(f"{normalizedCwd()}/", "") # clazy-standalone prints the complete cpp file path for some reason. Normalize it so it compares OK with the expected output.
             out_f.write(line)
     in_f.close()
     out_f.close()
