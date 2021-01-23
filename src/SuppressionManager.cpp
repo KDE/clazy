@@ -24,7 +24,6 @@
 #include "clazy_stl.h"
 
 #include <clang/Basic/SourceManager.h>
-#include <clang/Lex/Lexer.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/TokenKinds.h>
 #include <clang/Lex/Token.h>
@@ -84,7 +83,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     Suppressions &suppressions = (*it).second;
 
     bool invalid = false;
-    auto buffer = sm.getBuffer(id, &invalid);
+    auto buffer = clazy::getBuffer(sm, id, &invalid);
     if (invalid) {
         llvm::errs() << "SuppressionManager::parseFile: Invalid buffer ";
         if (buffer)
@@ -92,7 +91,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
         return;
     }
 
-    Lexer lexer(id, buffer, sm, lo);
+    auto lexer = clazy::getLexer(id, buffer, sm, lo);
     lexer.SetCommentRetentionState(true);
 
     Token token;
