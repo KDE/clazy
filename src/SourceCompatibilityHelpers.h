@@ -29,6 +29,7 @@
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/FrontendDiagnostic.h>
+#include <clang/Lex/Lexer.h>
 #include <clang/Tooling/Core/Diagnostic.h>
 
 #if defined(CLAZY_USES_BOOST_REGEX)
@@ -102,6 +103,31 @@ inline clang::tooling::Replacements& DiagnosticFix(clang::tooling::Diagnostic &d
     return diag.Fix[filePath];
 #endif
 }
+
+inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *invalid)
+{
+#if LLVM_VERSION_MAJOR >= 12
+    auto buffer = sm.getBufferOrNone(id);
+    *invalid = !buffer.hasValue();
+    return buffer;
+#else
+    return sm.getBuffer(id, invalid);
+#endif
+}
+
+#if LLVM_VERSION_MAJOR >= 12
+inline clang::Lexer getLexer(clang::FileID id, llvm::Optional<llvm::MemoryBufferRef> inputFile,
+                             const clang::SourceManager &sm, const clang::LangOptions &lo)
+{
+    return clang::Lexer(id, inputFile.getValue(), sm, lo);
+}
+#else
+inline clang::Lexer getLexer(clang::FileID id, const llvm::MemoryBuffer *inputFile,
+                             const clang::SourceManager &sm, const clang::LangOptions &lo)
+{
+    return clang::Lexer(id, inputFile, sm, lo);
+}
+#endif
 
 }
 
