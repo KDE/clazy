@@ -21,6 +21,7 @@
   <name xml:lang="lt">Clazy</name>
   <name xml:lang="nl">Clazy</name>
   <name xml:lang="nn">Clazy</name>
+  <name xml:lang="pl">Clazy</name>
   <name xml:lang="pt">Clazy</name>
   <name xml:lang="pt-BR">Clazy</name>
   <name xml:lang="ro">Clazy</name>
@@ -46,6 +47,7 @@
   <summary xml:lang="lt">Clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi</summary>
   <summary xml:lang="nl">Een Clang-compilerplug-in die waarschuwingen uitstuurt gerelateerd aan de beste praktijken van Qt</summary>
   <summary xml:lang="nn">Kompilatortillegg for Clang som viser åtvaringar knytte til mønsterpraksis for Qt-utvikling</summary>
+  <summary xml:lang="pl">Wtyczka do kompilatora Clang, która wydaje ostrzeżenia powiązane z najlepszymi praktykami Qt</summary>
   <summary xml:lang="pt">Um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt</summary>
   <summary xml:lang="pt-BR">Um plugin do compilador Clang que emite avisos relacionados às melhores práticas do Qt</summary>
   <summary xml:lang="ro">Extensie de compilator Clang ce emite avertizări legate de practicile recomandate Qt</summary>
@@ -71,6 +73,7 @@
     <p xml:lang="lt">Clang yra clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi.</p>
     <p xml:lang="nl">Clazy is een clang-compilerplug-in die waarschuwingen uitstuurt gerelateerd aan de beste praktijken van Qt.</p>
     <p xml:lang="nn">Clazy er eit kompilatortillegg for Clang som viser åtvaringar knytte til mønsterpraksis for Qt-utvikling.</p>
+    <p xml:lang="pl">Clazy jest wtyczką do kompilatora Clang, która wydaje ostrzeżenia powiązane z najlepszymi praktykami Qt.</p>
     <p xml:lang="pt">O Clazy é um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt.</p>
     <p xml:lang="pt-BR">O Clazy é um plugin do compilador Clang que emite avisos relacionados às melhores práticas do Qt</p>
     <p xml:lang="ro">Clazy e o extensie de compilator Clang ce emite avertizări legate de practicile recomandate Qt.</p>
