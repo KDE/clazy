@@ -252,7 +252,7 @@ bool replacementForQComboBox(clang::MemberExpr * membExpr, string functionName, 
     return true;
 }
 
-static std::set<std::string> qProcessDeprecatedFunctions = {"start", "execute", "startDetached"};
+static std::set<std::string> qProcessDeprecatedFunctions = {"start"};
 
 void replacementForQProcess(string functionName, string &message, string &replacement) {
     message = "call function QProcess::";
@@ -282,7 +282,7 @@ void replacementForQSignalMapper(clang::MemberExpr * membExpr, string &message, 
         functionNameExtention = "String";
         paramTypeCor = "const QString &";
     } else if (paramType == "class QWidget *") {
-        functionNameExtention = "Widget";
+        functionNameExtention = "Object";
         paramTypeCor = "QWidget *";
     } else if (paramType == "class QObject *") {
         functionNameExtention = "Object";
@@ -393,7 +393,10 @@ bool getMessageForDeclWarning(string type, string &message)
         message =  "Using QDirModel."
                " Use QFileSystemModel instead";
         return true;
-    } else {
+    } else if (clazy::contains(type, "QString::SplitBehavior")) {
+        message = "Using QString::SplitBehavior. Use Qt::SplitBehavior variant instead";
+        return true;
+    }else {
         return false;
     }
 
@@ -411,16 +414,50 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     vector<FixItHint> fixits;
     auto warningLocation = decl->getBeginLoc();
     string message;
+    string type;
+    SourceLocation replacementLocB;
+    SourceLocation replacementLocE;
     if (funcDecl) {
+        type = funcDecl->getReturnType().getAsString();
+        replacementLocB = funcDecl->getTypeSpecStartLoc();
+        replacementLocE = funcDecl->getTypeSpecEndLoc();
         if (!getMessageForDeclWarning(funcDecl->getReturnType().getAsString(),message))
             return;
     } else if (varDecl) {
+        type = varDecl->getType().getAsString();
+        replacementLocB = varDecl->getTypeSpecStartLoc();
+        replacementLocE = varDecl->getTypeSpecEndLoc();
         if (!getMessageForDeclWarning(varDecl->getType().getAsString(), message))
             return;
     } else if (fieldDecl) {
+        type = fieldDecl->getType().getAsString();
+        replacementLocB = fieldDecl->getTypeSpecStartLoc();
+        replacementLocE = fieldDecl->getTypeSpecEndLoc();
         if (!getMessageForDeclWarning(fieldDecl->getType().getAsString(), message))
             return;
     }
+
+    if (clazy::endsWith(type, "QString::SplitBehavior")) {
+        bool isQtNamespaceExplicit = false;
+        DeclContext *newcontext =  clazy::contextForDecl(m_context->lastDecl);
+        while (newcontext) {
+            if (!newcontext)
+                break;
+            if (clang::isa<NamespaceDecl>(newcontext)) {
+                clang::NamespaceDecl *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
+                if (namesdecl->getNameAsString() == "Qt")
+                    isQtNamespaceExplicit = true;
+             }
+            newcontext = newcontext->getParent();
+        }
+        string replacement;
+        if (!isQtNamespaceExplicit)
+            replacement = "Qt::";
+        replacement += "SplitBehavior";
+        SourceRange sourceRange(replacementLocB, replacementLocE);
+        fixits.push_back(FixItHint::CreateReplacement(sourceRange, replacement));
+    }
+
     emitWarning(warningLocation, message, fixits);
     return;
 }
@@ -441,13 +478,12 @@ string Qt6DeprecatedAPIFixes::buildReplacementforQDir(Stmt* stmt, DeclRefExpr* d
 
 string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(Stmt* stmt, DeclRefExpr* decl,  DeclRefExpr* declb)
 {
-    string replacement = declb->getNameInfo().getAsString();
+    string replacement = "QVariant::compare(";
     QualType qualtype = declb->getType();
     if (qualtype->isPointerType())
-        replacement += "->";
-    else
-    replacement += ".";
-    replacement += "compare(";
+        replacement += "*";
+    replacement += declb->getNameInfo().getAsString();
+    replacement += ", ";
     replacement += findPathArgument(clazy::childAt(stmt, 2));
     replacement += ") ";
     replacement += decl->getNameInfo().getAsString().substr(8,2);

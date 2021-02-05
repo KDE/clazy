@@ -60,8 +60,8 @@ void test()
 
     QProcess pp;
     pp.startCommand("stringContainingACommandWithArguments");
-    pp.executeCommand("stringContainingACommandWithArguments");
-    pp.startDetachedCommand("stringContainingACommandWithArguments");
+    pp.execute("stringContainingACommandWithArguments");
+    pp.startDetached("stringContainingACommandWithArguments");
 
     QResource rr;
     bool a_bool = rr.compressionAlgorithm();
@@ -77,6 +77,8 @@ void test()
     QString a_string = "eeoaaoii";
     QString sep = "o";
     QStringList my_list =  a_string.split(sep, Qt::KeepEmptyParts);
+    QStringList my_list2 =  a_string.split(sep, Qt::KeepEmptyParts);
+    Qt::SplitBehavior behavior = Qt::KeepEmptyParts;
 
     QSet<QString> my_set;
     QSet<QString>::iterator it_set = my_set.begin();
@@ -113,7 +115,7 @@ void test()
     sigMap.mappedInt(my_int);
     sigMap.mappedString("astring");
     sigMap.mappedString(a_string);
-    sigMap.mappedWidget(my_qwidget);
+    sigMap.mappedObject(my_qwidget);
     sigMap.mappedObject(my_qobject);
 
     QHash<QString, QString> my_hash;
@@ -156,10 +158,10 @@ void test()
     QVariant var1;
     QVariant *var3;
     QVariant var2;
-    bool bool1 = (var1.compare(var2) > 0);
-    bool bool2 = (var1.compare(var2) >= 0);
-    bool bool3 = (var3->compare(var2) < 0);
-    bool bool4 = (var3->compare(var2) <= 0);
+    bool bool1 = (QVariant::compare(var1, var2) > 0);
+    bool bool2 = (QVariant::compare(var1, var2) >= 0);
+    bool bool3 = (QVariant::compare(*var3, var2) < 0);
+    bool bool4 = (QVariant::compare(*var3, var2) <= 0);
 
 }
 
@@ -185,6 +187,8 @@ namespace Qt {
         QString a_string = "eeoaaoii";
         QString sep = "o";
         QStringList my_list =  a_string.split(sep, KeepEmptyParts);
+        SplitBehavior behavior = KeepEmptyParts;
+
     }
 }
 

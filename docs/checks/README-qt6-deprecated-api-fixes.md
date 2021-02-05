@@ -10,11 +10,11 @@ QDir dir; dir = "..." becomes	QDir dir; dir.setPath("...");
 QDir::addResourceSearchPath() becomes QDir::addSearchPath() with prefix.
 Only warning are emitted for addResourceSearchPath.
 
-QProcess::start(), execute(), startDetached() becomes QProcess::startCommand(), executeCommand(), startDetachedCommand().
+QProcess::start() becomes QProcess::startCommand().
 
 QResource::isCompressed() is replaced with QResource::compressionAlgorithm()
 
-QSignalMapper::mapped() is replaced with QSignalMapper::mappedInt, mappedString, mappedWidget, mappedObject depending on the argument of the functino.
+QSignalMapper::mapped() is replaced with QSignalMapper::mappedInt, mappedString, mappedObject depending on the argument of the function.
 
 QString::SplitBehavior is replaced with Qt::SplitBehavior.
 
@@ -23,7 +23,7 @@ Qt::MatchRegExp is replaced with Qt::MatchRegularExpression.
 QTextStream functions are replaced by the one under the Qt namespace.
 
 QVariant operators '<' '<=' '>' '>=' are replaced with QVariant::compare() function.
-QVariant v1; QVariant v2; 'v1 < v2' becomes 'v1.compare(v2) < 0'.
+QVariant v1; QVariant v2; 'v1 < v2' becomes 'QVariant::compare(v1, v2) < 0'.
 
 QWizard::visitedPages() is replaced with QWizard::visitedIds().
 

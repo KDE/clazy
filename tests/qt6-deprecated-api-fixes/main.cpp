@@ -77,6 +77,8 @@ void test()
     QString a_string = "eeoaaoii";
     QString sep = "o";
     QStringList my_list =  a_string.split(sep, QString::KeepEmptyParts);
+    QStringList my_list2 =  a_string.split(sep, QString::SplitBehavior::KeepEmptyParts);
+    QString::SplitBehavior behavior = QString::KeepEmptyParts;
 
     QSet<QString> my_set;
     QSet<QString>::iterator it_set = my_set.begin();
@@ -185,6 +187,8 @@ namespace Qt {
         QString a_string = "eeoaaoii";
         QString sep = "o";
         QStringList my_list =  a_string.split(sep, QString::KeepEmptyParts);
+        QString::SplitBehavior behavior = QString::KeepEmptyParts;
+
     }
 }
 
