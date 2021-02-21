@@ -99,7 +99,8 @@
 #include "checks/level1/qlatin1string-non-ascii.h"
 #include "checks/level1/qproperty-without-notify.h"
 #include "checks/level1/qstring-left.h"
-#include "checks/level1/range-loop.h"
+#include "checks/level1/range-loop-detach.h"
+#include "checks/level1/range-loop-reference.h"
 #include "checks/level1/returning-data-from-temporary.h"
 #include "checks/level1/rule-of-two-soft.h"
 #include "checks/level1/skipped-base-method.h"
@@ -214,9 +215,10 @@ void CheckManager::registerChecks()
     registerCheck(check<QLatin1StringNonAscii>("qlatin1string-non-ascii", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QPropertyWithoutNotify>("qproperty-without-notify", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QStringLeft>("qstring-left", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<RangeLoop>("range-loop", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
-    registerFixIt(1, "fix-range-loop-add-ref", "range-loop");
-    registerFixIt(2, "fix-range-loop-add-qasconst", "range-loop");
+    registerCheck(check<RangeLoopDetach>("range-loop-detach", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-range-loop-detach", "range-loop-detach");
+    registerCheck(check<RangeLoopReference>("range-loop-reference", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-range-loop-reference", "range-loop-reference");
     registerCheck(check<ReturningDataFromTemporary>("returning-data-from-temporary", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfTwoSoft>("rule-of-two-soft", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<SkippedBaseMethod>("skipped-base-method", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));

@@ -41,16 +41,15 @@ class CXXForRangeStmt;
 /**
  * Finds places where you're using C++11 for range loops with Qt containers. (potential detach)
  */
-class RangeLoop
+class RangeLoopDetach
     : public CheckBase
 {
 public:
-    RangeLoop(const std::string &name, ClazyContext *context);
+    RangeLoopDetach(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 private:
     bool islvalue(clang::Expr *exp, clang::SourceLocation &endLoc);
     void processForRangeLoop(clang::CXXForRangeStmt *rangeLoop);
-    void checkPassByConstRefCorrectness(clang::CXXForRangeStmt *rangeLoop);
 };
 
 #endif

@@ -22,7 +22,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "range-loop.h"
+#include "range-loop-detach.h"
 #include "Utils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
@@ -40,18 +40,12 @@
 #include <clang/AST/Stmt.h>
 #include <clang/AST/StmtCXX.h>
 #include <clang/AST/Type.h>
-#include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
 class ClazyContext;
 
 using namespace clang;
 using namespace std;
-
-enum Fixit {
-    Fixit_AddRef = 1,
-    Fixit_AddqAsConst = 2
-};
 
 namespace clazy {
 /**
@@ -98,20 +92,20 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
 }
 
 
-RangeLoop::RangeLoop(const std::string &name, ClazyContext *context)
+RangeLoopDetach::RangeLoopDetach(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enablePreprocessorVisitor();
 }
 
-void RangeLoop::VisitStmt(clang::Stmt *stmt)
+void RangeLoopDetach::VisitStmt(clang::Stmt *stmt)
 {
     if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
         processForRangeLoop(rangeLoop);
     }
 }
 
-bool RangeLoop::islvalue(Expr *exp, SourceLocation &endLoc)
+bool RangeLoopDetach::islvalue(Expr *exp, SourceLocation &endLoc)
 {
     if (isa<DeclRefExpr>(exp)) {
         endLoc = clazy::locForEndOfToken(&m_astContext, clazy::getLocStart(exp));
@@ -130,7 +124,7 @@ bool RangeLoop::islvalue(Expr *exp, SourceLocation &endLoc)
     return false;
 }
 
-void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
+void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 {
     Expr *containerExpr = rangeLoop->getRangeInit();
     if (!containerExpr)
@@ -140,8 +134,6 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     const Type *t = qt.getTypePtrOrNull();
     if (!t || !t->isRecordType())
         return;
-
-    checkPassByConstRefCorrectness(rangeLoop);
 
     if (qt.isConstQualified()) // const won't detach
         return;
@@ -172,35 +164,4 @@ void RangeLoop::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     }
 
     emitWarning(clazy::getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')', fixits);
-}
-
-void RangeLoop::checkPassByConstRefCorrectness(CXXForRangeStmt *rangeLoop)
-{
-    clazy::QualTypeClassification classif;
-    auto varDecl = rangeLoop->getLoopVariable();
-    bool success = varDecl && clazy::classifyQualType(m_context, varDecl->getType(), varDecl, /*by-ref*/ classif, rangeLoop);
-    if (!success)
-        return;
-
-    if (classif.passNonTriviallyCopyableByConstRef) {
-        string msg;
-        const string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
-        msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
-
-        std::vector<FixItHint> fixits;
-        const bool isConst = varDecl->getType().isConstQualified();
-
-        if (!isConst) {
-            SourceLocation start = clazy::getLocStart(varDecl);
-            fixits.push_back(clazy::createInsertion(start, "const "));
-        }
-
-        SourceLocation end = varDecl->getLocation();
-        fixits.push_back(clazy::createInsertion(end, "&"));
-
-
-        // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
-        // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(clazy::getLocStart(varDecl), msg.c_str(), fixits);
-    }
 }

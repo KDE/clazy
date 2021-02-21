@@ -77,7 +77,8 @@ SET(README_LEVEL1_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qlatin1string-non-ascii.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-without-notify.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-left.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop-detach.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop-reference.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-returning-data-from-temporary.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-rule-of-two-soft.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-skipped-base-method.md

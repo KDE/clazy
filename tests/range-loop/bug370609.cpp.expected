@@ -1,1 +1,0 @@
-range-loop/bug370609.cpp:10:9: warning: c++11 range-loop might detach Qt container (QVector) [-Wclazy-range-loop]
