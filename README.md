@@ -496,6 +496,7 @@ with contributions from:
 - Nikolai Kosjar
 - Jesper K. Pedersen
 - Lucie Gerard
+- Christian Schärf
 
 qt6-* porting checks written by Lucie Gerard <lucie.gerard@qt.io>
 
