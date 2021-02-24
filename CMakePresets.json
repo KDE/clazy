@@ -8,7 +8,8 @@
             "binaryDir": "${sourceDir}/build-dev",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CLAZY_MAN_PAGE" : "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
             }
         },
         {
@@ -19,7 +20,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
                 "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CLAZY_MAN_PAGE" : "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
             }
         },
         {
@@ -30,7 +32,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "ON"
+                "CLAZY_MAN_PAGE" : "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
             }
         }
     ]
