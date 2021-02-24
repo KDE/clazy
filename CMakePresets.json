@@ -8,7 +8,6 @@
             "binaryDir": "${sourceDir}/build-dev",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_UNITY_BUILD" : "ON",
                 "CLAZY_MAN_PAGE" : "OFF"
             }
         },
