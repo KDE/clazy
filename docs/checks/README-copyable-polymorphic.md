@@ -26,3 +26,7 @@ printNumber(d);
 ```
 
 To fix these warnings use `Q_DISABLE_COPY` or delete the copy-ctor yourself.
+
+This check supports a fixit, however you'll need to set the env var
+CLAZY_ACCESSSPECIFIER_NON_QOBJECT=1. It's opt-in since it involves a bit of cpu
+overhead and is also responsible for bug #431186
