@@ -14,7 +14,7 @@ space in order to avoid repeated memory allocations.
 
 Example where reserve shouldn't be used:
 
-    QLost<int> list;
+    QList<int> list;
     for (int i = 0; i < 1000; ++i) {
         // reserve() will be called 1000 times, meaning 1000 allocations
         // whilst without a reserve the internal exponential growth algorithm would do a better job
