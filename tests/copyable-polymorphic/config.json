@@ -6,7 +6,8 @@
         {
             "filename" : "fixits.cpp",
             "has_fixits" : true,
-            "minimum_clang_version" : 1100
+            "minimum_clang_version" : 1100,
+            "env"      : { "CLAZY_ACCESSSPECIFIER_NON_QOBJECT" : "1" }
         }
     ]
 }
