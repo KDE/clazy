@@ -108,6 +108,7 @@ private:
     std::unordered_map<const clang::CXXRecordDecl*, ClazySpecifierList> m_specifiersMap;
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
     const bool m_fixitsEnabled;
+    bool m_visitsNonQObjects = false;
 };
 
 #endif

@@ -148,6 +148,7 @@ AccessSpecifierManager::AccessSpecifierManager(ClazyContext *context)
 {
     Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    m_visitsNonQObjects = getenv("CLAZY_ACCESSSPECIFIER_NON_QOBJECT") != nullptr;
 }
 
 ClazySpecifierList& AccessSpecifierManager::entryForClassDefinition(CXXRecordDecl *classDecl)
@@ -172,10 +173,16 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
     if (!record)
         return;
 
-    if (!m_fixitsEnabled && !clazy::isQObject(record)) {
+    const bool isQObject = clazy::isQObject(record);
+    const bool visits = isQObject || (m_fixitsEnabled && m_visitsNonQObjects);
+
+    if (!visits) {
         // We're only interested if it's a QObject. Otherwise it's a waste of cpu cycles,
         // causing a big slowdown. However, the copyable-polymorphic fixit needs to know the locations
-        // of "private:", so allow that too
+        // of "private:", so allow that too.
+
+        // The copyable-polymorphic fixit is opt-in, via an env variable CLAZY_ACCESSSPECIFIER_NON_QOBJECT
+        // as it's buggy
         return;
     }
 
