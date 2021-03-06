@@ -458,16 +458,24 @@
             "visits_stmts" : true
         },
         {
-            "name"  : "range-loop",
+            "name"  : "range-loop-detach",
+            "level" : 1,
+            "categories" : ["containers", "performance"],
+            "visits_stmts" : true,
+            "fixits" : [
+                {
+                    "name" : "range-loop-add-qasconst"
+                }
+            ]
+        },
+        {
+            "name"  : "range-loop-reference",
             "level" : 1,
             "categories" : ["containers", "performance"],
             "visits_stmts" : true,
             "fixits" : [
                 {
                     "name" : "range-loop-add-ref"
-                },
-                {
-                    "name" : "range-loop-add-qasconst"
                 }
             ]
         },
