@@ -428,9 +428,9 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     if (!getMessageForDeclWarning(qualType.getAsString(), message))
         return;
 
+    vector<FixItHint> fixits;
 #if LLVM_VERSION_MAJOR >= 10
     const string type = qualType.getAsString();
-    vector<FixItHint> fixits;
 
     if (clazy::endsWith(type, "QString::SplitBehavior")) {
         bool isQtNamespaceExplicit = false;
