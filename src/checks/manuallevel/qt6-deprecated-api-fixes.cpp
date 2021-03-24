@@ -428,6 +428,7 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     if (!getMessageForDeclWarning(qualType.getAsString(), message))
         return;
 
+#if LLVM_VERSION_MAJOR >= 10
     const string type = qualType.getAsString();
     vector<FixItHint> fixits;
 
@@ -451,6 +452,7 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
         SourceRange sourceRange(declaratorDecl->getTypeSpecStartLoc(), declaratorDecl->getTypeSpecEndLoc());
         fixits.push_back(FixItHint::CreateReplacement(sourceRange, replacement));
     }
+#endif
 
     emitWarning(decl->getBeginLoc(), message, fixits);
     return;
