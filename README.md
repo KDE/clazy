@@ -60,7 +60,7 @@ Pre-built clazy binaries for MSVC and Linux AppImage are produced by KDAB, you c
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 7.0 are required.
+clang and LLVM >= 8.0 are required.
 
 If your distro provides clang then you can skip this step.
 
@@ -180,9 +180,9 @@ Compile your programs with it instead of clang++/g++.
 Note that this command is just a convenience wrapper which calls:
 `clang++ -Xclang -load -Xclang ClazyPlugin.so -Xclang -add-plugin -Xclang clazy`
 
-If you have multiple versions of clang installed (say clang++-3.8 and clang++-3.9)
+If you have multiple versions of clang installed (say clang++-10 and clang++-11)
 you can choose which one to use by setting the CLANGXX environment variable, like so:
-`export CLANGXX=clang++-3.8; clazy`
+`export CLANGXX=clang++-11; clazy`
 
 To build a CMake project use:
  `cmake . -DCMAKE_CXX_COMPILER=clazy`

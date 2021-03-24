@@ -3,12 +3,6 @@
         {
             "name" : "ubuntu-18.04",
             "url" : "iamsergio/clazy-ubuntu-18.04",
-            "llvm_root" : "/usr/lib/llvm-7",
-            "comment" : "llvm-7;Qt-5.9.5"
-        },
-        {
-            "name" : "ubuntu-18.04",
-            "url" : "iamsergio/clazy-ubuntu-18.04",
             "llvm_root" : "/usr/lib/llvm-8",
             "comment" : "llvm-8;Qt-5.9.5"
         },
@@ -29,12 +23,6 @@
             "url" : "iamsergio/clazy-archlinux",
             "llvm_root" : "/usr",
             "comment" : "llvm-8;Qt-5.13.1"
-        },
-        {
-            "name" : "opensuse-leap",
-            "url" : "iamsergio/clazy-opensuse-leap",
-            "llvm_root" : "/usr",
-            "comment" : "llvm-7;Qt-5.9.7"
         },
         {
             "name" : "opensuse-tumbleweed",
