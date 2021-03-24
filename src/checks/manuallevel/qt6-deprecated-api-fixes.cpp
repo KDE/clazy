@@ -411,31 +411,25 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     if (!funcDecl && !varDecl && !fieldDecl)
         return;
 
-    vector<FixItHint> fixits;
-    auto warningLocation = decl->getBeginLoc();
-    string message;
-    string type;
-    SourceLocation replacementLocB;
-    SourceLocation replacementLocE;
+    DeclaratorDecl *declaratorDecl = nullptr;
+    QualType qualType;
     if (funcDecl) {
-        type = funcDecl->getReturnType().getAsString();
-        replacementLocB = funcDecl->getTypeSpecStartLoc();
-        replacementLocE = funcDecl->getTypeSpecEndLoc();
-        if (!getMessageForDeclWarning(funcDecl->getReturnType().getAsString(),message))
-            return;
+        declaratorDecl = funcDecl;
+        qualType = funcDecl->getReturnType();
     } else if (varDecl) {
-        type = varDecl->getType().getAsString();
-        replacementLocB = varDecl->getTypeSpecStartLoc();
-        replacementLocE = varDecl->getTypeSpecEndLoc();
-        if (!getMessageForDeclWarning(varDecl->getType().getAsString(), message))
-            return;
+        declaratorDecl = varDecl;
+        qualType = varDecl->getType();
     } else if (fieldDecl) {
-        type = fieldDecl->getType().getAsString();
-        replacementLocB = fieldDecl->getTypeSpecStartLoc();
-        replacementLocE = fieldDecl->getTypeSpecEndLoc();
-        if (!getMessageForDeclWarning(fieldDecl->getType().getAsString(), message))
-            return;
+        declaratorDecl = fieldDecl;
+        qualType = fieldDecl->getType();
     }
+
+    string message;
+    if (!getMessageForDeclWarning(qualType.getAsString(), message))
+        return;
+
+    const string type = qualType.getAsString();
+    vector<FixItHint> fixits;
 
     if (clazy::endsWith(type, "QString::SplitBehavior")) {
         bool isQtNamespaceExplicit = false;
@@ -454,11 +448,11 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
         if (!isQtNamespaceExplicit)
             replacement = "Qt::";
         replacement += "SplitBehavior";
-        SourceRange sourceRange(replacementLocB, replacementLocE);
+        SourceRange sourceRange(declaratorDecl->getTypeSpecStartLoc(), declaratorDecl->getTypeSpecEndLoc());
         fixits.push_back(FixItHint::CreateReplacement(sourceRange, replacement));
     }
 
-    emitWarning(warningLocation, message, fixits);
+    emitWarning(decl->getBeginLoc(), message, fixits);
     return;
 }
 
