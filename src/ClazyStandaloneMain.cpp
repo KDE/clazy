@@ -158,7 +158,13 @@ llvm::IntrusiveRefCntPtr<vfs::FileSystem> getVfsFromFile(const std::string &over
 
 int main(int argc, const char **argv)
 {
-    CommonOptionsParser optionsParser(argc, argv, s_clazyCategory, cl::ZeroOrMore);
+    auto expectedParser = CommonOptionsParser::create(argc, argv, s_clazyCategory, cl::ZeroOrMore);
+    if (!expectedParser) {
+       llvm::errs() << expectedParser.takeError();
+       return 1;
+    }
+
+    auto &optionsParser = expectedParser.get();
     // llvm::errs() << optionsParser.getSourcePathList().size() << "\n";
 
     if (s_supportedChecks.getValue()) {
