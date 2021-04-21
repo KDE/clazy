@@ -83,12 +83,14 @@ if(NOT REGEX_RUN_RESULT EQUAL 0)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
+
 # Compiler might support c++17 but not have std::filesystem in the standard library
 message("Looking for std::filesystem support...")
 try_run(FILESYSTEM_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
 
 if (FILESYSTEM_RUN_RESULT EQUAL 0 AND COMPILE_RESULT)
-    set(CMAKE_CXX_STANDARD 17)
     add_definitions(-DHAS_STD_FILESYSTEM)
 endif()
 
