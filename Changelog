@@ -140,7 +140,10 @@
       - use-chrono-in-qtimer
       - fixit for missing-qobject-macro
 
-* v1.9 (2021)
+* v1.9 (Jan 10th, 2021)
     - Fixed clazy slowdown introduced in 1.8. I can be up to 4x faster now.
     - range-loop was split in range-loop-detach and range-loop-reference
     - Fixed -Wclazy-connect-non-signal false positives
+
+* v1.10 (2021)
+   - Requires C++17
