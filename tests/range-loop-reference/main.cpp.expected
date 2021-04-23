@@ -1,4 +1,4 @@
-range-loop-reference/main.cpp:45:10: warning: Missing reference in range-for with non trivial type (SmallNonTrivial) [-Wclazy-range-loop-reference]
-range-loop-reference/main.cpp:87:10: warning: Missing reference in range-for with non trivial type (QString) [-Wclazy-range-loop-reference]
+range-loop-reference/main.cpp:46:10: warning: Missing reference in range-for with non trivial type (SmallNonTrivial) [-Wclazy-range-loop-reference]
 range-loop-reference/main.cpp:88:10: warning: Missing reference in range-for with non trivial type (QString) [-Wclazy-range-loop-reference]
-range-loop-reference/main.cpp:104:10: warning: Missing reference in range-for with non trivial type (QJsonValue) [-Wclazy-range-loop-reference]
+range-loop-reference/main.cpp:89:10: warning: Missing reference in range-for with non trivial type (QString) [-Wclazy-range-loop-reference]
+range-loop-reference/main.cpp:105:10: warning: Missing reference in range-for with non trivial type (QJsonValue) [-Wclazy-range-loop-reference]

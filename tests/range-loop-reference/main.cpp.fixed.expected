@@ -1,6 +1,7 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QJsonArray>
+#include <QtCore/QSequentialIterable>
 
 struct Trivial
 {
