@@ -205,6 +205,11 @@ only for the regular gcc/clang warnings but not for clazy warnings.
 B<CLAZY_CHECKS_AS_ERRORS> - comma-separated list of checks that will be promoted
 to compiler errors. Note that this does not enable the checks specified here.
 
+B<CLAZY_IGNORE_DIRS> - A regular expression for paths to exclude from processing.
+For example:
+
+% export CLAZY_IGNORE_DIRS=".*my_qt_folder.*"
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2015-2017 Klaralvdalens Datakonsult AB, a KDAB Group company, <info@kdab.com>
