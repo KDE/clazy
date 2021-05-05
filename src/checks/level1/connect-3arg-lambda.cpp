@@ -73,9 +73,13 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     if (numParams != 3 || !clazy::isConnect(fdecl))
         return;
 
-    auto lambda = clazy::getFirstChildOfType2<LambdaExpr>(callExpr->getArg(2));
-    if (!lambda)
-        return;
+    auto arg3 = callExpr->getArg(2);
+    auto lambda = clang::dyn_cast_or_null<LambdaExpr>(arg3);
+    if (!lambda) {
+	    lambda = clazy::getFirstChildOfType2<LambdaExpr>(arg3);
+	    if (!lambda)
+		    return;
+    }
 
     DeclRefExpr *senderDeclRef = nullptr;
     MemberExpr *senderMemberExpr = nullptr;
