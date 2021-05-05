@@ -69,6 +69,7 @@ class Test:
         self.has_fixits = False
         self.should_run_fixits_test = False
         self.should_run_on_32bit = True
+        self.cppStandard = "c++14"
 
     def filename(self):
         if len(self.filenames) == 1:
@@ -263,6 +264,8 @@ def load_json(check_name):
                 test.qt4compat = t['qt4compat']
             if 'only_qt' in t:
                 test.only_qt = t['only_qt']
+            if 'cppStandard' in t:
+                test.cppStandard = t['cppStandard']
             if 'qt_developer' in t:
                 test.qt_developer = t['qt_developer']
             if 'header_filter' in t:
@@ -325,12 +328,12 @@ def link_flags():
     return flags
 
 
-def clazy_cpp_args():
-    return "-Wno-unused-value -Qunused-arguments -std=c++14 "
+def clazy_cpp_args(cppStandard):
+    return '-Wno-unused-value -Qunused-arguments -std=' + cppStandard + ' '
 
 
-def more_clazy_args():
-    return " " + clazy_cpp_args()
+def more_clazy_args(cppStandard):
+    return " " + clazy_cpp_args(cppStandard)
 
 
 def clazy_standalone_binary():
@@ -340,7 +343,8 @@ def clazy_standalone_binary():
 
 
 def clazy_standalone_command(test, qt):
-    result = " -- " + clazy_cpp_args() + qt.compiler_flags() + " " + test.flags
+    result = " -- " + clazy_cpp_args(test.cppStandard) + \
+        qt.compiler_flags() + " " + test.flags
     result = " -checks=" + ','.join(test.checks) + " " + result
 
     if test.has_fixits:
@@ -371,11 +375,12 @@ def clazy_command(qt, test, filename):
 
     if 'CLAZY_CXX' in os.environ:  # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX'] + \
-            more_clazy_args() + qt.compiler_flags()
+            more_clazy_args(test.cppStandard) + qt.compiler_flags()
     else:
         clang = os.getenv('CLANGXX', 'clang')
         result = clang + " -Xclang -load -Xclang " + libraryName() + \
-            " -Xclang -add-plugin -Xclang clazy " + more_clazy_args() + qt.compiler_flags()
+            " -Xclang -add-plugin -Xclang clazy " + \
+            more_clazy_args(test.cppStandard) + qt.compiler_flags()
 
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt4-compat "
