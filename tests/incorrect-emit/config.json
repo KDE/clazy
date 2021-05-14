@@ -14,8 +14,7 @@
             "filename" : "bug406798.cpp"
         },
         {
-            "filename" : "bug437092.cpp",
-            "expects_failure" : true
+            "filename" : "bug437092.cpp"
         }
     ]
 }

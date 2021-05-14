@@ -222,7 +222,7 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     method = method->getCanonicalDecl();
 
     const CXXRecordDecl *record = method->getParent();
-    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record))
+    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record) || method->isTemplateInstantiation())
         return QtAccessSpecifier_None;
 
     const SourceLocation methodLoc = clazy::getLocStart(method);
