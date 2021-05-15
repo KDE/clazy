@@ -158,6 +158,13 @@ llvm::IntrusiveRefCntPtr<vfs::FileSystem> getVfsFromFile(const std::string &over
 
 int main(int argc, const char **argv)
 {
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--version") == 0) {
+            std::cout << "clazy version 1.10\n";
+            break;
+        }
+    }
+
     auto expectedParser = CommonOptionsParser::create(argc, argv, s_clazyCategory, cl::ZeroOrMore);
     if (!expectedParser) {
        llvm::errs() << expectedParser.takeError();
