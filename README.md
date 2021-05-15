@@ -45,6 +45,13 @@ You can get clazy from:
 - <https://github.com/KDE/clazy>
 - <https://invent.kde.org/sdk/clazy>
 
+
+# Supported platforms
+
+Clazy has been tested on Linux, macOS and Windows/MSVC.
+Other platforms are not supported but we'll gladly accept patches.
+
+
 # Pre-built binaries
 
 Pre-built clazy binaries for MSVC and Linux AppImage are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
