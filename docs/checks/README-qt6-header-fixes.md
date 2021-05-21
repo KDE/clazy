@@ -2,6 +2,8 @@ Warns against include headers that have changed in Qt6.
 Replaces the code with the correct one.
 
 Full list:
+
+```
 ActiveQt/QAxAggregated                               replaced  by  QtAxServer/QAxAggregated
 ActiveQt/QAxBase                                     replaced  by  QtAxContainer/QAxBase
 ActiveQt/QAxBindable                                 replaced  by  QtAxServer/QAxBindable
@@ -172,6 +174,7 @@ QtWidgets/qopenglwidget.h                            replaced  by  QtOpenGLWidge
 QtWidgets/qshortcut.h                                replaced  by  QtGui/qshortcut.h
 QtWidgets/qundogroup.h                               replaced  by  QtGui/qundogroup.h
 QtWidgets/qundostack.h                               replaced  by  QtGui/qundostack.h
+```
 
 This fix-it is intended to aid the user porting from Qt5 to Qt6.
 Run this check with Qt5. The produced fixed code will compile on Qt6.
