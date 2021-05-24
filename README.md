@@ -471,7 +471,7 @@ Don't include the `clazy-` prefix. If, for example, you want to disable qstring-
 # Reporting bugs and wishes
 
 - bug tracker: <https://bugs.kde.org/enter_bug.cgi?product=clazy>
-- IRC: #kde-clazy (freenode)
+- IRC: #kde-clazy (irc.libera.chat)
 - E-mail: <smartins at kde.org>
 
 When reporting a bug *please* include a minimal compilable testcase. No matter
