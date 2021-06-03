@@ -197,10 +197,10 @@ std::vector<clang::CallExpr *> callListForChain(clang::CallExpr *lastCallExpr);
 clang::CXXRecordDecl * rootBaseClass(clang::CXXRecordDecl *derived);
 
 // Returns the copy ctor for this class
-clang::CXXConstructorDecl *copyCtor(clang::CXXRecordDecl *);
+clang::CXXConstructorDecl *copyCtor(const clang::CXXRecordDecl *);
 
 // Returns the copy-assignment operator for this class
-clang::CXXMethodDecl *copyAssign(clang::CXXRecordDecl *);
+clang::CXXMethodDecl *copyAssign(const clang::CXXRecordDecl *);
 
 bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
 

@@ -737,7 +737,7 @@ CXXRecordDecl *Utils::rootBaseClass(CXXRecordDecl *derived)
     return record ? rootBaseClass(record) : derived;
 }
 
-CXXConstructorDecl *Utils::copyCtor(CXXRecordDecl *record)
+CXXConstructorDecl *Utils::copyCtor(const CXXRecordDecl *record)
 {
     for (auto ctor : record->ctors()) {
         if (ctor->isCopyConstructor())
@@ -747,7 +747,7 @@ CXXConstructorDecl *Utils::copyCtor(CXXRecordDecl *record)
     return nullptr;
 }
 
-CXXMethodDecl *Utils::copyAssign(CXXRecordDecl *record)
+CXXMethodDecl *Utils::copyAssign(const CXXRecordDecl *record)
 {
     for (auto copyAssign : record->methods()) {
         if (copyAssign->isCopyAssignmentOperator())
