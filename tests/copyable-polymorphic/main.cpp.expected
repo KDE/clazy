@@ -2,3 +2,4 @@ copyable-polymorphic/main.cpp:36:1: warning: Polymorphic class PolymorphicClass4
 copyable-polymorphic/main.cpp:43:1: warning: Polymorphic class PolymorphicClass5 is copyable. Potential slicing. [-Wclazy-copyable-polymorphic]
 copyable-polymorphic/main.cpp:52:1: warning: Polymorphic class DerivedFromCopyable is copyable. Potential slicing. [-Wclazy-copyable-polymorphic]
 copyable-polymorphic/main.cpp:56:1: warning: Polymorphic class ClassWithPrivateSection is copyable. Potential slicing. [-Wclazy-copyable-polymorphic]
+copyable-polymorphic/main.cpp:82:1: warning: Polymorphic class DerivedOfBaseWithPublicCopyCtor is copyable. Potential slicing. [-Wclazy-copyable-polymorphic]

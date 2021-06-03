@@ -61,3 +61,26 @@ private:
     void bar();
     int i;
 };
+
+// Ok, copy-ctor is protected
+class BaseWithProtectedCopyCtor
+{
+protected:
+    virtual ~BaseWithProtectedCopyCtor();
+    BaseWithProtectedCopyCtor(const BaseWithProtectedCopyCtor &) {}
+    BaseWithProtectedCopyCtor &operator=(const BaseWithProtectedCopyCtor &);
+};
+
+// Ok, copy-ctor is protected in base class and derived is final (#438027)
+class DerivedOfBaseWithProtectedCopyCtor final : public BaseWithProtectedCopyCtor
+{
+protected:
+    virtual ~DerivedOfBaseWithProtectedCopyCtor();
+};
+
+// Warn
+class DerivedOfBaseWithPublicCopyCtor final : public PolymorphicClass4
+{
+protected:
+    virtual ~DerivedOfBaseWithPublicCopyCtor();
+};
