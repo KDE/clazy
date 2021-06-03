@@ -41,6 +41,21 @@ using namespace clang;
 using namespace std;
 
 
+/// Returns whether the class has non-private copy-ctor or copy-assign
+static bool hasNonPrivateCopy(const CXXRecordDecl *record)
+{
+    CXXConstructorDecl *copyCtor = Utils::copyCtor(record);
+    const bool hasCallableCopyCtor = copyCtor && !copyCtor->isDeleted() && copyCtor->getAccess() != clang::AS_private;
+    if (!hasCallableCopyCtor) {
+        CXXMethodDecl *copyAssign = Utils::copyAssign(record);
+        const bool hasCallableCopyAssign = copyAssign && !copyAssign->isDeleted() && copyAssign->getAccess() != clang::AS_private;
+        if (!hasCallableCopyAssign)
+            return false;
+    }
+
+    return true;
+}
+
 CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
@@ -53,14 +68,8 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
     if (!record || !record->hasDefinition() || record->getDefinition() != record || !record->isPolymorphic())
         return;
 
-    CXXConstructorDecl *copyCtor = Utils::copyCtor(record);
-    const bool hasCallableCopyCtor = copyCtor && !copyCtor->isDeleted() && copyCtor->getAccess() != clang::AS_private;
-    if (!hasCallableCopyCtor) {
-        CXXMethodDecl *copyAssign = Utils::copyAssign(record);
-        const bool hasCallableCopyAssign = copyAssign && !copyAssign->isDeleted() && copyAssign->getAccess() != clang::AS_private;
-        if (!hasCallableCopyAssign)
-            return;
-    }
+    if (!hasNonPrivateCopy(record))
+        return;
 
     emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.", fixits(record));
 }
