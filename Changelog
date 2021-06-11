@@ -2,6 +2,7 @@
 
 * v1.10 (2021)
    - Requires C++17
+   - Fixed a -Wclazy-lambda-in-connect false-positive
 
 
 * v1.9 (Jan 10th, 2021)
