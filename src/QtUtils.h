@@ -248,7 +248,7 @@ inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
     if (!call || call->getNumArgs() < 5)
         return nullptr;
 
-    return clazy::valueDeclForCallArgument(call, 3);
+    return clazy::valueDeclForCallArgument(call, 2);
 }
 
 /**

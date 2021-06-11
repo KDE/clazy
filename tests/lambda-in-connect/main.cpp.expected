@@ -4,3 +4,4 @@ lambda-in-connect/main.cpp:17:54: warning: captured local variable by reference 
 lambda-in-connect/main.cpp:17:57: warning: captured local variable by reference might go out of scope before lambda is called [-Wclazy-lambda-in-connect]
 lambda-in-connect/main.cpp:22:48: warning: captured local variable by reference might go out of scope before lambda is called [-Wclazy-lambda-in-connect]
 lambda-in-connect/main.cpp:37:52: warning: captured local variable by reference might go out of scope before lambda is called [-Wclazy-lambda-in-connect]
+lambda-in-connect/main.cpp:58:21: warning: captured local variable by reference might go out of scope before lambda is called [-Wclazy-lambda-in-connect]

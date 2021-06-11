@@ -1,5 +1,5 @@
 #include <QtCore/QObject>
-
+#include <QtCore/QDebug>
 struct A
 {
     int v;
@@ -46,3 +46,16 @@ struct C
 
     int m;
 };
+
+
+void bug3rdArgument(QObject *sender)
+{
+    // Checks that we shouldn't warn when the captured variable matches the 3rd argument
+
+    QObject context;
+    int m = 0;
+    QObject::connect(sender, &QObject::destroyed, &context, [&] {
+        qDebug() << m; // Warn
+        qDebug() << context.objectName(); // OK
+    });
+}
