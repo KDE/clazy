@@ -15,7 +15,7 @@
   <name xml:lang="eu">Clazy</name>
   <name xml:lang="fr">Clazy</name>
   <name xml:lang="gl">Clazy</name>
-  <name xml:lang="hi">क्लेज़ी (Clazy)</name>
+  <name xml:lang="hi">क्लेज़ी</name>
   <name xml:lang="it">Clazy</name>
   <name xml:lang="ko">Clazy</name>
   <name xml:lang="lt">Clazy</name>
@@ -42,7 +42,7 @@
   <summary xml:lang="eu">Clang konpilatzailearen plugin bat, Qt-ren gaineko praktika onenen abisuak igortzen dituena</summary>
   <summary xml:lang="fr">Un module externe pour le compilateur Clang émettant des avertissements concernant les bonnes pratiques Qt.</summary>
   <summary xml:lang="gl">Un complemento do compilador Clang que emite avisos relacionados con boas prácticas de Qt</summary>
-  <summary xml:lang="hi">Qt के अच्छे अमल के लिए एक Clang कंपाइलर प्लगिन जो चेतावनी संदेश देता है.</summary>
+  <summary xml:lang="hi">एक सीलैंग कंपाइलर प्लगिन जो क्यूट के सर्वोत्तम विधिओं के सम्बन्ध में चेतावनीसंदेश देता है.</summary>
   <summary xml:lang="it">Un'estensione per il compilatore Clang che emette avvisi relativi alle migliori pratiche per Qt</summary>
   <summary xml:lang="ko">Qt 권고 사항과 관련된 경고를 출력하는 Clang 컴파일러 플러그인</summary>
   <summary xml:lang="lt">Clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi</summary>
@@ -69,7 +69,7 @@
     <p xml:lang="eu">Clazy Clang konpilatzailearen plugin bat da, Qt-ren gaineko praktika onenen abisuak igortzen dituena.</p>
     <p xml:lang="fr">Clazy est un module externe « Clang », émettant des avertissements concernant les bonnes pratiques pour Qt.</p>
     <p xml:lang="gl">Clazy é un complemento do compilador Clang que emite avisos relacionados con boas prácticas de Qt.</p>
-    <p xml:lang="hi">क्लेजी (Clazy) Qt के अच्छे अमल के लिए एक Clang कंपाइलर प्लगिन जो चेतावनी संदेश देता है..</p>
+    <p xml:lang="hi">क्लेजी एक सीलैंग कंपाइलर प्लगिन है जो क्यूट के सर्वोत्तम सर्वोत्तम विधिओं केसम्बन्ध में चेतावनी संदेश देता है.</p>
     <p xml:lang="it">Clazy è un'estensione per il compilatore clang che emette avvisi relativi alle migliori pratiche per Qt</p>
     <p xml:lang="ko">Clazy는 Qt 권고 사항과 관련된 경고를 출력하는 Clang 컴파일러 플러그인입니다.</p>
     <p xml:lang="lt">Clang yra clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi.</p>
