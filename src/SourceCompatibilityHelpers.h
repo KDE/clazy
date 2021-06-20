@@ -26,6 +26,7 @@
 #include <clang/AST/Attr.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/FrontendDiagnostic.h>
@@ -128,6 +129,15 @@ inline clang::Lexer getLexer(clang::FileID id, const llvm::MemoryBuffer *inputFi
     return clang::Lexer(id, inputFile, sm, lo);
 }
 #endif
+
+inline bool isFinal(const clang::CXXRecordDecl *record)
+{
+#if LLVM_VERSION_MAJOR >= 11
+    return record->isEffectivelyFinal();
+#else
+    return record->hasAttr<clang::FinalAttr>();
+#endif
+}
 
 }
 

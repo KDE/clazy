@@ -90,7 +90,7 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
     if (!hasPublicCopy(record))
         return;
 
-    if (record->isEffectivelyFinal() && !hasPublicCopyInAncestors(record)) {
+    if (clazy::isFinal(record) && !hasPublicCopyInAncestors(record)) {
         // If the derived class is final, and all the base classes copy-ctors are protected or private then it's ok
         return;
     }
