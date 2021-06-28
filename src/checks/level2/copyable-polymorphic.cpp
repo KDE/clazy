@@ -68,6 +68,8 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
 {
     vector<FixItHint> result;
+    if (!m_context->accessSpecifierManager)
+        return {};
 
 #if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const StringRef className = clazy::name(record);
