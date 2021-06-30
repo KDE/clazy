@@ -51,7 +51,7 @@ public:
                             clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType) override;
     bool m_including_qcontainerfwd = false;
     std::set<clang::StringRef> m_qcontainerfwd_included_in_files;
-    string m_currentFile;
+    std::string m_currentFile;
 };
 
 #endif
