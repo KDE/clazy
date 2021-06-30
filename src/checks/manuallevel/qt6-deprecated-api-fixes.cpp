@@ -60,11 +60,11 @@ std::string Qt6DeprecatedAPIFixes::findPathArgument(clang::Stmt *stmt, bool ance
 
     int i = 0;
 
-    for (auto it = current_stmt->child_begin() ; it !=current_stmt->child_end() ; it++) {
+    for (auto it = current_stmt->child_begin(); it != current_stmt->child_end() ; it++) {
 
         Stmt *child = *it;
-        ConditionalOperator *parent_condOp = dyn_cast<ConditionalOperator>(current_stmt);
-        ConditionalOperator *child_condOp = dyn_cast<ConditionalOperator>(child);
+        auto parent_condOp = dyn_cast<ConditionalOperator>(current_stmt);
+        auto child_condOp = dyn_cast<ConditionalOperator>(child);
 
         /*
         For cases like: dir = cond ? "path1" : "path2";
@@ -146,7 +146,7 @@ bool replacementForQDate(clang::Stmt *parent, string &message, string &replaceme
     int i = 1;
     if (func->getNumParams() != 2)
         return false;
-    for (auto it = func->param_begin() ; it !=func->param_end() ; it++) {
+    for (auto it = func->param_begin(); it !=func->param_end(); it++) {
         ParmVarDecl *param = *it;
         if (i == 1 && param->getType().getAsString() != "Qt::DateFormat")
             return false;
@@ -154,8 +154,8 @@ bool replacementForQDate(clang::Stmt *parent, string &message, string &replaceme
             return false;
         i++;
     }
-    Stmt * firstArg = clazy::childAt(parent, 1);
-    Stmt * secondArg = clazy::childAt(parent, 2);
+    Stmt *firstArg = clazy::childAt(parent, 1);
+    Stmt *secondArg = clazy::childAt(parent, 2);
     DeclRefExpr *declFirstArg = dyn_cast<DeclRefExpr>(firstArg);
     if (!firstArg || !secondArg || !declFirstArg)
         return false;
@@ -405,8 +405,8 @@ bool getMessageForDeclWarning(string type, string &message)
 void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
 {
     auto funcDecl = decl->getAsFunction();
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    FieldDecl *fieldDecl = dyn_cast<FieldDecl>(decl);
+    auto varDecl = dyn_cast<VarDecl>(decl);
+    auto fieldDecl = dyn_cast<FieldDecl>(decl);
 
     if (!funcDecl && !varDecl && !fieldDecl)
         return;
@@ -465,7 +465,7 @@ string Qt6DeprecatedAPIFixes::buildReplacementforQDir(Stmt* stmt, DeclRefExpr* d
     if (qualtype->isPointerType())
         replacement += "->";
     else
-    replacement += ".";
+        replacement += ".";
     replacement += "setPath(";
     replacement += findPathArgument(clazy::childAt(stmt, 2));
     replacement += ")";
@@ -489,20 +489,14 @@ string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(Stmt* stmt, DeclRefExp
 
 bool foundQDirDeprecatedOperator(DeclRefExpr *decl)
 {
-    if (decl->getNameInfo().getAsString() == "operator=" )
-         return true;
-    else
-        return false;
+    return decl->getNameInfo().getAsString() == "operator=";
 }
 
 static std::set<std::string> qVariantDeprecatedOperator = {"operator<", "operator<=", "operator>", "operator>="};
 
 bool foundQVariantDeprecatedOperator(DeclRefExpr *decl)
 {
-    if (qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qTextStreamFunctions.end())
-        return true;
-    else
-        return false;
+    return qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qTextStreamFunctions.end();
 }
 
 void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, string className)
@@ -524,10 +518,9 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, string classNam
         }
 
         if (className == "QDir") {
-                foundOperator = foundQDirDeprecatedOperator(decl);
-        }
-        else if (className == "QVariant") {
-                foundOperator = foundQVariantDeprecatedOperator(decl);
+            foundOperator = foundQDirDeprecatedOperator(decl);
+        } else if (className == "QVariant") {
+            foundOperator = foundQVariantDeprecatedOperator(decl);
         }
 
         if (foundOperator) {
@@ -580,10 +573,10 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, string classNam
 
 void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
 {
-    CXXOperatorCallExpr *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
-    DeclRefExpr *declRefExp = dyn_cast<DeclRefExpr>(stmt);
-    MemberExpr *membExpr = dyn_cast<MemberExpr>(stmt);
-    CXXConstructExpr *consExpr = dyn_cast<CXXConstructExpr>(stmt);
+    auto oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
+    auto declRefExp = dyn_cast<DeclRefExpr>(stmt);
+    auto membExpr = dyn_cast<MemberExpr>(stmt);
+    auto consExpr = dyn_cast<CXXConstructExpr>(stmt);
 
     SourceLocation warningLocation;
     std::string replacement;
@@ -639,7 +632,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         message = "deprecated constructor. Use QDate::startOfDay() instead.";
     } else if (oppCallExpr) {
 
-        if ( clazy::isOfClass(oppCallExpr, "QDir")) {
+        if (clazy::isOfClass(oppCallExpr, "QDir")) {
             fixForDeprecatedOperator(stmt, "QDir");
             return;
         } else if (clazy::isOfClass(oppCallExpr, "QVariant")) {
@@ -746,7 +739,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         }
         fixitRange = declRefExp->getSourceRange();
 
-    }else if (membExpr) {
+    } else if (membExpr) {
         Stmt *child = clazy::childAt(stmt, 0);
         DeclRefExpr *decl = nullptr;
         while (child) {
@@ -843,10 +836,10 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
     emitWarning(warningLocation, message, fixits);
 
     return;
-
 }
 
-void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
+void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token &MacroNameTok,
+                                              const clang::SourceRange &range, const MacroInfo *)
 {
     m_listingMacroExpand.push_back(range.getBegin());
     return;
