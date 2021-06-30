@@ -274,7 +274,7 @@ void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceR
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
     const string text = static_cast<string>(Lexer::getSourceText(charRange, sm(), lo()));
 
-    static regex rx(R"(Q_PRIVATE_SLOT\s*\((.*)\s*,\s*.*\s+(.*)\(.*)");
+    static regex rx(R"(Q_PRIVATE_SLOT\s*\((.*),.*\s(.*)\(.*)");
     smatch match;
     if (!regex_match(text, match, rx) || match.size() != 3)
         return;
