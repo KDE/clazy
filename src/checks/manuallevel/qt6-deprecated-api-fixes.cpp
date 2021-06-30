@@ -467,7 +467,7 @@ static std::set<std::string> qVariantDeprecatedOperator = {"operator<", "operato
 
 bool foundQVariantDeprecatedOperator(DeclRefExpr *decl)
 {
-    if (qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qTextStreamFunctions.end())
+    if (qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qVariantDeprecatedOperator.end())
         return true;
     else
         return false;
