@@ -63,8 +63,8 @@ AssertWithSideEffects::AssertWithSideEffects(const std::string &name, ClazyConte
 static bool functionIsOk(StringRef name)
 {
     static const vector<StringRef> whitelist = {"qFuzzyIsNull", "qt_noop", "qt_assert", "qIsFinite", "qIsInf",
-                                                "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-"
-                                                "q_func", "d_func", "isEmptyHelper"
+                                                "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-",
+                                                "q_func", "d_func", "isEmptyHelper",
                                                 "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
     return clazy::contains(whitelist, name);
 }
