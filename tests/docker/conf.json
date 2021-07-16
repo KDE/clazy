@@ -1,12 +1,6 @@
 {
     "tests" : [
         {
-            "name" : "ubuntu-18.04",
-            "url" : "iamsergio/clazy-ubuntu-18.04",
-            "llvm_root" : "/usr/lib/llvm-8",
-            "comment" : "llvm-8;Qt-5.9.5"
-        },
-        {
             "name" : "ubuntu-19.10",
             "url" : "iamsergio/clazy-ubuntu-19.10-32bit",
             "llvm_root" : "/usr/lib/llvm-9",

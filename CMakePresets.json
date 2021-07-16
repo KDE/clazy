@@ -35,6 +35,20 @@
                 "CLAZY_MAN_PAGE" : "ON",
                 "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
             }
+        },
+        {
+            "name": "ubuntu-18.04",
+            "displayName": "ubuntu-18.04",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-ubuntu-18.04",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON"
+            },
+            "environment" : {
+                "PATH" : "/usr/lib/llvm-8/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "/usr/lib/llvm-8/lib64/:$penv{LD_LIBRARY_PATH}"
+            }
         }
     ]
 }
