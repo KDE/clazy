@@ -43,11 +43,42 @@
             "binaryDir": "${sourceDir}/build-ubuntu-18.04",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON"
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
             },
             "environment" : {
                 "PATH" : "/usr/lib/llvm-8/bin/:$penv{PATH}",
                 "LD_LIBRARY_PATH" : "/usr/lib/llvm-8/lib64/:$penv{LD_LIBRARY_PATH}"
+            }
+        },
+        {
+            "name": "ubuntu-20.04",
+            "displayName": "ubuntu-20.04",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-ubuntu-20.04",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            },
+            "environment" : {
+                "PATH" : "/usr/lib/llvm-9/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "/usr/lib/llvm-9/lib64/:$penv{LD_LIBRARY_PATH}"
+            }
+        },
+        {
+            "name": "ubuntu-21.04",
+            "displayName": "ubuntu-21.04",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-ubuntu-21.04",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            },
+            "environment" : {
+                "PATH" : "/usr/lib/llvm-12/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "/usr/lib/llvm-12/lib64/:$penv{LD_LIBRARY_PATH}"
             }
         }
     ]

@@ -1,17 +1,18 @@
-# This Dockerfile creates the container for testing on Ubuntu 18.04
+# This Dockerfile creates the container for testing on Ubuntu 21.04
 
-
-FROM ubuntu:18.04
+FROM ubuntu:21.04
 MAINTAINER Sergio Martins (sergio.martins@kdab.com)
+
 
 ENV PATH=/Qt/5.15.2/gcc_64/bin/:$PATH
 ENV LC_CTYPE=C.UTF-8
 
+ENV TZ=Europe/Lisbon
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt install -y build-essential g++ clang clang-7 clang-8 clang-tools clang-tools-7 \
-clang-tools-8 libclang-dev libclang-7-dev libclang-8-dev git-core python3 \
-ninja-build qtbase5-dev qtdeclarative5-dev libssl-dev
+RUN apt install -y build-essential g++ clang-12 clang-tools-12 libclang-12-dev libclang-12-dev \
+git-core python3 ninja-build qtbase5-dev qtdeclarative5-dev libssl-dev
 
 # Install a more recent CMake, so we can use presets
 WORKDIR /
