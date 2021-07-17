@@ -80,6 +80,43 @@
                 "PATH" : "/usr/lib/llvm-12/bin/:$penv{PATH}",
                 "LD_LIBRARY_PATH" : "/usr/lib/llvm-12/lib64/:$penv{LD_LIBRARY_PATH}"
             }
+        },
+        {
+            "name": "fedora-34",
+            "displayName": "fedora-34",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-fedora-34",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            },
+            "environment" : {
+                "PATH" : "/usr/lib/llvm-12/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "/usr/lib/llvm-12/lib64/:$penv{LD_LIBRARY_PATH}"
+            }
+        },
+        {
+            "name": "opensuse-leap",
+            "displayName": "opensuse-leap",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-opensuse-leap",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            }
+        },
+        {
+            "name": "opensuse-tumbleweed",
+            "displayName": "opensuse-tumbleweed",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-opensuse-tumbleweed",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            }
         }
     ]
 }
