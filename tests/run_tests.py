@@ -620,7 +620,7 @@ def print_differences(file1, file2):
 
 def normalizedCwd():
     if _platform.startswith('linux'):
-        return subprocess.check_output("pwd -L", shell=True, text=True).rstrip('\n')
+        return subprocess.check_output("pwd -L", shell=True, universal_newlines=True).rstrip('\n')
     else:
         return os.getcwd().replace('\\', '/')
 
