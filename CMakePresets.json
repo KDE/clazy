@@ -89,7 +89,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CLAZY_MAN_PAGE" : "OFF",
+                "CMAKE_INSTALL_PREFIX" : "/clazy"
             },
             "environment" : {
                 "PATH" : "/usr/lib/llvm-12/bin/:$penv{PATH}",
