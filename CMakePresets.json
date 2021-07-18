@@ -70,6 +70,17 @@
             }
         },
         {
+            "name": "debian-unstable",
+            "displayName": "debian-unstable",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-debian-unstable",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "OFF"
+            }
+        },
+        {
             "name": "fedora-34",
             "displayName": "fedora-34",
             "generator": "Ninja",
