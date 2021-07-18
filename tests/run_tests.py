@@ -156,7 +156,7 @@ class Check:
 # utility functions #1
 
 
-def get_command_output(cmd, test_env=os.environ):
+def get_command_output(cmd, test_env=os.environ, cwd=None):
     success = True
 
     try:
@@ -169,7 +169,7 @@ def get_command_output(cmd, test_env=os.environ):
             str_env[str(key)] = str(test_env[key])
 
         output = subprocess.check_output(
-            cmd, stderr=subprocess.STDOUT, shell=True, env=str_env)
+            cmd, stderr=subprocess.STDOUT, shell=True, env=str_env, cwd=cwd)
     except subprocess.CalledProcessError as e:
         output = e.output
         success = False
@@ -493,8 +493,8 @@ def qt_installation(major_version):
     return None
 
 
-def run_command(cmd, output_file="", test_env=os.environ):
-    lines, success = get_command_output(cmd, test_env)
+def run_command(cmd, output_file="", test_env=os.environ, cwd=None):
+    lines, success = get_command_output(cmd, test_env, cwd=cwd)
     # Hack for Windows, we have std::_Vector_base in the expected data
     lines = lines.replace("std::_Container_base0", "std::_Vector_base")
     lines = lines.replace("std::__1::__vector_base_common",
