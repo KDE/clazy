@@ -345,7 +345,7 @@ add_test(NAME clazy-plugin
          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 
 add_test(NAME clazy-standalone
-         COMMAND python3 run_tests.py --standalone-only
+         COMMAND python3 run_tests.py --only-standalone
          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 
 install(FILES org.kde.clazy.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
