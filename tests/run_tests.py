@@ -19,15 +19,17 @@ import platform
 os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 
 _verbose = False
+_hasStdFileSystem = True
 
 
 def isWindows():
     return _platform == 'win32'
 
-
 def isMacOS():
     return _platform == 'darwin'
 
+def isLinux():
+    return _platform.startswith('linux')
 
 class QtInstallation:
     def __init__(self):
@@ -70,6 +72,7 @@ class Test:
         self.should_run_fixits_test = False
         self.should_run_on_32bit = True
         self.cppStandard = "c++14"
+        self.requires_std_filesystem = False
 
     def filename(self):
         if len(self.filenames) == 1:
@@ -274,6 +277,8 @@ def load_json(check_name):
                 test.ignore_dirs = t['ignore_dirs']
             if 'should_run_on_32bit' in t:
                 test.should_run_on_32bit = t['should_run_on_32bit']
+            if 'requires_std_filesystem' in t:
+                test.requires_std_filesystem = t['requires_std_filesystem']
 
             if not test.checks:
                 test.checks.append(test.check.name)
@@ -372,6 +377,8 @@ def clazy_standalone_command(test, qt):
 
     return result
 
+def clang_name():
+    return os.getenv('CLANGXX', 'clang')
 
 def clazy_command(qt, test, filename):
     if test.isScript():
@@ -381,7 +388,7 @@ def clazy_command(qt, test, filename):
         result = os.environ['CLAZY_CXX'] + \
             more_clazy_args(test.cppStandard) + qt.compiler_flags()
     else:
-        clang = os.getenv('CLANGXX', 'clang')
+        clang = clang_name()
         result = clang + " -Xclang -load -Xclang " + libraryName() + \
             " -Xclang -add-plugin -Xclang clazy " + \
             more_clazy_args(test.cppStandard) + qt.compiler_flags()
@@ -679,6 +686,12 @@ def run_unit_test(test, is_standalone):
                   " because required version is not available")
         return True
 
+    if test.requires_std_filesystem and not _hasStdFileSystem:
+        if (_verbose):
+            print("Skipping " + test.check.name +
+                  " because it requires std::filesystem")
+        return True
+
     if _platform in test.blacklist_platforms:
         if (_verbose):
             print("Skipping " + test.check.name +
@@ -843,8 +856,6 @@ def dump_ast(check):
         run_command(dump_ast_command(test) + " > " + ast_filename)
         print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
 # -------------------------------------------------------------------------------
-
-
 def load_checks(all_check_names):
     checks = []
     for name in all_check_names:
@@ -858,8 +869,15 @@ def load_checks(all_check_names):
             sys.exit(-1)
     return checks
 # -------------------------------------------------------------------------------
+def try_compile(filename):
+    return run_command("%s --std=c++17 -c %s" % (clang_name(), filename))
+
+# -------------------------------------------------------------------------------
 # main
 
+if isLinux():
+    # On Windows and macOS we have recent enough toolchains
+    _hasStdFileSystem = try_compile('../.cmake_has_filesystem_test.cpp')
 
 if 'CLAZY_NO_WERROR' in os.environ:
     del os.environ['CLAZY_NO_WERROR']
