@@ -601,11 +601,10 @@ def patch_fixit_yaml_file(test, is_standalone):
     return True
 
 
-def run_clang_apply_replacements():
+def run_clang_apply_replacements(check):
     command = os.getenv('CLAZY_CLANG_APPLY_REPLACEMENTS',
                         'clang-apply-replacements')
-    return run_command(command + ' .')
-
+    return run_command(command + ' ' + check.name)
 
 def cleanup_fixit_files(checks):
     for check in checks:
@@ -613,7 +612,6 @@ def cleanup_fixit_files(checks):
             '.fixed') or entry.endswith('.yaml'), os.listdir(check.name)))
         for f in filestodelete:
             os.remove(check.name + '/' + f)
-
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
@@ -815,13 +813,12 @@ def run_fixit_tests(requested_checks):
     success = patch_yaml_files(
         requested_checks, is_standalone=True) and success
 
-    # Call clazy-apply-replacements[.exe]
-    if not run_clang_apply_replacements():
-        return False
-
-    # Now compare all the *.fixed files with the *.fixed.expected counterparts
-
     for check in requested_checks:
+        # Call clazy-apply-replacements[.exe]
+        if not run_clang_apply_replacements(check):
+            return False
+
+        # Now compare all the *.fixed files with the *.fixed.expected counterparts
         for test in check.tests:
             if test.should_run_fixits_test:
                 # Check that the rewritten file is identical to the expected one
@@ -893,8 +890,7 @@ if _dump_ast:
         dump_ast(check)
         os.chdir("..")
 else:
-    # Remove stale stuff from all checks, as clang-apply-replacements will apply all .yaml files it can find, even checks that werent requested
-    cleanup_fixit_files(all_checks)
+    cleanup_fixit_files(requested_checks)
     # Each list is a list of Test to be worked on by a thread
     list_of_chunks = [[] for x in range(_num_threads)]
     i = _num_threads
