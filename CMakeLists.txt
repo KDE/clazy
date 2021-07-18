@@ -337,4 +337,11 @@ file(READ checks.json SUPPORTED_CHECKS_JSON_STR)
 to_raw_string_literal(${SUPPORTED_CHECKS_JSON_STR} SUPPORTED_CHECKS_JSON_STR)
 configure_file(checks.json.h.in checks.json.h)
 
+enable_testing()
+
+# Tests for the clazy clang plugin
+add_test(NAME clazy-plugin
+         COMMAND python3 run_tests.py --no-standalone
+         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+
 install(FILES org.kde.clazy.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)

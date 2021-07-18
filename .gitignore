@@ -38,3 +38,4 @@ checks.json.h
 .cmake
 file.hh.gch
 /build-*
+*.o.tmp
