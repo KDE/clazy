@@ -341,10 +341,14 @@ def clazy_standalone_binary():
         return os.environ['CLAZYSTANDALONE_CXX']
     return 'clazy-standalone'
 
+def more_clazy_standalone_args():
+    if 'CLANG_BUILTIN_INCLUDE_DIR' in os.environ:
+        return ' -I ' + os.environ['CLANG_BUILTIN_INCLUDE_DIR']
+    return ''
 
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args(test.cppStandard) + \
-        qt.compiler_flags() + " " + test.flags
+        qt.compiler_flags() + " " + test.flags + more_clazy_standalone_args()
     result = " -checks=" + ','.join(test.checks) + " " + result
 
     if test.has_fixits:
