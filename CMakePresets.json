@@ -45,10 +45,6 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_UNITY_BUILD" : "ON",
                 "CLAZY_MAN_PAGE" : "OFF"
-            },
-            "environment" : {
-                "PATH" : "/usr/lib/llvm-8/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-8/lib64/:$penv{LD_LIBRARY_PATH}"
             }
         },
         {
@@ -60,10 +56,6 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_UNITY_BUILD" : "ON",
                 "CLAZY_MAN_PAGE" : "OFF"
-            },
-            "environment" : {
-                "PATH" : "/usr/lib/llvm-9/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-9/lib64/:$penv{LD_LIBRARY_PATH}"
             }
         },
         {
@@ -75,10 +67,6 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_UNITY_BUILD" : "ON",
                 "CLAZY_MAN_PAGE" : "OFF"
-            },
-            "environment" : {
-                "PATH" : "/usr/lib/llvm-12/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-12/lib64/:$penv{LD_LIBRARY_PATH}"
             }
         },
         {
@@ -126,8 +114,8 @@
             "description": "Clazy tests to be run on ubuntu-18.04",
             "configurePreset": "ubuntu-18.04",
             "environment" : {
-                "PATH" : "/usr/lib/llvm-8/bin/:${sourceDir}/build-ubuntu-18.04/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-8/lib64/:${sourceDir}/build-ubuntu-18.04/lib:$penv{LD_LIBRARY_PATH}"
+                "PATH" : "${sourceDir}/build-ubuntu-18.04/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "${sourceDir}/build-ubuntu-18.04/lib:$penv{LD_LIBRARY_PATH}"
             }
         },
         {
@@ -135,8 +123,8 @@
             "description": "Clazy tests to be run on ubuntu-20.04",
             "configurePreset": "ubuntu-20.04",
             "environment" : {
-                "PATH" : "/usr/lib/llvm-9/bin/:${sourceDir}/build-ubuntu-20.04/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-9/lib64/:${sourceDir}/build-ubuntu-20.04/lib:$penv{LD_LIBRARY_PATH}"
+                "PATH" : "${sourceDir}/build-ubuntu-20.04/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "${sourceDir}/build-ubuntu-20.04/lib:$penv{LD_LIBRARY_PATH}"
             }
         },
         {
@@ -144,8 +132,8 @@
             "description": "Clazy tests to be run on ubuntu-21.04",
             "configurePreset": "ubuntu-21.04",
             "environment" : {
-                "PATH" : "/usr/lib/llvm-12/bin/:${sourceDir}/build-ubuntu-21.04/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-12/lib64/:${sourceDir}/build-ubuntu-21.04/lib:$penv{LD_LIBRARY_PATH}"
+                "PATH" : "${sourceDir}/build-ubuntu-21.04/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH" : "${sourceDir}/build-ubuntu-21.04/lib:$penv{LD_LIBRARY_PATH}"
             }
         }
     ]
