@@ -37,6 +37,24 @@
             }
         },
         {
+            "name": "msvc-release",
+            "displayName": "msvc-release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-msvc-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_UNITY_BUILD" : "ON",
+                "CLAZY_MAN_PAGE" : "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "CMAKE_INSTALL_PREFIX" : "$env{LLVM_INSTALL_DIR}",
+                "CLANG_LIBRARY_IMPORT" : "$env{LLVM_INSTALL_DIR}/lib/clang.lib"
+            },
+            "environment" : {
+                "CC" : "cl",
+                "CXX" : "cl"
+            }
+        },
+        {
             "name": "ubuntu-18.04",
             "displayName": "ubuntu-18.04",
             "generator": "Ninja",
