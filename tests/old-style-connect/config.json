@@ -9,7 +9,8 @@
         {
             "filename" : "usingnamespace.cpp",
             "link" : true,
-            "has_fixits" : true
+            "has_fixits" : true,
+            "blacklist_platforms" : ["darwin"]
         },
         {
             "filename" : "namespaces.cpp",
