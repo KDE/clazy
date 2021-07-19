@@ -1,6 +1,5 @@
 # Changelog
-
-* v1.10 (2021)
+* v1.10 (July 20th 2021)
    - Requires C++17
    - Fixed a -Wclazy-lambda-in-connect false-positive
    - Fixed crash in copyable-polymorphic when PCH was enabled
