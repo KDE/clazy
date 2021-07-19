@@ -44,7 +44,7 @@ class QtInstallation:
             extra_includes = " -I%s/QtCore.framework/Headers" % self.qmake_lib_path
             extra_includes += " -iframework %s" % self.qmake_lib_path
 
-        return "-iframework " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + extra_includes
+        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + extra_includes
 
 
 class Test:
