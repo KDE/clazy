@@ -26,6 +26,7 @@ add_test(NAME signal-with-return-value COMMAND python3 run_tests.py signal-with-
 add_test(NAME thread-with-slots COMMAND python3 run_tests.py thread-with-slots WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME tr-non-literal COMMAND python3 run_tests.py tr-non-literal WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME unneeded-cast COMMAND python3 run_tests.py unneeded-cast WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+add_test(NAME use-arrow-operator COMMAND python3 run_tests.py use-arrow-operator WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME use-chrono-in-qtimer COMMAND python3 run_tests.py use-chrono-in-qtimer WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME connect-by-name COMMAND python3 run_tests.py connect-by-name WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME connect-non-signal COMMAND python3 run_tests.py connect-non-signal WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)

@@ -1,0 +1,3 @@
+use-arrow-operator/main.cpp:9:5: warning: Use operator -> directly instead of QScopedPointer::data()-> [-Wclazy-use-arrow-operator]
+use-arrow-operator/main.cpp:12:5: warning: Use operator -> directly instead of QPointer::data()-> [-Wclazy-use-arrow-operator]
+use-arrow-operator/main.cpp:15:5: warning: Use operator -> directly instead of QSharedPointer::data()-> [-Wclazy-use-arrow-operator]

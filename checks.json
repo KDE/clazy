@@ -711,6 +711,13 @@
             "level"  : -1,
             "categories" : ["readability"],
             "visits_stmts" : true
+        },
+        {
+            "name"   : "use-arrow-operator",
+            "class_name" : "UseArrowOperator",
+            "level"  : -1,
+            "categories" : ["readability"],
+            "visits_stmts" : true
         }
     ]
 }
