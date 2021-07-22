@@ -1,0 +1,20 @@
+#include <QtCore/QObject>
+#include <QtCore/QScopedPointer>
+#include <QtCore/QPointer>
+#include <QtCore/QSharedPointer>
+
+void test()
+{
+    QScopedPointer<QObject> ptr(new QObject);
+    ptr->deleteLater(); // Warn
+
+    QPointer<QObject> qptr(new QObject);
+    qptr->deleteLater();   // Warn
+
+    QSharedPointer<QObject> qsptr(new QObject);
+    qsptr->deleteLater(); // Warn
+
+    QScopedPointer<QObject> okPtr(new QObject);
+    okPtr->deleteLater();
+}
+

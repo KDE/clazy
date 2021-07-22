@@ -1,6 +1,9 @@
 /*
   This file is part of the clazy static checker.
 
+  Copyright (C) 2021 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Author: Waqar Ahmed <waqar.ahmed@kdab.com>
+
   Copyright (C) 2021 Waqar Ahmed <waqar.17a@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -45,7 +48,9 @@ void UseArrowOperator::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    FunctionDecl* funcDecl = vec.at(vec.size() - 1)->getDirectCallee();
+    CallExpr *callExpr = vec.at(vec.size() - 1);
+
+    FunctionDecl* funcDecl = callExpr->getDirectCallee();
     if (!funcDecl) {
         return;
     }
@@ -63,5 +68,27 @@ void UseArrowOperator::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "readibility: Use operator -> directly instead of data()->");
+    std::vector<FixItHint> fixits;
+
+    auto begin = callExpr->getExprLoc();
+    const auto end = callExpr->getEndLoc();
+    if (begin.isInvalid() || end.isInvalid()) {
+        emitWarning(clazy::getLocStart(callExpr), "readibility: Use operator -> directly instead of data()->");
+        return;
+    }
+
+    // find '.' in ptr.data()
+    int dotOffset = 0;
+    const char *d = m_sm.getCharacterData(begin);
+    while (*d != '.') {
+        dotOffset--;
+        d--;
+    }
+    begin = begin.getLocWithOffset(dotOffset);
+
+    SourceRange sourceRange{begin, end};
+    auto removal = FixItHint::CreateRemoval(sourceRange);
+    fixits.push_back(std::move(removal));
+
+    emitWarning(clazy::getLocStart(callExpr), "readibility: Use operator -> directly instead of data()->", fixits);
 }
