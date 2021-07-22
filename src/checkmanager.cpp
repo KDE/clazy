@@ -332,6 +332,7 @@ vector<string> CheckManager::checksAsErrors() const
             {
                 return check.name == name;
             });
+            llvm::errs() << name << '\n';
             if (it == m_registeredChecks.end())
                 llvm::errs() << "Invalid check: " << name << '\n';
             else
