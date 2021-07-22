@@ -1,6 +1,9 @@
 /*
   This file is part of the clazy static checker.
 
+  Copyright (C) 2021 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Author: Waqar Ahmed <waqar.ahmed@kdab.com>
+
   Copyright (C) 2021 Waqar Ahmed <waqar.17a@gmail.com>
 
   This library is free software; you can redistribute it and/or
