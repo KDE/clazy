@@ -25,7 +25,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/thread-with-slots.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/tr-non-literal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/unneeded-cast.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/use-arrow-operator.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/use-arrow-operator-instead-of-data.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/use-chrono-in-qtimer.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-by-name.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/connect-non-signal.cpp

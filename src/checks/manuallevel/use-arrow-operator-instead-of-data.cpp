@@ -22,7 +22,7 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "use-arrow-operator.h"
+#include "use-arrow-operator-instead-of-data.h"
 
 #include "HierarchyUtils.h"
 #include <clang/AST/ExprCXX.h>
@@ -30,13 +30,12 @@
 using namespace std;
 using namespace clang;
 
-
-UseArrowOperator::UseArrowOperator(const std::string &name, ClazyContext *context)
+UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
 
-void UseArrowOperator::VisitStmt(clang::Stmt *stmt)
+void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 {
     auto ce = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!ce) {

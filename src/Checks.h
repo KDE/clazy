@@ -53,7 +53,7 @@
 #include "checks/manuallevel/thread-with-slots.h"
 #include "checks/manuallevel/tr-non-literal.h"
 #include "checks/manuallevel/unneeded-cast.h"
-#include "checks/manuallevel/use-arrow-operator.h"
+#include "checks/manuallevel/use-arrow-operator-instead-of-data.h"
 #include "checks/manuallevel/use-chrono-in-qtimer.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
@@ -164,7 +164,7 @@ void CheckManager::registerChecks()
     registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<UseArrowOperator>("use-arrow-operator", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));

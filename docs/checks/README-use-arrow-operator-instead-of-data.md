@@ -1,4 +1,4 @@
-# use-arrow-operator
+# use-arrow-operator-instead-of-data
 
 Finds code such as:
 

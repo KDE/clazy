@@ -29,12 +29,12 @@
 
 
 /**
- * See README-use-arrow-operator.md for more info.
+ * See README-use-arrow-operator-instead-of-data.md for more info.
  */
-class UseArrowOperator : public CheckBase
+class UseArrowOperatorInsteadOfData : public CheckBase
 {
 public:
-    explicit UseArrowOperator(const std::string &name, ClazyContext *context);
+    explicit UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
 private:
 };

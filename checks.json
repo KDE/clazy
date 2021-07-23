@@ -713,8 +713,8 @@
             "visits_stmts" : true
         },
         {
-            "name"   : "use-arrow-operator",
-            "class_name" : "UseArrowOperator",
+            "name"   : "use-arrow-operator-instead-of-data",
+            "class_name" : "UseArrowOperatorInsteadOfData",
             "level"  : -1,
             "categories" : ["readability"],
             "visits_stmts" : true

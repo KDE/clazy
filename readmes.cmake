@@ -25,7 +25,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-thread-with-slots.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-tr-non-literal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unneeded-cast.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-use-arrow-operator.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-use-arrow-operator-instead-of-data.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-use-chrono-in-qtimer.md
 )
 
