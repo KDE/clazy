@@ -277,6 +277,7 @@ clazy runs all checks from level1 by default.
     - [strict-iterators](docs/checks/README-strict-iterators.md)
     - [temporary-iterator](docs/checks/README-temporary-iterator.md)
     - [unused-non-trivial-variable](docs/checks/README-unused-non-trivial-variable.md)
+    - [use-static-qregularexpression](docs/checks/README-use-static-qregularexpression.md)
     - [writing-to-temporary](docs/checks/README-writing-to-temporary.md)
     - [wrong-qevent-cast](docs/checks/README-wrong-qevent-cast.md)
     - [wrong-qglobalstatic](docs/checks/README-wrong-qglobalstatic.md)

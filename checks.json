@@ -718,6 +718,13 @@
             "level"  : -1,
             "categories" : ["readability"],
             "visits_stmts" : true
+        },
+        {
+            "name"  : "use-static-qregularexpression",
+            "class_name" : "UseStaticQRegularExpression",
+            "level" : 0,
+            "categories" : ["performance"],
+            "visits_stmts" : true
         }
     ]
 }

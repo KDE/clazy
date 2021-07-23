@@ -55,6 +55,7 @@ SET(README_LEVEL0_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-strict-iterators.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-temporary-iterator.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unused-non-trivial-variable.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-use-static-qregularexpression.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-writing-to-temporary.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-wrong-qevent-cast.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-wrong-qglobalstatic.md

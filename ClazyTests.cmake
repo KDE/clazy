@@ -53,6 +53,7 @@ add_test(NAME qt-macros COMMAND python3 run_tests.py qt-macros WORKING_DIRECTORY
 add_test(NAME strict-iterators COMMAND python3 run_tests.py strict-iterators WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME temporary-iterator COMMAND python3 run_tests.py temporary-iterator WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME unused-non-trivial-variable COMMAND python3 run_tests.py unused-non-trivial-variable WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+add_test(NAME use-static-qregularexpression COMMAND python3 run_tests.py use-static-qregularexpression WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME writing-to-temporary COMMAND python3 run_tests.py writing-to-temporary WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME wrong-qevent-cast COMMAND python3 run_tests.py wrong-qevent-cast WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME wrong-qglobalstatic COMMAND python3 run_tests.py wrong-qglobalstatic WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)

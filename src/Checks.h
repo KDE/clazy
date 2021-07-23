@@ -80,6 +80,7 @@
 #include "checks/level0/strict-iterators.h"
 #include "checks/level0/temporary-iterator.h"
 #include "checks/level0/unused-non-trivial-variable.h"
+#include "checks/level0/use-static-qregularexpression.h"
 #include "checks/level0/writing-to-temporary.h"
 #include "checks/level0/wrong-qevent-cast.h"
 #include "checks/level0/wrong-qglobalstatic.h"
@@ -196,6 +197,7 @@ void CheckManager::registerChecks()
     registerCheck(check<StrictIterators>("strict-iterators", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<TemporaryIterator>("temporary-iterator", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<UseStaticQRegularExpression>("use-static-qregularexpression", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<WritingToTemporary>("writing-to-temporary", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<WrongQEventCast>("wrong-qevent-cast", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<WrongQGlobalStatic>("wrong-qglobalstatic", CheckLevel0,  RegisteredCheck::Option_VisitsStmts));
