@@ -39,10 +39,9 @@ UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &
 
 static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
 
-    ConstantExpr *cexpr = dyn_cast_or_null<ConstantExpr>(clazy::getFirstChild(en->getInitExpr()));
-    if (!cexpr) {
+    auto cexpr = dyn_cast_or_null<ConstantExpr>(clazy::getFirstChild(en->getInitExpr()));
+    if (!cexpr)
         return false;
-    }
 
     if (auto binaryOp = dyn_cast_or_null<BinaryOperator>(cexpr->getSubExpr())) {
         binaryOp->dump();
@@ -108,10 +107,9 @@ static IsFlagEnumResult isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enu
 
 void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
 {
-    EnumDecl* enDecl = dyn_cast_or_null<EnumDecl>(decl);
-    if (!enDecl) {
+    auto enDecl = dyn_cast_or_null<EnumDecl>(decl);
+    if (!enDecl)
         return;
-    }
 
     const SmallVector<EnumConstantDecl*, 16> enumerators = getEnumerators(enDecl);
 
