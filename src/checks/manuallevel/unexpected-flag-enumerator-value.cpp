@@ -124,7 +124,7 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
 
     for (EnumConstantDecl* enumerator : enumerators) {
         const auto &initVal = enumerator->getInitVal();
-        if (!initVal.isPowerOf2() && !initVal.isNullValue()){
+        if (!initVal.isPowerOf2() && !initVal.isNullValue() && !initVal.isNegative()){
             if (isIntentionallyNotPowerOf2(enumerator))
                 continue;
             const auto value = enumerator->getInitVal().getLimitedValue();

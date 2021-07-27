@@ -81,3 +81,12 @@ enum class AlsoConsecutive {
     WHITE = 5,
     LAST = WHITE
 };
+
+enum class WithNegative
+{
+    V1 = 1,
+    V2 = 2,
+    V4 = 4,
+    V8 = 8,
+    VFoo = -1
+};
