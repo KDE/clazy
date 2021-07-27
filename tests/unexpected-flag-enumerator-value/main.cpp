@@ -39,7 +39,7 @@ enum AlignmentFlag {
 };
 
 // No Warning here, all consecutive values
-enum {
+enum Consecutive {
     RED = 1,
     GREEN = 2,
     BLUE = 3,
@@ -71,4 +71,13 @@ enum class WithZero {
     Bar = 2,
     Four = 4,
     Eight = 8,
+};
+
+enum class AlsoConsecutive {
+    RED = 1,
+    GREEN = 2,
+    BLUE = 3,
+    BLACK = 4,
+    WHITE = 5,
+    LAST = WHITE
 };

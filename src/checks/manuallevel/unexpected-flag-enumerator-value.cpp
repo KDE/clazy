@@ -28,6 +28,8 @@
 
 #include <clang/AST/AST.h>
 
+#include <algorithm>
+
 using namespace clang;
 using namespace std;
 
@@ -75,12 +77,13 @@ static uint64_t getIntegerValue(EnumConstantDecl* e)
 static bool hasConsecutiveValues(const SmallVector<EnumConstantDecl*, 16>& enumerators)
 {
     auto val = getIntegerValue(enumerators.front());
-    bool consecutive = true;
-    for (size_t i = 1; i < enumerators.size(); ++i) {
+    const size_t until = std::min<size_t>(4, enumerators.size());
+    for (size_t i = 1; i < until; ++i) {
         val++;
-        consecutive = getIntegerValue(enumerators[i]) == val;
+        if (getIntegerValue(enumerators[i]) != val)
+            return false;
     }
-    return consecutive;
+    return true;
 }
 
 static IsFlagEnumResult isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enumerators)
