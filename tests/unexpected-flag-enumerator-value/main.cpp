@@ -63,3 +63,12 @@ enum WithMasks
     V8 = 8,
     Mask = 0x0000FFFF
 };
+
+
+enum class WithZero {
+    Zero = 0,
+    Foo = 1,
+    Bar = 2,
+    Four = 4,
+    Eight = 8,
+};

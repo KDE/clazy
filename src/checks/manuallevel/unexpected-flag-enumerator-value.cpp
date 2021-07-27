@@ -116,15 +116,14 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
     const SmallVector<EnumConstantDecl*, 16> enumerators = getEnumerators(enDecl);
 
     auto flagEnum = isFlagEnum(enumerators);
-    if (!flagEnum.isFlagEnum) {
+    if (!flagEnum.isFlagEnum)
         return;
-    }
 
     for (EnumConstantDecl* enumerator : enumerators) {
-        if (!enumerator->getInitVal().isPowerOf2()) {
-            if (isIntentionallyNotPowerOf2(enumerator)) {
+        const auto &initVal = enumerator->getInitVal();
+        if (!initVal.isPowerOf2() && !initVal.isNullValue()){
+            if (isIntentionallyNotPowerOf2(enumerator))
                 continue;
-            }
             const auto value = enumerator->getInitVal().getLimitedValue();
             Expr *initExpr = enumerator->getInitExpr();
             emitWarning(initExpr ? initExpr->getBeginLoc() : enumerator->getBeginLoc(), "Unexpected non power-of-2 enumerator value: " + std::to_string(value));
