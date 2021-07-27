@@ -124,7 +124,8 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
                 continue;
             }
             const auto value = enumerator->getInitVal().getLimitedValue();
-            emitWarning(enumerator->getInitExpr()->getBeginLoc(), "Unexpected non power-of-2 enumerator value: " + std::to_string(value));
+            Expr *initExpr = enumerator->getInitExpr();
+            emitWarning(initExpr ? initExpr->getBeginLoc() : enumerator->getBeginLoc(), "Unexpected non power-of-2 enumerator value: " + std::to_string(value));
         }
     }
 }
