@@ -44,7 +44,6 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
         return false;
 
     if (auto binaryOp = dyn_cast_or_null<BinaryOperator>(cexpr->getSubExpr())) {
-        binaryOp->dump();
         return true;
     }
 
