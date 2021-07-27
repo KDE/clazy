@@ -247,6 +247,7 @@ clazy runs all checks from level1 by default.
     - [signal-with-return-value](docs/checks/README-signal-with-return-value.md)
     - [thread-with-slots](docs/checks/README-thread-with-slots.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)
+    - [unexpected-flag-enumerator-value](docs/checks/README-unexpected-flag-enumerator-value.md)
     - [unneeded-cast](docs/checks/README-unneeded-cast.md)
     - [use-arrow-operator-instead-of-data](docs/checks/README-use-arrow-operator-instead-of-data.md)
     - [use-chrono-in-qtimer](docs/checks/README-use-chrono-in-qtimer.md)

@@ -52,6 +52,7 @@
 #include "checks/manuallevel/signal-with-return-value.h"
 #include "checks/manuallevel/thread-with-slots.h"
 #include "checks/manuallevel/tr-non-literal.h"
+#include "checks/manuallevel/unexpected-flag-enumerator-value.h"
 #include "checks/manuallevel/unneeded-cast.h"
 #include "checks/manuallevel/use-arrow-operator-instead-of-data.h"
 #include "checks/manuallevel/use-chrono-in-qtimer.h"
@@ -164,6 +165,7 @@ void CheckManager::registerChecks()
     registerCheck(check<SignalWithReturnValue>("signal-with-return-value", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<UnexpectedFlagEnumeratorValue>("unexpected-flag-enumerator-value", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));

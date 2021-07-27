@@ -725,6 +725,13 @@
             "level" : 0,
             "categories" : ["performance"],
             "visits_stmts" : true
+        },
+        {
+            "name"  : "unexpected-flag-enumerator-value",
+            "class_name" : "UnexpectedFlagEnumeratorValue",
+            "level" : -1,
+            "categories" : ["bug"],
+            "visits_decls" : true
         }
     ]
 }

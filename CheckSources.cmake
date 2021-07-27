@@ -24,6 +24,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/signal-with-return-value.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/thread-with-slots.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/tr-non-literal.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/unexpected-flag-enumerator-value.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/unneeded-cast.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/use-arrow-operator-instead-of-data.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/use-chrono-in-qtimer.cpp

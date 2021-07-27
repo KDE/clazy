@@ -4,6 +4,7 @@
     - New Checks:
       - use-arrow-operator-instead-of-data
       - use-static-qregularexpression
+      - unexpected-flag-enumerator-value
 
 * v1.10 (July 20th 2021)
    - Requires C++17

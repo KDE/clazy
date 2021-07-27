@@ -1,0 +1,2 @@
+unexpected-flag-enumerator-value/main.cpp:14:17: warning: Unexpected non power-of-2 enumerator value: 3 [-Wclazy-unexpected-flag-enumerator-value]
+unexpected-flag-enumerator-value/main.cpp:25:21: warning: Unexpected non power-of-2 enumerator value: 17 [-Wclazy-unexpected-flag-enumerator-value]
