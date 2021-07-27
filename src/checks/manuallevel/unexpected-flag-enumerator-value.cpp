@@ -47,6 +47,9 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
         return true;
     }
 
+    if (en->getName().contains_lower("mask"))
+        return true;
+
     return false;
 }
 

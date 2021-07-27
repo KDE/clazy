@@ -54,3 +54,12 @@ class FooBar {
         int m = 0;
 };
 Q_DECLARE_TYPEINFO(FooBar, Q_RELOCATABLE_TYPE);
+
+enum WithMasks
+{
+    V1 = 1,
+    V2 = 2,
+    V4 = 4,
+    V8 = 8,
+    Mask = 0x0000FFFF
+};
