@@ -107,7 +107,7 @@ static IsFlagEnumResult isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enu
 void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
 {
     auto enDecl = dyn_cast_or_null<EnumDecl>(decl);
-    if (!enDecl)
+    if (!enDecl || !enDecl->hasNameForLinkage())
         return;
 
     const SmallVector<EnumConstantDecl*, 16> enumerators = getEnumerators(enDecl);

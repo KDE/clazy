@@ -46,3 +46,11 @@ enum {
     BLACK = 4,
     WHITE = 5,
 };
+
+#include <QtCore/qtypeinfo.h>
+
+class FooBar {
+    public:
+        int m = 0;
+};
+Q_DECLARE_TYPEINFO(FooBar, Q_RELOCATABLE_TYPE);
