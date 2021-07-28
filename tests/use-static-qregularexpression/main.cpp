@@ -1,4 +1,3 @@
-#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QRegularExpression>
 
@@ -53,4 +52,29 @@ void test()
 
     strList.lastIndexOf(e); // Warn
     strList.lastIndexOf(staticRegex); // Ok
+
+    QString regexStr = "[abc]";
+    h.contains(QRegularExpression(regexStr)); // Warn
+
+    {
+        QRegularExpression reg(regexStr);
+        h.contains(reg); // Warn
+    }
+    {
+        static const QRegularExpression reg(regexStr);
+        h.contains(reg); // Ok
+    }
+}
+
+void test1(const QString& regex, QString toCheck)
+{
+    QRegularExpression re(regex);
+    toCheck.contains(re); // Ok
+}
+
+void test2(const QStringList& regexes, QString toCheck)
+{
+    for (const auto& regix : regexes) {
+        toCheck.contains(QRegularExpression(regix)); // Ok, no warn
+    }
 }

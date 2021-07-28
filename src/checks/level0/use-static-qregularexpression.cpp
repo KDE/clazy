@@ -39,24 +39,72 @@ UseStaticQRegularExpression::UseStaticQRegularExpression(const std::string &name
 {
 }
 
-static bool isArgNonStaticLocalVar(Expr *arg0)
+static MaterializeTemporaryExpr* isArgTemporaryObj(Expr *arg0)
 {
-    auto declRefExpr = dyn_cast_or_null<DeclRefExpr>(clazy::getFirstChild(arg0));
+    return dyn_cast_or_null<MaterializeTemporaryExpr>(arg0);
+}
+
+static VarDecl* getVarDecl(Expr *arg)
+{
+    auto declRefExpr = dyn_cast_or_null<DeclRefExpr>(clazy::getFirstChild(arg));
     if (!declRefExpr) {
+        return nullptr;
+    }
+    return dyn_cast_or_null<VarDecl>(declRefExpr->getDecl());
+}
+
+static Expr* getVarInitExpr(VarDecl *VDef)
+{
+    return VDef->getDefinition() ? VDef->getDefinition()->getInit() : nullptr;
+}
+
+static bool isQStringFromStringLiteral(Expr *qstring)
+{
+    if (isArgTemporaryObj(qstring)) {
+        return true;
+    }
+
+    if (auto *VD = getVarDecl(qstring)) {
+        auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(getVarInitExpr(VD));
+        if (stringLit) {
+            return true;
+        }
+    }
+    return false;
+}
+
+static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
+{
+    Expr *initExpr = getVarInitExpr(qregexVarDecl);
+    if (!initExpr) {
         return false;
     }
 
-    auto varDecl = dyn_cast_or_null<VarDecl>(declRefExpr->getDecl());
+    auto ctorCall = dyn_cast_or_null<CXXConstructExpr>(*initExpr->child_begin());
+    if (!ctorCall) {
+        return false;
+    }
+
+    auto qstringArg = ctorCall->getArg(0);
+    if (qstringArg && isQStringFromStringLiteral(qstringArg)) {
+        return true;
+    }
+
+    return false;
+}
+
+static bool isArgNonStaticLocalVar(Expr *qregexp)
+{
+    auto *varDecl = getVarDecl(qregexp);
     if (!varDecl) {
         return false;
     }
 
-    return varDecl->isLocalVarDecl() && !varDecl->isStaticLocal();
-}
+    if (!isQRegexpFromStringLiteral(varDecl)) {
+        return false;
+    }
 
-static bool isArgTemporaryObj(Expr *arg0)
-{
-    return dyn_cast_or_null<MaterializeTemporaryExpr>(arg0);
+    return varDecl->isLocalVarDecl() && !varDecl->isStaticLocal();
 }
 
 static bool isQStringOrQStringListMethod(CXXMethodDecl *methodDecl)
@@ -92,18 +140,31 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    Expr* arg0 = method->getArg(0);
-    if (!arg0) {
+    Expr* qregexArg = method->getArg(0);
+    if (!qregexArg) {
         return;
     }
 
-    if (isArgTemporaryObj(arg0)) {
-        emitWarning(clazy::getLocStart(arg0), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+    // Its a QRegularExpression(arg) ?
+    if (auto temp = isArgTemporaryObj(qregexArg)) {
+        // Get the QRegularExpression ctor
+        auto ctor = clazy::getFirstChildOfType<CXXConstructExpr>(temp);
+
+        // Check if its first arg is "QString" && a temporary OR non-static local
+        auto qstrArg = ctor->getArg(0);
+        if (!qstrArg || clazy::typeName(qstrArg->getType(), lo(), true) != "QString") {
+            return;
+        }
+
+        if (isQStringFromStringLiteral(qstrArg)) {
+            emitWarning(clazy::getLocStart(qregexArg), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+        }
         return;
     }
 
-    if (isArgNonStaticLocalVar(arg0)) {
-        emitWarning(clazy::getLocStart(arg0), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+    // Its a local QRegularExpression variable?
+    if (isArgNonStaticLocalVar(qregexArg)) {
+        emitWarning(clazy::getLocStart(qregexArg), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
         return;
     }
 }
