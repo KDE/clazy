@@ -64,6 +64,13 @@ enum WithMasks
     Mask = 0x0000FFFF
 };
 
+enum RelationFlag {
+    Label         = 0x00000001,
+    Labelled      = 0x00000002,
+    Controller    = 0x00000004,
+    Controlled    = 0x00000008,
+    AllRelations  = 0xffffffff
+};
 
 enum class WithZero {
     Zero = 0,
@@ -89,4 +96,48 @@ enum class WithNegative
     V4 = 4,
     V8 = 8,
     VFoo = -1
+};
+
+enum Filter {
+    Dirs        = 0x001,
+    Files       = 0x002,
+    Drives      = 0x004,
+    NoSymLinks  = 0x008,
+    AllEntries  = Dirs | Files | Drives,// Because of this -1, the type of this enum becomes signed and hence BinaryOp | doesn't need any implicit casts
+    TypeMask    = 0x00f,
+
+    NoFilter = -1
+};
+
+enum ComponentFormattingOption : unsigned int {
+    PrettyDecoded = 0x000000,
+    EncodeSpaces = 0x100000,
+    EncodeUnicode = 0x200000,
+    EncodeDelimiters = 0x400000 | 0x800000,
+    EncodeReserved = 0x1000000,
+    DecodeReserved = 0x2000000,
+    // 0x4000000 used to indicate full-decode mode
+
+    FullyEncoded = EncodeSpaces | EncodeUnicode | EncodeDelimiters | EncodeReserved,
+    FullyDecoded = FullyEncoded | DecodeReserved | 0x4000000
+};
+enum MarkdownFeature {
+    MarkdownNoHTML = 0x0020 | 0x0040,
+    MarkdownDialectCommonMark = 0,
+    MarkdownDialectGitHub = 0x0004 | 0x0008 | 0x0400 | 0x0100 | 0x0200 | 0x0800 | 0x4000
+};
+enum Feature {
+    FeatureCollapseWhitespace =       0x0001,
+    FeaturePermissiveATXHeaders =     0x0002,
+    FeaturePermissiveURLAutoLinks =   0x0004,
+    FeaturePermissiveMailAutoLinks =  0x0008,
+    FeatureNoIndentedCodeBlocks =     0x0010,
+    FeatureNoHTMLBlocks =             0x0020,
+    FeatureNoHTMLSpans =              0x0040,
+    FeatureTables =                   0x0100,
+    FeatureStrikeThrough =            0x0200,
+    FeaturePermissiveWWWAutoLinks =   0x0400,
+    FeatureTasklists =                0x0800,
+    FeatureUnderline =                0x4000,
+    DialectGitHub =                   MarkdownDialectGitHub
 };

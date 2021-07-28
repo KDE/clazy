@@ -39,17 +39,55 @@ UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &
 {
 }
 
-static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
+static ConstantExpr* getConstantExpr(EnumConstantDecl *enCD)
+{
+    auto cexpr = dyn_cast_or_null<ConstantExpr>(enCD->getInitExpr());
+    if (cexpr)
+        return cexpr;
+    if (auto cast = dyn_cast_or_null<ImplicitCastExpr>(enCD->getInitExpr())) {
+        return dyn_cast_or_null<ConstantExpr>(cast->getSubExpr());
+    }
+    return nullptr;
+}
 
-    auto cexpr = dyn_cast_or_null<ConstantExpr>(clazy::getFirstChild(en->getInitExpr()));
+static bool isBinaryOperatorExpression(ConstantExpr* cexpr)
+{
+    auto subExpr = cexpr->getSubExpr();
+    if (dyn_cast_or_null<BinaryOperator>(subExpr))
+        return true;
+
+    if (auto cast = dyn_cast_or_null<ImplicitCastExpr>(subExpr)) {
+        return dyn_cast_or_null<BinaryOperator>(cast->getSubExpr());
+    }
+    return false;
+}
+
+static bool isReferenceToEnumerator(ConstantExpr* cexpr)
+{
+    return dyn_cast_or_null<DeclRefExpr>(cexpr->getSubExpr());
+}
+
+static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
+    constexpr unsigned MinOnesToQualifyAsMask = 3;
+
+    const auto val = en->getInitVal();
+    if (val.isMask() && val.countTrailingOnes() >= MinOnesToQualifyAsMask)
+        return true;
+
+    if (val.isShiftedMask() && val.countPopulation() >= MinOnesToQualifyAsMask)
+        return true;
+
+    if (en->getName().contains_lower("mask"))
+        return true;
+
+    auto *cexpr = getConstantExpr(en);
     if (!cexpr)
         return false;
 
-    if (auto binaryOp = dyn_cast_or_null<BinaryOperator>(cexpr->getSubExpr())) {
+    if (isBinaryOperatorExpression(cexpr))
         return true;
-    }
 
-    if (en->getName().contains_lower("mask"))
+    if (isReferenceToEnumerator(cexpr))
         return true;
 
     return false;
@@ -124,7 +162,7 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
 
     for (EnumConstantDecl* enumerator : enumerators) {
         const auto &initVal = enumerator->getInitVal();
-        if (!initVal.isPowerOf2() && !initVal.isNullValue() && !initVal.isNegative()){
+        if (!initVal.isPowerOf2() && !initVal.isNullValue() && !initVal.isNegative()) {
             if (isIntentionallyNotPowerOf2(enumerator))
                 continue;
             const auto value = enumerator->getInitVal().getLimitedValue();
