@@ -1,7 +1,8 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
+            "filename" : "main.cpp",
+            "expects_failure" : true
         }
     ]
 }

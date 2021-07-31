@@ -141,3 +141,13 @@ enum Feature {
     FeatureUnderline =                0x4000,
     DialectGitHub =                   MarkdownDialectGitHub
 };
+
+
+enum class EnumFoo { // OK
+    A,
+    B = A,
+    C,
+    D,
+    E,
+    F
+};
