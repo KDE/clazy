@@ -151,3 +151,11 @@ enum class EnumFoo { // OK
     E,
     F
 };
+
+enum class EnumFoo2 { // OK
+    A = 0,
+    B = 1,
+    C = 2,
+    D = 4,
+    E = (C | D)
+};
