@@ -21,10 +21,7 @@
 */
 
 #include "unexpected-flag-enumerator-value.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
 
 #include <clang/AST/AST.h>
 
@@ -44,22 +41,12 @@ static ConstantExpr* getConstantExpr(EnumConstantDecl *enCD)
     auto cexpr = dyn_cast_or_null<ConstantExpr>(enCD->getInitExpr());
     if (cexpr)
         return cexpr;
-    if (auto cast = dyn_cast_or_null<ImplicitCastExpr>(enCD->getInitExpr())) {
-        return dyn_cast_or_null<ConstantExpr>(cast->getSubExpr());
-    }
-    return nullptr;
+    return clazy::getFirstChildOfType<ConstantExpr>(enCD->getInitExpr());
 }
 
 static bool isBinaryOperatorExpression(ConstantExpr* cexpr)
 {
-    auto subExpr = cexpr->getSubExpr();
-    if (dyn_cast_or_null<BinaryOperator>(subExpr))
-        return true;
-
-    if (auto cast = dyn_cast_or_null<ImplicitCastExpr>(subExpr)) {
-        return dyn_cast_or_null<BinaryOperator>(cast->getSubExpr());
-    }
-    return false;
+    return clazy::getFirstChildOfType<BinaryOperator>(cexpr);
 }
 
 static bool isReferenceToEnumerator(ConstantExpr* cexpr)
@@ -93,11 +80,6 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
     return false;
 }
 
-struct IsFlagEnumResult {
-    bool isFlagEnum;
-    int numFalseValues;
-};
-
 static SmallVector<EnumConstantDecl*, 16> getEnumerators(EnumDecl *enDecl)
 {
     SmallVector<EnumConstantDecl*, 16> ret;
@@ -124,14 +106,32 @@ static bool hasConsecutiveValues(const SmallVector<EnumConstantDecl*, 16>& enume
     return true;
 }
 
-static IsFlagEnumResult isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enumerators)
+static bool hasInitExprs(const SmallVector<EnumConstantDecl*, 16>& enumerators)
+{
+    size_t enumeratorsWithInitExpr = 0;
+    for (auto enumerator : enumerators) {
+        if (enumerator->getInitExpr()) {
+            enumeratorsWithInitExpr++;
+        }
+    }
+
+    return enumeratorsWithInitExpr == enumerators.size();
+}
+
+static bool isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enumerators)
 {
     if (enumerators.size() < 4) {
-        return {false, 0};
+        return false;
+    }
+
+    // For an enum to be considered "flag like", all enumerators
+    // must have an explicit init value / expr
+    if (!hasInitExprs(enumerators)) {
+        return false;
     }
 
     if (hasConsecutiveValues(enumerators)) {
-        return {false, 0};
+        return false;
     }
 
     llvm::SmallVector<bool, 16> enumValues;
@@ -142,10 +142,7 @@ static IsFlagEnumResult isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enu
     const size_t count = std::count(enumValues.begin(), enumValues.end(), false);
 
     // If half of our values were power-of-2, this is probably a flag enum
-    IsFlagEnumResult res;
-    res.isFlagEnum = count <= (enumerators.size() / 2);
-    res.numFalseValues = count;
-    return res;
+    return count <= (enumerators.size() / 2);
 }
 
 void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
@@ -156,8 +153,7 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
 
     const SmallVector<EnumConstantDecl*, 16> enumerators = getEnumerators(enDecl);
 
-    auto flagEnum = isFlagEnum(enumerators);
-    if (!flagEnum.isFlagEnum)
+    if (!isFlagEnum(enumerators))
         return;
 
     for (EnumConstantDecl* enumerator : enumerators) {
