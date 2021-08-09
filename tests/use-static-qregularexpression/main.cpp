@@ -78,3 +78,10 @@ void test2(const QStringList& regexes, QString toCheck)
         toCheck.contains(QRegularExpression(regix)); // Ok, no warn
     }
 }
+
+void test_nocrash()
+{
+    QRegularExpression re;
+    QString s;
+    s.contains(re);
+}

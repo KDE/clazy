@@ -80,8 +80,15 @@ static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
         return false;
     }
 
-    auto ctorCall = dyn_cast_or_null<CXXConstructExpr>(*initExpr->child_begin());
+    auto ctorCall = dyn_cast<CXXConstructExpr>(initExpr);
     if (!ctorCall) {
+        ctorCall = clazy::getFirstChildOfType<CXXConstructExpr>(initExpr);
+        if (!ctorCall) {
+            return false;
+        }
+    }
+
+    if (ctorCall->getNumArgs() < 2) {
         return false;
     }
 
