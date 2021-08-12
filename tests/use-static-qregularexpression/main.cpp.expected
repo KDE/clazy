@@ -19,3 +19,7 @@ use-static-qregularexpression/main.cpp:50:21: warning: Don't create temporary QR
 use-static-qregularexpression/main.cpp:53:25: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
 use-static-qregularexpression/main.cpp:57:16: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
 use-static-qregularexpression/main.cpp:61:20: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
+use-static-qregularexpression/main.cpp:92:19: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
+use-static-qregularexpression/main.cpp:93:19: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
+use-static-qregularexpression/main.cpp:95:15: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
+use-static-qregularexpression/main.cpp:96:15: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
