@@ -21,6 +21,14 @@
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QWizard>
+
+class my_Class
+{
+public:
+    QDir m_dir;
+    QDir *m_dir_bis;
+    QVariant m_variant;
+};
 #define MYSTRING "myDirPath"
 
 void test()
@@ -28,11 +36,23 @@ void test()
     QDir dir;
     dir = "myStuff";
 
+    QDir d;
+    QFileInfo fi;
+    d = fi.absolutePath();
+
+    my_Class test_class;
+    test_class.m_dir = "name";
+
+    my_Class* test_class_bis = new my_Class;
+    test_class_bis->m_dir = ("name");
+
+    *test_class.m_dir_bis = "name";
+
     QDir dir2;
     dir2 = MYSTRING;
 
     QDir dir3;
-    dir3 = "my" "Stuff";
+    dir3= "my" "Stuff";
 
     QDir dir4;
     char *pathName = "myStuff";
@@ -47,6 +67,7 @@ void test()
 
     QDir *dir7 = new QDir("apath");
     *dir7 = "adir";
+    ((*dir7)) = "adir";
 
     QDir::addResourceSearchPath("somePath1");
     dir6.addResourceSearchPath("somePath2");
@@ -158,10 +179,13 @@ void test()
     QVariant var1;
     QVariant *var3;
     QVariant var2;
-    bool bool1 = (var1 > var2);
-    bool bool2 = (var1 >= var2);
-    bool bool3 = (*var3 < var2);
+    bool bool1 = var1 > var2;
+    bool bool2 = (var1 >= (var2));
+    bool bool3 = ((*var3) < var2);
     bool bool4 = (*var3 <= var2);
+    bool bool5 = (*var3 <= test_class.m_variant);
+    bool bool6 = (test_class_bis->m_variant <= test_class.m_variant);
+
 
 }
 

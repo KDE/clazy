@@ -56,11 +56,10 @@ public:
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *) override;
 
 private:
-    std::string findPathArgument(clang::Stmt *stmt, bool ancesterIsCondition = false, int ancestorConditionChildNumber = 0);
     std::vector<clang::SourceLocation> m_listingMacroExpand;
     void fixForDeprecatedOperator(clang::Stmt* stmt, std::string className);
-    std::string buildReplacementforQDir(clang::Stmt* stmt, clang::DeclRefExpr* declb);
-    std::string buildReplacementForQVariant(clang::Stmt* stmt, clang::DeclRefExpr* decl, clang::DeclRefExpr* declb);
+    std::string buildReplacementforQDir(clang::DeclRefExpr *decl_operator, bool isPointer, string replacement, string replacement_var2);
+    std::string buildReplacementForQVariant(clang::DeclRefExpr* decl_operator, string replacement, string replacement_var2);
 };
 
 #endif
