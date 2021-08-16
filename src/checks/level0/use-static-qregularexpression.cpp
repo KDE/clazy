@@ -50,7 +50,7 @@ static VarDecl* getVarDecl(Expr *arg)
   declRefExpr =
       declRefExpr ? declRefExpr : clazy::getFirstChildOfType<DeclRefExpr>(arg);
   if (!declRefExpr) {
-    return nullptr;
+      return nullptr;
   }
     return dyn_cast_or_null<VarDecl>(declRefExpr->getDecl());
 }
@@ -78,18 +78,18 @@ static bool isQStringFromStringLiteral(Expr *qstring)
 static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo) {
   // Get the QRegularExpression ctor
   auto ctor = clazy::getFirstChildOfType<CXXConstructExpr>(qregexVar);
-  if (ctor->getNumArgs() == 0) {
-    return false;
+  if (!ctor || ctor->getNumArgs() == 0) {
+      return false;
   }
 
   // Check if its first arg is "QString" && a temporary OR non-static local
   auto qstrArg = ctor->getArg(0);
   if (!qstrArg || clazy::typeName(qstrArg->getType(), lo, true) != "QString") {
-    return false;
+      return false;
   }
 
   if (isQStringFromStringLiteral(qstrArg)) {
-    return true;
+      return true;
   }
   return false;
 }

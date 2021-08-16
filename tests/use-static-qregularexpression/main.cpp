@@ -86,6 +86,7 @@ void test_nocrash()
     s.contains(re);
 }
 
+#include <QtCore/QVariant>
 void test_qregexmatch(QString selectedText)
 {
     QRegularExpression weekRE("(?<week>");
@@ -94,4 +95,7 @@ void test_qregexmatch(QString selectedText)
 
     auto m1 = QRegularExpression("[123]").match(selectedText);
     auto m2 = QRegularExpression("[123]").globalMatch(selectedText);
+
+    QVariant v;
+    v.toRegularExpression().match(selectedText); // No Warn
 }
