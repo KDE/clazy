@@ -63,6 +63,15 @@ static Expr* getVarInitExpr(VarDecl *VDef)
 static bool isQStringFromStringLiteral(Expr *qstring)
 {
     if (isArgTemporaryObj(qstring)) {
+        // Is it compile time known QString i.e., not from a function call
+        auto qstringCtor = clazy::getFirstChildOfType<CXXConstructExpr>(qstring);
+        if (!qstringCtor)
+            return false;
+
+        auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(qstringCtor);
+        if (!stringLit)
+            return false;
+
         return true;
     }
 
@@ -82,7 +91,7 @@ static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo) {
       return false;
   }
 
-  // Check if its first arg is "QString" && a temporary OR non-static local
+  // Check if its first arg is "QString"
   auto qstrArg = ctor->getArg(0);
   if (!qstrArg || clazy::typeName(qstrArg->getType(), lo, true) != "QString") {
       return false;

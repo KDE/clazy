@@ -99,3 +99,24 @@ void test_qregexmatch(QString selectedText)
     QVariant v;
     v.toRegularExpression().match(selectedText); // No Warn
 }
+
+extern QString someText();
+void test_qregexmatch_rvalueString(QString s)
+{
+    // XValue + RValue arg
+    QString text;
+    QRegularExpression(someText()).match(text); // Ok
+
+    // LValue + RValue arg
+    QRegularExpression re(someText());
+    re.match(text);
+
+    QRegularExpression re1("^" + someText());
+    re1.match(text);
+
+    QRegularExpression re2("^" + s);
+    re2.match(text);
+
+    QRegularExpression re3((QString(s)));
+    re3.match(text);
+}
