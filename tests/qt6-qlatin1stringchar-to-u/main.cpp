@@ -37,6 +37,8 @@ void receivingQLatin1Char(QLatin1Char s1) {}
 void receivingQString(QString s1) {}
 void receivingQLatin1String(QLatin1String s1) {}
 
+bool return_bool(QString si) {return true;}
+
 #define PREFIXX '*'
 #define PREFIX "foo"
 void test()
@@ -88,7 +90,7 @@ void test()
     c1 = QLatin1Char(s.startsWith(QLatin1String(("aa"))) ?
                            QLatin1Char(true ? QLatin1Char('_') : QLatin1Char('_')) : QLatin1Char('_'));
     c1 = QLatin1Char(s.startsWith(QLatin1Char('/')) ?
-                           QLatin1Char('_') : QLatin1Char(s.startsWith(QLatin1Char('_')) ? '*' : '/'));
+                           QLatin1Char('_') : QLatin1Char(s.startsWith(QLatin1Char('_')) ? QLatin1Char('*') : QLatin1Char('/')));
     // Support fixit for the QLatin1Char("_") calls in the above cases
 
     QString s1 = QLatin1String("str");
@@ -117,10 +119,14 @@ void test()
     // The outer QLatin1String fix is not supported, but the inside ones are.
     s1 = QLatin1String(s.startsWith(QLatin1String("fixme")) ? "foo" : "bar");//
     s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ?
-                           QLatin1String(true ? QLatin1String("fixme") : QLatin1String("fixme")) : QLatin1String("fixme"));
+                           QLatin1String(true ? QLatin1String("dontfixme") : QLatin1String("dontfixme")) : QLatin1String("dontfixme"));
     s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ?
-                           QLatin1Literal("fixme") : QLatin1String(s.startsWith(QLatin1String("fixme")) ? "foo" : "bar"));
-    // Support fixit for the QLatin1Literal("fixme") calls in the above cases
+                           QLatin1String("foo") : QLatin1String(s.startsWith(QLatin1String("fixme")) ? "foo" : "bar"));
+
+    QString s2df = "dfg";
+    s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
+    s1 = QLatin1String(return_bool(QLatin1String("fixme"))? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
+    s1 = QLatin1String(s2df.contains(QLatin1String("caught"))? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
 
 }
 

@@ -59,11 +59,17 @@ private:
     std::vector<clang::SourceLocation> m_emittedWarningsInMacro;
     bool warningAlreadyEmitted(clang::SourceLocation sploc);
     bool checkCTorExpr(clang::Stmt *stmt, bool check_parents);
-    void lookForLeftOver(clang::Stmt *stmt, bool keep_looking = true);
+    void lookForLeftOver(clang::Stmt *stmt, bool found_QString_QChar = false);
     std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false,
                                  int ancestorConditionChildNumber = 0);
 
     bool isInterestingCtorCall(clang::CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true);
+    bool relatedToQStringOrQChar(clang::Stmt* stmt, const ClazyContext *const context);
+    bool foundQCharOrQString(clang::Stmt* stmt);
+
+    bool m_QStringOrQChar_fix = false;
+    bool m_QChar = false;
+    bool m_QChar_noFix = false;
 
 };
 
