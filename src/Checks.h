@@ -32,7 +32,6 @@
 #include "checks/manuallevel/detaching-member.h"
 #include "checks/manuallevel/heap-allocated-small-trivial-type.h"
 #include "checks/manuallevel/ifndef-define-typo.h"
-#include "checks/manuallevel/inefficient-qlist.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/jnisignatures.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
@@ -92,7 +91,6 @@
 #include "checks/level1/detaching-temporary.h"
 #include "checks/level1/foreach.h"
 #include "checks/level1/incorrect-emit.h"
-#include "checks/level1/inefficient-qlist-soft.h"
 #include "checks/level1/install-event-filter.h"
 #include "checks/level1/non-pod-global-static.h"
 #include "checks/level1/overridden-signal.h"
@@ -138,7 +136,6 @@ void CheckManager::registerChecks()
     registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<HeapAllocatedSmallTrivialType>("heap-allocated-small-trivial-type", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
-    registerCheck(check<InefficientQList>("inefficient-qlist", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
@@ -211,7 +208,6 @@ void CheckManager::registerChecks()
     registerCheck(check<DetachingTemporary>("detaching-temporary", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<Foreach>("foreach", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<InefficientQListSoft>("inefficient-qlist-soft", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1,  RegisteredCheck::Option_VisitsDecls));

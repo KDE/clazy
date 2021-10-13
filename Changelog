@@ -5,6 +5,7 @@
       - use-arrow-operator-instead-of-data
       - use-static-qregularexpression
       - unexpected-flag-enumerator-value
+      - Removed inefficient-qlist check (Fixed in Qt6)
 
 * v1.10 (July 20th 2021)
    - Requires C++17

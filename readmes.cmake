@@ -4,7 +4,6 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-member.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-heap-allocated-small-trivial-type.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-ifndef-define-typo.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-inefficient-qlist.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-jni-signatures.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md
@@ -70,7 +69,6 @@ SET(README_LEVEL1_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-temporary.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-foreach.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-incorrect-emit.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-inefficient-qlist-soft.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-install-event-filter.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-non-pod-global-static.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-overridden-signal.md

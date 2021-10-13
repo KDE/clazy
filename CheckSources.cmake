@@ -4,7 +4,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/detaching-member.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/heap-allocated-small-trivial-type.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/ifndef-define-typo.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/inefficient-qlist.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/jnisignatures.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp
@@ -64,7 +63,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/detaching-temporary.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/foreach.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/incorrect-emit.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/inefficient-qlist-soft.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/install-event-filter.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/non-pod-global-static.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/overridden-signal.cpp

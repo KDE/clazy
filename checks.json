@@ -28,12 +28,6 @@
             "categories" : ["bug"]
         },
         {
-            "name"  : "inefficient-qlist",
-            "level" : -1,
-            "categories" : ["containers", "performance"],
-            "visits_decls" : true
-        },
-        {
             "name"   : "isempty-vs-count",
             "class_name" : "IsEmptyVSCount",
             "level"  : -1,
@@ -407,12 +401,6 @@
             "level" : 1,
             "categories" : ["readability"],
             "visits_stmts" : true
-        },
-        {
-            "name"  : "inefficient-qlist-soft",
-            "level" : 1,
-            "categories" : ["containers", "performance"],
-            "visits_decls" : true
         },
         {
             "name"  : "install-event-filter",
