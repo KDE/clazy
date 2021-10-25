@@ -171,9 +171,8 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
     }
 
     auto methodDecl = method->getMethodDecl();
-    if (!methodDecl) {
-      return;
-    }
+    if (!methodDecl || !methodDecl->getDeclName().isIdentifier())
+        return;
 
     if (!isOfAcceptableType(methodDecl)) {
       return;
