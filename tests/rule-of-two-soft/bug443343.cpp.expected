@@ -1,0 +1,1 @@
+rule-of-two-soft/bug443343.cpp:29:5: warning: Using assign operator but class Test2 has copy-ctor but no assign operator [-Wclazy-rule-of-two-soft]

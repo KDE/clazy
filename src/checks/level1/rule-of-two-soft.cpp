@@ -48,7 +48,9 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
         if (method && method->getParent() &&  method->isCopyAssignmentOperator()) {
             CXXRecordDecl *record = method->getParent();
             const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
-            const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
+            const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment()
+                                         || method->isExplicitlyDefaulted();
+
             if (hasCopyCtor && !hasCopyAssignOp && !isBlacklisted(record)) {
                 string msg = "Using assign operator but class " + record->getQualifiedNameAsString() + " has copy-ctor but no assign operator";
                 emitWarning(clazy::getLocStart(s), msg);
@@ -58,7 +60,8 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
         CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
         CXXRecordDecl *record = ctorDecl->getParent();
         if (ctorDecl->isCopyConstructor() && record) {
-            const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
+            const bool hasCopyCtor = record->hasNonTrivialCopyConstructor()
+                                     || ctorDecl->isExplicitlyDefaulted();
             const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
             if (!hasCopyCtor && hasCopyAssignOp && !isBlacklisted(record)) {
                 string msg = "Using copy-ctor but class " + record->getQualifiedNameAsString() + " has a trivial copy-ctor but non trivial assign operator";
