@@ -13,6 +13,18 @@
             }
         },
         {
+            "name": "dev-asan",
+            "displayName": "dev-asan",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-dev-asan",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CLAZY_MAN_PAGE" : "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "CLAZY_ENABLE_SANITIZERS" : "ON"
+            }
+        },
+        {
             "name": "profile",
             "displayName": "profile",
             "generator": "Ninja",
