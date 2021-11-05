@@ -64,7 +64,7 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
     if (val.isShiftedMask() && val.countPopulation() >= MinOnesToQualifyAsMask)
         return true;
 
-    if (en->getName().contains_lower("mask"))
+    if (clazy::contains_lower(en->getName(), "mask"))
         return true;
 
     auto *cexpr = getConstantExpr(en);

@@ -139,6 +139,15 @@ inline bool isFinal(const clang::CXXRecordDecl *record)
 #endif
 }
 
+inline bool contains_lower(clang::StringRef haystack, clang::StringRef needle)
+{
+#if LLVM_VERSION_MAJOR >= 13
+    return haystack.contains_insensitive(needle);
+#else
+    return haystack.contains_lower(needle);
+#endif
+}
+
 }
 
 #endif
