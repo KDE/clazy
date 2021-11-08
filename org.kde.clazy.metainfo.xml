@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-or-later</project_license>
   <name>Clazy</name>
+  <name xml:lang="az">Clazy</name>
   <name xml:lang="ca">Clazy</name>
   <name xml:lang="ca-valencia">Clazy</name>
   <name xml:lang="cs">Clazy</name>
@@ -33,6 +34,7 @@
   <name xml:lang="x-test">xxClazyxx</name>
   <name xml:lang="zh-TW">Clazy</name>
   <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
+  <summary xml:lang="az">Ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən Clang komplilyatoru qoşması</summary>
   <summary xml:lang="ca">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
   <summary xml:lang="ca-valencia">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
   <summary xml:lang="de">Ein Clang-Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt</summary>
@@ -61,6 +63,7 @@
   <summary xml:lang="zh-TW">一個會發出與 Qt 最佳實踐相關警告的 Clang 編譯器外掛程式</summary>
   <description>
     <p>Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
+    <p xml:lang="az">Clazy, ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən bir clang kompilyatorudur.</p>
     <p xml:lang="ca">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
     <p xml:lang="ca-valencia">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
     <p xml:lang="de">Clazy ist ein Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt.</p>
