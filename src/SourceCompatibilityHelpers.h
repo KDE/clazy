@@ -117,17 +117,13 @@ inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *in
 }
 
 #if LLVM_VERSION_MAJOR >= 12
-inline clang::Lexer getLexer(clang::FileID id, llvm::Optional<llvm::MemoryBufferRef> inputFile,
-                             const clang::SourceManager &sm, const clang::LangOptions &lo)
-{
-    return clang::Lexer(id, inputFile.getValue(), sm, lo);
-}
+
+#define GET_LEXER(id, inputFile, sm, lo) \
+clang::Lexer(id, inputFile.getValue(), sm, lo)
+
 #else
-inline clang::Lexer getLexer(clang::FileID id, const llvm::MemoryBuffer *inputFile,
-                             const clang::SourceManager &sm, const clang::LangOptions &lo)
-{
-    return clang::Lexer(id, inputFile, sm, lo);
-}
+#define GET_LEXER(id, inputFile, sm, lo) \
+clang::Lexer(id, inputFile.getValue(), sm, lo)
 #endif
 
 inline bool isFinal(const clang::CXXRecordDecl *record)
