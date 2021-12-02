@@ -91,7 +91,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
         return;
     }
 
-    auto lexer = clazy::getLexer(id, buffer, sm, lo);
+    auto lexer = GET_LEXER(id, buffer, sm, lo);
     lexer.SetCommentRetentionState(true);
 
     Token token;
