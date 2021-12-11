@@ -123,7 +123,7 @@ clang::Lexer(id, inputFile.getValue(), sm, lo)
 
 #else
 #define GET_LEXER(id, inputFile, sm, lo) \
-clang::Lexer(id, inputFile.getValue(), sm, lo)
+clang::Lexer(id, inputFile, sm, lo)
 #endif
 
 inline bool isFinal(const clang::CXXRecordDecl *record)
