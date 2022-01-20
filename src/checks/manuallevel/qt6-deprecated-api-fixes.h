@@ -58,8 +58,11 @@ public:
 private:
     std::vector<clang::SourceLocation> m_listingMacroExpand;
     void fixForDeprecatedOperator(clang::Stmt* stmt, std::string className);
-    std::string buildReplacementforQDir(clang::DeclRefExpr *decl_operator, bool isPointer, string replacement, string replacement_var2);
-    std::string buildReplacementForQVariant(clang::DeclRefExpr* decl_operator, string replacement, string replacement_var2);
+    std::string buildReplacementforQDir(clang::DeclRefExpr *decl_operator, bool isPointer,
+                                        std::string replacement, std::string replacement_var2);
+    std::string buildReplacementForQVariant(clang::DeclRefExpr* decl_operator,
+                                            std::string replacement,
+                                            std::string replacement_var2);
 };
 
 #endif
