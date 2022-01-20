@@ -1,6 +1,6 @@
 # Changelog
 
-* v1.11 (TBD)
+* v1.11 (January 21st 2022)
     - New Checks:
       - use-arrow-operator-instead-of-data
       - use-static-qregularexpression
