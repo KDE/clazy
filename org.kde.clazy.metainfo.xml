@@ -19,6 +19,7 @@
   <name xml:lang="hi">क्लेज़ी</name>
   <name xml:lang="hu">Clazy</name>
   <name xml:lang="it">Clazy</name>
+  <name xml:lang="ka">Clazy</name>
   <name xml:lang="ko">Clazy</name>
   <name xml:lang="lt">Clazy</name>
   <name xml:lang="nl">Clazy</name>
@@ -51,6 +52,7 @@
   <summary xml:lang="hi">एक सीलैंग कंपाइलर प्लगिन जो क्यूट के सर्वोत्तम विधिओं के सम्बन्ध में चेतावनीसंदेश देता है.</summary>
   <summary xml:lang="hu">A Clang fordítóprogram bővítménye, amely a Qt legjobb gyakorlataihoz kapcsolódó figyelmeztetéseket ad</summary>
   <summary xml:lang="it">Un'estensione per il compilatore Clang che emette avvisi relativi alle migliori pratiche per Qt</summary>
+  <summary xml:lang="ka">Clang კომპილატორის დამატება, რომელიც Qt-ის საუკეთესო პრაქტიკის გათვალისწინებით გაჩვენებთ გაფრთხილებებს</summary>
   <summary xml:lang="ko">Qt 권고 사항과 관련된 경고를 출력하는 Clang 컴파일러 플러그인</summary>
   <summary xml:lang="lt">Clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi</summary>
   <summary xml:lang="nl">Een Clang-compilerplug-in die waarschuwingen uitstuurt gerelateerd aan de beste praktijken van Qt</summary>
@@ -83,6 +85,7 @@
     <p xml:lang="hi">क्लेजी एक सीलैंग कंपाइलर प्लगिन है जो क्यूट के सर्वोत्तम सर्वोत्तम विधिओं केसम्बन्ध में चेतावनी संदेश देता है.</p>
     <p xml:lang="hu">A Clazy egy bővítmény a clang fordítóprogramhoz, amely a Qt legjobb gyakorlataihoz kapcsolódó figyelmeztetéseket ad.</p>
     <p xml:lang="it">Clazy è un'estensione per il compilatore clang che emette avvisi relativi alle migliori pratiche per Qt</p>
+    <p xml:lang="ka">Clang კომპილატორის დამატება, რომელიც Qt-ის საუკეთესო პრაქტიკის გათვალისწინებით გაჩვენებთ გაფრთხილებებს.</p>
     <p xml:lang="ko">Clazy는 Qt 권고 사항과 관련된 경고를 출력하는 Clang 컴파일러 플러그인입니다.</p>
     <p xml:lang="lt">Clang yra clang kompiliatoriaus papildinys, kuris parodo įspėjimus, susijusius su Qt gerąja patirtimi.</p>
     <p xml:lang="nl">Clazy is een clang-compilerplug-in die waarschuwingen uitstuurt gerelateerd aan de beste praktijken van Qt.</p>
