@@ -56,8 +56,8 @@ if (CLAZY_ENABLE_SANITIZERS)
     endif()
 endif()
 
-if (CLAZY_AST_MATCHERS_CRASH_WORKAROUND AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    message("Enabling AST Matchers workaround. Consider building with gcc instead. See bug #392223.")
+if (CLAZY_AST_MATCHERS_CRASH_WORKAROUND AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
+    message("Enabling AST Matchers workaround. Consider updating clang or building with gcc instead. See bug #392223.")
     add_definitions(-DCLAZY_DISABLE_AST_MATCHERS)
 endif()
 
