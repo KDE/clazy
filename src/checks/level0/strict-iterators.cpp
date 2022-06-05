@@ -97,7 +97,35 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
     }
 
+    // Allow conversions for mutating member functions of Qt container classes
     if (implicitCast->getCastKind() == CK_ConstructorConversion) {
+        if (auto *memberCall = dyn_cast_or_null<CXXMemberCallExpr>(m_context->parentMap->getParent(implicitCast))) {
+            auto memberFunctionDecl = memberCall->getMethodDecl();
+            if (auto *parentClass = memberFunctionDecl->getParent()) {
+                static const std::vector<std::string> allow = {
+                    "QMap<>::insert",
+                    "QMap<>::erase",
+                    "QHash<>::erase",
+                    "QMultiHash<>::erase",
+                    "QList<>::emplace",
+                    "QList<>::erase",
+                    "QList<>::insert",
+                    "QVarLengthArray<>::emplace",
+                    "QVarLengthArray<>::erase",
+                    "QVarLengthArray<>::insert",
+                    "QSet<>::erase",
+                    "QSet<>::insert",
+                    "QMultiMap<>::erase",
+                    "QMultiMap<>::insert",
+                };
+
+                const auto qualifiedName = parentClass->getNameAsString() + "<>::" + memberFunctionDecl->getNameAsString();
+                if (clazy::contains(allow, qualifiedName)) {
+                    return false;
+                }
+            }
+        }
+
         emitWarning(implicitCast, "Mixing iterators with const_iterators");
         return true;
     }
