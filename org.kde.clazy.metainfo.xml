@@ -40,7 +40,7 @@
   <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
   <summary xml:lang="az">Ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən Clang komplilyatoru qoşması</summary>
   <summary xml:lang="ca">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
-  <summary xml:lang="ca-valencia">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
+  <summary xml:lang="ca-valencia">Un conector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
   <summary xml:lang="de">Ein Clang-Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt</summary>
   <summary xml:lang="el">Ένα πρόσθετο μεταγλωττιστή Clang με προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt</summary>
   <summary xml:lang="en-GB">A Clang compiler plugin which emits warnings related to Qt best practices</summary>
@@ -73,7 +73,7 @@
     <p>Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
     <p xml:lang="az">Clazy, ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən bir clang kompilyatorudur.</p>
     <p xml:lang="ca">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
-    <p xml:lang="ca-valencia">Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
+    <p xml:lang="ca-valencia">Clazy és un conector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
     <p xml:lang="de">Clazy ist ein Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt.</p>
     <p xml:lang="el">Το Clazy είναι ένα πρόσθετο μεταγλωττιστή clang το οποίο στέλνει προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt.</p>
     <p xml:lang="en-GB">Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
