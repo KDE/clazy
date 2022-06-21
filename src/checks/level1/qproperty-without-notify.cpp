@@ -70,6 +70,13 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
     string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
+    if (text.empty()) {
+        // If the text is empty, it is more likely there is an error
+        // in parsing than an empty Q_PROPERTY macro call (which would
+        // be a moc error anyhow).
+        return;
+    }
+
     if (text.back() == ')')
         text.pop_back();
 
