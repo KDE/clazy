@@ -81,7 +81,7 @@ endif()
 
 # Look for std::regex support
 message("Looking for std::regex support...")
-try_run(REGEX_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
+try_run(REGEX_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
 
 if(NOT REGEX_RUN_RESULT EQUAL 0)
   message("Using boost::regex instead of std::regex")
