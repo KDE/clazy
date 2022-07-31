@@ -28,6 +28,7 @@ Table of contents
    * [List of checks](#list-of-checks)
    * [Selecting which checks to enable](#selecting-which-checks-to-enable)
       * [Example via env variable](#example-via-env-variable)
+      * [Example via configuration file](#example-via-configuration-file)
       * [Example via compiler argument](#example-via-compiler-argument)
    * [clazy-standalone and JSON database support](#clazy-standalone-and-json-database-support)
    * [Enabling Fixits](#enabling-fixits)
@@ -336,6 +337,18 @@ export CLAZY_CHECKS="unneeded-cast,qmap-with-pointer-key,virtual-call-ctor" # En
 export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except for qenums
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```
+
+## Example via configuration file
+
+You can place a `.clazy` file (or invoke `clazy --standalone --config-file custom_config.yaml` with a custom one)
+containing the default level, checks you want to enable or disable:
+
+```
+Level: 1
+Checks: 'static-pmf,-foreach'
+ChecksAsErrors: 'qenums'
+```
+
 ## Example via compiler argument
 `clazy -Xclang -plugin-arg-clazy -Xclang level0,detaching-temporary`
 Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.

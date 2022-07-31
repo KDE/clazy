@@ -83,6 +83,9 @@ inline bool checkLessThanByLevel(const RegisteredCheck &c1, const RegisteredChec
 class CheckManager
 {
 public:
+    struct RequestedChecks;
+    struct ClazyConfigurationFile;
+
     /**
      * @note You must hold the CheckManager lock when operating on the instance
      *
@@ -93,6 +96,7 @@ public:
     static std::mutex &lock() { return m_lock; }
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv(std::vector<std::string> &userDisabledChecks) const;
+    RegisteredCheck::List requestedChecksThroughConfig(std::vector<std::string> &userDisabledChecks) const;
     std::vector<std::string> checksAsErrors() const;
 
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
@@ -111,6 +115,8 @@ public:
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
+    void setConfigurationFile(const std::string& path);
+
 private:
     CheckManager();
     static std::mutex m_lock;
@@ -122,9 +128,15 @@ private:
     RegisteredCheck::List checksForLevel(int level) const;
     CheckBase* createCheck(const std::string &name, ClazyContext *context);
     std::string checkNameForFixIt(const std::string &) const;
+    void setRequestedChecksFromString(const std::string& checksStr, RequestedChecks& checks, std::vector<std::string> &userDisabledChecks) const;
+    std::string checksAsErrorsThroughEnv() const;
+    std::string checksAsErrorsThroughConfig() const;
+    ClazyConfigurationFile& localClazyConfiguration() const;
+
     RegisteredCheck::List m_registeredChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt>> m_fixitsByCheckName;
     std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
+    std::string m_configFile;
 };
 
 #endif

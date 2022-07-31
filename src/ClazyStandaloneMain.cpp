@@ -44,6 +44,10 @@ using namespace clang::tooling;
 using namespace llvm;
 
 static llvm::cl::OptionCategory s_clazyCategory("clazy options");
+
+static cl::opt<std::string> s_configFile("config-file", cl::desc("Specify the path of .clazy or custom config file"),
+                                          cl::init(""), cl::cat(s_clazyCategory));
+
 static cl::opt<std::string> s_checks("checks", cl::desc("Comma-separated list of clazy checks. Default is level1"),
                                      cl::init(""), cl::cat(s_clazyCategory));
 
@@ -177,6 +181,10 @@ int main(int argc, const char **argv)
     if (s_supportedChecks.getValue()) {
         std::cout << SUPPORTED_CHECKS_JSON_STR;
         return 0;
+    }
+
+    if (!s_configFile.getValue().empty()) {
+        CheckManager::instance()->setConfigurationFile(s_configFile.getValue());
     }
 
     if (s_listEnabledChecks.getValue()) {

@@ -28,6 +28,7 @@
 #include "Checks.h"
 
 #include <llvm/Support/raw_ostream.h>
+#include <llvm/Support/YAMLTraits.h>
 
 #include <stdlib.h>
 #include <assert.h>
@@ -35,12 +36,34 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <functional>
+#include <filesystem>
 
 using namespace clang;
 using namespace std;
 
 static const char * s_fixitNamePrefix = "fix-";
 static const char * s_levelPrefix = "level";
+
+struct CheckManager::ClazyConfigurationFile {
+    llvm::Optional<std::string> checks;
+    llvm::Optional<std::string> checksAsErrors;
+    int level = CheckLevelUndefined;
+    bool valid = false;
+};
+
+template <> struct llvm::yaml::MappingTraits<CheckManager::ClazyConfigurationFile> {
+    static void mapping(IO &IO, CheckManager::ClazyConfigurationFile &config) {
+        IO.mapOptional("Checks", config.checks);
+        IO.mapOptional("ChecksAsErrors", config.checksAsErrors);
+        IO.mapOptional("Level", config.level);
+    }
+};
+
+struct CheckManager::RequestedChecks {
+    RegisteredCheck::List requested;
+    std::vector<std::string> disabled;
+};
 
 std::mutex CheckManager::m_lock;
 
@@ -128,22 +151,67 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
     return checks;
 }
 
-RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &userDisabledChecks) const
+void CheckManager::setRequestedChecksFromString(const std::string& _checksStr,
+        RequestedChecks& checks, std::vector<std::string> &userDisabledChecks) const
 {
-    static RegisteredCheck::List requestedChecksThroughEnv;
-    static vector<string> disabledChecksThroughEnv;
-    if (requestedChecksThroughEnv.empty()) {
-        const char *checksEnv = getenv("CLAZY_CHECKS");
-        if (checksEnv) {
-            const string checksEnvStr = clazy::unquoteString(checksEnv);
-            requestedChecksThroughEnv = checksEnvStr == "all_checks" ? availableChecks(CheckLevel2)
-                                                                     : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ disabledChecksThroughEnv);
+    const std::string checksStr = clazy::unquoteString(_checksStr);
+    checks.requested = checksStr == "all_checks" ? availableChecks(CheckLevel2)
+                                                 : checksForCommaSeparatedString(checksStr, /*by-ref=*/ checks.disabled);
+
+    std::copy(checks.disabled.begin(), checks.disabled.end(),
+              std::back_inserter(userDisabledChecks));
+}
+
+CheckManager::ClazyConfigurationFile& CheckManager::localClazyConfiguration() const
+{
+    static auto s_configuration = [this] {
+        ClazyConfigurationFile configuration;
+
+        const auto maybeConfigFile = llvm::vfs::getRealFileSystem()->getBufferForFile(m_configFile.empty() ? ".clazy" : m_configFile);
+        if (maybeConfigFile) {
+            const auto& configFile = maybeConfigFile->get();
+            llvm::yaml::Input yamlConfig{configFile->getBuffer()};
+            yamlConfig >> configuration;
+
+            if (!yamlConfig.error()) {
+                configuration.valid = true;
+            };
         }
+
+        return configuration;
+    }();
+
+    return s_configuration;
+}
+
+RegisteredCheck::List CheckManager::requestedChecksThroughConfig(vector<string> &userDisabledChecks) const
+{
+    static RequestedChecks checksThroughConfig;
+    auto localConfig = localClazyConfiguration();
+    if (!localConfig.valid) {
+        llvm::errs() << "Local .clazy is not valid\n";
+        return {};
     }
 
-    std::copy(disabledChecksThroughEnv.begin(), disabledChecksThroughEnv.end(),
-              std::back_inserter(userDisabledChecks));
-    return requestedChecksThroughEnv;
+    if (localConfig.checks) {
+        setRequestedChecksFromString(localConfig.checks.getValue(), /*by-ref*/ checksThroughConfig, /*by-ref*/ userDisabledChecks);
+        return checksThroughConfig.requested;
+
+    } else {
+        return {};
+    }
+}
+
+RegisteredCheck::List CheckManager::requestedChecksThroughEnv(vector<string> &userDisabledChecks) const
+{
+    static RequestedChecks checksThroughEnv;
+    if (checksThroughEnv.requested.empty()) {
+        const char *checksEnv = getenv("CLAZY_CHECKS");
+        if (checksEnv) {
+            setRequestedChecksFromString(checksEnv, /*by-ref*/ checksThroughEnv, /*by-ref*/ userDisabledChecks);
+        }
+    }
+    return checksThroughEnv.requested;
 }
 
 RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks,
@@ -197,10 +265,16 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
     }
 
     // #3 Append checks specified from env variable
-
     vector<string> userDisabledChecks;
-    RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(/*by-ref*/ userDisabledChecks);
-    copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(result));
+    auto requestedChecks = requestedChecksThroughEnv(userDisabledChecks);
+    if (requestedChecks.empty() && userDisabledChecks.empty()) {
+        requestedChecks = requestedChecksThroughConfig(userDisabledChecks);
+        if (!requestedChecks.empty()) {
+            requestedLevel = static_cast<CheckLevel>(localClazyConfiguration().level);
+        }
+    }
+
+    clazy::append(requestedChecks, result);
 
     if (result.empty() && requestedLevel == CheckLevelUndefined) {
         // No checks or level specified, lets use the default level
@@ -249,6 +323,11 @@ std::vector<std::pair<CheckBase*, RegisteredCheck>> CheckManager::createChecks(c
     return checks;
 }
 
+void CheckManager::setConfigurationFile(const std::string &path)
+{
+    m_configFile = path;
+}
+
 /*static */
 void CheckManager::removeChecksFromList(RegisteredCheck::List &list, vector<string> &checkNames)
 {
@@ -292,9 +371,13 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
                         llvm::errs() << "Invalid level: " << name << "\n";
                     }
                 } else {
-                    if (clazy::startsWith(name, "no-")) {
+                    // Traditional clazy prefix
+                    const bool hasNoPrefix = clazy::startsWith(name, "no-");
+                    // For clang-tidy compatibility
+                    const bool hasMinusPrefix = clazy::startsWith(name, "-");
+                    if (hasNoPrefix || hasMinusPrefix) {
                         string checkName = name;
-                        checkName.erase(0, 3);
+                        checkName.erase(0, hasNoPrefix ? 3 : 1);
                         if (checkExists(checkName)) {
                             userDisabledChecks.push_back(checkName);
                         } else {
@@ -320,25 +403,40 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const string &
 
 vector<string> CheckManager::checksAsErrors() const
 {
-    auto checksAsErrosEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
-
-    if (checksAsErrosEnv) {
-        auto checkNames = clazy::splitString(checksAsErrosEnv, ',');
+    auto splitAndFilter = [this] (const std::string& commaSeparatedChecks) {
+        auto checkNames = clazy::splitString(commaSeparatedChecks, ',');
         vector<string> result;
 
         // Check whether all supplied check names are valid
-        for (const string &name : checkNames) {
-            auto it = clazy::find_if(m_registeredChecks, [&name](const RegisteredCheck &check)
-            {
-                return check.name == name;
-            });
-            if (it == m_registeredChecks.end())
+        // TODO: this would be more efficient with set intersection
+        clazy::append_if(checkNames, result, [this](const std::string& name) {
+            auto checkKnown = checkExists(name);
+            if (!checkKnown) {
                 llvm::errs() << "Invalid check: " << name << '\n';
-            else
-                result.emplace_back(name);
-        }
+            }
+            return checkKnown;
+            });
         return result;
-    }
-    else
+    };
+
+    auto checksAsErrors = splitAndFilter(checksAsErrorsThroughEnv());
+    return !checksAsErrors.empty() ? checksAsErrors : splitAndFilter(checksAsErrorsThroughConfig());
+}
+
+std::string CheckManager::checksAsErrorsThroughEnv() const
+{
+    auto checksAsErrorsEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
+
+    if (checksAsErrorsEnv) {
+        return checksAsErrorsEnv;
+    } else {
         return {};
+    }
+}
+
+std::string CheckManager::checksAsErrorsThroughConfig() const
+{
+    auto localConfig = localClazyConfiguration();
+    if (!localConfig.valid || !localConfig.checksAsErrors) return {};
+    return localConfig.checksAsErrors.getValue();
 }
