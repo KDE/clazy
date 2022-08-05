@@ -189,16 +189,15 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
     if (args.size() > 1) // we only expect a level and a comma separated list of arguments
         return {};
 
+    vector<string> userDisabledChecks;
     if (args.size() == 1) {
         // #2 Process list of comma separated checks that were passed to compiler
-        result = checksForCommaSeparatedString(args[0]);
-        if (result.empty()) // User passed inexisting checks.
+        result = checksForCommaSeparatedString(args[0], /*by-ref*/ userDisabledChecks);
+        if (result.empty() && userDisabledChecks.empty()) // User passed inexisting checks.
             return {};
     }
 
     // #3 Append checks specified from env variable
-
-    vector<string> userDisabledChecks;
     RegisteredCheck::List checksFromEnv = requestedChecksThroughEnv(/*by-ref*/ userDisabledChecks);
     copy(checksFromEnv.cbegin(), checksFromEnv.cend(), back_inserter(result));
 
