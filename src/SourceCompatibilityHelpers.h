@@ -144,6 +144,21 @@ inline bool contains_lower(clang::StringRef haystack, clang::StringRef needle)
 #endif
 }
 
+#if LLVM_VERSION_MAJOR >= 15
+using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
+#else
+using OptionalFileEntryRef = const clang::FileEntry*;
+#endif
+
+inline bool isAscii(clang::StringLiteral *lt)
+{
+#if LLVM_VERSION_MAJOR >= 15
+    return lt->isOrdinary();
+#else
+    return lt->isAscii();
+#endif
+}
+
 }
 
 #endif

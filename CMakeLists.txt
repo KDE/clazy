@@ -114,6 +114,10 @@ else()
     set(clang_tooling_refactoring_lib clangToolingRefactor)
 endif()
 
+if (${LLVM_VERSION} VERSION_GREATER_EQUAL "15.0.0")
+  set(clang_support_lib clangSupport)
+endif()
+
 macro(link_to_llvm name is_standalone)
   if (CLAZY_LINK_CLANG_DYLIB)
     target_link_libraries(${name} clang-cpp)
@@ -131,6 +135,7 @@ macro(link_to_llvm name is_standalone)
 
       target_link_libraries(${name} ${clang_lib})
     endforeach()
+    target_link_libraries(${name} ${clang_support_lib})
     target_link_libraries(${name} clangTooling)
     target_link_libraries(${name} clangToolingCore)
     target_link_libraries(${name} ${clang_tooling_refactoring_lib})
@@ -302,6 +307,7 @@ else()
     clangFrontendTool
     clangRewrite
     clangSerialization
+    ${clang_support_lib}
     clangTooling
     clangStaticAnalyzerCheckers
     clangStaticAnalyzerCore

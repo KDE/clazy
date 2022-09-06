@@ -46,7 +46,7 @@ class Qt6HeaderFixes
 public:
     explicit Qt6HeaderFixes(const std::string &name, ClazyContext *context);
     void VisitInclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
-                            clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
+                            clang::CharSourceRange FilenameRange, clazy::OptionalFileEntryRef File, clang::StringRef SearchPath,
                             clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType) override;
 
 };

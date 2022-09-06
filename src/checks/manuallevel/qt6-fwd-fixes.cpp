@@ -166,7 +166,7 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
 }
 
 void Qt6FwdFixes::VisitInclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
-                        clang::CharSourceRange FilenameRange, const clang::FileEntry *File, clang::StringRef SearchPath,
+                        clang::CharSourceRange FilenameRange, clazy::OptionalFileEntryRef File, clang::StringRef SearchPath,
                         clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType)
 {
     auto current_file = m_sm.getFilename(HashLoc);
