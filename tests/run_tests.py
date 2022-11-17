@@ -443,6 +443,8 @@ parser.add_argument("--dump-ast", action='store_true',
                     help='Dump a unit-test AST to file')
 parser.add_argument(
     "--exclude", help='Comma separated list of checks to ignore')
+parser.add_argument("-j", "--jobs", type=int, default=multiprocessing.cpu_count(),
+                    help='Parallel jobs to run (defaults to %(default)s)')
 parser.add_argument("check_names", nargs='*',
                     help="The name of the check whose unit-tests will be run. Defaults to running all checks.")
 args = parser.parse_args()
@@ -460,7 +462,7 @@ _verbose = args.verbose
 _no_standalone = args.no_standalone
 _no_fixits = args.no_fixits
 _only_standalone = args.only_standalone
-_num_threads = multiprocessing.cpu_count()
+_num_threads = args.jobs
 _lock = threading.Lock()
 _was_successful = True
 _qt5_installation = find_qt_installation(
