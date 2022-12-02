@@ -64,7 +64,7 @@
   <summary xml:lang="sk">Plugin prekladač Clang, ktorý generuje upozornenia súvisiace s najlepšími praktikami Qt</summary>
   <summary xml:lang="sl">Vtičnik za prevajalnik Clang, ki oddaja opozorila, povezana z najboljšimi praksami Qt</summary>
   <summary xml:lang="sv">Ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt</summary>
-  <summary xml:lang="tr">Qt kabul görmüş davranışları üzerine uyarılar veren bir Clang derleyici eklentisi</summary>
+  <summary xml:lang="tr">Qt için Kod Düzenleyici</summary>
   <summary xml:lang="uk">Додаток до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt</summary>
   <summary xml:lang="vi">Một phần cài cắm trình biên dịch Clang, đưa ra các cảnh báo liên quan đến các thực hành Qt tốt nhất</summary>
   <summary xml:lang="x-test">xxA Clang compiler plugin which emits warnings related to Qt best practicesxx</summary>
