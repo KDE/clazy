@@ -519,7 +519,7 @@ and thanks to:
 # Contributing patches
 
 New features go to master and bug fixes go to the 1.11 branch.
-The prefered way to contributing is by using KDE's GitLab instance,
+The preferred way to contributing is by using KDE's GitLab instance,
 see <https://community.kde.org/Infrastructure/GitLab>.
 
 If you rather just create a pull request in https://github.com/KDE/clazy for a drive-by change, it's also fine, but beware that

@@ -1,6 +1,6 @@
 # temporary-iterator
 
-Detects when you're using using functions returning iterators (eg. `begin()` or `end()`) on a temporary container.
+Detects when you're using functions returning iterators (eg. `begin()` or `end()`) on a temporary container.
 
 #### Example
 
