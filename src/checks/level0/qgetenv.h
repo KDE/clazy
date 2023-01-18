@@ -36,7 +36,7 @@ class Stmt;
 }
 
 /**
- * Finds inneficient usages of qgetenv
+ * Finds inefficient usages of qgetenv
  *
  * See README-qgetenv for more information
  */

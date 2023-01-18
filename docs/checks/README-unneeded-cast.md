@@ -4,7 +4,7 @@ Finds unneeded qobject_cast, static_cast and dynamic_casts.
 Warns when you're casting to base or casting to the same type, which doesn't require
 any explicit cast.
 
-Also warns when you're using dynamic_cast for QObjects. qobject_cast is prefered.
+Also warns when you're using dynamic_cast for QObjects. qobject_cast is preferred.
 
 
 #### Example
