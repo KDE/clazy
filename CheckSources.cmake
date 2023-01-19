@@ -10,6 +10,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qproperty-type-mismatch.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qrequiredresult-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-varargs.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keyword-emit.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keywords.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt4-qstring-from-array.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-deprecated-api-fixes.cpp

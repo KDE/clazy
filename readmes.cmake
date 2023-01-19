@@ -10,6 +10,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qrequiredresult-candidates.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keyword-emit.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-deprecated-api-fixes.md

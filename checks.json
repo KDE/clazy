@@ -11,6 +11,15 @@
             ]
         },
         {
+            "name"  : "qt-keyword-emit",
+            "level" : -1,
+            "fixits" : [
+                {
+                    "name" : "qt-keyword-emit"
+                }
+            ]
+        },
+        {
             "name"  : "signal-with-return-value",
             "level" : -1,
             "visits_decls" : true

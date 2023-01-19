@@ -1,6 +1,8 @@
 # Changelog
 
 * v1.12 (TBD)
+    - New Checks:
+      - qt-keyword-emit
 
 * v1.11 (January 21st 2022)
     - New Checks:

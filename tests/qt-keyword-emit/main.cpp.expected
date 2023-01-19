@@ -1,0 +1,1 @@
+qt-keyword-emit/main.cpp:12:9: warning: Using Qt (emit) keyword [-Wclazy-qt-keyword-emit]

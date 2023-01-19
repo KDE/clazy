@@ -233,6 +233,7 @@ clazy runs all checks from level1 by default.
     - [qproperty-type-mismatch](docs/checks/README-qproperty-type-mismatch.md)
     - [qrequiredresult-candidates](docs/checks/README-qrequiredresult-candidates.md)
     - [qstring-varargs](docs/checks/README-qstring-varargs.md)
+    - [qt-keyword-emit](docs/checks/README-qt-keyword-emit.md)    (fix-qt-keyword-emit)
     - [qt-keywords](docs/checks/README-qt-keywords.md)    (fix-qt-keywords)
     - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
     - [qt6-deprecated-api-fixes](docs/checks/README-qt6-deprecated-api-fixes.md)    (fix-qt6-deprecated-api-fixes)

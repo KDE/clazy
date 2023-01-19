@@ -11,6 +11,7 @@ add_test(NAME qhash-with-char-pointer-key COMMAND python3 run_tests.py qhash-wit
 add_test(NAME qproperty-type-mismatch COMMAND python3 run_tests.py qproperty-type-mismatch WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME qrequiredresult-candidates COMMAND python3 run_tests.py qrequiredresult-candidates WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME qstring-varargs COMMAND python3 run_tests.py qstring-varargs WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+add_test(NAME qt-keyword-emit COMMAND python3 run_tests.py qt-keyword-emit WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME qt-keywords COMMAND python3 run_tests.py qt-keywords WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME qt4-qstring-from-array COMMAND python3 run_tests.py qt4-qstring-from-array WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME qt6-deprecated-api-fixes COMMAND python3 run_tests.py qt6-deprecated-api-fixes WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
