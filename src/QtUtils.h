@@ -82,6 +82,10 @@ bool isQtIterableClass(clang::CXXRecordDecl *record);
 bool isQtIterableClass(llvm::StringRef className);
 
 /**
+ * Returns true if the method is of QMetaMethod type
+ */
+bool isQMetaMethod(clang::CallExpr *call, unsigned int argIndex);
+/**
  * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
  */
 bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
@@ -213,7 +217,6 @@ clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl);
  * Returns true if the function declaration is QObject::connect().
  */
 bool isConnect(clang::FunctionDecl *func);
-
 /**
  * Returns true if the function declaration represents a QObject::connect() using the new Qt5
  * (pointer to member) syntax.

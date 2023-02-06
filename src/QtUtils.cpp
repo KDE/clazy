@@ -94,6 +94,20 @@ std::unordered_map<string, std::vector<StringRef>> clazy::detachingMethodsWithCo
     return map;
 }
 
+bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex) {
+
+    Expr *arg = Call->getArg(argIndex);
+    QualType type = arg->getType();
+    if (!type->isRecordType())
+        return false;
+
+    CXXRecordDecl *recordDecl = type->getAsCXXRecordDecl();
+    if (!recordDecl)
+        return false;
+
+    return recordDecl->getQualifiedNameAsString() == "QMetaMethod";
+}
+
 bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record)
 {
     if (!record)

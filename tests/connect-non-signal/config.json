@@ -5,6 +5,9 @@
             "filename" : "main.cpp"
         },
         {
+            "filename" : "test_qmetamethod.cpp"
+        },
+        {
             "filename" : "bug374951.cpp",
             "minimum_qt_version" : 50700
         },
