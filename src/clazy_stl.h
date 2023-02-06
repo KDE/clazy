@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <cctype>
 #include <sstream>
+#include <string_view>
 
 namespace clazy {
 
@@ -130,7 +131,7 @@ inline clang::Stmt* childAt(clang::Stmt *s, int index)
 /**
  * Returns true if the string target starts with maybeBeginning
  */
-inline bool startsWith(const std::string &target, const std::string &maybeBeginning)
+inline bool startsWith(std::string_view target, std::string_view maybeBeginning)
 {
     return target.compare(0, maybeBeginning.length(), maybeBeginning) == 0;
 }
@@ -138,7 +139,7 @@ inline bool startsWith(const std::string &target, const std::string &maybeBeginn
 /**
  * Returns true if the string target starts with any of the strings in beginningCandidates
  */
-inline bool startsWithAny(const std::string &target, const std::vector<std::string> &beginningCandidates)
+inline bool startsWithAny(std::string_view target, const std::vector<std::string> &beginningCandidates)
 {
     return clazy::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
             return clazy::startsWith(target, maybeBeginning);
@@ -158,7 +159,7 @@ inline bool equalsAny(const std::string &target, const std::vector<std::string> 
 /**
  * Returns true if the string target ends with maybeEnding
  */
-inline bool endsWith(const std::string &target, const std::string &maybeEnding)
+inline bool endsWith(std::string_view target, std::string_view maybeEnding)
 {
     return target.size() >= maybeEnding.size() &&
            target.compare(target.size() - maybeEnding.size(), maybeEnding.size(), maybeEnding) == 0;
@@ -186,6 +187,24 @@ inline void rtrim(std::string &s)
 {
     while (!s.empty() && std::isspace(s.back()))
         s.pop_back();
+}
+
+inline std::vector<std::string_view> splitStringBySpaces(std::string_view str)
+{
+    auto nextWord = [str](decltype(str)::const_iterator i) {
+        auto isSpace = [](char c) {
+            return std::isspace(c);
+        };
+        auto first = std::find_if_not(i, str.cend(), isSpace);
+        return std::make_pair(first, std::find_if(first, str.cend(), isSpace));
+    };
+
+    std::vector<std::string_view> result;
+    for (auto w = nextWord(str.cbegin()); w.first != str.cend(); w = nextWord(w.second)) {
+        // TODO[C++20] Use string_view(begin, end) constructor instead
+        result.emplace_back(std::addressof(*w.first), std::distance(w.first, w.second));
+    }
+    return result;
 }
 
 inline std::vector<std::string> splitString(const std::string &str, char separator)

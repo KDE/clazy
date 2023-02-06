@@ -40,8 +40,10 @@
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
+
 #include <algorithm>
 #include <cctype>
+#include <string_view>
 
 namespace clang {
 class Decl;
@@ -230,69 +232,73 @@ bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, st
 void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if(!ii)
+    if (!ii)
         return;
-    if(ii->getName() != "Q_PROPERTY")
+    if (ii->getName() != "Q_PROPERTY")
         return;
 
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
     string text = static_cast<string>(Lexer::getSourceText(crange, sm(), lo()));
+    using namespace std::string_literals;
+    constexpr std::string_view q_property_brace = "Q_PROPERTY("sv;
+    if (clazy::startsWith(text, q_property_brace))
+        text = text.substr(q_property_brace.size());
+
     if (!text.empty() && text.back() == ')')
         text.pop_back();
 
-    std::vector<std::string> split = clazy::splitString(text, ' ');
-    if(split.size() < 2)
+    std::vector<std::string_view> split = clazy::splitStringBySpaces(text);
+    if (split.size() < 2)
         return;
 
     Property p;
     p.loc = range.getBegin();
 
-    // Handle type
-    clazy::rtrim(split[0]);
-    p.type = split[0];
-    if(p.type.find("Q_PROPERTY(") == 0)
-        p.type = p.type.substr(11);
+    std::size_t splitIndex = 0;
+
+    // Handle type (type string and any following modifiers)
+    const auto isModifier = [](std::string_view str) {
+        return str == "*"sv || str == "&"sv;
+    };
+
+    for (; isModifier(split[splitIndex]) || p.type.empty(); ++splitIndex) {
+        p.type += split[splitIndex];
+    }
 
     // Handle name
-    clazy::rtrim(split[1]);
-    p.name = split[1];
+    p.name = split[splitIndex];
 
+    std::size_t actualNameStartPos = 0;
     // FIXME: This is getting hairy, better use regexps
     for (unsigned int i = 0; i < p.name.size(); ++i) {
-        if (p.name[i] == '*') {
-            p.type += '*';
+        if (p.name[i] == '*' || p.name[i] == '&') {
+            p.type += p.name[i];
+            ++actualNameStartPos;
         } else {
             break;
         }
     }
 
-    p.name.erase(std::remove(p.name.begin(), p.name.end(), '*'), p.name.end());
+    if (actualNameStartPos)
+        p.name.erase(0, actualNameStartPos);
 
     // Handle Q_PROPERTY functions
-    enum {
-        None, Read, Write, Notify
-    } next = None;
+    enum { None, Read, Write, Notify } next = None;
 
-    for (std::string &token : split) {
-        clazy::rtrim(/*by-ref*/token);
-        switch(next)
-        {
-        case None:
-        {
-            if (token == "READ") {
+    for (std::string_view &token : split) {
+        switch (next) {
+        case None: {
+            if (token == "READ"sv) {
                 next = Read;
                 continue;
-            }
-            else if (token == "WRITE") {
+            } else if (token == "WRITE"sv) {
                 next = Write;
                 continue;
-            }
-            else if (token == "NOTIFY") {
+            } else if (token == "NOTIFY"sv) {
                 next = Notify;
                 continue;
-            }
-            else if (token == "MEMBER") {
+            } else if (token == "MEMBER"sv) {
                 p.member = true;
                 break;
             }
@@ -314,4 +320,3 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
 
     m_qproperties.push_back(std::move(p));
 }
-
