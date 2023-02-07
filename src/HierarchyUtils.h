@@ -40,7 +40,7 @@ namespace clazy
 
 enum IgnoreStmt { IgnoreNone = 0, IgnoreImplicitCasts = 1, IgnoreExprWithCleanups = 2 };
 
-typedef int IgnoreStmts;
+using IgnoreStmts = int;
 
 /**
  * Returns true if child is a child of parent.

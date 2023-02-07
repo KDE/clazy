@@ -120,9 +120,9 @@ class CheckBase
 {
 public:
     enum Option { Option_None = 0, Option_CanIgnoreIncludes = 1 };
-    typedef int Options;
+    using Options = int;
 
-    typedef std::vector<CheckBase *> List;
+    using List = std::vector<CheckBase *>;
     explicit CheckBase(const std::string &name, const ClazyContext *context, Options = Option_None);
     CheckBase(const CheckBase &other) = delete;
 

@@ -66,7 +66,7 @@ public:
         ClazyOption_VisitImplicitCode = 16, // Inspect compiler generated code aswell, useful for custom checks, if they need it
         ClazyOption_IgnoreIncludedFiles = 32 // Only warn for the current file being compiled, not on includes (useful for performance reasons)
     };
-    typedef int ClazyOptions;
+    using ClazyOptions = int;
 
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,

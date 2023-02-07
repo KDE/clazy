@@ -38,10 +38,10 @@ class FileID;
 class SuppressionManager
 {
 public:
-    typedef unsigned SourceFileID;
-    typedef unsigned LineNumber;
-    typedef std::string CheckName;
-    typedef std::pair<LineNumber, CheckName> LineAndCheckName;
+    using SourceFileID = unsigned int;
+    using LineNumber = unsigned int;
+    using CheckName = std::string;
+    using LineAndCheckName = std::pair<LineNumber, CheckName>;
 
     struct Suppressions {
         bool skipEntireFile = false;

@@ -47,7 +47,7 @@ class Token;
 }
 
 struct PrivateSlot {
-    typedef std::vector<PrivateSlot> List;
+    using List = std::vector<PrivateSlot>;
     std::string objName;
     std::string name;
 };

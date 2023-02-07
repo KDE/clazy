@@ -45,7 +45,7 @@
 
 using namespace clang;
 
-typedef std::vector<StringRef> ClassNameList;
+using ClassNameList = std::vector<StringRef>;
 
 enum QtUnregularlyNamedEventTypes {
     DragEnter = 60,

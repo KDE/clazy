@@ -39,7 +39,7 @@
 class ClazyContext;
 
 struct RegisteredFixIt {
-    typedef std::vector<RegisteredFixIt> List;
+    using List = std::vector<RegisteredFixIt>;
     RegisteredFixIt()
         : id(-1)
     {
@@ -62,8 +62,8 @@ using FactoryFunction = std::function<CheckBase *(ClazyContext *context)>;
 struct RegisteredCheck {
     enum Option { Option_None = 0, Option_Qt4Incompatible = 1, Option_VisitsStmts = 2, Option_VisitsDecls = 4 };
 
-    typedef std::vector<RegisteredCheck> List;
-    typedef int Options;
+    using List = std::vector<RegisteredCheck>;
+    using Options = int;
 
     std::string name;
     CheckLevel level;
