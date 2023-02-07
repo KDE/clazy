@@ -49,8 +49,9 @@ ContainerAntiPattern::ContainerAntiPattern(const std::string &name, ClazyContext
 static bool isInterestingCall(CallExpr *call)
 {
     FunctionDecl *func = call ? call->getDirectCallee() : nullptr;
-    if (!func)
+    if (!func) {
         return false;
+    }
 
     static const std::vector<std::string> methods =
         {"QVector::toList", "QList::toVector", "QMap::values", "QMap::keys", "QSet::toList", "QSet::values", "QHash::values", "QHash::keys"};
@@ -60,22 +61,26 @@ static bool isInterestingCall(CallExpr *call)
 
 void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
 {
-    if (handleLoop(stmt)) // catch for (auto i : map.values()) and such
+    if (handleLoop(stmt)) { // catch for (auto i : map.values()) and such
         return;
+    }
 
-    if (VisitQSet(stmt))
+    if (VisitQSet(stmt)) {
         return;
+    }
 
     std::vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
-    if (calls.size() < 2)
+    if (calls.size() < 2) {
         return;
+    }
 
     // For an expression like set.toList().count()...
     CallExpr *callexpr1 = calls[calls.size() - 1]; // ...this would be toList()
     // CallExpr *callexpr2 = calls[calls.size() - 2]; // ...and this would be count()
 
-    if (!isInterestingCall(callexpr1))
+    if (!isInterestingCall(callexpr1)) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "allocating an unneeded temporary container");
 }
@@ -83,26 +88,31 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
 bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
 {
     auto *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!secondCall || !secondCall->getMethodDecl())
+    if (!secondCall || !secondCall->getMethodDecl()) {
         return false;
+    }
 
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
     const std::string secondMethodName = clazy::qualifiedMethodName(secondMethod);
-    if (secondMethodName != "QSet::isEmpty")
+    if (secondMethodName != "QSet::isEmpty") {
         return false;
+    }
 
     std::vector<CallExpr *> chainedCalls = Utils::callListForChain(secondCall);
-    if (chainedCalls.size() < 2)
+    if (chainedCalls.size() < 2) {
         return false;
+    }
 
     CallExpr *firstCall = chainedCalls[chainedCalls.size() - 1];
     FunctionDecl *firstFunc = firstCall->getDirectCallee();
-    if (!firstFunc)
+    if (!firstFunc) {
         return false;
+    }
 
     auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (!firstMethod || clazy::qualifiedMethodName(firstMethod) != "QSet::intersect")
+    if (!firstMethod || clazy::qualifiedMethodName(firstMethod) != "QSet::intersect") {
         return false;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "Use QSet::intersects() instead");
     return true;
@@ -111,10 +121,11 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
 bool ContainerAntiPattern::handleLoop(Stmt *stm)
 {
     Expr *containerExpr = clazy::containerExprForLoop(stm);
-    if (!containerExpr)
+    if (!containerExpr) {
         return false;
+    }
 
-    auto memberExpr = clazy::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
+    auto *memberExpr = clazy::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
     if (isInterestingCall(memberExpr)) {
         emitWarning(clazy::getLocStart(stm), "allocating an unneeded temporary container");
         return true;

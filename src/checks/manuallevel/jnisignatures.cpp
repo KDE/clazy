@@ -58,7 +58,7 @@ JniSignatures::JniSignatures(const std::string &name, ClazyContext *context)
 {
 }
 
-bool checkSignature(const std::string& signature, const std::regex &expr)
+bool checkSignature(const std::string &signature, const std::regex &expr)
 {
     std::smatch match;
     return std::regex_match(signature, match, expr);
@@ -67,16 +67,19 @@ bool checkSignature(const std::string& signature, const std::regex &expr)
 template<typename T>
 void JniSignatures::checkArgAt(T *call, unsigned int index, const std::regex &expr, const std::string &errorMessage)
 {
-    if (call->getNumArgs() < index + 1)
+    if (call->getNumArgs() < index + 1) {
         return;
+    }
 
     auto *stringLiteral = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(index));
 
-    if (!stringLiteral)
+    if (!stringLiteral) {
         return;
+    }
 
-    if (stringLiteral->getCharByteWidth() != 1)
+    if (stringLiteral->getCharByteWidth() != 1) {
         return;
+    }
 
     const std::string signature = stringLiteral->getString().str();
 
@@ -89,10 +92,11 @@ void JniSignatures::checkArgAt(T *call, unsigned int index, const std::regex &ex
 
 void JniSignatures::checkFunctionCall(Stmt *stm)
 {
-    auto callExpr = dyn_cast<CallExpr>(stm);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stm);
+    if (!callExpr) {
         return;
-    auto funDecl = callExpr->getDirectCallee();
+    }
+    auto *funDecl = callExpr->getDirectCallee();
     if (!funDecl) {
         return;
     }
@@ -116,11 +120,11 @@ void JniSignatures::checkFunctionCall(Stmt *stm)
 
 void JniSignatures::checkConstructorCall(Stmt *stm)
 {
-    auto constructExpr = dyn_cast<CXXConstructExpr>(stm);
+    auto *constructExpr = dyn_cast<CXXConstructExpr>(stm);
     if (!constructExpr) {
         return;
     }
-    auto funDecl = constructExpr->getConstructor();
+    auto *funDecl = constructExpr->getConstructor();
 
     const std::string qualifiedName = funDecl->getQualifiedNameAsString();
     if (qualifiedName != "QAndroidJniObject::QAndroidJniObject") {

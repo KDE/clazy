@@ -50,8 +50,9 @@ inline bool isPredefined(const clang::PreprocessorOptions &ppOpts, const llvm::S
     const auto &macros = ppOpts.Macros;
 
     for (const auto &macro : macros) {
-        if (macro.first == macroName)
+        if (macro.first == macroName) {
             return true;
+        }
     }
 
     return false;

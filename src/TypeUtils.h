@@ -55,8 +55,9 @@ namespace clazy
  */
 inline int sizeOfPointer(const clang::ASTContext *context, clang::QualType qt)
 {
-    if (!qt.getTypePtrOrNull())
+    if (!qt.getTypePtrOrNull()) {
         return -1;
+    }
     // HACK: What's a better way of getting the size of a pointer ?
     return context->getTypeSize(context->getPointerType(qt));
 }
@@ -128,20 +129,23 @@ void heapOrStackAllocated(clang::Expr *arg, const std::string &type, const clang
  */
 inline bool isUndeducibleAuto(const clang::Type *t)
 {
-    if (!t)
+    if (!t) {
         return false;
+    }
 
-    auto at = llvm::dyn_cast<clang::AutoType>(t);
+    const auto *at = llvm::dyn_cast<clang::AutoType>(t);
     return at && at->getDeducedType().isNull();
 }
 
 inline const clang::Type *unpealAuto(clang::QualType q)
 {
-    if (q.isNull())
+    if (q.isNull()) {
         return nullptr;
+    }
 
-    if (auto t = llvm::dyn_cast<clang::AutoType>(q.getTypePtr()))
+    if (const auto *t = llvm::dyn_cast<clang::AutoType>(q.getTypePtr())) {
         return t->getDeducedType().getTypePtrOrNull();
+    }
 
     return q.getTypePtr();
 }
@@ -183,24 +187,27 @@ inline bool valueIsConst(clang::QualType qt)
 
 inline clang::CXXRecordDecl *typeAsRecord(clang::QualType qt)
 {
-    if (qt.isNull())
+    if (qt.isNull()) {
         return nullptr;
+    }
 
     return qt->getAsCXXRecordDecl();
 }
 
 inline clang::CXXRecordDecl *typeAsRecord(clang::Expr *expr)
 {
-    if (!expr)
+    if (!expr) {
         return nullptr;
+    }
 
     return typeAsRecord(pointeeQualType(expr->getType()));
 }
 
 inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
 {
-    if (!value)
+    if (!value) {
         return nullptr;
+    }
 
     return typeAsRecord(pointeeQualType(value->getType()));
 }
@@ -216,12 +223,13 @@ inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
  */
 inline clang::CXXRecordDecl *parentRecordForTypedef(clang::QualType qt)
 {
-    auto t = qt.getTypePtrOrNull();
-    if (!t)
+    const auto *t = qt.getTypePtrOrNull();
+    if (!t) {
         return nullptr;
+    }
 
     if (t->getTypeClass() == clang::Type::Typedef) {
-        auto tdt = static_cast<const clang::TypedefType *>(t);
+        const auto *tdt = static_cast<const clang::TypedefType *>(t);
         clang::TypedefNameDecl *tdnd = tdt->getDecl();
         return llvm::dyn_cast_or_null<clang::CXXRecordDecl>(tdnd->getDeclContext());
     }

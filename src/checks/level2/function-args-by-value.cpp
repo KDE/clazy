@@ -57,11 +57,13 @@ using namespace clang;
 // TODO, go over all these
 bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
 {
-    if (!record)
+    if (!record) {
         return false;
+    }
 
-    if (Utils::isSharedPointer(record))
+    if (Utils::isSharedPointer(record)) {
         return true;
+    }
 
     static const std::vector<std::string> ignoreList = {"QDebug", // Too many warnings
                                                         "QGenericReturnArgument",
@@ -117,18 +119,21 @@ void FunctionArgsByValue::VisitDecl(Decl *decl)
 
 void FunctionArgsByValue::VisitStmt(Stmt *stmt)
 {
-    if (auto lambda = dyn_cast<LambdaExpr>(stmt))
+    if (auto *lambda = dyn_cast<LambdaExpr>(stmt)) {
         processFunction(lambda->getCallOperator());
+    }
 }
 
 void FunctionArgsByValue::processFunction(FunctionDecl *func)
 {
-    if (!func || !func->isThisDeclarationADefinition() || func->isDeleted())
+    if (!func || !func->isThisDeclarationADefinition() || func->isDeleted()) {
         return;
+    }
 
-    auto ctor = dyn_cast<CXXConstructorDecl>(func);
-    if (ctor && ctor->isCopyConstructor())
+    auto *ctor = dyn_cast<CXXConstructorDecl>(func);
+    if (ctor && ctor->isCopyConstructor()) {
         return; // copy-ctor must take by ref
+    }
 
     const bool warnForOverriddenMethods = isOptionSet("warn-for-overridden-methods");
     if (!warnForOverriddenMethods && Utils::methodOverrides(dyn_cast<CXXMethodDecl>(func))) {
@@ -136,40 +141,47 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
         return;
     }
 
-    if (shouldIgnoreOperator(func))
+    if (shouldIgnoreOperator(func)) {
         return;
+    }
 
-    if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
+    if (m_context->isQtDeveloper() && shouldIgnoreFunction(func)) {
         return;
+    }
 
     Stmt *body = func->getBody();
 
     int i = -1;
-    for (auto param : Utils::functionParameters(func)) {
+    for (auto *param : Utils::functionParameters(func)) {
         i++;
         const QualType paramQt = clazy::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
-        if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
+        if (!paramType || paramType->isIncompleteType() || paramType->isDependentType()) {
             continue;
+        }
 
-        if (shouldIgnoreClass(paramType->getAsCXXRecordDecl()))
+        if (shouldIgnoreClass(paramType->getAsCXXRecordDecl())) {
             continue;
+        }
 
         clazy::QualTypeClassification classif;
         bool success = clazy::classifyQualType(m_context, param->getType(), param, classif, body);
-        if (!success)
+        if (!success) {
             continue;
+        }
 
         if (classif.passSmallTrivialByValue) {
             if (ctor) { // Implements fix for Bug #379342
                 std::vector<CXXCtorInitializer *> initializers = Utils::ctorInitializer(ctor, param);
                 bool found_by_ref_member_init = false;
-                for (auto initializer : initializers) {
-                    if (!initializer->isMemberInitializer())
+                for (auto *initializer : initializers) {
+                    if (!initializer->isMemberInitializer()) {
                         continue; // skip base class initializer
+                    }
                     FieldDecl *field = initializer->getMember();
-                    if (!field)
+                    if (!field) {
                         continue;
+                    }
 
                     QualType type = field->getType();
                     if (type.isNull() || type->isReferenceType()) {
@@ -178,16 +190,17 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
                     }
                 }
 
-                if (found_by_ref_member_init)
+                if (found_by_ref_member_init) {
                     continue;
+                }
             }
 
             std::vector<FixItHint> fixits;
-            auto method = dyn_cast<CXXMethodDecl>(func);
+            auto *method = dyn_cast<CXXMethodDecl>(func);
             const bool isVirtualMethod = method && method->isVirtual();
             if (!isVirtualMethod || warnForOverriddenMethods) { // Don't try to fix virtual methods, as build can fail
-                for (auto redecl : func->redecls()) { // Fix in both header and .cpp
-                    auto fdecl = dyn_cast<FunctionDecl>(redecl);
+                for (auto *redecl : func->redecls()) { // Fix in both header and .cpp
+                    auto *fdecl = dyn_cast<FunctionDecl>(redecl);
                     const ParmVarDecl *param = fdecl->getParamDecl(i);
                     fixits.push_back(fixit(fdecl, param, classif));
                 }

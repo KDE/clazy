@@ -42,18 +42,17 @@ using namespace clang::ast_matchers;
 
 static bool handleStringLiteral(const StringLiteral *literal)
 {
-    if (!literal)
+    if (!literal) {
         return false;
+    }
 
     int length = literal->getLength();
-    if (length != 4 && length != 7 && length != 9 && length != 13)
+    if (length != 4 && length != 7 && length != 9 && length != 13) {
         return false;
+    }
 
     llvm::StringRef str = literal->getString();
-    if (!str.startswith("#"))
-        return false;
-
-    return true;
+    return str.startswith("#");
 }
 
 class QColorFromLiteral_Callback : public ClazyAstMatcherCallback
@@ -67,8 +66,9 @@ public:
     void run(const MatchFinder::MatchResult &result) override
     {
         const auto *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
-        if (handleStringLiteral(lt))
+        if (handleStringLiteral(lt)) {
             m_check->emitWarning(lt, "The QColor ctor taking ints is cheaper than the one taking string literals");
+        }
     }
 };
 
@@ -85,17 +85,20 @@ QColorFromLiteral::~QColorFromLiteral()
 
 void QColorFromLiteral::VisitStmt(Stmt *stmt)
 {
-    auto call = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!call || call->getNumArgs() != 1)
+    auto *call = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!call || call->getNumArgs() != 1) {
         return;
+    }
 
     std::string name = clazy::qualifiedMethodName(call);
-    if (name != "QColor::setNamedColor")
+    if (name != "QColor::setNamedColor") {
         return;
+    }
 
     auto *lt = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(0));
-    if (handleStringLiteral(lt))
+    if (handleStringLiteral(lt)) {
         emitWarning(lt, "The ctor taking ints is cheaper than QColor::setNamedColor(QString)");
+    }
 }
 
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)

@@ -106,8 +106,9 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
     static const std::vector<StringRef> methods =
         {"append", "compare", "endsWith", "startsWith", "insert", "lastIndexOf", "prepend", "replace", "contains", "indexOf"};
 
-    if (!clazy::isOfClass(method, "QString"))
+    if (!clazy::isOfClass(method, "QString")) {
         return false;
+    }
 
     return (!lt || Utils::isAscii(lt)) && clazy::contains(methods, clazy::name(method));
 }
@@ -115,29 +116,34 @@ static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 // Returns the first occurrence of a QLatin1String(char*) CTOR call
 Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator *&ternary)
 {
-    if (!stm)
+    if (!stm) {
         return {};
+    }
 
-    auto constructExpr = dyn_cast<CXXConstructExpr>(stm);
+    auto *constructExpr = dyn_cast<CXXConstructExpr>(stm);
     if (constructExpr) {
         CXXConstructorDecl *ctor = constructExpr->getConstructor();
         const int numArgs = ctor->getNumParams();
         if (clazy::isOfClass(ctor, "QLatin1String")) {
-            if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/false, 2))
+            if (Utils::containsStringLiteral(constructExpr, /*allowEmpty=*/false, 2)) {
                 return {constructExpr, /*enableFixits=*/numArgs == 1};
+            }
 
-            if (Utils::userDefinedLiteral(constructExpr, "QLatin1String", lo()))
+            if (Utils::userDefinedLiteral(constructExpr, "QLatin1String", lo())) {
                 return {constructExpr, /*enableFixits=*/false};
+            }
         }
     }
 
-    if (!ternary)
+    if (!ternary) {
         ternary = dyn_cast<ConditionalOperator>(stm);
+    }
 
-    for (auto child : stm->children()) {
+    for (auto *child : stm->children()) {
         auto expr = qlatin1CtorExpr(child, ternary);
-        if (expr.isValid())
+        if (expr.isValid()) {
             return expr;
+        }
     }
 
     return {};
@@ -148,19 +154,23 @@ Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator *&
 //
 static bool containsStringLiteralNoCallExpr(Stmt *stmt)
 {
-    if (!stmt)
+    if (!stmt) {
         return false;
+    }
 
-    auto sl = dyn_cast<StringLiteral>(stmt);
-    if (sl)
+    auto *sl = dyn_cast<StringLiteral>(stmt);
+    if (sl) {
         return true;
+    }
 
-    for (auto child : stmt->children()) {
-        if (!child)
+    for (auto *child : stmt->children()) {
+        if (!child) {
             continue;
-        auto callExpr = dyn_cast<CallExpr>(child);
-        if (!callExpr && containsStringLiteralNoCallExpr(child))
+        }
+        auto *callExpr = dyn_cast<CallExpr>(child);
+        if (!callExpr && containsStringLiteralNoCallExpr(child)) {
             return true;
+        }
     }
 
     return false;
@@ -169,8 +179,9 @@ static bool containsStringLiteralNoCallExpr(Stmt *stmt)
 // For QString::fromLatin1("foo") returns "foo"
 static StringLiteral *stringLiteralForCall(Stmt *call)
 {
-    if (!call)
+    if (!call) {
         return nullptr;
+    }
 
     std::vector<StringLiteral *> literals;
     clazy::getChilds(call, literals, 2);
@@ -179,18 +190,20 @@ static StringLiteral *stringLiteralForCall(Stmt *call)
 
 void QStringAllocations::VisitCtor(Stmt *stm)
 {
-    auto ctorExpr = dyn_cast<CXXConstructExpr>(stm);
-    if (!ctorExpr)
+    auto *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
+    if (!ctorExpr) {
         return;
+    }
 
-    if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/true))
+    if (!Utils::containsStringLiteral(ctorExpr, /**allowEmpty=*/true)) {
         return;
+    }
 
 #if LLVM_VERSION_MAJOR >= 10
     // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
     // Do it manually.
     if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")) {
-        auto p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
+        auto *p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
         while (p) {
             if (clazy::isOfClass(p, "QString")) {
                 VisitCtor(p);
@@ -208,8 +221,9 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
 {
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    if (!clazy::isOfClass(ctorDecl, "QString"))
+    if (!clazy::isOfClass(ctorDecl, "QString")) {
         return;
+    }
 
     if (Utils::insideCTORCall(m_context->parentMap, ctorExpr, {"QRegExp", "QIcon"})) {
         // https://blogs.kde.org/2015/11/05/qregexp-qstringliteral-crash-exit
@@ -218,8 +232,9 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
 
     if (!isOptionSet("no-msvc-compat")) {
         auto *initializerList = clazy::getFirstParentOfType<InitListExpr>(m_context->parentMap, ctorExpr);
-        if (initializerList != nullptr)
+        if (initializerList != nullptr) {
             return; // Nothing to do here, MSVC doesn't like it
+        }
 
         StringLiteral *lt = stringLiteralForCall(ctorExpr);
         if (lt && lt->getNumConcatenated() > 1) {
@@ -247,12 +262,13 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
             return;
         }
 
-        auto qlatin1Ctor = qlatin1expr.qlatin1ctorexpr;
+        auto *qlatin1Ctor = qlatin1expr.qlatin1ctorexpr;
 
         if (clazy::getLocStart(qlatin1Ctor).isMacroID()) {
             auto macroName = Lexer::getImmediateMacroName(clazy::getLocStart(qlatin1Ctor), sm(), lo());
-            if (macroName == "Q_GLOBAL_STATIC_WITH_ARGS") // bug #391807
+            if (macroName == "Q_GLOBAL_STATIC_WITH_ARGS") { // bug #391807
                 return;
+            }
         }
 
         std::vector<FixItHint> fixits;
@@ -283,9 +299,9 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
     } else {
         std::vector<FixItHint> fixits;
         if (clazy::hasChildren(ctorExpr)) {
-            auto pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
+            auto *pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
             if (clazy::hasChildren(pointerDecay)) {
-                auto lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
+                auto *lt = dyn_cast<StringLiteral>(*pointerDecay->child_begin());
                 if (lt) {
                     Stmt *grandParent = clazy::parent(m_context->parentMap, lt, 2);
                     Stmt *grandGrandParent = clazy::parent(m_context->parentMap, lt, 3);
@@ -295,14 +311,15 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                         // This is the case of QString("foo"), replace QString
 
                         const bool literalIsEmpty = lt->getLength() == 0;
-                        if (literalIsEmpty && clazy::getFirstParentOfType<MemberExpr>(m_context->parentMap, ctorExpr) == nullptr)
+                        if (literalIsEmpty && clazy::getFirstParentOfType<MemberExpr>(m_context->parentMap, ctorExpr) == nullptr) {
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QLatin1String", "QString");
-                        else if (!clazy::getLocStart(ctorExpr).isMacroID())
+                        } else if (!clazy::getLocStart(ctorExpr).isMacroID()) {
                             fixits = fixItReplaceWordWithWord(ctorExpr, "QStringLiteral", "QString");
-                        else
+                        } else {
                             queueManualFixitWarning(clazy::getLocStart(ctorExpr), "Can't use QStringLiteral in macro.");
+                        }
                     } else {
-                        auto parentMemberCallExpr =
+                        auto *parentMemberCallExpr =
                             clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap,
                                                                            lt,
                                                                            /*maxDepth=*/6); // 6 seems like a nice max from the ASTs I've seen
@@ -311,7 +328,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                         if (parentMemberCallExpr) {
                             FunctionDecl *fDecl = parentMemberCallExpr->getDirectCallee();
                             if (fDecl) {
-                                auto method = dyn_cast<CXXMethodDecl>(fDecl);
+                                auto *method = dyn_cast<CXXMethodDecl>(fDecl);
                                 if (method && betterTakeQLatin1String(method, lt)) {
                                     replacement = "QLatin1String";
                                 }
@@ -338,8 +355,9 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt 
         }
     }
 
-    if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
+    if (Utils::literalContainsEscapedBytes(lt, sm(), lo())) {
         return {};
+    }
 
     std::vector<FixItHint> fixits;
     FixItHint fixit = clazy::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
@@ -357,12 +375,13 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(cla
     std::vector<CXXConstructExpr *> constructExprs;
 
     auto addConstructExpr = [&constructExprs](Expr *expr) {
-        if (auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(expr)) {
+        if (auto *functionalCast = dyn_cast<CXXFunctionalCastExpr>(expr)) {
             expr = functionalCast->getSubExpr();
         }
 
-        if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
+        if (auto *constructExpr = dyn_cast<CXXConstructExpr>(expr)) {
             constructExprs.push_back(constructExpr);
+        }
     };
 
     addConstructExpr(ternary->getTrueExpr());
@@ -393,26 +412,31 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(cla
 // false for: s += QString::fromLatin1("foo"), etc.
 static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions &lo, const SourceManager &sm, int currentCall = 0)
 {
-    if (!s)
+    if (!s) {
         return false;
+    }
 
     auto *memberExpr = dyn_cast<MemberExpr>(s);
-    if (memberExpr)
+    if (memberExpr) {
         return true;
+    }
 
-    auto constructExpr = dyn_cast<CXXConstructExpr>(s);
-    if (clazy::isOfClass(constructExpr, "QString"))
+    auto *constructExpr = dyn_cast<CXXConstructExpr>(s);
+    if (clazy::isOfClass(constructExpr, "QString")) {
         return true;
+    }
 
-    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QLatin1String", lo))
+    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QLatin1String", lo)) {
         return true;
+    }
 
-    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QString", lo))
+    if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QString", lo)) {
         return true;
+    }
 
     auto *callExpr = dyn_cast<CallExpr>(s);
     StringLiteral *literal = stringLiteralForCall(callExpr);
-    auto operatorCall = dyn_cast<CXXOperatorCallExpr>(s);
+    auto *operatorCall = dyn_cast<CXXOperatorCallExpr>(s);
     if (operatorCall && clazy::returnTypeName(operatorCall, lo) != "QTestData") {
         // QTest::newRow will static_assert when using QLatin1String
         // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object
@@ -421,21 +445,20 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
         std::string className = clazy::classNameFor(operatorCall);
         if (className == "QString") {
             return false;
-        } else if (className.empty() && clazy::hasArgumentOfType(operatorCall->getDirectCallee(), "QString", lo)) {
+        }
+        if (className.empty() && clazy::hasArgumentOfType(operatorCall->getDirectCallee(), "QString", lo)) {
             return false;
         }
     }
 
     if (currentCall > 0 && callExpr) {
-        auto fDecl = callExpr->getDirectCallee();
-        if (fDecl && betterTakeQLatin1String(dyn_cast<CXXMethodDecl>(fDecl), literal))
-            return false;
-
-        return true;
+        auto *fDecl = callExpr->getDirectCallee();
+        return !(fDecl && betterTakeQLatin1String(dyn_cast<CXXMethodDecl>(fDecl), literal));
     }
 
-    if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) // skip this cruft
+    if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) { // skip this cruft
         return isQStringLiteralCandidate(clazy::parent(map, s), map, lo, sm, currentCall + 1);
+    }
 
     return false;
 }
@@ -452,15 +475,17 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
 
     StringLiteral *literal = stringLiteralForCall(callExpr);
     if (literal) {
-        if (Utils::literalContainsEscapedBytes(literal, sm(), lo()))
+        if (Utils::literalContainsEscapedBytes(literal, sm(), lo())) {
             return {};
+        }
         if (!Utils::isAscii(literal)) {
             // QString::fromLatin1() to QLatin1String() is fine
             // QString::fromUtf8() to QStringLiteral() is fine
             // all other combinations are not
             if (replacement == "QStringLiteral" && fromFunction == FromLatin1) {
                 return {};
-            } else if (replacement == "QLatin1String" && fromFunction == FromUtf8) {
+            }
+            if (replacement == "QLatin1String" && fromFunction == FromUtf8) {
                 replacement = "QStringLiteral";
             }
         }
@@ -493,8 +518,9 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
     if (start.isMacroID()) {
         queueManualFixitWarning(start, "Can't use QStringLiteral in macro");
     } else {
-        if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
+        if (Utils::literalContainsEscapedBytes(lt, sm(), lo())) {
             return {};
+        }
 
         std::string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
         if (revisedReplacement == "QStringLiteral" && clazy::getLocStart(lt).isMacroID()) {
@@ -510,9 +536,10 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
 
 void QStringAllocations::VisitOperatorCall(Stmt *stm)
 {
-    auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
-    if (!operatorCall)
+    auto *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
+    if (!operatorCall) {
         return;
+    }
 
     if (clazy::returnTypeName(operatorCall, lo()) == "QTestData") {
         // QTest::newRow will static_assert when using QLatin1String
@@ -525,19 +552,23 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     clazy::getChilds<StringLiteral>(operatorCall, stringLiterals);
 
     //  We're only after string literals, str.contains(some_method_returning_const_char_is_fine())
-    if (stringLiterals.empty())
+    if (stringLiterals.empty()) {
         return;
+    }
 
     FunctionDecl *funcDecl = operatorCall->getDirectCallee();
-    if (!funcDecl)
+    if (!funcDecl) {
         return;
+    }
 
-    auto methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
-    if (!clazy::isOfClass(methodDecl, "QString"))
+    auto *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
+    if (!clazy::isOfClass(methodDecl, "QString")) {
         return;
+    }
 
-    if (!clazy::hasCharPtrArgument(methodDecl))
+    if (!clazy::hasCharPtrArgument(methodDecl)) {
         return;
+    }
 
     std::vector<FixItHint> fixits;
 
@@ -563,23 +594,28 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
 
 void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CallExpr>(stmt);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stmt);
+    if (!callExpr) {
         return;
+    }
 
     FunctionDecl *functionDecl = callExpr->getDirectCallee();
-    if (!clazy::functionIsOneOf(functionDecl, {"fromLatin1", "fromUtf8"}))
+    if (!clazy::functionIsOneOf(functionDecl, {"fromLatin1", "fromUtf8"})) {
         return;
+    }
 
-    auto methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (!clazy::isOfClass(methodDecl, "QString"))
+    auto *methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    if (!clazy::isOfClass(methodDecl, "QString")) {
         return;
+    }
 
-    if (!Utils::callHasDefaultArguments(callExpr) || !clazy::hasCharPtrArgument(functionDecl, 2)) // QString::fromLatin1("foo", 1) is ok
+    if (!Utils::callHasDefaultArguments(callExpr) || !clazy::hasCharPtrArgument(functionDecl, 2)) { // QString::fromLatin1("foo", 1) is ok
         return;
+    }
 
-    if (!containsStringLiteralNoCallExpr(callExpr))
+    if (!containsStringLiteralNoCallExpr(callExpr)) {
         return;
+    }
 
     if (!isOptionSet("no-msvc-compat")) {
         StringLiteral *lt = stringLiteralForCall(callExpr);
@@ -591,7 +627,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     std::vector<ConditionalOperator *> ternaries;
     clazy::getChilds(callExpr, ternaries, 2);
     if (!ternaries.empty()) {
-        auto ternary = ternaries[0];
+        auto *ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {
             maybeEmitWarning(clazy::getLocStart(stmt), std::string("QString::fromLatin1() being passed a literal"));
         }
@@ -611,18 +647,21 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 
 void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
-    if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo()))
+    auto *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
+    if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo())) {
         return;
+    }
 
-    if (!containsStringLiteralNoCallExpr(stmt))
+    if (!containsStringLiteralNoCallExpr(stmt)) {
         return;
+    }
 
     ConditionalOperator *ternary = nullptr;
     Stmt *begin = qlatin1CtorExpr(stmt, ternary).qlatin1ctorexpr;
 
-    if (!begin)
+    if (!begin) {
         return;
+    }
 
     const std::vector<FixItHint> fixits =
         ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String") : fixItReplaceWordWithWordInTernary(ternary);

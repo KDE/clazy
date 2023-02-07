@@ -45,7 +45,7 @@ static MaterializeTemporaryExpr *isArgTemporaryObj(Expr *arg0)
 
 static VarDecl *getVarDecl(Expr *arg)
 {
-    auto declRefExpr = dyn_cast<DeclRefExpr>(arg);
+    auto *declRefExpr = dyn_cast<DeclRefExpr>(arg);
     declRefExpr = declRefExpr ? declRefExpr : clazy::getFirstChildOfType<DeclRefExpr>(arg);
     if (!declRefExpr) {
         return nullptr;
@@ -62,15 +62,13 @@ static bool isQStringFromStringLiteral(Expr *qstring)
 {
     if (isArgTemporaryObj(qstring)) {
         // Is it compile time known QString i.e., not from a function call
-        auto qstringCtor = clazy::getFirstChildOfType<CXXConstructExpr>(qstring);
-        if (!qstringCtor)
+        auto *qstringCtor = clazy::getFirstChildOfType<CXXConstructExpr>(qstring);
+        if (!qstringCtor) {
             return false;
+        }
 
         auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(qstringCtor);
-        if (!stringLit)
-            return false;
-
-        return true;
+        return stringLit != nullptr;
     }
 
     if (auto *VD = getVarDecl(qstring)) {
@@ -85,13 +83,13 @@ static bool isQStringFromStringLiteral(Expr *qstring)
 static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
 {
     // Get the QRegularExpression ctor
-    auto ctor = clazy::getFirstChildOfType<CXXConstructExpr>(qregexVar);
+    auto *ctor = clazy::getFirstChildOfType<CXXConstructExpr>(qregexVar);
     if (!ctor || ctor->getNumArgs() == 0) {
         return false;
     }
 
     // Check if its first arg is "QString"
-    auto qstrArg = ctor->getArg(0);
+    auto *qstrArg = ctor->getArg(0);
     if (!qstrArg || clazy::typeName(qstrArg->getType(), lo, true) != "QString") {
         return false;
     }
@@ -109,7 +107,7 @@ static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
         return false;
     }
 
-    auto ctorCall = dyn_cast<CXXConstructExpr>(initExpr);
+    auto *ctorCall = dyn_cast<CXXConstructExpr>(initExpr);
     if (!ctorCall) {
         ctorCall = clazy::getFirstChildOfType<CXXConstructExpr>(initExpr);
         if (!ctorCall) {
@@ -121,12 +119,8 @@ static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
         return false;
     }
 
-    auto qstringArg = ctorCall->getArg(0);
-    if (qstringArg && isQStringFromStringLiteral(qstringArg)) {
-        return true;
-    }
-
-    return false;
+    auto *qstringArg = ctorCall->getArg(0);
+    return qstringArg && isQStringFromStringLiteral(qstringArg);
 }
 
 static bool isArgNonStaticLocalVar(Expr *qregexp)
@@ -160,7 +154,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    auto method = dyn_cast_or_null<CXXMemberCallExpr>(stmt);
+    auto *method = dyn_cast_or_null<CXXMemberCallExpr>(stmt);
     if (!method) {
         return;
     }
@@ -169,9 +163,10 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    auto methodDecl = method->getMethodDecl();
-    if (!methodDecl || !methodDecl->getDeclName().isIdentifier())
+    auto *methodDecl = method->getMethodDecl();
+    if (!methodDecl || !methodDecl->getDeclName().isIdentifier()) {
         return;
+    }
 
     if (!isOfAcceptableType(methodDecl)) {
         return;
@@ -180,9 +175,10 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
     // QRegularExpression.match()
     const auto methodName = methodDecl->getName();
     if (methodName == "match" || methodName == "globalMatch") {
-        auto obj = method->getImplicitObjectArgument()->IgnoreImpCasts();
-        if (!obj)
+        auto *obj = method->getImplicitObjectArgument()->IgnoreImpCasts();
+        if (!obj) {
             return;
+        }
 
         if (obj->isLValue()) {
             if (isArgNonStaticLocalVar(obj)) {
@@ -193,7 +189,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
             }
         } else if (obj->isXValue()) {
             // is it a temporary?
-            auto temp = dyn_cast<MaterializeTemporaryExpr>(obj);
+            auto *temp = dyn_cast<MaterializeTemporaryExpr>(obj);
             if (!temp) {
                 return;
             }
@@ -216,7 +212,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
     }
 
     // Its a QString*().method(QRegularExpression(arg)) ?
-    if (auto temp = isArgTemporaryObj(qregexArg)) {
+    if (auto *temp = isArgTemporaryObj(qregexArg)) {
         if (isTemporaryQRegexObj(temp, lo())) {
             emitWarning(clazy::getLocStart(qregexArg),
                         "Don't create temporary QRegularExpression objects. Use a "

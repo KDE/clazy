@@ -50,22 +50,26 @@ MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *
 
 void MutableContainerKey::VisitDecl(clang::Decl *decl)
 {
-    auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (!tsdecl || !isInterestingContainer(clazy::name(tsdecl)))
+    auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);
+    if (!tsdecl || !isInterestingContainer(clazy::name(tsdecl))) {
         return;
+    }
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
-    if (templateArguments.size() != 2)
+    if (templateArguments.size() != 2) {
         return;
+    }
 
     QualType qt = templateArguments[0].getAsType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t)
+    if (!t) {
         return;
+    }
 
-    auto record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
-    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer", "QPersistentModelIndex", "weak_ptr"}))
+    auto *record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
+    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer", "QPersistentModelIndex", "weak_ptr"})) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(decl), "Associative container key might be modified externally");
 }

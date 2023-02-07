@@ -47,8 +47,9 @@ using IgnoreStmts = int;
  */
 inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
 {
-    if (!child || !parent)
+    if (!child || !parent) {
         return false;
+    }
 
     return clazy::any_of(parent->children(), [child](clang::Stmt *c) {
         return c == child || isChildOf(child, c);
@@ -61,13 +62,15 @@ inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
 
 inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &name)
 {
-    if (!stm)
+    if (!stm) {
         return false;
+    }
 
-    if (auto expr = llvm::dyn_cast<clang::MemberExpr>(stm)) {
-        auto namedDecl = llvm::dyn_cast<clang::NamedDecl>(expr->getMemberDecl());
-        if (namedDecl && clazy::name(namedDecl) == name)
+    if (auto *expr = llvm::dyn_cast<clang::MemberExpr>(stm)) {
+        auto *namedDecl = llvm::dyn_cast<clang::NamedDecl>(expr->getMemberDecl());
+        if (namedDecl && clazy::name(namedDecl) == name) {
             return true;
+        }
     }
 
     return clazy::any_of(stm->children(), [name](clang::Stmt *child) {
@@ -84,18 +87,22 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
 template<typename T>
 T *getFirstChildOfType(clang::Stmt *stm)
 {
-    if (!stm)
+    if (!stm) {
         return nullptr;
+    }
 
-    for (auto child : stm->children()) {
-        if (!child) // Can happen
+    for (auto *child : stm->children()) {
+        if (!child) { // Can happen
             continue;
+        }
 
-        if (auto s = clang::dyn_cast<T>(child))
+        if (auto s = clang::dyn_cast<T>(child)) {
             return s;
+        }
 
-        if (auto s = getFirstChildOfType<T>(child))
+        if (auto s = getFirstChildOfType<T>(child)) {
             return s;
+        }
     }
 
     return nullptr;
@@ -107,20 +114,24 @@ T *getFirstChildOfType(clang::Stmt *stm)
 template<typename T>
 T *getFirstChildOfType2(clang::Stmt *stm)
 {
-    if (!stm)
+    if (!stm) {
         return nullptr;
+    }
 
     if (clazy::hasChildren(stm)) {
-        auto child = *(stm->child_begin());
+        auto *child = *(stm->child_begin());
 
-        if (!child) // can happen
+        if (!child) { // can happen
             return nullptr;
+        }
 
-        if (auto s = clang::dyn_cast<T>(child))
+        if (auto s = clang::dyn_cast<T>(child)) {
             return s;
+        }
 
-        if (auto s = getFirstChildOfType<T>(child))
+        if (auto s = getFirstChildOfType<T>(child)) {
             return s;
+        }
     }
 
     return nullptr;
@@ -131,8 +142,9 @@ T *getFirstChildOfType2(clang::Stmt *stm)
 // etc.
 inline clang::Stmt *parent(clang::ParentMap *map, clang::Stmt *s, unsigned int depth = 1)
 {
-    if (!s)
+    if (!s) {
         return nullptr;
+    }
 
     return depth == 0 ? s : clazy::parent(map, map->getParent(s), depth - 1);
 }
@@ -141,14 +153,17 @@ inline clang::Stmt *parent(clang::ParentMap *map, clang::Stmt *s, unsigned int d
 template<typename T>
 T *getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int depth = -1)
 {
-    if (!s)
+    if (!s) {
         return nullptr;
+    }
 
-    if (auto t = clang::dyn_cast<T>(s))
+    if (auto t = clang::dyn_cast<T>(s)) {
         return t;
+    }
 
-    if (depth == 0)
+    if (depth == 0) {
         return nullptr;
+    }
 
     --depth;
     return getFirstParentOfType<T>(pmap, parent(pmap, s), depth);
@@ -156,8 +171,9 @@ T *getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int dep
 
 inline clang::Stmt *getFirstChild(clang::Stmt *parent)
 {
-    if (!parent)
+    if (!parent) {
         return nullptr;
+    }
 
     auto it = parent->child_begin();
     return it == parent->child_end() ? nullptr : *it;
@@ -165,8 +181,9 @@ inline clang::Stmt *getFirstChild(clang::Stmt *parent)
 
 inline clang::Stmt *getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
 {
-    if (depth == 0 || !s)
+    if (depth == 0 || !s) {
         return s;
+    }
 
     return clazy::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth) : nullptr;
 }
@@ -174,17 +191,20 @@ inline clang::Stmt *getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
 template<typename T>
 void getChilds(clang::Stmt *stmt, std::vector<T *> &result_list, int depth = -1)
 {
-    if (!stmt)
+    if (!stmt) {
         return;
+    }
 
     auto cexpr = llvm::dyn_cast<T>(stmt);
-    if (cexpr)
+    if (cexpr) {
         result_list.push_back(cexpr);
+    }
 
     if (depth > 0 || depth == -1) {
-        if (depth > 0)
+        if (depth > 0) {
             --depth;
-        for (auto child : stmt->children()) {
+        }
+        for (auto *child : stmt->children()) {
             getChilds(child, result_list, depth);
         }
     }
@@ -211,23 +231,29 @@ std::vector<T *> getStatements(clang::Stmt *body,
                                IgnoreStmts ignoreOptions = IgnoreNone)
 {
     std::vector<T *> statements;
-    if (!body || depth == 0)
+    if (!body || depth == 0) {
         return statements;
+    }
 
-    if (includeParent)
-        if (T *t = clang::dyn_cast<T>(body))
+    if (includeParent) {
+        if (T *t = clang::dyn_cast<T>(body)) {
             statements.push_back(t);
+        }
+    }
 
-    for (auto child : body->children()) {
-        if (!child)
+    for (auto *child : body->children()) {
+        if (!child) {
             continue; // can happen
+        }
         if (T *childT = clang::dyn_cast<T>(child)) {
-            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), clazy::getLocStart(child))))
+            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), clazy::getLocStart(child)))) {
                 statements.push_back(childT);
+            }
         }
 
-        if (!isIgnoredByOption(child, ignoreOptions))
+        if (!isIgnoredByOption(child, ignoreOptions)) {
             --depth;
+        }
 
         auto childStatements = getStatements<T>(child, sm, startLocation, depth, false, ignoreOptions);
         clazy::append(childStatements, statements);
@@ -247,17 +273,21 @@ std::vector<T *> getStatements(clang::Stmt *body,
 template<typename T>
 T *unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
 {
-    if (!stmt)
+    if (!stmt) {
         return nullptr;
+    }
 
-    if (auto tt = llvm::dyn_cast<T>(stmt))
+    if (auto tt = llvm::dyn_cast<T>(stmt)) {
         return tt;
+    }
 
-    if ((options & IgnoreImplicitCasts) && llvm::isa<clang::ImplicitCastExpr>(stmt))
+    if ((options & IgnoreImplicitCasts) && llvm::isa<clang::ImplicitCastExpr>(stmt)) {
         return unpeal<T>(clazy::getFirstChild(stmt), options);
+    }
 
-    if ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(stmt))
+    if ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(stmt)) {
         return unpeal<T>(clazy::getFirstChild(stmt), options);
+    }
 
     return nullptr;
 }

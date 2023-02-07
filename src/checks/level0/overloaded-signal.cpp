@@ -40,31 +40,33 @@ OverloadedSignal::OverloadedSignal(const std::string &name, ClazyContext *contex
 void OverloadedSignal::VisitDecl(clang::Decl *decl)
 {
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    auto method = dyn_cast<CXXMethodDecl>(decl);
-    if (!accessSpecifierManager || !method)
+    auto *method = dyn_cast<CXXMethodDecl>(decl);
+    if (!accessSpecifierManager || !method) {
         return;
+    }
 
-    if (method->isThisDeclarationADefinition() && !method->hasInlineBody())
+    if (method->isThisDeclarationADefinition() && !method->hasInlineBody()) {
         return;
+    }
 
     CXXRecordDecl *record = method->getParent();
 
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
-    if (!methodIsSignal)
+    if (!methodIsSignal) {
         return;
+    }
 
     const StringRef methodName = clazy::name(method);
     CXXRecordDecl *p = record; // baseClass starts at record so we check overloaded methods there
     while (p) {
-        for (auto m : p->methods()) {
+        for (auto *m : p->methods()) {
             if (clazy::name(m) == methodName) {
                 if (!clazy::parametersMatch(m, method)) {
                     if (p == record) {
                         emitWarning(decl, "signal " + methodName.str() + " is overloaded");
                         continue; // No point in spitting more warnings for the same signal
-                    } else {
-                        emitWarning(decl, "signal " + methodName.str() + " is overloaded (with " + clazy::getLocStart(p).printToString(sm()) + ")");
                     }
+                    emitWarning(decl, "signal " + methodName.str() + " is overloaded (with " + clazy::getLocStart(p).printToString(sm()) + ")");
                 }
             }
         }

@@ -42,13 +42,15 @@ QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyConte
 
 void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
 {
-    auto constructExpr = dyn_cast<CXXConstructExpr>(stmt);
+    auto *constructExpr = dyn_cast<CXXConstructExpr>(stmt);
     CXXConstructorDecl *ctor = constructExpr ? constructExpr->getConstructor() : nullptr;
 
-    if (!ctor || ctor->getQualifiedNameAsString() != "QLatin1String::QLatin1String")
+    if (!ctor || ctor->getQualifiedNameAsString() != "QLatin1String::QLatin1String") {
         return;
+    }
 
     auto *lt = clazy::getFirstChildOfType2<StringLiteral>(stmt);
-    if (lt && !Utils::isAscii(lt))
+    if (lt && !Utils::isAscii(lt)) {
         emitWarning(stmt, "QLatin1String with non-ascii literal");
+    }
 }

@@ -101,10 +101,11 @@ bool isQtCOWIterableClass(const std::string &className);
  */
 inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
 {
-    if (!itRecord)
+    if (!itRecord) {
         return false;
+    }
 
-    auto parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
+    auto *parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
     return parent && clazy::isQtCOWIterableClass(parent);
 }
 
@@ -247,8 +248,9 @@ inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
  */
 inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
 {
-    if (!call || call->getNumArgs() < 5)
+    if (!call || call->getNumArgs() < 5) {
         return nullptr;
+    }
 
     return clazy::valueDeclForCallArgument(call, 2);
 }
@@ -260,8 +262,9 @@ inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
 inline clang::CXXMethodDecl *receiverMethodForConnect(clang::CallExpr *call)
 {
     clang::CXXMethodDecl *receiverMethod = clazy::pmfFromConnect(call, 2);
-    if (receiverMethod)
+    if (receiverMethod) {
         return receiverMethod;
+    }
 
     // It's either third or fourth argument
     return clazy::pmfFromConnect(call, 3);
@@ -270,14 +273,15 @@ inline clang::CXXMethodDecl *receiverMethodForConnect(clang::CallExpr *call)
 // Returns if callExpr is a call to qobject_cast()
 inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = nullptr, clang::CXXRecordDecl **castFrom = nullptr)
 {
-    if (auto callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
+    if (auto *callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
         clang::FunctionDecl *func = callExpr->getDirectCallee();
-        if (!func || clazy::name(func) != "qobject_cast")
+        if (!func || clazy::name(func) != "qobject_cast") {
             return false;
+        }
 
         if (castFrom) {
             clang::Expr *expr = callExpr->getArg(0);
-            if (auto implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
+            if (auto *implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
                 if (implicitCast->getCastKind() == clang::CK_DerivedToBase) {
                     expr = implicitCast->getSubExpr();
                 }
@@ -290,7 +294,7 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
         }
 
         if (castTo) {
-            auto templateArgs = func->getTemplateSpecializationArgs();
+            const auto *templateArgs = func->getTemplateSpecializationArgs();
             if (templateArgs->size() == 1) {
                 const clang::TemplateArgument &arg = templateArgs->get(0);
                 clang::QualType qt = clazy::pointeeQualType(arg.getAsType());

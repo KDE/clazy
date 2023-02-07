@@ -46,34 +46,40 @@ ConnectNotNormalized::ConnectNotNormalized(const std::string &name, ClazyContext
 
 void ConnectNotNormalized::VisitStmt(clang::Stmt *stmt)
 {
-    if (handleQ_ARG(dyn_cast<CXXConstructExpr>(stmt)))
+    if (handleQ_ARG(dyn_cast<CXXConstructExpr>(stmt))) {
         return;
+    }
 
     handleConnect(dyn_cast<CallExpr>(stmt));
 }
 
 bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
 {
-    if (!expr || expr->getNumArgs() != 2)
+    if (!expr || expr->getNumArgs() != 2) {
         return false;
+    }
 
     CXXConstructorDecl *ctor = expr->getConstructor();
-    if (!ctor)
+    if (!ctor) {
         return false;
+    }
 
     auto name = ctor->getNameAsString();
-    if (name != "QArgument" && name != "QReturnArgument")
+    if (name != "QArgument" && name != "QReturnArgument") {
         return false;
+    }
 
-    auto sl = clazy::getFirstChildOfType2<clang::StringLiteral>(expr->getArg(0));
-    if (!sl)
+    auto *sl = clazy::getFirstChildOfType2<clang::StringLiteral>(expr->getArg(0));
+    if (!sl) {
         return false;
+    }
 
     const std::string original = sl->getString().str();
     const std::string normalized = clazy::normalizedType(original.c_str());
 
-    if (original == normalized)
+    if (original == normalized) {
         return false;
+    }
 
     emitWarning(expr, "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
@@ -81,28 +87,33 @@ bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
 
 bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
 {
-    if (!callExpr)
+    if (!callExpr) {
         return false;
+    }
 
     FunctionDecl *func = callExpr->getDirectCallee();
-    if (!func || func->getNumParams() != 1 || clazy::name(func) != "qFlagLocation")
+    if (!func || func->getNumParams() != 1 || clazy::name(func) != "qFlagLocation") {
         return false;
+    }
 
     {
         // Only warn in connect statements, not disconnect, since there there's no optimization in Qt's side
-        auto parentCallExpr = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap, m_context->parentMap->getParent(callExpr), -1);
-        if (!parentCallExpr)
+        auto *parentCallExpr = clazy::getFirstParentOfType<CallExpr>(m_context->parentMap, m_context->parentMap->getParent(callExpr), -1);
+        if (!parentCallExpr) {
             return false;
+        }
 
         FunctionDecl *parentFunc = parentCallExpr->getDirectCallee();
-        if (!parentFunc || clazy::name(parentFunc) != "connect")
+        if (!parentFunc || clazy::name(parentFunc) != "connect") {
             return false;
+        }
     }
 
     Expr *arg1 = callExpr->getArg(0);
-    auto sl = clazy::getFirstChildOfType2<clang::StringLiteral>(arg1);
-    if (!sl)
+    auto *sl = clazy::getFirstChildOfType2<clang::StringLiteral>(arg1);
+    if (!sl) {
         return false;
+    }
     std::string original = sl->getString().str();
     std::string normalized = clazy::normalizedSignature(original.c_str());
 
@@ -110,8 +121,9 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     normalized = std::string(normalized.c_str());
     original = std::string(original.c_str());
 
-    if (original == normalized)
+    if (original == normalized) {
         return false;
+    }
 
     // Remove first digit
     normalized.erase(0, 1);

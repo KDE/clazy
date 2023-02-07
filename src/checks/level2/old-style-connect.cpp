@@ -64,16 +64,19 @@ namespace clazy
 // Copied from Clang's Expr.cpp and added "|| !DerivedType->isRecordType()" to avoid a crash
 const CXXRecordDecl *getBestDynamicClassType(Expr *expr)
 {
-    if (!expr)
+    if (!expr) {
         return nullptr;
+    }
 
     const Expr *E = expr->getBestDynamicClassTypeExpr();
     QualType DerivedType = E->getType();
-    if (const auto *PTy = DerivedType->getAs<PointerType>())
+    if (const auto *PTy = DerivedType->getAs<PointerType>()) {
         DerivedType = PTy->getPointeeType();
+    }
 
-    if (DerivedType->isDependentType() || !DerivedType->isRecordType())
+    if (DerivedType->isDependentType() || !DerivedType->isRecordType()) {
         return nullptr;
+    }
 
     const RecordType *Ty = DerivedType->castAs<RecordType>();
     Decl *D = Ty->getDecl();
@@ -120,28 +123,30 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
     int classification = ConnectFlag_None;
 
     const std::string methodName = connectFunc->getQualifiedNameAsString();
-    if (methodName == "QObject::connect")
+    if (methodName == "QObject::connect") {
         classification |= ConnectFlag_Connect;
-    else if (methodName == "QObject::disconnect")
+    } else if (methodName == "QObject::disconnect") {
         classification |= ConnectFlag_Disconnect;
-    else if (methodName == "QTimer::singleShot")
+    } else if (methodName == "QTimer::singleShot") {
         classification |= ConnectFlag_QTimerSingleShot;
-    else if (methodName == "QState::addTransition")
+    } else if (methodName == "QState::addTransition") {
         classification |= ConnectFlag_QStateAddTransition;
-    else if (methodName == "QMenu::addAction")
+    } else if (methodName == "QMenu::addAction") {
         classification |= ConnectFlag_QMenuAddAction;
-    else if (methodName == "QMessageBox::open")
+    } else if (methodName == "QMessageBox::open") {
         classification |= ConnectFlag_QMessageBoxOpen;
-    else if (methodName == "QSignalSpy::QSignalSpy")
+    } else if (methodName == "QSignalSpy::QSignalSpy") {
         classification |= ConnectFlag_QSignalSpy;
+    }
 
-    if (classification == ConnectFlag_None)
+    if (classification == ConnectFlag_None) {
         return classification;
+    }
 
-    if (clazy::connectHasPMFStyle(connectFunc))
+    if (clazy::connectHasPMFStyle(connectFunc)) {
         return classification;
-    else
-        classification |= ConnectFlag_OldStyle;
+    }
+    classification |= ConnectFlag_OldStyle;
 
     const unsigned int numParams = connectFunc->getNumParams();
 
@@ -171,8 +176,9 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
         for (auto arg : connectCall->arguments()) {
             auto argLocation = clazy::getLocStart(arg);
             std::string dummy;
-            if (isSignalOrSlot(argLocation, dummy))
+            if (isSignalOrSlot(argLocation, dummy)) {
                 ++numLiterals;
+            }
         }
 
         if ((classification & ConnectFlag_QTimerSingleShot) && numLiterals != 1) {
@@ -202,16 +208,19 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
     std::vector<CXXMemberCallExpr *> memberCalls;
     clazy::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
-    for (auto callExpr : memberCalls) {
-        if (!callExpr->getDirectCallee())
+    for (auto *callExpr : memberCalls) {
+        if (!callExpr->getDirectCallee()) {
             continue;
-        auto method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
-        if (!method)
+        }
+        auto *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
+        if (!method) {
             continue;
+        }
 
         // Any better way to detect it's an operator ?
-        if (clazy::startsWith(method->getNameAsString(), "operator "))
+        if (clazy::startsWith(method->getNameAsString(), "operator ")) {
             return true;
+        }
     }
 
     return false;
@@ -226,30 +235,36 @@ bool OldStyleConnect::isPrivateSlot(const std::string &name) const
 
 void OldStyleConnect::VisitStmt(Stmt *s)
 {
-    auto call = dyn_cast<CallExpr>(s);
-    auto ctorExpr = call ? nullptr : dyn_cast<CXXConstructExpr>(s);
-    if (!call && !ctorExpr)
+    auto *call = dyn_cast<CallExpr>(s);
+    auto *ctorExpr = call ? nullptr : dyn_cast<CXXConstructExpr>(s);
+    if (!call && !ctorExpr) {
         return;
+    }
 
     if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent()
-        && clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") // Don't warn of stuff inside qobject.h
+        && clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") { // Don't warn of stuff inside qobject.h
         return;
+    }
 
     FunctionDecl *function = call ? call->getDirectCallee() : ctorExpr->getConstructor();
-    if (!function)
+    if (!function) {
         return;
+    }
 
-    auto method = dyn_cast<CXXMethodDecl>(function);
-    if (!method)
+    auto *method = dyn_cast<CXXMethodDecl>(function);
+    if (!method) {
         return;
+    }
 
     const int classification = call ? classifyConnect(method, call) : classifyConnect(method, ctorExpr);
 
-    if (!(classification & ConnectFlag_OldStyle))
+    if (!(classification & ConnectFlag_OldStyle)) {
         return;
+    }
 
-    if ((classification & ConnectFlag_OldStyleButNonLiteral))
+    if ((classification & ConnectFlag_OldStyleButNonLiteral)) {
         return;
+    }
 
     if (classification & ConnectFlag_Bogus) {
         emitWarning(clazy::getLocStart(s), "Internal error");
@@ -267,16 +282,18 @@ void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
 void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = macroNameTok.getIdentifierInfo();
-    if (!ii || ii->getName() != "Q_PRIVATE_SLOT")
+    if (!ii || ii->getName() != "Q_PRIVATE_SLOT") {
         return;
+    }
 
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
     const std::string text = static_cast<std::string>(Lexer::getSourceText(charRange, sm(), lo()));
 
     static std::regex rx(R"(Q_PRIVATE_SLOT\s*\((.*),.*\s(.*)\(.*)");
     std::smatch match;
-    if (!regex_match(text, match, rx) || match.size() != 3)
+    if (!regex_match(text, match, rx) || match.size() != 3) {
         return;
+    }
 
     addPrivateSlot({match[1], match[2]});
 }
@@ -284,8 +301,9 @@ void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceR
 // SIGNAL(foo()) -> foo
 std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 {
-    if (!macroLoc.isMacroID())
+    if (!macroLoc.isMacroID()) {
         return "error";
+    }
 
     CharSourceRange expansionRange = clazy::getImmediateExpansionRange(macroLoc, sm());
     SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
@@ -298,9 +316,9 @@ std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     if (regex_match(text, match, rx)) {
         if (match.size() == 3) {
             return match[2].str();
-        } else {
-            return "error2";
         }
+        return "error2";
+
     } else {
         return std::string("regexp failed for ") + text;
     }
@@ -309,8 +327,9 @@ std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, std::string &macroName) const
 {
     macroName.clear();
-    if (!loc.isMacroID() || loc.isInvalid())
+    if (!loc.isMacroID() || loc.isInvalid()) {
         return false;
+    }
 
     macroName = static_cast<std::string>(Lexer::getImmediateMacroName(loc, sm(), lo()));
     return macroName == "SIGNAL" || macroName == "SLOT";
@@ -360,8 +379,9 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                 // This means it's a connect with implicit receiver
                 lastRecordDecl = Utils::recordForMemberCall(dyn_cast<CXXMemberCallExpr>(callOrCtor), implicitCallee);
 
-                if (macroNum == 1)
+                if (macroNum == 1) {
                     llvm::errs() << "This first macro shouldn't enter this path";
+                }
                 if (!lastRecordDecl) {
                     std::string msg = "Failed to get class name for implicit receiver";
                     queueManualFixitWarning(s, msg);
@@ -386,22 +406,23 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                     if (m_context->isQtDeveloper() && classIsOk(clazy::name(lastRecordDecl))) {
                         // This is OK
                         return {};
-                    } else {
-                        msg = "No such method " + methodName + " in class " + lastRecordDecl->getNameAsString();
                     }
+                    msg = "No such method " + methodName + " in class " + lastRecordDecl->getNameAsString();
                 }
 
                 queueManualFixitWarning(s, msg);
                 return {};
-            } else if (methods.size() != 1) {
+            }
+            if (methods.size() != 1) {
                 std::string msg = std::string("Too many overloads (") + std::to_string(methods.size()) + std::string(") for method ") + methodName
                     + " for record " + lastRecordDecl->getNameAsString();
                 queueManualFixitWarning(s, msg);
                 return {};
             } else {
                 AccessSpecifierManager *a = m_context->accessSpecifierManager;
-                if (!a)
+                if (!a) {
                     return {};
+                }
                 const bool isSignal = a->qtAccessSpecifierType(methods[0]) == QtAccessSpecifier_Signal;
                 if (isSignal && macroName == "SLOT") {
                     // The method is actually a signal and the user used SLOT()
@@ -412,9 +433,10 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                 }
             }
 
-            auto methodDecl = methods[0];
-            if (methodDecl->isStatic())
+            auto *methodDecl = methods[0];
+            if (methodDecl->isStatic()) {
                 return {};
+            }
 
             if (macroNum == 1) {
                 // Save the number of parameters of the signal. The slot should not have more arguments.
@@ -461,7 +483,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
             }
 
             std::string qualifiedName;
-            auto contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
+            auto *contextRecord = clazy::firstContextOfType<CXXRecordDecl>(m_context->lastDecl->getDeclContext());
             const bool isInInclude = sm().getMainFileID() != sm().getFileID(locStart);
 
             if (isSpecialProtectedCase && contextRecord) {
@@ -477,14 +499,15 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
             const std::string functionPointer = '&' + qualifiedName;
             std::string replacement = functionPointer;
 
-            if ((classification & ConnectFlag_4ArgsConnect) && macroNum == 2)
+            if ((classification & ConnectFlag_4ArgsConnect) && macroNum == 2) {
                 replacement = implicitCallee + ", " + replacement;
+            }
 
             fixits.push_back(FixItHint::CreateReplacement(range, replacement));
             lastRecordDecl = nullptr;
         } else {
             Expr *expr = arg;
-            const auto record = clazy::getBestDynamicClassType(expr);
+            const auto *const record = clazy::getBestDynamicClassType(expr);
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {

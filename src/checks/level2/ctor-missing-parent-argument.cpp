@@ -45,7 +45,8 @@ static std::string expectedParentTypeFor(CXXRecordDecl *decl)
 {
     if (clazy::derivesFrom(decl, "QWidget")) {
         return "QWidget";
-    } else if (clazy::derivesFrom(decl, "QQuickItem")) {
+    }
+    if (clazy::derivesFrom(decl, "QQuickItem")) {
         return "QQuickItem";
     } else if (clazy::derivesFrom(decl, "Qt3DCore::QEntity")) {
         return "Qt3DCore::QNode";
@@ -56,11 +57,12 @@ static std::string expectedParentTypeFor(CXXRecordDecl *decl)
 
 void CtorMissingParentArgument::VisitDecl(Decl *decl)
 {
-    auto record = dyn_cast<CXXRecordDecl>(decl);
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
     bool ok = false;
 
-    if (!clazy::isQObject(record))
+    if (!clazy::isQObject(record)) {
         return;
+    }
 
     if (record->hasInheritedConstructor()) {
         // When doing using QObject::QObject you inherit the ctors from QObject, so don't warn.
@@ -71,14 +73,16 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     }
 
     const bool hasCtors = record->ctor_begin() != record->ctor_end();
-    if (!hasCtors)
+    if (!hasCtors) {
         return;
+    }
 
     const std::string parentType = expectedParentTypeFor(record);
     int numCtors = 0;
     const bool hasQObjectParam = clazy::recordHasCtorWithParam(record, parentType, /*by-ref*/ ok, /*by-ref*/ numCtors);
-    if (!ok)
+    if (!ok) {
         return;
+    }
 
     if (numCtors > 0 && !hasQObjectParam) {
         clang::CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
@@ -88,8 +92,9 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
             return;
         }
 
-        if (clazy::name(baseClass) == "QCoreApplication")
+        if (clazy::name(baseClass) == "QCoreApplication") {
             return;
+        }
 
         emitWarning(decl, record->getQualifiedNameAsString() + std::string(" should take ") + parentType + std::string(" parent argument in CTOR"));
     }

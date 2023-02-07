@@ -64,8 +64,9 @@ SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManage
     std::pair<FileID, unsigned> locInfo = sm.getDecomposedLoc(loc);
     bool InvalidTemp = false;
     StringRef File = sm.getBufferData(locInfo.first, &InvalidTemp);
-    if (InvalidTemp)
+    if (InvalidTemp) {
         return {};
+    }
 
     const char *TokenBegin = File.data() + locInfo.second;
     Lexer lexer(sm.getLocForStartOfFile(locInfo.first), lo, File.begin(), TokenBegin, File.end());
@@ -96,8 +97,9 @@ SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManage
         char PrevC = C;
         C = *(++TokenEnd);
         NumWhitespaceChars++;
-        if ((C == '\n' || C == '\r') && C != PrevC)
+        if ((C == '\n' || C == '\r') && C != PrevC) {
             NumWhitespaceChars++;
+        }
     }
     return loc.getLocWithOffset(Tok.getLength() + NumCharsUntilSemiColon + NumWhitespaceChars + 1);
 }
@@ -105,23 +107,28 @@ SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManage
 void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
 {
     auto *recDecl = dyn_cast<CXXRecordDecl>(decl);
-    if (!recDecl)
+    if (!recDecl) {
         return;
-    auto parent = recDecl->getParent();
+    }
+    auto *parent = recDecl->getParent();
     std::string parentType = parent->getDeclKindName();
-    if (parentType != "TranslationUnit")
+    if (parentType != "TranslationUnit") {
         return;
-    if (recDecl->hasDefinition())
+    }
+    if (recDecl->hasDefinition()) {
         return;
-    if (interestingFwdDecl.find(recDecl->getNameAsString()) == interestingFwdDecl.end())
+    }
+    if (interestingFwdDecl.find(recDecl->getNameAsString()) == interestingFwdDecl.end()) {
         return;
+    }
 
     const std::string currentFile = m_sm.getFilename(decl->getLocation()).str();
     if (m_currentFile != currentFile) {
         m_currentFile = currentFile;
         m_including_qcontainerfwd = false;
-        if (m_qcontainerfwd_included_in_files.find(currentFile) != m_qcontainerfwd_included_in_files.end())
+        if (m_qcontainerfwd_included_in_files.find(currentFile) != m_qcontainerfwd_included_in_files.end()) {
             m_including_qcontainerfwd = true;
+        }
     }
 
     SourceLocation endLoc = locForNextSemiColon(recDecl->getBeginLoc(), m_sm, lo());
@@ -151,8 +158,9 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
     message += "Using forward declaration of ";
     message += recDecl->getNameAsString();
     message += ".";
-    if (m_including_qcontainerfwd)
+    if (m_including_qcontainerfwd) {
         message += " (already)";
+    }
     message += " Including <QtCore/qcontainerfwd.h> instead.";
 
     emitWarning(warningLocation, message, fixits);

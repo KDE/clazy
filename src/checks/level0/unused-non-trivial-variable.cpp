@@ -53,21 +53,25 @@ UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name, Claz
     const char *user_blacklist = getenv("CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_BLACKLIST");
     const char *user_whitelist = getenv("CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_WHITELIST");
 
-    if (user_blacklist)
+    if (user_blacklist) {
         m_userBlacklist = clazy::splitString(user_blacklist, ',');
+    }
 
-    if (user_whitelist)
+    if (user_whitelist) {
         m_userWhitelist = clazy::splitString(user_whitelist, ',');
+    }
 }
 
 void UnusedNonTrivialVariable::VisitStmt(clang::Stmt *stmt)
 {
-    auto declStmt = dyn_cast<DeclStmt>(stmt);
-    if (!declStmt)
+    auto *declStmt = dyn_cast<DeclStmt>(stmt);
+    if (!declStmt) {
         return;
+    }
 
-    for (auto decl : declStmt->decls())
+    for (auto *decl : declStmt->decls()) {
         handleVarDecl(dyn_cast<VarDecl>(decl));
+    }
 }
 
 bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) const
@@ -92,14 +96,16 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
         return container == typeName;
     });
 
-    if (any)
+    if (any) {
         return true;
+    }
 
     static const std::vector<StringRef> blacklistedTemplates = {"QScopedPointer", "QSetValueOnDestroy", "QScopedValueRollback"};
     StringRef className = clazy::name(record);
     for (StringRef templateName : blacklistedTemplates) {
-        if (clazy::startsWith(static_cast<std::string>(className), static_cast<std::string>(templateName)))
+        if (clazy::startsWith(static_cast<std::string>(className), static_cast<std::string>(templateName))) {
             return true;
+        }
     }
 
     // Now check the user's blacklist, set by env-variable
@@ -107,10 +113,7 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
         return container == typeName;
     });
 
-    if (any)
-        return true;
-
-    return false;
+    return any;
 }
 
 bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
@@ -173,24 +176,27 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
                                                            "QDomNode"};
 
     CXXRecordDecl *record = clazy::typeAsRecord(t);
-    if (!record)
+    if (!record) {
         return false;
+    }
 
     if (isOptionSet("no-whitelist")) {
         // Will cause too many false-positives, like RAII classes. Use suppressing comments to silence them.
         return !isUninterestingType(record);
     }
 
-    if (clazy::isQtContainer(record))
+    if (clazy::isQtContainer(record)) {
         return true;
+    }
 
     StringRef typeName = clazy::name(record);
     bool any = clazy::any_of(nonTrivialTypes, [typeName](StringRef container) {
         return container == typeName;
     });
 
-    if (any)
+    if (any) {
         return true;
+    }
 
     return clazy::any_of(m_userWhitelist, [typeName](const std::string &container) {
         return container == typeName;
@@ -199,13 +205,15 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
 
 void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
 {
-    if (!varDecl || !isInterestingType(varDecl->getType()))
+    if (!varDecl || !isInterestingType(varDecl->getType())) {
         return;
+    }
 
-    auto currentFunc = clazy::firstContextOfType<FunctionDecl>(varDecl->getDeclContext());
+    auto *currentFunc = clazy::firstContextOfType<FunctionDecl>(varDecl->getDeclContext());
     Stmt *body = currentFunc ? currentFunc->getBody() : nullptr;
-    if (!body)
+    if (!body) {
         return;
+    }
 
     SourceLocation locStart = clazy::getLocStart(varDecl);
     locStart = sm().getExpansionLoc(locStart);
@@ -215,6 +223,7 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
         return declRef->getDecl() == varDecl;
     };
 
-    if (!clazy::any_of(declRefs, pred))
+    if (!clazy::any_of(declRefs, pred)) {
         emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()));
+    }
 }

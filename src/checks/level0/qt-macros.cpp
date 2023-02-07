@@ -39,19 +39,22 @@ QtMacros::QtMacros(const std::string &name, ClazyContext *context)
 
 void QtMacros::VisitMacroDefined(const Token &MacroNameTok)
 {
-    if (m_OSMacroExists)
+    if (m_OSMacroExists) {
         return;
+    }
 
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (ii && clazy::startsWith(static_cast<std::string>(ii->getName()), "Q_OS_"))
+    if (ii && clazy::startsWith(static_cast<std::string>(ii->getName()), "Q_OS_")) {
         m_OSMacroExists = true;
+    }
 }
 
 void QtMacros::checkIfDef(const Token &macroNameTok, SourceLocation Loc)
 {
     IdentifierInfo *ii = macroNameTok.getIdentifierInfo();
-    if (!ii)
+    if (!ii) {
         return;
+    }
 
     PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
     if (preProcessorVisitor && preProcessorVisitor->qtVersion() < 51204 && ii->getName() == "Q_OS_WINDOWS") {
@@ -64,12 +67,14 @@ void QtMacros::checkIfDef(const Token &macroNameTok, SourceLocation Loc)
 
 void QtMacros::VisitDefined(const Token &macroNameTok, const SourceRange &range)
 {
-    if (!m_context->usingPreCompiledHeaders())
+    if (!m_context->usingPreCompiledHeaders()) {
         checkIfDef(macroNameTok, range.getBegin());
+    }
 }
 
 void QtMacros::VisitIfdef(SourceLocation loc, const Token &macroNameTok)
 {
-    if (!m_context->usingPreCompiledHeaders())
+    if (!m_context->usingPreCompiledHeaders()) {
         checkIfDef(macroNameTok, loc);
+    }
 }

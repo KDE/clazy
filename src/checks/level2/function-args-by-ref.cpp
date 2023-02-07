@@ -48,11 +48,13 @@ using namespace clang;
 
 bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
 {
-    if (!record)
+    if (!record) {
         return false;
+    }
 
-    if (Utils::isSharedPointer(record))
+    if (Utils::isSharedPointer(record)) {
         return true;
+    }
 
     static const std::vector<std::string> ignoreList = {"QDebug", // Too many warnings
                                                         "QGenericReturnArgument",
@@ -109,11 +111,13 @@ static std::string warningMsgForSmallType(int sizeOf, const std::string &typeNam
 
 void FunctionArgsByRef::processFunction(FunctionDecl *func)
 {
-    if (!func || !func->isThisDeclarationADefinition() || func->isDeleted() || shouldIgnoreOperator(func))
+    if (!func || !func->isThisDeclarationADefinition() || func->isDeleted() || shouldIgnoreOperator(func)) {
         return;
+    }
 
-    if (m_context->isQtDeveloper() && shouldIgnoreFunction(func))
+    if (m_context->isQtDeveloper() && shouldIgnoreFunction(func)) {
         return;
+    }
 
     Stmt *body = func->getBody();
 
@@ -122,20 +126,24 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         ParmVarDecl *param = funcParams[i];
         const QualType paramQt = clazy::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
-        if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())
+        if (!paramType || paramType->isIncompleteType() || paramType->isDependentType()) {
             continue;
+        }
 
-        if (shouldIgnoreClass(paramType->getAsCXXRecordDecl()))
+        if (shouldIgnoreClass(paramType->getAsCXXRecordDecl())) {
             continue;
+        }
 
         clazy::QualTypeClassification classif;
         bool success = clazy::classifyQualType(m_context, param->getType(), param, classif, body);
-        if (!success)
+        if (!success) {
             continue;
+        }
 
         std::vector<CXXCtorInitializer *> ctorInits = Utils::ctorInitializer(dyn_cast<CXXConstructorDecl>(func), param);
-        if (Utils::ctorInitializerContainsMove(ctorInits))
+        if (Utils::ctorInitializerContainsMove(ctorInits)) {
             continue;
+        }
 
         if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
             std::string error;
@@ -155,10 +163,11 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 
 void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *func, unsigned int parmIndex)
 {
-    for (auto funcRedecl : func->redecls()) {
+    for (auto *funcRedecl : func->redecls()) {
         auto funcParams = Utils::functionParameters(funcRedecl);
-        if (funcParams.size() <= parmIndex)
+        if (funcParams.size() <= parmIndex) {
             return;
+        }
 
         ParmVarDecl *param = funcParams[parmIndex];
         QualType paramQt = clazy::unrefQualType(param->getType());
@@ -182,9 +191,10 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 
 void FunctionArgsByRef::VisitStmt(Stmt *stmt)
 {
-    if (auto lambda = dyn_cast<LambdaExpr>(stmt)) {
-        if (!shouldIgnoreFile(clazy::getLocStart(stmt)))
+    if (auto *lambda = dyn_cast<LambdaExpr>(stmt)) {
+        if (!shouldIgnoreFile(clazy::getLocStart(stmt))) {
             processFunction(lambda->getCallOperator());
+        }
     }
 }
 

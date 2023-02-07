@@ -48,8 +48,9 @@ static bool hasPublicCopy(const CXXRecordDecl *record)
     if (!hasCallableCopyCtor) {
         CXXMethodDecl *copyAssign = Utils::copyAssign(record);
         const bool hasCallableCopyAssign = copyAssign && !copyAssign->isDeleted() && copyAssign->getAccess() == clang::AS_public;
-        if (!hasCallableCopyAssign)
+        if (!hasCallableCopyAssign) {
             return false;
+        }
     }
 
     return true;
@@ -58,16 +59,19 @@ static bool hasPublicCopy(const CXXRecordDecl *record)
 /// Checks if there's any base class with public copy
 static bool hasPublicCopyInAncestors(const CXXRecordDecl *record)
 {
-    if (!record)
+    if (!record) {
         return false;
+    }
 
     for (auto base : record->bases()) {
         if (const Type *t = base.getType().getTypePtrOrNull()) {
             CXXRecordDecl *baseRecord = t->getAsCXXRecordDecl();
-            if (hasPublicCopy(baseRecord))
+            if (hasPublicCopy(baseRecord)) {
                 return true;
-            if (hasPublicCopyInAncestors(t->getAsCXXRecordDecl()))
+            }
+            if (hasPublicCopyInAncestors(t->getAsCXXRecordDecl())) {
                 return true;
+            }
         }
     }
 
@@ -82,12 +86,14 @@ CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *
 
 void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 {
-    auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !record->isPolymorphic())
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !record->isPolymorphic()) {
         return;
+    }
 
-    if (!hasPublicCopy(record))
+    if (!hasPublicCopy(record)) {
         return;
+    }
 
     if (clazy::isFinal(record) && !hasPublicCopyInAncestors(record)) {
         // If the derived class is final, and all the base classes copy-ctors are protected or private then it's ok
@@ -100,8 +106,9 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
 {
     std::vector<FixItHint> result;
-    if (!m_context->accessSpecifierManager)
+    if (!m_context->accessSpecifierManager) {
         return {};
+    }
 
 #if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const StringRef className = clazy::name(record);

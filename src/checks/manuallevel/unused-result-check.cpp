@@ -75,9 +75,10 @@ UnusedResultCheck::~UnusedResultCheck() = default;
 
 void UnusedResultCheck::VisitStmt(Stmt *stmt)
 {
-    auto call = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!call || call->getNumArgs() != 1)
+    auto *call = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!call || call->getNumArgs() != 1) {
         return;
+    }
 }
 
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)

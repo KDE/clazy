@@ -50,11 +50,9 @@ Qt6QHashSignature::Qt6QHashSignature(const std::string &name, ClazyContext *cont
 {
 }
 
-static bool isInterestingFunction(const std::string& name)
+static bool isInterestingFunction(const std::string &name)
 {
-    if (name == "qHash" || name == "qHashBits" || name == "qHashRange" || name == "qHashRangeCommutative")
-        return true;
-    return false;
+    return name == "qHash" || name == "qHashBits" || name == "qHashRange" || name == "qHashRangeCommutative";
 }
 
 static int uintToSizetParam(clang::FunctionDecl *funcDecl)
@@ -62,62 +60,68 @@ static int uintToSizetParam(clang::FunctionDecl *funcDecl)
     std::string functionName = funcDecl->getNameAsString();
     // the uint signature is on the second parameter for the qHash function
     // it is on the third paramater for qHashBits, qHashRange and qHashCommutative
-    if (functionName == "qHash" && funcDecl->getNumParams() == 2)
+    if (functionName == "qHash" && funcDecl->getNumParams() == 2) {
         return 1;
-    if ((functionName == "qHashBits" || functionName == "qHashRange" || functionName == "qHashRangeCommutative") && funcDecl->getNumParams() == 3)
+    }
+    if ((functionName == "qHashBits" || functionName == "qHashRange" || functionName == "qHashRangeCommutative") && funcDecl->getNumParams() == 3) {
         return 2;
+    }
 
     return -1;
 }
 
 static clang::ParmVarDecl *getInterestingParam(clang::FunctionDecl *funcDecl)
 {
-    if (uintToSizetParam(funcDecl) > 0)
+    if (uintToSizetParam(funcDecl) > 0) {
         return funcDecl->getParamDecl(uintToSizetParam(funcDecl));
+    }
     return nullptr;
 }
 
 static bool isWrongParamType(clang::FunctionDecl *funcDecl)
 {
     // Second or third parameter of the qHash functions should be size_t
-    auto param = getInterestingParam(funcDecl);
-    if (!param)
+    auto *param = getInterestingParam(funcDecl);
+    if (!param) {
         return false;
-    const std::string typeStr = param->getType().getAsString();
-    if (typeStr != "size_t") {
-        return true;
     }
-    return false;
+    const std::string typeStr = param->getType().getAsString();
+    return typeStr != "size_t";
 }
 
 static bool isWrongReturnType(clang::FunctionDecl *funcDecl)
 {
-    if (!funcDecl)
+    if (!funcDecl) {
         return false;
+    }
 
     // Return type should be size_t
-    if (funcDecl->getReturnType().getAsString() != "size_t")
+    if (funcDecl->getReturnType().getAsString() != "size_t") {
         return true;
+    }
     return false;
 }
 
 void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
 {
     auto *declRefExpr = dyn_cast<DeclRefExpr>(stmt);
-    if (!declRefExpr)
+    if (!declRefExpr) {
         return;
+    }
 
     // checking if we're dealing with a qhash function
     std::string name = declRefExpr->getNameInfo().getAsString();
-    if (!isInterestingFunction(name))
+    if (!isInterestingFunction(name)) {
         return;
+    }
 
     VarDecl *varDecl = m_context->lastDecl ? dyn_cast<VarDecl>(m_context->lastDecl) : nullptr;
     FieldDecl *fieldDecl = m_context->lastDecl ? dyn_cast<FieldDecl>(m_context->lastDecl) : nullptr;
     FunctionDecl *funcDecl = m_context->lastDecl ? dyn_cast<FunctionDecl>(m_context->lastFunctionDecl) : nullptr;
 
-    if (!varDecl && !fieldDecl && !funcDecl)
+    if (!varDecl && !fieldDecl && !funcDecl) {
         return;
+    }
 
     // need to check if this stmt is part of a return stmt, if it is, it's the lastFunctionDecl that is of interest
     // loop over the parent until I find a return statement.
@@ -126,8 +130,9 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     if (parent) {
         while (parent) {
             Stmt *ancester = clazy::parent(m_context->parentMap, parent);
-            if (!ancester)
+            if (!ancester) {
                 break;
+            }
             auto *returnStmt = dyn_cast<ReturnStmt>(ancester);
             if (returnStmt) {
                 isPartReturnStmt = true;
@@ -138,8 +143,9 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     }
 
     // if the stmt is part of a return statement but there is no last functionDecl, it's a problem...
-    if (isPartReturnStmt && !funcDecl)
+    if (isPartReturnStmt && !funcDecl) {
         return;
+    }
 
     std::string message;
     std::string declType;
@@ -149,8 +155,9 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     if (funcDecl && isPartReturnStmt) {
         // if the return correspond to a qHash function, we are not interested
         // the qHash function is taken care of during the VisitDecl
-        if (isInterestingFunction(funcDecl->getNameAsString()))
+        if (isInterestingFunction(funcDecl->getNameAsString())) {
             return;
+        }
         declType = funcDecl->getReturnType().getAsString();
         fixitRange = funcDecl->getReturnTypeSourceRange();
         warningLocation = clazy::getLocStart(funcDecl);
@@ -165,8 +172,9 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     }
 
     std::string qhashReturnType = declRefExpr->getDecl()->getAsFunction()->getReturnType().getAsString();
-    if (declType == "size_t" && qhashReturnType == "size_t")
+    if (declType == "size_t" && qhashReturnType == "size_t") {
         return;
+    }
 
     std::vector<FixItHint> fixits;
 
@@ -194,13 +202,15 @@ void Qt6QHashSignature::VisitDecl(clang::Decl *decl)
 {
     auto *funcDecl = dyn_cast<FunctionDecl>(decl);
     if (funcDecl) {
-        if (!isInterestingFunction(funcDecl->getNameAsString()))
+        if (!isInterestingFunction(funcDecl->getNameAsString())) {
             return;
+        }
 
         bool wrongReturnType = isWrongReturnType(funcDecl);
         bool wrongParamType = isWrongParamType(funcDecl);
-        if (!wrongReturnType && !wrongParamType)
+        if (!wrongReturnType && !wrongParamType) {
             return;
+        }
         std::vector<FixItHint> fixits;
         std::string message;
         message = funcDecl->getNameAsString() + " with uint signature";
@@ -213,10 +223,11 @@ void Qt6QHashSignature::VisitDecl(clang::Decl *decl)
 
 std::vector<FixItHint> Qt6QHashSignature::fixitReplace(clang::FunctionDecl *funcDecl, bool changeReturnType, bool changeParamType)
 {
-    std::string replacement = "";
+    std::string replacement;
     std::vector<FixItHint> fixits;
-    if (!funcDecl)
+    if (!funcDecl) {
         return fixits;
+    }
 
     if (changeReturnType) {
         replacement = "size_t";

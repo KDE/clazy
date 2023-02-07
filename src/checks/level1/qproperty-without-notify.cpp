@@ -47,8 +47,9 @@ QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyCon
 void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (!ii)
+    if (!ii) {
         return;
+    }
 
     if (ii->getName() == "Q_GADGET") {
         m_lastIsGadget = true;
@@ -61,11 +62,13 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     }
 
     // Gadgets can't have NOTIFY
-    if (m_lastIsGadget || ii->getName() != "Q_PROPERTY")
+    if (m_lastIsGadget || ii->getName() != "Q_PROPERTY") {
         return;
+    }
 
-    if (sm().isInSystemHeader(range.getBegin()))
+    if (sm().isInSystemHeader(range.getBegin())) {
         return;
+    }
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
     std::string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
@@ -76,8 +79,9 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
         return;
     }
 
-    if (text.back() == ')')
+    if (text.back() == ')') {
         text.pop_back();
+    }
 
     std::vector<std::string> split = clazy::splitString(text, ' ');
 
@@ -102,8 +106,9 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
         }
     }
 
-    if (!found_read || (found_notify || found_constant))
+    if (!found_read || (found_notify || found_constant)) {
         return;
+    }
 
     emitWarning(range.getBegin(), "Q_PROPERTY should have either NOTIFY or CONSTANT");
 }

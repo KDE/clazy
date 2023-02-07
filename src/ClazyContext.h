@@ -113,8 +113,9 @@ public:
 
     bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc, const clang::FileEntry **file) const
     {
-        if (!regex)
+        if (!regex) {
             return false;
+        }
 
         if (!(*file)) {
             clang::FileID fid = sm.getDecomposedExpansionLoc(loc).first;
@@ -134,25 +135,29 @@ public:
         const clang::FileEntry *file = nullptr;
         if (ignoreDirsRegex) {
             const bool matches = fileMatchesLoc(ignoreDirsRegex, loc, &file);
-            if (matches)
+            if (matches) {
                 return true;
+            }
         }
 
         // 2. Process the regexp that includes files. Has lower priority.
-        if (!headerFilterRegex || isMainFile(loc))
+        if (!headerFilterRegex || isMainFile(loc)) {
             return false;
+        }
 
         const bool matches = fileMatchesLoc(headerFilterRegex, loc, &file);
-        if (!file)
+        if (!file) {
             return false;
+        }
 
         return !matches;
     }
 
     bool isMainFile(clang::SourceLocation loc) const
     {
-        if (loc.isMacroID())
+        if (loc.isMacroID()) {
             loc = sm.getExpansionLoc(loc);
+        }
 
         return sm.isInFileID(loc, sm.getMainFileID());
     }

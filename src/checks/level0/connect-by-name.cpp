@@ -45,15 +45,17 @@ ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)
 
 void ConnectByName::VisitDecl(clang::Decl *decl)
 {
-    auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record)
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
+    if (!record) {
         return;
+    }
 
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!accessSpecifierManager)
+    if (!accessSpecifierManager) {
         return;
+    }
 
-    for (auto method : record->methods()) {
+    for (auto *method : record->methods()) {
         std::string name = method->getNameAsString();
         if (clazy::startsWith(name, "on_")) {
             QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);

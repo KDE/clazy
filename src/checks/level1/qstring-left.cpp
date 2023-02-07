@@ -40,15 +40,17 @@ QStringLeft::QStringLeft(const std::string &name, ClazyContext *context)
 
 void QStringLeft::VisitStmt(clang::Stmt *stmt)
 {
-    auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall || clazy::qualifiedMethodName(memberCall) != "QString::left")
+    auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!memberCall || clazy::qualifiedMethodName(memberCall) != "QString::left") {
         return;
+    }
 
-    if (memberCall->getNumArgs() == 0) // Doesn't happen
+    if (memberCall->getNumArgs() == 0) { // Doesn't happen
         return;
+    }
 
     Expr *firstArg = memberCall->getArg(0);
-    auto lt = firstArg ? dyn_cast<IntegerLiteral>(firstArg) : nullptr;
+    auto *lt = firstArg ? dyn_cast<IntegerLiteral>(firstArg) : nullptr;
     if (lt) {
         const auto value = lt->getValue();
         if (value == 0) {

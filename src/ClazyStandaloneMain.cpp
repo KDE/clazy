@@ -123,25 +123,31 @@ public:
     {
         ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
 
-        if (!s_exportFixes.getValue().empty())
+        if (!s_exportFixes.getValue().empty()) {
             options |= ClazyContext::ClazyOption_ExportFixes;
+        }
 
-        if (s_qt4Compat.getValue())
+        if (s_qt4Compat.getValue()) {
             options |= ClazyContext::ClazyOption_Qt4Compat;
+        }
 
-        if (s_qtDeveloper.getValue())
+        if (s_qtDeveloper.getValue()) {
             options |= ClazyContext::ClazyOption_QtDeveloper;
+        }
 
-        if (s_onlyQt.getValue())
+        if (s_onlyQt.getValue()) {
             options |= ClazyContext::ClazyOption_OnlyQt;
+        }
 
-        if (s_visitImplicitCode.getValue())
+        if (s_visitImplicitCode.getValue()) {
             options |= ClazyContext::ClazyOption_VisitImplicitCode;
+        }
 
-        if (s_ignoreIncludedFiles.getValue())
+        if (s_ignoreIncludedFiles.getValue()) {
             options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
+        }
 
-            // TODO: We need to agregate the fixes with previous run
+        // TODO: We need to agregate the fixes with previous run
 #if LLVM_VERSION_MAJOR >= 10
         return std::make_unique<ClazyStandaloneASTAction>(s_checks.getValue(),
                                                           s_headerFilter.getValue(),

@@ -61,20 +61,23 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
 {
     // This helps for bug 367485
 
-    if (!valDecl)
+    if (!valDecl) {
         return false;
+    }
 
-    const auto context = dyn_cast<FunctionDecl>(valDecl->getDeclContext());
-    if (!context)
+    const auto *const context = dyn_cast<FunctionDecl>(valDecl->getDeclContext());
+    if (!context) {
         return false;
+    }
 
     bodyRange.body = context->getBody();
-    if (!bodyRange.body)
+    if (!bodyRange.body) {
         return false;
+    }
 
     if (valDecl->hasInit()) {
-        if (auto cleanupExpr = dyn_cast<clang::ExprWithCleanups>(valDecl->getInit())) {
-            if (auto ce = dyn_cast<clang::CXXConstructExpr>(cleanupExpr->getSubExpr())) {
+        if (const auto *cleanupExpr = dyn_cast<clang::ExprWithCleanups>(valDecl->getInit())) {
+            if (const auto *ce = dyn_cast<clang::CXXConstructExpr>(cleanupExpr->getSubExpr())) {
                 if (!ce->isListInitialization() && !ce->isStdInitListInitialization()) {
                     // When initing via copy or move ctor there's possible detachments.
                     return false;
@@ -84,8 +87,9 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
     }
 
     // TODO1: Being passed to a function as const should be OK
-    if (Utils::isPassedToFunction(bodyRange, valDecl, false))
+    if (Utils::isPassedToFunction(bodyRange, valDecl, false)) {
         return false;
+    }
 
     return true;
 }
@@ -99,7 +103,7 @@ RangeLoopDetach::RangeLoopDetach(const std::string &name, ClazyContext *context)
 
 void RangeLoopDetach::VisitStmt(clang::Stmt *stmt)
 {
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
+    if (auto *rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
         processForRangeLoop(rangeLoop);
     }
 }
@@ -111,10 +115,11 @@ bool RangeLoopDetach::islvalue(Expr *exp, SourceLocation &endLoc)
         return true;
     }
 
-    if (auto me = dyn_cast<MemberExpr>(exp)) {
-        auto decl = me->getMemberDecl();
-        if (!decl || isa<FunctionDecl>(decl))
+    if (auto *me = dyn_cast<MemberExpr>(exp)) {
+        auto *decl = me->getMemberDecl();
+        if (!decl || isa<FunctionDecl>(decl)) {
             return false;
+        }
 
         endLoc = clazy::locForEndOfToken(&m_astContext, me->getMemberLoc());
         return true;
@@ -126,28 +131,34 @@ bool RangeLoopDetach::islvalue(Expr *exp, SourceLocation &endLoc)
 void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 {
     Expr *containerExpr = rangeLoop->getRangeInit();
-    if (!containerExpr)
+    if (!containerExpr) {
         return;
+    }
 
     QualType qt = containerExpr->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t || !t->isRecordType())
+    if (!t || !t->isRecordType()) {
         return;
+    }
 
-    if (qt.isConstQualified()) // const won't detach
+    if (qt.isConstQualified()) { // const won't detach
         return;
+    }
 
     auto loopVariableType = rangeLoop->getLoopVariable()->getType();
-    if (!clazy::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType())
+    if (!clazy::unrefQualType(loopVariableType).isConstQualified() && loopVariableType->isReferenceType()) {
         return;
+    }
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record)))
+    if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record))) {
         return;
+    }
 
     StmtBodyRange bodyRange(nullptr, &sm(), clazy::getLocStart(rangeLoop));
-    if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange))
+    if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange)) {
         return;
+    }
 
     std::vector<FixItHint> fixits;
 

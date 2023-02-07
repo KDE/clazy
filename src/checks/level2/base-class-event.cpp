@@ -50,24 +50,28 @@ BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
 
 void BaseClassEvent::VisitDecl(Decl *decl)
 {
-    auto method = dyn_cast<CXXMethodDecl>(decl);
-    if (!method || !method->hasBody() || !method->isThisDeclarationADefinition())
+    auto *method = dyn_cast<CXXMethodDecl>(decl);
+    if (!method || !method->hasBody() || !method->isThisDeclarationADefinition()) {
         return;
+    }
 
     const std::string methodName = method->getNameAsString();
     const bool isEvent = methodName == "event";
     const bool isEventFilter = isEvent ? false : methodName == "eventFilter";
 
-    if (!isEvent && !isEventFilter)
+    if (!isEvent && !isEventFilter) {
         return;
+    }
 
     CXXRecordDecl *classDecl = method->getParent();
-    if (!clazy::isQObject(classDecl))
+    if (!clazy::isQObject(classDecl)) {
         return;
+    }
 
     const std::string className = classDecl->getQualifiedNameAsString();
-    if (clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), className))
+    if (clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), className)) {
         return;
+    }
 
     CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
     const std::string baseClassName = baseClass ? baseClass->getQualifiedNameAsString() : std::string("BaseClass");
@@ -82,11 +86,13 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     clazy::getChilds<ReturnStmt>(body, /*by-ref*/ returns);
     for (ReturnStmt *returnStmt : returns) {
         Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);
-        if (!maybeBoolExpr)
+        if (!maybeBoolExpr) {
             continue;
-        auto boolExpr = dyn_cast<CXXBoolLiteralExpr>(maybeBoolExpr);
-        if (!boolExpr || boolExpr->getValue()) // if getValue() is true that's a return true, which is fine
+        }
+        auto *boolExpr = dyn_cast<CXXBoolLiteralExpr>(maybeBoolExpr);
+        if (!boolExpr || boolExpr->getValue()) { // if getValue() is true that's a return true, which is fine
             continue;
+        }
 
         emitWarning(clazy::getLocStart(returnStmt), "Return " + baseClassName + "::" + methodName + "() instead of false");
     }

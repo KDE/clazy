@@ -40,15 +40,18 @@ TrNonLiteral::TrNonLiteral(const std::string &name, ClazyContext *context)
 
 void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CallExpr>(stmt);
-    if (!callExpr || callExpr->getNumArgs() <= 0)
+    auto *callExpr = dyn_cast<CallExpr>(stmt);
+    if (!callExpr || callExpr->getNumArgs() <= 0) {
         return;
+    }
 
     FunctionDecl *func = callExpr->getDirectCallee();
-    if (!func || func->getQualifiedNameAsString() != "QObject::tr")
+    if (!func || func->getQualifiedNameAsString() != "QObject::tr") {
         return;
+    }
 
     Expr *arg1 = callExpr->getArg(0);
-    if (clazy::getFirstChildOfType2<StringLiteral>(arg1) == nullptr)
+    if (clazy::getFirstChildOfType2<StringLiteral>(arg1) == nullptr) {
         emitWarning(stmt, "tr() without a literal string");
+    }
 }

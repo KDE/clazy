@@ -48,16 +48,18 @@ LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyCon
 
 void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
 {
-    auto call = dyn_cast<CallExpr>(stmt);
-    if (!call)
+    auto *call = dyn_cast<CallExpr>(stmt);
+    if (!call) {
         return;
+    }
 
     // We want this signature:
     // connect(const QObject *sender, PointerToMemberFunction signal, const QObject *context, Functor functor, Qt::ConnectionType type)
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
+    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !clazy::isConnect(func) || !clazy::connectHasPMFStyle(func)) {
         return;
+    }
 
     Expr *typeArg = call->getArg(4); // The type
 
@@ -65,8 +67,8 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
     clazy::getChilds(typeArg, result);
 
     bool found = false;
-    for (auto declRef : result) {
-        if (auto enumConstant = dyn_cast<EnumConstantDecl>(declRef->getDecl())) {
+    for (auto *declRef : result) {
+        if (auto *enumConstant = dyn_cast<EnumConstantDecl>(declRef->getDecl())) {
             if (clazy::name(enumConstant) == "UniqueConnection") {
                 found = true;
                 break;
@@ -74,16 +76,19 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    if (!found)
+    if (!found) {
         return;
+    }
 
     FunctionTemplateSpecializationInfo *tsi = func->getTemplateSpecializationInfo();
-    if (!tsi)
+    if (!tsi) {
         return;
+    }
     FunctionTemplateDecl *temp = tsi->getTemplate();
     const TemplateParameterList *tempParams = temp->getTemplateParameters();
-    if (tempParams->size() != 2)
+    if (tempParams->size() != 2) {
         return;
+    }
 
     CXXMethodDecl *method = clazy::pmfFromConnect(call, 3);
     if (method) {

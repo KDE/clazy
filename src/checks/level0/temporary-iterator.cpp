@@ -71,35 +71,41 @@ static bool isBlacklistedFunction(const std::string &name)
 
 void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 {
-    auto memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
-    if (!memberExpr)
+    auto *memberExpr = dyn_cast<CXXMemberCallExpr>(stm);
+    if (!memberExpr) {
         return;
+    }
 
     CXXRecordDecl *classDecl = memberExpr->getRecordDecl();
     CXXMethodDecl *methodDecl = memberExpr->getMethodDecl();
-    if (!classDecl || !methodDecl)
+    if (!classDecl || !methodDecl) {
         return;
+    }
 
     // Check if it's a container
     auto it = m_methodsByType.find(clazy::name(classDecl));
-    if (it == m_methodsByType.end())
+    if (it == m_methodsByType.end()) {
         return;
+    }
 
     // Check if it's a method returning an iterator
     const StringRef functionName = clazy::name(methodDecl);
     const auto &allowedFunctions = it->second;
-    if (!clazy::contains(allowedFunctions, functionName))
+    if (!clazy::contains(allowedFunctions, functionName)) {
         return;
+    }
 
     // Catch getList().cbegin().value(), which is ok
-    if (clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, m_context->parentMap->getParent(memberExpr)))
+    if (clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, m_context->parentMap->getParent(memberExpr))) {
         return;
+    }
 
     // Catch variant.toList().cbegin(), which is ok
-    auto chainedMemberCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
+    auto *chainedMemberCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(memberExpr);
     if (chainedMemberCall) {
-        if (isBlacklistedFunction(clazy::qualifiedMethodName(chainedMemberCall->getMethodDecl())))
+        if (isBlacklistedFunction(clazy::qualifiedMethodName(chainedMemberCall->getMethodDecl()))) {
             return;
+        }
     }
 
     // catch map[foo].cbegin()
@@ -107,46 +113,54 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     if (chainedOperatorCall) {
         FunctionDecl *func = chainedOperatorCall->getDirectCallee();
         if (func) {
-            auto method = dyn_cast<CXXMethodDecl>(func);
+            auto *method = dyn_cast<CXXMethodDecl>(func);
             if (method) {
-                if (isBlacklistedFunction(clazy::qualifiedMethodName(method)))
+                if (isBlacklistedFunction(clazy::qualifiedMethodName(method))) {
                     return;
+                }
             }
         }
     }
 
     // If we deref it within the expression, then we'll copy the value before the iterator becomes invalid, so it's safe
-    if (Utils::isInDerefExpression(memberExpr, m_context->parentMap))
+    if (Utils::isInDerefExpression(memberExpr, m_context->parentMap)) {
         return;
+    }
 
     Expr *expr = memberExpr->getImplicitObjectArgument();
-    if (!expr || expr->isLValue()) // This check is about detaching temporaries, so check for r value
+    if (!expr || expr->isLValue()) { // This check is about detaching temporaries, so check for r value
         return;
+    }
 
     const Type *containerType = expr->getType().getTypePtrOrNull();
-    if (!containerType || containerType->isPointerType())
+    if (!containerType || containerType->isPointerType()) {
         return;
+    }
 
     {
         // *really* check for rvalue
         auto *impl = dyn_cast<ImplicitCastExpr>(expr);
         if (impl) {
-            if (impl->getCastKind() == CK_LValueToRValue)
+            if (impl->getCastKind() == CK_LValueToRValue) {
                 return;
+            }
 
             Stmt *firstChild = clazy::getFirstChild(impl);
-            if (firstChild && isa<ImplicitCastExpr>(firstChild) && dyn_cast<ImplicitCastExpr>(firstChild)->getCastKind() == CK_LValueToRValue)
+            if (firstChild && isa<ImplicitCastExpr>(firstChild) && dyn_cast<ImplicitCastExpr>(firstChild)->getCastKind() == CK_LValueToRValue) {
                 return;
+            }
         }
     }
 
     auto *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(clazy::getFirstChildAtDepth(expr, 2));
-    if (possibleCtorCall)
+    if (possibleCtorCall) {
         return;
+    }
 
     auto *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1));
-    if (possibleThisCall)
+    if (possibleThisCall) {
         return;
+    }
 
     // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
 

@@ -48,8 +48,9 @@ QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &na
 static bool isInterestingCall1(CallExpr *call)
 {
     FunctionDecl *func = call->getDirectCallee();
-    if (!func)
+    if (!func) {
         return false;
+    }
 
     static const std::vector<std::string> methods = {"QString::toUpper", "QString::toLower"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
@@ -58,8 +59,9 @@ static bool isInterestingCall1(CallExpr *call)
 static bool isInterestingCall2(CallExpr *call)
 {
     FunctionDecl *func = call->getDirectCallee();
-    if (!func)
+    if (!func) {
         return false;
+    }
 
     static const std::vector<std::string> methods = {"QString::endsWith", "QString::startsWith", "QString::contains", "QString::compare"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
@@ -68,14 +70,16 @@ static bool isInterestingCall2(CallExpr *call)
 void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
 {
     std::vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
-    if (calls.size() < 2)
+    if (calls.size() < 2) {
         return;
+    }
 
     CallExpr *call1 = calls[calls.size() - 1];
     CallExpr *call2 = calls[calls.size() - 2];
 
-    if (!isInterestingCall1(call1) || !isInterestingCall2(call2))
+    if (!isInterestingCall1(call1) || !isInterestingCall2(call2)) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "unneeded allocation");
 }

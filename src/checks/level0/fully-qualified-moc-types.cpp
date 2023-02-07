@@ -58,27 +58,32 @@ FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyCon
 
 void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
 {
-    auto method = dyn_cast<CXXMethodDecl>(decl);
-    if (!method)
+    auto *method = dyn_cast<CXXMethodDecl>(decl);
+    if (!method) {
         return;
+    }
 
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!accessSpecifierManager)
+    if (!accessSpecifierManager) {
         return;
+    }
 
-    if (handleQ_PROPERTY(method))
+    if (handleQ_PROPERTY(method)) {
         return;
+    }
 
-    if (method->isThisDeclarationADefinition() && !method->hasInlineBody())
+    if (method->isThisDeclarationADefinition() && !method->hasInlineBody()) {
         return;
+    }
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
-    if (qst != QtAccessSpecifier_Signal && qst != QtAccessSpecifier_Slot && qst != QtAccessSpecifier_Invokable)
+    if (qst != QtAccessSpecifier_Signal && qst != QtAccessSpecifier_Slot && qst != QtAccessSpecifier_Invokable) {
         return;
+    }
 
     std::string qualifiedTypeName;
     std::string typeName;
-    for (auto param : method->parameters()) {
+    for (auto *param : method->parameters()) {
         QualType t = clazy::pointeeQualType(param->getType());
         if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             emitWarning(method,
@@ -104,8 +109,9 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
 
     if (!t.isNull()) {
         typeName = clazy::name(t, lo(), /*asWritten=*/true);
-        if (typeName == "QPrivateSignal")
+        if (typeName == "QPrivateSignal") {
             return true;
+        }
 
         qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/false);
         if (qualifiedTypeName.empty() || qualifiedTypeName[0] == '(') {
@@ -123,28 +129,30 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         }
 
         return typeName == qualifiedTypeName;
-    } else {
-        return true;
     }
+    return true;
 }
 
 bool FullyQualifiedMocTypes::isGadget(CXXRecordDecl *record) const
 {
     SourceLocation startLoc = clazy::getLocStart(record);
     for (const SourceLocation &loc : m_qgadgetMacroLocations) {
-        if (sm().getFileID(loc) != sm().getFileID(startLoc))
+        if (sm().getFileID(loc) != sm().getFileID(startLoc)) {
             continue; // Different file
+        }
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(record)))
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(record))) {
             return true; // We found a Q_GADGET after start and before end, it's ours.
+        }
     }
     return false;
 }
 
 bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
 {
-    if (clazy::name(method) != "qt_static_metacall" || !method->hasBody() || method->getDefinition() != method)
+    if (clazy::name(method) != "qt_static_metacall" || !method->hasBody() || method->getDefinition() != method) {
         return false;
+    }
     /**
      * Basically diffed a .moc file with and without a namespaced property,
      * the difference is one reinterpret_cast, under an if (_c == QMetaObject::ReadProperty), so
@@ -156,23 +164,25 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
 
     auto ifs = clazy::getStatements<IfStmt>(method->getBody());
 
-    for (auto iff : ifs) {
-        auto bo = dyn_cast<BinaryOperator>(iff->getCond());
-        if (!bo)
+    for (auto *iff : ifs) {
+        auto *bo = dyn_cast<BinaryOperator>(iff->getCond());
+        if (!bo) {
             continue;
+        }
 
         auto enumRefs = clazy::getStatements<DeclRefExpr>(bo->getRHS());
         if (enumRefs.size() == 1) {
-            auto enumerator = dyn_cast<EnumConstantDecl>(enumRefs.at(0)->getDecl());
+            auto *enumerator = dyn_cast<EnumConstantDecl>(enumRefs.at(0)->getDecl());
             if (enumerator && clazy::name(enumerator) == "ReadProperty") {
                 auto switches = clazy::getStatements<SwitchStmt>(iff); // we only want the reinterpret_casts that are inside switches
-                for (auto s : switches) {
+                for (auto *s : switches) {
                     auto reinterprets = clazy::getStatements<CXXReinterpretCastExpr>(s);
-                    for (auto reinterpret : reinterprets) {
+                    for (auto *reinterpret : reinterprets) {
                         QualType qt = clazy::pointeeQualType(reinterpret->getTypeAsWritten());
-                        auto record = qt->getAsCXXRecordDecl();
-                        if (!record || !isGadget(record))
+                        auto *record = qt->getAsCXXRecordDecl();
+                        if (!record || !isGadget(record)) {
                             continue;
+                        }
 
                         std::string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/true);
                         std::string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/false);
@@ -200,8 +210,9 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
 void FullyQualifiedMocTypes::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (ii && ii->getName() == "Q_GADGET")
+    if (ii && ii->getName() == "Q_GADGET") {
         registerQ_GADGET(range.getBegin());
+    }
 }
 
 void FullyQualifiedMocTypes::registerQ_GADGET(SourceLocation loc)

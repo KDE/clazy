@@ -52,7 +52,8 @@ static std::string nameForContext(DeclContext *context)
 {
     if (auto *ns = dyn_cast<NamespaceDecl>(context)) {
         return ns->getNameAsString();
-    } else if (auto rec = dyn_cast<CXXRecordDecl>(context)) {
+    }
+    if (auto *rec = dyn_cast<CXXRecordDecl>(context)) {
         return rec->getNameAsString();
     } else if (auto *method = dyn_cast<CXXMethodDecl>(context)) {
         return method->getNameAsString();
@@ -71,8 +72,9 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
                                               SourceLocation usageLoc,
                                               bool honourUsingDirectives)
 {
-    if (!currentScope)
+    if (!currentScope) {
         return method->getQualifiedNameAsString();
+    }
 
     // All namespaces, classes, inner class qualifications
     auto methodContexts = clazy::contextsForDecl(method->getDeclContext());
@@ -91,8 +93,9 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
     for (UsingDirectiveDecl *u : usings) {
         NamespaceDecl *ns = u->getNominatedNamespace();
         if (ns) {
-            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, clazy::getLocStart(u)))
+            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, clazy::getLocStart(u))) {
                 continue;
+            }
 
             visibleContexts.push_back(ns->getOriginalNamespace());
         }
@@ -101,10 +104,11 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
     for (DeclContext *context : visibleContexts) {
         if (context != method->getParent()) { // Don't remove the most immediate
             auto it = clazy::find_if(methodContexts, [context](DeclContext *c) {
-                if (c == context)
+                if (c == context) {
                     return true;
-                auto ns1 = dyn_cast<NamespaceDecl>(c);
-                auto ns2 = dyn_cast<NamespaceDecl>(context);
+                }
+                auto *ns1 = dyn_cast<NamespaceDecl>(c);
+                auto *ns2 = dyn_cast<NamespaceDecl>(context);
                 return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
             });
             if (it != methodContexts.end()) {
@@ -125,14 +129,17 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
 bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &isSpecialProtectedCase)
 {
     isSpecialProtectedCase = false;
-    if (!method || !method->getParent())
+    if (!method || !method->getParent()) {
         return false;
+    }
 
-    if (method->getAccess() == clang::AccessSpecifier::AS_public)
+    if (method->getAccess() == clang::AccessSpecifier::AS_public) {
         return true;
+    }
 
-    if (!context)
+    if (!context) {
         return false;
+    }
 
     CXXRecordDecl *contextRecord = nullptr;
 
@@ -141,17 +148,19 @@ bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
         context = context->getParent();
     } while (contextRecord == nullptr && context);
 
-    if (!contextRecord) // If we're not inside a class method we can't take the address of a private/protected method
+    if (!contextRecord) { // If we're not inside a class method we can't take the address of a private/protected method
         return false;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (record == contextRecord)
+    if (record == contextRecord) {
         return true;
+    }
 
     // We're inside a method belonging to a class (contextRecord).
     // Is contextRecord a friend of record ? Lets check:
 
-    for (auto fr : record->friends()) {
+    for (auto *fr : record->friends()) {
         TypeSourceInfo *si = fr->getFriendType();
         if (si) {
             const Type *t = si->getType().getTypePtrOrNull();
@@ -167,19 +176,23 @@ bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
     DeclContext *it = contextRecord;
     do {
         it = it->getParent();
-        if (it == record)
+        if (it == record) {
             return true;
+        }
     } while (it);
 
-    if (method->getAccess() == clang::AccessSpecifier::AS_private)
+    if (method->getAccess() == clang::AccessSpecifier::AS_private) {
         return false;
+    }
 
-    if (method->getAccess() != clang::AccessSpecifier::AS_protected) // shouldnt happen, must be protected at this point.
+    if (method->getAccess() != clang::AccessSpecifier::AS_protected) { // shouldnt happen, must be protected at this point.
         return false;
+    }
 
     // For protected there's still hope, since record might be a derived or base class
-    if (clazy::derivesFrom(record, contextRecord))
+    if (clazy::derivesFrom(record, contextRecord)) {
         return true;
+    }
 
     if (clazy::derivesFrom(contextRecord, record)) {
         isSpecialProtectedCase = true;

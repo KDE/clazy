@@ -49,22 +49,26 @@ WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *co
 void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
 {
     auto *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
-    if (!ctorExpr)
+    if (!ctorExpr) {
         return;
+    }
 
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
-    if (!ctorDecl || clazy::name(ctorDecl) != "QGlobalStatic")
+    if (!ctorDecl || clazy::name(ctorDecl) != "QGlobalStatic") {
         return;
+    }
 
     SourceLocation loc = clazy::getLocStart(stmt);
-    if (clazy::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS"))
+    if (clazy::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS")) {
         return;
+    }
 
     CXXRecordDecl *record = ctorDecl->getParent();
     std::vector<QualType> typeList = clazy::getTemplateArgumentsTypes(record);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
-    if (!t)
+    if (!t) {
         return;
+    }
 
     CXXRecordDecl *usersClass = t->getAsCXXRecordDecl();
     if (usersClass) {

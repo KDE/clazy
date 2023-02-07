@@ -45,21 +45,24 @@ SkippedBaseMethod::SkippedBaseMethod(const std::string &name, ClazyContext *cont
 
 void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
 {
-    auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall)
+    auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!memberCall) {
         return;
+    }
 
-    auto expr = memberCall->getImplicitObjectArgument();
-    auto thisExpr = clazy::unpeal<CXXThisExpr>(expr, clazy::IgnoreImplicitCasts);
-    if (!thisExpr)
+    auto *expr = memberCall->getImplicitObjectArgument();
+    auto *thisExpr = clazy::unpeal<CXXThisExpr>(expr, clazy::IgnoreImplicitCasts);
+    if (!thisExpr) {
         return;
+    }
 
     const CXXRecordDecl *thisClass = thisExpr->getType()->getPointeeCXXRecordDecl();
     const CXXRecordDecl *baseClass = memberCall->getRecordDecl();
 
     std::vector<CXXRecordDecl *> baseClasses;
-    if (!clazy::derivesFrom(thisClass, baseClass, &baseClasses) || baseClasses.size() < 2)
+    if (!clazy::derivesFrom(thisClass, baseClass, &baseClasses) || baseClasses.size() < 2) {
         return;
+    }
 
     // We're calling a grand-base method, so check if a more direct base also implements it
     for (int i = baseClasses.size() - 1; i > 0; --i) { // the higher indexes have the most derived classes

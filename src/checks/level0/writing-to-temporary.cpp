@@ -73,51 +73,62 @@ static bool isKnownType(const std::string &className)
 void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
 {
     auto *callExpr = dyn_cast<CallExpr>(stmt);
-    if (!callExpr)
+    if (!callExpr) {
         return;
+    }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stmt)))
+    if (shouldIgnoreFile(clazy::getLocStart(stmt))) {
         return;
+    }
 
     // For a chain like getFoo().setBar(), returns {setBar(), getFoo()}
     std::vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr is the call to setBar()
-    if (callExprs.size() < 2)
+    if (callExprs.size() < 2) {
         return;
+    }
 
     CallExpr *firstCallToBeEvaluated = callExprs.at(callExprs.size() - 1); // This is the call to getFoo()
     FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
-    if (!firstFunc)
+    if (!firstFunc) {
         return;
+    }
 
     CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to setBar()
     FunctionDecl *secondFunc = secondCallToBeEvaluated->getDirectCallee();
-    if (!secondFunc)
+    if (!secondFunc) {
         return;
+    }
 
     auto *secondMethod = dyn_cast<CXXMethodDecl>(secondFunc);
-    if (!secondMethod || secondMethod->isConst() || secondMethod->isStatic())
+    if (!secondMethod || secondMethod->isConst() || secondMethod->isStatic()) {
         return;
+    }
 
     CXXRecordDecl *record = secondMethod->getParent();
-    if (!record || isDisallowedClass(record->getNameAsString()))
+    if (!record || isDisallowedClass(record->getNameAsString())) {
         return;
+    }
 
     QualType qt = firstFunc->getReturnType();
     const Type *firstFuncReturnType = qt.getTypePtrOrNull();
-    if (!firstFuncReturnType || firstFuncReturnType->isPointerType() || firstFuncReturnType->isReferenceType())
+    if (!firstFuncReturnType || firstFuncReturnType->isPointerType() || firstFuncReturnType->isReferenceType()) {
         return;
+    }
 
     qt = secondFunc->getReturnType();
     const Type *secondFuncReturnType = qt.getTypePtrOrNull();
-    if (!secondFuncReturnType || !secondFuncReturnType->isVoidType())
+    if (!secondFuncReturnType || !secondFuncReturnType->isVoidType()) {
         return;
+    }
 
-    if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy::startsWith(secondFunc->getNameAsString(), "set"))
+    if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy::startsWith(secondFunc->getNameAsString(), "set")) {
         return;
+    }
 
     const std::string &methodName = secondMethod->getQualifiedNameAsString();
-    if (isDisallowedMethod(methodName))
+    if (isDisallowedMethod(methodName)) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "Call to temporary is a no-op: " + methodName);
 }

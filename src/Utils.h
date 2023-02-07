@@ -285,8 +285,9 @@ clang::SourceLocation locForNextToken(clang::SourceLocation loc, const clang::So
 
 inline bool isMainFile(const clang::SourceManager &sm, clang::SourceLocation loc)
 {
-    if (loc.isMacroID())
+    if (loc.isMacroID()) {
         loc = sm.getExpansionLoc(loc);
+    }
 
     return sm.isInFileID(loc, sm.getMainFileID());
 }

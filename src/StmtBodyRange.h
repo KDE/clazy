@@ -50,11 +50,13 @@ struct StmtBodyRange {
 
     bool isOutsideRange(clang::SourceLocation loc) const
     {
-        if (loc.isInvalid())
+        if (loc.isInvalid()) {
             return true;
+        }
 
-        if (!sm || searchUntilLoc.isInvalid())
+        if (!sm || searchUntilLoc.isInvalid()) {
             return false;
+        }
 
         return sm->isBeforeInSLocAddrSpace(searchUntilLoc, loc);
     }

@@ -45,10 +45,11 @@ QDeleteAll::QDeleteAll(const std::string &name, ClazyContext *context)
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values/keys
-    auto offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
     FunctionDecl *func = offendingCall ? offendingCall->getDirectCallee() : nullptr;
-    if (!func)
+    if (!func) {
         return;
+    }
 
     const std::string funcName = func->getNameAsString();
     const bool isValues = funcName == "values";
@@ -61,7 +62,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
             int i = 1;
             Stmt *p = clazy::parent(m_context->parentMap, stmt, i);
             while (p) {
-                auto pc = dyn_cast<CallExpr>(p);
+                auto *pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
                     if (clazy::name(f) == "qDeleteAll") {

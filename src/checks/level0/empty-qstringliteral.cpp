@@ -42,29 +42,35 @@ EmptyQStringliteral::EmptyQStringliteral(const std::string &name, ClazyContext *
 
 void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
 {
-    auto declstm = dyn_cast<DeclStmt>(stmt);
-    if (!declstm || !declstm->isSingleDecl())
+    auto *declstm = dyn_cast<DeclStmt>(stmt);
+    if (!declstm || !declstm->isSingleDecl()) {
         return;
+    }
 
-    auto vd = dyn_cast<VarDecl>(declstm->getSingleDecl());
-    if (!vd || clazy::name(vd) != "qstring_literal")
+    auto *vd = dyn_cast<VarDecl>(declstm->getSingleDecl());
+    if (!vd || clazy::name(vd) != "qstring_literal") {
         return;
+    }
 
     Expr *expr = vd->getInit();
-    auto initListExpr = expr ? dyn_cast<InitListExpr>(expr) : nullptr;
-    if (!initListExpr || initListExpr->getNumInits() != 2)
+    auto *initListExpr = expr ? dyn_cast<InitListExpr>(expr) : nullptr;
+    if (!initListExpr || initListExpr->getNumInits() != 2) {
         return;
+    }
 
     Expr *init = initListExpr->getInit(1);
-    auto literal = init ? dyn_cast<StringLiteral>(init) : nullptr;
-    if (!literal || literal->getByteLength() != 0)
+    auto *literal = init ? dyn_cast<StringLiteral>(init) : nullptr;
+    if (!literal || literal->getByteLength() != 0) {
         return;
+    }
 
-    if (!clazy::getLocStart(stmt).isMacroID())
+    if (!clazy::getLocStart(stmt).isMacroID()) {
         return;
+    }
 
-    if (maybeIgnoreUic(clazy::getLocStart(stmt)))
+    if (maybeIgnoreUic(clazy::getLocStart(stmt))) {
         return;
+    }
 
     emitWarning(stmt, "Use an empty QLatin1String instead of an empty QStringLiteral");
 }
@@ -74,8 +80,9 @@ bool EmptyQStringliteral::maybeIgnoreUic(SourceLocation loc) const
     PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
 
     // Since 5.12 uic no longer uses QStringLiteral("")
-    if (preProcessorVisitor && preProcessorVisitor->qtVersion() >= 51200)
+    if (preProcessorVisitor && preProcessorVisitor->qtVersion() >= 51200) {
         return false;
+    }
 
     return clazy::isUIFile(loc, sm());
 }

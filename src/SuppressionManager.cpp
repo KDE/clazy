@@ -43,12 +43,14 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
                                       const clang::SourceManager &sm,
                                       const clang::LangOptions &lo) const
 {
-    if (loc.isMacroID())
+    if (loc.isMacroID()) {
         loc = sm.getExpansionLoc(loc);
+    }
 
     FileID fileID = sm.getFileID(loc);
-    if (fileID.isInvalid())
+    if (fileID.isInvalid()) {
         return false;
+    }
 
     auto it = m_processedFileIDs.find(fileID.getHashValue());
     const bool notProcessedYet = (it == m_processedFileIDs.cend());
@@ -60,17 +62,20 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
     Suppressions &suppressions = (*it).second;
 
     // Case 1: clazy:skip, the whole file is skipped, regardless of which check
-    if (suppressions.skipEntireFile)
+    if (suppressions.skipEntireFile) {
         return true;
+    }
 
     // Case 2: clazy:excludeall=foo, the check foo will be ignored for this file
     const bool checkIsSuppressed = suppressions.checksToSkip.find(checkName) != suppressions.checksToSkip.cend();
-    if (checkIsSuppressed)
+    if (checkIsSuppressed) {
         return true;
+    }
 
     // Case 3: clazy:exclude=foo, the check foo will be ignored for this file in this line number
-    if (loc.isInvalid())
+    if (loc.isInvalid()) {
         return false;
+    }
 
     const int lineNumber = sm.getSpellingLineNumber(loc);
     const bool checkIsSuppressedByLine =
@@ -88,8 +93,9 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     auto buffer = clazy::getBuffer(sm, id, &invalid);
     if (invalid) {
         llvm::errs() << "SuppressionManager::parseFile: Invalid buffer ";
-        if (buffer)
+        if (buffer) {
             llvm::errs() << buffer->getBuffer() << "\n";
+        }
         return;
     }
 

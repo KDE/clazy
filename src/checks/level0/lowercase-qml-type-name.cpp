@@ -37,27 +37,32 @@ LowercaseQMlTypeName::LowercaseQMlTypeName(const std::string &name, ClazyContext
 
 void LowercaseQMlTypeName::VisitStmt(clang::Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CallExpr>(stmt);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stmt);
+    if (!callExpr) {
         return;
+    }
 
     FunctionDecl *func = callExpr->getDirectCallee();
-    if (!func)
+    if (!func) {
         return;
+    }
 
     StringRef name = clazy::name(func);
 
     Expr *arg = nullptr;
 
-    if (name == "qmlRegisterType" || name == "qmlRegisterUncreatableType")
+    if (name == "qmlRegisterType" || name == "qmlRegisterUncreatableType") {
         arg = callExpr->getNumArgs() <= 3 ? nullptr : callExpr->getArg(3);
+    }
 
-    if (!arg)
+    if (!arg) {
         return;
+    }
 
-    auto literal = clazy::getFirstChildOfType2<StringLiteral>(arg);
-    if (!literal)
+    auto *literal = clazy::getFirstChildOfType2<StringLiteral>(arg);
+    if (!literal) {
         return;
+    }
 
     StringRef str = literal->getString();
 

@@ -43,18 +43,20 @@ VirtualSignal::VirtualSignal(const std::string &name, ClazyContext *context)
 
 void VirtualSignal::VisitDecl(Decl *stmt)
 {
-    auto method = dyn_cast<CXXMethodDecl>(stmt);
-    if (!method || !method->isVirtual())
+    auto *method = dyn_cast<CXXMethodDecl>(stmt);
+    if (!method || !method->isVirtual()) {
         return;
+    }
 
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!accessSpecifierManager)
+    if (!accessSpecifierManager) {
         return;
+    }
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
     if (qst == QtAccessSpecifier_Signal) {
-        for (auto m : method->overridden_methods()) {
-            if (auto baseClass = m->getParent()) {
+        for (const auto *m : method->overridden_methods()) {
+            if (const auto *baseClass = m->getParent()) {
                 if (!clazy::isQObject(baseClass)) {
                     // It's possible that the signal is overriding a method from a non-QObject base class
                     // if the derived class inherits both QObject and some other interface.

@@ -209,11 +209,13 @@ void CheckBase::enablePreProcessorCallbacks()
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 {
-    if (m_filesToIgnore.empty())
+    if (m_filesToIgnore.empty()) {
         return false;
+    }
 
-    if (!loc.isValid())
+    if (!loc.isValid()) {
         return true;
+    }
 
     std::string filename = static_cast<std::string>(sm().getFilename(loc));
 
@@ -239,27 +241,32 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
 
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const std::vector<FixItHint> &fixits, bool printWarningTag)
 {
-    if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
+    if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo())) {
         return;
+    }
 
-    if (m_context->shouldIgnoreFile(loc))
+    if (m_context->shouldIgnoreFile(loc)) {
         return;
+    }
 
     if (loc.isMacroID()) {
-        if (warningAlreadyEmitted(loc))
+        if (warningAlreadyEmitted(loc)) {
             return; // For warnings in macro arguments we get a warning in each place the argument is used within the expanded macro, so filter all the dups
+        }
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
-    if (printWarningTag)
+    if (printWarningTag) {
         error += m_tag;
+    }
 
     reallyEmitWarning(loc, error, fixits);
 
     for (const auto &l : m_queuedManualInterventionWarnings) {
         std::string msg("FixIt failed, requires manual intervention: ");
-        if (!l.second.empty())
+        if (!l.second.empty()) {
             msg += ' ' + l.second;
+        }
 
         reallyEmitWarning(l.first, msg + m_tag, {});
     }
@@ -281,8 +288,9 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
     DiagnosticBuilder B = engine.Report(full, id);
     for (const FixItHint &fixit : fixits) {
-        if (!fixit.isNull())
+        if (!fixit.isNull()) {
             B.AddFixItHint(fixit);
+        }
     }
 }
 
@@ -300,8 +308,9 @@ bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
     for (auto rawLoc : m_emittedWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
         PresumedLoc p = sm().getPresumedLoc(l);
-        if (Utils::presumedLocationsEqual(p, ploc))
+        if (Utils::presumedLocationsEqual(p, ploc)) {
             return true;
+        }
     }
 
     return false;
@@ -313,8 +322,9 @@ bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
     for (auto loc : m_emittedManualFixItsWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(loc);
         PresumedLoc p = sm().getPresumedLoc(l);
-        if (Utils::presumedLocationsEqual(p, ploc))
+        if (Utils::presumedLocationsEqual(p, ploc)) {
             return true;
+        }
     }
 
     return false;

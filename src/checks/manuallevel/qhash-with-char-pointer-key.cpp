@@ -42,13 +42,15 @@ QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name, ClazyC
 
 void QHashWithCharPointerKey::VisitDecl(clang::Decl *decl)
 {
-    auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (!tsdecl || clazy::name(tsdecl) != "QHash") // For QMap you shouldn't use any kind of pointers, that's handled in another check
+    auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);
+    if (!tsdecl || clazy::name(tsdecl) != "QHash") { // For QMap you shouldn't use any kind of pointers, that's handled in another check
         return;
+    }
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
-    if (templateArguments.size() != 2)
+    if (templateArguments.size() != 2) {
         return;
+    }
 
     QualType qt = templateArguments[0].getAsType();
     if (!qt.isNull() && qt->isPointerType()) {

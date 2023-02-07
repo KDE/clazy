@@ -183,8 +183,9 @@ inline std::string toLower(const std::string &s)
 
 inline void rtrim(std::string &s)
 {
-    while (!s.empty() && std::isspace(s.back()))
+    while (!s.empty() && std::isspace(s.back())) {
         s.pop_back();
+    }
 }
 
 inline std::vector<std::string_view> splitStringBySpaces(std::string_view str)
@@ -219,8 +220,9 @@ inline std::vector<std::string> splitString(const std::string &str, char separat
 
 inline std::vector<std::string> splitString(const char *str, char separator)
 {
-    if (!str)
+    if (!str) {
         return {};
+    }
 
     return clazy::splitString(std::string(str), separator);
 }
@@ -241,8 +243,9 @@ void sort_and_remove_dups(Container &c, LessThan lessThan)
 inline std::string unquoteString(const std::string &str)
 {
     // If first and last are ", return what's in between quotes:
-    if (str.size() >= 3 && str[0] == '"' && str.at(str.size() - 1) == '"')
+    if (str.size() >= 3 && str[0] == '"' && str.at(str.size() - 1) == '"') {
         return str.substr(1, str.size() - 2);
+    }
 
     return str;
 }

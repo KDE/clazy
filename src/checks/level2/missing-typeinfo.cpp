@@ -50,8 +50,9 @@ MissingTypeInfo::MissingTypeInfo(const std::string &name, ClazyContext *context)
 void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 {
     ClassTemplateSpecializationDecl *tstdecl = clazy::templateDecl(decl);
-    if (!tstdecl)
+    if (!tstdecl) {
         return;
+    }
 
     const bool isQList = clazy::name(tstdecl) == "QList";
     const bool isQVector = isQList ? false : clazy::name(tstdecl) == "QVector";
@@ -64,19 +65,22 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
     QualType qt2 = clazy::getTemplateArgumentType(tstdecl, 0);
     const Type *t = qt2.getTypePtrOrNull();
     CXXRecordDecl *record = t ? t->getAsCXXRecordDecl() : nullptr;
-    if (!record || !record->getDefinition() || typeHasClassification(qt2))
+    if (!record || !record->getDefinition() || typeHasClassification(qt2)) {
         return; // Don't crash if we only have a fwd decl
+    }
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_astContext);
     const bool isTooBigForQList = isQList && clazy::isTooBigForQList(qt2, &m_astContext);
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
-        if (sm().isInSystemHeader(clazy::getLocStart(record)))
+        if (sm().isInSystemHeader(clazy::getLocStart(record))) {
             return;
+        }
 
         std::string typeName = static_cast<std::string>(clazy::name(record));
-        if (typeName == "QPair") // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
+        if (typeName == "QPair") { // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
             return;
+        }
 
         emitWarning(decl, "Missing Q_DECLARE_TYPEINFO: " + typeName);
         emitWarning(record, "Type declared here:", false);
@@ -87,8 +91,9 @@ void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (clazy::name(decl) == "QTypeInfo") {
         const std::string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
-        if (!typeName.empty())
+        if (!typeName.empty()) {
             m_typeInfos.insert(typeName);
+        }
     }
 }
 

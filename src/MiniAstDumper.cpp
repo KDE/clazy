@@ -52,7 +52,7 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
-    if (auto rec = dyn_cast<CXXRecordDecl>(decl)) {
+    if (auto *rec = dyn_cast<CXXRecordDecl>(decl)) {
         llvm::errs() << "Found record: " << rec->getQualifiedNameAsString() << "\n";
     }
 

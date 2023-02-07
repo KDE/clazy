@@ -47,12 +47,14 @@ QEnums::QEnums(const std::string &name, ClazyContext *context)
 void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const clang::MacroInfo *)
 {
     PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
-    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 50500)
+    if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 50500) {
         return;
+    }
 
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (!ii || ii->getName() != "Q_ENUMS")
+    if (!ii || ii->getName() != "Q_ENUMS") {
         return;
+    }
 
     {
         // Don't warn when importing enums of other classes, because Q_ENUM doesn't support it.
@@ -60,15 +62,18 @@ void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &ran
 
         CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
         std::string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
-        if (clazy::contains(text, "::"))
+        if (clazy::contains(text, "::")) {
             return;
+        }
     }
 
-    if (range.getBegin().isMacroID())
+    if (range.getBegin().isMacroID()) {
         return;
+    }
 
-    if (sm().isInSystemHeader(range.getBegin()))
+    if (sm().isInSystemHeader(range.getBegin())) {
         return;
+    }
 
     emitWarning(range.getBegin(), "Use Q_ENUM instead of Q_ENUMS");
 }

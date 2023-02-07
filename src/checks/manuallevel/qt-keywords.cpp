@@ -48,24 +48,28 @@ QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
 void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range, const clang::MacroInfo *minfo)
 {
     IdentifierInfo *ii = macroNameTok.getIdentifierInfo();
-    if (!ii || !minfo)
+    if (!ii || !minfo) {
         return;
+    }
 
-    if (auto ppvisitor = m_context->preprocessorVisitor) {
+    if (auto *ppvisitor = m_context->preprocessorVisitor) {
         // Save some CPU cycles. No point in running if QT_NO_KEYWORDS
-        if (ppvisitor->isQT_NO_KEYWORDS())
+        if (ppvisitor->isQT_NO_KEYWORDS()) {
             return;
+        }
     }
 
     static const std::vector<StringRef> keywords = {"foreach", "signals", "slots", "emit"};
     std::string name = static_cast<std::string>(ii->getName());
-    if (!clazy::contains(keywords, name))
+    if (!clazy::contains(keywords, name)) {
         return;
+    }
 
     // Make sure the macro is Qt's. It must be defined in Qt's headers, not 3rdparty
     std::string qtheader = static_cast<std::string>(sm().getFilename(sm().getSpellingLoc(minfo->getDefinitionLoc())));
-    if (!clazy::endsWithAny(qtheader, {"qglobal.h", "qobjectdefs.h", "qtmetamacros.h", "qforeach.h"}))
+    if (!clazy::endsWithAny(qtheader, {"qglobal.h", "qobjectdefs.h", "qtmetamacros.h", "qforeach.h"})) {
         return;
+    }
 
     std::vector<FixItHint> fixits;
     std::string replacement = "Q_" + name;

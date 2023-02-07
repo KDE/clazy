@@ -50,27 +50,33 @@ ContainerInsideLoop::ContainerInsideLoop(const std::string &name, ClazyContext *
 void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
 {
     auto *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
-    if (!ctorExpr)
+    if (!ctorExpr) {
         return;
+    }
 
     CXXConstructorDecl *ctor = ctorExpr->getConstructor();
-    if (!ctor || !clazy::equalsAny(clazy::classNameFor(ctor), {"QVector", "std::vector", "QList"}))
+    if (!ctor || !clazy::equalsAny(clazy::classNameFor(ctor), {"QVector", "std::vector", "QList"})) {
         return;
+    }
 
     auto *declStm = dyn_cast_or_null<DeclStmt>(m_context->parentMap->getParent(stmt));
-    if (!declStm || !declStm->isSingleDecl())
+    if (!declStm || !declStm->isSingleDecl()) {
         return;
+    }
 
     Stmt *loopStmt = clazy::isInLoop(m_context->parentMap, stmt);
-    if (!loopStmt)
+    if (!loopStmt) {
         return;
+    }
 
     auto *varDecl = dyn_cast<VarDecl>(declStm->getSingleDecl());
-    if (!varDecl || Utils::isInitializedExternally(varDecl))
+    if (!varDecl || Utils::isInitializedExternally(varDecl)) {
         return;
+    }
 
-    if (Utils::isPassedToFunction(StmtBodyRange(loopStmt), varDecl, true))
+    if (Utils::isPassedToFunction(StmtBodyRange(loopStmt), varDecl, true)) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "container inside loop causes unneeded allocations");
 }

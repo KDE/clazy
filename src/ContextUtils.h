@@ -54,7 +54,7 @@ namespace clazy
  */
 inline bool isValueDeclInFunctionContext(const clang::ValueDecl *valueDecl)
 {
-    auto context = valueDecl ? valueDecl->getDeclContext() : nullptr;
+    const auto *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
     return context && llvm::isa<clang::FunctionDecl>(context) && !llvm::isa<clang::ParmVarDecl>(valueDecl);
 }
 
@@ -69,24 +69,28 @@ std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
  */
 inline clang::DeclContext *contextForDecl(clang::Decl *decl)
 {
-    if (!decl)
+    if (!decl) {
         return nullptr;
+    }
 
-    if (auto context = llvm::dyn_cast<clang::DeclContext>(decl))
+    if (auto *context = llvm::dyn_cast<clang::DeclContext>(decl)) {
         return context;
+    }
 
     return decl->getDeclContext();
 }
 
 inline clang::NamespaceDecl *namespaceForDecl(clang::Decl *decl)
 {
-    if (!decl)
+    if (!decl) {
         return nullptr;
+    }
 
     clang::DeclContext *declContext = decl->getDeclContext();
     while (declContext) {
-        if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(declContext))
+        if (auto *ns = llvm::dyn_cast<clang::NamespaceDecl>(declContext)) {
             return ns;
+        }
 
         declContext = declContext->getParent();
     }
@@ -96,17 +100,19 @@ inline clang::NamespaceDecl *namespaceForDecl(clang::Decl *decl)
 
 inline clang::NamespaceDecl *namespaceForType(clang::QualType q)
 {
-    if (q.isNull())
+    if (q.isNull()) {
         return nullptr;
+    }
 
     q = clazy::pointeeQualType(q);
     // Check if it's a class, struct, union or enum
     clang::TagDecl *rec = q->getAsTagDecl();
-    if (rec)
+    if (rec) {
         return namespaceForDecl(rec);
+    }
 
     // Or maybe it's a typedef to a builtin type:
-    auto typeDefType = q->getAs<clang::TypedefType>();
+    const auto *typeDefType = q->getAs<clang::TypedefType>();
     if (typeDefType) {
         clang::TypedefNameDecl *typedeff = typeDefType->getDecl();
         return namespaceForDecl(typedeff);
@@ -117,8 +123,9 @@ inline clang::NamespaceDecl *namespaceForType(clang::QualType q)
 
 inline clang::NamespaceDecl *namespaceForFunction(clang::FunctionDecl *func)
 {
-    if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(func->getDeclContext()))
+    if (auto *ns = llvm::dyn_cast<clang::NamespaceDecl>(func->getDeclContext())) {
         return ns;
+    }
 
     return namespaceForDecl(func);
 }
@@ -131,11 +138,13 @@ inline clang::NamespaceDecl *namespaceForFunction(clang::FunctionDecl *func)
 template<typename T>
 T *firstContextOfType(clang::DeclContext *context)
 {
-    if (!context)
+    if (!context) {
         return nullptr;
+    }
 
-    if (llvm::isa<T>(context))
+    if (llvm::isa<T>(context)) {
         return llvm::cast<T>(context);
+    }
 
     return clazy::firstContextOfType<T>(context->getParent());
 }

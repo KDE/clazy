@@ -38,8 +38,9 @@ RuleOfBase::RuleOfBase(const std::string &name, ClazyContext *context)
 
 bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
 {
-    if (!record || clazy::startsWith(record->getQualifiedNameAsString(), "std::"))
+    if (!record || clazy::startsWith(record->getQualifiedNameAsString(), "std::")) {
         return true;
+    }
 
     const auto qualifiedName = clazy::classNameFor(record);
 

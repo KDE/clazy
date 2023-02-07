@@ -49,7 +49,7 @@ RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *co
 
 void RangeLoopReference::VisitStmt(clang::Stmt *stmt)
 {
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
+    if (auto *rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
         processForRangeLoop(rangeLoop);
     }
 }
@@ -57,19 +57,22 @@ void RangeLoopReference::VisitStmt(clang::Stmt *stmt)
 void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 {
     Expr *containerExpr = rangeLoop->getRangeInit();
-    if (!containerExpr)
+    if (!containerExpr) {
         return;
+    }
 
     QualType qt = containerExpr->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t || !t->isRecordType())
+    if (!t || !t->isRecordType()) {
         return;
+    }
 
     clazy::QualTypeClassification classif;
-    auto varDecl = rangeLoop->getLoopVariable();
+    auto *varDecl = rangeLoop->getLoopVariable();
     bool success = varDecl && clazy::classifyQualType(m_context, varDecl->getType(), varDecl, /*by-ref*/ classif, rangeLoop);
-    if (!success)
+    if (!success) {
         return;
+    }
 
     if (classif.passNonTriviallyCopyableByConstRef) {
         std::string msg;

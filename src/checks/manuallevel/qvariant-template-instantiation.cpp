@@ -61,22 +61,26 @@ static bool isMatchingClass(StringRef name)
 
 void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
 {
-    auto callExpr = dyn_cast<CXXMemberCallExpr>(stm);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CXXMemberCallExpr>(stm);
+    if (!callExpr) {
         return;
+    }
 
     CXXMethodDecl *methodDecl = callExpr->getMethodDecl();
-    if (!methodDecl || clazy::name(methodDecl) != "value")
+    if (!methodDecl || clazy::name(methodDecl) != "value") {
         return;
+    }
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!decl || clazy::name(decl) != "QVariant")
+    if (!decl || clazy::name(decl) != "QVariant") {
         return;
+    }
 
     std::vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
-    if (!t)
+    if (!t) {
         return;
+    }
 
     bool matches = false;
     if (t->isBooleanType() || t->isFloatingType() || (t->isIntegerType() && !t->isEnumeralType())) {
@@ -92,8 +96,9 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         std::string typeName2 = typeName;
         typeName2[0] = toupper(typeName2[0]);
 
-        if (typeName[0] == 'Q')
+        if (typeName[0] == 'Q') {
             typeName2.erase(0, 1); // Remove first letter
+        }
         std::string error = std::string("Use QVariant::to" + typeName2 + "() instead of QVariant::value<" + typeName + ">()");
         emitWarning(clazy::getLocStart(stm), error.c_str());
     }

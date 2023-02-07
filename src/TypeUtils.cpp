@@ -40,11 +40,13 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
 {
     QualType unrefQualType = clazy::unrefQualType(qualType);
     const Type *paramType = unrefQualType.getTypePtrOrNull();
-    if (!paramType || paramType->isIncompleteType())
+    if (!paramType || paramType->isIncompleteType()) {
         return false;
+    }
 
-    if (isUndeducibleAuto(paramType))
+    if (isUndeducibleAuto(paramType)) {
         return false;
+    }
 
     classif.size_of_T = context->astContext.getTypeSize(unrefQualType) / 8;
     classif.isBig = classif.size_of_T > 16;
@@ -55,8 +57,9 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
     classif.isReference = qualType->isLValueReferenceType();
     classif.isConst = unrefQualType.isConstQualified();
 
-    if (qualType->isRValueReferenceType()) // && ref, nothing to do here
+    if (qualType->isRValueReferenceType()) { // && ref, nothing to do here
         return true;
+    }
 
     if (classif.isConst && !classif.isReference) {
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
@@ -68,8 +71,9 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
     } else if (varDecl && !classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
         if (body
             && (Utils::containsNonConstMemberCall(context->parentMap, body, varDecl)
-                || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/true)))
+                || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/true))) {
             return true;
+        }
 
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
         if (classif.isBig) {
@@ -82,25 +86,31 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
 
 bool clazy::isSmallTrivial(const ClazyContext *context, QualType qualType)
 {
-    if (qualType.isNull())
+    if (qualType.isNull()) {
         return false;
+    }
 
-    if (qualType->isPointerType())
+    if (qualType->isPointerType()) {
         qualType = qualType->getPointeeType();
+    }
 
-    if (qualType->isPointerType()) // We don't care about ** (We can change this whenever we have a use case)
+    if (qualType->isPointerType()) { // We don't care about ** (We can change this whenever we have a use case)
         return false;
+    }
 
     QualType unrefQualType = clazy::unrefQualType(qualType);
     const Type *paramType = unrefQualType.getTypePtrOrNull();
-    if (!paramType || paramType->isIncompleteType())
+    if (!paramType || paramType->isIncompleteType()) {
         return false;
+    }
 
-    if (isUndeducibleAuto(paramType))
+    if (isUndeducibleAuto(paramType)) {
         return false;
+    }
 
-    if (qualType->isRValueReferenceType()) // && ref, nothing to do here
+    if (qualType->isRValueReferenceType()) { // && ref, nothing to do here
         return false;
+    }
 
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
@@ -129,10 +139,11 @@ void clazy::heapOrStackAllocated(Expr *arg, const std::string &type, const clang
     clazy::getChilds(arg, declrefs, 3);
 
     std::vector<DeclRefExpr *> interestingDeclRefs;
-    for (auto declref : declrefs) {
-        auto t = declref->getType().getTypePtrOrNull();
-        if (!t)
+    for (auto *declref : declrefs) {
+        const auto *t = declref->getType().getTypePtrOrNull();
+        if (!t) {
             continue;
+        }
 
         // Remove the '*' if it's a pointer
         QualType qt = t->isPointerType() ? t->getPointeeType() : declref->getType();
@@ -148,7 +159,7 @@ void clazy::heapOrStackAllocated(Expr *arg, const std::string &type, const clang
     }
 
     if (!interestingDeclRefs.empty()) {
-        auto declref = interestingDeclRefs[0];
+        auto *declref = interestingDeclRefs[0];
         isStack = !declref->getType().getTypePtr()->isPointerType();
         isHeap = !isStack;
     }
@@ -156,19 +167,22 @@ void clazy::heapOrStackAllocated(Expr *arg, const std::string &type, const clang
 
 bool clazy::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase, std::vector<CXXRecordDecl *> *baseClasses)
 {
-    if (!derived || !possibleBase || derived == possibleBase)
+    if (!derived || !possibleBase || derived == possibleBase) {
         return false;
+    }
 
     for (auto base : derived->bases()) {
         const Type *type = base.getType().getTypePtrOrNull();
-        if (!type)
+        if (!type) {
             continue;
+        }
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
         baseDecl = baseDecl ? baseDecl->getCanonicalDecl() : nullptr;
 
         if (possibleBase == baseDecl || derivesFrom(baseDecl, possibleBase, baseClasses)) {
-            if (baseClasses)
+            if (baseClasses) {
                 baseClasses->push_back(baseDecl);
+            }
             return true;
         }
     }
@@ -178,15 +192,18 @@ bool clazy::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possi
 
 bool clazy::derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase)
 {
-    if (!derived || !derived->hasDefinition())
+    if (!derived || !derived->hasDefinition()) {
         return false;
+    }
 
-    if (derived->getQualifiedNameAsString() == possibleBase)
+    if (derived->getQualifiedNameAsString() == possibleBase) {
         return true;
+    }
 
     for (auto base : derived->bases()) {
-        if (derivesFrom(recordFromBaseSpecifier(base), possibleBase))
+        if (derivesFrom(recordFromBaseSpecifier(base), possibleBase)) {
             return true;
+        }
     }
 
     return false;
@@ -195,6 +212,6 @@ bool clazy::derivesFrom(const clang::CXXRecordDecl *derived, const std::string &
 bool clazy::derivesFrom(QualType derivedQT, const std::string &possibleBase)
 {
     derivedQT = pointeeQualType(derivedQT);
-    const auto t = derivedQT.getTypePtrOrNull();
+    const auto *const t = derivedQT.getTypePtrOrNull();
     return t ? derivesFrom(t->getAsCXXRecordDecl(), possibleBase) : false;
 }

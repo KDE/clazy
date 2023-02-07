@@ -116,12 +116,13 @@ WrongQEventCast::WrongQEventCast(const std::string &name, ClazyContext *context)
 {
 }
 
-static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, const std::string& eventTypeStr, StringRef className)
+static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, const std::string &eventTypeStr, StringRef className)
 {
     // In the simplest case, the class is "Q" + eventType + "Event"
     std::string expectedClassName = std::string("Q") + eventTypeStr + std::string("Event");
-    if (expectedClassName == className)
+    if (expectedClassName == className) {
         return true;
+    }
 
     // Otherwise it's unregular and we need a map:
 
@@ -190,8 +191,9 @@ static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, const 
         {ContextMenu, {"QInputEvent"}}};
 
     auto it = map.find(eventType);
-    if (it == map.cend())
+    if (it == map.cend()) {
         return false;
+    }
 
     const ClassNameList &classes = it->second;
     const bool found = clazy::find(classes, className) != classes.cend();
@@ -205,20 +207,22 @@ CaseStmt *getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *even
     Stmt *s = pmap->getParent(stmt);
 
     while (s) {
-        if (auto ifStmt = dyn_cast<IfStmt>(s)) {
+        if (auto *ifStmt = dyn_cast<IfStmt>(s)) {
             // if there's we're inside an if statement then skip, to avoid false-positives
-            auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(ifStmt->getCond());
-            if (declRef && declRef->getDecl() == event->getDecl())
+            auto *declRef = clazy::getFirstChildOfType2<DeclRefExpr>(ifStmt->getCond());
+            if (declRef && declRef->getDecl() == event->getDecl()) {
                 return nullptr;
+            }
         }
 
-        if (auto caseStmt = dyn_cast<CaseStmt>(s)) {
-            auto switchStmt = clazy::getSwitchFromCase(pmap, caseStmt);
+        if (auto *caseStmt = dyn_cast<CaseStmt>(s)) {
+            auto *switchStmt = clazy::getSwitchFromCase(pmap, caseStmt);
             if (switchStmt) {
-                auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(switchStmt->getCond());
+                auto *declRef = clazy::getFirstChildOfType2<DeclRefExpr>(switchStmt->getCond());
                 // Does this switch refer to the same QEvent ?
-                if (declRef && declRef->getDecl() == event->getDecl())
+                if (declRef && declRef->getDecl() == event->getDecl()) {
                     return caseStmt;
+                }
             }
         }
 
@@ -230,9 +234,10 @@ CaseStmt *getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *even
 
 void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
 {
-    auto cast = dyn_cast<CXXStaticCastExpr>(stmt);
-    if (!cast)
+    auto *cast = dyn_cast<CXXStaticCastExpr>(stmt);
+    if (!cast) {
         return;
+    }
 
     Expr *e = cast->getSubExpr();
 
@@ -240,36 +245,43 @@ void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
     QualType pointeeType = t.isNull() ? QualType() : clazy::pointeeQualType(t);
     CXXRecordDecl *rec = pointeeType.isNull() ? nullptr : pointeeType->getAsCXXRecordDecl();
 
-    if (!rec || clazy::name(rec) != "QEvent")
+    if (!rec || clazy::name(rec) != "QEvent") {
         return;
+    }
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(cast);
-    if (!castTo)
+    if (!castTo) {
         return;
+    }
 
-    auto declref = clazy::getFirstChildOfType2<DeclRefExpr>(cast->getSubExpr());
-    if (!declref)
+    auto *declref = clazy::getFirstChildOfType2<DeclRefExpr>(cast->getSubExpr());
+    if (!declref) {
         return;
+    }
 
-    auto caseStmt = getCaseStatement(m_context->parentMap, stmt, declref);
-    if (!caseStmt)
+    auto *caseStmt = getCaseStatement(m_context->parentMap, stmt, declref);
+    if (!caseStmt) {
         return;
+    }
 
-    auto caseValue = clazy::getFirstChildOfType2<DeclRefExpr>(caseStmt->getLHS());
-    if (!caseValue)
+    auto *caseValue = clazy::getFirstChildOfType2<DeclRefExpr>(caseStmt->getLHS());
+    if (!caseValue) {
         return;
+    }
 
-    auto enumeratorDecl = dyn_cast<EnumConstantDecl>(caseValue->getDecl());
-    if (!enumeratorDecl)
+    auto *enumeratorDecl = dyn_cast<EnumConstantDecl>(caseValue->getDecl());
+    if (!enumeratorDecl) {
         return;
+    }
 
     auto enumeratorVal = static_cast<QtUnregularlyNamedEventTypes>(enumeratorDecl->getInitVal().getExtValue());
 
     std::string eventTypeStr = enumeratorDecl->getNameAsString();
     StringRef castToName = clazy::name(castTo);
 
-    if (eventTypeMatchesClass(enumeratorVal, eventTypeStr, castToName))
+    if (eventTypeMatchesClass(enumeratorVal, eventTypeStr, castToName)) {
         return;
+    }
 
     emitWarning(stmt, std::string("Cast from a QEvent::") + eventTypeStr + " event to " + std::string(castToName) + " looks suspicious.");
 }

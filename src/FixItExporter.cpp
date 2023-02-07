@@ -59,17 +59,19 @@ FixItExporter::FixItExporter(DiagnosticsEngine &DiagEngine,
 
 FixItExporter::~FixItExporter()
 {
-    if (Client)
+    if (Client) {
         DiagEngine.setClient(Client, Owner.release() != nullptr);
+    }
 }
 
 void FixItExporter::BeginSourceFile(const LangOptions &LangOpts, const Preprocessor *PP)
 {
-    if (Client)
+    if (Client) {
         Client->BeginSourceFile(LangOpts, PP);
+    }
 
     const auto id = SourceMgr.getMainFileID();
-    const auto entry = SourceMgr.getFileEntryForID(id);
+    const auto *const entry = SourceMgr.getFileEntryForID(id);
     getTuDiag().MainSourceFile = static_cast<std::string>(entry->getName());
 }
 
@@ -80,8 +82,9 @@ bool FixItExporter::IncludeInDiagnosticCounts() const
 
 void FixItExporter::EndSourceFile()
 {
-    if (Client)
+    if (Client) {
         Client->EndSourceFile();
+    }
 }
 
 tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
@@ -123,11 +126,14 @@ tooling::Replacement FixItExporter::ConvertFixIt(const FixItHint &Hint)
     tooling::Replacement Replacement;
     if (Hint.CodeToInsert.empty()) {
         if (Hint.InsertFromRange.isValid()) {
-            clang::SourceLocation b(Hint.InsertFromRange.getBegin()), _e(Hint.InsertFromRange.getEnd());
-            if (b.isMacroID())
+            clang::SourceLocation b(Hint.InsertFromRange.getBegin());
+            clang::SourceLocation _e(Hint.InsertFromRange.getEnd());
+            if (b.isMacroID()) {
                 b = SourceMgr.getSpellingLoc(b);
-            if (_e.isMacroID())
+            }
+            if (_e.isMacroID()) {
                 _e = SourceMgr.getSpellingLoc(_e);
+            }
             clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, SourceMgr, LangOpts));
             StringRef Text(SourceMgr.getCharacterData(b), SourceMgr.getCharacterData(e) - SourceMgr.getCharacterData(b));
             return tooling::Replacement(SourceMgr, Hint.RemoveRange, Text);
@@ -143,8 +149,9 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
     DiagnosticConsumer::HandleDiagnostic(DiagLevel, Info);
 
     // Let original client do it's handling
-    if (Client)
+    if (Client) {
         Client->HandleDiagnostic(DiagLevel, Info);
+    }
 
     // Convert and record warning diagnostics and their notes
     if (DiagLevel == DiagnosticsEngine::Warning) {

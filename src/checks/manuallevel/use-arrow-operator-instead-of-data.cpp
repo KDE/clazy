@@ -36,7 +36,7 @@ UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &
 
 void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 {
-    auto ce = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *ce = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!ce) {
         return;
     }

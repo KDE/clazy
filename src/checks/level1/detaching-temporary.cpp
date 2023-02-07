@@ -96,33 +96,38 @@ bool isAllowedChainedMethod(const std::string &methodName)
 
 void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 {
-    auto callExpr = dyn_cast<CallExpr>(stm);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stm);
+    if (!callExpr) {
         return;
+    }
 
     // For a chain like getList().first(), returns {first(), getList()}
     std::vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
-    if (callExprs.size() < 2)
+    if (callExprs.size() < 2) {
         return;
+    }
 
     CallExpr *firstCallToBeEvaluated = callExprs.at(callExprs.size() - 1); // This is the call to getList()
     FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
-    if (!firstFunc)
+    if (!firstFunc) {
         return;
+    }
 
     QualType qt = firstFunc->getReturnType();
     const Type *firstFuncReturnType = qt.getTypePtrOrNull();
-    if (!firstFuncReturnType)
+    if (!firstFuncReturnType) {
         return;
+    }
 
-    if (firstFuncReturnType->isReferenceType() || firstFuncReturnType->isPointerType())
+    if (firstFuncReturnType->isReferenceType() || firstFuncReturnType->isPointerType()) {
         return;
+    }
 
     if (qt.isConstQualified()) {
         return; // const doesn't detach
     }
 
-    auto firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
     if (isAllowedChainedMethod(clazy::qualifiedMethodName(firstFunc))) {
         return;
     }
@@ -138,10 +143,11 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to first()
     FunctionDecl *detachingFunc = secondCallToBeEvaluated->getDirectCallee();
-    auto detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
+    auto *detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
     const Type *detachingMethodReturnType = detachingMethod ? detachingMethod->getReturnType().getTypePtrOrNull() : nullptr;
-    if (!detachingMethod || !detachingMethodReturnType)
+    if (!detachingMethod || !detachingMethodReturnType) {
         return;
+    }
 
     // Check if it's one of the implicit shared classes
     CXXRecordDecl *classDecl = detachingMethod->getParent();
@@ -172,8 +178,9 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     if (isReadFunction || isWriteFunction) {
         bool returnTypeIsIterator = false;
         CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
-        if (returnRecord)
+        if (returnRecord) {
             returnTypeIsIterator = clazy::name(returnRecord) == "iterator";
+        }
 
         if (isWriteFunction && (detachingMethodReturnType->isVoidType() || returnTypeIsIterator)) {
             error = std::string("Modifying temporary container is pointless and it also detaches");
@@ -182,29 +189,34 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (!error.empty())
+    if (!error.empty()) {
         emitWarning(clazy::getLocStart(stm), error.c_str());
+    }
 }
 
 bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
 {
-    if (!method)
+    if (!method) {
         return false;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (!record)
+    if (!record) {
         return false;
+    }
 
-    if (DetachingBase::isDetachingMethod(method))
+    if (DetachingBase::isDetachingMethod(method)) {
         return true;
+    }
 
     StringRef className = clazy::name(record);
 
     auto it = m_writeMethodsByType.find(className);
     if (it != m_writeMethodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy::contains(methods, clazy::name(method)))
+        if (clazy::contains(methods, clazy::name(method))) {
             return true;
+        }
     }
 
     return false;

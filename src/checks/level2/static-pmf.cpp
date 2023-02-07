@@ -43,21 +43,25 @@ StaticPmf::StaticPmf(const std::string &name, ClazyContext *context)
 
 void StaticPmf::VisitDecl(clang::Decl *decl)
 {
-    auto vardecl = dyn_cast<VarDecl>(decl);
-    if (!vardecl || !vardecl->isStaticLocal())
+    auto *vardecl = dyn_cast<VarDecl>(decl);
+    if (!vardecl || !vardecl->isStaticLocal()) {
         return;
+    }
 
     const Type *t = clazy::unpealAuto(vardecl->getType());
-    if (!t)
+    if (!t) {
         return;
+    }
 
-    auto memberPointerType = dyn_cast<clang::MemberPointerType>(t);
-    if (!memberPointerType || !memberPointerType->isMemberFunctionPointer())
+    const auto *memberPointerType = dyn_cast<clang::MemberPointerType>(t);
+    if (!memberPointerType || !memberPointerType->isMemberFunctionPointer()) {
         return;
+    }
 
-    auto record = memberPointerType->getMostRecentCXXRecordDecl();
-    if (!clazy::isQObject(record))
+    auto *record = memberPointerType->getMostRecentCXXRecordDecl();
+    if (!clazy::isQObject(record)) {
         return;
+    }
 
     emitWarning(vardecl, "Static pointer to member has portability issues");
 }

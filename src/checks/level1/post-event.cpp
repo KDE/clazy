@@ -39,9 +39,10 @@ PostEvent::PostEvent(const std::string &name, ClazyContext *context)
 
 void PostEvent::VisitStmt(clang::Stmt *stmt)
 {
-    auto callexpr = dyn_cast<CallExpr>(stmt);
-    if (!callexpr)
+    auto *callexpr = dyn_cast<CallExpr>(stmt);
+    if (!callexpr) {
         return;
+    }
 
     auto name = clazy::qualifiedMethodName(callexpr);
 
@@ -50,12 +51,14 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
 
     // if (!isPostEvent && !isSendEvent)
     //  Send event has false-positives
-    if (!isPostEvent)
+    if (!isPostEvent) {
         return;
+    }
 
     Expr *event = callexpr->getNumArgs() > 1 ? callexpr->getArg(1) : nullptr;
-    if (!event || clazy::simpleTypeName(event->getType(), lo()) != "QEvent *")
+    if (!event || clazy::simpleTypeName(event->getType(), lo()) != "QEvent *") {
         return;
+    }
 
     bool isStack = false;
     bool isHeap = false;

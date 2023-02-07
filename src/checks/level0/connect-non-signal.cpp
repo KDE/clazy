@@ -43,27 +43,32 @@ ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *contex
 
 void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 {
-    auto call = dyn_cast<CallExpr>(stmt);
-    if (!call)
+    auto *call = dyn_cast<CallExpr>(stmt);
+    if (!call) {
         return;
+    }
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
+    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func)) {
         return;
+    }
 
     CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/1);
     if (!method) {
-        if (clazy::isQMetaMethod(call, 1))
+        if (clazy::isQMetaMethod(call, 1)) {
             return;
+        }
         emitWarning(clazy::getLocStart(call), "couldn't find method from pmf connect, please report a bug");
         return;
     }
 
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!accessSpecifierManager)
+    if (!accessSpecifierManager) {
         return;
+    }
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
-    if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
+    if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal) {
         emitWarning(call, method->getQualifiedNameAsString() + std::string(" is not a signal"));
+    }
 }

@@ -33,7 +33,7 @@ int levenshtein_distance(const std::string &s1, const std::string &s2)
 
     auto column_start = (decltype(s1len))1;
 
-    auto column = new decltype(s1len)[s1len + 1];
+    auto *column = new decltype(s1len)[s1len + 1];
     std::iota(column + column_start - 1, column + s1len + 1, column_start - 1);
 
     for (auto x = column_start; x <= s2len; x++) {

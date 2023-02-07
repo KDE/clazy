@@ -45,12 +45,14 @@ DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Opt
 
 bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType detachingMethodType) const
 {
-    if (!method)
+    if (!method) {
         return false;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (!record)
+    if (!record) {
         return false;
+    }
 
     StringRef className = clazy::name(record);
 
@@ -59,8 +61,9 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
     auto it = methodsByType.find(static_cast<std::string>(className));
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy::contains(methods, clazy::name(method)))
+        if (clazy::contains(methods, clazy::name(method))) {
             return true;
+        }
     }
 
     return false;

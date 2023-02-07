@@ -45,17 +45,20 @@ namespace clazy
 {
 void getChildsIgnoreLambda(clang::Stmt *stmt, std::vector<CXXMemberCallExpr *> &result_list, int depth = -1)
 {
-    if (!stmt || dyn_cast<LambdaExpr>(stmt))
+    if (!stmt || dyn_cast<LambdaExpr>(stmt)) {
         return;
+    }
 
-    auto cexpr = llvm::dyn_cast<CXXMemberCallExpr>(stmt);
-    if (cexpr)
+    auto *cexpr = llvm::dyn_cast<CXXMemberCallExpr>(stmt);
+    if (cexpr) {
         result_list.push_back(cexpr);
+    }
 
     if (depth > 0 || depth == -1) {
-        if (depth > 0)
+        if (depth > 0) {
             --depth;
-        for (auto child : stmt->children()) {
+        }
+        for (auto *child : stmt->children()) {
             getChildsIgnoreLambda(child, result_list, depth);
         }
     }
@@ -69,14 +72,16 @@ VirtualCallCtor::VirtualCallCtor(const std::string &name, ClazyContext *context)
 
 void VirtualCallCtor::VisitDecl(Decl *decl)
 {
-    auto ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
-    auto dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
-    if (!ctorDecl && !dtorDecl)
+    auto *ctorDecl = dyn_cast<CXXConstructorDecl>(decl);
+    auto *dtorDecl = dyn_cast<CXXDestructorDecl>(decl);
+    if (!ctorDecl && !dtorDecl) {
         return;
+    }
 
     Stmt *ctorOrDtorBody = ctorDecl ? ctorDecl->getBody() : dtorDecl->getBody();
-    if (!ctorOrDtorBody)
+    if (!ctorOrDtorBody) {
         return;
+    }
 
     CXXRecordDecl *classDecl = ctorDecl ? ctorDecl->getParent() : dtorDecl->getParent();
 
@@ -94,12 +99,14 @@ void VirtualCallCtor::VisitDecl(Decl *decl)
 
 SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt *> &processedStmts)
 {
-    if (!stmt)
+    if (!stmt) {
         return {};
+    }
 
     // already processed ? we don't want recurring calls
-    if (clazy::contains(processedStmts, stmt))
+    if (clazy::contains(processedStmts, stmt)) {
         return {};
+    }
 
     processedStmts.push_back(stmt);
 
@@ -111,15 +118,16 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {
         CXXMethodDecl *memberDecl = callExpr->getMethodDecl();
-        if (!memberDecl || !isa<CXXThisExpr>(callExpr->getImplicitObjectArgument()))
+        if (!memberDecl || !isa<CXXThisExpr>(callExpr->getImplicitObjectArgument())) {
             continue;
+        }
 
         if (memberDecl->getParent() == classDecl) {
             if (memberDecl->isPure()) {
                 return clazy::getLocStart(callExpr);
-            } else {
-                if (containsVirtualCall(classDecl, memberDecl->getBody(), processedStmts).isValid())
-                    return clazy::getLocStart(callExpr);
+            }
+            if (containsVirtualCall(classDecl, memberDecl->getBody(), processedStmts).isValid()) {
+                return clazy::getLocStart(callExpr);
             }
         }
     }

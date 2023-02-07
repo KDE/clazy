@@ -36,42 +36,49 @@ UseChronoInQTimer::UseChronoInQTimer(const std::string &name, ClazyContext *cont
 
 static int unpackValue(clang::Expr *expr)
 {
-    auto value = dyn_cast<IntegerLiteral>(expr);
-    if (value)
+    auto *value = dyn_cast<IntegerLiteral>(expr);
+    if (value) {
         return static_cast<int>(*value->getValue().getRawData());
+    }
 
-    auto binaryOp = dyn_cast<BinaryOperator>(expr);
-    if (!binaryOp)
+    auto *binaryOp = dyn_cast<BinaryOperator>(expr);
+    if (!binaryOp) {
         return -1;
+    }
 
     int left = unpackValue(binaryOp->getLHS());
     int right = unpackValue(binaryOp->getRHS());
-    if (left == -1 || right == -1)
+    if (left == -1 || right == -1) {
         return -1;
+    }
 
-    if (binaryOp->getOpcode() == BO_Mul)
+    if (binaryOp->getOpcode() == BO_Mul) {
         return left * right;
+    }
 
-    if (binaryOp->getOpcode() == BO_Div)
+    if (binaryOp->getOpcode() == BO_Div) {
         return left / right;
+    }
 
     return -1;
 }
 
 void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
 {
-    if (value == 0)
+    if (value == 0) {
         return; // ignore zero times;
+    }
 
     std::string suggestion;
-    if (value % (1000 * 3600) == 0)
+    if (value % (1000 * 3600) == 0) {
         suggestion = std::to_string(value / 1000 / 3600) + "h";
-    else if (value % (1000 * 60) == 0)
+    } else if (value % (1000 * 60) == 0) {
         suggestion = std::to_string(value / 1000 / 60) + "min";
-    else if (value % 1000 == 0)
+    } else if (value % 1000 == 0) {
         suggestion = std::to_string(value / 1000) + "s";
-    else
+    } else {
         suggestion = std::to_string(value) + "ms";
+    }
 
     std::vector<FixItHint> fixits;
 #if LLVM_VERSION_MAJOR >= 11 // LLVM < 11 has a problem with \n in the yaml replacements file
@@ -91,37 +98,43 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
 
 static std::string functionName(CallExpr *callExpr)
 {
-    auto memberCall = clazy::getFirstChildOfType<MemberExpr>(callExpr);
+    auto *memberCall = clazy::getFirstChildOfType<MemberExpr>(callExpr);
     if (memberCall) {
-        auto methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
-        if (!methodDecl)
+        auto *methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
+        if (!methodDecl) {
             return {};
+        }
         return methodDecl->getQualifiedNameAsString();
     }
 
     FunctionDecl *fdecl = callExpr->getDirectCallee();
-    if (fdecl)
+    if (fdecl) {
         return fdecl->getQualifiedNameAsString();
+    }
 
     return {};
 }
 
 void UseChronoInQTimer::VisitStmt(clang::Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CallExpr>(stmt);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stmt);
+    if (!callExpr) {
         return;
+    }
 
-    if (callExpr->getNumArgs() == 0)
+    if (callExpr->getNumArgs() == 0) {
         return; // start() doesn't take any arguments.
+    }
 
     const std::string name = functionName(callExpr);
-    if (name != "QTimer::setInterval" && name != "QTimer::start" && name != "QTimer::singleShot")
+    if (name != "QTimer::setInterval" && name != "QTimer::start" && name != "QTimer::singleShot") {
         return;
+    }
 
     const int value = unpackValue(callExpr->getArg(0));
-    if (value == -1)
+    if (value == -1) {
         return;
+    }
 
     warn(callExpr->getArg(0), value);
 }

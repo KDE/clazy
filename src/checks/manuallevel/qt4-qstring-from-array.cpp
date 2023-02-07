@@ -68,12 +68,14 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor, bool &is_char_array,
 {
     is_char_array = false;
     is_byte_array = false;
-    if (!ctor || !clazy::isOfClass(ctor, "QString"))
+    if (!ctor || !clazy::isOfClass(ctor, "QString")) {
         return false;
+    }
 
-    for (auto param : Utils::functionParameters(ctor)) {
-        if (isInterestingParam(param, is_char_array, is_byte_array))
+    for (auto *param : Utils::functionParameters(ctor)) {
+        if (isInterestingParam(param, is_char_array, is_byte_array)) {
             break;
+        }
 
         return false;
     }
@@ -92,18 +94,22 @@ static bool isInterestingMethodCall(CXXMethodDecl *method, std::string &methodNa
 {
     is_char_array = false;
     is_byte_array = false;
-    if (!method)
+    if (!method) {
         return false;
+    }
 
-    if (clazy::name(method->getParent()) != "QString" || method->getNumParams() != 1)
+    if (clazy::name(method->getParent()) != "QString" || method->getNumParams() != 1) {
         return false;
+    }
 
     methodName = method->getNameAsString();
-    if (!isInterestingMethod(methodName))
+    if (!isInterestingMethod(methodName)) {
         return false;
+    }
 
-    if (!isInterestingParam(method->getParamDecl(0), is_char_array, is_byte_array))
+    if (!isInterestingParam(method->getParamDecl(0), is_char_array, is_byte_array)) {
         return false;
+    }
 
     return true;
 }
@@ -113,8 +119,9 @@ static bool isInterestingOperatorCall(CXXOperatorCallExpr *op, std::string &oper
     is_char_array = false;
     is_byte_array = false;
     FunctionDecl *func = op->getDirectCallee();
-    if (!func)
+    if (!func) {
         return false;
+    }
 
     return isInterestingMethodCall(dyn_cast<CXXMethodDecl>(func), operatorName, is_char_array, is_byte_array);
 }
@@ -124,8 +131,9 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
     auto *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
     auto *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
     auto *memberCall = dyn_cast<CXXMemberCallExpr>(stm);
-    if (!ctorExpr && !operatorCall && !memberCall)
+    if (!ctorExpr && !operatorCall && !memberCall) {
         return;
+    }
 
     std::vector<FixItHint> fixits;
     bool is_char_array = false;
@@ -136,8 +144,9 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
     if (ctorExpr) {
         CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
 
-        if (!isInterestingCtorCall(ctorDecl, is_char_array, is_byte_array))
+        if (!isInterestingCtorCall(ctorDecl, is_char_array, is_byte_array)) {
             return;
+        }
 
         fixits = fixCtorCall(ctorExpr);
         if (is_char_array) {
@@ -146,13 +155,15 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
             message = "QString(QByteArray) ctor being called";
         }
     } else if (operatorCall) {
-        if (!isInterestingOperatorCall(operatorCall, /*by-ref*/ methodName, is_char_array, is_byte_array))
+        if (!isInterestingOperatorCall(operatorCall, /*by-ref*/ methodName, is_char_array, is_byte_array)) {
             return;
+        }
 
         fixits = fixOperatorCall(operatorCall);
     } else if (memberCall) {
-        if (!isInterestingMethodCall(memberCall->getMethodDecl(), /*by-ref*/ methodName, is_char_array, is_byte_array))
+        if (!isInterestingMethodCall(memberCall->getMethodDecl(), /*by-ref*/ methodName, is_char_array, is_byte_array)) {
             return;
+        }
 
         fixits = fixMethodCallCall(memberCall);
     } else {
@@ -177,9 +188,8 @@ std::vector<FixItHint> Qt4QStringFromArray::fixCtorCall(CXXConstructExpr *ctorEx
 
     if (parent && grandParent && isa<CXXBindTemporaryExpr>(parent) && isa<CXXFunctionalCastExpr>(grandParent)) {
         return fixitReplaceWithFromLatin1(ctorExpr);
-    } else {
-        return fixitInsertFromLatin1(ctorExpr);
     }
+    return fixitInsertFromLatin1(ctorExpr);
 }
 
 std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr *op)

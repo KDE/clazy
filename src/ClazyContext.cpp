@@ -50,11 +50,13 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
     , m_translationUnitPaths(translationUnitPaths)
 {
-    if (!headerFilter.empty())
+    if (!headerFilter.empty()) {
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
+    }
 
-    if (!ignoreDirs.empty())
+    if (!ignoreDirs.empty()) {
         ignoreDirsRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(ignoreDirs));
+    }
 
     if (exportFixesEnabled()) {
         if (exportFixesFilename.empty()) {
@@ -83,8 +85,9 @@ ClazyContext::~ClazyContext()
         // write out the last one. With clazy-plugin there's a YAML file per translation unit.
         const bool isClazyPlugin = m_translationUnitPaths.empty();
         const bool isLast = count == m_translationUnitPaths.size();
-        if (isLast || isClazyPlugin)
+        if (isLast || isClazyPlugin) {
             exporter->Export();
+        }
         delete exporter;
     }
 
@@ -95,14 +98,16 @@ ClazyContext::~ClazyContext()
 
 void ClazyContext::enableAccessSpecifierManager()
 {
-    if (!accessSpecifierManager && !usingPreCompiledHeaders())
+    if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
         accessSpecifierManager = new AccessSpecifierManager(this);
+    }
 }
 
 void ClazyContext::enablePreprocessorVisitor()
 {
-    if (!preprocessorVisitor && !usingPreCompiledHeaders())
+    if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
         preprocessorVisitor = new PreProcessorVisitor(ci);
+    }
 }
 
 void ClazyContext::enableVisitallTypeDefs()
@@ -120,9 +125,10 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (const auto& s : ci.getPreprocessorOpts().Macros) {
-            if (s.first == "QT_CORE_LIB")
+        for (const auto &s : ci.getPreprocessorOpts().Macros) {
+            if (s.first == "QT_CORE_LIB") {
                 return true;
+            }
         }
         return false;
     }();

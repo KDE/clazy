@@ -63,8 +63,9 @@ void IfndefDefineTypo::VisitIfdef(SourceLocation, const Token &)
 
 void IfndefDefineTypo::VisitIfndef(SourceLocation, const Token &macroNameTok)
 {
-    if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo())
+    if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
         m_lastIfndef = static_cast<std::string>(ii->getName());
+    }
 }
 
 void IfndefDefineTypo::VisitIf(SourceLocation, SourceRange, PPCallbacks::ConditionValueKind)
@@ -89,16 +90,18 @@ void IfndefDefineTypo::VisitEndif(SourceLocation, SourceLocation)
 
 void IfndefDefineTypo::maybeWarn(const std::string &define, SourceLocation loc)
 {
-    if (m_lastIfndef == "Q_CONSTRUCTOR_FUNCTION") // Transform into a list if more false-positives need to be added
+    if (m_lastIfndef == "Q_CONSTRUCTOR_FUNCTION") { // Transform into a list if more false-positives need to be added
         return;
+    }
 
     if (define == m_lastIfndef) {
         m_lastIfndef.clear();
         return;
     }
 
-    if (define.length() < 4)
+    if (define.length() < 4) {
         return;
+    }
 
     const int levDistance = levenshtein_distance(define, m_lastIfndef);
     if (levDistance < 3) {

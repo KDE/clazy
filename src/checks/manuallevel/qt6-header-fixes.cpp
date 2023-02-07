@@ -45,7 +45,7 @@
 
 using namespace clang;
 
-static bool newOldHeaderFileMatch(const std::string& FileNameOld, std::string &FileNameNew)
+static bool newOldHeaderFileMatch(const std::string &FileNameOld, std::string &FileNameNew)
 {
     static std::unordered_map<std::string, std::string> map = {
         {"ActiveQt/QAxAggregated", "QtAxServer/QAxAggregated"},
@@ -220,8 +220,9 @@ static bool newOldHeaderFileMatch(const std::string& FileNameOld, std::string &F
         {"QtWidgets/qundostack.h", "QtGui/qundostack.h"}};
 
     auto it = map.find(FileNameOld);
-    if (it == map.cend())
+    if (it == map.cend()) {
         return false;
+    }
 
     FileNameNew = it->second;
 
@@ -278,14 +279,16 @@ void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc,
                                              const clang::Module * /*Imported*/,
                                              clang::SrcMgr::CharacteristicKind /*FileType*/)
 {
-    if (shouldIgnoreFile(HashLoc))
+    if (shouldIgnoreFile(HashLoc)) {
         return;
+    }
 
-    std::string newFileName = "";
-    if (!newOldHeaderFileMatch(FileName.str(), newFileName))
+    std::string newFileName;
+    if (!newOldHeaderFileMatch(FileName.str(), newFileName)) {
         return;
+    }
 
-    std::string replacement = "";
+    std::string replacement;
     if (IsAngled) {
         replacement = "<";
         replacement += newFileName;

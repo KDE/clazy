@@ -56,30 +56,36 @@ MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *
 void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (ii && ii->getName() == "Q_OBJECT")
+    if (ii && ii->getName() == "Q_OBJECT") {
         registerQ_OBJECT(range.getBegin());
+    }
 }
 
 void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
 {
     auto *record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record))
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record)) {
         return;
+    }
 
-    if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates
+    if (record->getDescribedClassTemplate() != nullptr) { // moc doesn't accept Q_OBJECT in templates
         return;
+    }
 
-    if (m_context->usingPreCompiledHeaders())
+    if (m_context->usingPreCompiledHeaders()) {
         return;
+    }
 
     const SourceLocation startLoc = clazy::getLocStart(decl);
 
     for (const SourceLocation &loc : m_qobjectMacroLocations) {
-        if (sm().getFileID(loc) != sm().getFileID(startLoc))
+        if (sm().getFileID(loc) != sm().getFileID(startLoc)) {
             continue; // Different file
+        }
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(decl)))
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(decl))) {
             return; // We found a Q_OBJECT after start and before end, it's ours.
+        }
     }
 
     std::vector<FixItHint> fixits;

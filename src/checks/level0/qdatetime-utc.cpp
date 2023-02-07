@@ -50,26 +50,31 @@ QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
 void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 {
     auto *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!secondCall || !secondCall->getMethodDecl())
+    if (!secondCall || !secondCall->getMethodDecl()) {
         return;
+    }
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
     const std::string secondMethodName = secondMethod->getQualifiedNameAsString();
     const bool isTimeT = secondMethodName == "QDateTime::toTime_t";
-    if (!isTimeT && secondMethodName != "QDateTime::toUTC")
+    if (!isTimeT && secondMethodName != "QDateTime::toUTC") {
         return;
+    }
 
     std::vector<CallExpr *> chainedCalls = Utils::callListForChain(secondCall);
-    if (chainedCalls.size() < 2)
+    if (chainedCalls.size() < 2) {
         return;
+    }
 
     CallExpr *firstCall = chainedCalls[chainedCalls.size() - 1];
     FunctionDecl *firstFunc = firstCall->getDirectCallee();
-    if (!firstFunc)
+    if (!firstFunc) {
         return;
+    }
 
     auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime")
+    if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime") {
         return;
+    }
 
     std::string replacement = "::currentDateTimeUtc()";
     if (isTimeT) {

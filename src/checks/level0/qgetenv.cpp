@@ -55,12 +55,14 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
     auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall)
+    if (!memberCall) {
         return;
+    }
 
     CXXMethodDecl *method = memberCall->getMethodDecl();
-    if (!method)
+    if (!method) {
         return;
+    }
 
     CXXRecordDecl *record = method->getParent();
     if (!record || clazy::name(record) != "QByteArray") {
@@ -68,15 +70,17 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<CallExpr *> calls = Utils::callListForChain(memberCall);
-    if (calls.size() != 2)
+    if (calls.size() != 2) {
         return;
+    }
 
     CallExpr *qgetEnvCall = calls.back();
 
     FunctionDecl *func = qgetEnvCall->getDirectCallee();
 
-    if (!func || clazy::name(func) != "qgetenv")
+    if (!func || clazy::name(func) != "qgetenv") {
         return;
+    }
 
     StringRef methodname = clazy::name(method);
     std::string errorMsg;

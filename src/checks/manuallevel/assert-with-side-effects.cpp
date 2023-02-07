@@ -86,13 +86,14 @@ static bool methodIsOK(const std::string &name)
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = clazy::getLocStart(stm);
-    if (!clazy::isInMacro(&m_astContext, stmStart, "Q_ASSERT"))
+    if (!clazy::isInMacro(&m_astContext, stmStart, "Q_ASSERT")) {
         return;
+    }
 
     bool warn = false;
     const bool checkfunctions = m_aggressiveness & AlsoCheckFunctionCallsAggressiveness;
 
-    auto memberCall = dyn_cast<CXXMemberCallExpr>(stm);
+    auto *memberCall = dyn_cast<CXXMemberCallExpr>(stm);
     if (memberCall) {
         if (checkfunctions) {
             CXXMethodDecl *method = memberCall->getMethodDecl();
@@ -101,13 +102,14 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
                 warn = true;
             }
         }
-    } else if (auto call = dyn_cast<CallExpr>(stm)) {
+    } else if (auto *call = dyn_cast<CallExpr>(stm)) {
         // Non member function calls not allowed
 
         FunctionDecl *func = call->getDirectCallee();
         if (func && checkfunctions) {
-            if (isa<CXXMethodDecl>(func)) // This will be visited next, so ignore it now
+            if (isa<CXXMethodDecl>(func)) { // This will be visited next, so ignore it now
                 return;
+            }
 
             if (functionIsOk(clazy::name(func))) {
                 return;
@@ -115,7 +117,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
 
             warn = true;
         }
-    } else if (auto op = dyn_cast<BinaryOperator>(stm)) {
+    } else if (auto *op = dyn_cast<BinaryOperator>(stm)) {
         if (op->isAssignmentOp()) {
             if (auto *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
                 ValueDecl *valueDecl = declRef->getDecl();
@@ -125,8 +127,8 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
                 }
             }
         }
-    } else if (auto op = dyn_cast<UnaryOperator>(stm)) {
-        if (auto declRef = dyn_cast<DeclRefExpr>(op->getSubExpr())) {
+    } else if (auto *op = dyn_cast<UnaryOperator>(stm)) {
+        if (auto *declRef = dyn_cast<DeclRefExpr>(op->getSubExpr())) {
             ValueDecl *valueDecl = declRef->getDecl();
             auto type = op->getOpcode();
             if (type != UnaryOperatorKind::UO_Deref && type != UnaryOperatorKind::UO_AddrOf) {

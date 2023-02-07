@@ -45,35 +45,42 @@ using namespace clang;
 
 Stmt *clazy::bodyFromLoop(Stmt *loop)
 {
-    if (!loop)
+    if (!loop) {
         return nullptr;
+    }
 
-    if (auto forstm = dyn_cast<ForStmt>(loop))
+    if (auto *forstm = dyn_cast<ForStmt>(loop)) {
         return forstm->getBody();
+    }
 
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop))
+    if (auto *rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
         return rangeLoop->getBody();
+    }
 
-    if (auto whilestm = dyn_cast<WhileStmt>(loop))
+    if (auto *whilestm = dyn_cast<WhileStmt>(loop)) {
         return whilestm->getBody();
+    }
 
-    if (auto dostm = dyn_cast<DoStmt>(loop))
+    if (auto *dostm = dyn_cast<DoStmt>(loop)) {
         return dostm->getBody();
+    }
 
     return nullptr;
 }
 
 bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm, clang::SourceLocation onlyBeforeThisLoc)
 {
-    if (!stmt)
+    if (!stmt) {
         return false;
+    }
 
     if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
         if (onlyBeforeThisLoc.isValid()) {
             FullSourceLoc sourceLoc(clazy::getLocStart(stmt), sm);
             FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, sm);
-            if (sourceLoc.isBeforeInTranslationUnitThan(otherSourceLoc))
+            if (sourceLoc.isBeforeInTranslationUnitThan(otherSourceLoc)) {
                 return true;
+            }
         } else {
             return true;
         }
@@ -86,19 +93,23 @@ bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &
 
 clang::Expr *clazy::containerExprForLoop(Stmt *loop)
 {
-    if (!loop)
+    if (!loop) {
         return nullptr;
+    }
 
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop))
+    if (auto *rangeLoop = dyn_cast<CXXForRangeStmt>(loop)) {
         return rangeLoop->getRangeInit();
+    }
 
-    if (auto constructExpr = dyn_cast<CXXConstructExpr>(loop)) {
-        if (constructExpr->getNumArgs() < 1)
+    if (auto *constructExpr = dyn_cast<CXXConstructExpr>(loop)) {
+        if (constructExpr->getNumArgs() < 1) {
             return nullptr;
+        }
 
         CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-        if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
+        if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer") {
             return nullptr;
+        }
 
         return constructExpr;
     }
@@ -109,12 +120,14 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
 VarDecl *clazy::containerDeclForLoop(clang::Stmt *loop)
 {
     Expr *expr = containerExprForLoop(loop);
-    if (!expr)
+    if (!expr) {
         return nullptr;
+    }
 
-    auto declRef = dyn_cast<DeclRefExpr>(expr);
-    if (!declRef)
+    auto *declRef = dyn_cast<DeclRefExpr>(expr);
+    if (!declRef) {
         return nullptr;
+    }
 
     ValueDecl *valueDecl = declRef->getDecl();
     return valueDecl ? dyn_cast<VarDecl>(valueDecl) : nullptr;
@@ -122,13 +135,15 @@ VarDecl *clazy::containerDeclForLoop(clang::Stmt *loop)
 
 Stmt *clazy::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
 {
-    if (!stmt)
+    if (!stmt) {
         return nullptr;
+    }
 
     Stmt *p = pmap->getParent(stmt);
     while (p) {
-        if (clazy::isLoop(p))
+        if (clazy::isLoop(p)) {
             return p;
+        }
         p = pmap->getParent(p);
     }
 

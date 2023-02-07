@@ -45,22 +45,26 @@ ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyC
 
 void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 {
-    auto ret = dyn_cast<ReturnStmt>(stmt);
-    if (!ret || !clazy::hasChildren(ret))
+    auto *ret = dyn_cast<ReturnStmt>(stmt);
+    if (!ret || !clazy::hasChildren(ret)) {
         return;
+    }
 
     QualType qt = ret->getRetValue()->getType();
-    if (qt.isNull() || !qt->isVoidType())
+    if (qt.isNull() || !qt->isVoidType()) {
         return;
+    }
 
     DeclContext *context = clazy::contextForDecl(m_context->lastDecl);
-    if (!context)
+    if (!context) {
         return;
+    }
 
-    auto func = dyn_cast<FunctionDecl>(context);
+    auto *func = dyn_cast<FunctionDecl>(context);
     // A function template returning T won't bailout in the void check above, do it properly now:
-    if (!func || !func->getReturnType()->isVoidType())
+    if (!func || !func->getReturnType()->isVoidType()) {
         return;
+    }
 
     emitWarning(stmt, "Returning a void expression");
 }

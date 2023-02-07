@@ -44,13 +44,15 @@ QMapWithPointerKey::QMapWithPointerKey(const std::string &name, ClazyContext *co
 
 void QMapWithPointerKey::VisitDecl(clang::Decl *decl)
 {
-    auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (!tsdecl || clazy::name(tsdecl) != "QMap")
+    auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);
+    if (!tsdecl || clazy::name(tsdecl) != "QMap") {
         return;
+    }
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
-    if (templateArguments.size() != 2)
+    if (templateArguments.size() != 2) {
         return;
+    }
 
     QualType qt = templateArguments[0].getAsType();
     const Type *t = qt.getTypePtrOrNull();

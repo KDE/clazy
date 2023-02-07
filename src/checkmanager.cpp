@@ -99,16 +99,18 @@ CheckBase *CheckManager::createCheck(const std::string &name, ClazyContext *cont
 
 std::string CheckManager::checkNameForFixIt(const std::string &fixitName) const
 {
-    if (fixitName.empty())
+    if (fixitName.empty()) {
         return {};
+    }
 
-    for (auto &registeredCheck : m_registeredChecks) {
+    for (const auto &registeredCheck : m_registeredChecks) {
         auto it = m_fixitsByCheckName.find(registeredCheck.name);
         if (it != m_fixitsByCheckName.end()) {
-            auto &fixits = (*it).second;
+            const auto &fixits = (*it).second;
             for (const RegisteredFixIt &fixit : fixits) {
-                if (fixit.name == fixitName)
+                if (fixit.name == fixitName) {
                     return (*it).first;
+                }
             }
         }
     }
@@ -186,15 +188,17 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
         }
     }
 
-    if (args.size() > 1) // we only expect a level and a comma separated list of arguments
+    if (args.size() > 1) { // we only expect a level and a comma separated list of arguments
         return {};
+    }
 
     std::vector<std::string> userDisabledChecks;
     if (args.size() == 1) {
         // #2 Process list of comma separated checks that were passed to compiler
         result = checksForCommaSeparatedString(args[0], /*by-ref*/ userDisabledChecks);
-        if (result.empty() && userDisabledChecks.empty()) // User passed inexisting checks.
+        if (result.empty() && userDisabledChecks.empty()) { // User passed inexisting checks.
             return {};
+        }
     }
 
     // #3 Append checks specified from env variable
@@ -275,8 +279,9 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::str
     RegisteredCheck::List result;
 
     for (const std::string &name : checkNames) {
-        if (checkForName(result, name) != result.cend())
+        if (checkForName(result, name) != result.cend()) {
             continue; // Already added. Duplicate check specified. continue.
+        }
 
         auto it = checkForName(m_registeredChecks, name);
         if (it == m_registeredChecks.cend()) {
@@ -311,9 +316,8 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::str
                 result.push_back(*it);
             }
             continue;
-        } else {
-            result.push_back(*it);
         }
+        result.push_back(*it);
     }
 
     removeChecksFromList(result, userDisabledChecks);
@@ -323,7 +327,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::str
 
 std::vector<std::string> CheckManager::checksAsErrors() const
 {
-    auto checksAsErrosEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
+    auto *checksAsErrosEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
 
     if (checksAsErrosEnv) {
         auto checkNames = clazy::splitString(checksAsErrosEnv, ',');
@@ -334,12 +338,13 @@ std::vector<std::string> CheckManager::checksAsErrors() const
             auto it = clazy::find_if(m_registeredChecks, [&name](const RegisteredCheck &check) {
                 return check.name == name;
             });
-            if (it == m_registeredChecks.end())
+            if (it == m_registeredChecks.end()) {
                 llvm::errs() << "Invalid check: " << name << '\n';
-            else
+            } else {
                 result.emplace_back(name);
+            }
         }
         return result;
-    } else
-        return {};
+    }
+    return {};
 }

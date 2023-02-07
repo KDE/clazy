@@ -41,14 +41,16 @@ QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
 
 void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
 {
-    auto existsCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *existsCall = dyn_cast<CXXMemberCallExpr>(stmt);
     std::string methodName = clazy::qualifiedMethodName(existsCall);
-    if (methodName != "QFileInfo::exists")
+    if (methodName != "QFileInfo::exists") {
         return;
+    }
 
     auto *ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
-    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
+    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString") {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "Use the static QFileInfo::exists() instead. It's documented to be faster.");
 }

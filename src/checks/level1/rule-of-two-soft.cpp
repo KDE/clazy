@@ -40,9 +40,9 @@ RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, ClazyContext *context)
 
 void RuleOfTwoSoft::VisitStmt(Stmt *s)
 {
-    if (auto op = dyn_cast<CXXOperatorCallExpr>(s)) {
+    if (auto *op = dyn_cast<CXXOperatorCallExpr>(s)) {
         FunctionDecl *func = op->getDirectCallee();
-        auto method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
+        auto *method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
         if (method && method->getParent() && method->isCopyAssignmentOperator()) {
             CXXRecordDecl *record = method->getParent();
             const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
@@ -53,7 +53,7 @@ void RuleOfTwoSoft::VisitStmt(Stmt *s)
                 emitWarning(clazy::getLocStart(s), msg);
             }
         }
-    } else if (auto ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
+    } else if (auto *ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
         CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
         CXXRecordDecl *record = ctorDecl->getParent();
         if (ctorDecl->isCopyConstructor() && record) {

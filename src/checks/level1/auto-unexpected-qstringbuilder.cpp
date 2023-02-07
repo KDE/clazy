@@ -58,18 +58,21 @@ AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &na
 void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 {
     auto *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl)
+    if (!varDecl) {
         return;
+    }
 
     QualType qualtype = varDecl->getType();
     const Type *type = qualtype.getTypePtrOrNull();
-    if (!type || !type->isRecordType() || !dyn_cast<AutoType>(type) || !isQStringBuilder(qualtype))
+    if (!type || !type->isRecordType() || !dyn_cast<AutoType>(type) || !isQStringBuilder(qualtype)) {
         return;
+    }
 
     std::string replacement = "QString " + clazy::name(varDecl).str();
 
-    if (qualtype.isConstQualified())
+    if (qualtype.isConstQualified()) {
         replacement = "const " + replacement;
+    }
 
     SourceLocation start = clazy::getLocStart(varDecl);
     SourceLocation end = varDecl->getLocation();
@@ -81,13 +84,15 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 
 void AutoUnexpectedQStringBuilder::VisitStmt(Stmt *stmt)
 {
-    auto lambda = dyn_cast<LambdaExpr>(stmt);
-    if (!lambda)
+    auto *lambda = dyn_cast<LambdaExpr>(stmt);
+    if (!lambda) {
         return;
+    }
 
     CXXMethodDecl *method = lambda->getCallOperator();
-    if (!method || !isQStringBuilder(method->getReturnType()))
+    if (!method || !isQStringBuilder(method->getReturnType())) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "lambda return type deduced to be QStringBuilder instead of QString. Possible crash.");
 }
