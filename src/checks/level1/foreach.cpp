@@ -198,7 +198,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
                         Expr *expr = memberExpr->getBase();
 
                         if (expr) {
-                            DeclRefExpr *refExpr = dyn_cast<DeclRefExpr>(expr);
+                            auto *refExpr = dyn_cast<DeclRefExpr>(expr);
                             if (!refExpr) {
                                 auto s = clazy::getFirstChildAtDepth(expr, 1);
                                 refExpr = dyn_cast<DeclRefExpr>(s);

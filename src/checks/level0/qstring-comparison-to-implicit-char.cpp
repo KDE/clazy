@@ -41,7 +41,7 @@ void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
         return;
 
     Expr *arg1 = callExpr->getArg(1);
-    IntegerLiteral *il = clazy::getFirstChildOfType2<IntegerLiteral>(arg1);
+    auto *il = clazy::getFirstChildOfType2<IntegerLiteral>(arg1);
     if (!il)
         return;
 

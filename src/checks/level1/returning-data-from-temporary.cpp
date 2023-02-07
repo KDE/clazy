@@ -123,7 +123,7 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
         return;
 
     if (declRef) {
-        VarDecl *varDecl = dyn_cast<VarDecl>(declRef->getDecl());
+        auto *varDecl = dyn_cast<VarDecl>(declRef->getDecl());
         if (!varDecl || varDecl->isStaticLocal() || clazy::valueIsConst(varDecl->getType()))
             return;
 

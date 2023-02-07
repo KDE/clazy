@@ -103,7 +103,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     }
 
     // catch map[foo].cbegin()
-    CXXOperatorCallExpr *chainedOperatorCall = clazy::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
+    auto *chainedOperatorCall = clazy::getFirstChildOfType<CXXOperatorCallExpr>(memberExpr);
     if (chainedOperatorCall) {
         FunctionDecl *func = chainedOperatorCall->getDirectCallee();
         if (func) {
@@ -129,7 +129,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
 
     {
         // *really* check for rvalue
-        ImplicitCastExpr *impl = dyn_cast<ImplicitCastExpr>(expr);
+        auto *impl = dyn_cast<ImplicitCastExpr>(expr);
         if (impl) {
             if (impl->getCastKind() == CK_LValueToRValue)
                 return;
@@ -140,11 +140,11 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    CXXConstructExpr *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(clazy::getFirstChildAtDepth(expr, 2));
+    auto *possibleCtorCall = dyn_cast_or_null<CXXConstructExpr>(clazy::getFirstChildAtDepth(expr, 2));
     if (possibleCtorCall)
         return;
 
-    CXXThisExpr *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1));
+    auto *possibleThisCall = dyn_cast_or_null<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1));
     if (possibleThisCall)
         return;
 

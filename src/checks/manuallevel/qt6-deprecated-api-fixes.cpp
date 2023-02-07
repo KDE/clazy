@@ -64,7 +64,7 @@ void replacementForQWizard(std::string functionName, std::string &message, std::
 bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string &replacement, SourceLocation &warningLocation, SourceRange &fixitRange)
 {
     // The one with two arguments: Qt::DateFormat format, QCalendar cal
-    CXXMemberCallExpr *callExp = dyn_cast<CXXMemberCallExpr>(parent);
+    auto *callExp = dyn_cast<CXXMemberCallExpr>(parent);
     if (!callExp)
         return false;
     auto func = callExp->getDirectCallee();
@@ -83,7 +83,7 @@ bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string 
     }
     Stmt *firstArg = clazy::childAt(parent, 1);
     Stmt *secondArg = clazy::childAt(parent, 2);
-    DeclRefExpr *declFirstArg = dyn_cast<DeclRefExpr>(firstArg);
+    auto *declFirstArg = dyn_cast<DeclRefExpr>(firstArg);
     if (!firstArg || !secondArg || !declFirstArg)
         return false;
     fixitRange = SourceRange(firstArg->getEndLoc(), secondArg->getEndLoc());
@@ -376,7 +376,7 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
             if (!newcontext)
                 break;
             if (clang::isa<NamespaceDecl>(newcontext)) {
-                clang::NamespaceDecl *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
+                auto *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
                 if (namesdecl->getNameAsString() == "Qt")
                     isQtNamespaceExplicit = true;
             }
@@ -466,7 +466,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, std::string cla
         return;
 
     // Getting the two arguments of the operator to build the replacement
-    CXXOperatorCallExpr *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
+    auto *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
     auto *arg0Size = oppCallExpr->getArg(0);
     auto *arg1Size = oppCallExpr->getArg(1);
     auto charRange = Lexer::getAsCharRange(arg0Size->getSourceRange(), m_sm, lo());
@@ -491,7 +491,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, std::string cla
                 child = clazy::childAt(child, 0);
                 continue;
             }
-            clang::UnaryOperator *uni = dyn_cast<UnaryOperator>(child);
+            auto *uni = dyn_cast<UnaryOperator>(child);
             if (uni) {
                 if (uni->getOpcodeStr(uni->getOpcode()).equals("*"))
                     isPointer = true;
@@ -609,7 +609,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         std::string contextName;
         if (declContext) {
             if (clang::isa<clang::CXXRecordDecl>(declContext)) {
-                clang::CXXRecordDecl *recordDecl = llvm::dyn_cast<clang::CXXRecordDecl>(declContext);
+                auto *recordDecl = llvm::dyn_cast<clang::CXXRecordDecl>(declContext);
                 contextName = recordDecl->getQualifiedNameAsString();
             }
         }
@@ -662,7 +662,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             if (!newcontext)
                 break;
             if (clang::isa<NamespaceDecl>(newcontext)) {
-                clang::NamespaceDecl *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
+                auto *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
                 if (namesdecl->getNameAsString() == "Qt")
                     isQtNamespaceExplicit = true;
             }

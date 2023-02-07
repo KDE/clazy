@@ -46,7 +46,7 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
     if (methodName != "QFileInfo::exists")
         return;
 
-    CXXConstructExpr *ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
+    auto *ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
     if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
         return;
 

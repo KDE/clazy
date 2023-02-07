@@ -70,7 +70,7 @@ void JniSignatures::checkArgAt(T *call, unsigned int index, const std::regex &ex
     if (call->getNumArgs() < index + 1)
         return;
 
-    StringLiteral *stringLiteral = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(index));
+    auto *stringLiteral = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(index));
 
     if (!stringLiteral)
         return;

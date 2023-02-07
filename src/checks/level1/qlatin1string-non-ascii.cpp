@@ -48,7 +48,7 @@ void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
     if (!ctor || ctor->getQualifiedNameAsString() != "QLatin1String::QLatin1String")
         return;
 
-    StringLiteral *lt = clazy::getFirstChildOfType2<StringLiteral>(stmt);
+    auto *lt = clazy::getFirstChildOfType2<StringLiteral>(stmt);
     if (lt && !Utils::isAscii(lt))
         emitWarning(stmt, "QLatin1String with non-ascii literal");
 }

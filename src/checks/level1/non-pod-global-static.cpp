@@ -78,7 +78,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
             return;
     }
 
-    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
+    auto *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
     if (!ctorExpr)
         return;
 

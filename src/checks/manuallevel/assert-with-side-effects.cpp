@@ -117,7 +117,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
         }
     } else if (auto op = dyn_cast<BinaryOperator>(stm)) {
         if (op->isAssignmentOp()) {
-            if (DeclRefExpr *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
+            if (auto *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
                 ValueDecl *valueDecl = declRef->getDecl();
                 if (valueDecl && sm().isBeforeInSLocAddrSpace(clazy::getLocStart(valueDecl), stmStart)) {
                     // llvm::errs() << "reason3\n";

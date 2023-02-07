@@ -82,7 +82,7 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
 
 bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
 {
-    CXXMemberCallExpr *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!secondCall || !secondCall->getMethodDecl())
         return false;
 
@@ -100,7 +100,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
     if (!firstFunc)
         return false;
 
-    CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
     if (!firstMethod || clazy::qualifiedMethodName(firstMethod) != "QSet::intersect")
         return false;
 

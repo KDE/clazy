@@ -239,7 +239,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     if (!subscriptExprs.empty())
         return true;
 
-    BinaryOperator *binary = dyn_cast<BinaryOperator>(expr);
+    auto *binary = dyn_cast<BinaryOperator>(expr);
     if (binary && binary->isAssignmentOp()) { // Filter things like for ( ...; ...; next = node->next)
 
         Expr *rhs = binary->getRHS();

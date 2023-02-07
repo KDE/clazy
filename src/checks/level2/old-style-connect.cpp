@@ -69,7 +69,7 @@ const CXXRecordDecl *getBestDynamicClassType(Expr *expr)
 
     const Expr *E = expr->getBestDynamicClassTypeExpr();
     QualType DerivedType = E->getType();
-    if (const PointerType *PTy = DerivedType->getAs<PointerType>())
+    if (const auto *PTy = DerivedType->getAs<PointerType>())
         DerivedType = PTy->getPointeeType();
 
     if (DerivedType->isDependentType() || !DerivedType->isRecordType())

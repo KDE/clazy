@@ -121,9 +121,9 @@ static bool isInterestingOperatorCall(CXXOperatorCallExpr *op, std::string &oper
 
 void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
 {
-    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
-    CXXOperatorCallExpr *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
-    CXXMemberCallExpr *memberCall = dyn_cast<CXXMemberCallExpr>(stm);
+    auto *ctorExpr = dyn_cast<CXXConstructExpr>(stm);
+    auto *operatorCall = dyn_cast<CXXOperatorCallExpr>(stm);
+    auto *memberCall = dyn_cast<CXXMemberCallExpr>(stm);
     if (!ctorExpr && !operatorCall && !memberCall)
         return;
 

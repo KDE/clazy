@@ -48,7 +48,7 @@ WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *co
 
 void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
 {
-    CXXConstructExpr *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
+    auto *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
     if (!ctorExpr)
         return;
 

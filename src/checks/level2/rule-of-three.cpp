@@ -49,7 +49,7 @@ RuleOfThree::RuleOfThree(const std::string &name, ClazyContext *context)
 
 void RuleOfThree::VisitDecl(clang::Decl *decl)
 {
-    CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(decl);
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
     if (!record || isBlacklisted(record) || !record->hasDefinition() || record->isPolymorphic())
         return;
 

@@ -69,12 +69,12 @@ bool Qt6QLatin1StringCharToU::foundQCharOrQString(Stmt *stmt)
 {
     std::string type;
 
-    CXXOperatorCallExpr *opp = dyn_cast<CXXOperatorCallExpr>(stmt);
-    CXXConstructExpr *constr = dyn_cast<CXXConstructExpr>(stmt);
-    CXXMemberCallExpr *memb = dyn_cast<CXXMemberCallExpr>(stmt);
-    InitListExpr *init = dyn_cast<InitListExpr>(stmt);
-    CXXFunctionalCastExpr *func = dyn_cast<CXXFunctionalCastExpr>(stmt);
-    DeclRefExpr *decl = dyn_cast<DeclRefExpr>(stmt);
+    auto *opp = dyn_cast<CXXOperatorCallExpr>(stmt);
+    auto *constr = dyn_cast<CXXConstructExpr>(stmt);
+    auto *memb = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *init = dyn_cast<InitListExpr>(stmt);
+    auto *func = dyn_cast<CXXFunctionalCastExpr>(stmt);
+    auto *decl = dyn_cast<DeclRefExpr>(stmt);
 
     if (init) {
         type = init->getType().getAsString();
@@ -139,7 +139,7 @@ bool Qt6QLatin1StringCharToU::isInterestingCtorCall(CXXConstructExpr *ctorExpr, 
     // To avoid creating multiple fixit in case of nested QLatin1Char/String calls
     // it is important to only test the one right after a CXXFunctionalCastExpr with QLatin1Char/String name
     if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
-        CXXFunctionalCastExpr *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
+        auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
         if (parent->getConversionFunction()->getNameAsString() != "QLatin1Char" && parent->getConversionFunction()->getNameAsString() != "QLatin1String") {
             return false;
         } else {
@@ -170,7 +170,7 @@ bool Qt6QLatin1StringCharToU::isInterestingCtorCall(CXXConstructExpr *ctorExpr, 
     // Unless the outer call is from a Macro, in which case the current call should not be ignored
     while (parent_stmt) {
         if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
-            CXXFunctionalCastExpr *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
+            auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
             NamedDecl *ndecl = parent->getConversionFunction();
             if (ndecl) {
                 if (ndecl->getNameAsString() == "QLatin1Char" || ndecl->getNameAsString() == "QLatin1String") {
@@ -332,8 +332,8 @@ std::string Qt6QLatin1StringCharToU::buildReplacement(clang::Stmt *stmt, bool &n
 
     for (auto it = current_stmt->child_begin(); it != current_stmt->child_end(); it++) {
         Stmt *child = *it;
-        ConditionalOperator *parent_condOp = dyn_cast<ConditionalOperator>(current_stmt);
-        ConditionalOperator *child_condOp = dyn_cast<ConditionalOperator>(child);
+        auto *parent_condOp = dyn_cast<ConditionalOperator>(current_stmt);
+        auto *child_condOp = dyn_cast<ConditionalOperator>(child);
 
         if (parent_condOp) {
             ancestorIsCondition = true;
@@ -354,10 +354,10 @@ std::string Qt6QLatin1StringCharToU::buildReplacement(clang::Stmt *stmt, bool &n
 
         replacement += buildReplacement(child, noFix, extra, ancestorIsCondition, ancestorConditionChildNumber);
 
-        DeclRefExpr *child_declRefExp = dyn_cast<DeclRefExpr>(child);
-        CXXBoolLiteralExpr *child_boolLitExp = dyn_cast<CXXBoolLiteralExpr>(child);
-        CharacterLiteral *child_charliteral = dyn_cast<CharacterLiteral>(child);
-        StringLiteral *child_stringliteral = dyn_cast<StringLiteral>(child);
+        auto *child_declRefExp = dyn_cast<DeclRefExpr>(child);
+        auto *child_boolLitExp = dyn_cast<CXXBoolLiteralExpr>(child);
+        auto *child_charliteral = dyn_cast<CharacterLiteral>(child);
+        auto *child_stringliteral = dyn_cast<StringLiteral>(child);
 
         if (child_stringliteral) {
             replacement += "u\"";

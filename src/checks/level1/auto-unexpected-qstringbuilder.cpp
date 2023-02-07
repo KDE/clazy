@@ -57,7 +57,7 @@ AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &na
 
 void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 {
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    auto *varDecl = dyn_cast<VarDecl>(decl);
     if (!varDecl)
         return;
 

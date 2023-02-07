@@ -103,7 +103,7 @@ static bool isWrongReturnType(clang::FunctionDecl *funcDecl)
 
 void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
 {
-    DeclRefExpr *declRefExpr = dyn_cast<DeclRefExpr>(stmt);
+    auto *declRefExpr = dyn_cast<DeclRefExpr>(stmt);
     if (!declRefExpr)
         return;
 
@@ -128,7 +128,7 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
             Stmt *ancester = clazy::parent(m_context->parentMap, parent);
             if (!ancester)
                 break;
-            ReturnStmt *returnStmt = dyn_cast<ReturnStmt>(ancester);
+            auto *returnStmt = dyn_cast<ReturnStmt>(ancester);
             if (returnStmt) {
                 isPartReturnStmt = true;
                 break;
@@ -192,7 +192,7 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
 
 void Qt6QHashSignature::VisitDecl(clang::Decl *decl)
 {
-    FunctionDecl *funcDecl = dyn_cast<FunctionDecl>(decl);
+    auto *funcDecl = dyn_cast<FunctionDecl>(decl);
     if (funcDecl) {
         if (!isInterestingFunction(funcDecl->getNameAsString()))
             return;

@@ -104,7 +104,7 @@ SourceLocation locForNextSemiColon(SourceLocation loc, const clang::SourceManage
 
 void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
 {
-    CXXRecordDecl *recDecl = dyn_cast<CXXRecordDecl>(decl);
+    auto *recDecl = dyn_cast<CXXRecordDecl>(decl);
     if (!recDecl)
         return;
     auto parent = recDecl->getParent();

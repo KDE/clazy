@@ -128,7 +128,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         if (parentFunc && parentFunc->getNumParams() == parentCall->getNumArgs()) {
             int i = 0;
             for (auto argExpr : parentCall->arguments()) {
-                if (CXXMemberCallExpr *expr2 = clazy::getFirstChildOfType<CXXMemberCallExpr>(argExpr)) {
+                if (auto *expr2 = clazy::getFirstChildOfType<CXXMemberCallExpr>(argExpr)) {
                     if (expr2 == memberCall) {
                         // Success, we found which arg
                         ParmVarDecl *parm = parentFunc->getParamDecl(i);

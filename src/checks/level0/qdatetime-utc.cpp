@@ -49,7 +49,7 @@ QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
 
 void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 {
-    CXXMemberCallExpr *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!secondCall || !secondCall->getMethodDecl())
         return;
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
@@ -67,7 +67,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (!firstFunc)
         return;
 
-    CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
     if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime")
         return;
 

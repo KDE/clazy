@@ -215,7 +215,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
     }
 
     if (!isOptionSet("no-msvc-compat")) {
-        InitListExpr *initializerList = clazy::getFirstParentOfType<InitListExpr>(m_context->parentMap, ctorExpr);
+        auto *initializerList = clazy::getFirstParentOfType<InitListExpr>(m_context->parentMap, ctorExpr);
         if (initializerList != nullptr)
             return; // Nothing to do here, MSVC doesn't like it
 
@@ -394,7 +394,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
     if (!s)
         return false;
 
-    MemberExpr *memberExpr = dyn_cast<MemberExpr>(s);
+    auto *memberExpr = dyn_cast<MemberExpr>(s);
     if (memberExpr)
         return true;
 
@@ -408,7 +408,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
     if (Utils::isAssignOperator(dyn_cast<CXXOperatorCallExpr>(s), "QString", "QString", lo))
         return true;
 
-    CallExpr *callExpr = dyn_cast<CallExpr>(s);
+    auto *callExpr = dyn_cast<CallExpr>(s);
     StringLiteral *literal = stringLiteralForCall(callExpr);
     auto operatorCall = dyn_cast<CXXOperatorCallExpr>(s);
     if (operatorCall && clazy::returnTypeName(operatorCall, lo) != "QTestData") {

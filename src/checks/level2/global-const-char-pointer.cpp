@@ -45,7 +45,7 @@ GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyCon
 
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 {
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    auto *varDecl = dyn_cast<VarDecl>(decl);
     if (!varDecl || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() || !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace()
         || varDecl->hasExternalStorage())
         return;

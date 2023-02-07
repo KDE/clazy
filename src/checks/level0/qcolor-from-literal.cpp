@@ -66,7 +66,7 @@ public:
 
     void run(const MatchFinder::MatchResult &result) override
     {
-        const StringLiteral *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
+        const auto *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
         if (handleStringLiteral(lt))
             m_check->emitWarning(lt, "The QColor ctor taking ints is cheaper than the one taking string literals");
     }
@@ -93,7 +93,7 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
     if (name != "QColor::setNamedColor")
         return;
 
-    StringLiteral *lt = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(0));
+    auto *lt = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(0));
     if (handleStringLiteral(lt))
         emitWarning(lt, "The ctor taking ints is cheaper than QColor::setNamedColor(QString)");
 }

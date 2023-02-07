@@ -68,7 +68,7 @@ std::vector<clang::QualType> clazy::getTemplateArgumentsTypes(CXXRecordDecl *rec
     if (!record)
         return {};
 
-    ClassTemplateSpecializationDecl *templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(record);
+    auto *templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(record);
     if (!templateDecl)
         return {};
 
@@ -80,7 +80,7 @@ ClassTemplateSpecializationDecl *clazy::templateDecl(Decl *decl)
     if (isa<ClassTemplateSpecializationDecl>(decl))
         return dyn_cast<ClassTemplateSpecializationDecl>(decl);
 
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
+    auto *varDecl = dyn_cast<VarDecl>(decl);
     if (!varDecl)
         return nullptr;
     QualType qt = varDecl->getType();

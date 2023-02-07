@@ -72,7 +72,7 @@ static bool isKnownType(const std::string &className)
 
 void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
 {
-    CallExpr *callExpr = dyn_cast<CallExpr>(stmt);
+    auto *callExpr = dyn_cast<CallExpr>(stmt);
     if (!callExpr)
         return;
 
@@ -94,7 +94,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!secondFunc)
         return;
 
-    CXXMethodDecl *secondMethod = dyn_cast<CXXMethodDecl>(secondFunc);
+    auto *secondMethod = dyn_cast<CXXMethodDecl>(secondFunc);
     if (!secondMethod || secondMethod->isConst() || secondMethod->isStatic())
         return;
 

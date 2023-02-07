@@ -225,7 +225,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
             return false;
     }
 
-    CallExpr *innerCall = clazy::getFirstChildOfType2<CallExpr>(temp);
+    auto *innerCall = clazy::getFirstChildOfType2<CallExpr>(temp);
     auto innerMemberCall = innerCall ? dyn_cast<CXXMemberCallExpr>(innerCall) : nullptr;
     if (!innerMemberCall)
         return false;
@@ -242,7 +242,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
 
 std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
-    MemberExpr *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
+    auto *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
         queueManualFixitWarning(clazy::getLocStart(call), "Internal error 1");
         return {};
