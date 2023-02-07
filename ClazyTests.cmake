@@ -27,6 +27,7 @@ add_test(NAME thread-with-slots COMMAND python3 run_tests.py thread-with-slots W
 add_test(NAME tr-non-literal COMMAND python3 run_tests.py tr-non-literal WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME unexpected-flag-enumerator-value COMMAND python3 run_tests.py unexpected-flag-enumerator-value WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME unneeded-cast COMMAND python3 run_tests.py unneeded-cast WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+add_test(NAME unused-result-check COMMAND python3 run_tests.py unused-result-check WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME use-arrow-operator-instead-of-data COMMAND python3 run_tests.py use-arrow-operator-instead-of-data WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME use-chrono-in-qtimer COMMAND python3 run_tests.py use-chrono-in-qtimer WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME connect-by-name COMMAND python3 run_tests.py connect-by-name WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)

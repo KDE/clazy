@@ -54,6 +54,7 @@
 #include "checks/manuallevel/tr-non-literal.h"
 #include "checks/manuallevel/unexpected-flag-enumerator-value.h"
 #include "checks/manuallevel/unneeded-cast.h"
+#include "checks/manuallevel/unused-result-check.h"
 #include "checks/manuallevel/use-arrow-operator-instead-of-data.h"
 #include "checks/manuallevel/use-chrono-in-qtimer.h"
 #include "checks/level0/connect-by-name.h"
@@ -167,6 +168,9 @@ void CheckManager::registerChecks()
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnexpectedFlagEnumeratorValue>("unexpected-flag-enumerator-value", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+#ifndef CLAZY_DISABLE_AST_MATCHERS
+    registerCheck(check<UnusedResultCheck>("unused-result-check", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
+#endif
     registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0,  RegisteredCheck::Option_VisitsDecls));

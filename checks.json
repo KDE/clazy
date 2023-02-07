@@ -729,6 +729,13 @@
             "level" : -1,
             "categories" : ["bug"],
             "visits_decls" : true
+        },
+        {
+            "name"  : "unused-result-check",
+            "level" : -1,
+            "categories" : ["bug"],
+            "visits_stmts" : true,
+            "ifndef" : "CLAZY_DISABLE_AST_MATCHERS"
         }
     ]
 }
