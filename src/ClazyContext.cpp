@@ -19,11 +19,11 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "AccessSpecifierManager.h"
-#include "checkmanager.h"
 #include "ClazyContext.h"
+#include "AccessSpecifierManager.h"
 #include "FixItExporter.h"
 #include "PreProcessorVisitor.h"
+#include "checkmanager.h"
 
 #include <clang/AST/ParentMap.h>
 #include <clang/Frontend/CompilerInstance.h>
@@ -35,11 +35,12 @@
 
 using namespace clang;
 
-
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
-                           const std::string &headerFilter, const std::string &ignoreDirs,
+                           const std::string &headerFilter,
+                           const std::string &ignoreDirs,
                            std::string exportFixesFilename,
-                           const std::vector<std::string> &translationUnitPaths, ClazyOptions opts)
+                           const std::vector<std::string> &translationUnitPaths,
+                           ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())
@@ -64,14 +65,13 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
         }
 
         const bool isClazyStandalone = !translationUnitPaths.empty();
-        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(),
-                                     exportFixesFilename, isClazyStandalone);
+        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
 }
 
 ClazyContext::~ClazyContext()
 {
-    //delete preprocessorVisitor; // we don't own it
+    // delete preprocessorVisitor; // we don't own it
     delete accessSpecifierManager;
     delete parentMap;
 
@@ -120,12 +120,12 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-                                   for (auto s : ci.getPreprocessorOpts().Macros) {
-                                       if (s.first == "QT_CORE_LIB")
-                                           return true;
-                                   }
-                                   return false;
-                               } ();
+        for (auto s : ci.getPreprocessorOpts().Macros) {
+            if (s.first == "QT_CORE_LIB")
+                return true;
+        }
+        return false;
+    }();
 
     return s_isQt;
 }

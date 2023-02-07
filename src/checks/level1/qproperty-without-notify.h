@@ -29,23 +29,22 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class MacroInfo;
 class Token;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-qproperty-without-notify.md for more info.
  */
-class QPropertyWithoutNotify
-    : public CheckBase
+class QPropertyWithoutNotify : public CheckBase
 {
 public:
     explicit QPropertyWithoutNotify(const std::string &name, ClazyContext *context);
+
 private:
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 
     bool m_lastIsGadget = false;
 };

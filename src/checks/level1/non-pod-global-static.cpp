@@ -23,20 +23,20 @@
 */
 
 #include "non-pod-global-static.h"
-#include "QtUtils.h"
 #include "ClazyContext.h"
+#include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
-#include <clang/AST/DeclCXX.h>
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/Specifiers.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/Lexer.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
@@ -54,7 +54,7 @@ static bool shouldIgnoreType(StringRef name)
 NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    m_filesToIgnore = { "main.cpp", "qrc_", "qdbusxml2cpp" };
+    m_filesToIgnore = {"main.cpp", "qrc_", "qdbusxml2cpp"};
 }
 
 void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
@@ -74,7 +74,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
 
     if (declStart.isMacroID()) {
         auto macroName = static_cast<std::string>(Lexer::getImmediateMacroName(declStart, sm(), lo()));
-        if (clazy::startsWithAny(macroName, { "Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
+        if (clazy::startsWithAny(macroName, {"Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) // Don't warn on these
             return;
     }
 
@@ -107,5 +107,4 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
         std::string error = std::string("non-POD static (") + className.data() + std::string(")");
         emitWarning(declStart, error);
     }
-
 }

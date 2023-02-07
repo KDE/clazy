@@ -30,18 +30,19 @@
 
 class QtMacrosPreprocessorCallbacks;
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Token;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-qt-macros for more info.
  */
-class QtMacros
-    : public CheckBase
+class QtMacros : public CheckBase
 {
 public:
     explicit QtMacros(const std::string &name, ClazyContext *context);
+
 private:
     void checkIfDef(const clang::Token &MacroNameTok, clang::SourceLocation Loc);
     void VisitMacroDefined(const clang::Token &MacroNameTok) override;

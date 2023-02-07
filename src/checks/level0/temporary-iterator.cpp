@@ -23,21 +23,20 @@
     Boston, MA 02110-1301, USA.
 */
 
-
-#include "ClazyContext.h"
 #include "temporary-iterator.h"
-#include "Utils.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/AST/ParentMap.h>
+#include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
-#include <clang/AST/Decl.h>
 #include <clang/AST/OperationKinds.h>
+#include <clang/AST/ParentMap.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
@@ -50,11 +49,11 @@ using namespace clang;
 TemporaryIterator::TemporaryIterator(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_methodsByType["vector"] = {"begin", "end", "cbegin", "cend" }; // TODO: More stl support
-    m_methodsByType["QList"] = { "begin", "end", "constBegin", "constEnd", "cbegin", "cend" };
-    m_methodsByType["QVector"] = { "begin", "end", "constBegin", "constEnd", "cbegin", "cend", "insert" };
-    m_methodsByType["QMap"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "lowerBound", "upperBound", "cbegin", "cend", "equal_range" };
-    m_methodsByType["QHash"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend", "find", "constFind", "insert", "insertMulti" };
+    m_methodsByType["vector"] = {"begin", "end", "cbegin", "cend"}; // TODO: More stl support
+    m_methodsByType["QList"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend"};
+    m_methodsByType["QVector"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend", "insert"};
+    m_methodsByType["QMap"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "lowerBound", "upperBound", "cbegin", "cend", "equal_range"};
+    m_methodsByType["QHash"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend", "find", "constFind", "insert", "insertMulti"};
     m_methodsByType["QLinkedList"] = {"begin", "end", "constBegin", "constEnd", "cbegin", "cend"};
     m_methodsByType["QSet"] = {"begin", "end", "constBegin", "constEnd", "find", "constFind", "cbegin", "cend"};
     m_methodsByType["QStack"] = m_methodsByType["QVector"];
@@ -91,7 +90,6 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     const auto &allowedFunctions = it->second;
     if (!clazy::contains(allowedFunctions, functionName))
         return;
-
 
     // Catch getList().cbegin().value(), which is ok
     if (clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, m_context->parentMap->getParent(memberExpr)))

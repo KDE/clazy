@@ -20,11 +20,11 @@
 */
 
 #include "TypeUtils.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
+#include "StmtBodyRange.h"
 #include "StringUtils.h"
 #include "Utils.h"
-#include "StmtBodyRange.h"
-#include "ClazyContext.h"
 
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
@@ -36,9 +36,7 @@
 
 using namespace clang;
 
-bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualType,
-                             const VarDecl *varDecl, QualTypeClassification &classif,
-                             clang::Stmt *body)
+bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualType, const VarDecl *varDecl, QualTypeClassification &classif, clang::Stmt *body)
 {
     QualType unrefQualType = clazy::unrefQualType(qualType);
     const Type *paramType = unrefQualType.getTypePtrOrNull();
@@ -52,7 +50,8 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
-    classif.isNonTriviallyCopyable = recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor() || (copyCtor && copyCtor->isDeleted()));
+    classif.isNonTriviallyCopyable =
+        recordDecl && (recordDecl->hasNonTrivialCopyConstructor() || recordDecl->hasNonTrivialDestructor() || (copyCtor && copyCtor->isDeleted()));
     classif.isReference = qualType->isLValueReferenceType();
     classif.isConst = unrefQualType.isConstQualified();
 
@@ -67,7 +66,9 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
     } else if (classif.isConst && classif.isReference && !classif.isNonTriviallyCopyable && !classif.isBig) {
         classif.passSmallTrivialByValue = true;
     } else if (varDecl && !classif.isConst && !classif.isReference && (classif.isBig || classif.isNonTriviallyCopyable)) {
-        if (body && (Utils::containsNonConstMemberCall(context->parentMap, body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/ true)))
+        if (body
+            && (Utils::containsNonConstMemberCall(context->parentMap, body, varDecl)
+                || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, /*byrefonly=*/true)))
             return true;
 
         classif.passNonTriviallyCopyableByConstRef = classif.isNonTriviallyCopyable;
@@ -101,23 +102,21 @@ bool clazy::isSmallTrivial(const ClazyContext *context, QualType qualType)
     if (qualType->isRValueReferenceType()) // && ref, nothing to do here
         return false;
 
-     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
-     CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
-     const bool hasDeletedCopyCtor = copyCtor && copyCtor->isDeleted();
-     const bool isTrivial = recordDecl && !recordDecl->hasNonTrivialCopyConstructor() && !recordDecl->hasNonTrivialDestructor() && !hasDeletedCopyCtor;
+    CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
+    CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
+    const bool hasDeletedCopyCtor = copyCtor && copyCtor->isDeleted();
+    const bool isTrivial = recordDecl && !recordDecl->hasNonTrivialCopyConstructor() && !recordDecl->hasNonTrivialDestructor() && !hasDeletedCopyCtor;
 
-     if (isTrivial) {
-         const auto typeSize = context->astContext.getTypeSize(unrefQualType) / 8;
-         const bool isSmall = typeSize <= 16;
-         return isSmall;
-     }
+    if (isTrivial) {
+        const auto typeSize = context->astContext.getTypeSize(unrefQualType) / 8;
+        const bool isSmall = typeSize <= 16;
+        return isSmall;
+    }
 
-     return false;
+    return false;
 }
 
-void clazy::heapOrStackAllocated(Expr *arg, const std::string &type,
-                                     const clang::LangOptions &lo,
-                                     bool &isStack, bool &isHeap)
+void clazy::heapOrStackAllocated(Expr *arg, const std::string &type, const clang::LangOptions &lo, bool &isStack, bool &isHeap)
 {
     isStack = false;
     isHeap = false;
@@ -126,18 +125,17 @@ void clazy::heapOrStackAllocated(Expr *arg, const std::string &type,
         return;
     }
 
-    std::vector<DeclRefExpr*> declrefs;
+    std::vector<DeclRefExpr *> declrefs;
     clazy::getChilds(arg, declrefs, 3);
 
-    std::vector<DeclRefExpr*> interestingDeclRefs;
+    std::vector<DeclRefExpr *> interestingDeclRefs;
     for (auto declref : declrefs) {
         auto t = declref->getType().getTypePtrOrNull();
         if (!t)
             continue;
 
         // Remove the '*' if it's a pointer
-        QualType qt = t->isPointerType() ? t->getPointeeType()
-                                         : declref->getType();
+        QualType qt = t->isPointerType() ? t->getPointeeType() : declref->getType();
 
         if (t && type == clazy::simpleTypeName(qt, lo)) {
             interestingDeclRefs.push_back(declref);
@@ -156,15 +154,15 @@ void clazy::heapOrStackAllocated(Expr *arg, const std::string &type,
     }
 }
 
-bool clazy::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase,
-                            std::vector<CXXRecordDecl*> *baseClasses)
+bool clazy::derivesFrom(const CXXRecordDecl *derived, const CXXRecordDecl *possibleBase, std::vector<CXXRecordDecl *> *baseClasses)
 {
     if (!derived || !possibleBase || derived == possibleBase)
         return false;
 
     for (auto base : derived->bases()) {
         const Type *type = base.getType().getTypePtrOrNull();
-        if (!type) continue;
+        if (!type)
+            continue;
         CXXRecordDecl *baseDecl = type->getAsCXXRecordDecl();
         baseDecl = baseDecl ? baseDecl->getCanonicalDecl() : nullptr;
 

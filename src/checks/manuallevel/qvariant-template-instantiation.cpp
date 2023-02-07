@@ -23,9 +23,9 @@
 */
 
 #include "qvariant-template-instantiation.h"
-#include "TemplateUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TemplateUtils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -51,11 +51,10 @@ QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &
 
 static bool isMatchingClass(StringRef name)
 {
-    static const std::vector<StringRef> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
-                                                   "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
-                                                   "QJsonValue", "QLocale", "QModelIndex", "QPoint", "QPointF",
-                                                   "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
-                                                   "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
+    static const std::vector<StringRef> classes = {"QBitArray",     "QByteArray",  "QChar",      "QDate",   "QDateTime",          "QEasingCurve", "QJsonArray",
+                                                   "QJsonDocument", "QJsonObject", "QJsonValue", "QLocale", "QModelIndex",        "QPoint",       "QPointF",
+                                                   "QRect",         "QRectF",      "QRegExp",    "QString", "QRegularExpression", "QSize",        "QSizeF",
+                                                   "QStringList",   "QTime",       "QUrl",       "QUuid"};
 
     return clazy::contains(classes, name);
 }
@@ -92,7 +91,6 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
 
         std::string typeName2 = typeName;
         typeName2[0] = toupper(typeName2[0]);
-
 
         if (typeName[0] == 'Q')
             typeName2.erase(0, 1); // Remove first letter

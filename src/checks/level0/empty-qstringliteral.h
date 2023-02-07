@@ -27,21 +27,22 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class SourceLocation;
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-empty-qstringliteral.md for more info.
  */
-class EmptyQStringliteral
-    : public CheckBase
+class EmptyQStringliteral : public CheckBase
 {
 public:
     explicit EmptyQStringliteral(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
     bool maybeIgnoreUic(clang::SourceLocation) const;
+
 private:
 };
 

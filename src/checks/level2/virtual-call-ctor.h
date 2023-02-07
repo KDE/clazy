@@ -27,12 +27,13 @@
 
 #include "checkbase.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CXXRecordDecl;
 class Stmt;
 class SourceLocation;
@@ -47,17 +48,14 @@ class Decl;
  * This plugin only checks for pure virtuals, ignoring non-pure, which in theory you shouldn't call,
  * but seems common practice.
  */
-class VirtualCallCtor
-    : public CheckBase
+class VirtualCallCtor : public CheckBase
 {
 public:
     VirtualCallCtor(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
 
 private:
-    clang::SourceLocation containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt,
-                                              std::vector<clang::Stmt*> &processedStmts);
+    clang::SourceLocation containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<clang::Stmt *> &processedStmts);
 };
-
 
 #endif

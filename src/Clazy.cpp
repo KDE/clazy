@@ -22,38 +22,37 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "Utils.h"
 #include "Clazy.h"
-#include "clazy_stl.h"
-#include "checkbase.h"
 #include "AccessSpecifierManager.h"
-#include "SourceCompatibilityHelpers.h"
 #include "FixItExporter.h"
+#include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
+#include "checkbase.h"
+#include "clazy_stl.h"
 
-#include <clang/Frontend/FrontendPluginRegistry.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/AST/ParentMap.h>
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/ParentMap.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/StmtCXX.h>
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
-#include <llvm/Support/raw_ostream.h>
+#include <clang/Frontend/FrontendPluginRegistry.h>
 #include <llvm/Support/Casting.h>
+#include <llvm/Support/raw_ostream.h>
 
-#include <stdlib.h>
 #include <mutex>
+#include <stdlib.h>
 
 using namespace clang;
 using namespace clang::ast_matchers;
-
 
 static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
 {
@@ -81,7 +80,7 @@ void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &c
 #ifndef CLAZY_DISABLE_AST_MATCHERS
     checkBase->registerASTMatchers(*m_matchFinder);
 #endif
-    //m_createdChecks.push_back(checkBase);
+    // m_createdChecks.push_back(checkBase);
 
     const RegisteredCheck &rcheck = check.second;
 
@@ -90,7 +89,6 @@ void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &c
 
     if (rcheck.options & RegisteredCheck::Option_VisitsDecls)
         m_checksToVisitDecls.push_back(checkBase);
-
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
@@ -222,7 +220,8 @@ static std::string getEnvVariable(const char *name)
     const char *result = getenv(name);
     if (result)
         return result;
-    else return std::string();
+    else
+        return std::string();
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_)
@@ -237,8 +236,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(ci, headerFilter, ignoreDirs,
-                                     exportFixesFilename, {}, ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(ci, headerFilter, ignoreDirs, exportFixesFilename, {}, ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -271,8 +269,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     {
         std::lock_guard<std::mutex> lock(CheckManager::lock());
-        m_checks = m_checkManager->requestedChecks(args,
-                                                   m_options & ClazyContext::ClazyOption_Qt4Compat);
+        m_checks = m_checkManager->requestedChecks(args, m_options & ClazyContext::ClazyOption_Qt4Compat);
     }
 
     if (args.size() > 1) {
@@ -339,12 +336,13 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
 
         auto padded = check.name;
         padded.insert(padded.end(), 39 - padded.size(), ' ');
-        ros << "    - " << check.name;;
+        ros << "    - " << check.name;
+        ;
         auto fixits = m_checkManager->availableFixIts(check.name);
         if (!fixits.empty()) {
             ros << "    (";
             bool isFirst = true;
-            for (const auto& fixit : fixits) {
+            for (const auto &fixit : fixits) {
                 if (isFirst) {
                     isFirst = false;
                 } else {
@@ -390,12 +388,14 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
 
     auto cm = CheckManager::instance();
 
-    std::vector<std::string> checks; checks.push_back(m_checkList);
+    std::vector<std::string> checks;
+    checks.push_back(m_checkList);
     const bool qt4Compat = m_options & ClazyContext::ClazyOption_Qt4Compat;
     const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks, qt4Compat);
 
     if (requestedChecks.size() == 0) {
-        llvm::errs() << "No checks were requested!\n" << "\n";
+        llvm::errs() << "No checks were requested!\n"
+                     << "\n";
         return nullptr;
     }
 
@@ -409,5 +409,4 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
 
 volatile int ClazyPluginAnchorSource = 0;
 
-static FrontendPluginRegistry::Add<ClazyASTAction>
-X("clazy", "clang lazy plugin");
+static FrontendPluginRegistry::Add<ClazyASTAction> X("clazy", "clang lazy plugin");

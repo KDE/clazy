@@ -23,21 +23,19 @@
 */
 
 #include "Utils.h"
-#include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StmtBodyRange.h"
+#include "StringUtils.h"
 #include "clazy_stl.h"
 
-#include <clang/AST/Expr.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/ExprCXX.h>
-#include <clang/Basic/SourceLocation.h>
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclGroup.h>
+#include <clang/AST/DeclTemplate.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
 #include <clang/AST/OperationKinds.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/StmtIterator.h>
@@ -45,7 +43,9 @@
 #include <clang/Basic/CharInfo.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Lexer.h>
 #include <clang/Lex/Token.h>
 #include <llvm/Support/Casting.h>
 
@@ -53,9 +53,10 @@
 #include <iterator>
 #include <utility>
 
-namespace clang {
+namespace clang
+{
 class LangOptions;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -66,10 +67,11 @@ bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
     });
 }
 
-CXXRecordDecl * Utils::namedCastInnerDecl(CXXNamedCastExpr *staticOrDynamicCast)
+CXXRecordDecl *Utils::namedCastInnerDecl(CXXNamedCastExpr *staticOrDynamicCast)
 {
     Expr *e = staticOrDynamicCast->getSubExpr();
-    if (!e) return nullptr;
+    if (!e)
+        return nullptr;
     if (auto implicitCast = dyn_cast<ImplicitCastExpr>(e)) {
         // Sometimes it's automatically cast to base
         if (implicitCast->getCastKind() == CK_DerivedToBase) {
@@ -79,20 +81,23 @@ CXXRecordDecl * Utils::namedCastInnerDecl(CXXNamedCastExpr *staticOrDynamicCast)
 
     QualType qt = e->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t) return nullptr;
+    if (!t)
+        return nullptr;
     QualType qt2 = t->getPointeeType();
     const Type *t2 = qt2.getTypePtrOrNull();
-    if (!t2) return nullptr;
+    if (!t2)
+        return nullptr;
     return t2->getAsCXXRecordDecl();
 }
 
-CXXRecordDecl * Utils::namedCastOuterDecl(CXXNamedCastExpr *staticOrDynamicCast)
+CXXRecordDecl *Utils::namedCastOuterDecl(CXXNamedCastExpr *staticOrDynamicCast)
 {
     QualType qt = staticOrDynamicCast->getTypeAsWritten();
     const Type *t = qt.getTypePtrOrNull();
     QualType qt2 = t->getPointeeType();
     const Type *t2 = qt2.getTypePtrOrNull();
-    if (!t2) return nullptr;
+    if (!t2)
+        return nullptr;
     return t2->getAsCXXRecordDecl();
 }
 
@@ -127,23 +132,20 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
     if (binary && (binary->isAssignmentOp() || binary->isShiftAssignOp() || binary->isCompoundAssignmentOp()))
         return true;
 
-    static const std::vector<StringRef> method_blacklist = {
-        "isDestroyed",
-        "isRecursive", // TODO: Use qualified name instead ?
-        "q_func",
-        "d_func",
-        "begin",
-        "end",
-        "data",
-        "fragment",
-        "glIsRenderbuffer"
-    };
+    static const std::vector<StringRef> method_blacklist = {"isDestroyed",
+                                                            "isRecursive", // TODO: Use qualified name instead ?
+                                                            "q_func",
+                                                            "d_func",
+                                                            "begin",
+                                                            "end",
+                                                            "data",
+                                                            "fragment",
+                                                            "glIsRenderbuffer"};
 
     auto memberCall = dyn_cast<MemberExpr>(stm);
     if (memberCall) {
         auto methodDecl = dyn_cast<CXXMethodDecl>(memberCall->getMemberDecl());
-        if (methodDecl && !methodDecl->isConst() && !methodDecl->isStatic() &&
-            !clazy::contains(method_blacklist, clazy::name(methodDecl)))
+        if (methodDecl && !methodDecl->isConst() && !methodDecl->isStatic() && !clazy::contains(method_blacklist, clazy::name(methodDecl)))
             return true;
     }
 
@@ -193,7 +195,7 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
         return nullptr;
 
     auto declRefExpr = dyn_cast<DeclRefExpr>(implicitObject);
-    auto memberExpr =  dyn_cast<MemberExpr>(implicitObject);
+    auto memberExpr = dyn_cast<MemberExpr>(implicitObject);
     if (declRefExpr) {
         return declRefExpr->getDecl();
     } else if (memberExpr) {
@@ -201,8 +203,8 @@ ValueDecl *Utils::valueDeclForMemberCall(CXXMemberCallExpr *memberCall)
     }
 
     // Maybe there's an implicit cast in between..
-    auto memberExprs = clazy::getStatements<MemberExpr>(implicitObject, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
-    auto declRefs = clazy::getStatements<DeclRefExpr>(implicitObject, nullptr, {}, /**depth=*/ 1, /*includeParent=*/ true);
+    auto memberExprs = clazy::getStatements<MemberExpr>(implicitObject, nullptr, {}, /**depth=*/1, /*includeParent=*/true);
+    auto declRefs = clazy::getStatements<DeclRefExpr>(implicitObject, nullptr, {}, /**depth=*/1, /*includeParent=*/true);
 
     if (!memberExprs.empty()) {
         return memberExprs.at(0)->getMemberDecl();
@@ -230,7 +232,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     if (auto memberExpr = dyn_cast<MemberExpr>(child2)) {
         return memberExpr->getMemberDecl();
     } else {
-        std::vector<DeclRefExpr*> refs;
+        std::vector<DeclRefExpr *> refs;
         clazy::getChilds<DeclRefExpr>(child2, refs);
         if (refs.size() == 1) {
             return refs[0]->getDecl();
@@ -240,7 +242,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     return nullptr;
 }
 
-clang::ValueDecl * Utils::valueDeclForCallExpr(clang::CallExpr *expr)
+clang::ValueDecl *Utils::valueDeclForCallExpr(clang::CallExpr *expr)
 {
     if (auto memberExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
         return valueDeclForMemberCall(memberExpr);
@@ -267,13 +269,12 @@ static bool referencesVar(Stmt *s, const VarDecl *varDecl)
     return false;
 }
 
-
 bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const VarDecl *varDecl)
 {
     if (!varDecl)
         return false;
 
-    std::vector<CXXMemberCallExpr*> memberCallExprs;
+    std::vector<CXXMemberCallExpr *> memberCallExprs;
     clazy::getChilds<CXXMemberCallExpr>(body, memberCallExprs);
     for (auto memberCall : memberCallExprs) {
         CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
@@ -284,7 +285,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const 
         }
     }
 
-    std::vector<CXXOperatorCallExpr*> operatorCalls;
+    std::vector<CXXOperatorCallExpr *> operatorCalls;
     clazy::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
     for (auto operatorCall : operatorCalls) {
         FunctionDecl *fDecl = operatorCall->getDirectCallee();
@@ -298,7 +299,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const 
         }
     }
 
-    std::vector<BinaryOperator*> assignmentOperators;
+    std::vector<BinaryOperator *> assignmentOperators;
     clazy::getChilds<BinaryOperator>(body, assignmentOperators);
     for (auto op : assignmentOperators) {
         if (!op->isAssignmentOp())
@@ -318,9 +319,9 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
     for (auto arg : expr->arguments()) {
         ++param;
         auto refExpr = dyn_cast<DeclRefExpr>(arg);
-        if (!refExpr)  {
+        if (!refExpr) {
             if (clazy::hasChildren(arg)) {
-                Stmt* firstChild = *(arg->child_begin()); // Can be null (bug #362236)
+                Stmt *firstChild = *(arg->child_begin()); // Can be null (bug #362236)
                 refExpr = firstChild ? dyn_cast<DeclRefExpr>(firstChild) : nullptr;
                 if (!refExpr)
                     continue;
@@ -363,7 +364,7 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
         return false;
 
     Stmt *body = bodyRange.body;
-    std::vector<CallExpr*> callExprs;
+    std::vector<CallExpr *> callExprs;
     clazy::getChilds<CallExpr>(body, callExprs);
     for (CallExpr *callexpr : callExprs) {
         if (bodyRange.isOutsideRange(callexpr))
@@ -377,7 +378,7 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
             return true;
     }
 
-    std::vector<CXXConstructExpr*> constructExprs;
+    std::vector<CXXConstructExpr *> constructExprs;
     clazy::getChilds<CXXConstructExpr>(body, constructExprs);
     for (CXXConstructExpr *constructExpr : constructExprs) {
         if (bodyRange.isOutsideRange(constructExpr))
@@ -410,10 +411,10 @@ bool Utils::isReturned(Stmt *body, const VarDecl *varDecl)
     if (!body)
         return false;
 
-    std::vector<ReturnStmt*> returns;
+    std::vector<ReturnStmt *> returns;
     clazy::getChilds<ReturnStmt>(body, returns);
     for (ReturnStmt *returnStmt : returns) {
-        Expr* retValue = returnStmt->getRetValue();
+        Expr *retValue = returnStmt->getRetValue();
         if (!retValue)
             continue;
         auto declRef = clazy::unpeal<DeclRefExpr>(retValue, clazy::IgnoreImplicitCasts);
@@ -431,7 +432,7 @@ bool Utils::isAssignedTo(Stmt *body, const VarDecl *varDecl)
     if (!body)
         return false;
 
-    std::vector<BinaryOperator*> operatorCalls;
+    std::vector<BinaryOperator *> operatorCalls;
     clazy::getChilds<BinaryOperator>(body, operatorCalls);
     for (BinaryOperator *binaryOperator : operatorCalls) {
         if (binaryOperator->getOpcode() != clang::BO_Assign)
@@ -454,7 +455,7 @@ bool Utils::isAssignedFrom(Stmt *body, const VarDecl *varDecl)
     if (!body)
         return false;
 
-    std::vector<CXXOperatorCallExpr*> operatorCalls;
+    std::vector<CXXOperatorCallExpr *> operatorCalls;
     clazy::getChilds<CXXOperatorCallExpr>(body, operatorCalls);
     for (CXXOperatorCallExpr *operatorExpr : operatorCalls) {
         FunctionDecl *fDecl = operatorExpr->getDirectCallee();
@@ -474,7 +475,7 @@ bool Utils::isAssignedFrom(Stmt *body, const VarDecl *varDecl)
 
 bool Utils::callHasDefaultArguments(clang::CallExpr *expr)
 {
-    std::vector<clang::CXXDefaultArgExpr*> exprs;
+    std::vector<clang::CXXDefaultArgExpr *> exprs;
     clazy::getChilds<clang::CXXDefaultArgExpr>(expr, exprs, 1);
     return !exprs.empty();
 }
@@ -484,7 +485,7 @@ bool Utils::containsStringLiteral(Stmt *stm, bool allowEmpty, int depth)
     if (!stm)
         return false;
 
-    std::vector<StringLiteral*> stringLiterals;
+    std::vector<StringLiteral *> stringLiterals;
     clazy::getChilds<StringLiteral>(stm, stringLiterals, depth);
 
     if (allowEmpty)
@@ -518,14 +519,13 @@ bool Utils::ternaryOperatorIsOfStringLiteral(ConditionalOperator *ternary)
     return true;
 }
 
-bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className,
-                             StringRef argumentType, const clang::LangOptions &lo)
+bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className, StringRef argumentType, const clang::LangOptions &lo)
 {
     if (!op)
         return false;
 
     FunctionDecl *functionDecl = op->getDirectCallee();
-    if (!functionDecl || functionDecl->param_size() != 1 )
+    if (!functionDecl || functionDecl->param_size() != 1)
         return false;
 
     if (!className.empty()) {
@@ -540,10 +540,8 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className,
     if (!argumentType.empty() && !clazy::hasArgumentOfType(functionDecl, argumentType, lo))
         return false;
 
-
     return true;
 }
-
 
 bool Utils::isImplicitCastTo(Stmt *s, const std::string &className)
 {
@@ -554,7 +552,6 @@ bool Utils::isImplicitCastTo(Stmt *s, const std::string &className)
     auto record = expr->getBestDynamicClassType();
     return record && clazy::name(record) == className;
 }
-
 
 bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<StringRef> &anyOf)
 {
@@ -580,7 +577,6 @@ bool Utils::isInsideOperatorCall(ParentMap *map, Stmt *s, const std::vector<Stri
     return isInsideOperatorCall(map, clazy::parent(map, s), anyOf);
 }
 
-
 bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<llvm::StringRef> &anyOf)
 {
     if (!s)
@@ -596,9 +592,8 @@ bool Utils::insideCTORCall(ParentMap *map, Stmt *s, const std::vector<llvm::Stri
 
 bool Utils::presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2)
 {
-    return l1.isValid() && l2.isValid() && l1.getColumn() == l2.getColumn() &&
-           l1.getLine()   == l2.getLine()   &&
-           StringRef(l1.getFilename()) == StringRef(l2.getFilename());
+    return l1.isValid() && l2.isValid() && l1.getColumn() == l2.getColumn() && l1.getLine() == l2.getLine()
+        && StringRef(l1.getFilename()) == StringRef(l2.getFilename());
 }
 
 CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
@@ -632,7 +627,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
 const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, std::string &implicitCallee)
 {
     implicitCallee.clear();
-    Expr *implicitArgument= call->getImplicitObjectArgument();
+    Expr *implicitArgument = call->getImplicitObjectArgument();
     if (!implicitArgument) {
         return nullptr;
     }
@@ -696,7 +691,7 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
         return {};
 
     const bool isOperator = isa<CXXOperatorCallExpr>(lastCallExpr);
-    std::vector<CallExpr *> callexprs = { lastCallExpr };
+    std::vector<CallExpr *> callexprs = {lastCallExpr};
     Stmt *s = lastCallExpr;
     do {
         const int childCount = std::distance(s->child_begin(), s->child_end());
@@ -778,7 +773,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const std::string &memberTypeName)
 
 bool Utils::isSharedPointer(CXXRecordDecl *record)
 {
-    static const std::vector<std::string> names = { "std::shared_ptr", "QSharedPointer", "boost::shared_ptr" };
+    static const std::vector<std::string> names = {"std::shared_ptr", "QSharedPointer", "boost::shared_ptr"};
     return record ? clazy::contains(names, record->getQualifiedNameAsString()) : false;
 }
 
@@ -793,17 +788,17 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
     if (!body)
         return false;
 
-    std::vector<DeclStmt*> declStmts;
+    std::vector<DeclStmt *> declStmts;
     clazy::getChilds<DeclStmt>(body, declStmts);
     for (DeclStmt *declStmt : declStmts) {
         if (referencesVarDecl(declStmt, varDecl)) {
-            std::vector<DeclRefExpr*> declRefs;
+            std::vector<DeclRefExpr *> declRefs;
 
             clazy::getChilds<DeclRefExpr>(declStmt, declRefs);
             if (!declRefs.empty())
                 return true;
 
-            std::vector<CallExpr*> callExprs;
+            std::vector<CallExpr *> callExprs;
             clazy::getChilds<CallExpr>(declStmt, callExprs);
             if (!callExprs.empty())
                 return true;
@@ -874,11 +869,11 @@ std::vector<CXXCtorInitializer *> Utils::ctorInitializer(CXXConstructorDecl *cto
     if (!ctor)
         return {};
 
-    std::vector <CXXCtorInitializer *> result;
+    std::vector<CXXCtorInitializer *> result;
 
     for (auto it = ctor->init_begin(), end = ctor->init_end(); it != end; ++it) {
         auto ctorInit = *it;
-        std::vector<DeclRefExpr*> declRefs;
+        std::vector<DeclRefExpr *> declRefs;
         clazy::getChilds(ctorInit->getInit(), declRefs);
         for (auto declRef : declRefs) {
             if (declRef->getDecl() == param) {
@@ -896,7 +891,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
     if (!init)
         return false;
 
-    std::vector<CallExpr*> calls;
+    std::vector<CallExpr *> calls;
     clazy::getChilds(init->getInit(), calls);
 
     for (auto call : calls) {
@@ -910,7 +905,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
     return false;
 }
 
-bool Utils::ctorInitializerContainsMove(const std::vector<CXXCtorInitializer*> &ctorInits)
+bool Utils::ctorInitializerContainsMove(const std::vector<CXXCtorInitializer *> &ctorInits)
 {
     return clazy::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
         return Utils::ctorInitializerContainsMove(ctorInit);
@@ -939,8 +934,7 @@ SourceLocation Utils::locForNextToken(SourceLocation loc, const clang::SourceMan
         return {};
 
     const char *TokenBegin = File.data() + locInfo.second;
-    Lexer lexer(sm.getLocForStartOfFile(locInfo.first), lo, File.begin(),
-                TokenBegin, File.end());
+    Lexer lexer(sm.getLocForStartOfFile(locInfo.first), lo, File.begin(), TokenBegin, File.end());
 
     Token Tok;
     lexer.LexFromRawLexer(Tok);
@@ -949,8 +943,7 @@ SourceLocation Utils::locForNextToken(SourceLocation loc, const clang::SourceMan
 
     // Calculate how much whitespace needs to be skipped if any.
     unsigned NumWhitespaceChars = 0;
-    const char *TokenEnd = sm.getCharacterData(TokenLoc) +
-                           Tok.getLength();
+    const char *TokenEnd = sm.getCharacterData(TokenLoc) + Tok.getLength();
     unsigned char C = *TokenEnd;
     while (isHorizontalWhitespace(C)) {
         C = *(++TokenEnd);
@@ -981,7 +974,7 @@ bool Utils::literalContainsEscapedBytes(StringLiteral *lt, const SourceManager &
 
     for (int i = 0, size = str.size(); i < size - 1; ++i) {
         if (str[i] == '\\') {
-            auto next = str[i+1];
+            auto next = str[i + 1];
             if (next == 'U' || next == 'u' || next == 'x' || std::isdigit(next))
                 return true;
         }

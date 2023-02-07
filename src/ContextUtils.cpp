@@ -20,17 +20,17 @@
 */
 
 #include "ContextUtils.h"
-#include "clazy_stl.h"
-#include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "TypeUtils.h"
+#include "clazy_stl.h"
 
-#include <clang/Basic/SourceLocation.h>
-#include <clang/Basic/SourceManager.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclFriend.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclFriend.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
 #include <clang/Basic/Specifiers.h>
 #include <llvm/Support/raw_ostream.h>
 
@@ -66,9 +66,10 @@ static std::string nameForContext(DeclContext *context)
 }
 
 std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
-                                         CXXMethodDecl *method,
-                                         DeclContext *currentScope,
-                                         SourceLocation usageLoc, bool honourUsingDirectives)
+                                              CXXMethodDecl *method,
+                                              DeclContext *currentScope,
+                                              SourceLocation usageLoc,
+                                              bool honourUsingDirectives)
 {
     if (!currentScope)
         return method->getQualifiedNameAsString();
@@ -80,7 +81,7 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
     auto visibleContexts = clazy::contextsForDecl(currentScope);
 
     // Collect using directives
-    std::vector<UsingDirectiveDecl*> usings;
+    std::vector<UsingDirectiveDecl *> usings;
     if (honourUsingDirectives) {
         for (DeclContext *context : visibleContexts) {
             clazy::append(context->using_directives(), usings);
@@ -98,7 +99,6 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
     }
 
     for (DeclContext *context : visibleContexts) {
-
         if (context != method->getParent()) { // Don't remove the most immediate
             auto it = clazy::find_if(methodContexts, [context](DeclContext *c) {
                 if (c == context)
@@ -106,7 +106,6 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
                 auto ns1 = dyn_cast<NamespaceDecl>(c);
                 auto ns2 = dyn_cast<NamespaceDecl>(context);
                 return ns1 && ns2 && ns1->getQualifiedNameAsString() == ns2->getQualifiedNameAsString();
-
             });
             if (it != methodContexts.end()) {
                 methodContexts.erase(it, it + 1);

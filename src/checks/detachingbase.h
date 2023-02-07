@@ -28,29 +28,26 @@
 #include "checkbase.h"
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CXXMethodDecl;
 }
 
 /**
  * Base class for checks that look for detachments.
  */
-class DetachingBase
-    : public CheckBase
+class DetachingBase : public CheckBase
 {
 public:
     explicit DetachingBase(const std::string &name, ClazyContext *context, Options = Option_None);
-protected:
 
-    enum DetachingMethodType {
-        DetachingMethod,
-        DetachingMethodWithConstCounterPart
-    };
+protected:
+    enum DetachingMethodType { DetachingMethod, DetachingMethodWithConstCounterPart };
 
     bool isDetachingMethod(clang::CXXMethodDecl *, DetachingMethodType = DetachingMethod) const;
 };

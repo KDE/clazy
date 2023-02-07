@@ -25,7 +25,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-signal-with-return-value.md for more info.
  */
@@ -34,6 +33,7 @@ class SignalWithReturnValue : public CheckBase
 public:
     explicit SignalWithReturnValue(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
 };
 

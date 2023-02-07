@@ -23,8 +23,8 @@
 */
 
 #include "detachingbase.h"
-#include "StringUtils.h"
 #include "QtUtils.h"
+#include "StringUtils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -54,8 +54,8 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
 
     StringRef className = clazy::name(record);
 
-    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType = detachingMethodType == DetachingMethod ? clazy::detachingMethods()
-                                                                                                                          : clazy::detachingMethodsWithConstCounterParts();
+    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType =
+        detachingMethodType == DetachingMethod ? clazy::detachingMethods() : clazy::detachingMethodsWithConstCounterParts();
     auto it = methodsByType.find(static_cast<std::string>(className));
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;

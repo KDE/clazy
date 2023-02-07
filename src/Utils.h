@@ -27,24 +27,25 @@
 
 #include "SourceCompatibilityHelpers.h"
 
-#include <clang/Basic/SourceManager.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclTemplate.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
-#include <clang/AST/DeclTemplate.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Config/llvm-config.h>
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 // TODO: this is a dumping ground, most of these functions should be moved to the other *Utils classes
 
-namespace clang {
+namespace clang
+{
 class CXXNamedCastExpr;
 class CXXRecordDecl;
 class CXXMemberCallExpr;
@@ -75,23 +76,24 @@ class VarDecl;
 
 struct StmtBodyRange;
 
-namespace Utils {
+namespace Utils
+{
 /// Returns true if the class has at least one constexpr ctor
 bool hasConstexprCtor(clang::CXXRecordDecl *decl);
 
 /// Returns the type we're casting *from*
-clang::CXXRecordDecl * namedCastInnerDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
+clang::CXXRecordDecl *namedCastInnerDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
 
 /// Returns the type we're casting *to*
-clang::CXXRecordDecl * namedCastOuterDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
+clang::CXXRecordDecl *namedCastOuterDecl(clang::CXXNamedCastExpr *staticOrDynamicCast);
 
 /// Returns the class declaration from a variable declaration
 // So, if the var decl is "Foo f"; it returns the declaration of Foo
-clang::CXXRecordDecl * recordFromVarDecl(clang::Decl *);
+clang::CXXRecordDecl *recordFromVarDecl(clang::Decl *);
 
 /// Returns the template specialization from a variable declaration
 // So, if the var decl is "QList<Foo> f;", returns the template specialization QList<Foo>
-clang::ClassTemplateSpecializationDecl * templateSpecializationFromVarDecl(clang::Decl *);
+clang::ClassTemplateSpecializationDecl *templateSpecializationFromVarDecl(clang::Decl *);
 
 /// Returns true if all the child member function calls are const functions.
 bool allChildrenMemberCallsConst(clang::Stmt *stm);
@@ -101,18 +103,18 @@ bool childsHaveSideEffects(clang::Stmt *stm);
 
 /// Receives a member call, such as "list.reserve()" and returns the declaration of the variable list
 // such as "QList<F> list"
-clang::ValueDecl * valueDeclForMemberCall(clang::CXXMemberCallExpr *);
+clang::ValueDecl *valueDeclForMemberCall(clang::CXXMemberCallExpr *);
 
 /// Receives an operator call, such as "list << fooo" and returns the declaration of the variable list
 // such as "QList<F> list"
-clang::ValueDecl * valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
+clang::ValueDecl *valueDeclForOperatorCall(clang::CXXOperatorCallExpr *);
 
 // overload
-clang::ValueDecl * valueDeclForCallExpr(clang::CallExpr *);
+clang::ValueDecl *valueDeclForCallExpr(clang::CallExpr *);
 
 // Returns true of this value decl is a member variable of a class or struct
 // returns null if not
-clang::CXXRecordDecl* isMemberVariable(clang::ValueDecl *);
+clang::CXXRecordDecl *isMemberVariable(clang::ValueDecl *);
 
 // Returns true if a body of statements contains a non const member call on object declared by varDecl
 // For example:
@@ -133,12 +135,10 @@ bool isReturned(clang::Stmt *body, const clang::VarDecl *varDecl);
 
 // Returns true if a body of statements contains a function call that takes our variable (varDecl)
 // By ref or pointer
-bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl,
-                        bool byRefOrPtrOnly);
+bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl, bool byRefOrPtrOnly);
 
 // Returns true if we take the address of varDecl, such as: &foo
-bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body,
-                    const clang::ValueDecl *valDecl);
+bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body, const clang::ValueDecl *valDecl);
 
 // QString::fromLatin1("foo")    -> true
 // QString::fromLatin1("foo", 1) -> false
@@ -148,35 +148,28 @@ bool callHasDefaultArguments(clang::CallExpr *expr);
 // if allowEmpty is false, "" will be ignored
 bool containsStringLiteral(clang::Stmt *, bool allowEmpty = true, int depth = -1);
 
-bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s,
-                          const std::vector<llvm::StringRef> &anyOf);
+bool isInsideOperatorCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<llvm::StringRef> &anyOf);
 
-bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s,
-                    const std::vector<llvm::StringRef> &anyOf);
+bool insideCTORCall(clang::ParentMap *map, clang::Stmt *s, const std::vector<llvm::StringRef> &anyOf);
 
 // returns true if the ternary operator has two string literal arguments, such as:
 // foo ? "bar" : "baz"
-bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator*);
+bool ternaryOperatorIsOfStringLiteral(clang::ConditionalOperator *);
 
-bool isAssignOperator(clang::CXXOperatorCallExpr *op,
-                      llvm::StringRef className,
-                      llvm::StringRef argumentType, const clang::LangOptions &lo);
+bool isAssignOperator(clang::CXXOperatorCallExpr *op, llvm::StringRef className, llvm::StringRef argumentType, const clang::LangOptions &lo);
 
 bool isImplicitCastTo(clang::Stmt *, const std::string &);
 
 bool presumedLocationsEqual(const clang::PresumedLoc &l1, const clang::PresumedLoc &l2);
 
-
 // Returns the list of methods with name methodName that the class/struct record contains
-std::vector<clang::CXXMethodDecl*> methodsFromString(const clang::CXXRecordDecl *record,
-                                                     const std::string &methodName);
+std::vector<clang::CXXMethodDecl *> methodsFromString(const clang::CXXRecordDecl *record, const std::string &methodName);
 
 // Returns the most derived class. (CXXMemberCallExpr::getRecordDecl() return the first base class with the method)
 // The returned callee is the name of the variable on which the member call was made:
 // o1->foo() => "o1"
 // foo() => "this"
-const clang::CXXRecordDecl* recordForMemberCall(clang::CXXMemberCallExpr *call,
-                                                std::string &implicitCallee);
+const clang::CXXRecordDecl *recordForMemberCall(clang::CXXMemberCallExpr *call, std::string &implicitCallee);
 
 bool isAscii(clang::StringLiteral *lt);
 
@@ -194,7 +187,7 @@ bool isInDerefExpression(clang::Stmt *s, clang::ParentMap *map);
 std::vector<clang::CallExpr *> callListForChain(clang::CallExpr *lastCallExpr);
 
 // Returns the first base class
-clang::CXXRecordDecl * rootBaseClass(clang::CXXRecordDecl *derived);
+clang::CXXRecordDecl *rootBaseClass(clang::CXXRecordDecl *derived);
 
 // Returns the copy ctor for this class
 clang::CXXConstructorDecl *copyCtor(const clang::CXXRecordDecl *);
@@ -238,14 +231,13 @@ bool functionHasEmptyBody(clang::FunctionDecl *func);
  *
  * The operators that write to the variable are operator=, operator+=, operator++, etc.
  */
-clang::Expr* isWriteOperator(clang::Stmt *stm);
+clang::Expr *isWriteOperator(clang::Stmt *stm);
 
 /**
  * Gets the UserDefinedLiteral of type @p type which is somewhere in the ast of @p stm.
  * Returns nullptr if there's no such UserDefinedLiteral.
  */
-clang::UserDefinedLiteral* userDefinedLiteral(clang::Stmt *stm, const std::string &type,
-                                              const clang::LangOptions &lo);
+clang::UserDefinedLiteral *userDefinedLiteral(clang::Stmt *stm, const std::string &type, const clang::LangOptions &lo);
 
 /**
  * Returns the function parameters fom @p func
@@ -259,25 +251,23 @@ clang::ArrayRef<clang::ParmVarDecl *>
 #endif
 functionParameters(clang::FunctionDecl *func);
 
-
 /**
  * For the given ctor, and ctor param, returns the ctor member initializers that used that param.
  * Example:
  * MyCtor(int a, int b) : c(a), d(b) {}
  * auto result = Utils::ctorInitializer(MyCtor, b); // Result is the statement "d(b)"
  */
-std::vector<clang::CXXCtorInitializer*> ctorInitializer(clang::CXXConstructorDecl *ctor,
-                                                        clang::ParmVarDecl *param);
+std::vector<clang::CXXCtorInitializer *> ctorInitializer(clang::CXXConstructorDecl *ctor, clang::ParmVarDecl *param);
 
 /**
  * Returns true if a ctor initializer contains a std::move()
  * Example
  * MyCtor(Foo a) : c(move(a)) {} // Would return true for this init list
  */
-bool ctorInitializerContainsMove(clang::CXXCtorInitializer*);
+bool ctorInitializerContainsMove(clang::CXXCtorInitializer *);
 
 // Overload that recieves a vector and returns true if any ctor initializer contains a move()
-bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer*> &);
+bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer *> &);
 
 /**
  * Returns the filename for the source location loc
@@ -291,9 +281,7 @@ std::string filenameForLoc(clang::SourceLocation loc, const clang::SourceManager
  * If loc refers to the location of 'emit', then this function will return the source location if
  * the sig() call.
  */
-clang::SourceLocation locForNextToken(clang::SourceLocation loc,
-                                      const clang::SourceManager &sm,
-                                      const clang::LangOptions &lo);
+clang::SourceLocation locForNextToken(clang::SourceLocation loc, const clang::SourceManager &sm, const clang::LangOptions &lo);
 
 inline bool isMainFile(const clang::SourceManager &sm, clang::SourceLocation loc)
 {

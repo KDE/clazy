@@ -22,9 +22,9 @@
 #include "strict-iterators.h"
 #include "ClazyContext.h"
 #include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -63,7 +63,6 @@ StrictIterators::StrictIterators(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
-
 
 void StrictIterators::VisitStmt(clang::Stmt *stmt)
 {
@@ -124,7 +123,6 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     auto p = m_context->parentMap->getParent(implicitCast);
     if (dyn_cast<CXXOperatorCallExpr>(p))
         return false;
-
 
     emitWarning(implicitCast, "Mixing iterators with const_iterators");
 

@@ -20,27 +20,26 @@
 */
 
 #include "virtual-signal.h"
-#include "QtUtils.h"
-#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
+#include "QtUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 VirtualSignal::VirtualSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
     context->enableAccessSpecifierManager();
 }
-
 
 void VirtualSignal::VisitDecl(Decl *stmt)
 {
@@ -54,9 +53,7 @@ void VirtualSignal::VisitDecl(Decl *stmt)
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
     if (qst == QtAccessSpecifier_Signal) {
-
         for (auto m : method->overridden_methods()) {
-
             if (auto baseClass = m->getParent()) {
                 if (!clazy::isQObject(baseClass)) {
                     // It's possible that the signal is overriding a method from a non-QObject base class

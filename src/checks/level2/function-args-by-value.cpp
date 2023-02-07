@@ -20,12 +20,12 @@
 */
 
 #include "function-args-by-value.h"
-#include "Utils.h"
+#include "ClazyContext.h"
+#include "FixItUtils.h"
+#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
-#include "FixItUtils.h"
-#include "ClazyContext.h"
-#include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/ASTContext.h>
@@ -47,9 +47,10 @@
 #include <iterator>
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -68,35 +69,37 @@ bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
                                                         "QStringRef", // TODO: Remove in Qt6
                                                         "QList::const_iterator", // TODO: Remove in Qt6
                                                         "QJsonArray::const_iterator", // TODO: Remove in Qt6
-                                                        "QList<QString>::const_iterator",  // TODO: Remove in Qt6
+                                                        "QList<QString>::const_iterator", // TODO: Remove in Qt6
                                                         "QtMetaTypePrivate::QSequentialIterableImpl",
                                                         "QtMetaTypePrivate::QAssociativeIterableImpl",
                                                         "QVariantComparisonHelper",
-                                                        "QHashDummyValue", "QCharRef", "QString::Null"
-    };
+                                                        "QHashDummyValue",
+                                                        "QCharRef",
+                                                        "QString::Null"};
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
 bool FunctionArgsByValue::shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
-    static const std::vector<StringRef> ignoreList = { "operator<<" };
+    static const std::vector<StringRef> ignoreList = {"operator<<"};
 
     return clazy::contains(ignoreList, clazy::name(function));
 }
 
 bool FunctionArgsByValue::shouldIgnoreFunction(clang::FunctionDecl *function)
 {
-    static const std::vector<std::string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
-                                                                 "QMenu::exec", // Fixed in Qt6
-                                                                 "QTextFrame::iterator", // Fixed in Qt6
-                                                                 "QGraphicsWidget::addActions", // Fixed in Qt6
-                                                                 "QListWidget::mimeData", // Fixed in Qt6
-                                                                 "QTableWidget::mimeData", // Fixed in Qt6
-                                                                 "QTreeWidget::mimeData", // Fixed in Qt6
-                                                                 "QWidget::addActions", // Fixed in Qt6
-                                                                 "QSslCertificate::verify", // Fixed in Qt6
-                                                                 "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
+    static const std::vector<std::string> qualifiedIgnoreList = {
+        "QDBusMessage::createErrorReply", // Fixed in Qt6
+        "QMenu::exec", // Fixed in Qt6
+        "QTextFrame::iterator", // Fixed in Qt6
+        "QGraphicsWidget::addActions", // Fixed in Qt6
+        "QListWidget::mimeData", // Fixed in Qt6
+        "QTableWidget::mimeData", // Fixed in Qt6
+        "QTreeWidget::mimeData", // Fixed in Qt6
+        "QWidget::addActions", // Fixed in Qt6
+        "QSslCertificate::verify", // Fixed in Qt6
+        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
     };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
@@ -197,8 +200,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
     }
 }
 
-FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *param,
-                                     clazy::QualTypeClassification)
+FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *param, clazy::QualTypeClassification)
 {
     QualType qt = clazy::unrefQualType(param->getType());
     qt.removeLocalConst();
@@ -217,10 +219,9 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
     }
 
     if (!startLoc.isValid() || !endLoc.isValid()) {
-        llvm::errs() << "Internal error could not apply fixit " << startLoc.printToString(sm())
-                     << ';' << endLoc.printToString(sm()) << "\n";
+        llvm::errs() << "Internal error could not apply fixit " << startLoc.printToString(sm()) << ';' << endLoc.printToString(sm()) << "\n";
         return {};
     }
 
-    return clazy::createReplacement({ startLoc, endLoc }, replacement);
+    return clazy::createReplacement({startLoc, endLoc}, replacement);
 }

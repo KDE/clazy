@@ -21,26 +21,26 @@
 
 #include "container-inside-loop.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "LoopUtils.h"
-#include "StmtBodyRange.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StmtBodyRange.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/AST/ParentMap.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/ExprCXX.h>
+#include <clang/AST/ParentMap.h>
 #include <clang/AST/Stmt.h>
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class CXXConstructorDecl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 ContainerInsideLoop::ContainerInsideLoop(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -54,7 +54,7 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXConstructorDecl *ctor = ctorExpr->getConstructor();
-    if (!ctor || !clazy::equalsAny(clazy::classNameFor(ctor), { "QVector", "std::vector", "QList" }))
+    if (!ctor || !clazy::equalsAny(clazy::classNameFor(ctor), {"QVector", "std::vector", "QList"}))
         return;
 
     DeclStmt *declStm = dyn_cast_or_null<DeclStmt>(m_context->parentMap->getParent(stmt));

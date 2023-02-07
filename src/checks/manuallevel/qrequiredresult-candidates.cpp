@@ -20,15 +20,14 @@
 */
 
 #include "qrequiredresult-candidates.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
-
 
 QRequiredResultCandidates::QRequiredResultCandidates(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -51,17 +50,16 @@ void QRequiredResultCandidates::VisitDecl(clang::Decl *decl)
         return;
 
     QualType qt = method->getReturnType();
-    CXXRecordDecl* returnClass = qt->getAsCXXRecordDecl();
+    CXXRecordDecl *returnClass = qt->getAsCXXRecordDecl();
     returnClass = returnClass ? returnClass->getCanonicalDecl() : nullptr;
     if (!returnClass)
         return;
 
-    CXXRecordDecl* classDecl = method->getParent();
-    classDecl= classDecl ? classDecl->getCanonicalDecl() : nullptr;
+    CXXRecordDecl *classDecl = method->getParent();
+    classDecl = classDecl ? classDecl->getCanonicalDecl() : nullptr;
 
     if (classDecl->getAccess() == AS_private) // A nested private class. We're only interested on our public API
         return;
-
 
     if (returnClass == classDecl) {
         const std::string methodName = static_cast<std::string>(clazy::name(method));

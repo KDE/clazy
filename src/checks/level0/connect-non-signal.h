@@ -28,15 +28,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-connect-non-signal.md for more info.
  */
-class ConnectNonSignal
-    : public CheckBase
+class ConnectNonSignal : public CheckBase
 {
 public:
     explicit ConnectNonSignal(const std::string &name, ClazyContext *context);

@@ -22,14 +22,13 @@
 
 #include "qt4-qstring-from-array.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -39,6 +38,7 @@
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Lex/Lexer.h>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
@@ -57,7 +57,7 @@ static bool isInterestingParam(ParmVarDecl *param, bool &is_char_array, bool &is
     const std::string typeStr = param->getType().getAsString();
     if (typeStr == "const class QByteArray &") {
         is_byte_array = true;
-    } else if (typeStr == "const char *") {// We only want bytearray and const char*
+    } else if (typeStr == "const char *") { // We only want bytearray and const char*
         is_char_array = true;
     }
 
@@ -83,7 +83,8 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor, bool &is_char_array,
 
 static bool isInterestingMethod(const std::string &methodName)
 {
-    static const std::vector<std::string> methods = { "append", "prepend", "operator=", "operator==", "operator!=", "operator<", "operator<=", "operator>", "operator>=", "operator+=" };
+    static const std::vector<std::string> methods =
+        {"append", "prepend", "operator=", "operator==", "operator!=", "operator<", "operator<=", "operator>", "operator>=", "operator+="};
     return clazy::contains(methods, methodName);
 }
 
@@ -172,7 +173,7 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
 std::vector<FixItHint> Qt4QStringFromArray::fixCtorCall(CXXConstructExpr *ctorExpr)
 {
     Stmt *parent = clazy::parent(m_context->parentMap, ctorExpr); // CXXBindTemporaryExpr
-    Stmt *grandParent = clazy::parent(m_context->parentMap, parent); //CXXFunctionalCastExpr
+    Stmt *grandParent = clazy::parent(m_context->parentMap, parent); // CXXFunctionalCastExpr
 
     if (parent && grandParent && isa<CXXBindTemporaryExpr>(parent) && isa<CXXFunctionalCastExpr>(grandParent)) {
         return fixitReplaceWithFromLatin1(ctorExpr);
@@ -189,7 +190,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
         SourceLocation start = clazy::getLocStart(e);
         SourceLocation end = Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
 
-        SourceRange range = { start, end };
+        SourceRange range = {start, end};
         if (range.isInvalid()) {
             emitWarning(clazy::getLocStart(op), "internal error");
             return {};
@@ -200,7 +201,6 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
     } else {
         emitWarning(clazy::getLocStart(op), "internal error");
     }
-
 
     return fixits;
 }
@@ -214,7 +214,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
         SourceLocation start = clazy::getLocStart(e);
         SourceLocation end = Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
 
-        SourceRange range = { start, end };
+        SourceRange range = {start, end};
         if (range.isInvalid()) {
             emitWarning(clazy::getLocStart(memberExpr), "internal error");
             return {};
@@ -224,7 +224,6 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
     } else {
         emitWarning(clazy::getLocStart(memberExpr), "internal error");
     }
-
 
     return fixits;
 }

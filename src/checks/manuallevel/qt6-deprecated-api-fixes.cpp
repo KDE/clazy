@@ -21,16 +21,15 @@
 */
 
 #include "qt6-deprecated-api-fixes.h"
-#include "ContextUtils.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "StringUtils.h"
+#include "ContextUtils.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -40,6 +39,7 @@
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Lex/Lexer.h>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
@@ -52,7 +52,8 @@ Qt6DeprecatedAPIFixes::Qt6DeprecatedAPIFixes(const std::string &name, ClazyConte
     enablePreProcessorCallbacks();
 }
 
-void replacementForQWizard(std::string functionName, std::string &message, std::string &replacement) {
+void replacementForQWizard(std::string functionName, std::string &message, std::string &replacement)
+{
     message = "call function QProcess::";
     message += functionName;
     message += "(). Use function QProcess::visitedIds() instead";
@@ -60,8 +61,8 @@ void replacementForQWizard(std::string functionName, std::string &message, std::
     replacement = "visitedIds";
 }
 
-bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string &replacement, SourceLocation &warningLocation, SourceRange &fixitRange) {
-
+bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string &replacement, SourceLocation &warningLocation, SourceRange &fixitRange)
+{
     // The one with two arguments: Qt::DateFormat format, QCalendar cal
     CXXMemberCallExpr *callExp = dyn_cast<CXXMemberCallExpr>(parent);
     if (!callExp)
@@ -72,7 +73,7 @@ bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string 
     int i = 1;
     if (func->getNumParams() != 2)
         return false;
-    for (auto it = func->param_begin(); it !=func->param_end(); it++) {
+    for (auto it = func->param_begin(); it != func->param_end(); it++) {
         ParmVarDecl *param = *it;
         if (i == 1 && param->getType().getAsString() != "Qt::DateFormat")
             return false;
@@ -88,14 +89,14 @@ bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string 
     fixitRange = SourceRange(firstArg->getEndLoc(), secondArg->getEndLoc());
     message = "replacing with function omitting the calendar. Change manually and use QLocale if you want to keep the calendar.";
     warningLocation = secondArg->getBeginLoc();
-    replacement  = declFirstArg->getNameInfo().getAsString();
+    replacement = declFirstArg->getNameInfo().getAsString();
     return true;
 }
 
 static std::set<std::string> qButtonGroupDeprecatedFunctions = {"buttonClicked", "buttonPressed", "buttonReleased", "buttonToggled"};
 
-bool replacementForQButtonGroup(clang::MemberExpr * membExpr, std::string &message, std::string &replacement) {
-
+bool replacementForQButtonGroup(clang::MemberExpr *membExpr, std::string &message, std::string &replacement)
+{
     auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
     for (auto param : Utils::functionParameters(declfunc)) {
@@ -108,14 +109,14 @@ bool replacementForQButtonGroup(clang::MemberExpr * membExpr, std::string &messa
 
     std::string functionName = membExpr->getMemberNameInfo().getAsString();
     std::string newFunctionName = "id";
-    newFunctionName += functionName.substr(6,8);
+    newFunctionName += functionName.substr(6, 8);
 
     message = "call function QButtonGroup::";
     message += functionName;
     message += "(int";
     if (declfunc->param_size() > 1)
         message += ", bool";
-    message +="). Use function QButtonGroup";
+    message += "). Use function QButtonGroup";
     message += newFunctionName;
     message += " instead.";
 
@@ -123,8 +124,8 @@ bool replacementForQButtonGroup(clang::MemberExpr * membExpr, std::string &messa
     return true;
 }
 
-bool warningForQTextBrowser(clang::MemberExpr * membExpr, std::string &message) {
-
+bool warningForQTextBrowser(clang::MemberExpr *membExpr, std::string &message)
+{
     auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
     for (auto param : Utils::functionParameters(declfunc)) {
@@ -138,8 +139,8 @@ bool warningForQTextBrowser(clang::MemberExpr * membExpr, std::string &message) 
     return true;
 }
 
-bool warningForQComboBox(clang::MemberExpr * membExpr, std::string &message) {
-
+bool warningForQComboBox(clang::MemberExpr *membExpr, std::string &message)
+{
     auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
     for (auto param : Utils::functionParameters(declfunc)) {
@@ -154,8 +155,8 @@ bool warningForQComboBox(clang::MemberExpr * membExpr, std::string &message) {
     return true;
 }
 
-bool replacementForQComboBox(clang::MemberExpr * membExpr, std::string functionName, std::string &message, std::string &replacement) {
-
+bool replacementForQComboBox(clang::MemberExpr *membExpr, std::string functionName, std::string &message, std::string &replacement)
+{
     auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
     for (auto param : Utils::functionParameters(declfunc)) {
@@ -180,7 +181,8 @@ bool replacementForQComboBox(clang::MemberExpr * membExpr, std::string functionN
 
 static std::set<std::string> qProcessDeprecatedFunctions = {"start"};
 
-void replacementForQProcess(std::string functionName, std::string &message, std::string &replacement) {
+void replacementForQProcess(std::string functionName, std::string &message, std::string &replacement)
+{
     message = "call function QProcess::";
     message += functionName;
     message += "(). Use function QProcess::";
@@ -191,8 +193,8 @@ void replacementForQProcess(std::string functionName, std::string &message, std:
     replacement += "Command";
 }
 
-void replacementForQSignalMapper(clang::MemberExpr * membExpr, std::string &message, std::string &replacement) {
-
+void replacementForQSignalMapper(clang::MemberExpr *membExpr, std::string &message, std::string &replacement)
+{
     auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
     for (auto param : Utils::functionParameters(declfunc)) {
@@ -227,24 +229,21 @@ void replacementForQSignalMapper(clang::MemberExpr * membExpr, std::string &mess
     replacement += functionNameExtention;
 }
 
-void replacementForQResource(std::string functionName, std::string &message, std::string &replacement) {
+void replacementForQResource(std::string functionName, std::string &message, std::string &replacement)
+{
     message = "call function QRessource::isCompressed(). Use function QProcess::compressionAlgorithm() instead.";
     replacement = "compressionAlgorithm";
 }
 
 static std::set<std::string> qSetDeprecatedOperators = {"operator--", "operator+", "operator-", "operator+=", "operator-="};
-static std::set<std::string> qSetDeprecatedFunctions = {"rbegin", "rend", "crbegin", "crend", "hasPrevious", "previous",
-                                                       "peekPrevious", "findPrevious"};
-static std::set<std::string> qHashDeprecatedFunctions = {"hasPrevious", "previous",
-                                                       "peekPrevious", "findPrevious"};
+static std::set<std::string> qSetDeprecatedFunctions = {"rbegin", "rend", "crbegin", "crend", "hasPrevious", "previous", "peekPrevious", "findPrevious"};
+static std::set<std::string> qHashDeprecatedFunctions = {"hasPrevious", "previous", "peekPrevious", "findPrevious"};
 
 bool isQSetDepreprecatedOperator(std::string functionName, std::string contextName, std::string &message)
 {
     if (qSetDeprecatedOperators.find(functionName) == qSetDeprecatedOperators.end())
         return false;
-    if ((clazy::startsWith(contextName, "QSet<") || clazy::startsWith(contextName, "QHash<")) &&
-            clazy::endsWith(contextName, "iterator")) {
-
+    if ((clazy::startsWith(contextName, "QSet<") || clazy::startsWith(contextName, "QHash<")) && clazy::endsWith(contextName, "iterator")) {
         if (clazy::startsWith(contextName, "QSet<"))
             message = "QSet iterator categories changed from bidirectional to forward. Please port your code manually";
         else
@@ -257,8 +256,8 @@ bool isQSetDepreprecatedOperator(std::string functionName, std::string contextNa
 
 static std::set<std::string> qGraphicsViewFunctions = {"matrix", "setMatrix", "resetMatrix"};
 
-void warningForGraphicsViews(std::string functionName, std::string &message) {
-
+void warningForGraphicsViews(std::string functionName, std::string &message)
+{
     if (functionName == "matrix") {
         message = "Using QGraphicsView::matrix. Use transform() instead";
         return;
@@ -276,12 +275,21 @@ static std::set<std::string> qStylePixelMetrix = {"PM_DefaultTopLevelMargin", "P
 
 static std::set<std::string> qMapFunctions = {"insertMulti", "uniqueKeys", "values", "unite"};
 
-static std::set<std::string> qTextStreamFunctions = {
-    "bin", "oct", "dec", "hex", "showbase", "forcesign", "forcepoint", "noshowbase", "noforcesign", "noforcepoint",
-    "uppercasebase", "uppercasedigits", "lowercasebase", "lowercasedigits", "fixed", "scientific", "left", "right",
-    "center", "endl", "flush", "reset", "bom", "ws"};
+static std::set<std::string> qTextStreamFunctions = {"bin",           "oct",
+                                                     "dec",           "hex",
+                                                     "showbase",      "forcesign",
+                                                     "forcepoint",    "noshowbase",
+                                                     "noforcesign",   "noforcepoint",
+                                                     "uppercasebase", "uppercasedigits",
+                                                     "lowercasebase", "lowercasedigits",
+                                                     "fixed",         "scientific",
+                                                     "left",          "right",
+                                                     "center",        "endl",
+                                                     "flush",         "reset",
+                                                     "bom",           "ws"};
 
-void replacementForQTextStreamFunctions(std::string functionName, std::string &message, std::string &replacement, bool explicitQtNamespace) {
+void replacementForQTextStreamFunctions(std::string functionName, std::string &message, std::string &replacement, bool explicitQtNamespace)
+{
     if (qTextStreamFunctions.find(functionName) == qTextStreamFunctions.end())
         return;
     message = "call function QTextStream::";
@@ -295,7 +303,8 @@ void replacementForQTextStreamFunctions(std::string functionName, std::string &m
     replacement += functionName;
 }
 
-void replacementForQStringSplitBehavior(std::string functionName, std::string &message, std::string &replacement, bool explicitQtNamespace) {
+void replacementForQStringSplitBehavior(std::string functionName, std::string &message, std::string &replacement, bool explicitQtNamespace)
+{
     message = "Use Qt::SplitBehavior variant instead";
     if (!explicitQtNamespace)
         replacement = "Qt::";
@@ -308,24 +317,26 @@ bool getMessageForDeclWarning(std::string type, std::string &message)
         message = "Using QLinkedList. Use std::list instead";
         return true;
     } else if (clazy::contains(type, "QMacCocoaViewContainer")) {
-        message =  "Using QMacCocoaViewContainer."
-               " Use QWindow::fromWinId and QWidget::createWindowContainer instead";
+        message =
+            "Using QMacCocoaViewContainer."
+            " Use QWindow::fromWinId and QWidget::createWindowContainer instead";
         return true;
     } else if (clazy::contains(type, "QMacNativeWidget")) {
-        message =  "Using QMacNativeWidget."
-               " Use QWidget::winId instead";
+        message =
+            "Using QMacNativeWidget."
+            " Use QWidget::winId instead";
         return true;
     } else if (clazy::contains(type, "QDirModel")) {
-        message =  "Using QDirModel."
-               " Use QFileSystemModel instead";
+        message =
+            "Using QDirModel."
+            " Use QFileSystemModel instead";
         return true;
     } else if (clazy::contains(type, "QString::SplitBehavior")) {
         message = "Using QString::SplitBehavior. Use Qt::SplitBehavior variant instead";
         return true;
-    }else {
+    } else {
         return false;
     }
-
 }
 
 void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
@@ -360,7 +371,7 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
 
     if (clazy::endsWith(type, "QString::SplitBehavior")) {
         bool isQtNamespaceExplicit = false;
-        DeclContext *newcontext =  clazy::contextForDecl(m_context->lastDecl);
+        DeclContext *newcontext = clazy::contextForDecl(m_context->lastDecl);
         while (newcontext) {
             if (!newcontext)
                 break;
@@ -368,7 +379,7 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
                 clang::NamespaceDecl *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
                 if (namesdecl->getNameAsString() == "Qt")
                     isQtNamespaceExplicit = true;
-             }
+            }
             newcontext = newcontext->getParent();
         }
         std::string replacement;
@@ -396,15 +407,15 @@ std::string Qt6DeprecatedAPIFixes::buildReplacementforQDir(DeclRefExpr *decl_ope
     return replacement;
 }
 
-std::string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(DeclRefExpr* decl_operator, std::string replacement_var1, std::string replacement_var2)
+std::string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(DeclRefExpr *decl_operator, std::string replacement_var1, std::string replacement_var2)
 {
     std::string replacement = "QVariant::compare(";
     replacement += replacement_var1;
     replacement += ", ";
     replacement += replacement_var2;
     replacement += ") ";
-    replacement += decl_operator->getNameInfo().getAsString().substr(8,2);
-    replacement += " 0" ;
+    replacement += decl_operator->getNameInfo().getAsString().substr(8, 2);
+    replacement += " 0";
     return replacement;
 }
 
@@ -420,7 +431,7 @@ bool foundQVariantDeprecatedOperator(DeclRefExpr *decl)
     return qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qVariantDeprecatedOperator.end();
 }
 
-void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, std::string className)
+void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, std::string className)
 {
     // only interested in '=' operator for QDir
     std::vector<FixItHint> fixits;
@@ -433,7 +444,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, std::string cla
     DeclRefExpr *decl = nullptr;
     while (child) {
         decl = dyn_cast<DeclRefExpr>(child);
-        if ( !decl ) {
+        if (!decl) {
             child = clazy::childAt(child, 0);
             continue;
         }
@@ -456,8 +467,8 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, std::string cla
 
     // Getting the two arguments of the operator to build the replacement
     CXXOperatorCallExpr *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
-    auto * arg0Size = oppCallExpr->getArg(0);
-    auto * arg1Size = oppCallExpr->getArg(1);
+    auto *arg0Size = oppCallExpr->getArg(0);
+    auto *arg1Size = oppCallExpr->getArg(1);
     auto charRange = Lexer::getAsCharRange(arg0Size->getSourceRange(), m_sm, lo());
     auto replacementVar1 = Lexer::getSourceText(charRange, m_sm, lo());
     charRange = Lexer::getAsCharRange(arg1Size->getSourceRange(), m_sm, lo());
@@ -488,14 +499,14 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, std::string cla
             break;
         }
         if (isPointer) {
-            while(replacementVar1.consume_front("("))
+            while (replacementVar1.consume_front("("))
                 replacementVar1.consume_back(")");
             replacementVar1.consume_front("*");
         }
-            replacement = buildReplacementforQDir(decl, isPointer, replacementVar1.str(), replacementVar2.str());
-     } else if (className == "QVariant") {
-            message = " operator does not exist in Qt6. Using QVariant::compare() instead.";
-            replacement = buildReplacementForQVariant(decl, replacementVar1.str(), replacementVar2.str());
+        replacement = buildReplacementforQDir(decl, isPointer, replacementVar1.str(), replacementVar2.str());
+    } else if (className == "QVariant") {
+        message = " operator does not exist in Qt6. Using QVariant::compare() instead.";
+        replacement = buildReplacementForQVariant(decl, replacementVar1.str(), replacementVar2.str());
     }
 
     // If a macro is present in the stmt range the spelling location is used
@@ -507,7 +518,6 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt* stmt, std::string cla
     emitWarning(warningLocation, message, fixits);
 
     return;
-
 }
 
 void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
@@ -540,15 +550,15 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         }
         if (constructor->getDeclName().getAsString() != "QDateTime")
             return;
-        if ( consExpr->getNumArgs() != 1)
+        if (consExpr->getNumArgs() != 1)
             return;
-        if ( consExpr->getArg(0)->getType().getAsString() != "const class QDate")
+        if (consExpr->getArg(0)->getType().getAsString() != "const class QDate")
             return;
         Stmt *child = clazy::childAt(stmt, 0);
         DeclRefExpr *decl;
-        while(child) {
+        while (child) {
             decl = dyn_cast<DeclRefExpr>(child);
-            if ( !decl ) {
+            if (!decl) {
                 child = clazy::childAt(child, 0);
                 continue;
             } else {
@@ -563,14 +573,13 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         if (qualtype->isPointerType())
             replacement += "->";
         else
-        replacement += ".";
+            replacement += ".";
         replacement += "startOfDay()";
 
         warningLocation = stmt->getBeginLoc();
         fixitRange = stmt->getSourceRange();
         message = "deprecated constructor. Use QDate::startOfDay() instead.";
     } else if (oppCallExpr) {
-
         if (clazy::isOfClass(oppCallExpr, "QDir")) {
             fixForDeprecatedOperator(stmt, "QDir");
             return;
@@ -581,7 +590,6 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         return;
 
     } else if (declRefExp) {
-
         warningLocation = declRefExp->getBeginLoc();
         auto decl = declRefExp->getDecl();
         if (!decl)
@@ -635,22 +643,21 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             return;
         }
 
-        if ((qStylePixelMetrix.find(functionName) != qStylePixelMetrix.end() && declType == "enum QStyle::PixelMetric") ||
-            (functionName == "SE_DialogButtonBoxLayoutItem" && declType == "enum QStyle::SubElement")) {
+        if ((qStylePixelMetrix.find(functionName) != qStylePixelMetrix.end() && declType == "enum QStyle::PixelMetric")
+            || (functionName == "SE_DialogButtonBoxLayoutItem" && declType == "enum QStyle::SubElement")) {
             message = "this enum has been removed in Qt6";
             emitWarning(warningLocation, message, fixits);
             return;
         }
 
-
-        if (functionName != "MatchRegExp" && enclosingNameSpace != "QTextStreamFunctions" &&
-            functionName != "KeepEmptyParts" && functionName != "SkipEmptyParts")
+        if (functionName != "MatchRegExp" && enclosingNameSpace != "QTextStreamFunctions" && functionName != "KeepEmptyParts"
+            && functionName != "SkipEmptyParts")
             return;
 
         // To catch enum Qt::MatchFlag and enum QString::SplitBehavior
         // Get out of this DeclRefExp to catch the potential Qt namespace surrounding it
         bool isQtNamespaceExplicit = false;
-        DeclContext *newcontext =  clazy::contextForDecl(m_context->lastDecl);
+        DeclContext *newcontext = clazy::contextForDecl(m_context->lastDecl);
         while (newcontext) {
             if (!newcontext)
                 break;
@@ -658,14 +665,13 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
                 clang::NamespaceDecl *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
                 if (namesdecl->getNameAsString() == "Qt")
                     isQtNamespaceExplicit = true;
-             }
+            }
             newcontext = newcontext->getParent();
         }
 
         if (enclosingNameSpace == "QTextStreamFunctions") {
             replacementForQTextStreamFunctions(functionName, message, replacement, isQtNamespaceExplicit);
-        } else if ((functionName == "KeepEmptyParts" || functionName == "SkipEmptyParts") &&
-                   declType == "enum QString::SplitBehavior") {
+        } else if ((functionName == "KeepEmptyParts" || functionName == "SkipEmptyParts") && declType == "enum QString::SplitBehavior") {
             replacementForQStringSplitBehavior(functionName, message, replacement, isQtNamespaceExplicit);
         } else if (functionName == "MatchRegExp" && declType == "enum Qt::MatchFlag") {
             message = "call Qt::MatchRegExp. Use Qt::MatchRegularExpression instead.";
@@ -673,7 +679,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
                 replacement = "MatchRegularExpression";
             else
                 replacement = "Qt::MatchRegularExpression";
-        }else {
+        } else {
             return;
         }
         fixitRange = declRefExp->getSourceRange();
@@ -699,7 +705,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             emitWarning(warningLocation, message, fixits);
             return;
         } else if (clazy::startsWith(className, "QHash<") && qMapFunctions.find(functionName) != qMapFunctions.end()) {
-          // the name of the deprecated function are the same
+            // the name of the deprecated function are the same
             message = "Use QMultiHash for maps storing multiple values with the same key.";
             emitWarning(warningLocation, message, fixits);
             return;
@@ -707,8 +713,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QTimeLine") &&
-                   (functionName == "curveShape" || functionName == "setCurveShape")) {
+        } else if (clazy::startsWith(className, "class QTimeLine") && (functionName == "curveShape" || functionName == "setCurveShape")) {
             if (functionName == "curveShape") {
                 message = "call QTimeLine::curveShape. Use QTimeLine::easingCurve instead";
             } else {
@@ -729,25 +734,23 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
                 return;
             emitWarning(warningLocation, message, fixits);
             return;
-        }  else if (clazy::startsWith(className, "class QTextBrowser") && functionName == "highlighted") {
+        } else if (clazy::startsWith(className, "class QTextBrowser") && functionName == "highlighted") {
             if (!warningForQTextBrowser(membExpr, message))
                 return;
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QGraphicsView") &&
-                   qGraphicsViewFunctions.find(functionName) != qMapFunctions.end()) {
+        } else if (clazy::startsWith(className, "class QGraphicsView") && qGraphicsViewFunctions.find(functionName) != qMapFunctions.end()) {
             warningForGraphicsViews(functionName, message);
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (className == "class QDate"  && functionName == "toString") {
+        } else if (className == "class QDate" && functionName == "toString") {
             Stmt *parent = clazy::parent(m_context->parentMap, stmt);
             if (!replacementForQDate(parent, message, replacement, warningLocation, fixitRange))
                 return;
             fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));
             emitWarning(warningLocation, message, fixits);
             return;
-        }else if (clazy::startsWith(className, "class QProcess") &&
-                   qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
+        } else if (clazy::startsWith(className, "class QProcess") && qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
             replacementForQProcess(functionName, message, replacement);
         } else if (clazy::startsWith(className, "class QResource") && functionName == "isCompressed") {
             replacementForQResource(functionName, message, replacement);
@@ -755,19 +758,18 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             replacementForQSignalMapper(membExpr, message, replacement);
         } else if (clazy::startsWith(className, "class QWizard") && functionName == "visitedPages") {
             replacementForQWizard(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QButtonGroup") &&
-                   qButtonGroupDeprecatedFunctions.find(functionName) != qButtonGroupDeprecatedFunctions.end()) {
+        } else if (clazy::startsWith(className, "class QButtonGroup")
+                   && qButtonGroupDeprecatedFunctions.find(functionName) != qButtonGroupDeprecatedFunctions.end()) {
             if (!replacementForQButtonGroup(membExpr, message, replacement))
                 return;
-        } else if (clazy::startsWith(className, "class QComboBox") &&
-                   (functionName == "activated" || functionName == "highlighted")) {
+        } else if (clazy::startsWith(className, "class QComboBox") && (functionName == "activated" || functionName == "highlighted")) {
             if (!replacementForQComboBox(membExpr, functionName, message, replacement))
                 return;
         } else {
             return;
         }
         fixitRange = SourceRange(membExpr->getEndLoc());
-    }else {
+    } else {
         return;
     }
 
@@ -777,8 +779,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
     return;
 }
 
-void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token &MacroNameTok,
-                                              const clang::SourceRange &range, const MacroInfo *)
+void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     m_listingMacroExpand.push_back(range.getBegin());
     return;

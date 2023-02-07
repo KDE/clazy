@@ -34,10 +34,11 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class CXXMethodDecl;
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * Finds places where you're calling non-const member functions on temporaries.
@@ -45,12 +46,12 @@ class Stmt;
  * For example getList().first(), which would detach if the container is shared.
  * See README-deatching-temporary for more information
  */
-class DetachingTemporary
-    : public DetachingBase
+class DetachingTemporary : public DetachingBase
 {
 public:
     DetachingTemporary(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
+
 private:
     bool isDetachingMethod(clang::CXXMethodDecl *method) const;
     std::map<llvm::StringRef, std::vector<llvm::StringRef>> m_writeMethodsByType;

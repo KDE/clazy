@@ -22,18 +22,17 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #include "detaching-temporary.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "checkbase.h"
 #include "clazy_stl.h"
 
+#include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
-#include <clang/AST/Decl.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
@@ -52,9 +51,9 @@ DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *co
     // Extra stuff that isn't really related to detachments but doesn't make sense to call on temporaries
     m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};
     m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_writeMethodsByType["QVector"] = { "fill", "insert"};
-    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take"};
-    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take"};
+    m_writeMethodsByType["QVector"] = {"fill", "insert"};
+    m_writeMethodsByType["QMap"] = {"erase", "insert", "insertMulti", "remove", "take"};
+    m_writeMethodsByType["QHash"] = {"erase", "insert", "insertMulti", "remove", "take"};
     m_writeMethodsByType["QMultiHash"] = m_writeMethodsByType["QHash"];
     m_writeMethodsByType["QMultiMap"] = m_writeMethodsByType["QMap"];
     m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
@@ -73,13 +72,25 @@ bool isAllowedChainedClass(const std::string &className)
 
 bool isAllowedChainedMethod(const std::string &methodName)
 {
-    static const std::vector<std::string> allowed = {"QMap::keys", "QMap::values", "QHash::keys", "QMap::values",
-                                           "QApplication::topLevelWidgets", "QAbstractItemView::selectedIndexes",
-                                           "QListWidget::selectedItems", "QFile::encodeName", "QFile::decodeName",
-                                           "QItemSelectionModel::selectedRows", "QTreeWidget::selectedItems",
-                                           "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList",
-                                           "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes",
-                                           "QMimeData::formats", "i18n", "QAbstractTransition::targetStates"};
+    static const std::vector<std::string> allowed = {"QMap::keys",
+                                                     "QMap::values",
+                                                     "QHash::keys",
+                                                     "QMap::values",
+                                                     "QApplication::topLevelWidgets",
+                                                     "QAbstractItemView::selectedIndexes",
+                                                     "QListWidget::selectedItems",
+                                                     "QFile::encodeName",
+                                                     "QFile::decodeName",
+                                                     "QItemSelectionModel::selectedRows",
+                                                     "QTreeWidget::selectedItems",
+                                                     "QTableWidget::selectedItems",
+                                                     "QNetworkReply::rawHeaderList",
+                                                     "Mailbox::address",
+                                                     "QItemSelection::indexes",
+                                                     "QItemSelectionModel::selectedIndexes",
+                                                     "QMimeData::formats",
+                                                     "i18n",
+                                                     "QAbstractTransition::targetStates"};
     return clazy::contains(allowed, methodName);
 }
 
@@ -88,7 +99,6 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     auto callExpr = dyn_cast<CallExpr>(stm);
     if (!callExpr)
         return;
-
 
     // For a chain like getList().first(), returns {first(), getList()}
     std::vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
@@ -99,7 +109,6 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
     if (!firstFunc)
         return;
-
 
     QualType qt = firstFunc->getReturnType();
     const Type *firstFuncReturnType = qt.getTypePtrOrNull();
@@ -172,7 +181,6 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
             error = std::string("Don't call ") + clazy::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
         }
     }
-
 
     if (!error.empty())
         emitWarning(clazy::getLocStart(stm), error.c_str());

@@ -25,22 +25,23 @@
 #include "SuppressionManager.h"
 #include "clazy_stl.h"
 
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Basic/FileManager.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
-#include <llvm/Support/Regex.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/PreprocessorOptions.h>
 #include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Regex.h>
 
-#include <string>
-#include <vector>
 #include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 
 // ClazyContext is just a struct to share data and code between all checks
 
-namespace clang {
+namespace clang
+{
 class CompilerInstance;
 class ASTContext;
 class ParentMap;
@@ -110,7 +111,7 @@ public:
         return clazy::contains(extraOptions, optionName);
     }
 
-    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc,  const clang::FileEntry **file) const
+    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc, const clang::FileEntry **file) const
     {
         if (!regex)
             return false;

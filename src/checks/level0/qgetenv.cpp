@@ -23,10 +23,10 @@
 */
 
 #include "qgetenv.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "FixItUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>

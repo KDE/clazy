@@ -34,12 +34,12 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class CXXMethodDecl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -61,7 +61,7 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
 
     Expr *typeArg = call->getArg(4); // The type
 
-    std::vector<DeclRefExpr*> result;
+    std::vector<DeclRefExpr *> result;
     clazy::getChilds(typeArg, result);
 
     bool found = false;

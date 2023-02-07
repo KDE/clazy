@@ -27,22 +27,22 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-thread-with-slots.md for more info.
  */
-class ThreadWithSlots
-    : public CheckBase
+class ThreadWithSlots : public CheckBase
 {
 public:
     explicit ThreadWithSlots(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitDecl(clang::Decl *decl) override;
+
 private:
 };
 

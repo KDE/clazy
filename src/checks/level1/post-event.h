@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-post-event for more info.
  */
-class PostEvent
-    : public CheckBase
+class PostEvent : public CheckBase
 {
 public:
     explicit PostEvent(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
 };
 

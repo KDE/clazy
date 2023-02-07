@@ -23,16 +23,16 @@
 */
 
 #include "unneeded-cast.h"
-#include "Utils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
-#include "HierarchyUtils.h"
 #include "ClazyContext.h"
+#include "HierarchyUtils.h"
+#include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclCXX.h>
-#include <clang/AST/ExprCXX.h>
 #include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
 #include <clang/AST/OperationKinds.h>
 #include <clang/AST/Stmt.h>
 #include <clang/Basic/SourceLocation.h>
@@ -105,7 +105,7 @@ bool UnneededCast::handleQObjectCast(Stmt *stm)
     if (!clazy::is_qobject_cast(stm, &castTo, &castFrom))
         return false;
 
-    return maybeWarn(stm, castFrom, castTo, /*isQObjectCast=*/ true);
+    return maybeWarn(stm, castFrom, castTo, /*isQObjectCast=*/true);
 }
 
 bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl *castTo, bool isQObjectCast)
@@ -116,7 +116,7 @@ bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl 
     if (castFrom == castTo) {
         emitWarning(clazy::getLocStart(stmt), "Casting to itself");
         return true;
-    } else if (clazy::derivesFrom(/*child=*/ castFrom, castTo)) {
+    } else if (clazy::derivesFrom(/*child=*/castFrom, castTo)) {
         if (isQObjectCast) {
             const bool isTernaryOperator = clazy::getFirstParentOfType<ConditionalOperator>(m_context->parentMap, stmt) != nullptr;
             if (isTernaryOperator) {

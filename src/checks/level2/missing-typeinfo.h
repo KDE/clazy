@@ -32,7 +32,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class ClassTemplateSpecializationDecl;
 class CXXRecordDecl;
 class Decl;
@@ -45,12 +46,12 @@ class QualType;
  *
  * See README-missing-type-info for more info.
  */
-class MissingTypeInfo
-    : public CheckBase
+class MissingTypeInfo : public CheckBase
 {
 public:
     MissingTypeInfo(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
     void registerQTypeInfo(clang::ClassTemplateSpecializationDecl *decl);
     bool typeHasClassification(clang::QualType) const;

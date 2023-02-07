@@ -23,21 +23,22 @@
 */
 
 #include "missing-typeinfo.h"
-#include "TemplateUtils.h"
 #include "QtUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TemplateUtils.h"
 
-#include <clang/AST/DeclTemplate.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/DeclTemplate.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/SourceManager.h>
 #include <llvm/ADT/StringRef.h>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -85,7 +86,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (clazy::name(decl) == "QTypeInfo") {
-        const std::string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/ true);
+        const std::string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/true);
         if (!typeName.empty())
             m_typeInfos.insert(typeName);
     }

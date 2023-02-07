@@ -20,8 +20,8 @@
 */
 
 #include "post-event.h"
-#include "TypeUtils.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
@@ -31,7 +31,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 PostEvent::PostEvent(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -49,8 +48,8 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
     const bool isPostEvent = name == "QCoreApplication::postEvent";
     const bool isSendEvent = name == "QCoreApplication::sendEvent";
 
-    //if (!isPostEvent && !isSendEvent)
-    // Send event has false-positives
+    // if (!isPostEvent && !isSendEvent)
+    //  Send event has false-positives
     if (!isPostEvent)
         return;
 

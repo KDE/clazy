@@ -23,13 +23,13 @@
 */
 
 #include "range-loop-reference.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
-#include "StringUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "FixItUtils.h"
 #include "ClazyContext.h"
+#include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
+#include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
@@ -86,7 +86,6 @@ void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
         SourceLocation end = varDecl->getLocation();
         fixits.push_back(clazy::createInsertion(end, "&"));
-
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.

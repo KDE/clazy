@@ -20,9 +20,9 @@
 */
 
 #include "connect-3arg-lambda.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "ClazyContext.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
@@ -75,9 +75,9 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     auto arg3 = callExpr->getArg(2);
     auto lambda = clang::dyn_cast_or_null<LambdaExpr>(arg3);
     if (!lambda) {
-	    lambda = clazy::getFirstChildOfType2<LambdaExpr>(arg3);
-	    if (!lambda)
-		    return;
+        lambda = clazy::getFirstChildOfType2<LambdaExpr>(arg3);
+        if (!lambda)
+            return;
     }
 
     DeclRefExpr *senderDeclRef = nullptr;
@@ -133,14 +133,12 @@ void Connect3ArgLambda::processQTimer(FunctionDecl *func, Stmt *stmt)
 
     const uint numParams = func->getNumParams();
     if (numParams == 2) {
-        if (func->getParamDecl(0)->getNameAsString() == "interval" &&
-            func->getParamDecl(1)->getNameAsString() == "slot") {
+        if (func->getParamDecl(0)->getNameAsString() == "interval" && func->getParamDecl(1)->getNameAsString() == "slot") {
             emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
         }
     } else if (numParams == 3) {
-        if (func->getParamDecl(0)->getNameAsString() == "interval"  &&
-            func->getParamDecl(1)->getNameAsString() == "timerType" &&
-            func->getParamDecl(2)->getNameAsString() == "slot") {
+        if (func->getParamDecl(0)->getNameAsString() == "interval" && func->getParamDecl(1)->getNameAsString() == "timerType"
+            && func->getParamDecl(2)->getNameAsString() == "slot") {
             emitWarning(stmt, "Pass a context object as 3rd singleShot parameter");
         }
     }
@@ -152,9 +150,8 @@ void Connect3ArgLambda::processQMenu(FunctionDecl *func, Stmt *stmt)
     // QMenu::addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0)
     const uint numParams = func->getNumParams();
     if (numParams == 3) {
-        if (func->getParamDecl(0)->getNameAsString() == "text"  &&
-            func->getParamDecl(1)->getNameAsString() == "slot" &&
-            func->getParamDecl(2)->getNameAsString() == "shortcut") {
+        if (func->getParamDecl(0)->getNameAsString() == "text" && func->getParamDecl(1)->getNameAsString() == "slot"
+            && func->getParamDecl(2)->getNameAsString() == "shortcut") {
             emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
         }
     }

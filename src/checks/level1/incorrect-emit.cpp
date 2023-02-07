@@ -22,13 +22,13 @@
 #include "incorrect-emit.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclCXX.h>
-#include <clang/AST/ExprCXX.h>
 #include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/LLVM.h>
@@ -39,9 +39,10 @@
 
 #include <utility>
 
-namespace clang {
+namespace clang
+{
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -51,7 +52,7 @@ IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
     context->enableAccessSpecifierManager();
     enablePreProcessorCallbacks();
     m_emitLocations.reserve(30); // bootstrap it
-    m_filesToIgnore = { "moc_", ".moc" };
+    m_filesToIgnore = {"moc_", ".moc"};
 }
 
 void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const MacroInfo *)

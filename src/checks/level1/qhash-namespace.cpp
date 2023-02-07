@@ -20,11 +20,11 @@
 */
 
 #include "qhash-namespace.h"
-#include "ContextUtils.h"
-#include "StringUtils.h"
 #include "ClazyContext.h"
+#include "ContextUtils.h"
 #include "PreProcessorVisitor.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -32,12 +32,12 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -54,7 +54,7 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
 
     ParmVarDecl *firstArg = func->getParamDecl(0);
     NamespaceDecl *argumentNS = clazy::namespaceForType(firstArg->getType());
-    NamespaceDecl *qHashNS =  clazy::namespaceForFunction(func);
+    NamespaceDecl *qHashNS = clazy::namespaceForFunction(func);
 
     std::string msg;
     if (qHashNS && argumentNS) {
@@ -65,7 +65,8 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
     } else if (qHashNS && !argumentNS) {
         msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
     } else if (!qHashNS && argumentNS) {
-        msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
+        msg =
+            "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
     }
 
     if (!msg.empty())

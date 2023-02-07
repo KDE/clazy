@@ -27,21 +27,21 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class FunctionDecl;
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-connect-3arg-lambda.md for more info.
  */
-class Connect3ArgLambda
-    : public CheckBase
+class Connect3ArgLambda : public CheckBase
 {
 public:
     explicit Connect3ArgLambda(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     void processQTimer(clang::FunctionDecl *, clang::Stmt *);
     void processQMenu(clang::FunctionDecl *, clang::Stmt *);

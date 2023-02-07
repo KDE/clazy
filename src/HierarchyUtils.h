@@ -27,21 +27,18 @@
 
 // Contains utility classes to retrieve parents and childs from AST Nodes
 
-#include "clazy_stl.h"
 #include "StringUtils.h"
+#include "clazy_stl.h"
 
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/AST/Stmt.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/ParentMap.h>
+#include <clang/AST/Stmt.h>
+#include <clang/Frontend/CompilerInstance.h>
 
-namespace clazy {
+namespace clazy
+{
 
-enum IgnoreStmt {
-    IgnoreNone             = 0,
-    IgnoreImplicitCasts    = 1,
-    IgnoreExprWithCleanups = 2
-};
+enum IgnoreStmt { IgnoreNone = 0, IgnoreImplicitCasts = 1, IgnoreExprWithCleanups = 2 };
 
 typedef int IgnoreStmts;
 
@@ -54,8 +51,8 @@ inline bool isChildOf(clang::Stmt *child, clang::Stmt *parent)
         return false;
 
     return clazy::any_of(parent->children(), [child](clang::Stmt *c) {
-            return c == child || isChildOf(child, c);
-        });
+        return c == child || isChildOf(child, c);
+    });
 }
 
 /**
@@ -73,9 +70,9 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
             return true;
     }
 
-    return clazy::any_of(stm->children(), [name] (clang::Stmt *child) {
-            return isParentOfMemberFunctionCall(child, name);
-        });
+    return clazy::any_of(stm->children(), [name](clang::Stmt *child) {
+        return isParentOfMemberFunctionCall(child, name);
+    });
 
     return false;
 }
@@ -84,8 +81,8 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
  * Returns the first child of stm of type T.
  * Does depth-first.
  */
-template <typename T>
-T* getFirstChildOfType(clang::Stmt *stm)
+template<typename T>
+T *getFirstChildOfType(clang::Stmt *stm)
 {
     if (!stm)
         return nullptr;
@@ -104,12 +101,11 @@ T* getFirstChildOfType(clang::Stmt *stm)
     return nullptr;
 }
 
-
 /**
  * Returns the first child of stm of type T, but only looks at the first branch.
  */
-template <typename T>
-T* getFirstChildOfType2(clang::Stmt *stm)
+template<typename T>
+T *getFirstChildOfType2(clang::Stmt *stm)
 {
     if (!stm)
         return nullptr;
@@ -130,7 +126,6 @@ T* getFirstChildOfType2(clang::Stmt *stm)
     return nullptr;
 }
 
-
 // If depth = 0, return s
 // If depth = 1, returns parent of s
 // etc.
@@ -139,13 +134,12 @@ inline clang::Stmt *parent(clang::ParentMap *map, clang::Stmt *s, unsigned int d
     if (!s)
         return nullptr;
 
-    return depth == 0 ? s
-                      : clazy::parent(map, map->getParent(s), depth - 1);
+    return depth == 0 ? s : clazy::parent(map, map->getParent(s), depth - 1);
 }
 
 // Returns the first parent of type T, with max depth depth
-template <typename T>
-T* getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int depth = -1)
+template<typename T>
+T *getFirstParentOfType(clang::ParentMap *pmap, clang::Stmt *s, unsigned int depth = -1)
 {
     if (!s)
         return nullptr;
@@ -169,17 +163,16 @@ inline clang::Stmt *getFirstChild(clang::Stmt *parent)
     return it == parent->child_end() ? nullptr : *it;
 }
 
-inline clang::Stmt * getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
+inline clang::Stmt *getFirstChildAtDepth(clang::Stmt *s, unsigned int depth)
 {
     if (depth == 0 || !s)
         return s;
 
-    return clazy::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth)
-                                 : nullptr;
+    return clazy::hasChildren(s) ? getFirstChildAtDepth(*s->child_begin(), --depth) : nullptr;
 }
 
-template <typename T>
-void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
+template<typename T>
+void getChilds(clang::Stmt *stmt, std::vector<T *> &result_list, int depth = -1)
 {
     if (!stmt)
         return;
@@ -199,8 +192,8 @@ void getChilds(clang::Stmt *stmt, std::vector<T*> &result_list, int depth = -1)
 
 inline bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options)
 {
-    return ((options & IgnoreImplicitCasts)    && llvm::isa<clang::ImplicitCastExpr>(s)) ||
-           ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(s));
+    return ((options & IgnoreImplicitCasts) && llvm::isa<clang::ImplicitCastExpr>(s))
+        || ((options & IgnoreExprWithCleanups) && llvm::isa<clang::ExprWithCleanups>(s));
 }
 
 /**
@@ -209,14 +202,15 @@ inline bool isIgnoredByOption(clang::Stmt *s, IgnoreStmts options)
  *
  * Similar to getChilds(), but with startLocation support.
  */
-template <typename T>
-std::vector<T*> getStatements(clang::Stmt *body,
-                              const clang::SourceManager *sm = nullptr,
-                              clang::SourceLocation startLocation = {},
-                              int depth = -1, bool includeParent = false,
-                              IgnoreStmts ignoreOptions = IgnoreNone)
+template<typename T>
+std::vector<T *> getStatements(clang::Stmt *body,
+                               const clang::SourceManager *sm = nullptr,
+                               clang::SourceLocation startLocation = {},
+                               int depth = -1,
+                               bool includeParent = false,
+                               IgnoreStmts ignoreOptions = IgnoreNone)
 {
-    std::vector<T*> statements;
+    std::vector<T *> statements;
     if (!body || depth == 0)
         return statements;
 
@@ -225,7 +219,8 @@ std::vector<T*> getStatements(clang::Stmt *body,
             statements.push_back(t);
 
     for (auto child : body->children()) {
-        if (!child) continue; // can happen
+        if (!child)
+            continue; // can happen
         if (T *childT = clang::dyn_cast<T>(child)) {
             if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), clazy::getLocStart(child))))
                 statements.push_back(childT);
@@ -249,8 +244,8 @@ std::vector<T*> getStatements(clang::Stmt *body,
  *
  * This is useful for example when the interesting statement is under an Implicit cast, so:
  **/
-template <typename T>
-T* unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
+template<typename T>
+T *unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
 {
     if (!stmt)
         return nullptr;
@@ -267,7 +262,7 @@ T* unpeal(clang::Stmt *stmt, IgnoreStmts options = IgnoreNone)
     return nullptr;
 }
 
-inline clang::SwitchStmt* getSwitchFromCase(clang::ParentMap *pmap, clang::CaseStmt *caseStm)
+inline clang::SwitchStmt *getSwitchFromCase(clang::ParentMap *pmap, clang::CaseStmt *caseStm)
 {
     return getFirstParentOfType<clang::SwitchStmt>(pmap, caseStm);
 }

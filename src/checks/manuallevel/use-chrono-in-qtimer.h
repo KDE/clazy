@@ -24,7 +24,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-use-chrono-in-qtimer.md for more info.
  */
@@ -36,7 +35,7 @@ public:
     void VisitStmt(clang::Stmt *) override;
 
 private:
-    void warn(const clang::Stmt* stmt, int value);
+    void warn(const clang::Stmt *stmt, int value);
     bool m_hasInsertedInclude = false;
 };
 

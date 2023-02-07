@@ -23,13 +23,13 @@
 */
 
 #include "function-args-by-ref.h"
-#include "Utils.h"
-#include "TypeUtils.h"
 #include "ClazyContext.h"
-#include "StringUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "clazy_stl.h"
 #include "FixItUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -60,35 +60,37 @@ bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
                                                         "QStringRef", // TODO: Remove in Qt6
                                                         "QList::const_iterator", // TODO: Remove in Qt6
                                                         "QJsonArray::const_iterator", // TODO: Remove in Qt6
-                                                        "QList<QString>::const_iterator",  // TODO: Remove in Qt6
+                                                        "QList<QString>::const_iterator", // TODO: Remove in Qt6
                                                         "QtMetaTypePrivate::QSequentialIterableImpl",
                                                         "QtMetaTypePrivate::QAssociativeIterableImpl",
                                                         "QVariantComparisonHelper",
-                                                        "QHashDummyValue", "QCharRef", "QString::Null"
-    };
+                                                        "QHashDummyValue",
+                                                        "QCharRef",
+                                                        "QString::Null"};
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
 bool FunctionArgsByRef::shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
-    static const std::vector<StringRef> ignoreList = { "operator<<" };
+    static const std::vector<StringRef> ignoreList = {"operator<<"};
 
     return clazy::contains(ignoreList, clazy::name(function));
 }
 
 bool FunctionArgsByRef::shouldIgnoreFunction(clang::FunctionDecl *function)
 {
-    static const std::vector<std::string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
-                                                                 "QMenu::exec", // Fixed in Qt6
-                                                                 "QTextFrame::iterator", // Fixed in Qt6
-                                                                 "QGraphicsWidget::addActions", // Fixed in Qt6
-                                                                 "QListWidget::mimeData", // Fixed in Qt6
-                                                                 "QTableWidget::mimeData", // Fixed in Qt6
-                                                                 "QTreeWidget::mimeData", // Fixed in Qt6
-                                                                 "QWidget::addActions", // Fixed in Qt6
-                                                                 "QSslCertificate::verify", // Fixed in Qt6
-                                                                 "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
+    static const std::vector<std::string> qualifiedIgnoreList = {
+        "QDBusMessage::createErrorReply", // Fixed in Qt6
+        "QMenu::exec", // Fixed in Qt6
+        "QTextFrame::iterator", // Fixed in Qt6
+        "QGraphicsWidget::addActions", // Fixed in Qt6
+        "QListWidget::mimeData", // Fixed in Qt6
+        "QTableWidget::mimeData", // Fixed in Qt6
+        "QTreeWidget::mimeData", // Fixed in Qt6
+        "QWidget::addActions", // Fixed in Qt6
+        "QSslCertificate::verify", // Fixed in Qt6
+        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
     };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
@@ -117,7 +119,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 
     auto funcParams = Utils::functionParameters(func);
     for (unsigned int i = 0; i < funcParams.size(); ++i) {
-        ParmVarDecl* param = funcParams[i];
+        ParmVarDecl *param = funcParams[i];
         const QualType paramQt = clazy::unrefQualType(param->getType());
         const Type *paramType = paramQt.getTypePtrOrNull();
         if (!paramType || paramType->isIncompleteType() || paramType->isDependentType())

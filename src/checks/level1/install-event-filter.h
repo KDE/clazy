@@ -27,16 +27,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-install-event-filter.md for more info.
  */
-class InstallEventFilter
-    : public CheckBase
+class InstallEventFilter : public CheckBase
 {
 public:
     explicit InstallEventFilter(const std::string &name, ClazyContext *context);

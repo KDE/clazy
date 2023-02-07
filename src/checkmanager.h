@@ -31,31 +31,36 @@
 
 #include <functional>
 #include <mutex>
-#include <unordered_map>
-#include <vector>
-#include <utility>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 class ClazyContext;
 
 struct RegisteredFixIt {
     typedef std::vector<RegisteredFixIt> List;
-    RegisteredFixIt() : id(-1) {}
-    RegisteredFixIt(int id, const std::string &name) : id(id), name(name) {}
+    RegisteredFixIt()
+        : id(-1)
+    {
+    }
+    RegisteredFixIt(int id, const std::string &name)
+        : id(id)
+        , name(name)
+    {
+    }
     int id = -1;
     std::string name;
-    bool operator==(const RegisteredFixIt &other) const { return id == other.id; }
+    bool operator==(const RegisteredFixIt &other) const
+    {
+        return id == other.id;
+    }
 };
 
-using FactoryFunction = std::function<CheckBase*(ClazyContext *context)>;
+using FactoryFunction = std::function<CheckBase *(ClazyContext *context)>;
 
 struct RegisteredCheck {
-    enum Option {
-        Option_None = 0,
-        Option_Qt4Incompatible = 1,
-        Option_VisitsStmts = 2,
-        Option_VisitsDecls = 4
-    };
+    enum Option { Option_None = 0, Option_Qt4Incompatible = 1, Option_VisitsStmts = 2, Option_VisitsDecls = 4 };
 
     typedef std::vector<RegisteredCheck> List;
     typedef int Options;
@@ -64,7 +69,10 @@ struct RegisteredCheck {
     CheckLevel level;
     FactoryFunction factory;
     Options options;
-    bool operator==(const RegisteredCheck &other) const { return name == other.name; }
+    bool operator==(const RegisteredCheck &other) const
+    {
+        return name == other.name;
+    }
 };
 
 inline bool checkLessThan(const RegisteredCheck &c1, const RegisteredCheck &c2)
@@ -90,24 +98,25 @@ public:
      */
     static CheckManager *instance();
 
-    static std::mutex &lock() { return m_lock; }
+    static std::mutex &lock()
+    {
+        return m_lock;
+    }
     RegisteredCheck::List availableChecks(CheckLevel maxLevel) const;
     RegisteredCheck::List requestedChecksThroughEnv(std::vector<std::string> &userDisabledChecks) const;
     std::vector<std::string> checksAsErrors() const;
 
     RegisteredCheck::List::const_iterator checkForName(const RegisteredCheck::List &checks, const std::string &name) const;
     RegisteredCheck::List checksForCommaSeparatedString(const std::string &str) const;
-    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str,
-                                                        std::vector<std::string> &userDisabledChecks) const;
+    RegisteredCheck::List checksForCommaSeparatedString(const std::string &str, std::vector<std::string> &userDisabledChecks) const;
     RegisteredFixIt::List availableFixIts(const std::string &checkName) const;
-
 
     /**
      * Returns all the requested checks.
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
     RegisteredCheck::List requestedChecks(std::vector<std::string> &args, bool qt4Compat);
-    std::vector<std::pair<CheckBase*, RegisteredCheck>> createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
+    std::vector<std::pair<CheckBase *, RegisteredCheck>> createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);
 
@@ -120,11 +129,11 @@ private:
     void registerCheck(const RegisteredCheck &check);
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
-    CheckBase* createCheck(const std::string &name, ClazyContext *context);
+    CheckBase *createCheck(const std::string &name, ClazyContext *context);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt>> m_fixitsByCheckName;
-    std::unordered_map<std::string, RegisteredFixIt > m_fixitByName;
+    std::unordered_map<std::string, RegisteredFixIt> m_fixitByName;
 };
 
 #endif

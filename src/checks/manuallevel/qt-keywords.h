@@ -29,23 +29,22 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class MacroInfo;
 class Token;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-qt-keywords.md for more info.
  */
-class QtKeywords
-    : public CheckBase
+class QtKeywords : public CheckBase
 {
 public:
     explicit QtKeywords(const std::string &name, ClazyContext *context);
+
 protected:
-    void VisitMacroExpands(const clang::Token &, const clang::SourceRange &,
-                           const clang::MacroInfo *) override;
+    void VisitMacroExpands(const clang::Token &, const clang::SourceRange &, const clang::MacroInfo *) override;
 };
 
 #endif

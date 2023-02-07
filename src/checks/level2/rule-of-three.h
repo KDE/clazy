@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Decl;
 }
 
@@ -38,12 +39,12 @@ class Decl;
  *
  * See README-rule-of-three for more information
  */
-class RuleOfThree
-    : public RuleOfBase
+class RuleOfThree : public RuleOfBase
 {
 public:
     explicit RuleOfThree(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *d) override;
+
 private:
     bool shouldIgnoreType(const std::string &className) const;
 };

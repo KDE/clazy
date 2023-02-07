@@ -20,20 +20,20 @@
 */
 
 #include "qt-keywords.h"
-#include "FixItUtils.h"
 #include "ClazyContext.h"
+#include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/MacroInfo.h>
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Lex/MacroInfo.h>
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/StringRef.h>
 
-#include <ctype.h>
 #include <algorithm>
+#include <ctype.h>
 #include <vector>
 
 using namespace clang;
@@ -57,7 +57,7 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
             return;
     }
 
-    static const std::vector<StringRef> keywords = { "foreach", "signals", "slots", "emit" };
+    static const std::vector<StringRef> keywords = {"foreach", "signals", "slots", "emit"};
     std::string name = static_cast<std::string>(ii->getName());
     if (!clazy::contains(keywords, name))
         return;

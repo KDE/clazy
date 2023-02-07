@@ -22,17 +22,18 @@
 #include "TemplateUtils.h"
 #include "StringUtils.h"
 
+#include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Decl.h>
 #include <clang/AST/TemplateBase.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class LangOptions;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -80,17 +81,19 @@ ClassTemplateSpecializationDecl *clazy::templateDecl(Decl *decl)
         return dyn_cast<ClassTemplateSpecializationDecl>(decl);
 
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl) return nullptr;
+    if (!varDecl)
+        return nullptr;
     QualType qt = varDecl->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t) return nullptr;
+    if (!t)
+        return nullptr;
     CXXRecordDecl *classDecl = t->getAsCXXRecordDecl();
-    if (!classDecl) return nullptr;
+    if (!classDecl)
+        return nullptr;
     return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
 }
 
-std::string clazy::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
-                                              unsigned int index, const LangOptions &lo, bool recordOnly)
+std::string clazy::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization, unsigned int index, const LangOptions &lo, bool recordOnly)
 {
     if (!specialization)
         return {};

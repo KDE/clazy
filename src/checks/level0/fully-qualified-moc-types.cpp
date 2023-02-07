@@ -20,12 +20,12 @@
 */
 
 #include "fully-qualified-moc-types.h"
-#include "HierarchyUtils.h"
-#include "TypeUtils.h"
-#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
+#include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -41,13 +41,13 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class Decl;
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -81,17 +81,20 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     for (auto param : method->parameters()) {
         QualType t = clazy::pointeeQualType(param->getType());
         if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
-            emitWarning(method, std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
+            emitWarning(method,
+                        std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName
+                            + " instead of " + typeName + ")");
         }
     }
 
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
         QualType returnT = clazy::pointeeQualType(method->getReturnType());
         if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
-            emitWarning(method, std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
+            emitWarning(method,
+                        std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName
+                            + " instead of " + typeName + ")");
         }
     }
-
 }
 
 bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, std::string &typeName) const
@@ -100,11 +103,11 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
     typeName.clear();
 
     if (!t.isNull()) {
-        typeName = clazy::name(t, lo(), /*asWritten=*/ true);
+        typeName = clazy::name(t, lo(), /*asWritten=*/true);
         if (typeName == "QPrivateSignal")
             return true;
 
-        qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/ false);
+        qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/false);
         if (qualifiedTypeName.empty() || qualifiedTypeName[0] == '(') {
             // We don't care about (anonymous namespace)::
             return true;
@@ -171,8 +174,8 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                         if (!record || !isGadget(record))
                             continue;
 
-                        std::string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/ true);
-                        std::string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/ false);
+                        std::string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/true);
+                        std::string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/false);
                         if (fullyQualifiedName.empty() || fullyQualifiedName[0] == '(') {
                             // We don't care about (anonymous namespace)::
                             continue;
@@ -181,7 +184,8 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                         if (nameAsWritten != fullyQualifiedName) {
                             // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
                             // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
-                            emitWarning(clazy::getLocStart(method->getParent()), "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
+                            emitWarning(clazy::getLocStart(method->getParent()),
+                                        "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
                         }
                     }
                 }
@@ -193,8 +197,7 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
     return true; // true, so processing doesn't continue, it's a qt_static_metacall, nothing interesting here unless the properties above
 }
 
-void FullyQualifiedMocTypes::VisitMacroExpands(const clang::Token &MacroNameTok,
-                                               const clang::SourceRange &range, const MacroInfo *)
+void FullyQualifiedMocTypes::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (ii && ii->getName() == "Q_GADGET")

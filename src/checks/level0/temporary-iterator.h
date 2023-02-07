@@ -30,13 +30,14 @@
 #include <llvm/ADT/StringRef.h>
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * Finds places where you're using iterators on temporary containers.
@@ -44,12 +45,12 @@ class Stmt;
  * For example getList().constBegin(), getList().constEnd() would provoke a crash when dereferencing
  * the iterator.
  */
-class TemporaryIterator
-    : public CheckBase
+class TemporaryIterator : public CheckBase
 {
 public:
     TemporaryIterator(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
+
 private:
     std::map<llvm::StringRef, std::vector<llvm::StringRef>> m_methodsByType;
 };

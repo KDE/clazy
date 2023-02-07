@@ -36,7 +36,6 @@ class ClazyContext;
 
 using namespace clang;
 
-
 ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -55,8 +54,7 @@ bool ReturningDataFromTemporary::handleReturn(ReturnStmt *ret)
     if (!ret)
         return false;
 
-    auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups |
-                                                       clazy::IgnoreImplicitCasts);
+    auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups | clazy::IgnoreImplicitCasts);
     handleMemberCall(memberCall, false);
     return true;
 }
@@ -78,9 +76,7 @@ void ReturningDataFromTemporary::handleDeclStmt(DeclStmt *declStmt)
         if (!init)
             continue;
 
-        auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups |
-                                                           clazy::IgnoreImplicitCasts);
-
+        auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups | clazy::IgnoreImplicitCasts);
 
         handleMemberCall(memberCall, true);
     }
@@ -96,11 +92,8 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
         return;
     const auto methodName = method->getQualifiedNameAsString();
 
-    if (methodName != "QByteArray::data" &&
-        methodName != "QByteArray::operator const char *" &&
-        methodName != "QByteArray::constData")
+    if (methodName != "QByteArray::data" && methodName != "QByteArray::operator const char *" && methodName != "QByteArray::constData")
         return;
-
 
     Expr *obj = memberCall->getImplicitObjectArgument();
     Stmt *t = obj;

@@ -24,17 +24,17 @@
 
 #include "detaching-member.h"
 #include "ClazyContext.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "checkbase.h"
 #include "clazy_stl.h"
 
+#include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
-#include <clang/AST/Decl.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
@@ -48,7 +48,7 @@ using namespace clang;
 DetachingMember::DetachingMember(const std::string &name, ClazyContext *context)
     : DetachingBase(name, context, Option_CanIgnoreIncludes)
 {
-    m_filesToIgnore = { "qstring.h" };
+    m_filesToIgnore = {"qstring.h"};
 }
 
 void DetachingMember::VisitStmt(clang::Stmt *stm)

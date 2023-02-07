@@ -21,8 +21,8 @@
 */
 
 #include "connect-non-signal.h"
-#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 
@@ -34,7 +34,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-
 
 ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -52,7 +51,7 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
     if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/ 1);
+    CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/1);
     if (!method) {
         if (clazy::isQMetaMethod(call, 1))
             return;

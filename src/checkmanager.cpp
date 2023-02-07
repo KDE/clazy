@@ -23,23 +23,23 @@
 */
 
 #include "checkmanager.h"
-#include "clazy_stl.h"
-#include "ClazyContext.h"
 #include "Checks.h"
+#include "ClazyContext.h"
+#include "clazy_stl.h"
 
 #include <llvm/Support/raw_ostream.h>
 
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
 #include <algorithm>
+#include <assert.h>
 #include <iterator>
 #include <memory>
+#include <stdlib.h>
+#include <string.h>
 
 using namespace clang;
 
-static const char * s_fixitNamePrefix = "fix-";
-static const char * s_levelPrefix = "level";
+static const char *s_fixitNamePrefix = "fix-";
+static const char *s_levelPrefix = "level";
 
 std::mutex CheckManager::m_lock;
 
@@ -73,7 +73,7 @@ void CheckManager::registerFixIt(int id, const std::string &fixitName, const std
     }
 
     auto &fixits = m_fixitsByCheckName[checkName];
-    for (const auto& fixit : fixits) {
+    for (const auto &fixit : fixits) {
         if (fixit.name == fixitName) {
             // It can't exist
             assert(false);
@@ -85,9 +85,9 @@ void CheckManager::registerFixIt(int id, const std::string &fixitName, const std
     m_fixitByName.insert({fixitName, fixit});
 }
 
-CheckBase* CheckManager::createCheck(const std::string &name, ClazyContext *context)
+CheckBase *CheckManager::createCheck(const std::string &name, ClazyContext *context)
 {
-    for (const auto& rc : m_registeredChecks) {
+    for (const auto &rc : m_registeredChecks) {
         if (rc.name == name) {
             return rc.factory(context);
         }
@@ -120,9 +120,12 @@ RegisteredCheck::List CheckManager::availableChecks(CheckLevel maxLevel) const
 {
     RegisteredCheck::List checks = m_registeredChecks;
 
-    checks.erase(remove_if(checks.begin(), checks.end(),
-                           [maxLevel](const RegisteredCheck &r) { return r.level > maxLevel; }), checks.end());
-
+    checks.erase(remove_if(checks.begin(),
+                           checks.end(),
+                           [maxLevel](const RegisteredCheck &r) {
+                               return r.level > maxLevel;
+                           }),
+                 checks.end());
 
     return checks;
 }
@@ -135,22 +138,20 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(std::vector<std::s
         const char *checksEnv = getenv("CLAZY_CHECKS");
         if (checksEnv) {
             const std::string checksEnvStr = clazy::unquoteString(checksEnv);
-            requestedChecksThroughEnv = checksEnvStr == "all_checks" ? availableChecks(CheckLevel2)
-                                                                     : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/ disabledChecksThroughEnv);
+            requestedChecksThroughEnv =
+                checksEnvStr == "all_checks" ? availableChecks(CheckLevel2) : checksForCommaSeparatedString(checksEnvStr, /*by-ref=*/disabledChecksThroughEnv);
         }
     }
 
-    std::copy(disabledChecksThroughEnv.begin(), disabledChecksThroughEnv.end(),
-              std::back_inserter(userDisabledChecks));
+    std::copy(disabledChecksThroughEnv.begin(), disabledChecksThroughEnv.end(), std::back_inserter(userDisabledChecks));
     return requestedChecksThroughEnv;
 }
 
-RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks,
-                                                                 const std::string &name) const
+RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks, const std::string &name) const
 {
     return clazy::find_if(checks, [name](const RegisteredCheck &r) {
         return r.name == name;
-    } );
+    });
 }
 
 RegisteredFixIt::List CheckManager::availableFixIts(const std::string &checkName) const
@@ -175,7 +176,7 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
     RegisteredCheck::List result;
 
     // #1 Check if a level was specified
-    static const std::vector<std::string> levels = { "level0", "level1", "level2" };
+    static const std::vector<std::string> levels = {"level0", "level1", "level2"};
     const int numLevels = levels.size();
     CheckLevel requestedLevel = CheckLevelUndefined;
     for (int i = 0; i < numLevels; ++i) {
@@ -213,9 +214,12 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
 
     if (qt4Compat) {
         // #5 Remove Qt4 incompatible checks
-        result.erase(remove_if(result.begin(), result.end(), [](const RegisteredCheck &c){
-            return c.options & RegisteredCheck::Option_Qt4Incompatible;
-        }), result.end());
+        result.erase(remove_if(result.begin(),
+                               result.end(),
+                               [](const RegisteredCheck &c) {
+                                   return c.options & RegisteredCheck::Option_Qt4Incompatible;
+                               }),
+                     result.end());
     }
 
     return result;
@@ -233,15 +237,14 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
     return result;
 }
 
-std::vector<std::pair<CheckBase*, RegisteredCheck>> CheckManager::createChecks(const RegisteredCheck::List &requestedChecks,
-                                                                               ClazyContext *context)
+std::vector<std::pair<CheckBase *, RegisteredCheck>> CheckManager::createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context)
 {
     assert(context);
 
-    std::vector<std::pair<CheckBase*, RegisteredCheck>> checks;
+    std::vector<std::pair<CheckBase *, RegisteredCheck>> checks;
     checks.reserve(requestedChecks.size() + 1);
-    for (const auto& check : requestedChecks) {
-        checks.push_back({createCheck(check.name, context), check });
+    for (const auto &check : requestedChecks) {
+        checks.push_back({createCheck(check.name, context), check});
     }
 
     return checks;
@@ -251,9 +254,12 @@ std::vector<std::pair<CheckBase*, RegisteredCheck>> CheckManager::createChecks(c
 void CheckManager::removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames)
 {
     for (auto &name : checkNames) {
-        list.erase(remove_if(list.begin(), list.end(), [name](const RegisteredCheck &c) {
-            return c.name == name;
-        }), list.end());
+        list.erase(remove_if(list.begin(),
+                             list.end(),
+                             [name](const RegisteredCheck &c) {
+                                 return c.name == name;
+                             }),
+                   list.end());
     }
 }
 
@@ -263,8 +269,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::str
     return checksForCommaSeparatedString(str, byRefDummy);
 }
 
-RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::string &str,
-                                                                  std::vector<std::string> &userDisabledChecks) const
+RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::string &str, std::vector<std::string> &userDisabledChecks) const
 {
     std::vector<std::string> checkNames = clazy::splitString(str, ',');
     RegisteredCheck::List result;
@@ -326,8 +331,7 @@ std::vector<std::string> CheckManager::checksAsErrors() const
 
         // Check whether all supplied check names are valid
         for (const std::string &name : checkNames) {
-            auto it = clazy::find_if(m_registeredChecks, [&name](const RegisteredCheck &check)
-            {
+            auto it = clazy::find_if(m_registeredChecks, [&name](const RegisteredCheck &check) {
                 return check.name == name;
             });
             if (it == m_registeredChecks.end())
@@ -336,7 +340,6 @@ std::vector<std::string> CheckManager::checksAsErrors() const
                 result.emplace_back(name);
         }
         return result;
-    }
-    else
+    } else
         return {};
 }

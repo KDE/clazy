@@ -29,7 +29,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class CXXMemberCallExpr;
 class CallExpr;
@@ -38,17 +39,17 @@ class CallExpr;
 /**
  * Finds misuse of QString::arg()
  */
-class QStringArg
-    : public CheckBase
+class QStringArg : public CheckBase
 {
 public:
     explicit QStringArg(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
+
 private:
     bool checkQLatin1StringCase(clang::CXXMemberCallExpr *);
     bool checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls);
-    std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
+    std::vector<clang::CallExpr *> m_alreadyProcessedChainedCalls;
 };
 
 #endif

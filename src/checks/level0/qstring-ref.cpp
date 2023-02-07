@@ -21,14 +21,13 @@
 
 #include "qstring-ref.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "StringUtils.h"
 #include "FixItUtils.h"
+#include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
@@ -37,6 +36,7 @@
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Lex/Lexer.h>
 #include <llvm/ADT/SmallVector.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
@@ -44,10 +44,11 @@
 #include <array>
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class Decl;
 class LangOptions;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -61,7 +62,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
     if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    static const llvm::SmallVector<StringRef, 3> list = {{ "left", "mid", "right" }};
+    static const llvm::SmallVector<StringRef, 3> list = {{"left", "mid", "right"}};
     return clazy::contains(list, clazy::name(method));
 }
 
@@ -70,9 +71,25 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
     if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    static const std::array<StringRef, 19> list = {{ "compare", "contains", "count", "startsWith", "endsWith", "indexOf",
-        "isEmpty", "isNull", "lastIndexOf", "length", "size", "toDouble", "toFloat",
-        "toInt", "toUInt", "toULong", "toULongLong", "toUShort", "toUcs4" }};
+    static const std::array<StringRef, 19> list = {{"compare",
+                                                    "contains",
+                                                    "count",
+                                                    "startsWith",
+                                                    "endsWith",
+                                                    "indexOf",
+                                                    "isEmpty",
+                                                    "isNull",
+                                                    "lastIndexOf",
+                                                    "length",
+                                                    "size",
+                                                    "toDouble",
+                                                    "toFloat",
+                                                    "toInt",
+                                                    "toUInt",
+                                                    "toULong",
+                                                    "toULongLong",
+                                                    "toUShort",
+                                                    "toUcs4"}};
 
     if (!clazy::contains(list, clazy::name(method)))
         return false;
@@ -85,9 +102,9 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
     if (!method || clazy::name(method->getParent()) != "QString")
         return false;
 
-    static const std::array<StringRef, 8> list = {{ "append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth" }};
+    static const std::array<StringRef, 8> list = {{"append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth"}};
 
-    if  (clazy::contains(list, clazy::name(method)))
+    if (clazy::contains(list, clazy::name(method)))
         return true;
 
     if (method->getOverloadedOperator() == OO_PlusEqual) // operator+=
@@ -130,7 +147,7 @@ static bool containsChild(Stmt *s, Stmt *target)
     return false;
 }
 
-bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt* s) const
+bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt *s) const
 {
     // While passing a QString to the QVariant ctor works fine, passing QStringRef doesn't
     // So let's not warn when QStrings are cast to something else.
@@ -145,7 +162,6 @@ bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt* s) const
         CXXConstructorDecl *ctor = constr->getConstructor();
         CXXRecordDecl *record = ctor ? ctor->getParent() : nullptr;
         return record ? record->getQualifiedNameAsString() != "QString" : false;
-
     }
 
     return false;
@@ -242,5 +258,4 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
     std::vector<FixItHint> fixits;
     fixits.push_back(clazy::createInsertion(insertionLoc, "Ref"));
     return fixits;
-
 }

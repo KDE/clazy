@@ -31,12 +31,12 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -85,7 +85,7 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     bool found_constant = false;
     bool found_notify = false;
     for (std::string &token : split) {
-        clazy::rtrim(/*by-ref*/token);
+        clazy::rtrim(/*by-ref*/ token);
         if (!found_read && token == "READ") {
             found_read = true;
             continue;
@@ -104,7 +104,6 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
 
     if (!found_read || (found_notify || found_constant))
         return;
-
 
     emitWarning(range.getBegin(), "Q_PROPERTY should have either NOTIFY or CONSTANT");
 }

@@ -35,6 +35,7 @@ class UseStaticQRegularExpression : public CheckBase
 public:
     explicit UseStaticQRegularExpression(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
 };
 

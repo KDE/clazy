@@ -22,9 +22,9 @@
 
 #include "MiniAstDumper.h"
 
+#include <clang/Basic/FileManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
-#include <clang/Basic/FileManager.h>
 
 using namespace clang;
 
@@ -72,5 +72,4 @@ void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
     TraverseDecl(ctx.getTranslationUnitDecl());
 }
 
-static FrontendPluginRegistry::Add<MiniAstDumperASTAction>
-X2("clazyMiniAstDumper", "Clazy Mini AST Dumper plugin");
+static FrontendPluginRegistry::Add<MiniAstDumperASTAction> X2("clazyMiniAstDumper", "Clazy Mini AST Dumper plugin");

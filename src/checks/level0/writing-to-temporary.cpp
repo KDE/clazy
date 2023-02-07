@@ -23,8 +23,8 @@
 */
 
 #include "writing-to-temporary.h"
-#include "Utils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -41,35 +41,31 @@ class ClazyContext;
 
 using namespace clang;
 
-
 WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
     , m_widenCriteria(isOptionSet("widen-criteria"))
 {
-    m_filesToIgnore = { "qstring.h" };
+    m_filesToIgnore = {"qstring.h"};
 }
 
 static bool isDisallowedClass(const std::string &className)
 {
-    static const std::vector<std::string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
-                                                         "QScriptValue", "QTextLine", "QTextBlock", "QDomNode",
-                                                         "QJSValue", "QTextTableCell" };
+    static const std::vector<std::string> disallowed =
+        {"QTextCursor", "QDomElement", "KConfigGroup", "QWebElement", "QScriptValue", "QTextLine", "QTextBlock", "QDomNode", "QJSValue", "QTextTableCell"};
     return clazy::contains(disallowed, className);
 }
 
 static bool isDisallowedMethod(const std::string &name)
 {
-    static const std::vector<std::string> disallowed = { "QColor::getCmyk", "QColor::getCmykF" };
+    static const std::vector<std::string> disallowed = {"QColor::getCmyk", "QColor::getCmykF"};
     return clazy::contains(disallowed, name);
 }
 
 static bool isKnownType(const std::string &className)
 {
-    static const std::vector<std::string> types = { "QList", "QVector", "QMap", "QHash", "QString", "QSet",
-                                                    "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
-                                                    "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D",
-                                                    "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
-                                                    "QPointF", "QColor" };
+    static const std::vector<std::string> types = {"QList",           "QVector",     "QMap",        "QHash",  "QString", "QSet",      "QByteArray", "QUrl",
+                                                   "QVarLengthArray", "QLinkedList", "QRect",       "QRectF", "QBitmap", "QVector2D", "QVector3D",  "QVector4D",
+                                                   "QSize",           "QSizeF",      "QSizePolicy", "QPoint", "QPointF", "QColor"};
 
     return clazy::contains(types, className);
 }

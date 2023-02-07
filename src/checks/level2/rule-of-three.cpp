@@ -20,10 +20,10 @@
 */
 
 #include "rule-of-three.h"
-#include "Utils.h"
 #include "MacroUtils.h"
-#include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclBase.h>
@@ -44,7 +44,7 @@ using namespace clang;
 RuleOfThree::RuleOfThree(const std::string &name, ClazyContext *context)
     : RuleOfBase(name, context)
 {
-    m_filesToIgnore = { "qrc_" };
+    m_filesToIgnore = {"qrc_"};
 }
 
 void RuleOfThree::VisitDecl(clang::Decl *decl)
@@ -140,7 +140,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     const std::string className = record->getNameAsString();
     const std::string classQualifiedName = record->getQualifiedNameAsString();
     const std::string filename = static_cast<std::string>(sm().getFilename(recordStart));
-    if (clazy::endsWith(className, "Private") && clazy::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
+    if (clazy::endsWith(className, "Private") && clazy::endsWithAny(filename, {".cpp", ".cxx", "_p.h"}))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 
     std::string msg = classQualifiedName + " has ";

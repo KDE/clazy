@@ -22,18 +22,18 @@
 #include "PreProcessorVisitor.h"
 #include "MacroUtils.h"
 
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Lex/MacroInfo.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/MacroInfo.h>
 #include <clang/Lex/PPCallbacks.h>
+#include <clang/Lex/Preprocessor.h>
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/ArrayRef.h>
 
-#include <stdlib.h>
 #include <memory>
+#include <stdlib.h>
 
 using namespace clang;
 
@@ -62,12 +62,11 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
     std::vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
     for (SourceRange &pair : pairs) {
         if (pair.getBegin().isInvalid() || pair.getEnd().isInvalid()) {
-            //llvm::errs() << "PreProcessorVisitor::isBetweenQtNamespaceMacros Found invalid location\n";
+            // llvm::errs() << "PreProcessorVisitor::isBetweenQtNamespaceMacros Found invalid location\n";
             continue; // shouldn't happen
         }
 
-        if (m_sm.isBeforeInSLocAddrSpace(pair.getBegin(), loc) &&
-            m_sm.isBeforeInSLocAddrSpace(loc, pair.getEnd()))
+        if (m_sm.isBeforeInSLocAddrSpace(pair.getBegin(), loc) && m_sm.isBeforeInSLocAddrSpace(loc, pair.getEnd()))
             return true;
     }
 
@@ -76,7 +75,7 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
 
 bool PreProcessorVisitor::hasInclude(const std::string &fileName, bool IsAngled) const
 {
-    auto it = std::find_if(m_includeInfo.cbegin(), m_includeInfo.cend(), [&] (const IncludeInfo& info) {
+    auto it = std::find_if(m_includeInfo.cbegin(), m_includeInfo.cend(), [&](const IncludeInfo &info) {
         return info.fileName == fileName && info.IsAngled == IsAngled;
     });
     return (it != m_includeInfo.cend());
@@ -145,8 +144,7 @@ static int stringToNumber(const std::string &str)
     return atoi(str.c_str());
 }
 
-void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDefinition &def,
-                                       SourceRange range, const MacroArgs *)
+void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDefinition &def, SourceRange range, const MacroArgs *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (!ii)
@@ -182,12 +180,18 @@ void PreProcessorVisitor::MacroExpands(const Token &MacroNameTok, const MacroDef
     }
 }
 
-void PreProcessorVisitor::InclusionDirective (clang::SourceLocation, const clang::Token &,
-                                              clang::StringRef FileName, bool IsAngled, clang::CharSourceRange FilenameRange,
-                                              clazy::OptionalFileEntryRef, clang::StringRef, clang::StringRef,
-                                              const clang::Module *, clang::SrcMgr::CharacteristicKind)
+void PreProcessorVisitor::InclusionDirective(clang::SourceLocation,
+                                             const clang::Token &,
+                                             clang::StringRef FileName,
+                                             bool IsAngled,
+                                             clang::CharSourceRange FilenameRange,
+                                             clazy::OptionalFileEntryRef,
+                                             clang::StringRef,
+                                             clang::StringRef,
+                                             const clang::Module *,
+                                             clang::SrcMgr::CharacteristicKind)
 {
-   if (m_ci.getPreprocessor().isInPrimaryFile() && !clazy::endsWith(FileName.str(), ".moc")) {
+    if (m_ci.getPreprocessor().isInPrimaryFile() && !clazy::endsWith(FileName.str(), ".moc")) {
         m_includeInfo.push_back(IncludeInfo{FileName, IsAngled, FilenameRange});
     }
 }

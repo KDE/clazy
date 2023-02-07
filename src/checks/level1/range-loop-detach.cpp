@@ -23,16 +23,16 @@
 */
 
 #include "range-loop-detach.h"
-#include "Utils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
-#include "StringUtils.h"
-#include "LoopUtils.h"
-#include "StmtBodyRange.h"
-#include "SourceCompatibilityHelpers.h"
-#include "FixItUtils.h"
 #include "ClazyContext.h"
+#include "FixItUtils.h"
+#include "LoopUtils.h"
 #include "PreProcessorVisitor.h"
+#include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StmtBodyRange.h"
+#include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -46,7 +46,8 @@ class ClazyContext;
 
 using namespace clang;
 
-namespace clazy {
+namespace clazy
+{
 /**
  * Returns true if we can prove the container doesn't detach.
  * Returns false otherwise, meaning that you can't conclude anything if false is returned.
@@ -89,7 +90,6 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
     return true;
 }
 }
-
 
 RangeLoopDetach::RangeLoopDetach(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -152,12 +152,12 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     std::vector<FixItHint> fixits;
 
     SourceLocation end;
-    if (islvalue(containerExpr, /*by-ref*/end)) {
+    if (islvalue(containerExpr, /*by-ref*/ end)) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
             SourceLocation start = clazy::getLocStart(containerExpr);
             fixits.push_back(clazy::createInsertion(start, "qAsConst("));
-            //SourceLocation end = getLocEnd(containerExpr);
+            // SourceLocation end = getLocEnd(containerExpr);
             fixits.push_back(clazy::createInsertion(end, ")"));
         }
     }

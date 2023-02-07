@@ -20,10 +20,10 @@
 */
 
 #include "ifndef-define-typo.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 #include "levenshteindistance.h"
 
 #include <clang/AST/AST.h>
@@ -31,7 +31,6 @@
 #include <iostream>
 
 using namespace clang;
-
 
 IfndefDefineTypo::IfndefDefineTypo(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

@@ -30,17 +30,18 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 /**
  * Finds cases where you're using QMap<K,T> and K is a pointer. QHash<K,T> should be used instead.
  *
  * See README-qmap-with-pointer-key for more information.
  */
-class QMapWithPointerKey
-    : public CheckBase {
+class QMapWithPointerKey : public CheckBase
+{
 public:
     QMapWithPointerKey(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;

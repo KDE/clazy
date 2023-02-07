@@ -27,16 +27,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-qhash-namespace.md for more info.
  */
-class QHashNamespace
-    : public CheckBase
+class QHashNamespace : public CheckBase
 {
 public:
     explicit QHashNamespace(const std::string &name, ClazyContext *context);

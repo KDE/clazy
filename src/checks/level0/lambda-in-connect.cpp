@@ -21,10 +21,10 @@
 
 #include "lambda-in-connect.h"
 #include "ClazyContext.h"
-#include "StringUtils.h"
-#include "HierarchyUtils.h"
 #include "ContextUtils.h"
+#include "HierarchyUtils.h"
 #include "QtUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
@@ -38,7 +38,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-
 
 LambdaInConnect::LambdaInConnect(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)

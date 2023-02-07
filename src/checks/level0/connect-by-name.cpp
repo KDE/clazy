@@ -20,8 +20,8 @@
 */
 
 #include "connect-by-name.h"
-#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -30,12 +30,12 @@
 
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

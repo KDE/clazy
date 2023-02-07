@@ -21,8 +21,8 @@
 */
 
 #include "qlatin1string-non-ascii.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -34,7 +34,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)

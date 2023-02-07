@@ -20,10 +20,10 @@
 */
 
 #include "const-signal-or-slot.h"
+#include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "ClazyContext.h"
-#include "AccessSpecifierManager.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -32,13 +32,13 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class Decl;
 class FunctionDecl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -57,14 +57,13 @@ void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)
     if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func))
         return;
 
-    CXXMethodDecl *slot =  clazy::receiverMethodForConnect(call);
+    CXXMethodDecl *slot = clazy::receiverMethodForConnect(call);
     if (!slot || !slot->isConst() || slot->getReturnType()->isVoidType()) // const and returning void must do something, so not a getter
         return;
 
     QtAccessSpecifierType specifierType = accessSpecifierManager->qtAccessSpecifierType(slot);
     if (specifierType == QtAccessSpecifier_Slot || specifierType == QtAccessSpecifier_Signal)
         return; // For stuff explicitly marked as slots or signals we use VisitDecl
-
 
     // Here the user is connecting to a const method, which isn't marked as slot or signal and returns non-void
     // Looks like a getter!

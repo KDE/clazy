@@ -30,17 +30,17 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * Finds global static non-POD variables.
  *
  * See README-non-pod-global-static.
  */
-class NonPodGlobalStatic
-    : public CheckBase
+class NonPodGlobalStatic : public CheckBase
 {
 public:
     explicit NonPodGlobalStatic(const std::string &name, ClazyContext *context);

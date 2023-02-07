@@ -34,7 +34,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CallExpr;
 class CXXMemberCallExpr;
 class Expr;
@@ -45,8 +46,7 @@ class Stmt;
 class Token;
 }
 
-struct PrivateSlot
-{
+struct PrivateSlot {
     typedef std::vector<PrivateSlot> List;
     std::string objName;
     std::string name;
@@ -57,24 +57,25 @@ struct PrivateSlot
  *
  * See README-old-style-connect for more information.
  */
-class OldStyleConnect
-    : public CheckBase
+class OldStyleConnect : public CheckBase
 {
 public:
     OldStyleConnect(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
     void addPrivateSlot(const PrivateSlot &);
+
 protected:
     void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr) override;
+
 private:
     std::string signalOrSlotNameFromMacro(clang::SourceLocation macroLoc);
 
-    template <typename T>
+    template<typename T>
     std::vector<clang::FixItHint> fixits(int classification, T *callOrCtor);
 
     bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
 
-    template <typename T>
+    template<typename T>
     int classifyConnect(clang::FunctionDecl *connectFunc, T *connectCall) const;
 
     bool isQPointer(clang::Expr *expr) const;

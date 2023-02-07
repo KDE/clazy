@@ -20,13 +20,13 @@
 */
 
 #include "qstring-arg.h"
-#include "Utils.h"
-#include "StringUtils.h"
-#include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "clazy_stl.h"
 #include "ClazyContext.h"
+#include "HierarchyUtils.h"
 #include "PreProcessorVisitor.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -48,13 +48,13 @@ using namespace clang;
 QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    m_filesToIgnore = { "qstring.h" };
+    m_filesToIgnore = {"qstring.h"};
     context->enablePreprocessorVisitor();
 }
 
 static std::string variableNameFromArg(Expr *arg)
 {
-    std::vector<DeclRefExpr*> declRefs;
+    std::vector<DeclRefExpr *> declRefs;
     clazy::getChilds<DeclRefExpr>(arg, declRefs);
     if (declRefs.size() == 1) {
         ValueDecl *decl = declRefs.at(0)->getDecl();
@@ -64,7 +64,7 @@ static std::string variableNameFromArg(Expr *arg)
     return {};
 }
 
-static CXXMethodDecl* isArgMethod(FunctionDecl *func, const char *className)
+static CXXMethodDecl *isArgMethod(FunctionDecl *func, const char *className)
 {
     if (!func)
         return nullptr;
@@ -194,7 +194,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         ParmVarDecl *p = method->getParamDecl(2);
         if (p && clazy::name(p) == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
-            std::vector<IntegerLiteral*> literals;
+            std::vector<IntegerLiteral *> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
             if (!literals.empty())
                 return;
@@ -207,7 +207,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         p = method->getParamDecl(1);
         if (p && clazy::name(p) == "fieldWidth") {
             // He specified a literal, so he knows what he's doing, otherwise he would have put it directly in the string
-            std::vector<IntegerLiteral*> literals;
+            std::vector<IntegerLiteral *> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);
             if (!literals.empty())
                 return;

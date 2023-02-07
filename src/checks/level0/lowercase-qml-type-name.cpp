@@ -20,16 +20,15 @@
 */
 
 #include "lowercase-qml-type-name.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 
-#include <clang/AST/AST.h>
 #include <cctype>
+#include <clang/AST/AST.h>
 
 using namespace clang;
-
 
 LowercaseQMlTypeName::LowercaseQMlTypeName(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

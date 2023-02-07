@@ -20,15 +20,14 @@
 */
 
 #include "qstring-comparison-to-implicit-char.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
-
 
 QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -57,7 +56,6 @@ void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
     ParmVarDecl *parm2 = functionDecl->getParamDecl(1);
     if (parm2->getType().getAsString() != "class QChar")
         return;
-
 
     emitWarning(stmt, "QString being compared to implicit QChar");
 }

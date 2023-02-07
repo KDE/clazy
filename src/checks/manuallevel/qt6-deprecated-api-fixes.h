@@ -25,12 +25,13 @@
 
 #include "checkbase.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class FixItHint;
 class CXXConstructExpr;
@@ -46,8 +47,7 @@ class CXXFunctionalCastExpr;
  *
  * Run only with Qt 5.
  */
-class Qt6DeprecatedAPIFixes
-    : public CheckBase
+class Qt6DeprecatedAPIFixes : public CheckBase
 {
 public:
     explicit Qt6DeprecatedAPIFixes(const std::string &name, ClazyContext *context);
@@ -57,12 +57,9 @@ public:
 
 private:
     std::vector<clang::SourceLocation> m_listingMacroExpand;
-    void fixForDeprecatedOperator(clang::Stmt* stmt, std::string className);
-    std::string buildReplacementforQDir(clang::DeclRefExpr *decl_operator, bool isPointer,
-                                        std::string replacement, std::string replacement_var2);
-    std::string buildReplacementForQVariant(clang::DeclRefExpr* decl_operator,
-                                            std::string replacement,
-                                            std::string replacement_var2);
+    void fixForDeprecatedOperator(clang::Stmt *stmt, std::string className);
+    std::string buildReplacementforQDir(clang::DeclRefExpr *decl_operator, bool isPointer, std::string replacement, std::string replacement_var2);
+    std::string buildReplacementForQVariant(clang::DeclRefExpr *decl_operator, std::string replacement, std::string replacement_var2);
 };
 
 #endif

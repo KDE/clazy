@@ -23,13 +23,13 @@
 */
 
 #include "virtual-call-ctor.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
-#include "ClazyContext.h"
 
-#include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
@@ -41,8 +41,9 @@ class ClazyContext;
 
 using namespace clang;
 
-namespace clazy {
-void getChildsIgnoreLambda(clang::Stmt *stmt, std::vector<CXXMemberCallExpr*> &result_list, int depth = -1)
+namespace clazy
+{
+void getChildsIgnoreLambda(clang::Stmt *stmt, std::vector<CXXMemberCallExpr *> &result_list, int depth = -1)
 {
     if (!stmt || dyn_cast<LambdaExpr>(stmt))
         return;
@@ -79,7 +80,7 @@ void VirtualCallCtor::VisitDecl(Decl *decl)
 
     CXXRecordDecl *classDecl = ctorDecl ? ctorDecl->getParent() : dtorDecl->getParent();
 
-    std::vector<Stmt*> processedStmts;
+    std::vector<Stmt *> processedStmts;
     SourceLocation loc = containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts);
     if (loc.isValid()) {
         if (ctorDecl) {
@@ -91,8 +92,7 @@ void VirtualCallCtor::VisitDecl(Decl *decl)
     }
 }
 
-SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt,
-                                                    std::vector<Stmt*> &processedStmts)
+SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classDecl, clang::Stmt *stmt, std::vector<Stmt *> &processedStmts)
 {
     if (!stmt)
         return {};
@@ -103,9 +103,10 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
 
     processedStmts.push_back(stmt);
 
-    std::vector<CXXMemberCallExpr*> memberCalls;
+    std::vector<CXXMemberCallExpr *> memberCalls;
 
-    // Ignore lambdas, as they are usually used in connects. Might introduce true-negatives. Possible solution would be to check if the lambda is in a connect, timer, invokeMethod, etc.
+    // Ignore lambdas, as they are usually used in connects. Might introduce true-negatives. Possible solution would be to check if the lambda is in a connect,
+    // timer, invokeMethod, etc.
     clazy::getChildsIgnoreLambda(stmt, memberCalls);
 
     for (CXXMemberCallExpr *callExpr : memberCalls) {

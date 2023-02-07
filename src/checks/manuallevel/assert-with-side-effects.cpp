@@ -24,16 +24,16 @@
 
 #include "assert-with-side-effects.h"
 #include "MacroUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 #include "clazy_stl.h"
 
-#include <clang/AST/Expr.h>
-#include <clang/AST/Stmt.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/OperationKinds.h>
+#include <clang/AST/Stmt.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
@@ -46,9 +46,7 @@ class ClazyContext;
 
 using namespace clang;
 
-
-enum Aggressiveness
-{
+enum Aggressiveness {
     NormalAggressiveness = 0,
     AlsoCheckFunctionCallsAggressiveness = 1 // too many false positives
 };
@@ -61,19 +59,26 @@ AssertWithSideEffects::AssertWithSideEffects(const std::string &name, ClazyConte
 
 static bool functionIsOk(StringRef name)
 {
-    static const std::vector<StringRef> whitelist = {"qFuzzyIsNull", "qt_noop", "qt_assert", "qIsFinite", "qIsInf",
-                                                     "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-",
-                                                     "q_func", "d_func", "isEmptyHelper",
-                                                     "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
+    static const std::vector<StringRef> whitelist = {"qFuzzyIsNull", "qt_noop",   "qt_assert",    "qIsFinite",     "qIsInf",     "qIsNaN",     "qIsNumericType",
+                                                     "operator==",   "operator<", "operator>",    "operator<=",    "operator>=", "operator!=", "operator+",
+                                                     "operator-",    "q_func",    "d_func",       "isEmptyHelper", "qCross",     "qMin",       "qMax",
+                                                     "qBound",       "priv",      "qobject_cast", "dbusService"};
     return clazy::contains(whitelist, name);
 }
 
 static bool methodIsOK(const std::string &name)
 {
-    static const std::vector<std::string> whitelist = {"QList::begin", "QList::end", "QVector::begin",
-                                                       "QVector::end", "QHash::begin", "QHash::end",
-                                                       "QByteArray::data", "QBasicMutex::isRecursive",
-                                                       "QLinkedList::begin", "QLinkedList::end", "QDataBuffer::first",
+    static const std::vector<std::string> whitelist = {"QList::begin",
+                                                       "QList::end",
+                                                       "QVector::begin",
+                                                       "QVector::end",
+                                                       "QHash::begin",
+                                                       "QHash::end",
+                                                       "QByteArray::data",
+                                                       "QBasicMutex::isRecursive",
+                                                       "QLinkedList::begin",
+                                                       "QLinkedList::end",
+                                                       "QDataBuffer::first",
                                                        "QOpenGLFunctions::glIsRenderbuffer"};
     return clazy::contains(whitelist, name);
 }
@@ -101,7 +106,6 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
 
         FunctionDecl *func = call->getDirectCallee();
         if (func && checkfunctions) {
-
             if (isa<CXXMethodDecl>(func)) // This will be visited next, so ignore it now
                 return;
 

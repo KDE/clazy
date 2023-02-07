@@ -23,9 +23,9 @@
 */
 
 #include "qdatetime-utc.h"
-#include "Utils.h"
 #include "FixItUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -58,7 +58,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (!isTimeT && secondMethodName != "QDateTime::toUTC")
         return;
 
-    std::vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
+    std::vector<CallExpr *> chainedCalls = Utils::callListForChain(secondCall);
     if (chainedCalls.size() < 2)
         return;
 
@@ -81,7 +81,6 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (!success) {
         queueManualFixitWarning(clazy::getLocStart(secondCall));
     }
-
 
     emitWarning(clazy::getLocStart(stmt), "Use QDateTime" + replacement + " instead", fixits);
 }

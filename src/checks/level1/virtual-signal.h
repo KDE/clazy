@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-virtual-signal.md for more info.
  */
-class VirtualSignal
-    : public CheckBase
+class VirtualSignal : public CheckBase
 {
 public:
     explicit VirtualSignal(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *stmt) override;
+
 private:
 };
 

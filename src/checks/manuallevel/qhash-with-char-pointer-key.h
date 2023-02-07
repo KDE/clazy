@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-qhash-with-char-pointer-key.md for more info.
  */
-class QHashWithCharPointerKey
-    : public CheckBase
+class QHashWithCharPointerKey : public CheckBase
 {
 public:
     explicit QHashWithCharPointerKey(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
 };
 

@@ -41,13 +41,14 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/raw_ostream.h>
 
-#include <vector>
 #include <memory>
+#include <vector>
 
-namespace clang {
+namespace clang
+{
 class MacroArgs;
 class Token;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -57,8 +58,7 @@ ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
 {
 }
 
-void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &md,
-                                              SourceRange range, const MacroArgs *)
+void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &md, SourceRange range, const MacroArgs *)
 {
     check->VisitMacroExpands(macroNameTok, range, md.getMacroInfo());
 }
@@ -103,9 +103,16 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
-void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
-                                                    clang::CharSourceRange FilenameRange, clazy::OptionalFileEntryRef File, clang::StringRef SearchPath,
-                                                    clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType)
+void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLoc,
+                                                    const clang::Token &IncludeTok,
+                                                    clang::StringRef FileName,
+                                                    bool IsAngled,
+                                                    clang::CharSourceRange FilenameRange,
+                                                    clazy::OptionalFileEntryRef File,
+                                                    clang::StringRef SearchPath,
+                                                    clang::StringRef RelativePath,
+                                                    const clang::Module *Imported,
+                                                    clang::SrcMgr::CharacteristicKind FileType)
 {
     check->VisitInclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported, FileType);
 }
@@ -160,12 +167,12 @@ void CheckBase::VisitIfndef(SourceLocation, const Token &)
     // Overriden in derived classes
 }
 
-void CheckBase::VisitIf(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind)
+void CheckBase::VisitIf(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind)
 {
     // Overriden in derived classes
 }
 
-void CheckBase::VisitElif(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind, SourceLocation)
+void CheckBase::VisitElif(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind, SourceLocation)
 {
     // Overriden in derived classes
 }
@@ -180,9 +187,16 @@ void CheckBase::VisitEndif(SourceLocation, SourceLocation)
     // Overriden in derived classes
 }
 
-void CheckBase::VisitInclusionDirective(clang::SourceLocation , const clang::Token &, clang::StringRef , bool ,
-                        clang::CharSourceRange , clazy::OptionalFileEntryRef, clang::StringRef ,
-                        clang::StringRef , const clang::Module *, clang::SrcMgr::CharacteristicKind )
+void CheckBase::VisitInclusionDirective(clang::SourceLocation,
+                                        const clang::Token &,
+                                        clang::StringRef,
+                                        bool,
+                                        clang::CharSourceRange,
+                                        clazy::OptionalFileEntryRef,
+                                        clang::StringRef,
+                                        clang::StringRef,
+                                        const clang::Module *,
+                                        clang::SrcMgr::CharacteristicKind)
 {
     // Overriden in derived classes
 }
@@ -223,8 +237,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
     emitWarning(loc, error, {}, printWarningTag);
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
-                            const std::vector<FixItHint> &fixits, bool printWarningTag)
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const std::vector<FixItHint> &fixits, bool printWarningTag)
 {
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
         return;
@@ -243,7 +256,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
 
     reallyEmitWarning(loc, error, fixits);
 
-    for (const auto& l : m_queuedManualInterventionWarnings) {
+    for (const auto &l : m_queuedManualInterventionWarnings) {
         std::string msg("FixIt failed, requires manual intervention: ");
         if (!l.second.empty())
             msg += ' ' + l.second;
@@ -256,20 +269,18 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
 
 void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 {
-    llvm::errs() << m_tag << ": internal error: " << error
-                 << " at " << loc.printToString(sm()) << "\n";
+    llvm::errs() << m_tag << ": internal error: " << error << " at " << loc.printToString(sm()) << "\n";
 }
 
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
     auto &engine = m_context->ci.getDiagnostics();
-    auto severity = (m_context->treatAsError(m_name) || (engine.getWarningsAsErrors() && !m_context->userDisabledWError()))
-            ? DiagnosticIDs::Error
-            : DiagnosticIDs::Warning;
+    auto severity =
+        (m_context->treatAsError(m_name) || (engine.getWarningsAsErrors() && !m_context->userDisabledWError())) ? DiagnosticIDs::Error : DiagnosticIDs::Warning;
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
     DiagnosticBuilder B = engine.Report(full, id);
-    for (const FixItHint& fixit : fixits) {
+    for (const FixItHint &fixit : fixits) {
         if (!fixit.isNull())
             B.AddFixItHint(fixit);
     }

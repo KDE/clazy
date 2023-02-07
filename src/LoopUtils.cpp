@@ -23,22 +23,23 @@
 */
 
 #include "LoopUtils.h"
+#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
-#include "SourceCompatibilityHelpers.h"
 
-#include <clang/AST/ParentMap.h>
-#include <clang/Basic/SourceLocation.h>
-#include <clang/AST/ExprCXX.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/ParentMap.h>
 #include <clang/AST/StmtCXX.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceLocation.h>
 #include <llvm/ADT/StringRef.h>
 
-namespace clang {
+namespace clang
+{
 class CXXConstructorDecl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -53,10 +54,8 @@ Stmt *clazy::bodyFromLoop(Stmt *loop)
     if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(loop))
         return rangeLoop->getBody();
 
-
     if (auto whilestm = dyn_cast<WhileStmt>(loop))
         return whilestm->getBody();
-
 
     if (auto dostm = dyn_cast<DoStmt>(loop))
         return dostm->getBody();
@@ -64,8 +63,7 @@ Stmt *clazy::bodyFromLoop(Stmt *loop)
     return nullptr;
 }
 
-bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm,
-                                 clang::SourceLocation onlyBeforeThisLoc)
+bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &sm, clang::SourceLocation onlyBeforeThisLoc)
 {
     if (!stmt)
         return false;
@@ -102,14 +100,13 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
         if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
             return nullptr;
 
-
         return constructExpr;
     }
 
     return nullptr;
 }
 
-VarDecl* clazy::containerDeclForLoop(clang::Stmt *loop)
+VarDecl *clazy::containerDeclForLoop(clang::Stmt *loop)
 {
     Expr *expr = containerExprForLoop(loop);
     if (!expr)
@@ -123,7 +120,7 @@ VarDecl* clazy::containerDeclForLoop(clang::Stmt *loop)
     return valueDecl ? dyn_cast<VarDecl>(valueDecl) : nullptr;
 }
 
-Stmt* clazy::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
+Stmt *clazy::isInLoop(clang::ParentMap *pmap, clang::Stmt *stmt)
 {
     if (!stmt)
         return nullptr;

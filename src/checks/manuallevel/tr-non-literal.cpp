@@ -33,7 +33,6 @@ class ClazyContext;
 
 using namespace clang;
 
-
 TrNonLiteral::TrNonLiteral(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {

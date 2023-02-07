@@ -20,9 +20,9 @@
 */
 
 #include "isempty-vs-count.h"
-#include "StringUtils.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -37,7 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 IsEmptyVSCount::IsEmptyVSCount(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)

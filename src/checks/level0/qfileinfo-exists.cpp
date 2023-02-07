@@ -20,9 +20,9 @@
 */
 
 #include "qfileinfo-exists.h"
-#include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -33,7 +33,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -47,7 +46,7 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
     if (methodName != "QFileInfo::exists")
         return;
 
-    CXXConstructExpr* ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
+    CXXConstructExpr *ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
     if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
         return;
 

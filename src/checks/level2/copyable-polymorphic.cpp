@@ -20,12 +20,12 @@
 */
 
 #include "copyable-polymorphic.h"
-#include "Utils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
+#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/Basic/LLVM.h>
@@ -33,12 +33,12 @@
 #include <llvm/Support/Casting.h>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 /// Returns whether the class has non-private copy-ctor or copy-assign
 static bool hasPublicCopy(const CXXRecordDecl *record)
@@ -108,19 +108,14 @@ std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *
 
     // Insert Q_DISABLE_COPY(classname) in the private section if one exists,
     // otherwise at the end of the class declaration
-    SourceLocation pos =
-        m_context->accessSpecifierManager->firstLocationOfSection(
-            clang::AccessSpecifier::AS_private, record);
+    SourceLocation pos = m_context->accessSpecifierManager->firstLocationOfSection(clang::AccessSpecifier::AS_private, record);
 
     if (pos.isValid()) {
-        pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
-                                            false);
-        result.push_back(clazy::createInsertion(
-            pos, std::string("\n\tQ_DISABLE_COPY(") + className.data() + std::string(")")));
+        pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(), false);
+        result.push_back(clazy::createInsertion(pos, std::string("\n\tQ_DISABLE_COPY(") + className.data() + std::string(")")));
     } else {
         pos = record->getBraceRange().getEnd();
-        result.push_back(clazy::createInsertion(
-            pos, std::string("\tQ_DISABLE_COPY(") + className.data() + std::string(")\n")));
+        result.push_back(clazy::createInsertion(pos, std::string("\tQ_DISABLE_COPY(") + className.data() + std::string(")\n")));
     }
 
     // If the class has a default constructor, then we need to readd it,
@@ -128,18 +123,13 @@ std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *
     // Add it in the public section if one exists, otherwise add a
     // public section at the top of the class declaration.
     if (record->hasDefaultConstructor()) {
-        pos = m_context->accessSpecifierManager->firstLocationOfSection(
-            clang::AccessSpecifier::AS_public, record);
+        pos = m_context->accessSpecifierManager->firstLocationOfSection(clang::AccessSpecifier::AS_public, record);
         if (pos.isInvalid()) {
             pos = record->getBraceRange().getBegin().getLocWithOffset(1);
-            result.push_back(clazy::createInsertion(
-                pos, std::string("\npublic:\n\t") + className.data() + std::string("() = default;")));
-        }
-        else {
-            pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
-                                                false);
-            result.push_back(clazy::createInsertion(
-                pos, std::string("\n\t") + className.data() + std::string("() = default;")));
+            result.push_back(clazy::createInsertion(pos, std::string("\npublic:\n\t") + className.data() + std::string("() = default;")));
+        } else {
+            pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(), false);
+            result.push_back(clazy::createInsertion(pos, std::string("\n\t") + className.data() + std::string("() = default;")));
         }
     }
 #endif

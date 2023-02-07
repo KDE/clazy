@@ -20,10 +20,10 @@
 */
 
 #include "overridden-signal.h"
-#include "QtUtils.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FunctionUtils.h"
+#include "QtUtils.h"
 #include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -31,12 +31,12 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 OverriddenSignal::OverriddenSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -66,7 +66,6 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
     while (baseClass) {
         for (auto baseMethod : baseClass->methods()) {
             if (clazy::name(baseMethod) == methodName) {
-
                 if (!clazy::parametersMatch(method, baseMethod)) // overloading is permitted.
                     continue;
 

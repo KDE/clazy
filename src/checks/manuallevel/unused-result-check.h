@@ -52,7 +52,7 @@ public:
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 
 private:
-   std::unique_ptr<ClazyAstMatcherCallback> m_astMatcherCallBack; // TODO: add std::propagate_const
+    std::unique_ptr<ClazyAstMatcherCallback> m_astMatcherCallBack; // TODO: add std::propagate_const
 };
 
 #endif

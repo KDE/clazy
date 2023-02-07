@@ -20,9 +20,9 @@
 */
 
 #include "install-event-filter.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -37,7 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)

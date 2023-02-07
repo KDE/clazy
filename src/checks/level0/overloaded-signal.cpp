@@ -20,17 +20,16 @@
 */
 
 #include "overloaded-signal.h"
-#include "Utils.h"
+#include "AccessSpecifierManager.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "AccessSpecifierManager.h"
+#include "Utils.h"
 
 #include <ClazyContext.h>
 #include <clang/AST/AST.h>
 
 using namespace clang;
-
 
 OverloadedSignal::OverloadedSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -53,7 +52,6 @@ void OverloadedSignal::VisitDecl(clang::Decl *decl)
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
     if (!methodIsSignal)
         return;
-
 
     const StringRef methodName = clazy::name(method);
     CXXRecordDecl *p = record; // baseClass starts at record so we check overloaded methods there

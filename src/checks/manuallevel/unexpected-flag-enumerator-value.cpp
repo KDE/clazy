@@ -29,13 +29,12 @@
 
 using namespace clang;
 
-
 UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
 
-static ConstantExpr* getConstantExpr(EnumConstantDecl *enCD)
+static ConstantExpr *getConstantExpr(EnumConstantDecl *enCD)
 {
     auto cexpr = dyn_cast_or_null<ConstantExpr>(enCD->getInitExpr());
     if (cexpr)
@@ -43,17 +42,18 @@ static ConstantExpr* getConstantExpr(EnumConstantDecl *enCD)
     return clazy::getFirstChildOfType<ConstantExpr>(enCD->getInitExpr());
 }
 
-static bool isBinaryOperatorExpression(ConstantExpr* cexpr)
+static bool isBinaryOperatorExpression(ConstantExpr *cexpr)
 {
     return clazy::getFirstChildOfType<BinaryOperator>(cexpr);
 }
 
-static bool isReferenceToEnumerator(ConstantExpr* cexpr)
+static bool isReferenceToEnumerator(ConstantExpr *cexpr)
 {
     return dyn_cast_or_null<DeclRefExpr>(cexpr->getSubExpr());
 }
 
-static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
+static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en)
+{
     constexpr unsigned MinOnesToQualifyAsMask = 3;
 
     const auto val = en->getInitVal();
@@ -79,21 +79,21 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en) {
     return false;
 }
 
-static SmallVector<EnumConstantDecl*, 16> getEnumerators(EnumDecl *enDecl)
+static SmallVector<EnumConstantDecl *, 16> getEnumerators(EnumDecl *enDecl)
 {
-    SmallVector<EnumConstantDecl*, 16> ret;
+    SmallVector<EnumConstantDecl *, 16> ret;
     for (auto *enumerator : enDecl->enumerators()) {
         ret.push_back(enumerator);
     }
     return ret;
 }
 
-static uint64_t getIntegerValue(EnumConstantDecl* e)
+static uint64_t getIntegerValue(EnumConstantDecl *e)
 {
     return e->getInitVal().getLimitedValue();
 }
 
-static bool hasConsecutiveValues(const SmallVector<EnumConstantDecl*, 16>& enumerators)
+static bool hasConsecutiveValues(const SmallVector<EnumConstantDecl *, 16> &enumerators)
 {
     auto val = getIntegerValue(enumerators.front());
     const size_t until = std::min<size_t>(4, enumerators.size());
@@ -105,7 +105,7 @@ static bool hasConsecutiveValues(const SmallVector<EnumConstantDecl*, 16>& enume
     return true;
 }
 
-static bool hasInitExprs(const SmallVector<EnumConstantDecl*, 16>& enumerators)
+static bool hasInitExprs(const SmallVector<EnumConstantDecl *, 16> &enumerators)
 {
     size_t enumeratorsWithInitExpr = 0;
     for (auto enumerator : enumerators) {
@@ -117,7 +117,7 @@ static bool hasInitExprs(const SmallVector<EnumConstantDecl*, 16>& enumerators)
     return enumeratorsWithInitExpr == enumerators.size();
 }
 
-static bool isFlagEnum(const SmallVector<EnumConstantDecl*, 16>& enumerators)
+static bool isFlagEnum(const SmallVector<EnumConstantDecl *, 16> &enumerators)
 {
     if (enumerators.size() < 4) {
         return false;
@@ -150,12 +150,12 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
     if (!enDecl || !enDecl->hasNameForLinkage())
         return;
 
-    const SmallVector<EnumConstantDecl*, 16> enumerators = getEnumerators(enDecl);
+    const SmallVector<EnumConstantDecl *, 16> enumerators = getEnumerators(enDecl);
 
     if (!isFlagEnum(enumerators))
         return;
 
-    for (EnumConstantDecl* enumerator : enumerators) {
+    for (EnumConstantDecl *enumerator : enumerators) {
         const auto &initVal = enumerator->getInitVal();
         if (!initVal.isPowerOf2() && !initVal.isNullValue() && !initVal.isNegative()) {
             if (isIntentionallyNotPowerOf2(enumerator))

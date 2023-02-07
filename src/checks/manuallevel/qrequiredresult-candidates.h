@@ -24,16 +24,15 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-qrequiredresult-candidates.md for more info.
  */
-class QRequiredResultCandidates
-    : public CheckBase
+class QRequiredResultCandidates : public CheckBase
 {
 public:
     explicit QRequiredResultCandidates(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
 };
 

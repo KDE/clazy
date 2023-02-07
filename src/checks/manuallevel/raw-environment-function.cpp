@@ -33,7 +33,6 @@ class ClazyContext;
 
 using namespace clang;
 
-
 RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {

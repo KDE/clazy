@@ -65,7 +65,8 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
                     if (clazy::name(f) == "qDeleteAll") {
-                        std::string msg = "qDeleteAll() is being used on an unnecessary temporary container created by " + offendingClassName + "::" + funcName + "()";
+                        std::string msg =
+                            "qDeleteAll() is being used on an unnecessary temporary container created by " + offendingClassName + "::" + funcName + "()";
                         if (func->getNumParams() == 0) {
                             if (isValues) {
                                 msg += ", use qDeleteAll(mycontainer) instead";

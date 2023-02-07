@@ -20,9 +20,9 @@
 */
 
 #include "mutable-container-key.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclBase.h>
@@ -39,7 +39,7 @@ using namespace clang;
 
 static bool isInterestingContainer(StringRef name)
 {
-    static const std::vector<StringRef> containers = { "QMap", "QHash" };
+    static const std::vector<StringRef> containers = {"QMap", "QHash"};
     return clazy::contains(containers, name);
 }
 
@@ -64,10 +64,8 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
         return;
 
     auto record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
-    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer",
-                                      "QPersistentModelIndex", "weak_ptr"}))
+    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer", "QPersistentModelIndex", "weak_ptr"}))
         return;
-
 
     emitWarning(clazy::getLocStart(decl), "Associative container key might be modified externally");
 }

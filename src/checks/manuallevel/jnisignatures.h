@@ -28,18 +28,19 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
 class CXXMemberCallExpr;
 class FunctionDecl;
-}  // namespace clang
+} // namespace clang
 
-class JniSignatures
-    : public CheckBase
+class JniSignatures : public CheckBase
 {
 public:
     JniSignatures(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
     template<typename T>
     void checkArgAt(T *call, unsigned int index, const std::regex &expr, const std::string &errorMessage);

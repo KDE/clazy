@@ -20,11 +20,11 @@
 */
 
 #include "thread-with-slots.h"
+#include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "ClazyContext.h"
-#include "AccessSpecifierManager.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -36,12 +36,12 @@
 
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 static bool hasMutexes(Stmt *body)
 {
@@ -76,7 +76,7 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
     if (!clazy::isConnect(connectFunc))
         return;
 
-    CXXMethodDecl *slot =  clazy::receiverMethodForConnect(callExpr);
+    CXXMethodDecl *slot = clazy::receiverMethodForConnect(callExpr);
     if (!slot || !clazy::derivesFrom(slot->getParent(), "QThread"))
         return;
 

@@ -20,17 +20,16 @@
 */
 
 #include "signal-with-return-value.h"
-#include "Utils.h"
+#include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
-#include "AccessSpecifierManager.h"
-#include "ClazyContext.h"
+#include "Utils.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
-
 
 SignalWithReturnValue::SignalWithReturnValue(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -53,12 +52,16 @@ void SignalWithReturnValue::VisitDecl(clang::Decl *decl)
         return;
 
     if (!method->getReturnType()->isVoidType())
-        emitWarning(decl, std::string(clazy::name(method)) + "() should return void. For a clean design signals shouldn't assume a single slot are connected to them.");
+        emitWarning(decl,
+                    std::string(clazy::name(method))
+                        + "() should return void. For a clean design signals shouldn't assume a single slot are connected to them.");
 
     for (auto param : method->parameters()) {
         QualType qt = param->getType();
         if (qt->isReferenceType() && !qt->getPointeeType().isConstQualified()) {
-            emitWarning(decl, std::string(clazy::name(method)) + "() shouldn't receive parameters by ref. For a clean design signals shouldn't assume a single slot are connected to them.");
+            emitWarning(decl,
+                        std::string(clazy::name(method))
+                            + "() shouldn't receive parameters by ref. For a clean design signals shouldn't assume a single slot are connected to them.");
         }
     }
 }

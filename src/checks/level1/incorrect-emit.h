@@ -26,13 +26,14 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CXXMemberCallExpr;
 class MacroInfo;
 class Stmt;
@@ -42,16 +43,15 @@ class Token;
 /**
  * See README-incorrect-emit.md for more info.
  */
-class IncorrectEmit
-    : public CheckBase
+class IncorrectEmit : public CheckBase
 {
 public:
     explicit IncorrectEmit(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     void checkCallSignalInsideCTOR(clang::CXXMemberCallExpr *);
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     bool hasEmitKeyboard(clang::CXXMemberCallExpr *) const;
     std::vector<clang::SourceLocation> m_emitLocations;
     mutable std::unordered_map<unsigned, clang::SourceLocation> m_locationCache;

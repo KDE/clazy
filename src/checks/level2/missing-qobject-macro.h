@@ -26,12 +26,13 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Decl;
 class SourceLocation;
 class MacroInfo;
@@ -43,15 +44,14 @@ class Token;
  *
  * See README-missing-qobject for more information
  */
-class MissingQObjectMacro
-    : public CheckBase
+class MissingQObjectMacro : public CheckBase
 {
 public:
     explicit MissingQObjectMacro(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     void registerQ_OBJECT(clang::SourceLocation);
     std::vector<clang::SourceLocation> m_qobjectMacroLocations;
 

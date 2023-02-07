@@ -19,12 +19,12 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "clazy_stl.h"
 #include "QtUtils.h"
-#include "Utils.h"
-#include "TypeUtils.h"
 #include "StmtBodyRange.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/ExprCXX.h>
 #include <clang/Basic/LLVM.h>
@@ -41,22 +41,48 @@ bool clazy::isQtIterableClass(clang::CXXRecordDecl *record)
     return isQtIterableClass(record->getQualifiedNameAsString());
 }
 
-const std::vector<StringRef> & clazy::qtContainers()
+const std::vector<StringRef> &clazy::qtContainers()
 {
-    static const std::vector<StringRef> classes = { "QListSpecialMethods", "QList", "QVector", "QVarLengthArray", "QMap",
-                                               "QHash", "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
-                                               "QByteArray", "QSequentialIterable", "QAssociativeIterable", "QJsonArray", "QLinkedList" };
+    static const std::vector<StringRef> classes = {"QListSpecialMethods",
+                                                   "QList",
+                                                   "QVector",
+                                                   "QVarLengthArray",
+                                                   "QMap",
+                                                   "QHash",
+                                                   "QMultiMap",
+                                                   "QMultiHash",
+                                                   "QSet",
+                                                   "QStack",
+                                                   "QQueue",
+                                                   "QString",
+                                                   "QStringRef",
+                                                   "QByteArray",
+                                                   "QSequentialIterable",
+                                                   "QAssociativeIterable",
+                                                   "QJsonArray",
+                                                   "QLinkedList"};
     return classes;
 }
 
-const std::vector<StringRef> & clazy::qtCOWContainers()
+const std::vector<StringRef> &clazy::qtCOWContainers()
 {
-    static const std::vector<StringRef> classes = { "QListSpecialMethods", "QList", "QVector", "QMap", "QHash",
-                                               "QMultiMap", "QMultiHash", "QSet", "QStack", "QQueue", "QString", "QStringRef",
-                                               "QByteArray", "QJsonArray", "QLinkedList" };
+    static const std::vector<StringRef> classes = {"QListSpecialMethods",
+                                                   "QList",
+                                                   "QVector",
+                                                   "QMap",
+                                                   "QHash",
+                                                   "QMultiMap",
+                                                   "QMultiHash",
+                                                   "QSet",
+                                                   "QStack",
+                                                   "QQueue",
+                                                   "QString",
+                                                   "QStringRef",
+                                                   "QByteArray",
+                                                   "QJsonArray",
+                                                   "QLinkedList"};
     return classes;
 }
-
 
 std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethods()
 {
@@ -74,11 +100,11 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsW
     static std::unordered_map<std::string, std::vector<StringRef>> map;
     if (map.empty()) {
         map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
-        map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]" };
-        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]", "lowerBound", "upperBound" };
-        map["QHash"] = {"begin", "end", "find", "operator[]" };
-        map["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]" };
-        map["QSet"] = {"begin", "end", "find", "operator[]" };
+        map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]"};
+        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]", "lowerBound", "upperBound"};
+        map["QHash"] = {"begin", "end", "find", "operator[]"};
+        map["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
+        map["QSet"] = {"begin", "end", "find", "operator[]"};
         map["QStack"] = map["QVector"];
         map["QStack"].push_back({"top"});
         map["QQueue"] = map["QVector"];
@@ -93,8 +119,8 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsW
     return map;
 }
 
-bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex) {
-
+bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex)
+{
     Expr *arg = Call->getArg(argIndex);
     QualType type = arg->getType();
     if (!type->isRecordType())
@@ -137,7 +163,7 @@ bool clazy::isQtAssociativeContainer(clang::CXXRecordDecl *record)
 
 bool clazy::isQtAssociativeContainer(StringRef className)
 {
-    static const std::vector<StringRef> classes = { "QSet", "QMap", "QHash" };
+    static const std::vector<StringRef> classes = {"QSet", "QMap", "QHash"};
     return clazy::contains(classes, className);
 }
 
@@ -187,8 +213,8 @@ bool clazy::isJavaIterator(CXXRecordDecl *record)
     if (!record)
         return false;
 
-    static const std::vector<StringRef> names = { "QHashIterator", "QMapIterator", "QSetIterator", "QListIterator",
-                                             "QVectorIterator", "QLinkedListIterator", "QStringListIterator" };
+    static const std::vector<StringRef> names =
+        {"QHashIterator", "QMapIterator", "QSetIterator", "QListIterator", "QVectorIterator", "QLinkedListIterator", "QStringListIterator"};
 
     return clazy::contains(names, clazy::name(record));
 }
@@ -213,7 +239,7 @@ bool clazy::isQtContainer(QualType t)
 bool clazy::isQtContainer(const CXXRecordDecl *record)
 {
     const StringRef typeName = clazy::name(record);
-    return clazy::any_of(clazy::qtContainers(), [typeName] (StringRef container) {
+    return clazy::any_of(clazy::qtContainers(), [typeName](StringRef container) {
         return container == typeName;
     });
 }
@@ -243,7 +269,6 @@ clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDec
 
     return nullptr;
 }
-
 
 bool clazy::isConnect(FunctionDecl *func)
 {
@@ -285,13 +310,11 @@ CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex)
     return pmfFromUnary(expr);
 }
 
-
 CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
 {
     if (auto uo = dyn_cast<UnaryOperator>(expr)) {
         return pmfFromUnary(uo);
     } else if (auto call = dyn_cast<CXXOperatorCallExpr>(expr)) {
-
         if (call->getNumArgs() <= 1)
             return nullptr;
 
@@ -346,8 +369,7 @@ bool clazy::recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::stri
 {
     ok = true;
     numCtors = 0;
-    if (!record || !record->hasDefinition() ||
-        record->getDefinition() != record) { // Means fwd decl
+    if (!record || !record->hasDefinition() || record->getDefinition() != record) { // Means fwd decl
         ok = false;
         return false;
     }

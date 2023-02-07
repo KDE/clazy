@@ -27,12 +27,13 @@
 
 #include "checkbase.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class ValueDecl;
 class Expr;
 class CallExpr;
@@ -48,8 +49,7 @@ class Stmt;
  *
  * There some chance of false-positives.
  */
-class ReserveCandidates
-    : public CheckBase
+class ReserveCandidates : public CheckBase
 {
 public:
     ReserveCandidates(const std::string &name, ClazyContext *context);
@@ -57,14 +57,14 @@ public:
 
 private:
     bool registerReserveStatement(clang::Stmt *stmt);
-    bool containerWasReserved(clang::ValueDecl*) const;
+    bool containerWasReserved(clang::ValueDecl *) const;
     bool acceptsValueDecl(clang::ValueDecl *valueDecl) const;
     bool expressionIsComplex(clang::Expr *) const;
     bool loopIsComplex(clang::Stmt *, bool &isLoop) const;
     bool isInComplexLoop(clang::Stmt *, clang::SourceLocation declLocation, bool isMemberVariable) const;
     bool isReserveCandidate(clang::ValueDecl *valueDecl, clang::Stmt *loopBody, clang::CallExpr *callExpr) const;
 
-    std::vector<clang::ValueDecl*> m_foundReserves;
+    std::vector<clang::ValueDecl *> m_foundReserves;
 };
 
 #endif

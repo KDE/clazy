@@ -20,11 +20,11 @@
 */
 
 #include "wrong-qevent-cast.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "TypeUtils.h"
 #include "ClazyContext.h"
+#include "HierarchyUtils.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -108,15 +108,12 @@ enum QtUnregularlyNamedEventTypes {
     WhatsThis = 111,
     ContextMenu = 82,
     QueryWhatsThis = 123
-                     // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
+    // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
 };
-
 
 WrongQEventCast::WrongQEventCast(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-
-
 }
 
 static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, std::string eventTypeStr, StringRef className)
@@ -129,69 +126,68 @@ static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, std::s
     // Otherwise it's unregular and we need a map:
 
     static std::unordered_map<QtUnregularlyNamedEventTypes, ClassNameList, std::hash<int>> map = {
-        { ActionAdded, {"QActionEvent" } },
-        { ActionRemoved, {"QActionEvent" } },
-        { ActionChanged, {"QActionEvent" } },
-        { ChildAdded, {"QChildEvent" } },
-        { ChildRemoved, {"QChildEvent" } },
-        { ChildPolished, {"QChildEvent" } },
-        { MetaCall, {"QDBusSpyCallEvent", "QDBusCallDeliveryEvent"} },
-        { DragEnter, {"QDragEnterEvent", "QDragMoveEvent", "QDropEvent"  } },
-        { DragLeave, {"QDragLeaveEvent", "QDragMoveEvent", "QDropEvent" } },
-        { DragMove, {"QDragMoveEvent", "QDropEvent" } },
-        { FocusIn, {"QFocusEvent" } },
-        { FocusOut, {"QFocusEvent" } },
-        { FocusAboutToChange, {"QFocusEvent" } },
-        { Gesture, {"QGestureEvent" } },
-        { GestureOverride, {"QGestureEvent" } },
-        { GraphicsSceneContextMenu, {"QGraphicsSceneEvent" } },
-        { GraphicsSceneHoverEnter, { "QGraphicsSceneHoverEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneHoverMove, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneHoverLeave, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneHelp, { "QGraphicsSceneEvent" } },
-        { GraphicsSceneDragEnter, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneDragMove, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneDragLeave, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneDrop, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneWheel, {"QGraphicsSceneEvent" } },
-        { GraphicsSceneResize, {"QGraphicsSceneEvent" } },
-        { GraphicsSceneMouseMove, {"QGraphicsSceneMouseEvent" } },
-        { GraphicsSceneMousePress, {"QGraphicsSceneMouseEvent" } },
-        { GraphicsSceneMouseRelease, {"QGraphicsSceneMouseEvent" } },
-        { GraphicsSceneMouseDoubleClick, {"QGraphicsSceneMouseEvent" } },
+        {ActionAdded, {"QActionEvent"}},
+        {ActionRemoved, {"QActionEvent"}},
+        {ActionChanged, {"QActionEvent"}},
+        {ChildAdded, {"QChildEvent"}},
+        {ChildRemoved, {"QChildEvent"}},
+        {ChildPolished, {"QChildEvent"}},
+        {MetaCall, {"QDBusSpyCallEvent", "QDBusCallDeliveryEvent"}},
+        {DragEnter, {"QDragEnterEvent", "QDragMoveEvent", "QDropEvent"}},
+        {DragLeave, {"QDragLeaveEvent", "QDragMoveEvent", "QDropEvent"}},
+        {DragMove, {"QDragMoveEvent", "QDropEvent"}},
+        {FocusIn, {"QFocusEvent"}},
+        {FocusOut, {"QFocusEvent"}},
+        {FocusAboutToChange, {"QFocusEvent"}},
+        {Gesture, {"QGestureEvent"}},
+        {GestureOverride, {"QGestureEvent"}},
+        {GraphicsSceneContextMenu, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneHoverEnter, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneHoverMove, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneHoverLeave, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneHelp, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneDragEnter, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneDragMove, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneDragLeave, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneDrop, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneWheel, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneResize, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneMouseMove, {"QGraphicsSceneMouseEvent"}},
+        {GraphicsSceneMousePress, {"QGraphicsSceneMouseEvent"}},
+        {GraphicsSceneMouseRelease, {"QGraphicsSceneMouseEvent"}},
+        {GraphicsSceneMouseDoubleClick, {"QGraphicsSceneMouseEvent"}},
         //{ StatusTip, {"QStatusTipEvent" } },
-        { ToolTip, {"QHelpEvent" } },
-        { WhatsThis, {"QHelpEvent" } },
-        { QueryWhatsThis, {"QHelpEvent" } },
-        { HoverEnter, {"QHoverEvent", "QInputEvent" } },
-        { HoverLeave, {"QHoverEvent", "QInputEvent" } },
-        { HoverMove, {"QHoverEvent", "QInputEvent" } },
-        { KeyPress, {"QKeyEvent", "QInputEvent" } },
-        { KeyRelease, {"QKeyEvent", "QInputEvent" } },
-        { ShortcutOverride, {"QKeyEvent", "QInputEvent" } },
-        { MouseButtonPress, {"QMouseEvent" } },
-        { MouseButtonRelease, {"QMouseEvent" } },
-        { MouseButtonDblClick, {"QMouseEvent" } },
-        { MouseMove, {"QMouseEvent" } },
-        { NonClientAreaMouseMove, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonPress, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonRelease, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonRelease, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonDblClick, {"QMouseEvent" } },
-        { NativeGesture, { "QInputEvent" } },
-        { OrientationChange, {"QScreenOrientationChangeEvent" } },
-        { TabletEnterProximity, {"QTabletEvent", "QInputEvent" } },
-        { TabletLeaveProximity, {"QTabletEvent", "QInputEvent" } },
-        { TabletPress, {"QTabletEvent", "QInputEvent" } },
-        { TabletMove, {"QTabletEvent", "QInputEvent" } },
-        { TabletRelease, {"QTabletEvent", "QInputEvent" } },
-        { TouchBegin, {"QTouchEvent", "QInputEvent" } },
-        { TouchCancel, {"QTouchEvent", "QInputEvent" } },
-        { TouchEnd, {"QTouchEvent", "QInputEvent" } },
-        { TouchUpdate, {"QTouchEvent", "QInputEvent" } },
-        { Wheel, {"QInputEvent" } },
-        { ContextMenu, {"QInputEvent" } }
-    };
+        {ToolTip, {"QHelpEvent"}},
+        {WhatsThis, {"QHelpEvent"}},
+        {QueryWhatsThis, {"QHelpEvent"}},
+        {HoverEnter, {"QHoverEvent", "QInputEvent"}},
+        {HoverLeave, {"QHoverEvent", "QInputEvent"}},
+        {HoverMove, {"QHoverEvent", "QInputEvent"}},
+        {KeyPress, {"QKeyEvent", "QInputEvent"}},
+        {KeyRelease, {"QKeyEvent", "QInputEvent"}},
+        {ShortcutOverride, {"QKeyEvent", "QInputEvent"}},
+        {MouseButtonPress, {"QMouseEvent"}},
+        {MouseButtonRelease, {"QMouseEvent"}},
+        {MouseButtonDblClick, {"QMouseEvent"}},
+        {MouseMove, {"QMouseEvent"}},
+        {NonClientAreaMouseMove, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonPress, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonRelease, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonRelease, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonDblClick, {"QMouseEvent"}},
+        {NativeGesture, {"QInputEvent"}},
+        {OrientationChange, {"QScreenOrientationChangeEvent"}},
+        {TabletEnterProximity, {"QTabletEvent", "QInputEvent"}},
+        {TabletLeaveProximity, {"QTabletEvent", "QInputEvent"}},
+        {TabletPress, {"QTabletEvent", "QInputEvent"}},
+        {TabletMove, {"QTabletEvent", "QInputEvent"}},
+        {TabletRelease, {"QTabletEvent", "QInputEvent"}},
+        {TouchBegin, {"QTouchEvent", "QInputEvent"}},
+        {TouchCancel, {"QTouchEvent", "QInputEvent"}},
+        {TouchEnd, {"QTouchEvent", "QInputEvent"}},
+        {TouchUpdate, {"QTouchEvent", "QInputEvent"}},
+        {Wheel, {"QInputEvent"}},
+        {ContextMenu, {"QInputEvent"}}};
 
     auto it = map.find(eventType);
     if (it == map.cend())
@@ -203,21 +199,18 @@ static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, std::s
     return found;
 }
 
-
 // TODO: Use iterators
-CaseStmt* getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *event)
+CaseStmt *getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *event)
 {
     Stmt *s = pmap->getParent(stmt);
 
     while (s) {
-
         if (auto ifStmt = dyn_cast<IfStmt>(s)) {
             // if there's we're inside an if statement then skip, to avoid false-positives
             auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(ifStmt->getCond());
             if (declRef && declRef->getDecl() == event->getDecl())
                 return nullptr;
         }
-
 
         if (auto caseStmt = dyn_cast<CaseStmt>(s)) {
             auto switchStmt = clazy::getSwitchFromCase(pmap, caseStmt);
@@ -265,7 +258,6 @@ void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
     auto caseValue = clazy::getFirstChildOfType2<DeclRefExpr>(caseStmt->getLHS());
     if (!caseValue)
         return;
-
 
     auto enumeratorDecl = dyn_cast<EnumConstantDecl>(caseValue->getDecl());
     if (!enumeratorDecl)

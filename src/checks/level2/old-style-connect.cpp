@@ -23,21 +23,20 @@
 */
 
 #include "old-style-connect.h"
-#include "Utils.h"
-#include "StringUtils.h"
-#include "FixItUtils.h"
-#include "ContextUtils.h"
-#include "QtUtils.h"
-#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
+#include "ContextUtils.h"
+#include "FixItUtils.h"
 #include "HierarchyUtils.h"
+#include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
@@ -47,18 +46,21 @@
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Basic/TokenKinds.h>
+#include <clang/Lex/Lexer.h>
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 #include <llvm/Support/raw_ostream.h>
 
-namespace clang {
+namespace clang
+{
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
-namespace clazy {
+namespace clazy
+{
 // Copied from Clang's Expr.cpp and added "|| !DerivedType->isRecordType()" to avoid a crash
 const CXXRecordDecl *getBestDynamicClassType(Expr *expr)
 {
@@ -80,15 +82,16 @@ const CXXRecordDecl *getBestDynamicClassType(Expr *expr)
 }
 
 enum ConnectFlag {
-    ConnectFlag_None = 0,       // Not a disconnect or connect
-    ConnectFlag_Connect = 1,    // It's a connect
+    ConnectFlag_None = 0, // Not a disconnect or connect
+    ConnectFlag_Connect = 1, // It's a connect
     ConnectFlag_Disconnect = 2, // It's a disconnect
     ConnectFlag_QTimerSingleShot = 4,
-    ConnectFlag_OldStyle = 8,   // Qt4 style
+    ConnectFlag_OldStyle = 8, // Qt4 style
     ConnectFlag_4ArgsDisconnect = 16, // disconnect(const char *signal = 0, const QObject *receiver = 0, const char *method = 0) const
     ConnectFlag_3ArgsDisconnect = 32, // disconnect(SIGNAL(foo))
-    ConnectFlag_2ArgsDisconnect = 64, //disconnect(const QObject *receiver, const char *method = 0) const
-    ConnectFlag_5ArgsConnect = 128, // connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
+    ConnectFlag_2ArgsDisconnect = 64, // disconnect(const QObject *receiver, const char *method = 0) const
+    ConnectFlag_5ArgsConnect =
+        128, // connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
     ConnectFlag_4ArgsConnect = 256, // connect(const QObject *sender, const char *signal, const char *method, Qt::ConnectionType type = Qt::AutoConnection)
     ConnectFlag_OldStyleButNonLiteral = 0x200, // connect(foo, SIGNAL(bar()), foo, variableWithSlotName); // here the slot name isn't a literal
     ConnectFlag_QStateAddTransition = 0x400,
@@ -111,7 +114,7 @@ OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
     context->enableAccessSpecifierManager();
 }
 
-template <typename T>
+template<typename T>
 int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) const
 {
     int classification = ConnectFlag_None;
@@ -176,7 +179,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
             classification |= ConnectFlag_OldStyleButNonLiteral;
         } else if (((classification & ConnectFlag_Connect) && numLiterals != 2)) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
-        } else if ((classification & ConnectFlag_4ArgsDisconnect) && numLiterals != 2)  {
+        } else if ((classification & ConnectFlag_4ArgsDisconnect) && numLiterals != 2) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
         } else if ((classification & ConnectFlag_QStateAddTransition) && numLiterals != 1) {
             classification |= ConnectFlag_OldStyleButNonLiteral;
@@ -196,7 +199,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
 
 bool OldStyleConnect::isQPointer(Expr *expr) const
 {
-    std::vector<CXXMemberCallExpr*> memberCalls;
+    std::vector<CXXMemberCallExpr *> memberCalls;
     clazy::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
     for (auto callExpr : memberCalls) {
@@ -228,12 +231,11 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!call && !ctorExpr)
         return;
 
-    if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent() &&
-        clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") // Don't warn of stuff inside qobject.h
+    if (m_context->lastMethodDecl && m_context->isQtDeveloper() && m_context->lastMethodDecl->getParent()
+        && clazy::name(m_context->lastMethodDecl->getParent()) == "QObject") // Don't warn of stuff inside qobject.h
         return;
 
-    FunctionDecl *function = call ? call->getDirectCallee()
-                                  : ctorExpr->getConstructor();
+    FunctionDecl *function = call ? call->getDirectCallee() : ctorExpr->getConstructor();
     if (!function)
         return;
 
@@ -241,8 +243,7 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     if (!method)
         return;
 
-    const int classification = call ? classifyConnect(method, call)
-                                    : classifyConnect(method, ctorExpr);
+    const int classification = call ? classifyConnect(method, call) : classifyConnect(method, ctorExpr);
 
     if (!(classification & ConnectFlag_OldStyle))
         return;
@@ -255,8 +256,7 @@ void OldStyleConnect::VisitStmt(Stmt *s)
         return;
     }
 
-    emitWarning(clazy::getLocStart(s), "Old Style Connect", call ? fixits(classification, call)
-                                                                 : fixits(classification, ctorExpr));
+    emitWarning(clazy::getLocStart(s), "Old Style Connect", call ? fixits(classification, call) : fixits(classification, ctorExpr));
 }
 
 void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
@@ -316,7 +316,7 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, std::string &macroName)
     return macroName == "SIGNAL" || macroName == "SLOT";
 }
 
-template <typename T>
+template<typename T>
 std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor)
 {
     if (!callOrCtor) {
@@ -394,8 +394,8 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                 queueManualFixitWarning(s, msg);
                 return {};
             } else if (methods.size() != 1) {
-                std::string msg = std::string("Too many overloads (") + std::to_string(methods.size()) + std::string(") for method ")
-                             + methodName + " for record " + lastRecordDecl->getNameAsString();
+                std::string msg = std::string("Too many overloads (") + std::to_string(methods.size()) + std::string(") for method ") + methodName
+                    + " for record " + lastRecordDecl->getNameAsString();
                 queueManualFixitWarning(s, msg);
                 return {};
             } else {
@@ -422,7 +422,8 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
             } else if (macroNum == 2) {
                 const unsigned int numReceiverParams = methodDecl->getNumParams();
                 if (numReceiverParams > senderMethod->getNumParams()) {
-                    std::string msg = std::string("Receiver has more parameters (") + std::to_string(methodDecl->getNumParams()) + ") than signal (" + std::to_string(senderMethod->getNumParams()) + ')';
+                    std::string msg = std::string("Receiver has more parameters (") + std::to_string(methodDecl->getNumParams()) + ") than signal ("
+                        + std::to_string(senderMethod->getNumParams()) + ')';
                     queueManualFixitWarning(s, msg);
                     return {};
                 }

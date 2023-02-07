@@ -19,9 +19,9 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "StringUtils.h"
-#include "HierarchyUtils.h"
 #include "qcolor-from-literal.h"
+#include "HierarchyUtils.h"
+#include "StringUtils.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
@@ -56,15 +56,12 @@ static bool handleStringLiteral(const StringLiteral *literal)
     return true;
 }
 
-class QColorFromLiteral_Callback
-    : public ClazyAstMatcherCallback
+class QColorFromLiteral_Callback : public ClazyAstMatcherCallback
 {
 public:
-
     QColorFromLiteral_Callback(CheckBase *base)
         : ClazyAstMatcherCallback(base)
     {
-
     }
 
     void run(const MatchFinder::MatchResult &result) override
@@ -74,7 +71,6 @@ public:
             m_check->emitWarning(lt, "The QColor ctor taking ints is cheaper than the one taking string literals");
     }
 };
-
 
 QColorFromLiteral::QColorFromLiteral(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -104,6 +100,5 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
 
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
 {
-    finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))),
-                                       hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
+    finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))), hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
 }

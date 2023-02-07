@@ -20,10 +20,10 @@
 */
 
 #include "wrong-qglobalstatic.h"
-#include "TemplateUtils.h"
 #include "MacroUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TemplateUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -75,7 +74,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         }
     } else {
         // Not a class, why use Q_GLOBAL_STATIC ?
-        std::string error = std::string("Don't use Q_GLOBAL_STATIC with non-class type (") + typeList[0].getAsString()  + ')';
+        std::string error = std::string("Don't use Q_GLOBAL_STATIC with non-class type (") + typeList[0].getAsString() + ')';
         emitWarning(loc, error.c_str());
     }
 }

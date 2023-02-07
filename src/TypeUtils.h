@@ -22,18 +22,19 @@
 #ifndef CLAZY_TYPE_UTILS_H
 #define CLAZY_TYPE_UTILS_H
 
-#include <clang/AST/Type.h>
-#include <clang/AST/Expr.h>
-#include <clang/AST/StmtCXX.h>
-#include <clang/AST/DeclCXX.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
+#include <clang/AST/StmtCXX.h>
+#include <clang/AST/Type.h>
 #include <llvm/Support/Casting.h>
 
 #include <string>
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class CompilerInstance;
 class Expr;
 class LangOptions;
@@ -78,7 +79,9 @@ struct QualTypeClassification {
  * The optional parameter body is in order to advise non-const-ref -> value, since the body
  * needs to be inspected to see if we that would compile.
  */
-bool classifyQualType(const ClazyContext *context, clang::QualType qualType, const clang::VarDecl *varDecl,
+bool classifyQualType(const ClazyContext *context,
+                      clang::QualType qualType,
+                      const clang::VarDecl *varDecl,
                       QualTypeClassification &classification,
                       clang::Stmt *body = nullptr);
 
@@ -118,9 +121,7 @@ inline clang::QualType pointeeQualType(clang::QualType qualType)
  * Returns if @p arg is stack or heap allocated.
  * true means it is. false means it either isn't or the situation was too complex to judge.
  */
-void heapOrStackAllocated(clang::Expr *arg, const std::string &type,
-                          const clang::LangOptions &lo,
-                          bool &isStack, bool &isHeap);
+void heapOrStackAllocated(clang::Expr *arg, const std::string &type, const clang::LangOptions &lo, bool &isStack, bool &isHeap);
 
 /**
  * Returns true if t is an AutoType that can't be deduced.
@@ -134,7 +135,7 @@ inline bool isUndeducibleAuto(const clang::Type *t)
     return at && at->getDeducedType().isNull();
 }
 
-inline const clang::Type * unpealAuto(clang::QualType q)
+inline const clang::Type *unpealAuto(clang::QualType q)
 {
     if (q.isNull())
         return nullptr;
@@ -148,8 +149,7 @@ inline const clang::Type * unpealAuto(clang::QualType q)
 /**
  * Returns true if childDecl is a descent from parentDecl
  **/
-bool derivesFrom(const clang::CXXRecordDecl *derived, const clang::CXXRecordDecl *possibleBase,
-                 std::vector<clang::CXXRecordDecl*> *baseClasses = nullptr);
+bool derivesFrom(const clang::CXXRecordDecl *derived, const clang::CXXRecordDecl *possibleBase, std::vector<clang::CXXRecordDecl *> *baseClasses = nullptr);
 
 // Overload
 bool derivesFrom(const clang::CXXRecordDecl *derived, const std::string &possibleBase);
@@ -160,7 +160,7 @@ bool derivesFrom(clang::QualType derived, const std::string &possibleBase);
 /**
  * Returns the CXXRecordDecl represented by the CXXBaseSpecifier
  */
-inline clang::CXXRecordDecl * recordFromBaseSpecifier(const clang::CXXBaseSpecifier &base)
+inline clang::CXXRecordDecl *recordFromBaseSpecifier(const clang::CXXBaseSpecifier &base)
 {
     const clang::Type *t = base.getType().getTypePtrOrNull();
     return t ? t->getAsCXXRecordDecl() : nullptr;
@@ -181,7 +181,7 @@ inline bool valueIsConst(clang::QualType qt)
     return pointeeQualType(qt).isConstQualified();
 }
 
-inline clang::CXXRecordDecl* typeAsRecord(clang::QualType qt)
+inline clang::CXXRecordDecl *typeAsRecord(clang::QualType qt)
 {
     if (qt.isNull())
         return nullptr;
@@ -189,7 +189,7 @@ inline clang::CXXRecordDecl* typeAsRecord(clang::QualType qt)
     return qt->getAsCXXRecordDecl();
 }
 
-inline clang::CXXRecordDecl* typeAsRecord(clang::Expr *expr)
+inline clang::CXXRecordDecl *typeAsRecord(clang::Expr *expr)
 {
     if (!expr)
         return nullptr;
@@ -197,7 +197,7 @@ inline clang::CXXRecordDecl* typeAsRecord(clang::Expr *expr)
     return typeAsRecord(pointeeQualType(expr->getType()));
 }
 
-inline clang::CXXRecordDecl* typeAsRecord(clang::ValueDecl *value)
+inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
 {
     if (!value)
         return nullptr;
@@ -214,17 +214,16 @@ inline clang::CXXRecordDecl* typeAsRecord(clang::ValueDecl *value)
  *
  * For the above example Foo would be returned.
  */
-inline clang::CXXRecordDecl* parentRecordForTypedef(clang::QualType qt)
+inline clang::CXXRecordDecl *parentRecordForTypedef(clang::QualType qt)
 {
     auto t = qt.getTypePtrOrNull();
     if (!t)
         return nullptr;
 
     if (t->getTypeClass() == clang::Type::Typedef) {
-        auto tdt = static_cast<const clang::TypedefType*>(t);
+        auto tdt = static_cast<const clang::TypedefType *>(t);
         clang::TypedefNameDecl *tdnd = tdt->getDecl();
         return llvm::dyn_cast_or_null<clang::CXXRecordDecl>(tdnd->getDeclContext());
-
     }
 
     return nullptr;

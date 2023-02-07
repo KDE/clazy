@@ -20,20 +20,18 @@
 */
 
 #include "heap-allocated-small-trivial-type.h"
-#include "Utils.h"
-#include "StmtBodyRange.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
+#include "StmtBodyRange.h"
 #include "TypeUtils.h"
-#include "ClazyContext.h"
+#include "Utils.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
 
-
-HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name,
-                                                             ClazyContext *context)
+HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
@@ -68,9 +66,7 @@ void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
         }
 
         auto body = fDecl->getBody();
-        if (Utils::isAssignedTo(body, varDecl) ||
-            Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false) ||
-            Utils::isReturned(body, varDecl))
+        if (Utils::isAssignedTo(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false) || Utils::isReturned(body, varDecl))
             return;
 
         emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());

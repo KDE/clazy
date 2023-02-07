@@ -25,9 +25,9 @@
 
 #include "checkbase.h"
 
-#include <clang/Frontend/CompilerInstance.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/Specifiers.h>
+#include <clang/Frontend/CompilerInstance.h>
 #include <llvm/ADT/StringRef.h>
 
 #include <unordered_map>
@@ -59,17 +59,9 @@ class CompilerInstance;
 class AccessSpecifierPreprocessorCallbacks;
 class ClazyContext;
 
-enum QtAccessSpecifierType
-{
-    QtAccessSpecifier_None,
-    QtAccessSpecifier_Unknown,
-    QtAccessSpecifier_Slot,
-    QtAccessSpecifier_Signal,
-    QtAccessSpecifier_Invokable
-};
+enum QtAccessSpecifierType { QtAccessSpecifier_None, QtAccessSpecifier_Unknown, QtAccessSpecifier_Slot, QtAccessSpecifier_Signal, QtAccessSpecifier_Invokable };
 
-struct ClazyAccessSpecifier
-{
+struct ClazyAccessSpecifier {
     clang::SourceLocation loc;
     clang::AccessSpecifier accessSpecifier;
     QtAccessSpecifierType qtAccessSpecifier;
@@ -86,26 +78,25 @@ public:
     /**
      * Returns if a method is a signal, a slot, or neither.
      */
-    QtAccessSpecifierType qtAccessSpecifierType(const clang::CXXMethodDecl*) const;
+    QtAccessSpecifierType qtAccessSpecifierType(const clang::CXXMethodDecl *) const;
 
     /**
      * Returns if a method is scriptable (Q_SCRIPTABLE)
      */
-    bool isScriptable(const clang::CXXMethodDecl*) const;
+    bool isScriptable(const clang::CXXMethodDecl *) const;
 
     /**
      * Returns a string representations of a Qt Access Specifier Type
      */
     llvm::StringRef qtAccessSpecifierTypeStr(QtAccessSpecifierType) const;
 
-    clang::SourceLocation firstLocationOfSection(clang::AccessSpecifier specifier,
-                                                 clang::CXXRecordDecl *decl) const;
+    clang::SourceLocation firstLocationOfSection(clang::AccessSpecifier specifier, clang::CXXRecordDecl *decl) const;
 
 private:
-    ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl*);
+    ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl *);
     const clang::CompilerInstance &m_ci;
     const clang::CXXRecordDecl *classDefinitionForLoc(clang::SourceLocation loc) const;
-    std::unordered_map<const clang::CXXRecordDecl*, ClazySpecifierList> m_specifiersMap;
+    std::unordered_map<const clang::CXXRecordDecl *, ClazySpecifierList> m_specifiersMap;
     AccessSpecifierPreprocessorCallbacks *const m_preprocessorCallbacks;
     const bool m_fixitsEnabled;
     bool m_visitsNonQObjects = false;

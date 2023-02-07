@@ -22,9 +22,9 @@
 
 #include "auto-unexpected-qstringbuilder.h"
 #include "FixItUtils.h"
-#include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
@@ -74,7 +74,7 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
     SourceLocation start = clazy::getLocStart(varDecl);
     SourceLocation end = varDecl->getLocation();
     std::vector<FixItHint> fixits;
-    fixits.push_back(clazy::createReplacement({ start, end }, replacement));
+    fixits.push_back(clazy::createReplacement({start, end}, replacement));
 
     emitWarning(clazy::getLocStart(decl), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);
 }

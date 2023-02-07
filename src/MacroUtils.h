@@ -25,14 +25,15 @@
 #include "clazy_stl.h"
 
 #include <clang/AST/ASTContext.h>
+#include <clang/Basic/SourceLocation.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Lexer.h>
 #include <clang/Lex/PreprocessorOptions.h>
-#include <clang/Basic/SourceLocation.h>
 
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class CompilerInstance;
 class SourceLocation;
 }
@@ -75,8 +76,8 @@ inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation lo
 inline bool isInAnyMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::vector<llvm::StringRef> &macroNames)
 {
     return clazy::any_of(macroNames, [context, loc](const llvm::StringRef &macroName) {
-            return isInMacro(context, loc, macroName);
-        });
+        return isInMacro(context, loc, macroName);
+    });
 }
 
 }

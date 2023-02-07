@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class Decl;
 }
@@ -38,8 +39,7 @@ class Decl;
  *
  * See README-auto-unexpected-qstring-builder for more information
  */
-class AutoUnexpectedQStringBuilder
-    : public CheckBase
+class AutoUnexpectedQStringBuilder : public CheckBase
 {
 public:
     explicit AutoUnexpectedQStringBuilder(const std::string &name, ClazyContext *context);

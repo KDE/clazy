@@ -26,15 +26,12 @@
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 
-struct StmtBodyRange
-{
+struct StmtBodyRange {
     clang::Stmt *body = nullptr;
     const clang::SourceManager *const sm = nullptr;
     const clang::SourceLocation searchUntilLoc; // We don't search after this point
 
-    explicit StmtBodyRange(clang::Stmt *body,
-                           const clang::SourceManager *sm = nullptr,
-                           clang::SourceLocation searchUntilLoc = {})
+    explicit StmtBodyRange(clang::Stmt *body, const clang::SourceManager *sm = nullptr, clang::SourceLocation searchUntilLoc = {})
         : body(body)
         , sm(sm)
         , searchUntilLoc(searchUntilLoc)

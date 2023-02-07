@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 }
 
@@ -38,8 +39,7 @@ class Stmt;
  *
  * See README-rule-of-two-soft for more information
  */
-class RuleOfTwoSoft
-    : public RuleOfBase
+class RuleOfTwoSoft : public RuleOfBase
 {
 public:
     explicit RuleOfTwoSoft(const std::string &name, ClazyContext *context);

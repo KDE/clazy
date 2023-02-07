@@ -27,15 +27,16 @@
 
 // Contains utility functions regarding functions and methods
 
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 
 #include <string>
 
-namespace clazy {
+namespace clazy
+{
 
 inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
 {
@@ -66,8 +67,8 @@ inline clang::ValueDecl *valueDeclForCallArgument(clang::CallExpr *call, unsigne
         return nullptr;
 
     clang::Expr *firstArg = call->getArg(argIndex);
-    auto declRef = llvm::isa<clang::DeclRefExpr>(firstArg) ? llvm::cast<clang::DeclRefExpr>(firstArg)
-                                                           : clazy::getFirstChildOfType2<clang::DeclRefExpr>(firstArg);
+    auto declRef =
+        llvm::isa<clang::DeclRefExpr>(firstArg) ? llvm::cast<clang::DeclRefExpr>(firstArg) : clazy::getFirstChildOfType2<clang::DeclRefExpr>(firstArg);
     if (!declRef)
         return nullptr;
 

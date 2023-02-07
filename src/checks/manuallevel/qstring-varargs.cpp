@@ -36,7 +36,6 @@ class ClazyContext;
 
 using namespace clang;
 
-
 QStringVarargs::QStringVarargs(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {

@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class CXXForRangeStmt;
 class CXXConstructExpr;
@@ -40,12 +41,12 @@ class CXXConstructExpr;
  *
  * See README-anti-pattern for more information
  */
-class ContainerAntiPattern
-    : public CheckBase
+class ContainerAntiPattern : public CheckBase
 {
 public:
     explicit ContainerAntiPattern(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     bool VisitQSet(clang::Stmt *stmt);
     bool handleLoop(clang::Stmt *);

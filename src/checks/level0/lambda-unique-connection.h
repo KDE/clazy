@@ -27,16 +27,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-lambda-unique-connection.md for more info.
  */
-class LambdaUniqueConnection
-    : public CheckBase
+class LambdaUniqueConnection : public CheckBase
 {
 public:
     explicit LambdaUniqueConnection(const std::string &name, ClazyContext *context);

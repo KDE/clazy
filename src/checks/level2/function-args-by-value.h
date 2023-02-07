@@ -30,14 +30,16 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class Decl;
 class FunctionDecl;
 class ParmVarDecl;
 }
 
-namespace clazy {
+namespace clazy
+{
 struct QualTypeClassification;
 }
 
@@ -46,20 +48,19 @@ struct QualTypeClassification;
  *
  * See README-function-args-by-value for more info
  */
-class FunctionArgsByValue
-    : public CheckBase
+class FunctionArgsByValue : public CheckBase
 {
 public:
     explicit FunctionArgsByValue(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     void processFunction(clang::FunctionDecl *);
     static bool shouldIgnoreClass(clang::CXXRecordDecl *);
     static bool shouldIgnoreOperator(clang::FunctionDecl *);
     static bool shouldIgnoreFunction(clang::FunctionDecl *);
-    clang::FixItHint fixit(clang::FunctionDecl *func, const clang::ParmVarDecl *param,
-                           clazy::QualTypeClassification);
+    clang::FixItHint fixit(clang::FunctionDecl *func, const clang::ParmVarDecl *param, clazy::QualTypeClassification);
 };
 
 #endif

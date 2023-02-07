@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class Decl;
 }
@@ -38,13 +39,12 @@ class Decl;
  *
  * See README-copyable-polymorphic for more information
  */
-class CopyablePolymorphic
-    : public CheckBase
+class CopyablePolymorphic : public CheckBase
 {
 public:
     explicit CopyablePolymorphic(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
-    std::vector<clang::FixItHint> fixits(clang::CXXRecordDecl* record);
+    std::vector<clang::FixItHint> fixits(clang::CXXRecordDecl *record);
 };
 
 #endif

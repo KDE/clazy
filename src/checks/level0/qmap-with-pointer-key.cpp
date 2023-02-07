@@ -23,9 +23,9 @@
 */
 
 #include "qmap-with-pointer-key.h"
-#include "Utils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclTemplate.h>

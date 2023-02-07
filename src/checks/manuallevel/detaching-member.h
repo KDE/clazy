@@ -30,9 +30,10 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * Finds places where you're calling non-const member functions on member containers.
@@ -40,8 +41,7 @@ class Stmt;
  * For example m_list.first(), which would detach if the container is shared.
  * See README-deatching-member for more information
  */
-class DetachingMember
-    : public DetachingBase
+class DetachingMember : public DetachingBase
 {
 public:
     explicit DetachingMember(const std::string &name, ClazyContext *context);

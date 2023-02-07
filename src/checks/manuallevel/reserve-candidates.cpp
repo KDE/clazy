@@ -24,15 +24,15 @@
 
 #include "reserve-candidates.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "clazy_stl.h"
-#include "MacroUtils.h"
-#include "StringUtils.h"
-#include "QtUtils.h"
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "LoopUtils.h"
+#include "MacroUtils.h"
+#include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -77,8 +77,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     if (!classDecl)
         return false;
 
-    if (!clazy::equalsAny(static_cast<std::string>(clazy::name(methodDecl)),
-                 { "append", "push_back", "push", "operator<<", "operator+=" }))
+    if (!clazy::equalsAny(static_cast<std::string>(clazy::name(methodDecl)), {"append", "push_back", "push", "operator<<", "operator+="}))
         return false;
 
     if (!clazy::isAReserveClass(classDecl))
@@ -175,10 +174,12 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
     // Get the list of member calls and operator<< that are direct childs of the loop statements
     // If it's inside an if statement we don't care.
-    auto callExprs = clazy::getStatements<CallExpr>(body, nullptr, {}, /*depth=*/ 1,
-                                                    /*includeParent=*/ true,
+    auto callExprs = clazy::getStatements<CallExpr>(body,
+                                                    nullptr,
+                                                    {},
+                                                    /*depth=*/1,
+                                                    /*includeParent=*/true,
                                                     clazy::IgnoreExprWithCleanups);
-
 
     for (CallExpr *callExpr : callExprs) {
         if (!isCandidate(callExpr))
@@ -220,7 +221,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     if (!expr)
         return false;
 
-    std::vector<CallExpr*> callExprs;
+    std::vector<CallExpr *> callExprs;
     clazy::getChilds<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
@@ -233,12 +234,12 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
             return true;
     }
 
-    std::vector<ArraySubscriptExpr*> subscriptExprs;
+    std::vector<ArraySubscriptExpr *> subscriptExprs;
     clazy::getChilds<ArraySubscriptExpr>(expr, subscriptExprs);
     if (!subscriptExprs.empty())
         return true;
 
-    BinaryOperator* binary = dyn_cast<BinaryOperator>(expr);
+    BinaryOperator *binary = dyn_cast<BinaryOperator>(expr);
     if (binary && binary->isAssignmentOp()) { // Filter things like for ( ...; ...; next = node->next)
 
         Expr *rhs = binary->getRHS();
@@ -285,7 +286,6 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     static std::vector<unsigned int> complexOnesCache;
     auto rawLoc = clazy::getLocStart(s).getRawEncoding();
 
-
     // For some reason we generate two warnings on some foreaches, so cache the ones we processed
     // and return true so we don't trigger a warning
     if (clazy::contains(nonComplexOnesCache, rawLoc) || clazy::contains(complexOnesCache, rawLoc))
@@ -323,8 +323,6 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             complexOnesCache.push_back(rawLoc);
             return true;
         }
-
-
     }
 
     nonComplexOnesCache.push_back(rawLoc);

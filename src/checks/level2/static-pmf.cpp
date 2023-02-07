@@ -29,12 +29,12 @@
 #include <llvm/Support/Casting.h>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 StaticPmf::StaticPmf(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

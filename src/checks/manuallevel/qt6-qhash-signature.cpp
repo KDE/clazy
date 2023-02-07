@@ -22,14 +22,13 @@
 
 #include "qt6-qhash-signature.h"
 #include "ClazyContext.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -39,6 +38,7 @@
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Lex/Lexer.h>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
@@ -50,7 +50,8 @@ Qt6QHashSignature::Qt6QHashSignature(const std::string &name, ClazyContext *cont
 {
 }
 
-static bool isInterestingFunction(std::string name) {
+static bool isInterestingFunction(std::string name)
+{
     if (name == "qHash" || name == "qHashBits" || name == "qHashRange" || name == "qHashRangeCommutative")
         return true;
     return false;
@@ -61,16 +62,15 @@ static int uintToSizetParam(clang::FunctionDecl *funcDecl)
     std::string functionName = funcDecl->getNameAsString();
     // the uint signature is on the second parameter for the qHash function
     // it is on the third paramater for qHashBits, qHashRange and qHashCommutative
-   if (functionName == "qHash" && funcDecl->getNumParams() == 2)
+    if (functionName == "qHash" && funcDecl->getNumParams() == 2)
         return 1;
-    if ((functionName ==  "qHashBits" || functionName == "qHashRange" || functionName == "qHashRangeCommutative")
-            && funcDecl->getNumParams() == 3)
+    if ((functionName == "qHashBits" || functionName == "qHashRange" || functionName == "qHashRangeCommutative") && funcDecl->getNumParams() == 3)
         return 2;
 
     return -1;
 }
 
-static clang::ParmVarDecl* getInterestingParam(clang::FunctionDecl *funcDecl)
+static clang::ParmVarDecl *getInterestingParam(clang::FunctionDecl *funcDecl)
 {
     if (uintToSizetParam(funcDecl) > 0)
         return funcDecl->getParamDecl(uintToSizetParam(funcDecl));
@@ -95,7 +95,7 @@ static bool isWrongReturnType(clang::FunctionDecl *funcDecl)
     if (!funcDecl)
         return false;
 
-    //Return type should be size_t
+    // Return type should be size_t
     if (funcDecl->getReturnType().getAsString() != "size_t")
         return true;
     return false;
@@ -125,7 +125,7 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     bool isPartReturnStmt = false;
     if (parent) {
         while (parent) {
-            Stmt* ancester = clazy::parent(m_context->parentMap, parent);
+            Stmt *ancester = clazy::parent(m_context->parentMap, parent);
             if (!ancester)
                 break;
             ReturnStmt *returnStmt = dyn_cast<ReturnStmt>(ancester);

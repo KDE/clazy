@@ -24,7 +24,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-qstring-comparison-to-implicit-char.md for more info.
  */
@@ -33,6 +32,7 @@ class QStringComparisonToImplicitChar : public CheckBase
 public:
     explicit QStringComparisonToImplicitChar(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
 };
 

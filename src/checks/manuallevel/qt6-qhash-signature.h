@@ -25,12 +25,13 @@
 
 #include "checkbase.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class FixItHint;
 class CXXConstructExpr;
@@ -46,8 +47,7 @@ class CXXFunctionalCastExpr;
  *
  * Run only in Qt 6 code.
  */
-class Qt6QHashSignature
-    : public CheckBase
+class Qt6QHashSignature : public CheckBase
 {
 public:
     explicit Qt6QHashSignature(const std::string &name, ClazyContext *context);

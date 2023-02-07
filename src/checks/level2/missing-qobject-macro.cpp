@@ -21,10 +21,10 @@
 
 #include "missing-qobject-macro.h"
 #include "ClazyContext.h"
-#include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
+#include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
@@ -36,12 +36,13 @@
 #include <llvm/Support/Casting.h>
 
 #ifdef HAS_STD_FILESYSTEM
-# include <filesystem>
+#include <filesystem>
 #endif
 
-namespace clang {
+namespace clang
+{
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -86,18 +87,18 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
     const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
     fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
 
-# ifdef HAS_STD_FILESYSTEM
+#ifdef HAS_STD_FILESYSTEM
     const std::string fileName = static_cast<std::string>(sm().getFilename(startLoc));
     if (clazy::endsWith(fileName, ".cpp")) {
         const std::string basename = std::filesystem::path(fileName).stem().string();
 
-        if (!m_hasAddedMocFile && !m_context->preprocessorVisitor->hasInclude(basename+".moc", false)) {
+        if (!m_hasAddedMocFile && !m_context->preprocessorVisitor->hasInclude(basename + ".moc", false)) {
             const SourceLocation pos = sm().getLocForEndOfFile(sm().getFileID(startLoc));
             fixits.push_back(clazy::createInsertion(pos, "\n#include \"" + basename + ".moc\"\n"));
             m_hasAddedMocFile = true;
         }
     }
-# endif
+#endif
 #endif
 
     emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro", fixits);

@@ -29,7 +29,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class CallExpr;
 class CXXMemberCallExpr;
@@ -41,19 +42,19 @@ class FixItHint;
  *
  * See README-qstringref for more info.
  */
-class StringRefCandidates
-    : public CheckBase
+class StringRefCandidates : public CheckBase
 {
 public:
     StringRefCandidates(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
-private:
-    bool processCase1(clang::CXXMemberCallExpr*);
-    bool processCase2(clang::CallExpr *call);
-    bool isConvertedToSomethingElse(clang::Stmt* s) const;
 
-    std::vector<clang::CallExpr*> m_alreadyProcessedChainedCalls;
-    std::vector<clang::FixItHint> fixit(clang::CXXMemberCallExpr*);
+private:
+    bool processCase1(clang::CXXMemberCallExpr *);
+    bool processCase2(clang::CallExpr *call);
+    bool isConvertedToSomethingElse(clang::Stmt *s) const;
+
+    std::vector<clang::CallExpr *> m_alreadyProcessedChainedCalls;
+    std::vector<clang::FixItHint> fixit(clang::CXXMemberCallExpr *);
 };
 
 #endif

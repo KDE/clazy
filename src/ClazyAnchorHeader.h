@@ -69,71 +69,21 @@ extern volatile int ClazyAnchor_ThreadWithSlots;
 
 int clazy_dummy()
 {
-    return
-        ClazyAnchor_ConnectNonSignal +
-        ClazyAnchor_ConnectNotNormalized +
-        ClazyAnchor_ContainerAntiPattern +
-        ClazyAnchor_LambdaInConnect +
-        ClazyAnchor_LambdaUniqueConnection +
-        ClazyAnchor_MutableContainerKey +
-        ClazyAnchor_QColorFromLiteral +
-        ClazyAnchor_QDateTimeUtc +
-        ClazyAnchor_Qenums +
-        ClazyAnchor_QFileInfoExists +
-        ClazyAnchor_QGetEnv +
-        ClazyAnchor_QMapWithPointerKey +
-        ClazyAnchor_StringArg +
-        ClazyAnchor_QStringInsensitiveAllocation +
-        ClazyAnchor_StringRefCandidates +
-        ClazyAnchor_QtMacros +
-        ClazyAnchor_QVariantTemplateInstantiation +
-        ClazyAnchor_StrictIterators +
-        ClazyAnchor_TemporaryIterator +
-        ClazyAnchor_UnusedNonTrivialVariable +
-        ClazyAnchor_WritingToTemporary +
-        ClazyAnchor_WrongQGlobalStatic +
-        ClazyAnchor_AutoUnexpectedQStringBuilder +
-        ClazyAnchor_ChildEvent_qobject_cast +
-        ClazyAnchor_Connect3argLambda +
-        ClazyAnchor_ConstSignalOrSlot +
-        ClazyAnchor_DetachingTemporary +
-        ClazyAnchor_Foreach +
-        ClazyAnchor_IncorrectEmit +
-        ClazyAnchor_InefficientQListSoft +
-        ClazyAnchor_InstallEventFilter +
-        ClazyAnchor_NonPodStatic +
-        ClazyAnchor_OverriddenSignal +
-        ClazyAnchor_PostEvent +
-        ClazyAnchor_QDeleteAll +
-        ClazyAnchor_qhash_namespace +
-        ClazyAnchor_QLatin1StringNonAscii +
-        ClazyAnchor_QPropertyWithoutNotify +
-        ClazyAnchor_QStringLeft +
-        ClazyAnchor_RangeLoop +
-        ClazyAnchor_ReturningDataFromTemporary +
-        ClazyAnchor_RuleOfTwoSoft +
-        ClazyAnchor_VirtualSignal +
-        ClazyAnchor_BaseClassEvent +
-        ClazyAnchor_ContainerInsideLoop +
-        ClazyAnchor_CopyablePolymorphic +
-        ClazyAnchor_CtorMissingParentArgument +
-        ClazyAnchor_FunctionArgsByRef +
-        ClazyAnchor_FunctionArgsByValue +
-        ClazyAnchor_GlobalConstCharPointer +
-        ClazyAnchor_ImplicitCasts +
-        ClazyAnchor_MissingQ_OBJECT +
-        ClazyAnchor_MissingTypeinfo +
-        ClazyAnchor_OldStyleConnect +
-        ClazyAnchor_QStringAllocations +
-        ClazyAnchor_ReserveCandidates +
-        ClazyAnchor_ReturningVoidExpression +
-        ClazyAnchor_RuleOfThree +
-        ClazyAnchor_VirtualCallsFromCTOR +
-        ClazyAnchor_AssertWithSideEffects +
-        ClazyAnchor_UnneededCast +
-        ClazyAnchor_DetachingMember +
-        ClazyAnchor_ThreadWithSlots +
-        0;
+    return ClazyAnchor_ConnectNonSignal + ClazyAnchor_ConnectNotNormalized + ClazyAnchor_ContainerAntiPattern + ClazyAnchor_LambdaInConnect
+        + ClazyAnchor_LambdaUniqueConnection + ClazyAnchor_MutableContainerKey + ClazyAnchor_QColorFromLiteral + ClazyAnchor_QDateTimeUtc + ClazyAnchor_Qenums
+        + ClazyAnchor_QFileInfoExists + ClazyAnchor_QGetEnv + ClazyAnchor_QMapWithPointerKey + ClazyAnchor_StringArg + ClazyAnchor_QStringInsensitiveAllocation
+        + ClazyAnchor_StringRefCandidates + ClazyAnchor_QtMacros + ClazyAnchor_QVariantTemplateInstantiation + ClazyAnchor_StrictIterators
+        + ClazyAnchor_TemporaryIterator + ClazyAnchor_UnusedNonTrivialVariable + ClazyAnchor_WritingToTemporary + ClazyAnchor_WrongQGlobalStatic
+        + ClazyAnchor_AutoUnexpectedQStringBuilder + ClazyAnchor_ChildEvent_qobject_cast + ClazyAnchor_Connect3argLambda + ClazyAnchor_ConstSignalOrSlot
+        + ClazyAnchor_DetachingTemporary + ClazyAnchor_Foreach + ClazyAnchor_IncorrectEmit + ClazyAnchor_InefficientQListSoft + ClazyAnchor_InstallEventFilter
+        + ClazyAnchor_NonPodStatic + ClazyAnchor_OverriddenSignal + ClazyAnchor_PostEvent + ClazyAnchor_QDeleteAll + ClazyAnchor_qhash_namespace
+        + ClazyAnchor_QLatin1StringNonAscii + ClazyAnchor_QPropertyWithoutNotify + ClazyAnchor_QStringLeft + ClazyAnchor_RangeLoop
+        + ClazyAnchor_ReturningDataFromTemporary + ClazyAnchor_RuleOfTwoSoft + ClazyAnchor_VirtualSignal + ClazyAnchor_BaseClassEvent
+        + ClazyAnchor_ContainerInsideLoop + ClazyAnchor_CopyablePolymorphic + ClazyAnchor_CtorMissingParentArgument + ClazyAnchor_FunctionArgsByRef
+        + ClazyAnchor_FunctionArgsByValue + ClazyAnchor_GlobalConstCharPointer + ClazyAnchor_ImplicitCasts + ClazyAnchor_MissingQ_OBJECT
+        + ClazyAnchor_MissingTypeinfo + ClazyAnchor_OldStyleConnect + ClazyAnchor_QStringAllocations + ClazyAnchor_ReserveCandidates
+        + ClazyAnchor_ReturningVoidExpression + ClazyAnchor_RuleOfThree + ClazyAnchor_VirtualCallsFromCTOR + ClazyAnchor_AssertWithSideEffects
+        + ClazyAnchor_UnneededCast + ClazyAnchor_DetachingMember + ClazyAnchor_ThreadWithSlots + 0;
 }
 
 #endif

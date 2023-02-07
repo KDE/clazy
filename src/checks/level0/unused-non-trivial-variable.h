@@ -29,7 +29,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class VarDecl;
 class CXXRecordDecl;
@@ -43,12 +44,12 @@ class QualType;
  *
  * See README-unused-non-trivial-variable.md for more information
  */
-class UnusedNonTrivialVariable
-    : public CheckBase
+class UnusedNonTrivialVariable : public CheckBase
 {
 public:
     explicit UnusedNonTrivialVariable(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     void handleVarDecl(clang::VarDecl *varDecl);
     bool isInterestingType(clang::QualType t) const;

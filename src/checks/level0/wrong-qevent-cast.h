@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-wrong-qevent-cast.md for more info.
  */
-class WrongQEventCast
-    : public CheckBase
+class WrongQEventCast : public CheckBase
 {
 public:
     explicit WrongQEventCast(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
 };
 

@@ -21,9 +21,9 @@
 
 #include "ctor-missing-parent-argument.h"
 #include "QtUtils.h"
-#include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
@@ -35,7 +35,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -92,8 +91,6 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
         if (clazy::name(baseClass) == "QCoreApplication")
             return;
 
-        emitWarning(decl, record->getQualifiedNameAsString() +
-                    std::string(" should take ") +
-                    parentType + std::string(" parent argument in CTOR"));
+        emitWarning(decl, record->getQualifiedNameAsString() + std::string(" should take ") + parentType + std::string(" parent argument in CTOR"));
     }
 }

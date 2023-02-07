@@ -21,8 +21,8 @@
 
 #include "qt-macros.h"
 #include "ClazyContext.h"
-#include "clazy_stl.h"
 #include "PreProcessorVisitor.h"
+#include "clazy_stl.h"
 
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Lex/Token.h>

@@ -33,12 +33,12 @@
  * Warns if a result of a const member function is ignored.
  * There are lots of false positives. QDir::mkdir() for example.
  */
-class RequiredResults
-    : public CheckBase
+class RequiredResults : public CheckBase
 {
 public:
     RequiredResults(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
+
 private:
     bool shouldIgnoreMethod(const std::string &qualifiedName);
 };

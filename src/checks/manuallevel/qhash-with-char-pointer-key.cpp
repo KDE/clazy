@@ -20,10 +20,10 @@
 */
 
 #include "qhash-with-char-pointer-key.h"
-#include "Utils.h"
-#include "TypeUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclTemplate.h>
@@ -34,7 +34,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

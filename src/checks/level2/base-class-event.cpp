@@ -36,9 +36,10 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -69,8 +70,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         return;
 
     CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
-    const std::string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
-                                                : std::string("BaseClass");
+    const std::string baseClassName = baseClass ? baseClass->getQualifiedNameAsString() : std::string("BaseClass");
 
     if (isEventFilter && clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), baseClassName)) {
         // This is fine, QObject and QWidget eventFilter() don't do anything
@@ -78,7 +78,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     }
 
     Stmt *body = method->getBody();
-    std::vector<ReturnStmt*> returns;
+    std::vector<ReturnStmt *> returns;
     clazy::getChilds<ReturnStmt>(body, /*by-ref*/ returns);
     for (ReturnStmt *returnStmt : returns) {
         Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);

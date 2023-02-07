@@ -24,12 +24,11 @@
 
 #include "implicit-casts.h"
 #include "ClazyContext.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/Lexer.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -40,24 +39,24 @@
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/Linkage.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Lex/Lexer.h>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class ParentMap;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    m_filesToIgnore = { "qobject_impl.h", "qdebug.h", "hb-", "qdbusintegrator.cpp",
-                        "harfbuzz-", "qunicodetools.cpp" };
+    m_filesToIgnore = {"qobject_impl.h", "qdebug.h", "hb-", "qdbusintegrator.cpp", "harfbuzz-", "qunicodetools.cpp"};
 }
 
 static bool isInterestingFunction(FunctionDecl *func)
@@ -84,8 +83,8 @@ static bool isInterestingFunction(FunctionDecl *func)
 }
 
 // Checks for pointer->bool implicit casts
-template <typename T>
-static bool iterateCallExpr(T* callExpr, CheckBase *check)
+template<typename T>
+static bool iterateCallExpr(T *callExpr, CheckBase *check)
 {
     if (!callExpr)
         return false;
@@ -107,8 +106,8 @@ static bool iterateCallExpr(T* callExpr, CheckBase *check)
 }
 
 // Checks for bool->int implicit casts
-template <typename T>
-static bool iterateCallExpr2(T* callExpr, CheckBase *check, ParentMap *parentMap)
+template<typename T>
+static bool iterateCallExpr2(T *callExpr, CheckBase *check, ParentMap *parentMap)
 {
     if (!callExpr)
         return false;
@@ -156,7 +155,7 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
     auto callExpr = dyn_cast<CallExpr>(stmt);
-    CXXConstructExpr* ctorExpr = nullptr;
+    CXXConstructExpr *ctorExpr = nullptr;
     if (!callExpr) {
         ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
         if (!ctorExpr)
@@ -172,9 +171,7 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
     if (shouldIgnoreFile(clazy::getLocStart(stmt)))
         return;
 
-    FunctionDecl *func = callExpr ? callExpr->getDirectCallee()
-                                  : ctorExpr->getConstructor();
-
+    FunctionDecl *func = callExpr ? callExpr->getDirectCallee() : ctorExpr->getConstructor();
 
     if (isInterestingFunction(func)) {
         // Check pointer->bool implicit casts
@@ -201,7 +198,7 @@ bool ImplicitCasts::isBoolToInt(FunctionDecl *func) const
 
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
-    static const std::vector<StringRef> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
+    static const std::vector<StringRef> macros = {"QVERIFY", "Q_UNLIKELY", "Q_LIKELY"};
     if (!loc.isMacroID())
         return false;
     StringRef macro = Lexer::getImmediateMacroName(loc, sm(), lo());

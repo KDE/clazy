@@ -24,13 +24,13 @@
 
 #include "foreach.h"
 #include "ClazyContext.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
 #include "PreProcessorVisitor.h"
-#include "StringUtils.h"
+#include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -46,10 +46,11 @@
 #include <unordered_map>
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class Decl;
 class DeclContext;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 
@@ -85,7 +86,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
         return;
 
-    std::vector<DeclRefExpr*> declRefExprs;
+    std::vector<DeclRefExpr *> declRefExprs;
     clazy::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
     if (declRefExprs.empty())
         return;
@@ -96,11 +97,9 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     if (!valueDecl)
         return;
 
-
     QualType containerQualType = constructExpr->getArg(0)->getType();
     const Type *containerType = containerQualType.getTypePtrOrNull();
     CXXRecordDecl *const containerRecord = containerType ? containerType->getAsCXXRecordDecl() : nullptr;
-
 
     if (!containerRecord)
         return;
@@ -139,13 +138,13 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
-    std::vector<ForStmt*> forStatements;
+    std::vector<ForStmt *> forStatements;
     clazy::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
     if (forStatements.empty())
         return;
 
     // Get the variable declaration (lhs of foreach)
-    std::vector<DeclStmt*> varDecls;
+    std::vector<DeclStmt *> varDecls;
     clazy::getChilds<DeclStmt>(forStatements.at(0), varDecls);
     if (varDecls.empty())
         return;
@@ -169,8 +168,8 @@ void Foreach::checkBigTypeMissingRef()
         } else if (classif.passNonTriviallyCopyableByConstRef) {
             error = "Missing reference in foreach with non trivial type (" + paramStr + ')';
         } else if (classif.passSmallTrivialByValue) {
-            //error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
-            // Don't warn. The compiler can (and most do) optimize this and generate the same code
+            // error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
+            //  Don't warn. The compiler can (and most do) optimize this and generate the same code
             return;
         }
 
@@ -204,7 +203,8 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
                                 auto s = clazy::getFirstChildAtDepth(expr, 1);
                                 refExpr = dyn_cast<DeclRefExpr>(s);
                                 if (refExpr) {
-                                    if (refExpr->getDecl() == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating
+                                    if (refExpr->getDecl()
+                                        == containerValueDecl) { // Finally, check if this non-const member call is on the same container we're iterating
                                         return true;
                                     }
                                 }

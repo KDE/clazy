@@ -20,9 +20,9 @@
 */
 
 #include "qstring-insensitive-allocation.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Expr.h>
@@ -33,12 +33,12 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class FunctionDecl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-
 
 QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -51,7 +51,7 @@ static bool isInterestingCall1(CallExpr *call)
     if (!func)
         return false;
 
-    static const std::vector<std::string> methods = { "QString::toUpper", "QString::toLower" };
+    static const std::vector<std::string> methods = {"QString::toUpper", "QString::toLower"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
@@ -61,8 +61,7 @@ static bool isInterestingCall2(CallExpr *call)
     if (!func)
         return false;
 
-    static const std::vector<std::string> methods = { "QString::endsWith", "QString::startsWith",
-                                            "QString::contains", "QString::compare" };
+    static const std::vector<std::string> methods = {"QString::endsWith", "QString::startsWith", "QString::contains", "QString::compare"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 

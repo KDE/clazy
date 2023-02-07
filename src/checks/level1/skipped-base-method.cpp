@@ -20,9 +20,9 @@
 */
 
 #include "skipped-base-method.h"
+#include "FunctionUtils.h"
 #include "HierarchyUtils.h"
 #include "TypeUtils.h"
-#include "FunctionUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -37,7 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-
 
 SkippedBaseMethod::SkippedBaseMethod(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -58,7 +57,7 @@ void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
     const CXXRecordDecl *thisClass = thisExpr->getType()->getPointeeCXXRecordDecl();
     const CXXRecordDecl *baseClass = memberCall->getRecordDecl();
 
-    std::vector<CXXRecordDecl*> baseClasses;
+    std::vector<CXXRecordDecl *> baseClasses;
     if (!clazy::derivesFrom(thisClass, baseClass, &baseClasses) || baseClasses.size() < 2)
         return;
 
@@ -66,7 +65,8 @@ void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
     for (int i = baseClasses.size() - 1; i > 0; --i) { // the higher indexes have the most derived classes
         CXXRecordDecl *moreDirectBaseClass = baseClasses[i];
         if (clazy::classImplementsMethod(moreDirectBaseClass, memberCall->getMethodDecl())) {
-            std::string msg = "Maybe you meant to call " + moreDirectBaseClass->getNameAsString() + "::" + memberCall->getMethodDecl()->getNameAsString() + "() instead";
+            std::string msg =
+                "Maybe you meant to call " + moreDirectBaseClass->getNameAsString() + "::" + memberCall->getMethodDecl()->getNameAsString() + "() instead";
             emitWarning(stmt, msg);
         }
     }

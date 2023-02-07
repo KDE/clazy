@@ -34,18 +34,19 @@
  */
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class MacroInfo;
 class Token;
-}  // namespace clang
+} // namespace clang
 
 class QtKeywordEmit : public CheckBase
 {
 public:
     explicit QtKeywordEmit(const std::string &name, ClazyContext *context);
+
 protected:
-    void VisitMacroExpands(const clang::Token &, const clang::SourceRange &,
-                           const clang::MacroInfo *) override;
+    void VisitMacroExpands(const clang::Token &, const clang::SourceRange &, const clang::MacroInfo *) override;
 };
 
 #endif // CLAZY_QT_KEYWORD_EMIT_H

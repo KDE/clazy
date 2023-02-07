@@ -20,11 +20,11 @@
 */
 
 #include "container-anti-pattern.h"
-#include "Utils.h"
-#include "StringUtils.h"
-#include "LoopUtils.h"
 #include "HierarchyUtils.h"
+#include "LoopUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -41,7 +41,6 @@ class ClazyContext;
 
 using namespace clang;
 
-
 ContainerAntiPattern::ContainerAntiPattern(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -53,9 +52,8 @@ static bool isInterestingCall(CallExpr *call)
     if (!func)
         return false;
 
-    static const std::vector<std::string> methods = { "QVector::toList", "QList::toVector", "QMap::values",
-                                                      "QMap::keys", "QSet::toList", "QSet::values",
-                                                      "QHash::values", "QHash::keys" };
+    static const std::vector<std::string> methods =
+        {"QVector::toList", "QList::toVector", "QMap::values", "QMap::keys", "QSet::toList", "QSet::values", "QHash::values", "QHash::keys"};
 
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
@@ -93,7 +91,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
     if (secondMethodName != "QSet::isEmpty")
         return false;
 
-    std::vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
+    std::vector<CallExpr *> chainedCalls = Utils::callListForChain(secondCall);
     if (chainedCalls.size() < 2)
         return false;
 

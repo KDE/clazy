@@ -40,14 +40,14 @@ using namespace clang;
 GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_filesToIgnore = { "3rdparty", "mysql.h", "qpicture.cpp" };
+    m_filesToIgnore = {"3rdparty", "mysql.h", "qpicture.cpp"};
 }
 
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 {
     VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() ||
-        !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace() || varDecl->hasExternalStorage())
+    if (!varDecl || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() || !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace()
+        || varDecl->hasExternalStorage())
         return;
 
     if (shouldIgnoreFile(clazy::getLocStart(decl)))

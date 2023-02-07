@@ -20,10 +20,10 @@
 */
 
 #include "empty-qstringliteral.h"
+#include "ClazyContext.h"
+#include "PreProcessorVisitor.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
-#include "PreProcessorVisitor.h"
-#include "ClazyContext.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
@@ -34,7 +34,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-
 
 EmptyQStringliteral::EmptyQStringliteral(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

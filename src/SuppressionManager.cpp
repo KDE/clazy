@@ -23,8 +23,8 @@
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
-#include <clang/Basic/SourceManager.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
 #include <clang/Basic/TokenKinds.h>
 #include <clang/Lex/Token.h>
 #include <llvm/Support/MemoryBuffer.h>
@@ -38,8 +38,10 @@ SuppressionManager::SuppressionManager()
 {
 }
 
-bool SuppressionManager::isSuppressed(const std::string &checkName, clang::SourceLocation loc,
-                                      const clang::SourceManager &sm, const clang::LangOptions &lo) const
+bool SuppressionManager::isSuppressed(const std::string &checkName,
+                                      clang::SourceLocation loc,
+                                      const clang::SourceManager &sm,
+                                      const clang::LangOptions &lo) const
 {
     if (loc.isMacroID())
         loc = sm.getExpansionLoc(loc);
@@ -71,7 +73,8 @@ bool SuppressionManager::isSuppressed(const std::string &checkName, clang::Sourc
         return false;
 
     const int lineNumber = sm.getSpellingLineNumber(loc);
-    const bool checkIsSuppressedByLine = suppressions.checksToSkipByLine.find(LineAndCheckName(lineNumber, checkName)) != suppressions.checksToSkipByLine.cend();
+    const bool checkIsSuppressedByLine =
+        suppressions.checksToSkipByLine.find(LineAndCheckName(lineNumber, checkName)) != suppressions.checksToSkipByLine.cend();
     return checkIsSuppressedByLine;
 }
 

@@ -28,20 +28,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-tr-non-literal.md for more info.
  */
-class TrNonLiteral
-    : public CheckBase
+class TrNonLiteral : public CheckBase
 {
 public:
     explicit TrNonLiteral(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
 };
 

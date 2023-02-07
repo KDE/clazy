@@ -24,7 +24,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-heap-allocated-small-trivial-type.md for more info.
  */
@@ -33,6 +32,7 @@ class HeapAllocatedSmallTrivialType : public CheckBase
 public:
     explicit HeapAllocatedSmallTrivialType(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
 };
 

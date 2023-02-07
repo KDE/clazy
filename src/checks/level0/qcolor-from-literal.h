@@ -28,24 +28,26 @@
 
 class QColorFromLiteral_Callback;
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-namespace ast_matchers {
+namespace ast_matchers
+{
 class MatchFinder;
-}  // namespace ast_matchers
-}  // namespace clang
+} // namespace ast_matchers
+} // namespace clang
 
 /**
  * See README-qcolor-from-literal.md for more info.
  */
-class QColorFromLiteral
-    : public CheckBase
+class QColorFromLiteral : public CheckBase
 {
 public:
     explicit QColorFromLiteral(const std::string &name, ClazyContext *context);
     ~QColorFromLiteral();
     void VisitStmt(clang::Stmt *stmt) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
+
 private:
     ClazyAstMatcherCallback *const m_astMatcherCallBack;
 };
