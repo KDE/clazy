@@ -107,7 +107,11 @@ inline clang::tooling::Replacements& DiagnosticFix(clang::tooling::Diagnostic &d
 
 inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *invalid)
 {
-#if LLVM_VERSION_MAJOR >= 12
+#if LLVM_VERSION_MAJOR >= 16
+    auto buffer = sm.getBufferOrNone(id);
+    *invalid = !buffer.has_value();
+    return buffer;
+#elif LLVM_VERSION_MAJOR >= 12
     auto buffer = sm.getBufferOrNone(id);
     *invalid = !buffer.hasValue();
     return buffer;
@@ -116,11 +120,12 @@ inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *in
 #endif
 }
 
-#if LLVM_VERSION_MAJOR >= 12
-
+#if LLVM_VERSION_MAJOR >= 16
+#define GET_LEXER(id, inputFile, sm, lo) \
+clang::Lexer(id, inputFile.value(), sm, lo)
+#elif LLVM_VERSION_MAJOR >= 12
 #define GET_LEXER(id, inputFile, sm, lo) \
 clang::Lexer(id, inputFile.getValue(), sm, lo)
-
 #else
 #define GET_LEXER(id, inputFile, sm, lo) \
 clang::Lexer(id, inputFile, sm, lo)
@@ -144,7 +149,9 @@ inline bool contains_lower(clang::StringRef haystack, clang::StringRef needle)
 #endif
 }
 
-#if LLVM_VERSION_MAJOR >= 15
+#if LLVM_VERSION_MAJOR >= 16
+using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
+#elif LLVM_VERSION_MAJOR >= 15
 using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
 #else
 using OptionalFileEntryRef = const clang::FileEntry*;
