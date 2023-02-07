@@ -146,14 +146,14 @@ static std::string normalizeTypeInternal(const char *t, const char *e, bool fixS
         struct {
             const char *keyword;
             int len;
-        } optional[] = {{"struct ", 7}, {"class ", 6}, {"enum ", 5}, {0, 0}};
+        } optional[] = {{"struct ", 7}, {"class ", 6}, {"enum ", 5}, {nullptr, 0}};
         int i = 0;
         do {
             if (strncmp(optional[i].keyword, t, optional[i].len) == 0) {
                 t += optional[i].len;
                 break;
             }
-        } while (optional[++i].keyword != 0);
+        } while (optional[++i].keyword != nullptr);
     }
 
     bool star = false;
