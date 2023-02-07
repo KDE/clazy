@@ -34,12 +34,11 @@ namespace clang {
 class LangOptions;
 }  // namespace clang
 
-using namespace std;
 using namespace clang;
 
-static vector<QualType> typesFromTemplateArguments(const TemplateArgumentList *templateArgs)
+static std::vector<QualType> typesFromTemplateArguments(const TemplateArgumentList *templateArgs)
 {
-    vector<QualType> result;
+    std::vector<QualType> result;
     const int numArgs = templateArgs->size();
     result.reserve(numArgs);
     for (int i = 0; i < numArgs; ++i) {
@@ -51,7 +50,7 @@ static vector<QualType> typesFromTemplateArguments(const TemplateArgumentList *t
     return result;
 }
 
-vector<QualType> clazy::getTemplateArgumentsTypes(CXXMethodDecl *method)
+std::vector<QualType> clazy::getTemplateArgumentsTypes(CXXMethodDecl *method)
 {
     if (!method)
         return {};
@@ -90,8 +89,8 @@ ClassTemplateSpecializationDecl *clazy::templateDecl(Decl *decl)
     return dyn_cast<ClassTemplateSpecializationDecl>(classDecl);
 }
 
-string clazy::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
-                                         unsigned int index, const LangOptions &lo, bool recordOnly)
+std::string clazy::getTemplateArgumentTypeStr(ClassTemplateSpecializationDecl *specialization,
+                                              unsigned int index, const LangOptions &lo, bool recordOnly)
 {
     if (!specialization)
         return {};

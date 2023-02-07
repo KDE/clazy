@@ -43,12 +43,11 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
 static bool shouldIgnoreType(StringRef name)
 {
     // Q_GLOBAL_STATIC and such
-    static vector<StringRef> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage"};
+    static std::vector<StringRef> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage"};
     return clazy::contains(blacklist, name);
 }
 
@@ -105,7 +104,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
 
     StringRef className = clazy::name(recordDecl);
     if (!shouldIgnoreType(className)) {
-        std::string error = string("non-POD static (") + className.data() + string(")");
+        std::string error = std::string("non-POD static (") + className.data() + std::string(")");
         emitWarning(declStart, error);
     }
 

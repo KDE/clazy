@@ -45,7 +45,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 enum Aggressiveness
@@ -62,20 +61,20 @@ AssertWithSideEffects::AssertWithSideEffects(const std::string &name, ClazyConte
 
 static bool functionIsOk(StringRef name)
 {
-    static const vector<StringRef> whitelist = {"qFuzzyIsNull", "qt_noop", "qt_assert", "qIsFinite", "qIsInf",
-                                                "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-",
-                                                "q_func", "d_func", "isEmptyHelper",
-                                                "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
+    static const std::vector<StringRef> whitelist = {"qFuzzyIsNull", "qt_noop", "qt_assert", "qIsFinite", "qIsInf",
+                                                     "qIsNaN", "qIsNumericType", "operator==", "operator<", "operator>", "operator<=", "operator>=", "operator!=", "operator+", "operator-",
+                                                     "q_func", "d_func", "isEmptyHelper",
+                                                     "qCross", "qMin", "qMax", "qBound", "priv", "qobject_cast", "dbusService"};
     return clazy::contains(whitelist, name);
 }
 
-static bool methodIsOK(const string &name)
+static bool methodIsOK(const std::string &name)
 {
-    static const vector<string> whitelist = {"QList::begin", "QList::end", "QVector::begin",
-                                             "QVector::end", "QHash::begin", "QHash::end",
-                                             "QByteArray::data", "QBasicMutex::isRecursive",
-                                             "QLinkedList::begin", "QLinkedList::end", "QDataBuffer::first",
-                                             "QOpenGLFunctions::glIsRenderbuffer"};
+    static const std::vector<std::string> whitelist = {"QList::begin", "QList::end", "QVector::begin",
+                                                       "QVector::end", "QHash::begin", "QHash::end",
+                                                       "QByteArray::data", "QBasicMutex::isRecursive",
+                                                       "QLinkedList::begin", "QLinkedList::end", "QDataBuffer::first",
+                                                       "QOpenGLFunctions::glIsRenderbuffer"};
     return clazy::contains(whitelist, name);
 }
 

@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -73,8 +72,8 @@ void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
 
     if (classif.passNonTriviallyCopyableByConstRef) {
-        string msg;
-        const string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
+        std::string msg;
+        const std::string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         std::vector<FixItHint> fixits;

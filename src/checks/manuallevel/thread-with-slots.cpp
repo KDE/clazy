@@ -41,7 +41,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 static bool hasMutexes(Stmt *body)
@@ -131,5 +130,3 @@ void ThreadWithSlots::VisitDecl(Decl *decl)
 
     emitWarning(method, "Slot " + method->getQualifiedNameAsString() + " might not run in the expected thread");
 }
-
-

@@ -37,7 +37,6 @@ class ClazyContext;
 
 using namespace clang;
 using namespace clang::ast_matchers;
-using namespace std;
 
 // TODO: setNameFromString()
 
@@ -94,7 +93,7 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
     if (!call || call->getNumArgs() != 1)
         return;
 
-    string name = clazy::qualifiedMethodName(call);
+    std::string name = clazy::qualifiedMethodName(call);
     if (name != "QColor::setNamedColor")
         return;
 

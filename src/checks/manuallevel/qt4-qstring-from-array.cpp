@@ -44,7 +44,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 Qt4QStringFromArray::Qt4QStringFromArray(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -55,7 +54,7 @@ static bool isInterestingParam(ParmVarDecl *param, bool &is_char_array, bool &is
 {
     is_char_array = false;
     is_byte_array = false;
-    const string typeStr = param->getType().getAsString();
+    const std::string typeStr = param->getType().getAsString();
     if (typeStr == "const class QByteArray &") {
         is_byte_array = true;
     } else if (typeStr == "const char *") {// We only want bytearray and const char*
@@ -82,13 +81,13 @@ static bool isInterestingCtorCall(CXXConstructorDecl *ctor, bool &is_char_array,
     return is_char_array || is_byte_array;
 }
 
-static bool isInterestingMethod(const string &methodName)
+static bool isInterestingMethod(const std::string &methodName)
 {
-    static const vector<string> methods = { "append", "prepend", "operator=", "operator==", "operator!=", "operator<", "operator<=", "operator>", "operator>=", "operator+=" };
+    static const std::vector<std::string> methods = { "append", "prepend", "operator=", "operator==", "operator!=", "operator<", "operator<=", "operator>", "operator>=", "operator+=" };
     return clazy::contains(methods, methodName);
 }
 
-static bool isInterestingMethodCall(CXXMethodDecl *method, string &methodName, bool &is_char_array, bool &is_byte_array)
+static bool isInterestingMethodCall(CXXMethodDecl *method, std::string &methodName, bool &is_char_array, bool &is_byte_array)
 {
     is_char_array = false;
     is_byte_array = false;
@@ -108,7 +107,7 @@ static bool isInterestingMethodCall(CXXMethodDecl *method, string &methodName, b
     return true;
 }
 
-static bool isInterestingOperatorCall(CXXOperatorCallExpr *op, string &operatorName, bool &is_char_array, bool &is_byte_array)
+static bool isInterestingOperatorCall(CXXOperatorCallExpr *op, std::string &operatorName, bool &is_char_array, bool &is_byte_array)
 {
     is_char_array = false;
     is_byte_array = false;
@@ -127,11 +126,11 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
     if (!ctorExpr && !operatorCall && !memberCall)
         return;
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     bool is_char_array = false;
     bool is_byte_array = false;
-    string methodName;
-    string message;
+    std::string methodName;
+    std::string message;
 
     if (ctorExpr) {
         CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
@@ -184,7 +183,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixCtorCall(CXXConstructExpr *ctorEx
 
 std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr *op)
 {
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     if (op->getNumArgs() == 2) {
         Expr *e = op->getArg(1);
         SourceLocation start = clazy::getLocStart(e);
@@ -208,7 +207,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
 
 std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCallExpr *memberExpr)
 {
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 
     if (memberExpr->getNumArgs() == 1) {
         Expr *e = *(memberExpr->arg_begin());
@@ -232,9 +231,9 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
 
 std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstructExpr *ctorExpr)
 {
-    const string replacement = "QString::fromLatin1";
-    const string replacee = "QString";
-    vector<FixItHint> fixits;
+    const std::string replacement = "QString::fromLatin1";
+    const std::string replacee = "QString";
+    std::vector<FixItHint> fixits;
 
     SourceLocation rangeStart = clazy::getLocStart(ctorExpr);
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm(), lo());
@@ -257,7 +256,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstr
 
 std::vector<FixItHint> Qt4QStringFromArray::fixitInsertFromLatin1(CXXConstructExpr *ctorExpr)
 {
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     SourceRange range;
 
     Expr *arg = *(ctorExpr->arg_begin());

@@ -38,7 +38,6 @@ class FunctionDecl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &name, ClazyContext *context)
@@ -52,7 +51,7 @@ static bool isInterestingCall1(CallExpr *call)
     if (!func)
         return false;
 
-    static const vector<string> methods = { "QString::toUpper", "QString::toLower" };
+    static const std::vector<std::string> methods = { "QString::toUpper", "QString::toLower" };
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
@@ -62,14 +61,14 @@ static bool isInterestingCall2(CallExpr *call)
     if (!func)
         return false;
 
-    static const vector<string> methods = { "QString::endsWith", "QString::startsWith",
+    static const std::vector<std::string> methods = { "QString::endsWith", "QString::startsWith",
                                             "QString::contains", "QString::compare" };
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
 void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
 {
-    vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
+    std::vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
     if (calls.size() < 2)
         return;
 

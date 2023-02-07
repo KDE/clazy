@@ -51,7 +51,6 @@ class Token;
 
 using namespace clang;
 using namespace clang::ast_matchers;
-using namespace std;
 
 ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
     : check(check)
@@ -111,7 +110,7 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
     check->VisitInclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported, FileType);
 }
 
-CheckBase::CheckBase(const string &name, const ClazyContext *context, Options options)
+CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
     : m_sm(context->ci.getSourceManager())
     , m_name(name)
     , m_context(context)
@@ -202,7 +201,7 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
     if (!loc.isValid())
         return true;
 
-    string filename = static_cast<string>(sm().getFilename(loc));
+    std::string filename = static_cast<std::string>(sm().getFilename(loc));
 
     return clazy::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
         return clazy::contains(filename, ignored);
@@ -225,7 +224,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
 }
 
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
-                            const vector<FixItHint> &fixits, bool printWarningTag)
+                            const std::vector<FixItHint> &fixits, bool printWarningTag)
 {
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
         return;
@@ -245,7 +244,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
     reallyEmitWarning(loc, error, fixits);
 
     for (const auto& l : m_queuedManualInterventionWarnings) {
-        string msg = string("FixIt failed, requires manual intervention: ");
+        std::string msg("FixIt failed, requires manual intervention: ");
         if (!l.second.empty())
             msg += ' ' + l.second;
 
@@ -255,13 +254,13 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
     m_queuedManualInterventionWarnings.clear();
 }
 
-void CheckBase::emitInternalError(SourceLocation loc, string error)
+void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 {
     llvm::errs() << m_tag << ": internal error: " << error
                  << " at " << loc.printToString(sm()) << "\n";
 }
 
-void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
+void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
     auto &engine = m_context->ci.getDiagnostics();
@@ -276,7 +275,7 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
     }
 }
 
-void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const string &message)
+void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const std::string &message)
 {
     if (!manualFixitAlreadyQueued(loc)) {
         m_queuedManualInterventionWarnings.push_back({loc, message});
@@ -312,7 +311,7 @@ bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
 
 bool CheckBase::isOptionSet(const std::string &optionName) const
 {
-    const string qualifiedName = name() + '-' + optionName;
+    const std::string qualifiedName = name() + '-' + optionName;
     return m_context->isOptionSet(qualifiedName);
 }
 

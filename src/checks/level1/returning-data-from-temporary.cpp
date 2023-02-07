@@ -35,7 +35,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, ClazyContext *context)

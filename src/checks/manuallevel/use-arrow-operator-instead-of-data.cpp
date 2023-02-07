@@ -27,7 +27,6 @@
 #include "HierarchyUtils.h"
 #include <clang/AST/ExprCXX.h>
 
-using namespace std;
 using namespace clang;
 
 UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context)
@@ -46,7 +45,7 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
     if (vec.size() < 2) {
         return;
     }
-    
+
     CallExpr *callExpr = vec.at(vec.size() - 1);
 
     FunctionDecl* funcDecl = callExpr->getDirectCallee();

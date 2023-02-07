@@ -36,7 +36,6 @@
 
 using namespace clazy;
 using namespace clang;
-using namespace std;
 
 clang::FixItHint clazy::createReplacement(clang::SourceRange range, const std::string &replacement)
 {
@@ -144,7 +143,7 @@ SourceLocation clazy::locForEndOfToken(const ASTContext *context, SourceLocation
 }
 
 bool clazy::transformTwoCallsIntoOne(const ASTContext *context, CallExpr *call1, CXXMemberCallExpr *call2,
-                                     const string &replacement, vector<FixItHint> &fixits)
+                                     const std::string &replacement, std::vector<FixItHint> &fixits)
 {
     Expr *implicitArgument = call2->getImplicitObjectArgument();
     if (!implicitArgument)
@@ -172,7 +171,7 @@ bool clazy::transformTwoCallsIntoOne(const ASTContext *context, CallExpr *call1,
 }
 
 bool clazy::transformTwoCallsIntoOneV2(const ASTContext *context, CXXMemberCallExpr *call2,
-                                       const string &replacement, std::vector<FixItHint> &fixits)
+                                       const std::string &replacement, std::vector<FixItHint> &fixits)
 {
     Expr *implicitArgument = call2->getImplicitObjectArgument();
     if (!implicitArgument)
@@ -189,7 +188,7 @@ bool clazy::transformTwoCallsIntoOneV2(const ASTContext *context, CXXMemberCallE
 }
 
 FixItHint clazy::fixItReplaceWordWithWord(const ASTContext *context, clang::Stmt *begin,
-                                          const string &replacement, const string &replacee)
+                                          const std::string &replacement, const std::string &replacee)
 {
     auto &sm = context->getSourceManager();
     SourceLocation rangeStart = clazy::getLocStart(begin);
@@ -209,13 +208,13 @@ FixItHint clazy::fixItReplaceWordWithWord(const ASTContext *context, clang::Stmt
     return FixItHint::CreateReplacement(SourceRange(rangeStart, rangeEnd), replacement);
 }
 
-vector<FixItHint> clazy::fixItRemoveToken(const ASTContext *context, Stmt *stmt, bool removeParenthesis)
+std::vector<FixItHint> clazy::fixItRemoveToken(const ASTContext *context, Stmt *stmt, bool removeParenthesis)
 {
     SourceLocation start = clazy::getLocStart(stmt);
     SourceLocation end = Lexer::getLocForEndOfToken(start, removeParenthesis ? 0 : -1,
                                                     context->getSourceManager(), context->getLangOpts());
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 
     if (start.isValid() && end.isValid()) {
         fixits.push_back(FixItHint::CreateRemoval(SourceRange(start, end)));

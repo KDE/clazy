@@ -33,7 +33,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)

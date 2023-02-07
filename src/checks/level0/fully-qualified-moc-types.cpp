@@ -47,7 +47,6 @@ class MacroInfo;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyContext *context)
@@ -77,25 +76,25 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     if (qst != QtAccessSpecifier_Signal && qst != QtAccessSpecifier_Slot && qst != QtAccessSpecifier_Invokable)
         return;
 
-    string qualifiedTypeName;
-    string typeName;
+    std::string qualifiedTypeName;
+    std::string typeName;
     for (auto param : method->parameters()) {
         QualType t = clazy::pointeeQualType(param->getType());
         if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
-            emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
+            emitWarning(method, std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
     }
 
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
         QualType returnT = clazy::pointeeQualType(method->getReturnType());
         if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
-            emitWarning(method, string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
+            emitWarning(method, std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName + " instead of " + typeName + ")");
         }
     }
 
 }
 
-bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, string &qualifiedTypeName, string &typeName) const
+bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, std::string &typeName) const
 {
     qualifiedTypeName.clear();
     typeName.clear();
@@ -172,8 +171,8 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                         if (!record || !isGadget(record))
                             continue;
 
-                        string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/ true);
-                        string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/ false);
+                        std::string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/ true);
+                        std::string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/ false);
                         if (fullyQualifiedName.empty() || fullyQualifiedName[0] == '(') {
                             // We don't care about (anonymous namespace)::
                             continue;

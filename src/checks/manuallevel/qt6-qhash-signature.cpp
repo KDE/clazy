@@ -44,7 +44,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 Qt6QHashSignature::Qt6QHashSignature(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -84,7 +83,7 @@ static bool isWrongParamType(clang::FunctionDecl *funcDecl)
     auto param = getInterestingParam(funcDecl);
     if (!param)
         return false;
-    const string typeStr = param->getType().getAsString();
+    const std::string typeStr = param->getType().getAsString();
     if (typeStr != "size_t") {
         return true;
     }
@@ -169,7 +168,7 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     if (declType == "size_t" && qhashReturnType == "size_t")
         return;
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 
     // if the type of the variable is correct, but the qHash is not returning the right type
     // just emit warning...
@@ -202,8 +201,8 @@ void Qt6QHashSignature::VisitDecl(clang::Decl *decl)
         bool wrongParamType = isWrongParamType(funcDecl);
         if (!wrongReturnType && !wrongParamType)
             return;
-        vector<FixItHint> fixits;
-        string message;
+        std::vector<FixItHint> fixits;
+        std::string message;
         message = funcDecl->getNameAsString() + " with uint signature";
         fixits = fixitReplace(funcDecl, wrongReturnType, wrongParamType);
         emitWarning(clazy::getLocStart(funcDecl), message, fixits);
@@ -213,9 +212,9 @@ void Qt6QHashSignature::VisitDecl(clang::Decl *decl)
 }
 
 std::vector<FixItHint> Qt6QHashSignature::fixitReplace(clang::FunctionDecl *funcDecl, bool changeReturnType, bool changeParamType)
-{   
+{
     std::string replacement = "";
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     if (!funcDecl)
         return fixits;
 

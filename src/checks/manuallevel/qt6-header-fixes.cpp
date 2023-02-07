@@ -44,11 +44,10 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
-static bool newOldHeaderFileMatch(string FileNameOld, string &FileNameNew)
+static bool newOldHeaderFileMatch(std::string FileNameOld, std::string &FileNameNew)
 {
-    static unordered_map<string, string> map = {
+    static std::unordered_map<std::string, std::string> map = {
         { "ActiveQt/QAxAggregated", "QtAxServer/QAxAggregated" },
         { "ActiveQt/QAxBase", "QtAxContainer/QAxBase" },
         { "ActiveQt/QAxBindable", "QtAxServer/QAxBindable" },
@@ -276,11 +275,11 @@ void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc, cons
     if (shouldIgnoreFile(HashLoc))
         return;
 
-    string newFileName = "";
+    std::string newFileName = "";
     if (!newOldHeaderFileMatch(FileName.str(), newFileName))
         return;
 
-    string replacement = "";
+    std::string replacement = "";
     if (IsAngled) {
         replacement = "<";
         replacement += newFileName;
@@ -292,9 +291,9 @@ void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc, cons
         replacement += "\"";
     }
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     fixits.push_back(FixItHint::CreateReplacement(FilenameRange.getAsRange(), replacement));
-    string message = "including ";
+    std::string message = "including ";
     message += FileName;
     emitWarning(FilenameRange.getAsRange().getBegin(), message, fixits);
     return;

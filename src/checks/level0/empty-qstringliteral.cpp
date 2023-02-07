@@ -34,7 +34,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 
 EmptyQStringliteral::EmptyQStringliteral(const std::string &name, ClazyContext *context)

@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *context)
@@ -63,7 +62,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return;
 
     CXXRecordDecl *record = ctorDecl->getParent();
-    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(record);
+    std::vector<QualType> typeList = clazy::getTemplateArgumentsTypes(record);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
     if (!t)
         return;
@@ -71,12 +70,12 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
     CXXRecordDecl *usersClass = t->getAsCXXRecordDecl();
     if (usersClass) {
         if (usersClass->hasTrivialDefaultConstructor() && usersClass->hasTrivialDefaultConstructor()) {
-            string error = string("Don't use Q_GLOBAL_STATIC with trivial type (") + usersClass->getNameAsString() + ')';
+            std::string error = std::string("Don't use Q_GLOBAL_STATIC with trivial type (") + usersClass->getNameAsString() + ')';
             emitWarning(loc, error.c_str());
         }
     } else {
         // Not a class, why use Q_GLOBAL_STATIC ?
-        string error = string("Don't use Q_GLOBAL_STATIC with non-class type (") + typeList[0].getAsString()  + ')';
+        std::string error = std::string("Don't use Q_GLOBAL_STATIC with non-class type (") + typeList[0].getAsString()  + ')';
         emitWarning(loc, error.c_str());
     }
 }

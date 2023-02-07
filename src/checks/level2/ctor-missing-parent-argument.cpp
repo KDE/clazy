@@ -35,7 +35,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, ClazyContext *context)
@@ -43,7 +42,7 @@ CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, Cl
 {
 }
 
-static string expectedParentTypeFor(CXXRecordDecl *decl)
+static std::string expectedParentTypeFor(CXXRecordDecl *decl)
 {
     if (clazy::derivesFrom(decl, "QWidget")) {
         return "QWidget";
@@ -76,7 +75,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     if (!hasCtors)
         return;
 
-    const string parentType = expectedParentTypeFor(record);
+    const std::string parentType = expectedParentTypeFor(record);
     int numCtors = 0;
     const bool hasQObjectParam = clazy::recordHasCtorWithParam(record, parentType, /*by-ref*/ ok, /*by-ref*/ numCtors);
     if (!ok)
@@ -94,7 +93,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
             return;
 
         emitWarning(decl, record->getQualifiedNameAsString() +
-                    string(" should take ") +
-                    parentType + string(" parent argument in CTOR"));
+                    std::string(" should take ") +
+                    parentType + std::string(" parent argument in CTOR"));
     }
 }

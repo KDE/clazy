@@ -38,7 +38,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 ConnectNotNormalized::ConnectNotNormalized(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -109,8 +108,8 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     std::string normalized = clazy::normalizedSignature(original.c_str());
 
     // discard the junk after '\0'
-    normalized = string(normalized.c_str());
-    original = string(original.c_str());
+    normalized = std::string(normalized.c_str());
+    original = std::string(original.c_str());
 
     if (original == normalized)
         return false;

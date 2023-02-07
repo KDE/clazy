@@ -42,10 +42,9 @@ public:
     void VisitStmt(clang::Stmt *) override;
 private:
     template<typename T>
-    void checkArgAt(T *call, unsigned int index, const regex &expr, const std::string &errorMessage);
+    void checkArgAt(T *call, unsigned int index, const std::regex &expr, const std::string &errorMessage);
     void checkConstructorCall(clang::Stmt *stm);
     void checkFunctionCall(clang::Stmt *stm);
 };
 
 #endif
-

@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *context)
@@ -50,27 +49,27 @@ WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *co
     m_filesToIgnore = { "qstring.h" };
 }
 
-static bool isDisallowedClass(const string &className)
+static bool isDisallowedClass(const std::string &className)
 {
-    static const vector<string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
-                                               "QScriptValue", "QTextLine", "QTextBlock", "QDomNode",
-                                               "QJSValue", "QTextTableCell" };
+    static const std::vector<std::string> disallowed = { "QTextCursor", "QDomElement", "KConfigGroup", "QWebElement",
+                                                         "QScriptValue", "QTextLine", "QTextBlock", "QDomNode",
+                                                         "QJSValue", "QTextTableCell" };
     return clazy::contains(disallowed, className);
 }
 
-static bool isDisallowedMethod(const string &name)
+static bool isDisallowedMethod(const std::string &name)
 {
-    static const vector<string> disallowed = { "QColor::getCmyk", "QColor::getCmykF" };
+    static const std::vector<std::string> disallowed = { "QColor::getCmyk", "QColor::getCmykF" };
     return clazy::contains(disallowed, name);
 }
 
-static bool isKnownType(const string &className)
+static bool isKnownType(const std::string &className)
 {
-    static const vector<string> types = { "QList", "QVector", "QMap", "QHash", "QString", "QSet",
-                                          "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
-                                          "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D",
-                                          "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
-                                          "QPointF", "QColor" };
+    static const std::vector<std::string> types = { "QList", "QVector", "QMap", "QHash", "QString", "QSet",
+                                                    "QByteArray", "QUrl", "QVarLengthArray", "QLinkedList",
+                                                    "QRect", "QRectF", "QBitmap", "QVector2D", "QVector3D",
+                                                    "QVector4D", "QSize", "QSizeF", "QSizePolicy", "QPoint",
+                                                    "QPointF", "QColor" };
 
     return clazy::contains(types, className);
 }
@@ -85,7 +84,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
         return;
 
     // For a chain like getFoo().setBar(), returns {setBar(), getFoo()}
-    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr is the call to setBar()
+    std::vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr is the call to setBar()
     if (callExprs.size() < 2)
         return;
 
@@ -120,7 +119,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
     if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy::startsWith(secondFunc->getNameAsString(), "set"))
         return;
 
-    const string &methodName = secondMethod->getQualifiedNameAsString();
+    const std::string &methodName = secondMethod->getQualifiedNameAsString();
     if (isDisallowedMethod(methodName))
         return;
 

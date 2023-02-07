@@ -52,7 +52,6 @@
 #include <mutex>
 
 using namespace clang;
-using namespace std;
 using namespace clang::ast_matchers;
 
 
@@ -185,7 +184,7 @@ void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
 #endif
 }
 
-static bool parseArgument(const string &arg, vector<string> &args)
+static bool parseArgument(const std::string &arg, std::vector<std::string> &args)
 {
     auto it = clazy::find(args, arg);
     if (it != args.end()) {
@@ -233,8 +232,8 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     std::vector<std::string> args = args_;
 
-    const string headerFilter = getEnvVariable("CLAZY_HEADER_FILTER");
-    const string ignoreDirs = getEnvVariable("CLAZY_IGNORE_DIRS");
+    const std::string headerFilter = getEnvVariable("CLAZY_HEADER_FILTER");
+    const std::string ignoreDirs = getEnvVariable("CLAZY_IGNORE_DIRS");
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
@@ -326,7 +325,7 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     const auto numChecks = checks.size();
     for (unsigned int i = 0; i < numChecks; ++i) {
         const RegisteredCheck &check = checks[i];
-        const string levelStr = "level" + to_string(check.level);
+        const std::string levelStr = "level" + std::to_string(check.level);
         if (lastPrintedLevel < check.level) {
             lastPrintedLevel = check.level;
 
@@ -336,7 +335,7 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
             ros << "- Checks from " << levelStr << ":\n";
         }
 
-        const string relativeReadmePath = "src/checks/" + levelStr + "/README-" + check.name + ".md";
+        const std::string relativeReadmePath = "src/checks/" + levelStr + "/README-" + check.name + ".md";
 
         auto padded = check.name;
         padded.insert(padded.end(), 39 - padded.size(), ' ');
@@ -368,11 +367,11 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     ros << "\n";
 }
 
-ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList,
-                                                   const string &headerFilter,
-                                                   const string &ignoreDirs,
-                                                   const string &exportFixesFilename,
-                                                   const std::vector<string> &translationUnitPaths,
+ClazyStandaloneASTAction::ClazyStandaloneASTAction(const std::string &checkList,
+                                                   const std::string &headerFilter,
+                                                   const std::string &ignoreDirs,
+                                                   const std::string &exportFixesFilename,
+                                                   const std::vector<std::string> &translationUnitPaths,
                                                    ClazyContext::ClazyOptions options)
     : clang::ASTFrontendAction()
     , m_checkList(checkList.empty() ? "level1" : checkList)
@@ -384,14 +383,14 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const string &checkList,
 {
 }
 
-unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
+std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
     auto context = new ClazyContext(ci, m_headerFilter, m_ignoreDirs, m_exportFixesFilename, m_translationUnitPaths, m_options);
     auto astConsumer = new ClazyASTConsumer(context);
 
     auto cm = CheckManager::instance();
 
-    vector<string> checks; checks.push_back(m_checkList);
+    std::vector<std::string> checks; checks.push_back(m_checkList);
     const bool qt4Compat = m_options & ClazyContext::ClazyOption_Qt4Compat;
     const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks, qt4Compat);
 
@@ -405,7 +404,7 @@ unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInst
         astConsumer->addCheck(check);
     }
 
-    return unique_ptr<ASTConsumer>(astConsumer);
+    return std::unique_ptr<ASTConsumer>(astConsumer);
 }
 
 volatile int ClazyPluginAnchorSource = 0;

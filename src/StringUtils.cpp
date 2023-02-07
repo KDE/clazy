@@ -31,7 +31,6 @@ namespace clang {
 class LangOptions;
 }  // namespace clang
 
-using namespace std;
 using namespace clang;
 
 std::string clazy::simpleArgTypeName(clang::FunctionDecl *func, unsigned int index, const clang::LangOptions &lo)
@@ -56,13 +55,13 @@ bool clazy::anyArgIsOfSimpleType(clang::FunctionDecl *func,
 }
 
 bool clazy::anyArgIsOfAnySimpleType(clang::FunctionDecl *func,
-                                    const vector<string> &simpleTypes,
+                                    const std::vector<std::string> &simpleTypes,
                                     const clang::LangOptions &lo)
 {
     if (!func)
         return false;
 
-    return clazy::any_of(simpleTypes, [func, lo](const string &simpleType) {
+    return clazy::any_of(simpleTypes, [func, lo](const std::string &simpleType) {
         return clazy::anyArgIsOfSimpleType(func, simpleType, lo);
     });
 }

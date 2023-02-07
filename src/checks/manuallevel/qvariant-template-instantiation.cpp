@@ -42,7 +42,6 @@
 
 class ClazyContext;
 
-using namespace std;
 using namespace clang;
 
 QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, ClazyContext *context)
@@ -52,11 +51,11 @@ QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &
 
 static bool isMatchingClass(StringRef name)
 {
-    static const vector<StringRef> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
-                                              "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
-                                              "QJsonValue", "QLocale", "QModelIndex", "QPoint", "QPointF",
-                                              "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
-                                              "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
+    static const std::vector<StringRef> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
+                                                   "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
+                                                   "QJsonValue", "QLocale", "QModelIndex", "QPoint", "QPointF",
+                                                   "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
+                                                   "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
 
     return clazy::contains(classes, name);
 }
@@ -75,7 +74,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     if (!decl || clazy::name(decl) != "QVariant")
         return;
 
-    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
+    std::vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
     if (!t)
         return;
@@ -89,9 +88,9 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     if (matches) {
-        string typeName = clazy::simpleTypeName(typeList[0], lo());
+        std::string typeName = clazy::simpleTypeName(typeList[0], lo());
 
-        string typeName2 = typeName;
+        std::string typeName2 = typeName;
         typeName2[0] = toupper(typeName2[0]);
 
 

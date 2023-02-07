@@ -39,3 +39,4 @@ checks.json.h
 file.hh.gch
 /build-*
 *.o.tmp
+compile_commands.json

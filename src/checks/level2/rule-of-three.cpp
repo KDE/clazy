@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 RuleOfThree::RuleOfThree(const std::string &name, ClazyContext *context)
     : RuleOfBase(name, context)
@@ -101,8 +100,8 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (numImplemented == 0 || numImplemented == 3) // Rule of 3 respected
         return;
 
-    vector<StringRef> hasList;
-    vector<StringRef> missingList;
+    std::vector<StringRef> hasList;
+    std::vector<StringRef> missingList;
     if (hasUserDtor)
         hasList.push_back("dtor");
     else
@@ -138,13 +137,13 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     if (Utils::hasMember(record, "QSharedDataPointer"))
         return; // These need boiler-plate copy ctor and dtor
 
-    const string className = record->getNameAsString();
-    const string classQualifiedName = record->getQualifiedNameAsString();
-    const string filename = static_cast<string>(sm().getFilename(recordStart));
+    const std::string className = record->getNameAsString();
+    const std::string classQualifiedName = record->getQualifiedNameAsString();
+    const std::string filename = static_cast<std::string>(sm().getFilename(recordStart));
     if (clazy::endsWith(className, "Private") && clazy::endsWithAny(filename, { ".cpp", ".cxx", "_p.h" }))
         return; // Lots of RAII classes fall into this category. And even Private (d-pointer) classes, warning in that case would just be noise
 
-    string msg = classQualifiedName + " has ";
+    std::string msg = classQualifiedName + " has ";
 
     for (int i = 0; i < numImplemented; ++i) {
         msg += hasList[i];

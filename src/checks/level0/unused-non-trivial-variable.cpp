@@ -46,7 +46,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name, ClazyContext *context)
@@ -74,10 +73,10 @@ void UnusedNonTrivialVariable::VisitStmt(clang::Stmt *stmt)
 
 bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) const
 {
-    static const vector<StringRef> blacklist = { "QMutexLocker", "QDebugStateSaver",
-                                                 "QTextBlockFormat", "QWriteLocker",
-                                                 "QSignalBlocker", "QReadLocker", "PRNGLocker", "QDBusWriteLocker", "QDBusBlockingCallWatcher",
-                                                 "QBoolBlocker", "QOrderedMutexLocker", "QTextLine", "QScopedScopeLevelCounter" };
+    static const std::vector<StringRef> blacklist = { "QMutexLocker", "QDebugStateSaver",
+                                                      "QTextBlockFormat", "QWriteLocker",
+                                                      "QSignalBlocker", "QReadLocker", "PRNGLocker", "QDBusWriteLocker", "QDBusBlockingCallWatcher",
+                                                      "QBoolBlocker", "QOrderedMutexLocker", "QTextLine", "QScopedScopeLevelCounter" };
 
     // Check some obvious candidates first
     StringRef typeName = clazy::name(record);
@@ -88,7 +87,7 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
     if (any)
         return true;
 
-    static const vector<StringRef> blacklistedTemplates = { "QScopedPointer", "QSetValueOnDestroy", "QScopedValueRollback" };
+    static const std::vector<StringRef> blacklistedTemplates = { "QScopedPointer", "QSetValueOnDestroy", "QScopedValueRollback" };
     StringRef className = clazy::name(record);
     for (StringRef templateName : blacklistedTemplates) {
         if (clazy::startsWith(static_cast<std::string>(className), static_cast<std::string>(templateName)))
@@ -109,19 +108,19 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
 bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
 {
     // TODO Remove QColor in Qt6
-    static const vector<StringRef> nonTrivialTypes = { "QColor", "QVariant", "QFont", "QUrl", "QIcon",
-                                                       "QImage", "QPixmap", "QPicture", "QBitmap", "QBrush",
-                                                       "QPen", "QBuffer", "QCache", "QDateTime", "QDir", "QEvent",
-                                                       "QFileInfo", "QFontInfo", "QFontMetrics", "QJSValue", "QLocale",
-                                                       "QRegularExpression", "QRegExp", "QUrlQuery", "QStorageInfo",
-                                                       "QPersistentModelIndex", "QJsonArray", "QJsonDocument",
-                                                       "QMimeType", "QBitArray", "QCollator",
-                                                       "QByteArrayList", "QCollatorSortKey",
-                                                       "QCursor", "QPalette", "QPainterPath", "QRegion", "QFontInfo", "QTextCursor",
-                                                       "QStaticText", "QFontMetricsF", "QTextFrameFormat", "QTextImageFormat",
-                                                       "QNetworkCookie", "QNetworkRequest", "QNetworkConfiguration",
-                                                       "QHostAddress", "QSqlQuery", "QSqlRecord", "QSqlField",
-                                                       "QLine", "QLineF", "QRect", "QRectF", "QDomNode"
+    static const std::vector<StringRef> nonTrivialTypes = { "QColor", "QVariant", "QFont", "QUrl", "QIcon",
+                                                            "QImage", "QPixmap", "QPicture", "QBitmap", "QBrush",
+                                                            "QPen", "QBuffer", "QCache", "QDateTime", "QDir", "QEvent",
+                                                            "QFileInfo", "QFontInfo", "QFontMetrics", "QJSValue", "QLocale",
+                                                            "QRegularExpression", "QRegExp", "QUrlQuery", "QStorageInfo",
+                                                            "QPersistentModelIndex", "QJsonArray", "QJsonDocument",
+                                                            "QMimeType", "QBitArray", "QCollator",
+                                                            "QByteArrayList", "QCollatorSortKey",
+                                                            "QCursor", "QPalette", "QPainterPath", "QRegion", "QFontInfo", "QTextCursor",
+                                                            "QStaticText", "QFontMetricsF", "QTextFrameFormat", "QTextImageFormat",
+                                                            "QNetworkCookie", "QNetworkRequest", "QNetworkConfiguration",
+                                                            "QHostAddress", "QSqlQuery", "QSqlRecord", "QSqlField",
+                                                            "QLine", "QLineF", "QRect", "QRectF", "QDomNode"
     };
 
     CXXRecordDecl *record = clazy::typeAsRecord(t);

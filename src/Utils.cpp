@@ -58,7 +58,6 @@ class LangOptions;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 {
@@ -231,7 +230,7 @@ ValueDecl *Utils::valueDeclForOperatorCall(CXXOperatorCallExpr *operatorCall)
     if (auto memberExpr = dyn_cast<MemberExpr>(child2)) {
         return memberExpr->getMemberDecl();
     } else {
-        vector<DeclRefExpr*> refs;
+        std::vector<DeclRefExpr*> refs;
         clazy::getChilds<DeclRefExpr>(child2, refs);
         if (refs.size() == 1) {
             return refs[0]->getDecl();
@@ -546,7 +545,7 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className,
 }
 
 
-bool Utils::isImplicitCastTo(Stmt *s, const string &className)
+bool Utils::isImplicitCastTo(Stmt *s, const std::string &className)
 {
     auto expr = dyn_cast<ImplicitCastExpr>(s);
     if (!expr)
@@ -607,12 +606,12 @@ CXXRecordDecl *Utils::isMemberVariable(ValueDecl *decl)
     return decl ? dyn_cast<CXXRecordDecl>(decl->getDeclContext()) : nullptr;
 }
 
-std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *record, const string &methodName)
+std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *record, const std::string &methodName)
 {
     if (!record)
         return {};
 
-    vector<CXXMethodDecl *> methods;
+    std::vector<CXXMethodDecl *> methods;
     clazy::append_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
         return clazy::name(m) == methodName;
     });
@@ -630,7 +629,7 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
     return methods;
 }
 
-const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, string &implicitCallee)
+const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, std::string &implicitCallee)
 {
     implicitCallee.clear();
     Expr *implicitArgument= call->getImplicitObjectArgument();
@@ -697,7 +696,7 @@ std::vector<CallExpr *> Utils::callListForChain(CallExpr *lastCallExpr)
         return {};
 
     const bool isOperator = isa<CXXOperatorCallExpr>(lastCallExpr);
-    vector<CallExpr *> callexprs = { lastCallExpr };
+    std::vector<CallExpr *> callexprs = { lastCallExpr };
     Stmt *s = lastCallExpr;
     do {
         const int childCount = std::distance(s->child_begin(), s->child_end());
@@ -758,7 +757,7 @@ CXXMethodDecl *Utils::copyAssign(const CXXRecordDecl *record)
     return nullptr;
 }
 
-bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
+bool Utils::hasMember(CXXRecordDecl *record, const std::string &memberTypeName)
 {
     if (!record)
         return false;
@@ -779,7 +778,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const string &memberTypeName)
 
 bool Utils::isSharedPointer(CXXRecordDecl *record)
 {
-    static const vector<string> names = { "std::shared_ptr", "QSharedPointer", "boost::shared_ptr" };
+    static const std::vector<std::string> names = { "std::shared_ptr", "QSharedPointer", "boost::shared_ptr" };
     return record ? clazy::contains(names, record->getQualifiedNameAsString()) : false;
 }
 
@@ -794,17 +793,17 @@ bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
     if (!body)
         return false;
 
-    vector<DeclStmt*> declStmts;
+    std::vector<DeclStmt*> declStmts;
     clazy::getChilds<DeclStmt>(body, declStmts);
     for (DeclStmt *declStmt : declStmts) {
         if (referencesVarDecl(declStmt, varDecl)) {
-            vector<DeclRefExpr*> declRefs;
+            std::vector<DeclRefExpr*> declRefs;
 
             clazy::getChilds<DeclRefExpr>(declStmt, declRefs);
             if (!declRefs.empty())
                 return true;
 
-            vector<CallExpr*> callExprs;
+            std::vector<CallExpr*> callExprs;
             clazy::getChilds<CallExpr>(declStmt, callExprs);
             if (!callExprs.empty())
                 return true;
@@ -870,16 +869,16 @@ clang::ArrayRef<clang::ParmVarDecl *> Utils::functionParameters(clang::FunctionD
     return func->parameters();
 }
 
-vector<CXXCtorInitializer *> Utils::ctorInitializer(CXXConstructorDecl *ctor, clang::ParmVarDecl *param)
+std::vector<CXXCtorInitializer *> Utils::ctorInitializer(CXXConstructorDecl *ctor, clang::ParmVarDecl *param)
 {
     if (!ctor)
         return {};
 
-    vector <CXXCtorInitializer *> result;
+    std::vector <CXXCtorInitializer *> result;
 
     for (auto it = ctor->init_begin(), end = ctor->init_end(); it != end; ++it) {
         auto ctorInit = *it;
-        vector<DeclRefExpr*> declRefs;
+        std::vector<DeclRefExpr*> declRefs;
         clazy::getChilds(ctorInit->getInit(), declRefs);
         for (auto declRef : declRefs) {
             if (declRef->getDecl() == param) {
@@ -897,7 +896,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
     if (!init)
         return false;
 
-    vector<CallExpr*> calls;
+    std::vector<CallExpr*> calls;
     clazy::getChilds(init->getInit(), calls);
 
     for (auto call : calls) {
@@ -911,19 +910,19 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
     return false;
 }
 
-bool Utils::ctorInitializerContainsMove(const vector<CXXCtorInitializer*> &ctorInits)
+bool Utils::ctorInitializerContainsMove(const std::vector<CXXCtorInitializer*> &ctorInits)
 {
     return clazy::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
         return Utils::ctorInitializerContainsMove(ctorInit);
     });
 }
 
-string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
+std::string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager &sm)
 {
     if (loc.isMacroID())
         loc = sm.getExpansionLoc(loc);
 
-    const string filename = static_cast<string>(sm.getFilename(loc));
+    const std::string filename = static_cast<std::string>(sm.getFilename(loc));
     auto splitted = clazy::splitString(filename, '/');
     if (splitted.empty())
         return {};

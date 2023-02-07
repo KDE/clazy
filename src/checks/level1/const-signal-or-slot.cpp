@@ -38,7 +38,6 @@ class FunctionDecl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name, ClazyContext *context)

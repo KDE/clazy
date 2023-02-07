@@ -32,7 +32,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 TrNonLiteral::TrNonLiteral(const std::string &name, ClazyContext *context)

@@ -36,7 +36,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QMapWithPointerKey::QMapWithPointerKey(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

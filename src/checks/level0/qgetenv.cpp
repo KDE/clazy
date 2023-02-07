@@ -43,7 +43,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -80,7 +79,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         return;
 
     StringRef methodname = clazy::name(method);
-    string errorMsg;
+    std::string errorMsg;
     std::string replacement;
     if (methodname == "isEmpty") {
         errorMsg = "qgetenv().isEmpty() allocates.";

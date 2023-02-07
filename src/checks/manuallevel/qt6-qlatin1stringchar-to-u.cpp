@@ -44,7 +44,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 Qt6QLatin1StringCharToU::Qt6QLatin1StringCharToU(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -225,8 +224,8 @@ void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingCtorCall(ctorExpr, m_context, true))
         return;
 
-    vector<FixItHint> fixits;
-    string message;
+    std::vector<FixItHint> fixits;
+    std::string message;
 
     for (auto macro_pos : m_listingMacroExpand) {
         if (m_sm.isPointWithin(macro_pos, clazy::getLocStart(stmt), clazy::getLocEnd(stmt))) {
@@ -250,8 +249,8 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
     if (!ctorExpr)
         return false;
 
-    vector<FixItHint> fixits;
-    string message;
+    std::vector<FixItHint> fixits;
+    std::string message;
 
     // parents are not checked when looking inside a QLatin1Char/String that does not support fixes
     // extra paratheses might be needed for the inner QLatin1Char/String fix

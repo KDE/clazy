@@ -36,11 +36,10 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 static bool isInterestingContainer(StringRef name)
 {
-    static const vector<StringRef> containers = { "QMap", "QHash" };
+    static const std::vector<StringRef> containers = { "QMap", "QHash" };
     return clazy::contains(containers, name);
 }
 

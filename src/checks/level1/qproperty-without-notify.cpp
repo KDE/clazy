@@ -36,7 +36,6 @@ class MacroInfo;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyContext *context)
@@ -69,7 +68,7 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
         return;
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
-    string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
+    std::string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
     if (text.empty()) {
         // If the text is empty, it is more likely there is an error
         // in parsing than an empty Q_PROPERTY macro call (which would
@@ -80,7 +79,7 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     if (text.back() == ')')
         text.pop_back();
 
-    vector<string> split = clazy::splitString(text, ' ');
+    std::vector<std::string> split = clazy::splitString(text, ' ');
 
     bool found_read = false;
     bool found_constant = false;

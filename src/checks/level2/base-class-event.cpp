@@ -41,7 +41,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -54,7 +53,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     if (!method || !method->hasBody() || !method->isThisDeclarationADefinition())
         return;
 
-    const string methodName = method->getNameAsString();
+    const std::string methodName = method->getNameAsString();
     const bool isEvent = methodName == "event";
     const bool isEventFilter = isEvent ? false : methodName == "eventFilter";
 
@@ -65,13 +64,13 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     if (!clazy::isQObject(classDecl))
         return;
 
-    const string className = classDecl->getQualifiedNameAsString();
+    const std::string className = classDecl->getQualifiedNameAsString();
     if (clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), className))
         return;
 
     CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
-    const string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
-                                           : string("BaseClass");
+    const std::string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
+                                                : std::string("BaseClass");
 
     if (isEventFilter && clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), baseClassName)) {
         // This is fine, QObject and QWidget eventFilter() don't do anything

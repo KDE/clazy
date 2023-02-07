@@ -35,7 +35,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 QStringVarargs::QStringVarargs(const std::string &name, ClazyContext *context)
@@ -64,5 +63,5 @@ void QStringVarargs::VisitStmt(clang::Stmt *stmt)
 
     StringRef name = clazy::name(record);
     if (name == "QString" || name == "QByteArray")
-        emitWarning(stmt, string("Passing ") + name.data() + string(" to variadic function"));
+        emitWarning(stmt, std::string("Passing ") + name.data() + std::string(" to variadic function"));
 }

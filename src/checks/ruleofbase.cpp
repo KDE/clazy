@@ -30,7 +30,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 RuleOfBase::RuleOfBase(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -44,29 +43,29 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
 
     const auto qualifiedName = clazy::classNameFor(record);
 
-    static const vector<string> blacklisted = { "QAtomicInt", "QBasicAtomicInteger", "QAtomicInteger", "QBasicAtomicPointer",
-                                                "QList::iterator", "QList::const_iterator", "QTextBlock::iterator",
-                                                "QAtomicPointer", "QtPrivate::ConverterMemberFunction",
-                                                "QtPrivate::ConverterMemberFunctionOk", "QtPrivate::ConverterFunctor",
-                                                "QtMetaTypePrivate::VariantData", "QScopedArrayPointer",
-                                                "QtPrivate::AlignOfHelper", "QColor", "QCharRef", "QByteRef",
-                                                "QObjectPrivate::Connection", "QMutableListIterator",
-                                                "QStringList", "QVariant::Private",
-                                                "QModelIndex", // Qt4
-                                                "QPair", // Qt4
-                                                "QSet", // Fixed for Qt 5.7
-                                                "QSet::iterator",
-                                                "QSet::const_iterator",
-                                                "QLinkedList::iterator",
-                                                "QLinkedList::const_iterator",
-                                                "QJsonArray::const_iterator",
-                                                "QJsonArray::iterator",
-                                                "QTextFrame::iterator",
-                                                "QFuture::const_iterator",
-                                                "QFuture::iterator",
-                                                "QMatrix",
-                                                "QBitRef", "QJsonValueRef",
-                                                "QTypedArrayData::iterator"
+    static const std::vector<std::string> blacklisted = { "QAtomicInt", "QBasicAtomicInteger", "QAtomicInteger", "QBasicAtomicPointer",
+                                                          "QList::iterator", "QList::const_iterator", "QTextBlock::iterator",
+                                                          "QAtomicPointer", "QtPrivate::ConverterMemberFunction",
+                                                          "QtPrivate::ConverterMemberFunctionOk", "QtPrivate::ConverterFunctor",
+                                                          "QtMetaTypePrivate::VariantData", "QScopedArrayPointer",
+                                                          "QtPrivate::AlignOfHelper", "QColor", "QCharRef", "QByteRef",
+                                                          "QObjectPrivate::Connection", "QMutableListIterator",
+                                                          "QStringList", "QVariant::Private",
+                                                          "QModelIndex", // Qt4
+                                                          "QPair", // Qt4
+                                                          "QSet", // Fixed for Qt 5.7
+                                                          "QSet::iterator",
+                                                          "QSet::const_iterator",
+                                                          "QLinkedList::iterator",
+                                                          "QLinkedList::const_iterator",
+                                                          "QJsonArray::const_iterator",
+                                                          "QJsonArray::iterator",
+                                                          "QTextFrame::iterator",
+                                                          "QFuture::const_iterator",
+                                                          "QFuture::iterator",
+                                                          "QMatrix",
+                                                          "QBitRef", "QJsonValueRef",
+                                                          "QTypedArrayData::iterator"
     };
     return clazy::contains(blacklisted, qualifiedName);
 }

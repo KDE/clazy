@@ -37,7 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Options options)
     : CheckBase(name, context, options)
@@ -55,8 +54,8 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
 
     StringRef className = clazy::name(record);
 
-    const std::unordered_map<string, std::vector<StringRef>> &methodsByType = detachingMethodType == DetachingMethod ? clazy::detachingMethods()
-                                                                                                                     : clazy::detachingMethodsWithConstCounterParts();
+    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType = detachingMethodType == DetachingMethod ? clazy::detachingMethods()
+                                                                                                                          : clazy::detachingMethodsWithConstCounterParts();
     auto it = methodsByType.find(static_cast<std::string>(className));
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;

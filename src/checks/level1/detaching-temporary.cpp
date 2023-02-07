@@ -45,7 +45,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *context)
     : DetachingBase(name, context, Option_CanIgnoreIncludes)
@@ -68,13 +67,13 @@ DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *co
 
 bool isAllowedChainedClass(const std::string &className)
 {
-    static const vector<string> allowed = {"QString", "QByteArray", "QVariant"};
+    static const std::vector<std::string> allowed = {"QString", "QByteArray", "QVariant"};
     return clazy::contains(allowed, className);
 }
 
 bool isAllowedChainedMethod(const std::string &methodName)
 {
-    static const vector<string> allowed = {"QMap::keys", "QMap::values", "QHash::keys", "QMap::values",
+    static const std::vector<std::string> allowed = {"QMap::keys", "QMap::values", "QHash::keys", "QMap::values",
                                            "QApplication::topLevelWidgets", "QAbstractItemView::selectedIndexes",
                                            "QListWidget::selectedItems", "QFile::encodeName", "QFile::decodeName",
                                            "QItemSelectionModel::selectedRows", "QTreeWidget::selectedItems",
@@ -92,7 +91,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
 
     // For a chain like getList().first(), returns {first(), getList()}
-    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
+    std::vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
     if (callExprs.size() < 2)
         return;
 
@@ -139,7 +138,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     StringRef className = clazy::name(classDecl);
 
-    const std::unordered_map<string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
+    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(static_cast<std::string>(className));
     auto it2 = m_writeMethodsByType.find(className);
 
@@ -156,7 +155,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     // Check if it's one of the detaching methods
     StringRef functionName = clazy::name(detachingMethod);
 
-    string error;
+    std::string error;
 
     const bool isReadFunction = clazy::contains(allowedFunctions, functionName);
     const bool isWriteFunction = clazy::contains(allowedWriteFunctions, functionName);

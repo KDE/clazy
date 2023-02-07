@@ -50,7 +50,6 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
 ReserveCandidates::ReserveCandidates(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -221,7 +220,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     if (!expr)
         return false;
 
-    vector<CallExpr*> callExprs;
+    std::vector<CallExpr*> callExprs;
     clazy::getChilds<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
@@ -234,7 +233,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
             return true;
     }
 
-    vector<ArraySubscriptExpr*> subscriptExprs;
+    std::vector<ArraySubscriptExpr*> subscriptExprs;
     clazy::getChilds<ArraySubscriptExpr>(expr, subscriptExprs);
     if (!subscriptExprs.empty())
         return true;
@@ -282,8 +281,8 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     int forCount = 0;
     int foreachCount = 0;
 
-    static vector<unsigned int> nonComplexOnesCache;
-    static vector<unsigned int> complexOnesCache;
+    static std::vector<unsigned int> nonComplexOnesCache;
+    static std::vector<unsigned int> complexOnesCache;
     auto rawLoc = clazy::getLocStart(s).getRawEncoding();
 
 

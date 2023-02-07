@@ -34,7 +34,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyContext *context)

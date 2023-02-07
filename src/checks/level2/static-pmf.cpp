@@ -34,7 +34,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 StaticPmf::StaticPmf(const std::string &name, ClazyContext *context)

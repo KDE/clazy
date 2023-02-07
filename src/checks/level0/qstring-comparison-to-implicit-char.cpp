@@ -28,7 +28,6 @@
 #include <clang/AST/AST.h>
 
 using namespace clang;
-using namespace std;
 
 
 QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::string &name, ClazyContext *context)

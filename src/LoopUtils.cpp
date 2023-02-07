@@ -40,7 +40,6 @@ namespace clang {
 class CXXConstructorDecl;
 }  // namespace clang
 
-using namespace std;
 using namespace clang;
 
 Stmt *clazy::bodyFromLoop(Stmt *loop)

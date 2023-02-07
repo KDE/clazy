@@ -52,7 +52,6 @@ class DeclContext;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 Foreach::Foreach(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -86,7 +85,7 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
     if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer")
         return;
 
-    vector<DeclRefExpr*> declRefExprs;
+    std::vector<DeclRefExpr*> declRefExprs;
     clazy::getChilds<DeclRefExpr>(constructExpr, declRefExprs);
     if (declRefExprs.empty())
         return;
@@ -140,13 +139,13 @@ void Foreach::VisitStmt(clang::Stmt *stmt)
 void Foreach::checkBigTypeMissingRef()
 {
     // Get the inner forstm
-    vector<ForStmt*> forStatements;
+    std::vector<ForStmt*> forStatements;
     clazy::getChilds<ForStmt>(m_lastForStmt->getBody(), forStatements);
     if (forStatements.empty())
         return;
 
     // Get the variable declaration (lhs of foreach)
-    vector<DeclStmt*> varDecls;
+    std::vector<DeclStmt*> varDecls;
     clazy::getChilds<DeclStmt>(forStatements.at(0), varDecls);
     if (varDecls.empty())
         return;
@@ -162,8 +161,8 @@ void Foreach::checkBigTypeMissingRef()
         return;
 
     if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef || classif.passSmallTrivialByValue) {
-        string error;
-        const string paramStr = varDecl->getType().getAsString();
+        std::string error;
+        const std::string paramStr = varDecl->getType().getAsString();
         if (classif.passBigTypeByConstRef) {
             error = "Missing reference in foreach with sizeof(T) = ";
             error += std::to_string(classif.size_of_T) + " bytes (" + paramStr + ')';
@@ -192,7 +191,7 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
             auto recordDecl = dyn_cast<CXXRecordDecl>(declContext);
             if (recordDecl) {
                 const std::string className = Utils::rootBaseClass(recordDecl)->getQualifiedNameAsString();
-                const std::unordered_map<string, std::vector<StringRef>> &detachingMethodsMap = clazy::detachingMethods();
+                const std::unordered_map<std::string, std::vector<StringRef>> &detachingMethodsMap = clazy::detachingMethods();
                 if (detachingMethodsMap.find(className) != detachingMethodsMap.end()) {
                     const std::string functionName = valDecl->getNameAsString();
                     const auto &allowedFunctions = detachingMethodsMap.at(className);

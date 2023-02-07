@@ -44,7 +44,6 @@
 #include <assert.h>
 
 using namespace clang;
-using namespace std;
 
 static bool isMemberVariable(Expr *expr)
 {
@@ -80,7 +79,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (!implicitCast)
         return false;
 
-    const string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
+    const std::string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
 
     const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = clazy::parentRecordForTypedef(typeTo);
@@ -117,7 +116,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     if (nameToIsIterator)
         return false;
 
-    const string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
+    const std::string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
     const bool nameFromIsIterator = nameFrom == "iterator" || clazy::endsWith(nameFrom, "::iterator");
     if (!nameFromIsIterator)
         return false;

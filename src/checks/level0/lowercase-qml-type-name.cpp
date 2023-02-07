@@ -29,7 +29,6 @@
 #include <cctype>
 
 using namespace clang;
-using namespace std;
 
 
 LowercaseQMlTypeName::LowercaseQMlTypeName(const std::string &name, ClazyContext *context)

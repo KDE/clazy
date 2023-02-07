@@ -27,13 +27,12 @@
 #include <clang/Basic/FileManager.h>
 
 using namespace clang;
-using namespace std;
 
 MiniAstDumperASTAction::MiniAstDumperASTAction()
 {
 }
 
-bool MiniAstDumperASTAction::ParseArgs(const CompilerInstance &, const std::vector<string> &)
+bool MiniAstDumperASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &)
 {
     return true;
 }

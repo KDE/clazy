@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 ChildEventQObjectCast::ChildEventQObjectCast(const std::string &name, ClazyContext *context)

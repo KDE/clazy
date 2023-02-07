@@ -44,7 +44,6 @@ class MacroInfo;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -82,13 +81,13 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
             return; // We found a Q_OBJECT after start and before end, it's ours.
     }
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 #if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
     fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
 
 # ifdef HAS_STD_FILESYSTEM
-    const std::string fileName = static_cast<string>(sm().getFilename(startLoc));
+    const std::string fileName = static_cast<std::string>(sm().getFilename(startLoc));
     if (clazy::endsWith(fileName, ".cpp")) {
         const std::string basename = std::filesystem::path(fileName).stem().string();
 

@@ -44,9 +44,8 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
-typedef vector<StringRef> ClassNameList;
+typedef std::vector<StringRef> ClassNameList;
 
 enum QtUnregularlyNamedEventTypes {
     DragEnter = 60,
@@ -120,16 +119,16 @@ WrongQEventCast::WrongQEventCast(const std::string &name, ClazyContext *context)
 
 }
 
-static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, string eventTypeStr, StringRef className)
+static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, std::string eventTypeStr, StringRef className)
 {
     // In the simplest case, the class is "Q" + eventType + "Event"
-    string expectedClassName = string("Q") + eventTypeStr + string("Event");
+    std::string expectedClassName = std::string("Q") + eventTypeStr + std::string("Event");
     if (expectedClassName == className)
         return true;
 
     // Otherwise it's unregular and we need a map:
 
-    static unordered_map<QtUnregularlyNamedEventTypes, ClassNameList, std::hash<int>> map = {
+    static std::unordered_map<QtUnregularlyNamedEventTypes, ClassNameList, std::hash<int>> map = {
         { ActionAdded, {"QActionEvent" } },
         { ActionRemoved, {"QActionEvent" } },
         { ActionChanged, {"QActionEvent" } },
@@ -274,11 +273,11 @@ void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
 
     auto enumeratorVal = static_cast<QtUnregularlyNamedEventTypes>(enumeratorDecl->getInitVal().getExtValue());
 
-    string eventTypeStr = enumeratorDecl->getNameAsString();
+    std::string eventTypeStr = enumeratorDecl->getNameAsString();
     StringRef castToName = clazy::name(castTo);
 
     if (eventTypeMatchesClass(enumeratorVal, eventTypeStr, castToName))
         return;
 
-    emitWarning(stmt, string("Cast from a QEvent::") + eventTypeStr + " event to " + string(castToName) + " looks suspicious.");
+    emitWarning(stmt, std::string("Cast from a QEvent::") + eventTypeStr + " event to " + std::string(castToName) + " looks suspicious.");
 }

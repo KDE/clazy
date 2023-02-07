@@ -39,7 +39,6 @@
 #include <string_view>
 
 using namespace clang;
-using namespace std;
 
 QtKeywordEmit::QtKeywordEmit(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

@@ -43,7 +43,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 static bool isQStringBuilder(QualType t)
 {

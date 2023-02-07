@@ -40,7 +40,6 @@ class CXXConstructorDecl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 ContainerInsideLoop::ContainerInsideLoop(const std::string &name, ClazyContext *context)

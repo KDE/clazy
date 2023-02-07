@@ -36,7 +36,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 OverriddenSignal::OverriddenSignal(const std::string &name, ClazyContext *context)

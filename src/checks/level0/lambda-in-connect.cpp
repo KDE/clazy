@@ -38,7 +38,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 
 LambdaInConnect::LambdaInConnect(const std::string &name, ClazyContext *context)

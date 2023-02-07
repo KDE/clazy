@@ -45,7 +45,6 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
 bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
 {
@@ -55,17 +54,17 @@ bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
     if (Utils::isSharedPointer(record))
         return true;
 
-    static const vector<string> ignoreList = {"QDebug", // Too many warnings
-                                              "QGenericReturnArgument",
-                                              "QColor", // TODO: Remove in Qt6
-                                              "QStringRef", // TODO: Remove in Qt6
-                                              "QList::const_iterator", // TODO: Remove in Qt6
-                                              "QJsonArray::const_iterator", // TODO: Remove in Qt6
-                                              "QList<QString>::const_iterator",  // TODO: Remove in Qt6
-                                              "QtMetaTypePrivate::QSequentialIterableImpl",
-                                              "QtMetaTypePrivate::QAssociativeIterableImpl",
-                                              "QVariantComparisonHelper",
-                                              "QHashDummyValue", "QCharRef", "QString::Null"
+    static const std::vector<std::string> ignoreList = {"QDebug", // Too many warnings
+                                                        "QGenericReturnArgument",
+                                                        "QColor", // TODO: Remove in Qt6
+                                                        "QStringRef", // TODO: Remove in Qt6
+                                                        "QList::const_iterator", // TODO: Remove in Qt6
+                                                        "QJsonArray::const_iterator", // TODO: Remove in Qt6
+                                                        "QList<QString>::const_iterator",  // TODO: Remove in Qt6
+                                                        "QtMetaTypePrivate::QSequentialIterableImpl",
+                                                        "QtMetaTypePrivate::QAssociativeIterableImpl",
+                                                        "QVariantComparisonHelper",
+                                                        "QHashDummyValue", "QCharRef", "QString::Null"
     };
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
@@ -73,23 +72,23 @@ bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
 bool FunctionArgsByRef::shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
-    static const vector<StringRef> ignoreList = { "operator<<" };
+    static const std::vector<StringRef> ignoreList = { "operator<<" };
 
     return clazy::contains(ignoreList, clazy::name(function));
 }
 
 bool FunctionArgsByRef::shouldIgnoreFunction(clang::FunctionDecl *function)
 {
-    static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
-                                                       "QMenu::exec", // Fixed in Qt6
-                                                       "QTextFrame::iterator", // Fixed in Qt6
-                                                       "QGraphicsWidget::addActions", // Fixed in Qt6
-                                                       "QListWidget::mimeData", // Fixed in Qt6
-                                                       "QTableWidget::mimeData", // Fixed in Qt6
-                                                       "QTreeWidget::mimeData", // Fixed in Qt6
-                                                       "QWidget::addActions", // Fixed in Qt6
-                                                       "QSslCertificate::verify", // Fixed in Qt6
-                                                       "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
+    static const std::vector<std::string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
+                                                                 "QMenu::exec", // Fixed in Qt6
+                                                                 "QTextFrame::iterator", // Fixed in Qt6
+                                                                 "QGraphicsWidget::addActions", // Fixed in Qt6
+                                                                 "QListWidget::mimeData", // Fixed in Qt6
+                                                                 "QTableWidget::mimeData", // Fixed in Qt6
+                                                                 "QTreeWidget::mimeData", // Fixed in Qt6
+                                                                 "QWidget::addActions", // Fixed in Qt6
+                                                                 "QSslCertificate::verify", // Fixed in Qt6
+                                                                 "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
     };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
@@ -132,14 +131,14 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         if (!success)
             continue;
 
-        vector<CXXCtorInitializer *> ctorInits = Utils::ctorInitializer(dyn_cast<CXXConstructorDecl>(func), param);
+        std::vector<CXXCtorInitializer *> ctorInits = Utils::ctorInitializer(dyn_cast<CXXConstructorDecl>(func), param);
         if (Utils::ctorInitializerContainsMove(ctorInits))
             continue;
 
         if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
-            string error;
+            std::string error;
             std::vector<FixItHint> fixits;
-            const string paramStr = param->getType().getAsString();
+            const std::string paramStr = param->getType().getAsString();
             if (classif.passBigTypeByConstRef) {
                 error = warningMsgForSmallType(classif.size_of_T, paramStr);
             } else if (classif.passNonTriviallyCopyableByConstRef) {
@@ -153,7 +152,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
 }
 
 void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *func, unsigned int parmIndex)
-{    
+{
     for (auto funcRedecl : func->redecls()) {
         auto funcParams = Utils::functionParameters(funcRedecl);
         if (funcParams.size() <= parmIndex)

@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 ContainerAntiPattern::ContainerAntiPattern(const std::string &name, ClazyContext *context)
@@ -54,9 +53,9 @@ static bool isInterestingCall(CallExpr *call)
     if (!func)
         return false;
 
-    static const vector<string> methods = { "QVector::toList", "QList::toVector", "QMap::values",
-                                            "QMap::keys", "QSet::toList", "QSet::values",
-                                            "QHash::values", "QHash::keys" };
+    static const std::vector<std::string> methods = { "QVector::toList", "QList::toVector", "QMap::values",
+                                                      "QMap::keys", "QSet::toList", "QSet::values",
+                                                      "QHash::values", "QHash::keys" };
 
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
@@ -69,7 +68,7 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
     if (VisitQSet(stmt))
         return;
 
-    vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
+    std::vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
     if (calls.size() < 2)
         return;
 
@@ -90,11 +89,11 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
         return false;
 
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
-    const string secondMethodName = clazy::qualifiedMethodName(secondMethod);
+    const std::string secondMethodName = clazy::qualifiedMethodName(secondMethod);
     if (secondMethodName != "QSet::isEmpty")
         return false;
 
-    vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
+    std::vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
     if (chainedCalls.size() < 2)
         return false;
 

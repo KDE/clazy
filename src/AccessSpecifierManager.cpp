@@ -48,7 +48,6 @@ class MacroDefinition;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs,
                                    const SourceManager &sm)
@@ -133,10 +132,10 @@ public:
         }
     }
 
-    vector<unsigned> m_individualSignals; // Q_SIGNAL
-    vector<unsigned> m_individualSlots;   // Q_SLOT
-    vector<unsigned> m_invokables; // Q_INVOKABLE
-    vector<unsigned> m_scriptables; // Q_SCRIPTABLE
+    std::vector<unsigned> m_individualSignals; // Q_SIGNAL
+    std::vector<unsigned> m_individualSlots;   // Q_SLOT
+    std::vector<unsigned> m_invokables; // Q_INVOKABLE
+    std::vector<unsigned> m_scriptables; // Q_SCRIPTABLE
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
@@ -147,7 +146,7 @@ AccessSpecifierManager::AccessSpecifierManager(ClazyContext *context)
     , m_fixitsEnabled(context->exportFixesEnabled())
 {
     Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
     m_visitsNonQObjects = getenv("CLAZY_ACCESSSPECIFIER_NON_QOBJECT") != nullptr;
 }
 

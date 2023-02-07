@@ -37,7 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 SkippedBaseMethod::SkippedBaseMethod(const std::string &name, ClazyContext *context)

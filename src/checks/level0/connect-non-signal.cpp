@@ -34,7 +34,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 
 ConnectNonSignal::ConnectNonSignal(const std::string &name, ClazyContext *context)
@@ -67,5 +66,5 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
 
     QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);
     if (qst != QtAccessSpecifier_Unknown && qst != QtAccessSpecifier_Signal)
-        emitWarning(call, method->getQualifiedNameAsString() + string(" is not a signal"));
+        emitWarning(call, method->getQualifiedNameAsString() + std::string(" is not a signal"));
 }

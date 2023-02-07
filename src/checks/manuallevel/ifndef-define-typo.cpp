@@ -31,7 +31,6 @@
 #include <iostream>
 
 using namespace clang;
-using namespace std;
 
 
 IfndefDefineTypo::IfndefDefineTypo(const std::string &name, ClazyContext *context)
@@ -89,7 +88,7 @@ void IfndefDefineTypo::VisitEndif(SourceLocation, SourceLocation)
     m_lastIfndef.clear();
 }
 
-void IfndefDefineTypo::maybeWarn(const string &define, SourceLocation loc)
+void IfndefDefineTypo::maybeWarn(const std::string &define, SourceLocation loc)
 {
     if (m_lastIfndef == "Q_CONSTRUCTOR_FUNCTION") // Transform into a list if more false-positives need to be added
         return;
@@ -104,6 +103,6 @@ void IfndefDefineTypo::maybeWarn(const string &define, SourceLocation loc)
 
     const int levDistance = levenshtein_distance(define, m_lastIfndef);
     if (levDistance < 3) {
-        emitWarning(loc, string("Possible typo in define. ") + m_lastIfndef + " vs " + define);
+        emitWarning(loc, std::string("Possible typo in define. ") + m_lastIfndef + " vs " + define);
     }
 }

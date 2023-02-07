@@ -44,7 +44,6 @@ class MacroInfo;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -88,7 +87,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
         return;
 
     const bool hasEmit = hasEmitKeyboard(methodCall);
-    const string methodName = method->getQualifiedNameAsString();
+    const std::string methodName = method->getQualifiedNameAsString();
     const bool isSignal = type == QtAccessSpecifier_Signal;
     if (isSignal && !hasEmit) {
         emitWarning(stmt, "Missing emit keyword on signal call " + methodName);

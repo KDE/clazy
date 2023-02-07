@@ -28,7 +28,6 @@
 #include <algorithm>
 
 using namespace clang;
-using namespace std;
 
 
 UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &name, ClazyContext *context)

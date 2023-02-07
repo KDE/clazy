@@ -50,7 +50,6 @@ class LangOptions;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 StringRefCandidates::StringRefCandidates(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -164,7 +163,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
     if (!isInterestingSecondMethod(method, lo()))
         return false;
 
-    vector<CallExpr *> callExprs = Utils::callListForChain(memberCall);
+    std::vector<CallExpr *> callExprs = Utils::callListForChain(memberCall);
     if (callExprs.size() < 2)
         return false;
 
@@ -177,7 +176,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
     if (isConvertedToSomethingElse(memberCall))
         return false;
 
-    const string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
+    const std::string firstMethodName = firstMemberCall->getMethodDecl()->getNameAsString();
     const std::vector<FixItHint> fixits = fixit(firstMemberCall);
 
     emitWarning(clazy::getLocEnd(firstMemberCall), "Use " + firstMethodName + "Ref() instead", fixits);

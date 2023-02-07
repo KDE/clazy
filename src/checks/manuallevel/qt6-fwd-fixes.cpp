@@ -47,7 +47,6 @@
 #include "llvm/MC/MCAsmMacro.h"
 
 using namespace clang;
-using namespace std;
 
 Qt6FwdFixes::Qt6FwdFixes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -113,7 +112,7 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
     if (!recDecl)
         return;
     auto parent = recDecl->getParent();
-    string parentType = parent->getDeclKindName();
+    std::string parentType = parent->getDeclKindName();
     if (parentType != "TranslationUnit")
         return;
     if (recDecl->hasDefinition())
@@ -139,12 +138,12 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
         beginLoc = recDecl->getBeginLoc();
     }
 
-    vector<FixItHint> fixits;
-    string message;
+    std::vector<FixItHint> fixits;
+    std::string message;
     auto warningLocation = beginLoc;
     SourceRange fixitRange = SourceRange(beginLoc, endLoc);
 
-    string replacement;
+    std::string replacement;
     CharSourceRange controledFixitRange = CharSourceRange(fixitRange, false);
     if (!m_including_qcontainerfwd) {
         replacement += "#include <QtCore/qcontainerfwd.h>\n";

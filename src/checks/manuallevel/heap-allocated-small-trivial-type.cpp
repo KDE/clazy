@@ -30,7 +30,6 @@
 #include <clang/AST/AST.h>
 
 using namespace clang;
-using namespace std;
 
 
 HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name,

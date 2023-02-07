@@ -39,7 +39,6 @@ namespace clang {
 class Decl;
 }  // namespace clang
 
-using namespace std;
 using namespace clang;
 
 MissingTypeInfo::MissingTypeInfo(const std::string &name, ClazyContext *context)
@@ -86,7 +85,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
 void MissingTypeInfo::registerQTypeInfo(ClassTemplateSpecializationDecl *decl)
 {
     if (clazy::name(decl) == "QTypeInfo") {
-        const string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/ true);
+        const std::string typeName = clazy::getTemplateArgumentTypeStr(decl, 0, lo(), /**recordOnly=*/ true);
         if (!typeName.empty())
             m_typeInfos.insert(typeName);
     }

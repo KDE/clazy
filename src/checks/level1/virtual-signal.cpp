@@ -33,7 +33,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 VirtualSignal::VirtualSignal(const std::string &name, ClazyContext *context)

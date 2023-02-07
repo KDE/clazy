@@ -46,27 +46,26 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
-static const regex methodSignatureRegex("\\((\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;))*\\)\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;|V)");
+static const std::regex methodSignatureRegex("\\((\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;))*\\)\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;|V)");
 
-static const regex classNameRegex("([a-zA-Z]+\\/)*[a-zA-Z]+");
+static const std::regex classNameRegex("([a-zA-Z]+\\/)*[a-zA-Z]+");
 
-static const regex methodNameRegex("[a-zA-Z]+");
+static const std::regex methodNameRegex("[a-zA-Z]+");
 
 JniSignatures::JniSignatures(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
 
-bool checkSignature(std::string signature, const regex &expr)
+bool checkSignature(std::string signature, const std::regex &expr)
 {
-    smatch match;
-    return regex_match(signature, match, expr);
+    std::smatch match;
+    return std::regex_match(signature, match, expr);
 }
 
 template<typename T>
-void JniSignatures::checkArgAt(T *call, unsigned int index, const regex &expr, const std::string &errorMessage)
+void JniSignatures::checkArgAt(T *call, unsigned int index, const std::regex &expr, const std::string &errorMessage)
 {
     if (call->getNumArgs() < index + 1)
         return;

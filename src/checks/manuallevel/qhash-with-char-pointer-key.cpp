@@ -34,7 +34,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name, ClazyContext *context)

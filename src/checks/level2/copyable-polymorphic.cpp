@@ -38,7 +38,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 /// Returns whether the class has non-private copy-ctor or copy-assign
@@ -98,9 +97,9 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
     emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.", fixits(record));
 }
 
-vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
+std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
 {
-    vector<FixItHint> result;
+    std::vector<FixItHint> result;
     if (!m_context->accessSpecifierManager)
         return {};
 
@@ -117,11 +116,11 @@ vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *recor
         pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
                                             false);
         result.push_back(clazy::createInsertion(
-            pos, string("\n\tQ_DISABLE_COPY(") + className.data() + string(")")));
+            pos, std::string("\n\tQ_DISABLE_COPY(") + className.data() + std::string(")")));
     } else {
         pos = record->getBraceRange().getEnd();
         result.push_back(clazy::createInsertion(
-            pos, string("\tQ_DISABLE_COPY(") + className.data() + string(")\n")));
+            pos, std::string("\tQ_DISABLE_COPY(") + className.data() + std::string(")\n")));
     }
 
     // If the class has a default constructor, then we need to readd it,
@@ -134,13 +133,13 @@ vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *recor
         if (pos.isInvalid()) {
             pos = record->getBraceRange().getBegin().getLocWithOffset(1);
             result.push_back(clazy::createInsertion(
-                pos, string("\npublic:\n\t") + className.data() + string("() = default;")));
+                pos, std::string("\npublic:\n\t") + className.data() + std::string("() = default;")));
         }
         else {
             pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
                                                 false);
             result.push_back(clazy::createInsertion(
-                pos, string("\n\t") + className.data() + string("() = default;")));
+                pos, std::string("\n\t") + className.data() + std::string("() = default;")));
         }
     }
 #endif

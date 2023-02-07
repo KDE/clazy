@@ -44,7 +44,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -53,13 +52,13 @@ QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     context->enablePreprocessorVisitor();
 }
 
-static string variableNameFromArg(Expr *arg)
+static std::string variableNameFromArg(Expr *arg)
 {
-    vector<DeclRefExpr*> declRefs;
+    std::vector<DeclRefExpr*> declRefs;
     clazy::getChilds<DeclRefExpr>(arg, declRefs);
     if (declRefs.size() == 1) {
         ValueDecl *decl = declRefs.at(0)->getDecl();
-        return decl ? decl->getNameAsString() : string();
+        return decl ? decl->getNameAsString() : std::string();
     }
 
     return {};
@@ -102,7 +101,7 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
     return isa<CXXDefaultArgExpr>(callExpr->getArg(1));
 }
 
-bool QStringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls)
+bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls)
 {
     const int size = calls.size();
     for (int i = 1; i < size; ++i) {
@@ -127,8 +126,8 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
             return;
     }
 
-    vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
-    vector<clang::CallExpr *> argCalls;
+    std::vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
+    std::vector<clang::CallExpr *> argCalls;
     for (auto call : callExprs) {
         if (!clazy::contains(m_alreadyProcessedChainedCalls, call) && isArgFuncWithOnlyQString(call)) {
             argCalls.push_back(call);
@@ -195,12 +194,12 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         ParmVarDecl *p = method->getParamDecl(2);
         if (p && clazy::name(p) == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
-            vector<IntegerLiteral*> literals;
+            std::vector<IntegerLiteral*> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
             if (!literals.empty())
                 return;
 
-            string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(2)));
+            std::string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(2)));
             if (clazy::contains(variableName, "base"))
                 return;
         }
@@ -208,13 +207,13 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         p = method->getParamDecl(1);
         if (p && clazy::name(p) == "fieldWidth") {
             // He specified a literal, so he knows what he's doing, otherwise he would have put it directly in the string
-            vector<IntegerLiteral*> literals;
+            std::vector<IntegerLiteral*> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);
             if (!literals.empty())
                 return;
 
             // the variable is named "width", user knows what he's doing
-            string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(1)));
+            std::string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(1)));
             if (clazy::contains(variableName, "width"))
                 return;
         }

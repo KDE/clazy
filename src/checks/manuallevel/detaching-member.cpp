@@ -44,7 +44,6 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
 DetachingMember::DetachingMember(const std::string &name, ClazyContext *context)
     : DetachingBase(name, context, Option_CanIgnoreIncludes)
@@ -105,7 +104,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     auto parentOp = clazy::getFirstParentOfType<CXXOperatorCallExpr>(m_context->parentMap, clazy::parent(m_context->parentMap, callExpr));
     if (parentOp) {
         FunctionDecl *parentFunc = parentOp->getDirectCallee();
-        const string parentFuncName = parentFunc ? parentFunc->getNameAsString() : "";
+        const std::string parentFuncName = parentFunc ? parentFunc->getNameAsString() : "";
         if (clazy::startsWith(parentFuncName, "operator")) {
             // m_foo[0] = ... is OK
             return;

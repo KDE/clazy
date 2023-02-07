@@ -46,7 +46,6 @@
 #include <utility>
 
 using namespace clang;
-using namespace std;
 
 TemporaryIterator::TemporaryIterator(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -64,10 +63,10 @@ TemporaryIterator::TemporaryIterator(const std::string &name, ClazyContext *cont
     m_methodsByType["QMultiHash"] = m_methodsByType["QHash"];
 }
 
-static bool isBlacklistedFunction(const string &name)
+static bool isBlacklistedFunction(const std::string &name)
 {
     // These are fine
-    static const vector<string> list = {"QVariant::toList", "QHash::operator[]", "QMap::operator[]", "QSet::operator[]"};
+    static const std::vector<std::string> list = {"QVariant::toList", "QHash::operator[]", "QMap::operator[]", "QSet::operator[]"};
     return clazy::contains(list, name);
 }
 

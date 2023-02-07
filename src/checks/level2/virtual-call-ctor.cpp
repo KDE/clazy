@@ -39,7 +39,6 @@
 
 class ClazyContext;
 
-using namespace std;
 using namespace clang;
 
 namespace clazy {

@@ -33,7 +33,6 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
 SuppressionManager::SuppressionManager()
 {
@@ -104,10 +103,10 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 return;
             }
 
-            static regex rx(R"(clazy:excludeall=(.*?)(\s|$))");
-            smatch match;
+            static std::regex rx(R"(clazy:excludeall=(.*?)(\s|$))");
+            std::smatch match;
             if (regex_search(comment, match, rx) && match.size() > 1) {
-                vector<string> checks = clazy::splitString(match[1], ',');
+                std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
             }
 
@@ -117,11 +116,11 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 continue;
             }
 
-            static regex rx2(R"(clazy:exclude=(.*?)(\s|$))");
+            static std::regex rx2(R"(clazy:exclude=(.*?)(\s|$))");
             if (regex_search(comment, match, rx2) && match.size() > 1) {
-                vector<string> checks = clazy::splitString(match[1], ',');
+                std::vector<std::string> checks = clazy::splitString(match[1], ',');
 
-                for (const string &checkName : checks) {
+                for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
                 }
             }

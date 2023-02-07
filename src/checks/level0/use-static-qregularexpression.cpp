@@ -32,7 +32,6 @@
 #include <clang/AST/ExprCXX.h>
 
 using namespace clang;
-using namespace std;
 
 UseStaticQRegularExpression::UseStaticQRegularExpression(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

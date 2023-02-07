@@ -33,14 +33,13 @@
 
 #include <stdlib.h>
 
-using namespace std;
 using namespace clang;
 
 
 ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
-                           const string &headerFilter, const string &ignoreDirs,
-                           string exportFixesFilename,
-                           const std::vector<string> &translationUnitPaths, ClazyOptions opts)
+                           const std::string &headerFilter, const std::string &ignoreDirs,
+                           std::string exportFixesFilename,
+                           const std::vector<std::string> &translationUnitPaths, ClazyOptions opts)
     : ci(compiler)
     , astContext(ci.getASTContext())
     , sm(ci.getSourceManager())

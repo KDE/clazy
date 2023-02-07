@@ -27,7 +27,6 @@
 #include "PreProcessorVisitor.h"
 
 using namespace clang;
-using namespace std;
 
 
 UseChronoInQTimer::UseChronoInQTimer(const std::string &name, ClazyContext *context)
@@ -75,7 +74,7 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
     else
         suggestion = std::to_string(value) + "ms";
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 #if LLVM_VERSION_MAJOR >= 11 // LLVM < 11 has a problem with \n in the yaml replacements file
     fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), suggestion));
 
@@ -127,4 +126,3 @@ void UseChronoInQTimer::VisitStmt(clang::Stmt *stmt)
 
     warn(callExpr->getArg(0), value);
 }
-

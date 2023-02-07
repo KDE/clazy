@@ -37,7 +37,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
@@ -59,8 +58,8 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
 
     std::string msg;
     if (qHashNS && argumentNS) {
-        const string argumentNSstr = argumentNS->getQualifiedNameAsString();
-        const string qhashNSstr = qHashNS->getQualifiedNameAsString();
+        const std::string argumentNSstr = argumentNS->getQualifiedNameAsString();
+        const std::string qhashNSstr = qHashNS->getQualifiedNameAsString();
         if (argumentNSstr != qhashNSstr)
             msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") to " + argumentNSstr + " namespace for ADL lookup";
     } else if (qHashNS && !argumentNS) {

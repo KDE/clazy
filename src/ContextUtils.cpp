@@ -35,7 +35,6 @@
 #include <llvm/Support/raw_ostream.h>
 
 using namespace clang;
-using namespace std;
 
 std::vector<DeclContext *> clazy::contextsForDecl(DeclContext *currentScope)
 {
@@ -49,7 +48,7 @@ std::vector<DeclContext *> clazy::contextsForDecl(DeclContext *currentScope)
     return decls;
 }
 
-static string nameForContext(DeclContext *context)
+static std::string nameForContext(DeclContext *context)
 {
     if (auto *ns = dyn_cast<NamespaceDecl>(context)) {
         return ns->getNameAsString();
@@ -66,7 +65,7 @@ static string nameForContext(DeclContext *context)
     return {};
 }
 
-string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
+std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
                                          CXXMethodDecl *method,
                                          DeclContext *currentScope,
                                          SourceLocation usageLoc, bool honourUsingDirectives)
@@ -81,7 +80,7 @@ string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
     auto visibleContexts = clazy::contextsForDecl(currentScope);
 
     // Collect using directives
-    vector<UsingDirectiveDecl*> usings;
+    std::vector<UsingDirectiveDecl*> usings;
     if (honourUsingDirectives) {
         for (DeclContext *context : visibleContexts) {
             clazy::append(context->using_directives(), usings);
@@ -115,12 +114,12 @@ string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager,
         }
     }
 
-    string neededContexts;
+    std::string neededContexts;
     for (DeclContext *context : methodContexts) {
         neededContexts = nameForContext(context) + "::" + neededContexts;
     }
 
-    const string result = neededContexts + method->getNameAsString();
+    const std::string result = neededContexts + method->getNameAsString();
     return result;
 }
 

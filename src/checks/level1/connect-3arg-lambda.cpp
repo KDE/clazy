@@ -36,7 +36,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 using uint = unsigned;
 
@@ -59,7 +58,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     if (numParams != 2 && numParams != 3)
         return;
 
-    string qualifiedName = fdecl->getQualifiedNameAsString();
+    std::string qualifiedName = fdecl->getQualifiedNameAsString();
     if (qualifiedName == "QTimer::singleShot") {
         processQTimer(fdecl, stmt);
         return;

@@ -39,7 +39,6 @@ class CXXMethodDecl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyContext *context)
@@ -62,7 +61,7 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
 
     Expr *typeArg = call->getArg(4); // The type
 
-    vector<DeclRefExpr*> result;
+    std::vector<DeclRefExpr*> result;
     clazy::getChilds(typeArg, result);
 
     bool found = false;

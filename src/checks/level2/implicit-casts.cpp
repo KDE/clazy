@@ -51,7 +51,6 @@ class ParentMap;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
@@ -196,13 +195,13 @@ bool ImplicitCasts::isBoolToInt(FunctionDecl *func) const
     if (func->getLanguageLinkage() != CXXLanguageLinkage || func->isVariadic())
         return false; // Disabled for now, too many false-positives when interacting with C code
 
-    static const vector<string> functions = {"QString::arg"};
+    static const std::vector<std::string> functions = {"QString::arg"};
     return !clazy::contains(functions, func->getQualifiedNameAsString());
 }
 
 bool ImplicitCasts::isMacroToIgnore(SourceLocation loc) const
 {
-    static const vector<StringRef> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
+    static const std::vector<StringRef> macros = {"QVERIFY",  "Q_UNLIKELY", "Q_LIKELY"};
     if (!loc.isMacroID())
         return false;
     StringRef macro = Lexer::getImmediateMacroName(loc, sm(), lo());

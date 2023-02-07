@@ -41,7 +41,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -54,12 +53,12 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (!secondCall || !secondCall->getMethodDecl())
         return;
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
-    const string secondMethodName = secondMethod->getQualifiedNameAsString();
+    const std::string secondMethodName = secondMethod->getQualifiedNameAsString();
     const bool isTimeT = secondMethodName == "QDateTime::toTime_t";
     if (!isTimeT && secondMethodName != "QDateTime::toUTC")
         return;
 
-    vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
+    std::vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
     if (chainedCalls.size() < 2)
         return;
 

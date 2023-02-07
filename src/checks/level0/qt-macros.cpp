@@ -29,7 +29,6 @@
 #include <llvm/ADT/StringRef.h>
 
 using namespace clang;
-using namespace std;
 
 QtMacros::QtMacros(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

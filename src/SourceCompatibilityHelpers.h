@@ -41,7 +41,6 @@ inline void boost::throw_exception(std::exception const &){}
 using namespace boost;
 #else
 # include <regex>
-using namespace std;
 #endif
 
 namespace clazy {

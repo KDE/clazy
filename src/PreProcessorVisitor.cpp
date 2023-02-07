@@ -36,7 +36,6 @@
 #include <memory>
 
 using namespace clang;
-using namespace std;
 
 PreProcessorVisitor::PreProcessorVisitor(const clang::CompilerInstance &ci)
     : clang::PPCallbacks()
@@ -60,7 +59,7 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
 
     uint fileId = m_sm.getFileID(loc).getHashValue();
 
-    vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
+    std::vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
     for (SourceRange &pair : pairs) {
         if (pair.getBegin().isInvalid() || pair.getEnd().isInvalid()) {
             //llvm::errs() << "PreProcessorVisitor::isBetweenQtNamespaceMacros Found invalid location\n";
@@ -100,7 +99,7 @@ std::string PreProcessorVisitor::getTokenSpelling(const MacroDefinition &def) co
         return {};
 
     const Preprocessor &pp = m_ci.getPreprocessor();
-    string result;
+    std::string result;
     for (const auto &tok : info->tokens())
         result += pp.getSpelling(tok);
 
@@ -120,7 +119,7 @@ void PreProcessorVisitor::handleQtNamespaceMacro(SourceLocation loc, StringRef n
 {
     const bool isBegin = name == "QT_BEGIN_NAMESPACE";
     uint fileId = m_sm.getFileID(loc).getHashValue();
-    vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
+    std::vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
 
     if (isBegin) {
         pairs.push_back(SourceRange(loc, {}));
@@ -138,7 +137,7 @@ void PreProcessorVisitor::handleQtNamespaceMacro(SourceLocation loc, StringRef n
     }
 }
 
-static int stringToNumber(const string &str)
+static int stringToNumber(const std::string &str)
 {
     if (str.empty())
         return -1;

@@ -36,7 +36,6 @@ class DeclContext;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyContext *context)

@@ -35,7 +35,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)

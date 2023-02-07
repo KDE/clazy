@@ -62,7 +62,6 @@ class SourceManager;
 /// It will be rewritten in a new check, so don't bother.
 
 using namespace clang;
-using namespace std;
 
 enum Fixit {
     FixitNone = 0,
@@ -98,8 +97,8 @@ void QStringAllocations::VisitStmt(clang::Stmt *stm)
 
 static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 {
-    static const vector<StringRef> methods = {"append", "compare", "endsWith", "startsWith", "insert",
-                                              "lastIndexOf", "prepend", "replace", "contains", "indexOf" };
+    static const std::vector<StringRef> methods = {"append", "compare", "endsWith", "startsWith", "insert",
+                                                   "lastIndexOf", "prepend", "replace", "contains", "indexOf" };
 
     if (!clazy::isOfClass(method, "QString"))
         return false;
@@ -168,7 +167,7 @@ static StringLiteral* stringLiteralForCall(Stmt *call)
     if (!call)
         return nullptr;
 
-    vector<StringLiteral*> literals;
+    std::vector<StringLiteral*> literals;
     clazy::getChilds(call, literals, 2);
     return literals.empty() ? nullptr : literals[0];
 }
@@ -224,7 +223,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
     }
 
     bool isQLatin1String = false;
-    string paramType;
+    std::string paramType;
     if (clazy::hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
     } else if (ctorDecl->param_size() == 1 && clazy::hasArgumentOfType(ctorDecl, "QLatin1String", lo())) {
@@ -234,7 +233,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
         return;
     }
 
-    string msg = string("QString(") + paramType + string(") being called");
+    std::string msg = std::string("QString(") + paramType + std::string(") being called");
 
     if (isQLatin1String) {
         ConditionalOperator *ternary = nullptr;
@@ -252,7 +251,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                 return;
         }
 
-        vector<FixItHint> fixits;
+        std::vector<FixItHint> fixits;
         if (qlatin1expr.enableFixit) {
             if (!clazy::getLocStart(qlatin1Ctor).isMacroID()) {
                 if (!ternary) {
@@ -277,7 +276,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
 
         maybeEmitWarning(clazy::getLocStart(ctorExpr), msg, fixits);
     } else {
-        vector<FixItHint> fixits;
+        std::vector<FixItHint> fixits;
         if (clazy::hasChildren(ctorExpr)) {
             auto pointerDecay = dyn_cast<ImplicitCastExpr>(*(ctorExpr->child_begin()));
             if (clazy::hasChildren(pointerDecay)) {
@@ -300,7 +299,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
 
                         auto parentMemberCallExpr = clazy::getFirstParentOfType<CXXMemberCallExpr>(m_context->parentMap, lt, /*maxDepth=*/ 6); // 6 seems like a nice max from the ASTs I've seen
 
-                        string replacement = "QStringLiteral";
+                        std::string replacement = "QStringLiteral";
                         if (parentMemberCallExpr) {
                             FunctionDecl *fDecl = parentMemberCallExpr->getDirectCallee();
                             if (fDecl) {
@@ -321,7 +320,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
     }
 }
 
-vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const string &replacement, const string &replacee)
+std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee)
 {
     StringLiteral *lt = stringLiteralForCall(begin);
     if (replacee == "QLatin1String") {
@@ -334,7 +333,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
     if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
         return {};
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     FixItHint fixit = clazy::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
     if (fixit.isNull()) {
         queueManualFixitWarning(clazy::getLocStart(begin), "");
@@ -345,9 +344,9 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt *begi
     return fixits;
 }
 
-vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
+std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *ternary)
 {
-    vector<CXXConstructExpr*> constructExprs;
+    std::vector<CXXConstructExpr*> constructExprs;
 
     auto addConstructExpr = [&constructExprs] (Expr* expr) {
         if (auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(expr)) {
@@ -369,7 +368,7 @@ vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(clang::C
         return {};
     }
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
     fixits.reserve(2);
     for (CXXConstructExpr *constructExpr : constructExprs) {
         SourceLocation rangeStart = clazy::getLocStart(constructExpr);
@@ -411,7 +410,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
         // QTest::newRow will static_assert when using QLatin1String
         // Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
 
-        string className = clazy::classNameFor(operatorCall);
+        std::string className = clazy::classNameFor(operatorCall);
         if (className == "QString") {
             return false;
         } else if (className.empty() && clazy::hasArgumentOfType(operatorCall->getDirectCallee(), "QString", lo)) {
@@ -435,7 +434,7 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
 
 std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(CallExpr *callExpr, FromFunction fromFunction)
 {
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 
     std::string replacement = isQStringLiteralCandidate(callExpr, m_context->parentMap, lo(), sm()) ? "QStringLiteral"
                                                                                                     : "QLatin1String";
@@ -471,9 +470,9 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
     return fixits;
 }
 
-std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral *lt, const string &replacement)
+std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral *lt, const std::string &replacement)
 {
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 
     SourceRange range = clazy::rangeForLiteral(&m_astContext, lt);
     if (range.isInvalid()) {
@@ -490,7 +489,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
         if (Utils::literalContainsEscapedBytes(lt, sm(), lo()))
             return {};
 
-        string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
+        std::string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
         if (revisedReplacement == "QStringLiteral" && clazy::getLocStart(lt).isMacroID()) {
             queueManualFixitWarning(clazy::getLocStart(lt), "Can't use QStringLiteral in macro...");
             return {};
@@ -532,9 +531,9 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     if (!clazy::hasCharPtrArgument(methodDecl))
         return;
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 
-    vector<StringLiteral*> literals;
+    std::vector<StringLiteral*> literals;
     clazy::getChilds<StringLiteral>(stm, literals, 2);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
@@ -546,11 +545,11 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     if (literals.empty()) {
         queueManualFixitWarning(clazy::getLocStart(stm), "Couldn't find literal");
     } else {
-        const string replacement = Utils::isAscii(literals[0]) ? "QLatin1String" : "QStringLiteral";
+        const std::string replacement = Utils::isAscii(literals[0]) ? "QLatin1String" : "QStringLiteral";
         fixits = fixItRawLiteral(literals[0], replacement);
     }
 
-    string msg = string("QString(const char*) being called");
+    std::string msg("QString(const char*) being called");
     maybeEmitWarning(clazy::getLocStart(stm), msg, fixits);
 }
 
@@ -581,12 +580,12 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         }
     }
 
-    vector<ConditionalOperator*> ternaries;
+    std::vector<ConditionalOperator*> ternaries;
     clazy::getChilds(callExpr, ternaries, 2);
     if (!ternaries.empty()) {
         auto ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {
-            maybeEmitWarning(clazy::getLocStart(stmt), string("QString::fromLatin1() being passed a literal"));
+            maybeEmitWarning(clazy::getLocStart(stmt), std::string("QString::fromLatin1() being passed a literal"));
         }
 
         return;
@@ -596,9 +595,9 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     const std::vector<FixItHint> fixits = fixItReplaceFromLatin1OrFromUtf8(callExpr, fromFunction);
 
     if (clazy::name(functionDecl) == "fromLatin1") {
-        maybeEmitWarning(clazy::getLocStart(stmt), string("QString::fromLatin1() being passed a literal"), fixits);
+        maybeEmitWarning(clazy::getLocStart(stmt), std::string("QString::fromLatin1() being passed a literal"), fixits);
     } else {
-        maybeEmitWarning(clazy::getLocStart(stmt), string("QString::fromUtf8() being passed a literal"), fixits);
+        maybeEmitWarning(clazy::getLocStart(stmt), std::string("QString::fromUtf8() being passed a literal"), fixits);
     }
 }
 
@@ -617,14 +616,14 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (!begin)
         return;
 
-    const vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String")
+    const std::vector<FixItHint> fixits = ternary == nullptr ? fixItReplaceWordWithWord(begin, "QStringLiteral", "QLatin1String")
                                                         : fixItReplaceWordWithWordInTernary(ternary);
 
 
-    maybeEmitWarning(clazy::getLocStart(stmt), string("QString::operator=(QLatin1String(\"literal\")"), fixits);
+    maybeEmitWarning(clazy::getLocStart(stmt), std::string("QString::operator=(QLatin1String(\"literal\")"), fixits);
 }
 
-void QStringAllocations::maybeEmitWarning(SourceLocation loc, string error, std::vector<FixItHint> fixits)
+void QStringAllocations::maybeEmitWarning(SourceLocation loc, std::string error, std::vector<FixItHint> fixits)
 {
     if (clazy::isUIFile(loc, sm())) {
         // Don't bother warning for generated UI files.

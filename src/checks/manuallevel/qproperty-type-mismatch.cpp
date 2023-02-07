@@ -51,7 +51,6 @@ class MacroInfo;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 
 QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name, ClazyContext *context)
@@ -209,7 +208,7 @@ void QPropertyTypeMismatch::checkFieldAgainstProperty (const Property& prop, con
     }
 }
 
-bool QPropertyTypeMismatch::typesMatch(const string &type1, QualType type2Qt, std::string &type2Cleaned) const
+bool QPropertyTypeMismatch::typesMatch(const std::string &type1, QualType type2Qt, std::string &type2Cleaned) const
 {
     type2Cleaned = cleanupType(type2Qt);
     if (type1 == type2Cleaned)
@@ -239,8 +238,8 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
 
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
-    string text = static_cast<string>(Lexer::getSourceText(crange, sm(), lo()));
-    using namespace std::string_literals;
+    std::string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
+    using namespace std::string_view_literals;
     constexpr std::string_view q_property_brace = "Q_PROPERTY("sv;
     if (clazy::startsWith(text, q_property_brace))
         text = text.substr(q_property_brace.size());

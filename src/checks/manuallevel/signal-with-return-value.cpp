@@ -30,7 +30,6 @@
 #include <clang/AST/AST.h>
 
 using namespace clang;
-using namespace std;
 
 
 SignalWithReturnValue::SignalWithReturnValue(const std::string &name, ClazyContext *context)

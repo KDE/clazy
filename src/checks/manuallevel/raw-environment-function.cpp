@@ -32,7 +32,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name, ClazyContext *context)

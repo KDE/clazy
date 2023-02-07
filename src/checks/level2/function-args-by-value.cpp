@@ -52,7 +52,6 @@ class Decl;
 }  // namespace clang
 
 using namespace clang;
-using namespace std;
 
 // TODO, go over all these
 bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
@@ -63,17 +62,17 @@ bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
     if (Utils::isSharedPointer(record))
         return true;
 
-    static const vector<string> ignoreList = {"QDebug", // Too many warnings
-                                              "QGenericReturnArgument",
-                                              "QColor", // TODO: Remove in Qt6
-                                              "QStringRef", // TODO: Remove in Qt6
-                                              "QList::const_iterator", // TODO: Remove in Qt6
-                                              "QJsonArray::const_iterator", // TODO: Remove in Qt6
-                                              "QList<QString>::const_iterator",  // TODO: Remove in Qt6
-                                              "QtMetaTypePrivate::QSequentialIterableImpl",
-                                              "QtMetaTypePrivate::QAssociativeIterableImpl",
-                                              "QVariantComparisonHelper",
-                                              "QHashDummyValue", "QCharRef", "QString::Null"
+    static const std::vector<std::string> ignoreList = {"QDebug", // Too many warnings
+                                                        "QGenericReturnArgument",
+                                                        "QColor", // TODO: Remove in Qt6
+                                                        "QStringRef", // TODO: Remove in Qt6
+                                                        "QList::const_iterator", // TODO: Remove in Qt6
+                                                        "QJsonArray::const_iterator", // TODO: Remove in Qt6
+                                                        "QList<QString>::const_iterator",  // TODO: Remove in Qt6
+                                                        "QtMetaTypePrivate::QSequentialIterableImpl",
+                                                        "QtMetaTypePrivate::QAssociativeIterableImpl",
+                                                        "QVariantComparisonHelper",
+                                                        "QHashDummyValue", "QCharRef", "QString::Null"
     };
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
@@ -81,23 +80,23 @@ bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
 bool FunctionArgsByValue::shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
-    static const vector<StringRef> ignoreList = { "operator<<" };
+    static const std::vector<StringRef> ignoreList = { "operator<<" };
 
     return clazy::contains(ignoreList, clazy::name(function));
 }
 
 bool FunctionArgsByValue::shouldIgnoreFunction(clang::FunctionDecl *function)
 {
-    static const vector<string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
-                                                       "QMenu::exec", // Fixed in Qt6
-                                                       "QTextFrame::iterator", // Fixed in Qt6
-                                                       "QGraphicsWidget::addActions", // Fixed in Qt6
-                                                       "QListWidget::mimeData", // Fixed in Qt6
-                                                       "QTableWidget::mimeData", // Fixed in Qt6
-                                                       "QTreeWidget::mimeData", // Fixed in Qt6
-                                                       "QWidget::addActions", // Fixed in Qt6
-                                                       "QSslCertificate::verify", // Fixed in Qt6
-                                                       "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
+    static const std::vector<std::string> qualifiedIgnoreList = {"QDBusMessage::createErrorReply", // Fixed in Qt6
+                                                                 "QMenu::exec", // Fixed in Qt6
+                                                                 "QTextFrame::iterator", // Fixed in Qt6
+                                                                 "QGraphicsWidget::addActions", // Fixed in Qt6
+                                                                 "QListWidget::mimeData", // Fixed in Qt6
+                                                                 "QTableWidget::mimeData", // Fixed in Qt6
+                                                                 "QTreeWidget::mimeData", // Fixed in Qt6
+                                                                 "QWidget::addActions", // Fixed in Qt6
+                                                                 "QSslCertificate::verify", // Fixed in Qt6
+                                                                 "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
     };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
@@ -160,7 +159,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
 
         if (classif.passSmallTrivialByValue) {
             if (ctor) { // Implements fix for Bug #379342
-                vector<CXXCtorInitializer *> initializers = Utils::ctorInitializer(ctor, param);
+                std::vector<CXXCtorInitializer *> initializers = Utils::ctorInitializer(ctor, param);
                 bool found_by_ref_member_init = false;
                 for (auto initializer : initializers) {
                     if (!initializer->isMemberInitializer())
@@ -191,8 +190,8 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
                 }
             }
 
-            const string paramStr = param->getType().getAsString();
-            string error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
+            const std::string paramStr = param->getType().getAsString();
+            std::string error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
             emitWarning(clazy::getLocStart(param), error.c_str(), fixits);
         }
     }
@@ -203,8 +202,8 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
 {
     QualType qt = clazy::unrefQualType(param->getType());
     qt.removeLocalConst();
-    const string typeName = qt.getAsString(PrintingPolicy(lo()));
-    string replacement = typeName + ' ' + string(clazy::name(param));
+    const std::string typeName = qt.getAsString(PrintingPolicy(lo()));
+    std::string replacement = typeName + ' ' + std::string(clazy::name(param));
     SourceLocation startLoc = clazy::getLocStart(param);
     SourceLocation endLoc = clazy::getLocEnd(param);
 

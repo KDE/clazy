@@ -37,7 +37,6 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
 QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -58,7 +57,7 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
             return;
     }
 
-    static const vector<StringRef> keywords = { "foreach", "signals", "slots", "emit" };
+    static const std::vector<StringRef> keywords = { "foreach", "signals", "slots", "emit" };
     std::string name = static_cast<std::string>(ii->getName());
     if (!clazy::contains(keywords, name))
         return;
@@ -73,5 +72,5 @@ void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange 
     std::transform(replacement.begin(), replacement.end(), replacement.begin(), ::toupper);
     fixits.push_back(clazy::createReplacement(range, replacement));
 
-    emitWarning(range.getBegin(), "Using a Qt keyword (" + string(ii->getName()) + ")", fixits);
+    emitWarning(range.getBegin(), "Using a Qt keyword (" + std::string(ii->getName()) + ")", fixits);
 }

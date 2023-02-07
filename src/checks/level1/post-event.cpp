@@ -31,7 +31,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 
 PostEvent::PostEvent(const std::string &name, ClazyContext *context)
