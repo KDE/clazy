@@ -71,7 +71,7 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
 
     for (auto capture : captures) {
         if (capture.getCaptureKind() == clang::LCK_ByRef) {
-            VarDecl *declForCapture = capture.getCapturedVar();
+            auto *declForCapture = capture.getCapturedVar();
             if (declForCapture && declForCapture != receiverDecl && clazy::isValueDeclInFunctionContext(declForCapture))
                 emitWarning(capture.getLocation(), "captured local variable by reference might go out of scope before lambda is called");
         }

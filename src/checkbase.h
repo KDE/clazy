@@ -93,6 +93,7 @@ public:
     void InclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
                             clang::CharSourceRange FilenameRange, clazy::OptionalFileEntryRef File, clang::StringRef SearchPath,
                             clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType) override;
+
 private:
     CheckBase *const check;
 };
