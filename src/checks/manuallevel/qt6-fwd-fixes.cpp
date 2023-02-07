@@ -161,15 +161,15 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
 }
 
 void Qt6FwdFixes::VisitInclusionDirective(clang::SourceLocation HashLoc,
-                                          const clang::Token &IncludeTok,
+                                          const clang::Token & /*IncludeTok*/,
                                           clang::StringRef FileName,
-                                          bool IsAngled,
-                                          clang::CharSourceRange FilenameRange,
-                                          clazy::OptionalFileEntryRef File,
-                                          clang::StringRef SearchPath,
-                                          clang::StringRef RelativePath,
-                                          const clang::Module *Imported,
-                                          clang::SrcMgr::CharacteristicKind FileType)
+                                          bool /*IsAngled*/,
+                                          clang::CharSourceRange /*FilenameRange*/,
+                                          clazy::OptionalFileEntryRef /*File*/,
+                                          clang::StringRef /*SearchPath*/,
+                                          clang::StringRef /*RelativePath*/,
+                                          const clang::Module * /*Imported*/,
+                                          clang::SrcMgr::CharacteristicKind /*FileType*/)
 {
     auto current_file = m_sm.getFilename(HashLoc);
     if (FileName.str() == "QtCore/qcontainerfwd.h") {

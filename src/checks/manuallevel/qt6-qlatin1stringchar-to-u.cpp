@@ -395,7 +395,7 @@ std::string Qt6QLatin1StringCharToU::buildReplacement(clang::Stmt *stmt, bool &n
     return replacement;
 }
 
-void Qt6QLatin1StringCharToU::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *info)
+void Qt6QLatin1StringCharToU::VisitMacroExpands(const clang::Token & /*MacroNameTok*/, const clang::SourceRange &range, const MacroInfo * /*info*/)
 {
     m_listingMacroExpand.push_back(range.getBegin());
     return;

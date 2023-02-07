@@ -268,15 +268,15 @@ Qt6HeaderFixes::Qt6HeaderFixes(const std::string &name, ClazyContext *context)
 }
 
 void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc,
-                                             const clang::Token &IncludeTok,
+                                             const clang::Token & /*IncludeTok*/,
                                              clang::StringRef FileName,
                                              bool IsAngled,
                                              clang::CharSourceRange FilenameRange,
-                                             clazy::OptionalFileEntryRef File,
-                                             clang::StringRef SearchPath,
-                                             clang::StringRef RelativePath,
-                                             const clang::Module *Imported,
-                                             clang::SrcMgr::CharacteristicKind FileType)
+                                             clazy::OptionalFileEntryRef /*File*/,
+                                             clang::StringRef /*SearchPath*/,
+                                             clang::StringRef /*RelativePath*/,
+                                             const clang::Module * /*Imported*/,
+                                             clang::SrcMgr::CharacteristicKind /*FileType*/)
 {
     if (shouldIgnoreFile(HashLoc))
         return;

@@ -229,7 +229,7 @@ void replacementForQSignalMapper(clang::MemberExpr *membExpr, std::string &messa
     replacement += functionNameExtention;
 }
 
-void replacementForQResource(std::string functionName, std::string &message, std::string &replacement)
+void replacementForQResource(std::string /*functionName*/, std::string &message, std::string &replacement)
 {
     message = "call function QRessource::isCompressed(). Use function QProcess::compressionAlgorithm() instead.";
     replacement = "compressionAlgorithm";
@@ -395,7 +395,8 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     return;
 }
 
-std::string Qt6DeprecatedAPIFixes::buildReplacementforQDir(DeclRefExpr *decl_operator, bool isPointer, std::string replacement, std::string replacement_var2)
+std::string
+Qt6DeprecatedAPIFixes::buildReplacementforQDir(DeclRefExpr * /*decl_operator*/, bool isPointer, std::string replacement, std::string replacement_var2)
 {
     if (isPointer)
         replacement += "->";
@@ -779,7 +780,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
     return;
 }
 
-void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
+void Qt6DeprecatedAPIFixes::VisitMacroExpands(const clang::Token & /*MacroNameTok*/, const clang::SourceRange &range, const MacroInfo *)
 {
     m_listingMacroExpand.push_back(range.getBegin());
     return;

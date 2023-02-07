@@ -269,7 +269,7 @@ static bool referencesVar(Stmt *s, const VarDecl *varDecl)
     return false;
 }
 
-bool Utils::containsNonConstMemberCall(clang::ParentMap *map, Stmt *body, const VarDecl *varDecl)
+bool Utils::containsNonConstMemberCall(clang::ParentMap * /*map*/, Stmt *body, const VarDecl *varDecl)
 {
     if (!varDecl)
         return false;
@@ -391,7 +391,7 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
     return false;
 }
 
-bool Utils::addressIsTaken(const clang::CompilerInstance &ci, Stmt *body, const clang::ValueDecl *valDecl)
+bool Utils::addressIsTaken(const clang::CompilerInstance & /*ci*/, Stmt *body, const clang::ValueDecl *valDecl)
 {
     if (!body || !valDecl)
         return false;
