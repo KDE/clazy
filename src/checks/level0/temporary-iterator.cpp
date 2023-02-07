@@ -146,7 +146,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
             }
 
             Stmt *firstChild = clazy::getFirstChild(impl);
-            if (firstChild && isa<ImplicitCastExpr>(firstChild) && dyn_cast<ImplicitCastExpr>(firstChild)->getCastKind() == CK_LValueToRValue) {
+            if (isa_and_nonnull<ImplicitCastExpr>(firstChild) && dyn_cast<ImplicitCastExpr>(firstChild)->getCastKind() == CK_LValueToRValue) {
                 return;
             }
         }

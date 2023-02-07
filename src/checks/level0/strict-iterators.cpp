@@ -131,7 +131,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
     }
 
     auto *p = m_context->parentMap->getParent(implicitCast);
-    if (dyn_cast<CXXOperatorCallExpr>(p)) {
+    if (isa<CXXOperatorCallExpr>(p)) {
         return false;
     }
 

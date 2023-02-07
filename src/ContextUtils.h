@@ -55,7 +55,7 @@ namespace clazy
 inline bool isValueDeclInFunctionContext(const clang::ValueDecl *valueDecl)
 {
     const auto *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
-    return context && llvm::isa<clang::FunctionDecl>(context) && !llvm::isa<clang::ParmVarDecl>(valueDecl);
+    return llvm::isa_and_nonnull<clang::FunctionDecl>(context) && !llvm::isa<clang::ParmVarDecl>(valueDecl);
 }
 
 /**

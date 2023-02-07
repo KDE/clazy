@@ -57,7 +57,7 @@ static std::string nameForContext(DeclContext *context)
         return rec->getNameAsString();
     } else if (auto *method = dyn_cast<CXXMethodDecl>(context)) {
         return method->getNameAsString();
-    } else if (dyn_cast<TranslationUnitDecl>(context)) {
+    } else if (isa<TranslationUnitDecl>(context)) {
         return {};
     } else {
         llvm::errs() << "Unhandled kind: " << context->getDeclKindName() << "\n";
