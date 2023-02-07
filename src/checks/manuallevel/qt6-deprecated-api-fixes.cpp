@@ -52,7 +52,7 @@ Qt6DeprecatedAPIFixes::Qt6DeprecatedAPIFixes(const std::string &name, ClazyConte
     enablePreProcessorCallbacks();
 }
 
-void replacementForQWizard(std::string functionName, std::string &message, std::string &replacement)
+void replacementForQWizard(const std::string& functionName, std::string &message, std::string &replacement)
 {
     message = "call function QProcess::";
     message += functionName;
@@ -155,7 +155,7 @@ bool warningForQComboBox(clang::MemberExpr *membExpr, std::string &message)
     return true;
 }
 
-bool replacementForQComboBox(clang::MemberExpr *membExpr, std::string functionName, std::string &message, std::string &replacement)
+bool replacementForQComboBox(clang::MemberExpr *membExpr, const std::string& functionName, std::string &message, std::string &replacement)
 {
     auto declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
@@ -181,7 +181,7 @@ bool replacementForQComboBox(clang::MemberExpr *membExpr, std::string functionNa
 
 static std::set<std::string> qProcessDeprecatedFunctions = {"start"};
 
-void replacementForQProcess(std::string functionName, std::string &message, std::string &replacement)
+void replacementForQProcess(const std::string& functionName, std::string &message, std::string &replacement)
 {
     message = "call function QProcess::";
     message += functionName;
@@ -229,7 +229,7 @@ void replacementForQSignalMapper(clang::MemberExpr *membExpr, std::string &messa
     replacement += functionNameExtention;
 }
 
-void replacementForQResource(std::string /*functionName*/, std::string &message, std::string &replacement)
+void replacementForQResource(const std::string& /*functionName*/, std::string &message, std::string &replacement)
 {
     message = "call function QRessource::isCompressed(). Use function QProcess::compressionAlgorithm() instead.";
     replacement = "compressionAlgorithm";
@@ -239,7 +239,7 @@ static std::set<std::string> qSetDeprecatedOperators = {"operator--", "operator+
 static std::set<std::string> qSetDeprecatedFunctions = {"rbegin", "rend", "crbegin", "crend", "hasPrevious", "previous", "peekPrevious", "findPrevious"};
 static std::set<std::string> qHashDeprecatedFunctions = {"hasPrevious", "previous", "peekPrevious", "findPrevious"};
 
-bool isQSetDepreprecatedOperator(std::string functionName, std::string contextName, std::string &message)
+bool isQSetDepreprecatedOperator(const std::string& functionName, const std::string& contextName, std::string &message)
 {
     if (qSetDeprecatedOperators.find(functionName) == qSetDeprecatedOperators.end())
         return false;
@@ -256,7 +256,7 @@ bool isQSetDepreprecatedOperator(std::string functionName, std::string contextNa
 
 static std::set<std::string> qGraphicsViewFunctions = {"matrix", "setMatrix", "resetMatrix"};
 
-void warningForGraphicsViews(std::string functionName, std::string &message)
+void warningForGraphicsViews(const std::string& functionName, std::string &message)
 {
     if (functionName == "matrix") {
         message = "Using QGraphicsView::matrix. Use transform() instead";
@@ -288,7 +288,7 @@ static std::set<std::string> qTextStreamFunctions = {"bin",           "oct",
                                                      "flush",         "reset",
                                                      "bom",           "ws"};
 
-void replacementForQTextStreamFunctions(std::string functionName, std::string &message, std::string &replacement, bool explicitQtNamespace)
+void replacementForQTextStreamFunctions(const std::string& functionName, std::string &message, std::string &replacement, bool explicitQtNamespace)
 {
     if (qTextStreamFunctions.find(functionName) == qTextStreamFunctions.end())
         return;
@@ -303,7 +303,7 @@ void replacementForQTextStreamFunctions(std::string functionName, std::string &m
     replacement += functionName;
 }
 
-void replacementForQStringSplitBehavior(std::string functionName, std::string &message, std::string &replacement, bool explicitQtNamespace)
+void replacementForQStringSplitBehavior(const std::string& functionName, std::string &message, std::string &replacement, bool explicitQtNamespace)
 {
     message = "Use Qt::SplitBehavior variant instead";
     if (!explicitQtNamespace)
@@ -311,7 +311,7 @@ void replacementForQStringSplitBehavior(std::string functionName, std::string &m
     replacement += functionName;
 }
 
-bool getMessageForDeclWarning(std::string type, std::string &message)
+bool getMessageForDeclWarning(const std::string& type, std::string &message)
 {
     if (clazy::contains(type, "QLinkedList")) {
         message = "Using QLinkedList. Use std::list instead";
@@ -396,7 +396,7 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
 }
 
 std::string
-Qt6DeprecatedAPIFixes::buildReplacementforQDir(DeclRefExpr * /*decl_operator*/, bool isPointer, std::string replacement, std::string replacement_var2)
+Qt6DeprecatedAPIFixes::buildReplacementforQDir(DeclRefExpr * /*decl_operator*/, bool isPointer, std::string replacement, const std::string& replacement_var2)
 {
     if (isPointer)
         replacement += "->";
@@ -408,7 +408,7 @@ Qt6DeprecatedAPIFixes::buildReplacementforQDir(DeclRefExpr * /*decl_operator*/, 
     return replacement;
 }
 
-std::string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(DeclRefExpr *decl_operator, std::string replacement_var1, std::string replacement_var2)
+std::string Qt6DeprecatedAPIFixes::buildReplacementForQVariant(DeclRefExpr *decl_operator, const std::string& replacement_var1, const std::string& replacement_var2)
 {
     std::string replacement = "QVariant::compare(";
     replacement += replacement_var1;
@@ -432,7 +432,7 @@ bool foundQVariantDeprecatedOperator(DeclRefExpr *decl)
     return qVariantDeprecatedOperator.find(decl->getNameInfo().getAsString()) != qVariantDeprecatedOperator.end();
 }
 
-void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, std::string className)
+void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, const std::string& className)
 {
     // only interested in '=' operator for QDir
     std::vector<FixItHint> fixits;

@@ -120,7 +120,7 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (auto s : ci.getPreprocessorOpts().Macros) {
+        for (const auto& s : ci.getPreprocessorOpts().Macros) {
             if (s.first == "QT_CORE_LIB")
                 return true;
         }

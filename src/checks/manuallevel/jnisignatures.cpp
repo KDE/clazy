@@ -58,7 +58,7 @@ JniSignatures::JniSignatures(const std::string &name, ClazyContext *context)
 {
 }
 
-bool checkSignature(std::string signature, const std::regex &expr)
+bool checkSignature(const std::string& signature, const std::regex &expr)
 {
     std::smatch match;
     return std::regex_match(signature, match, expr);

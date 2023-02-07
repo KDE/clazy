@@ -116,7 +116,7 @@ WrongQEventCast::WrongQEventCast(const std::string &name, ClazyContext *context)
 {
 }
 
-static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, std::string eventTypeStr, StringRef className)
+static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, const std::string& eventTypeStr, StringRef className)
 {
     // In the simplest case, the class is "Q" + eventType + "Event"
     std::string expectedClassName = std::string("Q") + eventTypeStr + std::string("Event");

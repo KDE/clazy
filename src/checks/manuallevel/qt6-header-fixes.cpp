@@ -45,7 +45,7 @@
 
 using namespace clang;
 
-static bool newOldHeaderFileMatch(std::string FileNameOld, std::string &FileNameNew)
+static bool newOldHeaderFileMatch(const std::string& FileNameOld, std::string &FileNameNew)
 {
     static std::unordered_map<std::string, std::string> map = {
         {"ActiveQt/QAxAggregated", "QtAxServer/QAxAggregated"},

@@ -208,7 +208,7 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
 
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
     auto createdChecks = m_checkManager->createChecks(m_checks, m_context);
-    for (auto check : createdChecks) {
+    for (const auto& check : createdChecks) {
         astConsumer->addCheck(check);
     }
 

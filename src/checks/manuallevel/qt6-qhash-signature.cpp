@@ -50,7 +50,7 @@ Qt6QHashSignature::Qt6QHashSignature(const std::string &name, ClazyContext *cont
 {
 }
 
-static bool isInterestingFunction(std::string name)
+static bool isInterestingFunction(const std::string& name)
 {
     if (name == "qHash" || name == "qHashBits" || name == "qHashRange" || name == "qHashRangeCommutative")
         return true;

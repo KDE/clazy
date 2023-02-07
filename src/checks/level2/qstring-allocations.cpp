@@ -50,6 +50,8 @@
 
 #include <assert.h>
 
+#include <utility>
+
 namespace clang
 {
 class LangOptions;
@@ -642,5 +644,5 @@ void QStringAllocations::maybeEmitWarning(SourceLocation loc, std::string error,
         fixits = {};
     }
 
-    emitWarning(loc, error, fixits);
+    emitWarning(loc, std::move(error), fixits);
 }
