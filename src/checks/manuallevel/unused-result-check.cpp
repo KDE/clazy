@@ -40,7 +40,7 @@ public:
         : ClazyAstMatcherCallback(check)
     {
     }
-    virtual void run(const MatchFinder::MatchResult &result)
+    void run(const MatchFinder::MatchResult &result) override
     {
         if (const auto *callExpr = result.Nodes.getNodeAs<CXXMemberCallExpr>("callExpr")) {
             if (callExpr->getMethodDecl()->isConst() && !callExpr->getMethodDecl()->getReturnType()->isVoidType()) {
