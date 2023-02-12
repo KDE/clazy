@@ -17,6 +17,7 @@ macro(add_clazy_test name)
 endmacro()
 
 add_clazy_test(assert-with-side-effects)
+add_clazy_test(compare-member-check)
 add_clazy_test(container-inside-loop)
 add_clazy_test(detaching-member)
 add_clazy_test(heap-allocated-small-trivial-type)

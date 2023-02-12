@@ -1,5 +1,6 @@
 SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-assert-with-side-effects.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-compare-member-check.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-container-inside-loop.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-detaching-member.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-heap-allocated-small-trivial-type.md

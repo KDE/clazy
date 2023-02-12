@@ -765,6 +765,12 @@
             "visits_stmts" : true
         },
         {
+            "name"  : "compare-member-check",
+            "level" : -1,
+            "categories" : ["bug"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "used-qunused-variable",
             "class_name" : "UsedQUnusedVariable",
             "level" : -1,
