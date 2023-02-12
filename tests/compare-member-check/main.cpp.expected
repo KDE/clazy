@@ -1,0 +1,2 @@
+compare-member-check/main.cpp:46:17: warning: Comparison operator does not use all member variables [-Wclazy-compare-member-check]
+compare-member-check/main.cpp:50:17: warning: Comparison operator does not use all member variables [-Wclazy-compare-member-check]

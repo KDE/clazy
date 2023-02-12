@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 # SPDX-FileCopyrightText: Clazy Developers
 add_clazy_test(assert-with-side-effects)
+add_clazy_test(compare-member-check)
 add_clazy_test(container-inside-loop)
 add_clazy_test(detaching-member)
 add_clazy_test(heap-allocated-small-trivial-type)
