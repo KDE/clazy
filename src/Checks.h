@@ -76,6 +76,7 @@
 #include "checks/level2/static-pmf.h"
 #include "checks/level2/virtual-call-ctor.h"
 #include "checks/manuallevel/assert-with-side-effects.h"
+#include "checks/manuallevel/compare-member-check.h"
 #include "checks/manuallevel/container-inside-loop.h"
 #include "checks/manuallevel/detaching-member.h"
 #include "checks/manuallevel/heap-allocated-small-trivial-type.h"
@@ -117,6 +118,7 @@ RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Optio
 void CheckManager::registerChecks()
 {
     registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
+    registerCheck(check<CompareMemberCheck>("compare-member-check", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<HeapAllocatedSmallTrivialType>("heap-allocated-small-trivial-type", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls, false));
