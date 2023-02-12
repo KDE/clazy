@@ -218,6 +218,7 @@ clazy runs all checks from level1 by default.
 
 - Checks from Manual Level:
     - [assert-with-side-effects](docs/checks/README-assert-with-side-effects.md)
+    - [compare-member-check](docs/checks/README-compare-member-check.md)
     - [container-inside-loop](docs/checks/README-container-inside-loop.md)
     - [detaching-member](docs/checks/README-detaching-member.md)
     - [heap-allocated-small-trivial-type](docs/checks/README-heap-allocated-small-trivial-type.md)

@@ -2,6 +2,7 @@
 
 set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/assert-with-side-effects.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/compare-member-check.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/container-inside-loop.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/detaching-member.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/heap-allocated-small-trivial-type.cpp
