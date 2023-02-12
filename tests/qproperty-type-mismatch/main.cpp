@@ -20,7 +20,14 @@ class MyObj : public QObject
     Q_OBJECT
     Q_PROPERTY(int r_good READ r_good CONSTANT)
     Q_PROPERTY( int r_good2 READ r_good CONSTANT )
-    Q_PROPERTY( int r_good3
+    Q_PROPERTY ( int r_good3 READ r_good CONSTANT )
+    Q_PROPERTY( int r_good4
+        READ r_good
+        CONSTANT
+    )
+    Q_PROPERTY
+    (
+        int r_good5
         READ r_good
         CONSTANT
     )

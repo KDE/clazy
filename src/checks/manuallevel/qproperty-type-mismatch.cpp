@@ -214,22 +214,31 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
     if (!ii) {
         return;
     }
-    if (ii->getName() != "Q_PROPERTY") {
+
+    constexpr llvm::StringLiteral q_property{"Q_PROPERTY"};
+
+    if (ii->getName() != q_property) {
         return;
     }
 
-    CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
+    const CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
-    std::string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
-    using namespace std::string_view_literals;
-    constexpr std::string_view q_property_brace = "Q_PROPERTY("sv;
-    if (clazy::startsWith(text, q_property_brace)) {
-        text = text.substr(q_property_brace.size());
+    llvm::StringRef text = Lexer::getSourceText(crange, sm(), lo());
+
+    const auto openingLParen = std::find_if_not(text.begin() + q_property.size(), text.end(), [](char c) {
+        return std::isspace(c);
+    });
+    if (*openingLParen != '(') {
+        emitWarning(range.getBegin(), "Could not parse argument of the Q_PROPERTY macro");
+        return;
     }
 
+    const std::size_t contentBegin = openingLParen - text.begin() + 1;
+    std::size_t contentLength = text.size() - contentBegin;
     if (!text.empty() && text.back() == ')') {
-        text.pop_back();
+        --contentLength;
     }
+    text = text.substr(contentBegin, contentLength);
 
     std::vector<std::string_view> split = clazy::splitStringBySpaces(text);
     if (split.size() < 2) {
@@ -240,6 +249,7 @@ void QPropertyTypeMismatch::VisitMacroExpands(const clang::Token &MacroNameTok, 
     p.loc = range.getBegin();
 
     std::size_t splitIndex = 0;
+    using namespace std::string_view_literals;
 
     // Handle type (type string and any following modifiers)
     const auto isModifier = [](std::string_view str) {
