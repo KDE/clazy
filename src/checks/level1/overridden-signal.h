@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-overridden-signal.md for more info.
  */
-class OverriddenSignal
-    : public CheckBase
+class OverriddenSignal : public CheckBase
 {
 public:
     explicit OverriddenSignal(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
 };
 

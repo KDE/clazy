@@ -22,18 +22,17 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #include "detaching-temporary.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "checkbase.h"
 #include "clazy_stl.h"
 
+#include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
-#include <clang/AST/Decl.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
@@ -45,7 +44,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *context)
     : DetachingBase(name, context, Option_CanIgnoreIncludes)
@@ -53,9 +51,9 @@ DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *co
     // Extra stuff that isn't really related to detachments but doesn't make sense to call on temporaries
     m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};
     m_writeMethodsByType["QList"] = {"takeAt", "takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
-    m_writeMethodsByType["QVector"] = { "fill", "insert"};
-    m_writeMethodsByType["QMap"] = { "erase", "insert", "insertMulti", "remove", "take"};
-    m_writeMethodsByType["QHash"] = { "erase", "insert", "insertMulti", "remove", "take"};
+    m_writeMethodsByType["QVector"] = {"fill", "insert"};
+    m_writeMethodsByType["QMap"] = {"erase", "insert", "insertMulti", "remove", "take"};
+    m_writeMethodsByType["QHash"] = {"erase", "insert", "insertMulti", "remove", "take"};
     m_writeMethodsByType["QMultiHash"] = m_writeMethodsByType["QHash"];
     m_writeMethodsByType["QMultiMap"] = m_writeMethodsByType["QMap"];
     m_writeMethodsByType["QLinkedList"] = {"takeFirst", "takeLast", "removeOne", "removeAll", "erase"};
@@ -68,53 +66,68 @@ DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *co
 
 bool isAllowedChainedClass(const std::string &className)
 {
-    static const vector<string> allowed = {"QString", "QByteArray", "QVariant"};
+    static const std::vector<std::string> allowed = {"QString", "QByteArray", "QVariant"};
     return clazy::contains(allowed, className);
 }
 
 bool isAllowedChainedMethod(const std::string &methodName)
 {
-    static const vector<string> allowed = {"QMap::keys", "QMap::values", "QHash::keys", "QMap::values",
-                                           "QApplication::topLevelWidgets", "QAbstractItemView::selectedIndexes",
-                                           "QListWidget::selectedItems", "QFile::encodeName", "QFile::decodeName",
-                                           "QItemSelectionModel::selectedRows", "QTreeWidget::selectedItems",
-                                           "QTableWidget::selectedItems", "QNetworkReply::rawHeaderList",
-                                           "Mailbox::address", "QItemSelection::indexes", "QItemSelectionModel::selectedIndexes",
-                                           "QMimeData::formats", "i18n", "QAbstractTransition::targetStates"};
+    static const std::vector<std::string> allowed = {"QMap::keys",
+                                                     "QMap::values",
+                                                     "QHash::keys",
+                                                     "QMap::values",
+                                                     "QApplication::topLevelWidgets",
+                                                     "QAbstractItemView::selectedIndexes",
+                                                     "QListWidget::selectedItems",
+                                                     "QFile::encodeName",
+                                                     "QFile::decodeName",
+                                                     "QItemSelectionModel::selectedRows",
+                                                     "QTreeWidget::selectedItems",
+                                                     "QTableWidget::selectedItems",
+                                                     "QNetworkReply::rawHeaderList",
+                                                     "Mailbox::address",
+                                                     "QItemSelection::indexes",
+                                                     "QItemSelectionModel::selectedIndexes",
+                                                     "QMimeData::formats",
+                                                     "i18n",
+                                                     "QAbstractTransition::targetStates"};
     return clazy::contains(allowed, methodName);
 }
 
 void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 {
-    auto callExpr = dyn_cast<CallExpr>(stm);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stm);
+    if (!callExpr) {
         return;
-
+    }
 
     // For a chain like getList().first(), returns {first(), getList()}
-    vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
-    if (callExprs.size() < 2)
+    std::vector<CallExpr *> callExprs = Utils::callListForChain(callExpr); // callExpr would be first()
+    if (callExprs.size() < 2) {
         return;
+    }
 
     CallExpr *firstCallToBeEvaluated = callExprs.at(callExprs.size() - 1); // This is the call to getList()
     FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
-    if (!firstFunc)
+    if (!firstFunc) {
         return;
-
+    }
 
     QualType qt = firstFunc->getReturnType();
     const Type *firstFuncReturnType = qt.getTypePtrOrNull();
-    if (!firstFuncReturnType)
+    if (!firstFuncReturnType) {
         return;
+    }
 
-    if (firstFuncReturnType->isReferenceType() || firstFuncReturnType->isPointerType())
+    if (firstFuncReturnType->isReferenceType() || firstFuncReturnType->isPointerType()) {
         return;
+    }
 
     if (qt.isConstQualified()) {
         return; // const doesn't detach
     }
 
-    auto firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
     if (isAllowedChainedMethod(clazy::qualifiedMethodName(firstFunc))) {
         return;
     }
@@ -130,16 +143,17 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to first()
     FunctionDecl *detachingFunc = secondCallToBeEvaluated->getDirectCallee();
-    auto detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
+    auto *detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
     const Type *detachingMethodReturnType = detachingMethod ? detachingMethod->getReturnType().getTypePtrOrNull() : nullptr;
-    if (!detachingMethod || !detachingMethodReturnType)
+    if (!detachingMethod || !detachingMethodReturnType) {
         return;
+    }
 
     // Check if it's one of the implicit shared classes
     CXXRecordDecl *classDecl = detachingMethod->getParent();
     StringRef className = clazy::name(classDecl);
 
-    const std::unordered_map<string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
+    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
     auto it = methodsByType.find(static_cast<std::string>(className));
     auto it2 = m_writeMethodsByType.find(className);
 
@@ -156,7 +170,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     // Check if it's one of the detaching methods
     StringRef functionName = clazy::name(detachingMethod);
 
-    string error;
+    std::string error;
 
     const bool isReadFunction = clazy::contains(allowedFunctions, functionName);
     const bool isWriteFunction = clazy::contains(allowedWriteFunctions, functionName);
@@ -164,8 +178,9 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     if (isReadFunction || isWriteFunction) {
         bool returnTypeIsIterator = false;
         CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
-        if (returnRecord)
+        if (returnRecord) {
             returnTypeIsIterator = clazy::name(returnRecord) == "iterator";
+        }
 
         if (isWriteFunction && (detachingMethodReturnType->isVoidType() || returnTypeIsIterator)) {
             error = std::string("Modifying temporary container is pointless and it also detaches");
@@ -174,30 +189,34 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         }
     }
 
-
-    if (!error.empty())
+    if (!error.empty()) {
         emitWarning(clazy::getLocStart(stm), error.c_str());
+    }
 }
 
 bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
 {
-    if (!method)
+    if (!method) {
         return false;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (!record)
+    if (!record) {
         return false;
+    }
 
-    if (DetachingBase::isDetachingMethod(method))
+    if (DetachingBase::isDetachingMethod(method)) {
         return true;
+    }
 
     StringRef className = clazy::name(record);
 
     auto it = m_writeMethodsByType.find(className);
     if (it != m_writeMethodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy::contains(methods, clazy::name(method)))
+        if (clazy::contains(methods, clazy::name(method))) {
             return true;
+        }
     }
 
     return false;

@@ -19,14 +19,13 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef SOURCE_COMPAT_HELPERS
 #define SOURCE_COMPAT_HELPERS
 
 #include <clang/AST/Attr.h>
-#include <clang/AST/Expr.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
+#include <clang/AST/Expr.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/FrontendDiagnostic.h>
@@ -34,19 +33,21 @@
 #include <clang/Tooling/Core/Diagnostic.h>
 
 #if defined(CLAZY_USES_BOOST_REGEX)
-# define BOOST_NO_EXCEPTIONS
-# include <boost/throw_exception.hpp>
-inline void boost::throw_exception(std::exception const &){}
-# include <boost/regex.hpp>
+#define BOOST_NO_EXCEPTIONS
+#include <boost/throw_exception.hpp>
+inline void boost::throw_exception(std::exception const &)
+{
+}
+#include <boost/regex.hpp>
 using namespace boost;
 #else
-# include <regex>
-using namespace std;
+#include <regex>
 #endif
 
-namespace clazy {
+namespace clazy
+{
 
-template <typename T>
+template<typename T>
 inline clang::SourceLocation getLocStart(const T *t)
 {
 #if LLVM_VERSION_MAJOR >= 8
@@ -56,7 +57,7 @@ inline clang::SourceLocation getLocStart(const T *t)
 #endif
 }
 
-template <typename T>
+template<typename T>
 inline clang::SourceLocation getLocEnd(const T *t)
 {
 #if LLVM_VERSION_MAJOR >= 8
@@ -81,22 +82,23 @@ inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
 #if LLVM_VERSION_MAJOR >= 8
     auto RetType = func->getReturnType();
     if (const auto *Ret = RetType->getAsRecordDecl()) {
-        if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>())
+        if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>()) {
             return R != nullptr;
+        }
     } else if (const auto *ET = RetType->getAs<clang::EnumType>()) {
         if (const clang::EnumDecl *ED = ET->getDecl()) {
-            if (const auto *R = ED->getAttr<clang::WarnUnusedResultAttr>())
+            if (const auto *R = ED->getAttr<clang::WarnUnusedResultAttr>()) {
                 return R != nullptr;
+            }
         }
     }
     return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
 #else
     return func->hasUnusedResultAttr();
 #endif
-
 }
 
-inline clang::tooling::Replacements& DiagnosticFix(clang::tooling::Diagnostic &diag, llvm::StringRef filePath)
+inline clang::tooling::Replacements &DiagnosticFix(clang::tooling::Diagnostic &diag, llvm::StringRef filePath)
 {
 #if LLVM_VERSION_MAJOR >= 9
     return diag.Message.Fix[filePath];
@@ -121,14 +123,11 @@ inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *in
 }
 
 #if LLVM_VERSION_MAJOR >= 16
-#define GET_LEXER(id, inputFile, sm, lo) \
-clang::Lexer(id, inputFile.value(), sm, lo)
+#define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile.value(), sm, lo)
 #elif LLVM_VERSION_MAJOR >= 12
-#define GET_LEXER(id, inputFile, sm, lo) \
-clang::Lexer(id, inputFile.getValue(), sm, lo)
+#define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile.getValue(), sm, lo)
 #else
-#define GET_LEXER(id, inputFile, sm, lo) \
-clang::Lexer(id, inputFile, sm, lo)
+#define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile, sm, lo)
 #endif
 
 inline bool isFinal(const clang::CXXRecordDecl *record)
@@ -154,7 +153,7 @@ using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
 #elif LLVM_VERSION_MAJOR >= 15
 using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
 #else
-using OptionalFileEntryRef = const clang::FileEntry*;
+using OptionalFileEntryRef = const clang::FileEntry *;
 #endif
 
 inline bool isAscii(clang::StringLiteral *lt)

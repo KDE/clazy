@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-ctor-missing-parent-argument for more info.
  */
-class CtorMissingParentArgument
-    : public CheckBase
+class CtorMissingParentArgument : public CheckBase
 {
 public:
     explicit CtorMissingParentArgument(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
 };
 

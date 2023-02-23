@@ -27,17 +27,16 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-const-signal-or-slot.md for more info.
  */
-class ConstSignalOrSlot
-    : public CheckBase
+class ConstSignalOrSlot : public CheckBase
 {
 public:
     explicit ConstSignalOrSlot(const std::string &name, ClazyContext *context);

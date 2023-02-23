@@ -23,13 +23,13 @@
 */
 
 #include "range-loop-reference.h"
-#include "QtUtils.h"
-#include "TypeUtils.h"
-#include "StringUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "FixItUtils.h"
 #include "ClazyContext.h"
+#include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
+#include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
@@ -40,7 +40,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -50,7 +49,7 @@ RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *co
 
 void RangeLoopReference::VisitStmt(clang::Stmt *stmt)
 {
-    if (auto rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
+    if (auto *rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {
         processForRangeLoop(rangeLoop);
     }
 }
@@ -58,23 +57,26 @@ void RangeLoopReference::VisitStmt(clang::Stmt *stmt)
 void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 {
     Expr *containerExpr = rangeLoop->getRangeInit();
-    if (!containerExpr)
+    if (!containerExpr) {
         return;
+    }
 
     QualType qt = containerExpr->getType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t || !t->isRecordType())
+    if (!t || !t->isRecordType()) {
         return;
+    }
 
     clazy::QualTypeClassification classif;
-    auto varDecl = rangeLoop->getLoopVariable();
+    auto *varDecl = rangeLoop->getLoopVariable();
     bool success = varDecl && clazy::classifyQualType(m_context, varDecl->getType(), varDecl, /*by-ref*/ classif, rangeLoop);
-    if (!success)
+    if (!success) {
         return;
+    }
 
     if (classif.passNonTriviallyCopyableByConstRef) {
-        string msg;
-        const string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
+        std::string msg;
+        const std::string paramStr = clazy::simpleTypeName(varDecl->getType(), lo());
         msg = "Missing reference in range-for with non trivial type (" + paramStr + ')';
 
         std::vector<FixItHint> fixits;
@@ -87,7 +89,6 @@ void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
         SourceLocation end = varDecl->getLocation();
         fixits.push_back(clazy::createInsertion(end, "&"));
-
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.

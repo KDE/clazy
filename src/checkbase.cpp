@@ -41,25 +41,24 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/raw_ostream.h>
 
-#include <vector>
 #include <memory>
+#include <vector>
 
-namespace clang {
+namespace clang
+{
 class MacroArgs;
 class Token;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
 using namespace clang::ast_matchers;
-using namespace std;
 
 ClazyPreprocessorCallbacks::ClazyPreprocessorCallbacks(CheckBase *check)
     : check(check)
 {
 }
 
-void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &md,
-                                              SourceRange range, const MacroArgs *)
+void ClazyPreprocessorCallbacks::MacroExpands(const Token &macroNameTok, const MacroDefinition &md, SourceRange range, const MacroArgs *)
 {
     check->VisitMacroExpands(macroNameTok, range, md.getMacroInfo());
 }
@@ -104,14 +103,21 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
     check->VisitMacroDefined(macroNameTok);
 }
 
-void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
-                                                    clang::CharSourceRange FilenameRange, clazy::OptionalFileEntryRef File, clang::StringRef SearchPath,
-                                                    clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType)
+void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLoc,
+                                                    const clang::Token &IncludeTok,
+                                                    clang::StringRef FileName,
+                                                    bool IsAngled,
+                                                    clang::CharSourceRange FilenameRange,
+                                                    clazy::OptionalFileEntryRef File,
+                                                    clang::StringRef SearchPath,
+                                                    clang::StringRef RelativePath,
+                                                    const clang::Module *Imported,
+                                                    clang::SrcMgr::CharacteristicKind FileType)
 {
     check->VisitInclusionDirective(HashLoc, IncludeTok, FileName, IsAngled, FilenameRange, File, SearchPath, RelativePath, Imported, FileType);
 }
 
-CheckBase::CheckBase(const string &name, const ClazyContext *context, Options options)
+CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
     : m_sm(context->ci.getSourceManager())
     , m_name(name)
     , m_context(context)
@@ -161,12 +167,12 @@ void CheckBase::VisitIfndef(SourceLocation, const Token &)
     // Overriden in derived classes
 }
 
-void CheckBase::VisitIf(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind)
+void CheckBase::VisitIf(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind)
 {
     // Overriden in derived classes
 }
 
-void CheckBase::VisitElif(SourceLocation, SourceRange,  clang::PPCallbacks::ConditionValueKind, SourceLocation)
+void CheckBase::VisitElif(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind, SourceLocation)
 {
     // Overriden in derived classes
 }
@@ -181,9 +187,16 @@ void CheckBase::VisitEndif(SourceLocation, SourceLocation)
     // Overriden in derived classes
 }
 
-void CheckBase::VisitInclusionDirective(clang::SourceLocation , const clang::Token &, clang::StringRef , bool ,
-                        clang::CharSourceRange , clazy::OptionalFileEntryRef, clang::StringRef ,
-                        clang::StringRef , const clang::Module *, clang::SrcMgr::CharacteristicKind )
+void CheckBase::VisitInclusionDirective(clang::SourceLocation,
+                                        const clang::Token &,
+                                        clang::StringRef,
+                                        bool,
+                                        clang::CharSourceRange,
+                                        clazy::OptionalFileEntryRef,
+                                        clang::StringRef,
+                                        clang::StringRef,
+                                        const clang::Module *,
+                                        clang::SrcMgr::CharacteristicKind)
 {
     // Overriden in derived classes
 }
@@ -196,13 +209,15 @@ void CheckBase::enablePreProcessorCallbacks()
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 {
-    if (m_filesToIgnore.empty())
+    if (m_filesToIgnore.empty()) {
         return false;
+    }
 
-    if (!loc.isValid())
+    if (!loc.isValid()) {
         return true;
+    }
 
-    string filename = static_cast<string>(sm().getFilename(loc));
+    std::string filename = static_cast<std::string>(sm().getFilename(loc));
 
     return clazy::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
         return clazy::contains(filename, ignored);
@@ -224,30 +239,34 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
     emitWarning(loc, error, {}, printWarningTag);
 }
 
-void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
-                            const vector<FixItHint> &fixits, bool printWarningTag)
+void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const std::vector<FixItHint> &fixits, bool printWarningTag)
 {
-    if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo()))
+    if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo())) {
         return;
+    }
 
-    if (m_context->shouldIgnoreFile(loc))
+    if (m_context->shouldIgnoreFile(loc)) {
         return;
+    }
 
     if (loc.isMacroID()) {
-        if (warningAlreadyEmitted(loc))
+        if (warningAlreadyEmitted(loc)) {
             return; // For warnings in macro arguments we get a warning in each place the argument is used within the expanded macro, so filter all the dups
+        }
         m_emittedWarningsInMacro.push_back(loc.getRawEncoding());
     }
 
-    if (printWarningTag)
+    if (printWarningTag) {
         error += m_tag;
+    }
 
     reallyEmitWarning(loc, error, fixits);
 
-    for (const auto& l : m_queuedManualInterventionWarnings) {
-        string msg = string("FixIt failed, requires manual intervention: ");
-        if (!l.second.empty())
+    for (const auto &l : m_queuedManualInterventionWarnings) {
+        std::string msg("FixIt failed, requires manual intervention: ");
+        if (!l.second.empty()) {
             msg += ' ' + l.second;
+        }
 
         reallyEmitWarning(l.first, msg + m_tag, {});
     }
@@ -255,28 +274,27 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error,
     m_queuedManualInterventionWarnings.clear();
 }
 
-void CheckBase::emitInternalError(SourceLocation loc, string error)
+void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 {
-    llvm::errs() << m_tag << ": internal error: " << error
-                 << " at " << loc.printToString(sm()) << "\n";
+    llvm::errs() << m_tag << ": internal error: " << error << " at " << loc.printToString(sm()) << "\n";
 }
 
-void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const vector<FixItHint> &fixits)
+void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
     auto &engine = m_context->ci.getDiagnostics();
-    auto severity = (m_context->treatAsError(m_name) || (engine.getWarningsAsErrors() && !m_context->userDisabledWError()))
-            ? DiagnosticIDs::Error
-            : DiagnosticIDs::Warning;
+    auto severity =
+        (m_context->treatAsError(m_name) || (engine.getWarningsAsErrors() && !m_context->userDisabledWError())) ? DiagnosticIDs::Error : DiagnosticIDs::Warning;
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
     DiagnosticBuilder B = engine.Report(full, id);
-    for (const FixItHint& fixit : fixits) {
-        if (!fixit.isNull())
+    for (const FixItHint &fixit : fixits) {
+        if (!fixit.isNull()) {
             B.AddFixItHint(fixit);
+        }
     }
 }
 
-void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const string &message)
+void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const std::string &message)
 {
     if (!manualFixitAlreadyQueued(loc)) {
         m_queuedManualInterventionWarnings.push_back({loc, message});
@@ -290,8 +308,9 @@ bool CheckBase::warningAlreadyEmitted(SourceLocation loc) const
     for (auto rawLoc : m_emittedWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(rawLoc);
         PresumedLoc p = sm().getPresumedLoc(l);
-        if (Utils::presumedLocationsEqual(p, ploc))
+        if (Utils::presumedLocationsEqual(p, ploc)) {
             return true;
+        }
     }
 
     return false;
@@ -303,8 +322,9 @@ bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
     for (auto loc : m_emittedManualFixItsWarningsInMacro) {
         SourceLocation l = SourceLocation::getFromRawEncoding(loc);
         PresumedLoc p = sm().getPresumedLoc(l);
-        if (Utils::presumedLocationsEqual(p, ploc))
+        if (Utils::presumedLocationsEqual(p, ploc)) {
             return true;
+        }
     }
 
     return false;
@@ -312,7 +332,7 @@ bool CheckBase::manualFixitAlreadyQueued(SourceLocation loc) const
 
 bool CheckBase::isOptionSet(const std::string &optionName) const
 {
-    const string qualifiedName = name() + '-' + optionName;
+    const std::string qualifiedName = name() + '-' + optionName;
     return m_context->isOptionSet(qualifiedName);
 }
 

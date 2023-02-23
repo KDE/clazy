@@ -25,22 +25,23 @@
 #include "SuppressionManager.h"
 #include "clazy_stl.h"
 
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Basic/FileManager.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
-#include <llvm/Support/Regex.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/PreprocessorOptions.h>
 #include <llvm/ADT/StringRef.h>
+#include <llvm/Support/Regex.h>
 
-#include <string>
-#include <vector>
 #include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 
 // ClazyContext is just a struct to share data and code between all checks
 
-namespace clang {
+namespace clang
+{
 class CompilerInstance;
 class ASTContext;
 class ParentMap;
@@ -65,7 +66,7 @@ public:
         ClazyOption_VisitImplicitCode = 16, // Inspect compiler generated code aswell, useful for custom checks, if they need it
         ClazyOption_IgnoreIncludedFiles = 32 // Only warn for the current file being compiled, not on includes (useful for performance reasons)
     };
-    typedef int ClazyOptions;
+    using ClazyOptions = int;
 
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,
@@ -110,10 +111,11 @@ public:
         return clazy::contains(extraOptions, optionName);
     }
 
-    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc,  const clang::FileEntry **file) const
+    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc, const clang::FileEntry **file) const
     {
-        if (!regex)
+        if (!regex) {
             return false;
+        }
 
         if (!(*file)) {
             clang::FileID fid = sm.getDecomposedExpansionLoc(loc).first;
@@ -133,25 +135,29 @@ public:
         const clang::FileEntry *file = nullptr;
         if (ignoreDirsRegex) {
             const bool matches = fileMatchesLoc(ignoreDirsRegex, loc, &file);
-            if (matches)
+            if (matches) {
                 return true;
+            }
         }
 
         // 2. Process the regexp that includes files. Has lower priority.
-        if (!headerFilterRegex || isMainFile(loc))
+        if (!headerFilterRegex || isMainFile(loc)) {
             return false;
+        }
 
         const bool matches = fileMatchesLoc(headerFilterRegex, loc, &file);
-        if (!file)
+        if (!file) {
             return false;
+        }
 
         return !matches;
     }
 
     bool isMainFile(clang::SourceLocation loc) const
     {
-        if (loc.isMacroID())
+        if (loc.isMacroID()) {
             loc = sm.getExpansionLoc(loc);
+        }
 
         return sm.isInFileID(loc, sm.getMainFileID());
     }

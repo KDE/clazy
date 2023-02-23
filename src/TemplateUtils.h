@@ -21,10 +21,11 @@
 
 #include <clang/AST/Type.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace clang {
+namespace clang
+{
 class CXXMethodDecl;
 class CXXRecordDecl;
 class ClassTemplateSpecializationDecl;
@@ -56,8 +57,7 @@ clang::ClassTemplateSpecializationDecl *templateDecl(clang::Decl *decl);
  *
  * Example: For QList<Foo>, getTemplateArgumentTypeStr(decl, 0) would return "Foo"
  */
-std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl*,
-                                       unsigned int index, const clang::LangOptions &lo, bool recordOnly = false);
+std::string getTemplateArgumentTypeStr(clang::ClassTemplateSpecializationDecl *, unsigned int index, const clang::LangOptions &lo, bool recordOnly = false);
 
 clang::QualType getTemplateArgumentType(clang::ClassTemplateSpecializationDecl *, unsigned int index);
 

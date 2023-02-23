@@ -35,8 +35,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
-
 
 QStringVarargs::QStringVarargs(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -45,24 +43,29 @@ QStringVarargs::QStringVarargs(const std::string &name, ClazyContext *context)
 
 void QStringVarargs::VisitStmt(clang::Stmt *stmt)
 {
-    auto binop = dyn_cast<BinaryOperator>(stmt);
-    if (!binop || binop->getOpcode() != BO_Comma)
+    auto *binop = dyn_cast<BinaryOperator>(stmt);
+    if (!binop || binop->getOpcode() != BO_Comma) {
         return;
+    }
 
-    auto callexpr = dyn_cast<CallExpr>(binop->getLHS());
-    if (!callexpr)
+    auto *callexpr = dyn_cast<CallExpr>(binop->getLHS());
+    if (!callexpr) {
         return;
+    }
 
     FunctionDecl *func = callexpr->getDirectCallee();
-    if (!func || clazy::name(func) != "__builtin_trap")
+    if (!func || clazy::name(func) != "__builtin_trap") {
         return;
+    }
 
     QualType qt = binop->getRHS()->getType();
     CXXRecordDecl *record = qt->getAsCXXRecordDecl();
-    if (!record)
+    if (!record) {
         return;
+    }
 
     StringRef name = clazy::name(record);
-    if (name == "QString" || name == "QByteArray")
-        emitWarning(stmt, string("Passing ") + name.data() + string(" to variadic function"));
+    if (name == "QString" || name == "QByteArray") {
+        emitWarning(stmt, std::string("Passing ") + name.data() + std::string(" to variadic function"));
+    }
 }

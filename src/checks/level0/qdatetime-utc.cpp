@@ -23,9 +23,9 @@
 */
 
 #include "qdatetime-utc.h"
-#include "Utils.h"
 #include "FixItUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -41,7 +41,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -50,27 +49,32 @@ QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
 
 void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 {
-    CXXMemberCallExpr *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!secondCall || !secondCall->getMethodDecl())
+    auto *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!secondCall || !secondCall->getMethodDecl()) {
         return;
+    }
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
-    const string secondMethodName = secondMethod->getQualifiedNameAsString();
+    const std::string secondMethodName = secondMethod->getQualifiedNameAsString();
     const bool isTimeT = secondMethodName == "QDateTime::toTime_t";
-    if (!isTimeT && secondMethodName != "QDateTime::toUTC")
+    if (!isTimeT && secondMethodName != "QDateTime::toUTC") {
         return;
+    }
 
-    vector<CallExpr*> chainedCalls = Utils::callListForChain(secondCall);
-    if (chainedCalls.size() < 2)
+    std::vector<CallExpr *> chainedCalls = Utils::callListForChain(secondCall);
+    if (chainedCalls.size() < 2) {
         return;
+    }
 
     CallExpr *firstCall = chainedCalls[chainedCalls.size() - 1];
     FunctionDecl *firstFunc = firstCall->getDirectCallee();
-    if (!firstFunc)
+    if (!firstFunc) {
         return;
+    }
 
-    CXXMethodDecl *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime")
+    auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
+    if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime") {
         return;
+    }
 
     std::string replacement = "::currentDateTimeUtc()";
     if (isTimeT) {
@@ -82,7 +86,6 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     if (!success) {
         queueManualFixitWarning(clazy::getLocStart(secondCall));
     }
-
 
     emitWarning(clazy::getLocStart(stmt), "Use QDateTime" + replacement + " instead", fixits);
 }

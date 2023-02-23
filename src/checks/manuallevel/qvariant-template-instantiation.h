@@ -30,17 +30,17 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * Detects when you're using QVariant::value<Foo>() instead of QVariant::toFoo().
  *
  * TODO: Missing QVariants of QHash<QString,QVariant>, QList<QVariant> and QMap<QString, QVariant>
  */
-class QVariantTemplateInstantiation
-    : public CheckBase
+class QVariantTemplateInstantiation : public CheckBase
 {
 public:
     QVariantTemplateInstantiation(const std::string &name, ClazyContext *context);

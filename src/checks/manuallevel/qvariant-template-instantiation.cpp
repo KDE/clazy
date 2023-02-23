@@ -23,9 +23,9 @@
 */
 
 #include "qvariant-template-instantiation.h"
-#include "TemplateUtils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "TemplateUtils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -42,7 +42,6 @@
 
 class ClazyContext;
 
-using namespace std;
 using namespace clang;
 
 QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, ClazyContext *context)
@@ -52,33 +51,36 @@ QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &
 
 static bool isMatchingClass(StringRef name)
 {
-    static const vector<StringRef> classes = {"QBitArray", "QByteArray", "QChar", "QDate", "QDateTime",
-                                              "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
-                                              "QJsonValue", "QLocale", "QModelIndex", "QPoint", "QPointF",
-                                              "QRect", "QRectF", "QRegExp", "QString", "QRegularExpression",
-                                              "QSize", "QSizeF", "QStringList", "QTime", "QUrl", "QUuid" };
+    static const std::vector<StringRef> classes = {"QBitArray",     "QByteArray",  "QChar",      "QDate",   "QDateTime",          "QEasingCurve", "QJsonArray",
+                                                   "QJsonDocument", "QJsonObject", "QJsonValue", "QLocale", "QModelIndex",        "QPoint",       "QPointF",
+                                                   "QRect",         "QRectF",      "QRegExp",    "QString", "QRegularExpression", "QSize",        "QSizeF",
+                                                   "QStringList",   "QTime",       "QUrl",       "QUuid"};
 
     return clazy::contains(classes, name);
 }
 
 void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
 {
-    auto callExpr = dyn_cast<CXXMemberCallExpr>(stm);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CXXMemberCallExpr>(stm);
+    if (!callExpr) {
         return;
+    }
 
     CXXMethodDecl *methodDecl = callExpr->getMethodDecl();
-    if (!methodDecl || clazy::name(methodDecl) != "value")
+    if (!methodDecl || clazy::name(methodDecl) != "value") {
         return;
+    }
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!decl || clazy::name(decl) != "QVariant")
+    if (!decl || clazy::name(decl) != "QVariant") {
         return;
+    }
 
-    vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
+    std::vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();
-    if (!t)
+    if (!t) {
         return;
+    }
 
     bool matches = false;
     if (t->isBooleanType() || t->isFloatingType() || (t->isIntegerType() && !t->isEnumeralType())) {
@@ -89,14 +91,14 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     if (matches) {
-        string typeName = clazy::simpleTypeName(typeList[0], lo());
+        std::string typeName = clazy::simpleTypeName(typeList[0], lo());
 
-        string typeName2 = typeName;
+        std::string typeName2 = typeName;
         typeName2[0] = toupper(typeName2[0]);
 
-
-        if (typeName[0] == 'Q')
+        if (typeName[0] == 'Q') {
             typeName2.erase(0, 1); // Remove first letter
+        }
         std::string error = std::string("Use QVariant::to" + typeName2 + "() instead of QVariant::value<" + typeName + ">()");
         emitWarning(clazy::getLocStart(stm), error.c_str());
     }

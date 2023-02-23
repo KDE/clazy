@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-static-pmf.md for more info.
  */
-class StaticPmf
-    : public CheckBase
+class StaticPmf : public CheckBase
 {
 public:
     explicit StaticPmf(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
 };
 

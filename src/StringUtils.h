@@ -25,20 +25,20 @@
 #ifndef CLANG_LAZY_STRING_UTILS_H
 #define CLANG_LAZY_STRING_UTILS_H
 
+#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 #include "clazy_stl.h"
-#include "SourceCompatibilityHelpers.h"
 
-#include <clang/Basic/LangOptions.h>
-#include <clang/AST/ExprCXX.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/PrettyPrinter.h>
 #include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclarationName.h>
 #include <clang/AST/Expr.h>
+#include <clang/AST/ExprCXX.h>
+#include <clang/AST/PrettyPrinter.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/LangOptions.h>
 #include <clang/Basic/OperatorKinds.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/Specifiers.h>
@@ -50,13 +50,14 @@
 #include <string>
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class LangOpts;
 class SourceManager;
 }
 
-
-namespace clazy {
+namespace clazy
+{
 
 // Returns the class name.
 // The name will not include any templates, so  "QVector::iterator" would be returned for QVector<int>::iterator
@@ -64,16 +65,18 @@ namespace clazy {
 
 inline std::string classNameFor(const clang::CXXRecordDecl *record)
 {
-    if (!record)
+    if (!record) {
         return {};
+    }
 
     const std::string name = record->getNameAsString();
 
-    if (auto p = record->getParent()) {
+    if (const auto *p = record->getParent()) {
         // TODO: Also append the namespace, when needed.
         auto parentName = classNameFor(llvm::dyn_cast<clang::CXXRecordDecl>(p));
-        if (!parentName.empty())
+        if (!parentName.empty()) {
             return parentName + "::" + name;
+        }
     }
 
     return name;
@@ -103,29 +106,32 @@ inline std::string classNameFor(clang::QualType qt)
 {
     qt = qt.getNonReferenceType().getUnqualifiedType();
     const clang::Type *t = qt.getTypePtrOrNull();
-    if (!t)
+    if (!t) {
         return {};
+    }
 
-    if (clang::ElaboratedType::classof(t))
-        return classNameFor(static_cast<const clang::ElaboratedType*>(t)->getNamedType());
+    if (clang::ElaboratedType::classof(t)) {
+        return classNameFor(static_cast<const clang::ElaboratedType *>(t)->getNamedType());
+    }
 
-    const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl()
-                                                           : t->getPointeeCXXRecordDecl();
+    const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl() : t->getPointeeCXXRecordDecl();
     return classNameFor(record);
 }
 
 inline std::string classNameFor(clang::ParmVarDecl *param)
 {
-    if (!param)
+    if (!param) {
         return {};
+    }
 
     return classNameFor(param->getType());
 }
 
 inline llvm::StringRef name(const clang::NamedDecl *decl)
 {
-    if (decl->getDeclName().isIdentifier())
+    if (decl->getDeclName().isIdentifier()) {
         return decl->getName();
+    }
 
     return "";
 }
@@ -133,12 +139,15 @@ inline llvm::StringRef name(const clang::NamedDecl *decl)
 inline llvm::StringRef name(const clang::CXXMethodDecl *method)
 {
     auto op = method->getOverloadedOperator();
-    if (op == clang::OO_Subscript)
+    if (op == clang::OO_Subscript) {
         return "operator[]";
-    if (op == clang::OO_LessLess)
+    }
+    if (op == clang::OO_LessLess) {
         return "operator<<";
-    if (op == clang::OO_PlusEqual)
+    }
+    if (op == clang::OO_PlusEqual) {
         return "operator+=";
+    }
 
     return name(static_cast<const clang::NamedDecl *>(method));
 }
@@ -155,14 +164,14 @@ inline llvm::StringRef name(const clang::CXXDestructorDecl *decl)
 
 // Returns the type name with or without namespace, depending on how it was written by the user.
 // If the user omitted the namespace then the return won't have namespace
-inline std::string name(clang::QualType t, clang::LangOptions lo, bool asWritten)
+inline std::string name(clang::QualType t, const clang::LangOptions &lo, bool asWritten)
 {
     clang::PrintingPolicy p(lo);
     p.SuppressScope = asWritten;
     return t.getAsString(p);
 }
 
-template <typename T>
+template<typename T>
 inline bool isOfClass(T *node, llvm::StringRef className)
 {
     return node && classNameFor(node) == className;
@@ -181,8 +190,9 @@ inline bool classIsOneOf(clang::CXXRecordDecl *record, const std::vector<llvm::S
 inline void printLocation(const clang::SourceManager &sm, clang::SourceLocation loc, bool newLine = true)
 {
     llvm::errs() << loc.printToString(sm);
-    if (newLine)
+    if (newLine) {
         llvm::errs() << "\n";
+    }
 }
 
 inline void printRange(const clang::SourceManager &sm, clang::SourceRange range, bool newLine = true)
@@ -194,29 +204,34 @@ inline void printRange(const clang::SourceManager &sm, clang::SourceRange range,
 
 inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, bool newLine = true)
 {
-    if (s)
+    if (s) {
         printLocation(sm, clazy::getLocStart(s), newLine);
+    }
 }
 
 inline void printLocation(const clang::PresumedLoc &loc, bool newLine = true)
 {
     llvm::errs() << loc.getFilename() << ' ' << loc.getLine() << ':' << loc.getColumn();
-    if (newLine)
+    if (newLine) {
         llvm::errs() << "\n";
+    }
 }
 
 inline std::string qualifiedMethodName(clang::FunctionDecl *func)
 {
-    if (!func)
+    if (!func) {
         return {};
+    }
 
-    auto method = clang::dyn_cast<clang::CXXMethodDecl>(func);
-    if (!method)
+    auto *method = clang::dyn_cast<clang::CXXMethodDecl>(func);
+    if (!method) {
         return func->getQualifiedNameAsString();
+    }
 
     // method->getQualifiedNameAsString() returns the name with template arguments, so do a little hack here
-    if (!method || !method->getParent())
+    if (!method || !method->getParent()) {
         return "";
+    }
 
     return method->getParent()->getNameAsString() + "::" + method->getNameAsString();
 }
@@ -228,8 +243,7 @@ inline std::string qualifiedMethodName(clang::CallExpr *call)
 
 inline std::string accessString(clang::AccessSpecifier s)
 {
-    switch (s)
-    {
+    switch (s) {
     case clang::AccessSpecifier::AS_public:
         return "public";
     case clang::AccessSpecifier::AS_private:
@@ -248,12 +262,14 @@ inline std::string accessString(clang::AccessSpecifier s)
  */
 inline std::string simpleTypeName(clang::QualType qt, const clang::LangOptions &lo)
 {
-    auto t = qt.getTypePtrOrNull();
-    if (!t)
+    const auto *t = qt.getTypePtrOrNull();
+    if (!t) {
         return {};
+    }
 
-    if (clang::ElaboratedType::classof(t))
-        qt = static_cast<const clang::ElaboratedType*>(t)->getNamedType();
+    if (clang::ElaboratedType::classof(t)) {
+        qt = static_cast<const clang::ElaboratedType *>(t)->getNamedType();
+    }
 
     return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
 }
@@ -273,22 +289,21 @@ inline std::string typeName(clang::QualType qt, const clang::LangOptions &lo, bo
  * If \a simpleName is true, any cv qualifications, ref or pointer are not taken into account, so
  * const Foo & would be equal to Foo.
  */
-inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOptions &lo,
-                                  bool simpleName = true)
+inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOptions &lo, bool simpleName = true)
 {
-    if (!call)
+    if (!call) {
         return {};
+    }
 
     clang::FunctionDecl *func = call->getDirectCallee();
     return func ? clazy::typeName(func->getReturnType(), lo, simpleName) : std::string();
 }
 
-inline bool hasArgumentOfType(clang::FunctionDecl *func, llvm::StringRef typeName,
-                              const clang::LangOptions &lo, bool simpleName = true)
+inline bool hasArgumentOfType(clang::FunctionDecl *func, llvm::StringRef typeName, const clang::LangOptions &lo, bool simpleName = true)
 {
     return clazy::any_of(Utils::functionParameters(func), [simpleName, lo, typeName](clang::ParmVarDecl *param) {
-            return clazy::typeName(param->getType(), lo, simpleName) == typeName;
-        });
+        return clazy::typeName(param->getType(), lo, simpleName) == typeName;
+    });
 }
 
 /**
@@ -312,18 +327,17 @@ bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::s
 
 inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {
-    if (!s)
+    if (!s) {
         return;
+    }
 
-    llvm::errs() << "Start=" << getLocStart(s).printToString(sm)
-                 << "; end=" << getLocStart(s).printToString(sm)
-                 << "\n";
+    llvm::errs() << "Start=" << getLocStart(s).printToString(sm) << "; end=" << getLocStart(s).printToString(sm) << "\n";
 
-    for (auto child : s->children())
+    for (auto *child : s->children()) {
         dump(sm, child);
+    }
 }
 
 }
 
 #endif
-

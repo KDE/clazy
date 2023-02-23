@@ -22,10 +22,10 @@
 #ifndef CLAZY_QT_UTILS_H
 #define CLAZY_QT_UTILS_H
 
-#include "TypeUtils.h"
-#include "MacroUtils.h"
 #include "FunctionUtils.h"
+#include "MacroUtils.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 
@@ -43,10 +43,11 @@
 #include <llvm/Support/Casting.h>
 
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
-namespace clang {
+namespace clang
+{
 class CXXRecordDecl;
 class CompilerInstance;
 class Type;
@@ -100,10 +101,11 @@ bool isQtCOWIterableClass(const std::string &className);
  */
 inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
 {
-    if (!itRecord)
+    if (!itRecord) {
         return false;
+    }
 
-    auto parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
+    auto *parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
     return parent && clazy::isQtCOWIterableClass(parent);
 }
 
@@ -120,12 +122,12 @@ bool isQtAssociativeContainer(llvm::StringRef className);
 /**
  * Returns a list of Qt containers.
  */
-const std::vector<llvm::StringRef> & qtContainers();
+const std::vector<llvm::StringRef> &qtContainers();
 
 /**
  * Returns a list of implicitly shared Qt containers.
  */
-const std::vector<llvm::StringRef> & qtCOWContainers();
+const std::vector<llvm::StringRef> &qtCOWContainers();
 
 /**
  * Returns a map with the list of method names that detach each container.
@@ -144,7 +146,6 @@ std::unordered_map<std::string, std::vector<llvm::StringRef>> detachingMethodsWi
 bool isQtContainer(clang::QualType);
 
 bool isQtContainer(const clang::CXXRecordDecl *);
-
 
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler
@@ -174,7 +175,7 @@ bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
  */
 inline bool isInForeach(const clang::ASTContext *context, clang::SourceLocation loc)
 {
-    return clazy::isInAnyMacro(context, loc, { "Q_FOREACH", "foreach" });
+    return clazy::isInAnyMacro(context, loc, {"Q_FOREACH", "foreach"});
 }
 
 /**
@@ -225,14 +226,13 @@ bool isConnect(clang::FunctionDecl *func);
  */
 bool connectHasPMFStyle(clang::FunctionDecl *func);
 
-
 /**
  * Returns the method referenced by a PMF-style connect for the specified connect() call.
  */
-clang::CXXMethodDecl* pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
+clang::CXXMethodDecl *pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
 
-clang::CXXMethodDecl* pmfFromUnary(clang::Expr *e);
-clang::CXXMethodDecl* pmfFromUnary(clang::UnaryOperator *uo);
+clang::CXXMethodDecl *pmfFromUnary(clang::Expr *e);
+clang::CXXMethodDecl *pmfFromUnary(clang::UnaryOperator *uo);
 
 /**
  * Returns the varDecl for the 1st argument in a connect call
@@ -248,8 +248,9 @@ inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
  */
 inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
 {
-    if (!call || call->getNumArgs() < 5)
+    if (!call || call->getNumArgs() < 5) {
         return nullptr;
+    }
 
     return clazy::valueDeclForCallArgument(call, 2);
 }
@@ -258,30 +259,29 @@ inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
  * Returns the receiver method, in a PMF connect statement.
  * The method can be a slot or a signal. If it's a lambda or functor nullptr is returned
  */
-inline clang::CXXMethodDecl* receiverMethodForConnect(clang::CallExpr *call)
+inline clang::CXXMethodDecl *receiverMethodForConnect(clang::CallExpr *call)
 {
-
     clang::CXXMethodDecl *receiverMethod = clazy::pmfFromConnect(call, 2);
-    if (receiverMethod)
+    if (receiverMethod) {
         return receiverMethod;
+    }
 
     // It's either third or fourth argument
     return clazy::pmfFromConnect(call, 3);
 }
 
-
 // Returns if callExpr is a call to qobject_cast()
-inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = nullptr,
-                            clang::CXXRecordDecl **castFrom = nullptr)
+inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = nullptr, clang::CXXRecordDecl **castFrom = nullptr)
 {
-    if (auto callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
+    if (auto *callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
         clang::FunctionDecl *func = callExpr->getDirectCallee();
-        if (!func || clazy::name(func) != "qobject_cast")
+        if (!func || clazy::name(func) != "qobject_cast") {
             return false;
+        }
 
         if (castFrom) {
             clang::Expr *expr = callExpr->getArg(0);
-            if (auto implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
+            if (auto *implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
                 if (implicitCast->getCastKind() == clang::CK_DerivedToBase) {
                     expr = implicitCast->getSubExpr();
                 }
@@ -294,7 +294,7 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
         }
 
         if (castTo) {
-            auto templateArgs = func->getTemplateSpecializationArgs();
+            const auto *templateArgs = func->getTemplateSpecializationArgs();
             if (templateArgs->size() == 1) {
                 const clang::TemplateArgument &arg = templateArgs->get(0);
                 clang::QualType qt = clazy::pointeeQualType(arg.getAsType());

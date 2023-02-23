@@ -30,13 +30,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class CXXNamedCastExpr;
 class CXXRecordDecl;
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
-namespace {
+namespace
+{
 class CXXNAmedCastExpr;
 }
 
@@ -44,12 +46,12 @@ class CXXNAmedCastExpr;
  * Finds redundant casts.
  * See README-unneeded-cast.md for more info.
  */
-class UnneededCast
-    : public CheckBase
+class UnneededCast : public CheckBase
 {
 public:
     UnneededCast(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stm) override;
+
 private:
     bool handleNamedCast(clang::CXXNamedCastExpr *);
     bool handleQObjectCast(clang::Stmt *);

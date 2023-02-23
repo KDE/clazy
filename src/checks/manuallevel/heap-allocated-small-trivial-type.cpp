@@ -20,46 +20,48 @@
 */
 
 #include "heap-allocated-small-trivial-type.h"
-#include "Utils.h"
-#include "StmtBodyRange.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
+#include "StmtBodyRange.h"
 #include "TypeUtils.h"
-#include "ClazyContext.h"
+#include "Utils.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
-using namespace std;
 
-
-HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name,
-                                                             ClazyContext *context)
+HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
 }
 
 void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
 {
-    auto varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl)
+    auto *varDecl = dyn_cast<VarDecl>(decl);
+    if (!varDecl) {
         return;
+    }
 
     Expr *init = varDecl->getInit();
-    if (!init)
+    if (!init) {
         return;
+    }
 
-    auto newExpr = dyn_cast<CXXNewExpr>(init);
-    if (!newExpr || newExpr->getNumPlacementArgs() > 0) // Placement new, user probably knows what he's doing
+    auto *newExpr = dyn_cast<CXXNewExpr>(init);
+    if (!newExpr || newExpr->getNumPlacementArgs() > 0) { // Placement new, user probably knows what he's doing
         return;
+    }
 
-    if (newExpr->isArray())
+    if (newExpr->isArray()) {
         return;
+    }
 
     DeclContext *context = varDecl->getDeclContext();
     FunctionDecl *fDecl = context ? dyn_cast<FunctionDecl>(context) : nullptr;
-    if (!fDecl)
+    if (!fDecl) {
         return;
+    }
 
     QualType qualType = newExpr->getType()->getPointeeType();
     if (clazy::isSmallTrivial(m_context, qualType)) {
@@ -68,11 +70,10 @@ void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
             return;
         }
 
-        auto body = fDecl->getBody();
-        if (Utils::isAssignedTo(body, varDecl) ||
-            Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false) ||
-            Utils::isReturned(body, varDecl))
+        auto *body = fDecl->getBody();
+        if (Utils::isAssignedTo(body, varDecl) || Utils::isPassedToFunction(StmtBodyRange(body), varDecl, false) || Utils::isReturned(body, varDecl)) {
             return;
+        }
 
         emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());
     }

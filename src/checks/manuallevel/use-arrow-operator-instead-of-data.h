@@ -27,7 +27,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-use-arrow-operator-instead-of-data.md for more info.
  */
@@ -36,6 +35,7 @@ class UseArrowOperatorInsteadOfData : public CheckBase
 public:
     explicit UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
 };
 

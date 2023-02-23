@@ -36,7 +36,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-using namespace std;
 
 QDeleteAll::QDeleteAll(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -46,12 +45,13 @@ QDeleteAll::QDeleteAll(const std::string &name, ClazyContext *context)
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values/keys
-    auto offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *offendingCall = dyn_cast<CXXMemberCallExpr>(stmt);
     FunctionDecl *func = offendingCall ? offendingCall->getDirectCallee() : nullptr;
-    if (!func)
+    if (!func) {
         return;
+    }
 
-    const string funcName = func->getNameAsString();
+    const std::string funcName = func->getNameAsString();
     const bool isValues = funcName == "values";
     const bool isKeys = isValues ? false : funcName == "keys";
 
@@ -62,11 +62,12 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
             int i = 1;
             Stmt *p = clazy::parent(m_context->parentMap, stmt, i);
             while (p) {
-                auto pc = dyn_cast<CallExpr>(p);
+                auto *pc = dyn_cast<CallExpr>(p);
                 FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr;
                 if (f) {
                     if (clazy::name(f) == "qDeleteAll") {
-                        string msg = "qDeleteAll() is being used on an unnecessary temporary container created by " + offendingClassName + "::" + funcName + "()";
+                        std::string msg =
+                            "qDeleteAll() is being used on an unnecessary temporary container created by " + offendingClassName + "::" + funcName + "()";
                         if (func->getNumParams() == 0) {
                             if (isValues) {
                                 msg += ", use qDeleteAll(mycontainer) instead";

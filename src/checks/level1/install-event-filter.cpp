@@ -20,9 +20,9 @@
 */
 
 #include "install-event-filter.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -37,8 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
-
 
 InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -47,20 +45,24 @@ InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *co
 
 void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
 {
-    auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCallExpr || memberCallExpr->getNumArgs() != 1)
+    auto *memberCallExpr = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!memberCallExpr || memberCallExpr->getNumArgs() != 1) {
         return;
+    }
 
     FunctionDecl *func = memberCallExpr->getDirectCallee();
-    if (!func || func->getQualifiedNameAsString() != "QObject::installEventFilter")
+    if (!func || func->getQualifiedNameAsString() != "QObject::installEventFilter") {
         return;
+    }
 
     Expr *expr = memberCallExpr->getImplicitObjectArgument();
-    if (!expr)
+    if (!expr) {
         return;
+    }
 
-    if (!isa<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1)))
+    if (!isa<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1))) {
         return;
+    }
 
     Expr *arg1 = memberCallExpr->getArg(0);
     arg1 = arg1 ? arg1->IgnoreCasts() : nullptr;
@@ -68,9 +70,10 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     CXXRecordDecl *record = clazy::typeAsRecord(arg1);
     auto methods = Utils::methodsFromString(record, "eventFilter");
 
-    for (auto method : methods) {
-        if (method->getQualifiedNameAsString() != "QObject::eventFilter") // It overrides it, probably on purpose then, don't warn.
+    for (auto *method : methods) {
+        if (method->getQualifiedNameAsString() != "QObject::eventFilter") { // It overrides it, probably on purpose then, don't warn.
             return;
+        }
     }
 
     emitWarning(stmt, "'this' should usually be the filter object, not the monitored one.");

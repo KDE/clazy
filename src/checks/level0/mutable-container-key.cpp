@@ -20,9 +20,9 @@
 */
 
 #include "mutable-container-key.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclBase.h>
@@ -36,11 +36,10 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 static bool isInterestingContainer(StringRef name)
 {
-    static const vector<StringRef> containers = { "QMap", "QHash" };
+    static const std::vector<StringRef> containers = {"QMap", "QHash"};
     return clazy::contains(containers, name);
 }
 
@@ -51,24 +50,26 @@ MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *
 
 void MutableContainerKey::VisitDecl(clang::Decl *decl)
 {
-    auto tsdecl = Utils::templateSpecializationFromVarDecl(decl);
-    if (!tsdecl || !isInterestingContainer(clazy::name(tsdecl)))
+    auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);
+    if (!tsdecl || !isInterestingContainer(clazy::name(tsdecl))) {
         return;
+    }
 
     const TemplateArgumentList &templateArguments = tsdecl->getTemplateArgs();
-    if (templateArguments.size() != 2)
+    if (templateArguments.size() != 2) {
         return;
+    }
 
     QualType qt = templateArguments[0].getAsType();
     const Type *t = qt.getTypePtrOrNull();
-    if (!t)
+    if (!t) {
         return;
+    }
 
-    auto record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
-    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer",
-                                      "QPersistentModelIndex", "weak_ptr"}))
+    auto *record = t->isRecordType() ? t->getAsCXXRecordDecl() : nullptr;
+    if (!clazy::classIsOneOf(record, {"QPointer", "QWeakPointer", "QPersistentModelIndex", "weak_ptr"})) {
         return;
-
+    }
 
     emitWarning(clazy::getLocStart(decl), "Associative container key might be modified externally");
 }

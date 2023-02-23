@@ -24,17 +24,18 @@
 
 #include "TypeUtils.h"
 
-#include <clang/AST/DeclBase.h>
 #include <clang/AST/Decl.h>
+#include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <llvm/Support/Casting.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace clang {
+namespace clang
+{
 class ValueDecl;
 class DeclContext;
 class SourceManager;
@@ -53,8 +54,8 @@ namespace clazy
  */
 inline bool isValueDeclInFunctionContext(const clang::ValueDecl *valueDecl)
 {
-    auto context = valueDecl ? valueDecl->getDeclContext() : nullptr;
-    return context && llvm::isa<clang::FunctionDecl>(context) && !llvm::isa<clang::ParmVarDecl>(valueDecl);
+    const auto *context = valueDecl ? valueDecl->getDeclContext() : nullptr;
+    return llvm::isa_and_nonnull<clang::FunctionDecl>(context) && !llvm::isa<clang::ParmVarDecl>(valueDecl);
 }
 
 /**
@@ -66,26 +67,30 @@ std::vector<clang::DeclContext *> contextsForDecl(clang::DeclContext *);
 /**
  * Returns the first context for a decl.
  */
-inline clang::DeclContext * contextForDecl(clang::Decl *decl)
+inline clang::DeclContext *contextForDecl(clang::Decl *decl)
 {
-    if (!decl)
+    if (!decl) {
         return nullptr;
+    }
 
-    if (auto context = llvm::dyn_cast<clang::DeclContext>(decl))
+    if (auto *context = llvm::dyn_cast<clang::DeclContext>(decl)) {
         return context;
+    }
 
     return decl->getDeclContext();
 }
 
 inline clang::NamespaceDecl *namespaceForDecl(clang::Decl *decl)
 {
-    if (!decl)
+    if (!decl) {
         return nullptr;
+    }
 
     clang::DeclContext *declContext = decl->getDeclContext();
     while (declContext) {
-        if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(declContext))
+        if (auto *ns = llvm::dyn_cast<clang::NamespaceDecl>(declContext)) {
             return ns;
+        }
 
         declContext = declContext->getParent();
     }
@@ -95,19 +100,21 @@ inline clang::NamespaceDecl *namespaceForDecl(clang::Decl *decl)
 
 inline clang::NamespaceDecl *namespaceForType(clang::QualType q)
 {
-    if (q.isNull())
+    if (q.isNull()) {
         return nullptr;
+    }
 
     q = clazy::pointeeQualType(q);
     // Check if it's a class, struct, union or enum
     clang::TagDecl *rec = q->getAsTagDecl();
-    if (rec)
+    if (rec) {
         return namespaceForDecl(rec);
+    }
 
     // Or maybe it's a typedef to a builtin type:
-    auto typeDefType = q->getAs<clang::TypedefType>();
+    const auto *typeDefType = q->getAs<clang::TypedefType>();
     if (typeDefType) {
-        clang::TypedefNameDecl* typedeff = typeDefType->getDecl();
+        clang::TypedefNameDecl *typedeff = typeDefType->getDecl();
         return namespaceForDecl(typedeff);
     }
 
@@ -116,8 +123,9 @@ inline clang::NamespaceDecl *namespaceForType(clang::QualType q)
 
 inline clang::NamespaceDecl *namespaceForFunction(clang::FunctionDecl *func)
 {
-    if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(func->getDeclContext()))
+    if (auto *ns = llvm::dyn_cast<clang::NamespaceDecl>(func->getDeclContext())) {
         return ns;
+    }
 
     return namespaceForDecl(func);
 }
@@ -127,18 +135,19 @@ inline clang::NamespaceDecl *namespaceForFunction(clang::FunctionDecl *func)
  * Contexts are namespaces, classes, inner classes, functions, etc.
 
  */
-template <typename T>
-T* firstContextOfType(clang::DeclContext *context)
+template<typename T>
+T *firstContextOfType(clang::DeclContext *context)
 {
-    if (!context)
+    if (!context) {
         return nullptr;
+    }
 
-    if (llvm::isa<T>(context))
+    if (llvm::isa<T>(context)) {
         return llvm::cast<T>(context);
+    }
 
     return clazy::firstContextOfType<T>(context->getParent());
 }
-
 
 /**
  * Returns fully/semi-fully qualified name for a method, but doesn't over-qualify with namespaces
@@ -163,9 +172,7 @@ std::string getMostNeededQualifiedName(const clang::SourceManager &sourceManager
  * but only if you qualify it with the derived class name, so &Derived::baseMethod, instead of &Base::baseMethod
  * If this was the case then isSpecialProtectedCase will be true
  */
-bool canTakeAddressOf(clang::CXXMethodDecl *method,
-                      clang::DeclContext *context,
-                      bool &isSpecialProtectedCase);
+bool canTakeAddressOf(clang::CXXMethodDecl *method, clang::DeclContext *context, bool &isSpecialProtectedCase);
 
 }
 

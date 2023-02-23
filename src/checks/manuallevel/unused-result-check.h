@@ -47,12 +47,12 @@ class UnusedResultCheck : public CheckBase
 {
 public:
     explicit UnusedResultCheck(const std::string &name, ClazyContext *context);
-    ~UnusedResultCheck();
+    ~UnusedResultCheck() override;
     void VisitStmt(clang::Stmt *stmt) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 
 private:
-   std::unique_ptr<ClazyAstMatcherCallback> m_astMatcherCallBack; // TODO: add std::propagate_const
+    std::unique_ptr<ClazyAstMatcherCallback> m_astMatcherCallBack; // TODO: add std::propagate_const
 };
 
 #endif

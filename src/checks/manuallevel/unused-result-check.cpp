@@ -40,7 +40,7 @@ public:
         : ClazyAstMatcherCallback(check)
     {
     }
-    virtual void run(const MatchFinder::MatchResult &result)
+    void run(const MatchFinder::MatchResult &result) override
     {
         if (const auto *callExpr = result.Nodes.getNodeAs<CXXMemberCallExpr>("callExpr")) {
             if (callExpr->getMethodDecl()->isConst() && !callExpr->getMethodDecl()->getReturnType()->isVoidType()) {
@@ -75,9 +75,10 @@ UnusedResultCheck::~UnusedResultCheck() = default;
 
 void UnusedResultCheck::VisitStmt(Stmt *stmt)
 {
-    auto call = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!call || call->getNumArgs() != 1)
+    auto *call = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!call || call->getNumArgs() != 1) {
         return;
+    }
 }
 
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)

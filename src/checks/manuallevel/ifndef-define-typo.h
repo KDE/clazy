@@ -27,8 +27,7 @@
 /**
  * See README-ifndef-define-typo.md for more info.
  */
-class IfndefDefineTypo
-    : public CheckBase
+class IfndefDefineTypo : public CheckBase
 {
 public:
     explicit IfndefDefineTypo(const std::string &name, ClazyContext *context);
@@ -37,7 +36,10 @@ public:
     void VisitIfdef(clang::SourceLocation, const clang::Token &) override;
     void VisitIfndef(clang::SourceLocation, const clang::Token &) override;
     void VisitIf(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind conditionValue) override;
-    void VisitElif(clang::SourceLocation loc, clang::SourceRange conditionRange, clang::PPCallbacks::ConditionValueKind ConditionValue, clang::SourceLocation ifLoc) override;
+    void VisitElif(clang::SourceLocation loc,
+                   clang::SourceRange conditionRange,
+                   clang::PPCallbacks::ConditionValueKind ConditionValue,
+                   clang::SourceLocation ifLoc) override;
     void VisitElse(clang::SourceLocation loc, clang::SourceLocation ifLoc) override;
     void VisitEndif(clang::SourceLocation loc, clang::SourceLocation ifLoc) override;
 

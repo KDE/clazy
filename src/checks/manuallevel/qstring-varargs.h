@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-qstring-varargs.md for more info.
  */
-class QStringVarargs
-    : public CheckBase
+class QStringVarargs : public CheckBase
 {
 public:
     explicit QStringVarargs(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
 };
 

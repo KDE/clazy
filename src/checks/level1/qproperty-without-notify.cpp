@@ -31,13 +31,12 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
-
 
 QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -48,8 +47,9 @@ QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name, ClazyCon
 void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (!ii)
+    if (!ii) {
         return;
+    }
 
     if (ii->getName() == "Q_GADGET") {
         m_lastIsGadget = true;
@@ -62,14 +62,16 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
     }
 
     // Gadgets can't have NOTIFY
-    if (m_lastIsGadget || ii->getName() != "Q_PROPERTY")
+    if (m_lastIsGadget || ii->getName() != "Q_PROPERTY") {
         return;
+    }
 
-    if (sm().isInSystemHeader(range.getBegin()))
+    if (sm().isInSystemHeader(range.getBegin())) {
         return;
+    }
     CharSourceRange crange = Lexer::getAsCharRange(range, sm(), lo());
 
-    string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
+    std::string text = static_cast<std::string>(Lexer::getSourceText(crange, sm(), lo()));
     if (text.empty()) {
         // If the text is empty, it is more likely there is an error
         // in parsing than an empty Q_PROPERTY macro call (which would
@@ -77,16 +79,17 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
         return;
     }
 
-    if (text.back() == ')')
+    if (text.back() == ')') {
         text.pop_back();
+    }
 
-    vector<string> split = clazy::splitString(text, ' ');
+    std::vector<std::string> split = clazy::splitString(text, ' ');
 
     bool found_read = false;
     bool found_constant = false;
     bool found_notify = false;
     for (std::string &token : split) {
-        clazy::rtrim(/*by-ref*/token);
+        clazy::rtrim(/*by-ref*/ token);
         if (!found_read && token == "READ") {
             found_read = true;
             continue;
@@ -103,9 +106,9 @@ void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok,
         }
     }
 
-    if (!found_read || (found_notify || found_constant))
+    if (!found_read || (found_notify || found_constant)) {
         return;
-
+    }
 
     emitWarning(range.getBegin(), "Q_PROPERTY should have either NOTIFY or CONSTANT");
 }

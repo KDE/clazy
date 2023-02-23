@@ -20,8 +20,8 @@
 */
 
 #include "returning-void-expression.h"
-#include "ContextUtils.h"
 #include "ClazyContext.h"
+#include "ContextUtils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -31,13 +31,12 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class DeclContext;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
-
 
 ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -46,22 +45,26 @@ ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyC
 
 void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 {
-    auto ret = dyn_cast<ReturnStmt>(stmt);
-    if (!ret || !clazy::hasChildren(ret))
+    auto *ret = dyn_cast<ReturnStmt>(stmt);
+    if (!ret || !clazy::hasChildren(ret)) {
         return;
+    }
 
     QualType qt = ret->getRetValue()->getType();
-    if (qt.isNull() || !qt->isVoidType())
+    if (qt.isNull() || !qt->isVoidType()) {
         return;
+    }
 
     DeclContext *context = clazy::contextForDecl(m_context->lastDecl);
-    if (!context)
+    if (!context) {
         return;
+    }
 
-    auto func = dyn_cast<FunctionDecl>(context);
+    auto *func = dyn_cast<FunctionDecl>(context);
     // A function template returning T won't bailout in the void check above, do it properly now:
-    if (!func || !func->getReturnType()->isVoidType())
+    if (!func || !func->getReturnType()->isVoidType()) {
         return;
+    }
 
     emitWarning(stmt, "Returning a void expression");
 }

@@ -31,7 +31,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class ForStmt;
 class ValueDecl;
 class Stmt;
@@ -46,12 +47,12 @@ class CXXForRangeStmt;
  * - For Range Loops:
  *   - Finds places where you're using C++11 for range loops with Qt containers. (potential detach)
  */
-class Foreach
-    : public CheckBase
+class Foreach : public CheckBase
 {
 public:
     Foreach(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     void checkBigTypeMissingRef();
     bool containsDetachments(clang::Stmt *stmt, clang::ValueDecl *containerValueDecl);

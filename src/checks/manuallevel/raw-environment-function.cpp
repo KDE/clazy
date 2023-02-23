@@ -32,8 +32,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
-
 
 RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -42,19 +40,23 @@ RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name, ClazyCon
 
 void RawEnvironmentFunction::VisitStmt(clang::Stmt *stmt)
 {
-    auto callexpr = dyn_cast<CallExpr>(stmt);
-    if (!callexpr)
+    auto *callexpr = dyn_cast<CallExpr>(stmt);
+    if (!callexpr) {
         return;
+    }
 
     FunctionDecl *func = callexpr->getDirectCallee();
-    if (!func)
+    if (!func) {
         return;
+    }
 
     StringRef funcName = clazy::name(func);
 
-    if (funcName == "putenv")
+    if (funcName == "putenv") {
         emitWarning(stmt, "Prefer using qputenv instead of putenv");
+    }
 
-    if (funcName == "getenv")
+    if (funcName == "getenv") {
         emitWarning(stmt, "Prefer using qgetenv instead of getenv");
+    }
 }

@@ -26,39 +26,38 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <vector>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class CXXMethodDecl;
 class FieldDecl;
 class Decl;
 class MacroInfo;
 class Token;
 class TypeAliasDecl;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-qproperty-type-mismatch.md for more info.
  */
-class QPropertyTypeMismatch
-    : public CheckBase
+class QPropertyTypeMismatch : public CheckBase
 {
 public:
     explicit QPropertyTypeMismatch(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
     void VisitMethod(const clang::CXXMethodDecl &);
     void VisitField(const clang::FieldDecl &);
     void VisitTypedef(const clang::TypedefNameDecl *);
 
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 
-    struct Property
-    {
+    struct Property {
         clang::SourceLocation loc;
         bool member{};
         std::string name;

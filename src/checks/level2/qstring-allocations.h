@@ -28,12 +28,13 @@
 #include "checkbase.h"
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class FixItHint;
 class ConditionalOperator;
 class CallExpr;
@@ -44,11 +45,7 @@ class Stmt;
 
 struct Latin1Expr;
 
-enum FromFunction {
-    FromLatin1,
-    FromUtf8
-};
-
+enum FromFunction { FromLatin1, FromUtf8 };
 
 /**
  * Finds places where there are unneeded memory allocations due to temporary QStrings.
@@ -59,8 +56,7 @@ enum FromFunction {
  *
  * See README-qstring-allocations for more information.
  */
-class QStringAllocations
-    : public CheckBase
+class QStringAllocations : public CheckBase
 {
 public:
     QStringAllocations(const std::string &name, ClazyContext *context);
@@ -79,7 +75,7 @@ private:
     std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr, FromFunction);
     std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt, const std::string &replacement);
 
-    Latin1Expr qlatin1CtorExpr(clang::Stmt *stm, clang::ConditionalOperator * &ternary);
+    Latin1Expr qlatin1CtorExpr(clang::Stmt *stm, clang::ConditionalOperator *&ternary);
 };
 
 #endif

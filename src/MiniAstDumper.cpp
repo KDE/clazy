@@ -22,18 +22,17 @@
 
 #include "MiniAstDumper.h"
 
+#include <clang/Basic/FileManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
-#include <clang/Basic/FileManager.h>
 
 using namespace clang;
-using namespace std;
 
 MiniAstDumperASTAction::MiniAstDumperASTAction()
 {
 }
 
-bool MiniAstDumperASTAction::ParseArgs(const CompilerInstance &, const std::vector<string> &)
+bool MiniAstDumperASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &)
 {
     return true;
 }
@@ -53,7 +52,7 @@ MiniASTDumperConsumer::~MiniASTDumperConsumer()
 
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
-    if (auto rec = dyn_cast<CXXRecordDecl>(decl)) {
+    if (auto *rec = dyn_cast<CXXRecordDecl>(decl)) {
         llvm::errs() << "Found record: " << rec->getQualifiedNameAsString() << "\n";
     }
 
@@ -73,5 +72,4 @@ void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
     TraverseDecl(ctx.getTranslationUnitDecl());
 }
 
-static FrontendPluginRegistry::Add<MiniAstDumperASTAction>
-X2("clazyMiniAstDumper", "Clazy Mini AST Dumper plugin");
+static FrontendPluginRegistry::Add<MiniAstDumperASTAction> X2("clazyMiniAstDumper", "Clazy Mini AST Dumper plugin");

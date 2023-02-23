@@ -24,16 +24,17 @@
 #define CLAZY_MINI_AST_DUMPER
 
 #include <clang/AST/ASTConsumer.h>
-#include <clang/Frontend/FrontendAction.h>
 #include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/Frontend/FrontendAction.h>
 #include <llvm/ADT/StringRef.h>
 
 #include <memory>
-#include <vector>
 #include <string>
 #include <utility>
+#include <vector>
 
-namespace clang {
+namespace clang
+{
 class CompilerInstance;
 class ASTContext;
 class Decl;
@@ -44,14 +45,13 @@ class MiniAstDumperASTAction : public clang::PluginASTAction
 {
 public:
     MiniAstDumperASTAction();
+
 protected:
     bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args_) override;
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
 };
 
-class MiniASTDumperConsumer
-    : public clang::ASTConsumer
-    , public clang::RecursiveASTVisitor<MiniASTDumperConsumer>
+class MiniASTDumperConsumer : public clang::ASTConsumer, public clang::RecursiveASTVisitor<MiniASTDumperConsumer>
 {
 public:
     explicit MiniASTDumperConsumer();

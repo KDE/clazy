@@ -27,16 +27,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-connect-by-name.md for more info.
  */
-class ConnectByName
-    : public CheckBase
+class ConnectByName : public CheckBase
 {
 public:
     explicit ConnectByName(const std::string &name, ClazyContext *context);

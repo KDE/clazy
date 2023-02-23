@@ -31,7 +31,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class ImplicitCastExpr;
 class SourceLocation;
 class Stmt;
@@ -44,12 +45,12 @@ class FunctionDecl;
  *
  * See README-implicit-casts for more information
  */
-class ImplicitCasts
-    : public CheckBase
+class ImplicitCasts : public CheckBase
 {
 public:
     ImplicitCasts(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     bool isBoolToInt(clang::FunctionDecl *func) const;
     bool isMacroToIgnore(clang::SourceLocation loc) const;

@@ -25,12 +25,13 @@
 
 #include "checkbase.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class FixItHint;
 class CXXConstructExpr;
@@ -46,31 +47,28 @@ class CXXFunctionalCastExpr;
  * Replaces QLatin1Char( ) calls with u''.
  *
  */
-class Qt6QLatin1StringCharToU
-    : public CheckBase
+class Qt6QLatin1StringCharToU : public CheckBase
 {
 public:
     explicit Qt6QLatin1StringCharToU(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+
 private:
     std::vector<clang::SourceLocation> m_listingMacroExpand;
     std::vector<clang::SourceLocation> m_emittedWarningsInMacro;
     bool warningAlreadyEmitted(clang::SourceLocation sploc);
     bool checkCTorExpr(clang::Stmt *stmt, bool check_parents);
     void lookForLeftOver(clang::Stmt *stmt, bool found_QString_QChar = false);
-    std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false,
-                                 int ancestorConditionChildNumber = 0);
+    std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false, int ancestorConditionChildNumber = 0);
 
     bool isInterestingCtorCall(clang::CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true);
-    bool relatedToQStringOrQChar(clang::Stmt* stmt, const ClazyContext *const context);
-    bool foundQCharOrQString(clang::Stmt* stmt);
+    bool relatedToQStringOrQChar(clang::Stmt *stmt, const ClazyContext *const context);
+    bool foundQCharOrQString(clang::Stmt *stmt);
 
     bool m_QStringOrQChar_fix = false;
     bool m_QChar = false;
     bool m_QChar_noFix = false;
-
 };
 
 #endif

@@ -20,11 +20,11 @@
 */
 
 #include "wrong-qevent-cast.h"
-#include "Utils.h"
-#include "HierarchyUtils.h"
-#include "TypeUtils.h"
 #include "ClazyContext.h"
+#include "HierarchyUtils.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -44,9 +44,8 @@
 #include <vector>
 
 using namespace clang;
-using namespace std;
 
-typedef vector<StringRef> ClassNameList;
+using ClassNameList = std::vector<StringRef>;
 
 enum QtUnregularlyNamedEventTypes {
     DragEnter = 60,
@@ -109,94 +108,92 @@ enum QtUnregularlyNamedEventTypes {
     WhatsThis = 111,
     ContextMenu = 82,
     QueryWhatsThis = 123
-                     // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
+    // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
 };
-
 
 WrongQEventCast::WrongQEventCast(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-
-
 }
 
-static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, string eventTypeStr, StringRef className)
+static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, const std::string &eventTypeStr, StringRef className)
 {
     // In the simplest case, the class is "Q" + eventType + "Event"
-    string expectedClassName = string("Q") + eventTypeStr + string("Event");
-    if (expectedClassName == className)
+    std::string expectedClassName = std::string("Q") + eventTypeStr + std::string("Event");
+    if (expectedClassName == className) {
         return true;
+    }
 
     // Otherwise it's unregular and we need a map:
 
-    static unordered_map<QtUnregularlyNamedEventTypes, ClassNameList, std::hash<int>> map = {
-        { ActionAdded, {"QActionEvent" } },
-        { ActionRemoved, {"QActionEvent" } },
-        { ActionChanged, {"QActionEvent" } },
-        { ChildAdded, {"QChildEvent" } },
-        { ChildRemoved, {"QChildEvent" } },
-        { ChildPolished, {"QChildEvent" } },
-        { MetaCall, {"QDBusSpyCallEvent", "QDBusCallDeliveryEvent"} },
-        { DragEnter, {"QDragEnterEvent", "QDragMoveEvent", "QDropEvent"  } },
-        { DragLeave, {"QDragLeaveEvent", "QDragMoveEvent", "QDropEvent" } },
-        { DragMove, {"QDragMoveEvent", "QDropEvent" } },
-        { FocusIn, {"QFocusEvent" } },
-        { FocusOut, {"QFocusEvent" } },
-        { FocusAboutToChange, {"QFocusEvent" } },
-        { Gesture, {"QGestureEvent" } },
-        { GestureOverride, {"QGestureEvent" } },
-        { GraphicsSceneContextMenu, {"QGraphicsSceneEvent" } },
-        { GraphicsSceneHoverEnter, { "QGraphicsSceneHoverEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneHoverMove, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneHoverLeave, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneHelp, { "QGraphicsSceneEvent" } },
-        { GraphicsSceneDragEnter, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneDragMove, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneDragLeave, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneDrop, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent" } },
-        { GraphicsSceneWheel, {"QGraphicsSceneEvent" } },
-        { GraphicsSceneResize, {"QGraphicsSceneEvent" } },
-        { GraphicsSceneMouseMove, {"QGraphicsSceneMouseEvent" } },
-        { GraphicsSceneMousePress, {"QGraphicsSceneMouseEvent" } },
-        { GraphicsSceneMouseRelease, {"QGraphicsSceneMouseEvent" } },
-        { GraphicsSceneMouseDoubleClick, {"QGraphicsSceneMouseEvent" } },
+    static std::unordered_map<QtUnregularlyNamedEventTypes, ClassNameList, std::hash<int>> map = {
+        {ActionAdded, {"QActionEvent"}},
+        {ActionRemoved, {"QActionEvent"}},
+        {ActionChanged, {"QActionEvent"}},
+        {ChildAdded, {"QChildEvent"}},
+        {ChildRemoved, {"QChildEvent"}},
+        {ChildPolished, {"QChildEvent"}},
+        {MetaCall, {"QDBusSpyCallEvent", "QDBusCallDeliveryEvent"}},
+        {DragEnter, {"QDragEnterEvent", "QDragMoveEvent", "QDropEvent"}},
+        {DragLeave, {"QDragLeaveEvent", "QDragMoveEvent", "QDropEvent"}},
+        {DragMove, {"QDragMoveEvent", "QDropEvent"}},
+        {FocusIn, {"QFocusEvent"}},
+        {FocusOut, {"QFocusEvent"}},
+        {FocusAboutToChange, {"QFocusEvent"}},
+        {Gesture, {"QGestureEvent"}},
+        {GestureOverride, {"QGestureEvent"}},
+        {GraphicsSceneContextMenu, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneHoverEnter, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneHoverMove, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneHoverLeave, {"QGraphicsSceneHoverEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneHelp, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneDragEnter, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneDragMove, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneDragLeave, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneDrop, {"QGraphicsSceneDragDropEvent", "QGraphicsSceneEvent"}},
+        {GraphicsSceneWheel, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneResize, {"QGraphicsSceneEvent"}},
+        {GraphicsSceneMouseMove, {"QGraphicsSceneMouseEvent"}},
+        {GraphicsSceneMousePress, {"QGraphicsSceneMouseEvent"}},
+        {GraphicsSceneMouseRelease, {"QGraphicsSceneMouseEvent"}},
+        {GraphicsSceneMouseDoubleClick, {"QGraphicsSceneMouseEvent"}},
         //{ StatusTip, {"QStatusTipEvent" } },
-        { ToolTip, {"QHelpEvent" } },
-        { WhatsThis, {"QHelpEvent" } },
-        { QueryWhatsThis, {"QHelpEvent" } },
-        { HoverEnter, {"QHoverEvent", "QInputEvent" } },
-        { HoverLeave, {"QHoverEvent", "QInputEvent" } },
-        { HoverMove, {"QHoverEvent", "QInputEvent" } },
-        { KeyPress, {"QKeyEvent", "QInputEvent" } },
-        { KeyRelease, {"QKeyEvent", "QInputEvent" } },
-        { ShortcutOverride, {"QKeyEvent", "QInputEvent" } },
-        { MouseButtonPress, {"QMouseEvent" } },
-        { MouseButtonRelease, {"QMouseEvent" } },
-        { MouseButtonDblClick, {"QMouseEvent" } },
-        { MouseMove, {"QMouseEvent" } },
-        { NonClientAreaMouseMove, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonPress, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonRelease, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonRelease, {"QMouseEvent" } },
-        { NonClientAreaMouseButtonDblClick, {"QMouseEvent" } },
-        { NativeGesture, { "QInputEvent" } },
-        { OrientationChange, {"QScreenOrientationChangeEvent" } },
-        { TabletEnterProximity, {"QTabletEvent", "QInputEvent" } },
-        { TabletLeaveProximity, {"QTabletEvent", "QInputEvent" } },
-        { TabletPress, {"QTabletEvent", "QInputEvent" } },
-        { TabletMove, {"QTabletEvent", "QInputEvent" } },
-        { TabletRelease, {"QTabletEvent", "QInputEvent" } },
-        { TouchBegin, {"QTouchEvent", "QInputEvent" } },
-        { TouchCancel, {"QTouchEvent", "QInputEvent" } },
-        { TouchEnd, {"QTouchEvent", "QInputEvent" } },
-        { TouchUpdate, {"QTouchEvent", "QInputEvent" } },
-        { Wheel, {"QInputEvent" } },
-        { ContextMenu, {"QInputEvent" } }
-    };
+        {ToolTip, {"QHelpEvent"}},
+        {WhatsThis, {"QHelpEvent"}},
+        {QueryWhatsThis, {"QHelpEvent"}},
+        {HoverEnter, {"QHoverEvent", "QInputEvent"}},
+        {HoverLeave, {"QHoverEvent", "QInputEvent"}},
+        {HoverMove, {"QHoverEvent", "QInputEvent"}},
+        {KeyPress, {"QKeyEvent", "QInputEvent"}},
+        {KeyRelease, {"QKeyEvent", "QInputEvent"}},
+        {ShortcutOverride, {"QKeyEvent", "QInputEvent"}},
+        {MouseButtonPress, {"QMouseEvent"}},
+        {MouseButtonRelease, {"QMouseEvent"}},
+        {MouseButtonDblClick, {"QMouseEvent"}},
+        {MouseMove, {"QMouseEvent"}},
+        {NonClientAreaMouseMove, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonPress, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonRelease, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonRelease, {"QMouseEvent"}},
+        {NonClientAreaMouseButtonDblClick, {"QMouseEvent"}},
+        {NativeGesture, {"QInputEvent"}},
+        {OrientationChange, {"QScreenOrientationChangeEvent"}},
+        {TabletEnterProximity, {"QTabletEvent", "QInputEvent"}},
+        {TabletLeaveProximity, {"QTabletEvent", "QInputEvent"}},
+        {TabletPress, {"QTabletEvent", "QInputEvent"}},
+        {TabletMove, {"QTabletEvent", "QInputEvent"}},
+        {TabletRelease, {"QTabletEvent", "QInputEvent"}},
+        {TouchBegin, {"QTouchEvent", "QInputEvent"}},
+        {TouchCancel, {"QTouchEvent", "QInputEvent"}},
+        {TouchEnd, {"QTouchEvent", "QInputEvent"}},
+        {TouchUpdate, {"QTouchEvent", "QInputEvent"}},
+        {Wheel, {"QInputEvent"}},
+        {ContextMenu, {"QInputEvent"}}};
 
     auto it = map.find(eventType);
-    if (it == map.cend())
+    if (it == map.cend()) {
         return false;
+    }
 
     const ClassNameList &classes = it->second;
     const bool found = clazy::find(classes, className) != classes.cend();
@@ -204,29 +201,28 @@ static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, string
     return found;
 }
 
-
 // TODO: Use iterators
-CaseStmt* getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *event)
+CaseStmt *getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *event)
 {
     Stmt *s = pmap->getParent(stmt);
 
     while (s) {
-
-        if (auto ifStmt = dyn_cast<IfStmt>(s)) {
+        if (auto *ifStmt = dyn_cast<IfStmt>(s)) {
             // if there's we're inside an if statement then skip, to avoid false-positives
-            auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(ifStmt->getCond());
-            if (declRef && declRef->getDecl() == event->getDecl())
+            auto *declRef = clazy::getFirstChildOfType2<DeclRefExpr>(ifStmt->getCond());
+            if (declRef && declRef->getDecl() == event->getDecl()) {
                 return nullptr;
+            }
         }
 
-
-        if (auto caseStmt = dyn_cast<CaseStmt>(s)) {
-            auto switchStmt = clazy::getSwitchFromCase(pmap, caseStmt);
+        if (auto *caseStmt = dyn_cast<CaseStmt>(s)) {
+            auto *switchStmt = clazy::getSwitchFromCase(pmap, caseStmt);
             if (switchStmt) {
-                auto declRef = clazy::getFirstChildOfType2<DeclRefExpr>(switchStmt->getCond());
+                auto *declRef = clazy::getFirstChildOfType2<DeclRefExpr>(switchStmt->getCond());
                 // Does this switch refer to the same QEvent ?
-                if (declRef && declRef->getDecl() == event->getDecl())
+                if (declRef && declRef->getDecl() == event->getDecl()) {
                     return caseStmt;
+                }
             }
         }
 
@@ -238,9 +234,10 @@ CaseStmt* getCaseStatement(clang::ParentMap *pmap, Stmt *stmt, DeclRefExpr *even
 
 void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
 {
-    auto cast = dyn_cast<CXXStaticCastExpr>(stmt);
-    if (!cast)
+    auto *cast = dyn_cast<CXXStaticCastExpr>(stmt);
+    if (!cast) {
         return;
+    }
 
     Expr *e = cast->getSubExpr();
 
@@ -248,37 +245,43 @@ void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
     QualType pointeeType = t.isNull() ? QualType() : clazy::pointeeQualType(t);
     CXXRecordDecl *rec = pointeeType.isNull() ? nullptr : pointeeType->getAsCXXRecordDecl();
 
-    if (!rec || clazy::name(rec) != "QEvent")
+    if (!rec || clazy::name(rec) != "QEvent") {
         return;
+    }
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(cast);
-    if (!castTo)
+    if (!castTo) {
         return;
+    }
 
-    auto declref = clazy::getFirstChildOfType2<DeclRefExpr>(cast->getSubExpr());
-    if (!declref)
+    auto *declref = clazy::getFirstChildOfType2<DeclRefExpr>(cast->getSubExpr());
+    if (!declref) {
         return;
+    }
 
-    auto caseStmt = getCaseStatement(m_context->parentMap, stmt, declref);
-    if (!caseStmt)
+    auto *caseStmt = getCaseStatement(m_context->parentMap, stmt, declref);
+    if (!caseStmt) {
         return;
+    }
 
-    auto caseValue = clazy::getFirstChildOfType2<DeclRefExpr>(caseStmt->getLHS());
-    if (!caseValue)
+    auto *caseValue = clazy::getFirstChildOfType2<DeclRefExpr>(caseStmt->getLHS());
+    if (!caseValue) {
         return;
+    }
 
-
-    auto enumeratorDecl = dyn_cast<EnumConstantDecl>(caseValue->getDecl());
-    if (!enumeratorDecl)
+    auto *enumeratorDecl = dyn_cast<EnumConstantDecl>(caseValue->getDecl());
+    if (!enumeratorDecl) {
         return;
+    }
 
     auto enumeratorVal = static_cast<QtUnregularlyNamedEventTypes>(enumeratorDecl->getInitVal().getExtValue());
 
-    string eventTypeStr = enumeratorDecl->getNameAsString();
+    std::string eventTypeStr = enumeratorDecl->getNameAsString();
     StringRef castToName = clazy::name(castTo);
 
-    if (eventTypeMatchesClass(enumeratorVal, eventTypeStr, castToName))
+    if (eventTypeMatchesClass(enumeratorVal, eventTypeStr, castToName)) {
         return;
+    }
 
-    emitWarning(stmt, string("Cast from a QEvent::") + eventTypeStr + " event to " + string(castToName) + " looks suspicious.");
+    emitWarning(stmt, std::string("Cast from a QEvent::") + eventTypeStr + " event to " + std::string(castToName) + " looks suspicious.");
 }

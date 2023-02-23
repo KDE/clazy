@@ -38,44 +38,42 @@ RequiredResults::RequiredResults(const std::string &name, ClazyContext *context)
 
 bool RequiredResults::shouldIgnoreMethod(const StringRef &qualifiedName)
 {
-    static const std::vector<StringRef> files = {
-        "QDir::mkdir",
-        "QDir::rmdir",
-        "QDir::mkpath",
-        "QDBusConnection::send",
+    static const std::vector<StringRef> files = {"QDir::mkdir",
+                                                 "QDir::rmdir",
+                                                 "QDir::mkpath",
+                                                 "QDBusConnection::send",
 
-        "QRegExp::indexIn",
-        "QRegExp::exactMatch",
-        "QQmlProperty::write",
-        "QQmlProperty::reset",
-        "QWidget::winId",
-        "QtWaylandClient::QWaylandEglWindow::contentFBO",
-        "ProString::updatedHash",
+                                                 "QRegExp::indexIn",
+                                                 "QRegExp::exactMatch",
+                                                 "QQmlProperty::write",
+                                                 "QQmlProperty::reset",
+                                                 "QWidget::winId",
+                                                 "QtWaylandClient::QWaylandEglWindow::contentFBO",
+                                                 "ProString::updatedHash",
 
-        // kdepim
-        "KCalCore::Incidence::recurrence",
-        "KCalCore::RecurrenceRule::Private::buildCache",
-        "KAlarmCal::KAEvent::updateKCalEvent",
-        "Akonadi::Server::Collection::clearMimeTypes",
-        "Akonadi::Server::Collection::addMimeType",
-        "Akonadi::Server::PimItem::addFlag",
-        "Akonadi::Server::PimItem::addTag",
+                                                 // kdepim
+                                                 "KCalCore::Incidence::recurrence",
+                                                 "KCalCore::RecurrenceRule::Private::buildCache",
+                                                 "KAlarmCal::KAEvent::updateKCalEvent",
+                                                 "Akonadi::Server::Collection::clearMimeTypes",
+                                                 "Akonadi::Server::Collection::addMimeType",
+                                                 "Akonadi::Server::PimItem::addFlag",
+                                                 "Akonadi::Server::PimItem::addTag",
 
-        // kf5 libs
-        "KateVi::Command::execute",
-        "KArchiveDirectory::copyTo",
-        "KBookmarkManager::saveAs",
-        "KBookmarkManager::save",
-        "KLineEditPrivate::copySqueezedText",
-        "KJS::UString::Rep::hash",
-        "KCModuleProxy::realModule",
-        "KCategorizedView::visualRect",
-        "KateLineLayout::textLine",
-        "DOM::HTMLCollectionImpl::firstItem",
-        "DOM::HTMLCollectionImpl::nextItem",
-        "DOM::HTMLCollectionImpl::firstItem",
-        "ImapResourceBase::settings"
-    };
+                                                 // kf5 libs
+                                                 "KateVi::Command::execute",
+                                                 "KArchiveDirectory::copyTo",
+                                                 "KBookmarkManager::saveAs",
+                                                 "KBookmarkManager::save",
+                                                 "KLineEditPrivate::copySqueezedText",
+                                                 "KJS::UString::Rep::hash",
+                                                 "KCModuleProxy::realModule",
+                                                 "KCategorizedView::visualRect",
+                                                 "KateLineLayout::textLine",
+                                                 "DOM::HTMLCollectionImpl::firstItem",
+                                                 "DOM::HTMLCollectionImpl::nextItem",
+                                                 "DOM::HTMLCollectionImpl::firstItem",
+                                                 "ImapResourceBase::settings"};
 
     return clazy::contains(files, qualifiedName);
 }

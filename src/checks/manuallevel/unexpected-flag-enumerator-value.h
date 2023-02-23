@@ -25,7 +25,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-unexpected-flag-enumerator-value.md for more info.
  */
@@ -34,6 +33,7 @@ class UnexpectedFlagEnumeratorValue : public CheckBase
 public:
     explicit UnexpectedFlagEnumeratorValue(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
 };
 

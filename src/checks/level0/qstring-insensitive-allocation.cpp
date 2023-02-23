@@ -20,9 +20,9 @@
 */
 
 #include "qstring-insensitive-allocation.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Expr.h>
@@ -33,13 +33,12 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class FunctionDecl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
-
 
 QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -49,35 +48,38 @@ QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &na
 static bool isInterestingCall1(CallExpr *call)
 {
     FunctionDecl *func = call->getDirectCallee();
-    if (!func)
+    if (!func) {
         return false;
+    }
 
-    static const vector<string> methods = { "QString::toUpper", "QString::toLower" };
+    static const std::vector<std::string> methods = {"QString::toUpper", "QString::toLower"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
 static bool isInterestingCall2(CallExpr *call)
 {
     FunctionDecl *func = call->getDirectCallee();
-    if (!func)
+    if (!func) {
         return false;
+    }
 
-    static const vector<string> methods = { "QString::endsWith", "QString::startsWith",
-                                            "QString::contains", "QString::compare" };
+    static const std::vector<std::string> methods = {"QString::endsWith", "QString::startsWith", "QString::contains", "QString::compare"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
 void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
 {
-    vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
-    if (calls.size() < 2)
+    std::vector<CallExpr *> calls = Utils::callListForChain(dyn_cast<CallExpr>(stmt));
+    if (calls.size() < 2) {
         return;
+    }
 
     CallExpr *call1 = calls[calls.size() - 1];
     CallExpr *call2 = calls[calls.size() - 2];
 
-    if (!isInterestingCall1(call1) || !isInterestingCall2(call2))
+    if (!isInterestingCall1(call1) || !isInterestingCall2(call2)) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "unneeded allocation");
 }

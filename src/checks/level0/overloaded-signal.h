@@ -24,7 +24,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-overloaded-signal.md for more info.
  */

@@ -27,7 +27,6 @@
 #include "HierarchyUtils.h"
 #include <clang/AST/ExprCXX.h>
 
-using namespace std;
 using namespace clang;
 
 UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context)
@@ -37,7 +36,7 @@ UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &
 
 void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 {
-    auto ce = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *ce = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!ce) {
         return;
     }
@@ -46,23 +45,20 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
     if (vec.size() < 2) {
         return;
     }
-    
+
     CallExpr *callExpr = vec.at(vec.size() - 1);
 
-    FunctionDecl* funcDecl = callExpr->getDirectCallee();
+    FunctionDecl *funcDecl = callExpr->getDirectCallee();
     if (!funcDecl) {
         return;
     }
     const std::string func = clazy::qualifiedMethodName(funcDecl);
 
-    static const std::vector<std::string> whiteList {
-        "QScopedPointer::data",
-        "QPointer::data",
-        "QSharedPointer::data",
-        "QSharedDataPointer::data"
-    };
+    static const std::vector<std::string> whiteList{"QScopedPointer::data", "QPointer::data", "QSharedPointer::data", "QSharedDataPointer::data"};
 
-    bool accepted = clazy::any_of(whiteList, [func](const std::string& f) { return f == func; });
+    bool accepted = clazy::any_of(whiteList, [func](const std::string &f) {
+        return f == func;
+    });
     if (!accepted) {
         return;
     }

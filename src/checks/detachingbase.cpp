@@ -23,8 +23,8 @@
 */
 
 #include "detachingbase.h"
-#include "StringUtils.h"
 #include "QtUtils.h"
+#include "StringUtils.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -37,7 +37,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Options options)
     : CheckBase(name, context, options)
@@ -46,22 +45,25 @@ DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Opt
 
 bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType detachingMethodType) const
 {
-    if (!method)
+    if (!method) {
         return false;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (!record)
+    if (!record) {
         return false;
+    }
 
     StringRef className = clazy::name(record);
 
-    const std::unordered_map<string, std::vector<StringRef>> &methodsByType = detachingMethodType == DetachingMethod ? clazy::detachingMethods()
-                                                                                                                     : clazy::detachingMethodsWithConstCounterParts();
+    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType =
+        detachingMethodType == DetachingMethod ? clazy::detachingMethods() : clazy::detachingMethodsWithConstCounterParts();
     auto it = methodsByType.find(static_cast<std::string>(className));
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy::contains(methods, clazy::name(method)))
+        if (clazy::contains(methods, clazy::name(method))) {
             return true;
+        }
     }
 
     return false;

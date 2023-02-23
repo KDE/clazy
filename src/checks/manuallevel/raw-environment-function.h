@@ -27,19 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-raw-environment-function.md for more info.
  */
-class RawEnvironmentFunction
-    : public CheckBase
+class RawEnvironmentFunction : public CheckBase
 {
 public:
     explicit RawEnvironmentFunction(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
 };
 

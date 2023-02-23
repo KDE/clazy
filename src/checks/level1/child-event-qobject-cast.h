@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-child-event-qobject-cast for more info.
  */
-class ChildEventQObjectCast
-    : public CheckBase
+class ChildEventQObjectCast : public CheckBase
 {
 public:
     explicit ChildEventQObjectCast(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
 };
 

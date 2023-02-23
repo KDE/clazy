@@ -35,8 +35,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
-
 
 ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -45,43 +43,46 @@ ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, 
 
 void ReturningDataFromTemporary::VisitStmt(clang::Stmt *stmt)
 {
-    if (handleReturn(dyn_cast<ReturnStmt>(stmt)))
+    if (handleReturn(dyn_cast<ReturnStmt>(stmt))) {
         return;
+    }
 
     handleDeclStmt(dyn_cast<DeclStmt>(stmt));
 }
 
 bool ReturningDataFromTemporary::handleReturn(ReturnStmt *ret)
 {
-    if (!ret)
+    if (!ret) {
         return false;
+    }
 
-    auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups |
-                                                       clazy::IgnoreImplicitCasts);
+    auto *memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(ret), clazy::IgnoreExprWithCleanups | clazy::IgnoreImplicitCasts);
     handleMemberCall(memberCall, false);
     return true;
 }
 
 void ReturningDataFromTemporary::handleDeclStmt(DeclStmt *declStmt)
 {
-    if (!declStmt)
+    if (!declStmt) {
         return;
+    }
 
-    for (auto decl : declStmt->decls()) {
-        auto varDecl = dyn_cast<VarDecl>(decl);
-        if (!varDecl)
+    for (auto *decl : declStmt->decls()) {
+        auto *varDecl = dyn_cast<VarDecl>(decl);
+        if (!varDecl) {
             continue;
+        }
 
-        if (varDecl->getType().getAsString() != "const char *")
+        if (varDecl->getType().getAsString() != "const char *") {
             continue;
+        }
 
         Expr *init = varDecl->getInit();
-        if (!init)
+        if (!init) {
             continue;
+        }
 
-        auto memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups |
-                                                           clazy::IgnoreImplicitCasts);
-
+        auto *memberCall = clazy::unpeal<CXXMemberCallExpr>(clazy::getFirstChild(init), clazy::IgnoreExprWithCleanups | clazy::IgnoreImplicitCasts);
 
         handleMemberCall(memberCall, true);
     }
@@ -89,19 +90,19 @@ void ReturningDataFromTemporary::handleDeclStmt(DeclStmt *declStmt)
 
 void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall, bool onlyTemporaries)
 {
-    if (!memberCall)
+    if (!memberCall) {
         return;
+    }
 
     CXXMethodDecl *method = memberCall->getMethodDecl();
-    if (!method)
+    if (!method) {
         return;
+    }
     const auto methodName = method->getQualifiedNameAsString();
 
-    if (methodName != "QByteArray::data" &&
-        methodName != "QByteArray::operator const char *" &&
-        methodName != "QByteArray::constData")
+    if (methodName != "QByteArray::data" && methodName != "QByteArray::operator const char *" && methodName != "QByteArray::constData") {
         return;
-
+    }
 
     Expr *obj = memberCall->getImplicitObjectArgument();
     Stmt *t = obj;
@@ -116,31 +117,37 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
 
         if (!onlyTemporaries) {
             declRef = dyn_cast<DeclRefExpr>(t);
-            if (declRef)
+            if (declRef) {
                 break;
+            }
         }
 
         temporaryExpr = dyn_cast<CXXBindTemporaryExpr>(t);
-        if (temporaryExpr)
+        if (temporaryExpr) {
             break;
+        }
 
         break;
     }
 
-    if (!temporaryExpr && !declRef)
+    if (!temporaryExpr && !declRef) {
         return;
+    }
 
     if (declRef) {
-        VarDecl *varDecl = dyn_cast<VarDecl>(declRef->getDecl());
-        if (!varDecl || varDecl->isStaticLocal() || clazy::valueIsConst(varDecl->getType()))
+        auto *varDecl = dyn_cast<VarDecl>(declRef->getDecl());
+        if (!varDecl || varDecl->isStaticLocal() || clazy::valueIsConst(varDecl->getType())) {
             return;
+        }
 
         QualType qt = varDecl->getType();
-        if (qt.isNull() || qt->isReferenceType())
+        if (qt.isNull() || qt->isReferenceType()) {
             return;
+        }
     } else if (temporaryExpr) {
-        if (clazy::valueIsConst(temporaryExpr->getType()))
+        if (clazy::valueIsConst(temporaryExpr->getType())) {
             return;
+        }
     }
 
     emitWarning(memberCall, "Returning data of temporary QByteArray");

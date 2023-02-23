@@ -22,9 +22,9 @@
 
 #include "auto-unexpected-qstringbuilder.h"
 #include "FixItUtils.h"
-#include "TypeUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
@@ -43,7 +43,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 static bool isQStringBuilder(QualType t)
 {
@@ -58,37 +57,42 @@ AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &na
 
 void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 {
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl)
+    auto *varDecl = dyn_cast<VarDecl>(decl);
+    if (!varDecl) {
         return;
+    }
 
     QualType qualtype = varDecl->getType();
     const Type *type = qualtype.getTypePtrOrNull();
-    if (!type || !type->isRecordType() || !dyn_cast<AutoType>(type) || !isQStringBuilder(qualtype))
+    if (!type || !type->isRecordType() || !dyn_cast<AutoType>(type) || !isQStringBuilder(qualtype)) {
         return;
+    }
 
     std::string replacement = "QString " + clazy::name(varDecl).str();
 
-    if (qualtype.isConstQualified())
+    if (qualtype.isConstQualified()) {
         replacement = "const " + replacement;
+    }
 
     SourceLocation start = clazy::getLocStart(varDecl);
     SourceLocation end = varDecl->getLocation();
     std::vector<FixItHint> fixits;
-    fixits.push_back(clazy::createReplacement({ start, end }, replacement));
+    fixits.push_back(clazy::createReplacement({start, end}, replacement));
 
     emitWarning(clazy::getLocStart(decl), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);
 }
 
 void AutoUnexpectedQStringBuilder::VisitStmt(Stmt *stmt)
 {
-    auto lambda = dyn_cast<LambdaExpr>(stmt);
-    if (!lambda)
+    auto *lambda = dyn_cast<LambdaExpr>(stmt);
+    if (!lambda) {
         return;
+    }
 
     CXXMethodDecl *method = lambda->getCallOperator();
-    if (!method || !isQStringBuilder(method->getReturnType()))
+    if (!method || !isQStringBuilder(method->getReturnType())) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "lambda return type deduced to be QStringBuilder instead of QString. Possible crash.");
 }

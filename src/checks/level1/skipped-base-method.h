@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-skipped-base-method.md for more info.
  */
-class SkippedBaseMethod
-    : public CheckBase
+class SkippedBaseMethod : public CheckBase
 {
 public:
     explicit SkippedBaseMethod(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
 };
 

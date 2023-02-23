@@ -19,7 +19,13 @@ class MyObj : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int r_good READ r_good CONSTANT)
+    Q_PROPERTY( int r_good2 READ r_good CONSTANT )
+    Q_PROPERTY( int r_good3
+        READ r_good
+        CONSTANT
+    )
     Q_PROPERTY(int r_bad READ r_bad CONSTANT)
+    Q_PROPERTY( int r_bad2 READ r_bad CONSTANT)
 
     Q_PROPERTY(int m_good MEMBER)
     Q_PROPERTY(int m_bad MEMBER)
@@ -34,7 +40,8 @@ class MyObj : public QObject
     Q_PROPERTY(int* rw_bad_ptr READ rw_bad_ptr WRITE set_rw_bad_ptr NOTIFY rw_bad_ptr_changed)
 
     Q_PROPERTY(bool boolTest READ boolTest CONSTANT)
-    Q_PROPERTY(A* classTest1 READ classTest1 CONSTANT)
+    Q_PROPERTY(A* classTest1_0 READ classTest1 CONSTANT)
+    Q_PROPERTY(A * classTest1_1 READ classTest1 CONSTANT)
     Q_PROPERTY(A classTest2 READ classTest2 CONSTANT)
     Q_PROPERTY(NS::A* classTest3 READ classTest3 CONSTANT)
     Q_PROPERTY(NS::A classTest4 READ classTest4 CONSTANT)

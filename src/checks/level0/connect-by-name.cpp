@@ -20,8 +20,8 @@
 */
 
 #include "connect-by-name.h"
-#include "ClazyContext.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -30,13 +30,12 @@
 
 #include <vector>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
-
 
 ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -46,15 +45,17 @@ ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)
 
 void ConnectByName::VisitDecl(clang::Decl *decl)
 {
-    auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record)
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
+    if (!record) {
         return;
+    }
 
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!accessSpecifierManager)
+    if (!accessSpecifierManager) {
         return;
+    }
 
-    for (auto method : record->methods()) {
+    for (auto *method : record->methods()) {
         std::string name = method->getNameAsString();
         if (clazy::startsWith(name, "on_")) {
             QtAccessSpecifierType qst = accessSpecifierManager->qtAccessSpecifierType(method);

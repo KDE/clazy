@@ -20,10 +20,10 @@
 */
 
 #include "ifndef-define-typo.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 #include "levenshteindistance.h"
 
 #include <clang/AST/AST.h>
@@ -31,8 +31,6 @@
 #include <iostream>
 
 using namespace clang;
-using namespace std;
-
 
 IfndefDefineTypo::IfndefDefineTypo(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -65,8 +63,9 @@ void IfndefDefineTypo::VisitIfdef(SourceLocation, const Token &)
 
 void IfndefDefineTypo::VisitIfndef(SourceLocation, const Token &macroNameTok)
 {
-    if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo())
+    if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
         m_lastIfndef = static_cast<std::string>(ii->getName());
+    }
 }
 
 void IfndefDefineTypo::VisitIf(SourceLocation, SourceRange, PPCallbacks::ConditionValueKind)
@@ -89,21 +88,23 @@ void IfndefDefineTypo::VisitEndif(SourceLocation, SourceLocation)
     m_lastIfndef.clear();
 }
 
-void IfndefDefineTypo::maybeWarn(const string &define, SourceLocation loc)
+void IfndefDefineTypo::maybeWarn(const std::string &define, SourceLocation loc)
 {
-    if (m_lastIfndef == "Q_CONSTRUCTOR_FUNCTION") // Transform into a list if more false-positives need to be added
+    if (m_lastIfndef == "Q_CONSTRUCTOR_FUNCTION") { // Transform into a list if more false-positives need to be added
         return;
+    }
 
     if (define == m_lastIfndef) {
         m_lastIfndef.clear();
         return;
     }
 
-    if (define.length() < 4)
+    if (define.length() < 4) {
         return;
+    }
 
     const int levDistance = levenshtein_distance(define, m_lastIfndef);
     if (levDistance < 3) {
-        emitWarning(loc, string("Possible typo in define. ") + m_lastIfndef + " vs " + define);
+        emitWarning(loc, std::string("Possible typo in define. ") + m_lastIfndef + " vs " + define);
     }
 }

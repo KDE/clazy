@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-returning-void-expression.md for more info.
  */
-class ReturningVoidExpression
-    : public CheckBase
+class ReturningVoidExpression : public CheckBase
 {
 public:
     explicit ReturningVoidExpression(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
 };
 

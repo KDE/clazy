@@ -29,23 +29,22 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class MacroInfo;
 class Token;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-qenums for more info.
  */
-class QEnums
-    : public CheckBase
+class QEnums : public CheckBase
 {
 public:
     explicit QEnums(const std::string &name, ClazyContext *context);
+
 private:
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range,
-                           const clang::MacroInfo * = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo * = nullptr) override;
 };
 
 #endif

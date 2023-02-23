@@ -25,29 +25,29 @@
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Tooling/Core/Diagnostic.h>
 
-namespace clang {
+namespace clang
+{
 class FixItOptions;
 }
 
-class FixItExporter
-    : public clang::DiagnosticConsumer
+class FixItExporter : public clang::DiagnosticConsumer
 {
 public:
-    explicit FixItExporter(clang::DiagnosticsEngine &DiagEngine, clang::SourceManager &SourceMgr,
-                           const clang::LangOptions &LangOpts, const std::string &exportFixes,
+    explicit FixItExporter(clang::DiagnosticsEngine &DiagEngine,
+                           clang::SourceManager &SourceMgr,
+                           const clang::LangOptions &LangOpts,
+                           const std::string &exportFixes,
                            bool isClazyStandalone);
 
     ~FixItExporter() override;
 
     bool IncludeInDiagnosticCounts() const override;
 
-    void BeginSourceFile(const clang::LangOptions &LangOpts,
-                         const clang::Preprocessor *PP = nullptr) override;
+    void BeginSourceFile(const clang::LangOptions &LangOpts, const clang::Preprocessor *PP = nullptr) override;
 
     void EndSourceFile() override;
 
-    void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel,
-                          const clang::Diagnostic &Info) override;
+    void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel, const clang::Diagnostic &Info) override;
 
     void Export();
 

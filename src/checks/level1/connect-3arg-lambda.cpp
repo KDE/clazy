@@ -20,9 +20,9 @@
 */
 
 #include "connect-3arg-lambda.h"
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "ClazyContext.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
@@ -36,7 +36,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 using uint = unsigned;
 
@@ -47,19 +46,22 @@ Connect3ArgLambda::Connect3ArgLambda(const std::string &name, ClazyContext *cont
 
 void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CallExpr>(stmt);
-    if (!callExpr)
+    auto *callExpr = dyn_cast<CallExpr>(stmt);
+    if (!callExpr) {
         return;
+    }
 
     FunctionDecl *fdecl = callExpr->getDirectCallee();
-    if (!fdecl)
+    if (!fdecl) {
         return;
+    }
 
     const uint numParams = fdecl->getNumParams();
-    if (numParams != 2 && numParams != 3)
+    if (numParams != 2 && numParams != 3) {
         return;
+    }
 
-    string qualifiedName = fdecl->getQualifiedNameAsString();
+    std::string qualifiedName = fdecl->getQualifiedNameAsString();
     if (qualifiedName == "QTimer::singleShot") {
         processQTimer(fdecl, stmt);
         return;
@@ -70,15 +72,17 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (numParams != 3 || !clazy::isConnect(fdecl))
+    if (numParams != 3 || !clazy::isConnect(fdecl)) {
         return;
+    }
 
-    auto arg3 = callExpr->getArg(2);
-    auto lambda = clang::dyn_cast_or_null<LambdaExpr>(arg3);
+    auto *arg3 = callExpr->getArg(2);
+    auto *lambda = clang::dyn_cast_or_null<LambdaExpr>(arg3);
     if (!lambda) {
-	    lambda = clazy::getFirstChildOfType2<LambdaExpr>(arg3);
-	    if (!lambda)
-		    return;
+        lambda = clazy::getFirstChildOfType2<LambdaExpr>(arg3);
+        if (!lambda) {
+            return;
+        }
     }
 
     DeclRefExpr *senderDeclRef = nullptr;
@@ -86,17 +90,19 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 
     Stmt *s = callExpr->getArg(0);
     while (s) {
-        if ((senderDeclRef = dyn_cast<DeclRefExpr>(s)))
+        if ((senderDeclRef = dyn_cast<DeclRefExpr>(s))) {
             break;
+        }
 
-        if ((senderMemberExpr = dyn_cast<MemberExpr>(s)))
+        if ((senderMemberExpr = dyn_cast<MemberExpr>(s))) {
             break;
+        }
 
         s = clazy::getFirstChild(s);
     }
 
     // The sender can be: this
-    auto senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
+    auto *senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
 
     // The variables used inside the lambda
     auto declrefs = clazy::getStatements<DeclRefExpr>(lambda->getBody());
@@ -105,10 +111,11 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 
     // We'll only warn if the lambda is dereferencing another QObject (besides the sender)
     bool found = false;
-    for (auto declref : declrefs) {
+    for (auto *declref : declrefs) {
         ValueDecl *decl = declref->getDecl();
-        if (decl == senderDecl)
+        if (decl == senderDecl) {
             continue; // It's the sender, continue.
+        }
 
         if (clazy::isQObject(decl->getType())) {
             found = true;
@@ -118,12 +125,14 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 
     if (!found) {
         auto thisexprs = clazy::getStatements<CXXThisExpr>(lambda->getBody());
-        if (!thisexprs.empty() && !senderThis)
+        if (!thisexprs.empty() && !senderThis) {
             found = true;
+        }
     }
 
-    if (found)
+    if (found) {
         emitWarning(stmt, "Pass a context object as 3rd connect parameter");
+    }
 }
 
 void Connect3ArgLambda::processQTimer(FunctionDecl *func, Stmt *stmt)
@@ -134,14 +143,12 @@ void Connect3ArgLambda::processQTimer(FunctionDecl *func, Stmt *stmt)
 
     const uint numParams = func->getNumParams();
     if (numParams == 2) {
-        if (func->getParamDecl(0)->getNameAsString() == "interval" &&
-            func->getParamDecl(1)->getNameAsString() == "slot") {
+        if (func->getParamDecl(0)->getNameAsString() == "interval" && func->getParamDecl(1)->getNameAsString() == "slot") {
             emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
         }
     } else if (numParams == 3) {
-        if (func->getParamDecl(0)->getNameAsString() == "interval"  &&
-            func->getParamDecl(1)->getNameAsString() == "timerType" &&
-            func->getParamDecl(2)->getNameAsString() == "slot") {
+        if (func->getParamDecl(0)->getNameAsString() == "interval" && func->getParamDecl(1)->getNameAsString() == "timerType"
+            && func->getParamDecl(2)->getNameAsString() == "slot") {
             emitWarning(stmt, "Pass a context object as 3rd singleShot parameter");
         }
     }
@@ -153,9 +160,8 @@ void Connect3ArgLambda::processQMenu(FunctionDecl *func, Stmt *stmt)
     // QMenu::addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0)
     const uint numParams = func->getNumParams();
     if (numParams == 3) {
-        if (func->getParamDecl(0)->getNameAsString() == "text"  &&
-            func->getParamDecl(1)->getNameAsString() == "slot" &&
-            func->getParamDecl(2)->getNameAsString() == "shortcut") {
+        if (func->getParamDecl(0)->getNameAsString() == "text" && func->getParamDecl(1)->getNameAsString() == "slot"
+            && func->getParamDecl(2)->getNameAsString() == "shortcut") {
             emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
         }
     }

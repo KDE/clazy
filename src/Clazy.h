@@ -25,25 +25,27 @@
 #ifndef CLAZY_AST_ACTION_H
 #define CLAZY_AST_ACTION_H
 
-#include "checkmanager.h"
 #include "ClazyContext.h"
 #include "checkbase.h"
+#include "checkmanager.h"
 
 #include <clang/AST/ASTConsumer.h>
-#include <clang/Frontend/FrontendAction.h>
 #include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/Frontend/FrontendAction.h>
 #include <llvm/ADT/StringRef.h>
 
 #include <memory>
-#include <vector>
 #include <string>
 #include <utility>
+#include <vector>
 
-namespace llvm {
+namespace llvm
+{
 class raw_ostream;
-}  // namespace llvm
+} // namespace llvm
 
-namespace clang {
+namespace clang
+{
 class CompilerInstance;
 class ASTContext;
 class Decl;
@@ -53,8 +55,7 @@ class Stmt;
 /**
  * This is the FrontendAction that is run when clazy is used as a clang plugin.
  */
-class ClazyASTAction
-    : public clang::PluginASTAction
+class ClazyASTAction : public clang::PluginASTAction
 {
 public:
     ClazyASTAction();
@@ -67,6 +68,7 @@ protected:
 
     void PrintHelp(llvm::raw_ostream &ros) const;
     void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks) const;
+
 private:
     void printRequestedChecks() const;
     RegisteredCheck::List m_checks;
@@ -78,8 +80,7 @@ private:
 /**
  * This is the FrontendAction that is run when clazy is invoked via clazy-standalone.
  */
-class ClazyStandaloneASTAction
-    : public clang::ASTFrontendAction
+class ClazyStandaloneASTAction : public clang::ASTFrontendAction
 {
 public:
     explicit ClazyStandaloneASTAction(const std::string &checkList,
@@ -88,8 +89,10 @@ public:
                                       const std::string &exportFixesFilename,
                                       const std::vector<std::string> &translationUnitPaths,
                                       ClazyContext::ClazyOptions = ClazyContext::ClazyOption_None);
+
 protected:
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
+
 private:
     const std::string m_checkList;
     const std::string m_headerFilter;
@@ -102,27 +105,31 @@ private:
 /**
  * Clazy's AST Consumer.
  */
-class ClazyASTConsumer
-    : public clang::ASTConsumer
-    , public clang::RecursiveASTVisitor<ClazyASTConsumer>
+class ClazyASTConsumer : public clang::ASTConsumer, public clang::RecursiveASTVisitor<ClazyASTConsumer>
 {
 public:
     explicit ClazyASTConsumer(ClazyContext *context);
     ~ClazyASTConsumer() override;
-    bool shouldVisitImplicitCode() const { return m_context->isVisitImplicitCode(); }
+    bool shouldVisitImplicitCode() const
+    {
+        return m_context->isVisitImplicitCode();
+    }
 
     bool VisitDecl(clang::Decl *decl);
     bool VisitStmt(clang::Stmt *stm);
     void HandleTranslationUnit(clang::ASTContext &ctx) override;
     void addCheck(const std::pair<CheckBase *, RegisteredCheck> &check);
 
-    ClazyContext *context() const { return m_context; }
+    ClazyContext *context() const
+    {
+        return m_context;
+    }
 
 private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
     clang::Stmt *lastStm = nullptr;
     ClazyContext *const m_context;
-    //CheckBase::List m_createdChecks;
+    // CheckBase::List m_createdChecks;
     CheckBase::List m_checksToVisitStmts;
     CheckBase::List m_checksToVisitDecls;
 #ifndef CLAZY_DISABLE_AST_MATCHERS

@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CXXConstructExpr;
 class ImplicitCastExpr;
 class CXXOperatorCallExpr;
@@ -38,12 +39,12 @@ class Stmt;
 /**
  * See README-strict-iterators.md for more info.
  */
-class StrictIterators
-    : public CheckBase
+class StrictIterators : public CheckBase
 {
 public:
     explicit StrictIterators(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     bool handleImplicitCast(clang::ImplicitCastExpr *);
     bool handleOperator(clang::CXXOperatorCallExpr *);

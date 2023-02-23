@@ -27,20 +27,20 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-mutable-container-key for more info.
  */
-class MutableContainerKey
-    : public CheckBase
+class MutableContainerKey : public CheckBase
 {
 public:
     explicit MutableContainerKey(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
+
 private:
 };
 

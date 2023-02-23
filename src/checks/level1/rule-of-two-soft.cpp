@@ -32,8 +32,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
-
 
 RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, ClazyContext *context)
     : RuleOfBase(name, context)
@@ -42,29 +40,28 @@ RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, ClazyContext *context)
 
 void RuleOfTwoSoft::VisitStmt(Stmt *s)
 {
-    if (auto op = dyn_cast<CXXOperatorCallExpr>(s)) {
+    if (auto *op = dyn_cast<CXXOperatorCallExpr>(s)) {
         FunctionDecl *func = op->getDirectCallee();
-        auto method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
-        if (method && method->getParent() &&  method->isCopyAssignmentOperator()) {
+        auto *method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
+        if (method && method->getParent() && method->isCopyAssignmentOperator()) {
             CXXRecordDecl *record = method->getParent();
             const bool hasCopyCtor = record->hasNonTrivialCopyConstructor();
-            const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment()
-                                         || method->isExplicitlyDefaulted();
+            const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment() || method->isExplicitlyDefaulted();
 
             if (hasCopyCtor && !hasCopyAssignOp && !isBlacklisted(record)) {
-                string msg = "Using assign operator but class " + record->getQualifiedNameAsString() + " has copy-ctor but no assign operator";
+                std::string msg = "Using assign operator but class " + record->getQualifiedNameAsString() + " has copy-ctor but no assign operator";
                 emitWarning(clazy::getLocStart(s), msg);
             }
         }
-    } else if (auto ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
+    } else if (auto *ctorExpr = dyn_cast<CXXConstructExpr>(s)) {
         CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
         CXXRecordDecl *record = ctorDecl->getParent();
         if (ctorDecl->isCopyConstructor() && record) {
-            const bool hasCopyCtor = record->hasNonTrivialCopyConstructor()
-                                     || ctorDecl->isExplicitlyDefaulted();
+            const bool hasCopyCtor = record->hasNonTrivialCopyConstructor() || ctorDecl->isExplicitlyDefaulted();
             const bool hasCopyAssignOp = record->hasNonTrivialCopyAssignment();
             if (!hasCopyCtor && hasCopyAssignOp && !isBlacklisted(record)) {
-                string msg = "Using copy-ctor but class " + record->getQualifiedNameAsString() + " has a trivial copy-ctor but non trivial assign operator";
+                std::string msg =
+                    "Using copy-ctor but class " + record->getQualifiedNameAsString() + " has a trivial copy-ctor but non trivial assign operator";
                 emitWarning(clazy::getLocStart(s), msg);
             }
         }

@@ -31,7 +31,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 }
 
@@ -40,8 +41,7 @@ class Stmt;
  *
  * See README-qdatetime-utc for more information.
  */
-class QDateTimeUtc
-    : public CheckBase
+class QDateTimeUtc : public CheckBase
 {
 public:
     QDateTimeUtc(const std::string &name, ClazyContext *context);

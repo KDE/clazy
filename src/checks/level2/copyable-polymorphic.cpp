@@ -20,12 +20,12 @@
 */
 
 #include "copyable-polymorphic.h"
-#include "Utils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
+#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/Basic/LLVM.h>
@@ -33,13 +33,12 @@
 #include <llvm/Support/Casting.h>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
-
 
 /// Returns whether the class has non-private copy-ctor or copy-assign
 static bool hasPublicCopy(const CXXRecordDecl *record)
@@ -49,8 +48,9 @@ static bool hasPublicCopy(const CXXRecordDecl *record)
     if (!hasCallableCopyCtor) {
         CXXMethodDecl *copyAssign = Utils::copyAssign(record);
         const bool hasCallableCopyAssign = copyAssign && !copyAssign->isDeleted() && copyAssign->getAccess() == clang::AS_public;
-        if (!hasCallableCopyAssign)
+        if (!hasCallableCopyAssign) {
             return false;
+        }
     }
 
     return true;
@@ -59,16 +59,19 @@ static bool hasPublicCopy(const CXXRecordDecl *record)
 /// Checks if there's any base class with public copy
 static bool hasPublicCopyInAncestors(const CXXRecordDecl *record)
 {
-    if (!record)
+    if (!record) {
         return false;
+    }
 
     for (auto base : record->bases()) {
         if (const Type *t = base.getType().getTypePtrOrNull()) {
             CXXRecordDecl *baseRecord = t->getAsCXXRecordDecl();
-            if (hasPublicCopy(baseRecord))
+            if (hasPublicCopy(baseRecord)) {
                 return true;
-            if (hasPublicCopyInAncestors(t->getAsCXXRecordDecl()))
+            }
+            if (hasPublicCopyInAncestors(t->getAsCXXRecordDecl())) {
                 return true;
+            }
         }
     }
 
@@ -83,12 +86,14 @@ CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *
 
 void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 {
-    auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !record->isPolymorphic())
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !record->isPolymorphic()) {
         return;
+    }
 
-    if (!hasPublicCopy(record))
+    if (!hasPublicCopy(record)) {
         return;
+    }
 
     if (clazy::isFinal(record) && !hasPublicCopyInAncestors(record)) {
         // If the derived class is final, and all the base classes copy-ctors are protected or private then it's ok
@@ -98,30 +103,26 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
     emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.", fixits(record));
 }
 
-vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
+std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)
 {
-    vector<FixItHint> result;
-    if (!m_context->accessSpecifierManager)
+    std::vector<FixItHint> result;
+    if (!m_context->accessSpecifierManager) {
         return {};
+    }
 
 #if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const StringRef className = clazy::name(record);
 
     // Insert Q_DISABLE_COPY(classname) in the private section if one exists,
     // otherwise at the end of the class declaration
-    SourceLocation pos =
-        m_context->accessSpecifierManager->firstLocationOfSection(
-            clang::AccessSpecifier::AS_private, record);
+    SourceLocation pos = m_context->accessSpecifierManager->firstLocationOfSection(clang::AccessSpecifier::AS_private, record);
 
     if (pos.isValid()) {
-        pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
-                                            false);
-        result.push_back(clazy::createInsertion(
-            pos, string("\n\tQ_DISABLE_COPY(") + className.data() + string(")")));
+        pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(), false);
+        result.push_back(clazy::createInsertion(pos, std::string("\n\tQ_DISABLE_COPY(") + className.data() + std::string(")")));
     } else {
         pos = record->getBraceRange().getEnd();
-        result.push_back(clazy::createInsertion(
-            pos, string("\tQ_DISABLE_COPY(") + className.data() + string(")\n")));
+        result.push_back(clazy::createInsertion(pos, std::string("\tQ_DISABLE_COPY(") + className.data() + std::string(")\n")));
     }
 
     // If the class has a default constructor, then we need to readd it,
@@ -129,18 +130,13 @@ vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *recor
     // Add it in the public section if one exists, otherwise add a
     // public section at the top of the class declaration.
     if (record->hasDefaultConstructor()) {
-        pos = m_context->accessSpecifierManager->firstLocationOfSection(
-            clang::AccessSpecifier::AS_public, record);
+        pos = m_context->accessSpecifierManager->firstLocationOfSection(clang::AccessSpecifier::AS_public, record);
         if (pos.isInvalid()) {
             pos = record->getBraceRange().getBegin().getLocWithOffset(1);
-            result.push_back(clazy::createInsertion(
-                pos, string("\npublic:\n\t") + className.data() + string("() = default;")));
-        }
-        else {
-            pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(),
-                                                false);
-            result.push_back(clazy::createInsertion(
-                pos, string("\n\t") + className.data() + string("() = default;")));
+            result.push_back(clazy::createInsertion(pos, std::string("\npublic:\n\t") + className.data() + std::string("() = default;")));
+        } else {
+            pos = Lexer::findLocationAfterToken(pos, clang::tok::colon, sm(), lo(), false);
+            result.push_back(clazy::createInsertion(pos, std::string("\n\t") + className.data() + std::string("() = default;")));
         }
     }
 #endif

@@ -29,7 +29,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CXXConstructExpr;
 class CallExpr;
 class Expr;
@@ -39,8 +40,7 @@ class Stmt;
 /**
  * See README-connect-not-normalized.md for more info.
  */
-class ConnectNotNormalized
-    : public CheckBase
+class ConnectNotNormalized : public CheckBase
 {
 public:
     explicit ConnectNotNormalized(const std::string &name, ClazyContext *context);

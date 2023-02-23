@@ -19,7 +19,6 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CLAZY_WRONG_QGLOBALSTATIC_H
 #define CLAZY_WRONG_QGLOBALSTATIC_H
 
@@ -29,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 }
 
@@ -38,8 +38,7 @@ class Stmt;
  *
  * See README-wrong-qglobalstatic for more information
  */
-class WrongQGlobalStatic
-    : public CheckBase
+class WrongQGlobalStatic : public CheckBase
 {
 public:
     explicit WrongQGlobalStatic(const std::string &name, ClazyContext *context);

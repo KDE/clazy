@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 }
 
@@ -37,8 +38,7 @@ class Stmt;
  *
  * See README-qfileinfo-exists for more information
  */
-class QFileInfoExists
-    : public CheckBase
+class QFileInfoExists : public CheckBase
 {
 public:
     explicit QFileInfoExists(const std::string &name, ClazyContext *context);

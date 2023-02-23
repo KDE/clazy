@@ -20,10 +20,10 @@
 */
 
 #include "overridden-signal.h"
-#include "QtUtils.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FunctionUtils.h"
+#include "QtUtils.h"
 #include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -31,13 +31,12 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
-
 
 OverriddenSignal::OverriddenSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -48,28 +47,31 @@ OverriddenSignal::OverriddenSignal(const std::string &name, ClazyContext *contex
 void OverriddenSignal::VisitDecl(clang::Decl *decl)
 {
     AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    auto method = dyn_cast<CXXMethodDecl>(decl);
-    if (!accessSpecifierManager || !method)
+    auto *method = dyn_cast<CXXMethodDecl>(decl);
+    if (!accessSpecifierManager || !method) {
         return;
+    }
 
-    if (method->isThisDeclarationADefinition() && !method->hasInlineBody())
+    if (method->isThisDeclarationADefinition() && !method->hasInlineBody()) {
         return;
+    }
 
     CXXRecordDecl *record = method->getParent();
     CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
-    if (!baseClass)
+    if (!baseClass) {
         return;
+    }
 
     const bool methodIsSignal = accessSpecifierManager->qtAccessSpecifierType(method) == QtAccessSpecifier_Signal;
     const StringRef methodName = clazy::name(method);
 
     std::string warningMsg;
     while (baseClass) {
-        for (auto baseMethod : baseClass->methods()) {
+        for (auto *baseMethod : baseClass->methods()) {
             if (clazy::name(baseMethod) == methodName) {
-
-                if (!clazy::parametersMatch(method, baseMethod)) // overloading is permitted.
+                if (!clazy::parametersMatch(method, baseMethod)) { // overloading is permitted.
                     continue;
+                }
 
                 const bool baseMethodIsSignal = accessSpecifierManager->qtAccessSpecifierType(baseMethod) == QtAccessSpecifier_Signal;
 

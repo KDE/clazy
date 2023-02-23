@@ -20,13 +20,13 @@
 */
 
 #include "qstring-arg.h"
-#include "Utils.h"
-#include "StringUtils.h"
-#include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "clazy_stl.h"
 #include "ClazyContext.h"
+#include "HierarchyUtils.h"
 #include "PreProcessorVisitor.h"
+#include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -44,69 +44,75 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    m_filesToIgnore = { "qstring.h" };
+    m_filesToIgnore = {"qstring.h"};
     context->enablePreprocessorVisitor();
 }
 
-static string variableNameFromArg(Expr *arg)
+static std::string variableNameFromArg(Expr *arg)
 {
-    vector<DeclRefExpr*> declRefs;
+    std::vector<DeclRefExpr *> declRefs;
     clazy::getChilds<DeclRefExpr>(arg, declRefs);
     if (declRefs.size() == 1) {
         ValueDecl *decl = declRefs.at(0)->getDecl();
-        return decl ? decl->getNameAsString() : string();
+        return decl ? decl->getNameAsString() : std::string();
     }
 
     return {};
 }
 
-static CXXMethodDecl* isArgMethod(FunctionDecl *func, const char *className)
+static CXXMethodDecl *isArgMethod(FunctionDecl *func, const char *className)
 {
-    if (!func)
+    if (!func) {
         return nullptr;
+    }
 
-    auto method = dyn_cast<CXXMethodDecl>(func);
-    if (!method || clazy::name(method) != "arg")
+    auto *method = dyn_cast<CXXMethodDecl>(func);
+    if (!method || clazy::name(method) != "arg") {
         return nullptr;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (!record || clazy::name(record) != className)
+    if (!record || clazy::name(record) != className) {
         return nullptr;
+    }
 
     return method;
 }
 
 static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
 {
-    if (!callExpr)
+    if (!callExpr) {
         return false;
+    }
 
     CXXMethodDecl *method = isArgMethod(callExpr->getDirectCallee(), "QString");
-    if (!method)
+    if (!method) {
         return false;
+    }
 
     ParmVarDecl *secondParam = method->getParamDecl(1);
-    if (clazy::classNameFor(secondParam) == "QString")
+    if (clazy::classNameFor(secondParam) == "QString") {
         return true;
+    }
 
     ParmVarDecl *firstParam = method->getParamDecl(0);
-    if (clazy::classNameFor(firstParam) != "QString")
+    if (clazy::classNameFor(firstParam) != "QString") {
         return false;
+    }
 
     // This is a arg(QString, int, QChar) call, it's good if the second parameter is a default param
     return isa<CXXDefaultArgExpr>(callExpr->getArg(1));
 }
 
-bool QStringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls)
+bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls)
 {
     const int size = calls.size();
     for (int i = 1; i < size; ++i) {
-        auto call = calls.at(i);
+        auto *call = calls.at(i);
         if (calls.at(i - 1)->getNumArgs() + call->getNumArgs() <= 9) {
             emitWarning(clazy::getLocEnd(call), "Use multi-arg instead");
             return true;
@@ -118,24 +124,27 @@ bool QStringArg::checkMultiArgWarningCase(const vector<clang::CallExpr *> &calls
 
 void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
 {
-    if (!isArgFuncWithOnlyQString(memberCall))
+    if (!isArgFuncWithOnlyQString(memberCall)) {
         return;
+    }
 
     if (clazy::getLocStart(memberCall).isMacroID()) {
         auto macroName = Lexer::getImmediateMacroName(clazy::getLocStart(memberCall), sm(), lo());
-        if (macroName == "QT_REQUIRE_VERSION") // bug #391851
+        if (macroName == "QT_REQUIRE_VERSION") { // bug #391851
             return;
+        }
     }
 
-    vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
-    vector<clang::CallExpr *> argCalls;
-    for (auto call : callExprs) {
+    std::vector<clang::CallExpr *> callExprs = Utils::callListForChain(memberCall);
+    std::vector<clang::CallExpr *> argCalls;
+    for (auto *call : callExprs) {
         if (!clazy::contains(m_alreadyProcessedChainedCalls, call) && isArgFuncWithOnlyQString(call)) {
             argCalls.push_back(call);
             m_alreadyProcessedChainedCalls.push_back(call);
         } else {
-            if (checkMultiArgWarningCase(argCalls))
+            if (checkMultiArgWarningCase(argCalls)) {
                 return;
+            }
             argCalls.clear();
         }
     }
@@ -151,16 +160,19 @@ bool QStringArg::checkQLatin1StringCase(CXXMemberCallExpr *memberCall)
         return false;
     }
 
-    if (!isArgMethod(memberCall->getDirectCallee(), "QLatin1String"))
+    if (!isArgMethod(memberCall->getDirectCallee(), "QLatin1String")) {
         return false;
+    }
 
-    if (memberCall->getNumArgs() == 0)
+    if (memberCall->getNumArgs() == 0) {
         return false;
+    }
 
     Expr *arg = memberCall->getArg(0);
     QualType t = arg->getType();
-    if (!t->isIntegerType() || t->isCharType())
+    if (!t->isIntegerType() || t->isCharType()) {
         return false;
+    }
 
     emitWarning(memberCall, "Argument passed to QLatin1String::arg() will be implicitly cast to QChar");
     return true;
@@ -168,55 +180,65 @@ bool QStringArg::checkQLatin1StringCase(CXXMemberCallExpr *memberCall)
 
 void QStringArg::VisitStmt(clang::Stmt *stmt)
 {
-    auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall)
+    auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    if (!memberCall) {
         return;
+    }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stmt)))
+    if (shouldIgnoreFile(clazy::getLocStart(stmt))) {
         return;
+    }
 
     checkForMultiArgOpportunities(memberCall);
 
-    if (checkQLatin1StringCase(memberCall))
+    if (checkQLatin1StringCase(memberCall)) {
         return;
+    }
 
-    if (!isOptionSet("fillChar-overloads"))
+    if (!isOptionSet("fillChar-overloads")) {
         return;
+    }
 
     CXXMethodDecl *method = isArgMethod(memberCall->getDirectCallee(), "QString");
-    if (!method)
+    if (!method) {
         return;
+    }
 
     if (clazy::simpleArgTypeName(method, method->getNumParams() - 1, lo()) == "QChar") {
         // The second arg wasn't passed, so this is a safe and unambiguous use, like .arg(1)
-        if (isa<CXXDefaultArgExpr>(memberCall->getArg(1)))
+        if (isa<CXXDefaultArgExpr>(memberCall->getArg(1))) {
             return;
+        }
 
         ParmVarDecl *p = method->getParamDecl(2);
         if (p && clazy::name(p) == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
-            vector<IntegerLiteral*> literals;
+            std::vector<IntegerLiteral *> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(2), literals);
-            if (!literals.empty())
+            if (!literals.empty()) {
                 return;
+            }
 
-            string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(2)));
-            if (clazy::contains(variableName, "base"))
+            std::string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(2)));
+            if (clazy::contains(variableName, "base")) {
                 return;
+            }
         }
 
         p = method->getParamDecl(1);
         if (p && clazy::name(p) == "fieldWidth") {
             // He specified a literal, so he knows what he's doing, otherwise he would have put it directly in the string
-            vector<IntegerLiteral*> literals;
+            std::vector<IntegerLiteral *> literals;
             clazy::getChilds<IntegerLiteral>(memberCall->getArg(1), literals);
-            if (!literals.empty())
+            if (!literals.empty()) {
                 return;
+            }
 
             // the variable is named "width", user knows what he's doing
-            string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(1)));
-            if (clazy::contains(variableName, "width"))
+            std::string variableName = clazy::toLower(variableNameFromArg(memberCall->getArg(1)));
+            if (clazy::contains(variableName, "width")) {
                 return;
+            }
         }
 
         emitWarning(clazy::getLocStart(stmt), "Using QString::arg() with fillChar overload");

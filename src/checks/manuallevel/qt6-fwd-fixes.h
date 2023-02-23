@@ -25,12 +25,13 @@
 
 #include "checkbase.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 class FixItHint;
 }
@@ -40,15 +41,21 @@ class FixItHint;
  *
  * Run only in Qt 6 code.
  */
-class Qt6FwdFixes
-    : public CheckBase
+class Qt6FwdFixes : public CheckBase
 {
 public:
     explicit Qt6FwdFixes(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *decl) override;
-    void VisitInclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, clang::StringRef FileName, bool IsAngled,
-                            clang::CharSourceRange FilenameRange, clazy::OptionalFileEntryRef File, clang::StringRef SearchPath,
-                            clang::StringRef RelativePath, const clang::Module *Imported, clang::SrcMgr::CharacteristicKind FileType) override;
+    void VisitInclusionDirective(clang::SourceLocation HashLoc,
+                                 const clang::Token &IncludeTok,
+                                 clang::StringRef FileName,
+                                 bool IsAngled,
+                                 clang::CharSourceRange FilenameRange,
+                                 clazy::OptionalFileEntryRef File,
+                                 clang::StringRef SearchPath,
+                                 clang::StringRef RelativePath,
+                                 const clang::Module *Imported,
+                                 clang::SrcMgr::CharacteristicKind FileType) override;
     bool m_including_qcontainerfwd = false;
     std::set<clang::StringRef> m_qcontainerfwd_included_in_files;
     std::string m_currentFile;

@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class CXXMemberCallExpr;
 class DeclStmt;
 class ReturnStmt;
@@ -38,12 +39,12 @@ class Stmt;
 /**
  * See README-returning-data-from-temporary.md for more info.
  */
-class ReturningDataFromTemporary
-    : public CheckBase
+class ReturningDataFromTemporary : public CheckBase
 {
 public:
     explicit ReturningDataFromTemporary(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
+
 private:
     bool handleReturn(clang::ReturnStmt *);
     void handleDeclStmt(clang::DeclStmt *);

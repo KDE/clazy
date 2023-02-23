@@ -28,7 +28,8 @@
 
 class ClazyContext;
 
-namespace clang {
+namespace clang
+{
 class Stmt;
 }
 
@@ -37,8 +38,7 @@ class Stmt;
  *
  * See README-example-check for more information
  */
-class LambdaInConnect
-    : public CheckBase
+class LambdaInConnect : public CheckBase
 {
 public:
     explicit LambdaInConnect(const std::string &name, ClazyContext *context);

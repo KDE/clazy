@@ -21,10 +21,10 @@
 
 #include "missing-qobject-macro.h"
 #include "ClazyContext.h"
-#include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
+#include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>
@@ -36,15 +36,15 @@
 #include <llvm/Support/Casting.h>
 
 #ifdef HAS_STD_FILESYSTEM
-# include <filesystem>
+#include <filesystem>
 #endif
 
-namespace clang {
+namespace clang
+{
 class MacroInfo;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
 
 MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -56,49 +56,55 @@ MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *
 void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (ii && ii->getName() == "Q_OBJECT")
+    if (ii && ii->getName() == "Q_OBJECT") {
         registerQ_OBJECT(range.getBegin());
+    }
 }
 
 void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
 {
-    CXXRecordDecl *record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record))
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record)) {
         return;
+    }
 
-    if (record->getDescribedClassTemplate() != nullptr) // moc doesn't accept Q_OBJECT in templates
+    if (record->getDescribedClassTemplate() != nullptr) { // moc doesn't accept Q_OBJECT in templates
         return;
+    }
 
-    if (m_context->usingPreCompiledHeaders())
+    if (m_context->usingPreCompiledHeaders()) {
         return;
+    }
 
     const SourceLocation startLoc = clazy::getLocStart(decl);
 
     for (const SourceLocation &loc : m_qobjectMacroLocations) {
-        if (sm().getFileID(loc) != sm().getFileID(startLoc))
+        if (sm().getFileID(loc) != sm().getFileID(startLoc)) {
             continue; // Different file
+        }
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(decl)))
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(decl))) {
             return; // We found a Q_OBJECT after start and before end, it's ours.
+        }
     }
 
-    vector<FixItHint> fixits;
+    std::vector<FixItHint> fixits;
 #if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
     fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
 
-# ifdef HAS_STD_FILESYSTEM
-    const std::string fileName = static_cast<string>(sm().getFilename(startLoc));
+#ifdef HAS_STD_FILESYSTEM
+    const std::string fileName = static_cast<std::string>(sm().getFilename(startLoc));
     if (clazy::endsWith(fileName, ".cpp")) {
         const std::string basename = std::filesystem::path(fileName).stem().string();
 
-        if (!m_hasAddedMocFile && !m_context->preprocessorVisitor->hasInclude(basename+".moc", false)) {
+        if (!m_hasAddedMocFile && !m_context->preprocessorVisitor->hasInclude(basename + ".moc", false)) {
             const SourceLocation pos = sm().getLocForEndOfFile(sm().getFileID(startLoc));
             fixits.push_back(clazy::createInsertion(pos, "\n#include \"" + basename + ".moc\"\n"));
             m_hasAddedMocFile = true;
         }
     }
-# endif
+#endif
 #endif
 
     emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro", fixits);

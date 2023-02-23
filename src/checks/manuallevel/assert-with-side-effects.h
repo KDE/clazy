@@ -30,16 +30,17 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Stmt;
-}  // namespace clang
+} // namespace clang
 
-class AssertWithSideEffects
-    : public CheckBase
+class AssertWithSideEffects : public CheckBase
 {
 public:
     AssertWithSideEffects(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *) override;
+
 private:
     int m_aggressiveness;
 };

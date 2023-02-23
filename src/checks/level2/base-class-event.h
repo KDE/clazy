@@ -27,16 +27,15 @@
 #include <string>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
-
+} // namespace clang
 
 /**
  * See README-base-class-event.md for more info.
  */
-class BaseClassEvent
-    : public CheckBase
+class BaseClassEvent : public CheckBase
 {
 public:
     explicit BaseClassEvent(const std::string &name, ClazyContext *context);

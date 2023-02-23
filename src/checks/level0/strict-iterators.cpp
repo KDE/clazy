@@ -22,9 +22,9 @@
 #include "strict-iterators.h"
 #include "ClazyContext.h"
 #include "QtUtils.h"
+#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
@@ -44,15 +44,16 @@
 #include <assert.h>
 
 using namespace clang;
-using namespace std;
 
 static bool isMemberVariable(Expr *expr)
 {
-    if (isa<MemberExpr>(expr))
+    if (isa<MemberExpr>(expr)) {
         return true;
+    }
 
-    if (auto ice = dyn_cast<ImplicitCastExpr>(expr))
+    if (auto *ice = dyn_cast<ImplicitCastExpr>(expr)) {
         return isMemberVariable(ice->getSubExpr());
+    }
 
     return false;
 }
@@ -65,11 +66,11 @@ StrictIterators::StrictIterators(const std::string &name, ClazyContext *context)
 {
 }
 
-
 void StrictIterators::VisitStmt(clang::Stmt *stmt)
 {
-    if (handleOperator(dyn_cast<CXXOperatorCallExpr>(stmt)))
+    if (handleOperator(dyn_cast<CXXOperatorCallExpr>(stmt))) {
         return;
+    }
 
     // QVector's aren't actual classes, they are just typedefs to T* and const T*
     handleImplicitCast(dyn_cast<ImplicitCastExpr>(stmt));
@@ -77,19 +78,22 @@ void StrictIterators::VisitStmt(clang::Stmt *stmt)
 
 bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 {
-    if (!implicitCast)
+    if (!implicitCast) {
         return false;
+    }
 
-    const string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
+    const std::string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
 
     const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = clazy::parentRecordForTypedef(typeTo);
-    if (recordTo && !clazy::isQtCOWIterableClass(recordTo))
+    if (recordTo && !clazy::isQtCOWIterableClass(recordTo)) {
         return false;
+    }
 
     recordTo = clazy::typeAsRecord(typeTo);
-    if (recordTo && !clazy::isQtCOWIterator(recordTo))
+    if (recordTo && !clazy::isQtCOWIterator(recordTo)) {
         return false;
+    }
 
     assert(implicitCast->getSubExpr());
 
@@ -100,12 +104,14 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = clazy::parentRecordForTypedef(typeFrom);
-    if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom))
+    if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom)) {
         return false;
+    }
 
     // const_iterator might be a typedef to pointer, like const T *, instead of a class, so just check for const qualification in that case
-    if (!(clazy::pointeeQualType(typeTo).isConstQualified() || clazy::endsWith(nameTo, "const_iterator")))
+    if (!(clazy::pointeeQualType(typeTo).isConstQualified() || clazy::endsWith(nameTo, "const_iterator"))) {
         return false;
+    }
 
     if (implicitCast->getCastKind() == CK_ConstructorConversion) {
         emitWarning(implicitCast, "Mixing iterators with const_iterators");
@@ -114,18 +120,20 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 
     // TODO: some util function to get the name of a nested class
     const bool nameToIsIterator = nameTo == "iterator" || clazy::endsWith(nameTo, "::iterator");
-    if (nameToIsIterator)
+    if (nameToIsIterator) {
         return false;
+    }
 
-    const string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
+    const std::string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
     const bool nameFromIsIterator = nameFrom == "iterator" || clazy::endsWith(nameFrom, "::iterator");
-    if (!nameFromIsIterator)
+    if (!nameFromIsIterator) {
         return false;
+    }
 
-    auto p = m_context->parentMap->getParent(implicitCast);
-    if (dyn_cast<CXXOperatorCallExpr>(p))
+    auto *p = m_context->parentMap->getParent(implicitCast);
+    if (isa<CXXOperatorCallExpr>(p)) {
         return false;
-
+    }
 
     emitWarning(implicitCast, "Mixing iterators with const_iterators");
 
@@ -134,24 +142,29 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 
 bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
 {
-    if (!op)
+    if (!op) {
         return false;
+    }
 
-    auto method = dyn_cast_or_null<CXXMethodDecl>(op->getDirectCallee());
-    if (!method || method->getNumParams() != 1)
+    auto *method = dyn_cast_or_null<CXXMethodDecl>(op->getDirectCallee());
+    if (!method || method->getNumParams() != 1) {
         return false;
+    }
 
     CXXRecordDecl *record = method->getParent();
-    if (!clazy::isQtCOWIterator(record))
+    if (!clazy::isQtCOWIterator(record)) {
         return false;
+    }
 
-    if (clazy::name(record) != "iterator")
+    if (clazy::name(record) != "iterator") {
         return false;
+    }
 
     ParmVarDecl *p = method->getParamDecl(0);
     CXXRecordDecl *paramClass = p ? clazy::typeAsRecord(clazy::pointeeQualType(p->getType())) : nullptr;
-    if (!paramClass || clazy::name(paramClass) != "const_iterator")
+    if (!paramClass || clazy::name(paramClass) != "const_iterator") {
         return false;
+    }
 
     emitWarning(op, "Mixing iterators with const_iterators");
     return true;

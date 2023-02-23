@@ -26,32 +26,32 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class CXXMethodDecl;
 class CXXRecordDecl;
 class Decl;
 class MacroInfo;
 class Token;
-}  // namespace clang
+} // namespace clang
 
 /**
  * See README-fully-qualified-moc-types.md for more info.
  */
-class FullyQualifiedMocTypes
-    : public CheckBase
+class FullyQualifiedMocTypes : public CheckBase
 {
 public:
     explicit FullyQualifiedMocTypes(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
+
 private:
     bool isGadget(clang::CXXRecordDecl *record) const;
     bool handleQ_PROPERTY(clang::CXXMethodDecl *);
-    void VisitMacroExpands(const clang::Token &MacroNameTok,
-                           const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
+    void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     void registerQ_GADGET(clang::SourceLocation);
     bool typeIsFullyQualified(clang::QualType t, std::string &qualifiedTypeName, std::string &typeName) const;
 

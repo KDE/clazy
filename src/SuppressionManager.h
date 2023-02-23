@@ -27,7 +27,8 @@
 #include <unordered_map>
 #include <utility>
 
-namespace clang {
+namespace clang
+{
 class SourceLocation;
 class LangOptions;
 class SourceManager;
@@ -37,10 +38,10 @@ class FileID;
 class SuppressionManager
 {
 public:
-    typedef unsigned SourceFileID;
-    typedef unsigned LineNumber;
-    typedef std::string CheckName;
-    typedef std::pair<LineNumber, CheckName> LineAndCheckName;
+    using SourceFileID = unsigned int;
+    using LineNumber = unsigned int;
+    using CheckName = std::string;
+    using LineAndCheckName = std::pair<LineNumber, CheckName>;
 
     struct Suppressions {
         bool skipEntireFile = false;
@@ -51,13 +52,12 @@ public:
 
     SuppressionManager();
 
-    bool isSuppressed(const std::string &checkName, clang::SourceLocation,
-                      const clang::SourceManager &, const clang::LangOptions &) const;
+    bool isSuppressed(const std::string &checkName, clang::SourceLocation, const clang::SourceManager &, const clang::LangOptions &) const;
 
 private:
     void parseFile(clang::FileID, const clang::SourceManager &, const clang::LangOptions &lo) const;
     SuppressionManager(const SuppressionManager &) = delete;
-    SuppressionManager& operator=(const SuppressionManager &) = delete;
+    SuppressionManager &operator=(const SuppressionManager &) = delete;
     mutable std::unordered_map<SourceFileID, Suppressions> m_processedFileIDs;
 };
 

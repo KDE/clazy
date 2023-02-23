@@ -20,9 +20,9 @@
 */
 
 #include "qfileinfo-exists.h"
-#include "StringUtils.h"
 #include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/ExprCXX.h>
@@ -33,8 +33,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
-
 
 QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -43,14 +41,16 @@ QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
 
 void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
 {
-    auto existsCall = dyn_cast<CXXMemberCallExpr>(stmt);
+    auto *existsCall = dyn_cast<CXXMemberCallExpr>(stmt);
     std::string methodName = clazy::qualifiedMethodName(existsCall);
-    if (methodName != "QFileInfo::exists")
+    if (methodName != "QFileInfo::exists") {
         return;
+    }
 
-    CXXConstructExpr* ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
-    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString")
+    auto *ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
+    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString") {
         return;
+    }
 
     emitWarning(clazy::getLocStart(stmt), "Use the static QFileInfo::exists() instead. It's documented to be faster.");
 }

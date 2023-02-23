@@ -1,0 +1,27 @@
+# When calling git blame, pass it this file
+# to avoid seeing cosmetic changes in the
+# blame list.
+
+# For example:
+# git blame --ignore-revs-file=_git_blame_ignore_revs src/Clazy.cpp
+
+#   Use isa and isa_and_nonnull when possible
+24e7eedacb2ea87f3afc6ac5be56b5c806091e24
+#   Applied clang-tidy's several readability improvements
+05d4020614379557f733739d7f6495dc0c2ad0bd
+#   Avoid copying when copies are not needed
+0f5c9f812a4f274e70ec4a5e2ed603aa54fb7387
+#   Applied clang-tidy's misc-unused- checks
+a9d93189ffc98c543f9656be9f3114b1620d07e9
+#   Applied clang-tidy's modernize-use-override
+c0df00c291d47f8845c7ee4ca0bc3f66a1d17efd
+#   Applied clang-tidy's modernize-use-nullptr
+229df6ab989a917d8cb93f09cf684829c46c8395
+#   Applied clang-tidy's modernize-use-using
+45174f7aeae5e1f0a0873b71198712d5e2511630
+#   Applied clang-tidy's modernize-use-auto
+6f6cc532b0eff5c02e29653dc6886660c0bef1c2
+#   Apply clang-format to all source files
+8c4886339fbe3681804c6e5c7585f137ddc101f5
+#   No more using namespace std
+3ff10cb3fa1ee368f312c8916d6a300b20c5604e

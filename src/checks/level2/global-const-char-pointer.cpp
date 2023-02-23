@@ -40,28 +40,32 @@ using namespace clang;
 GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_filesToIgnore = { "3rdparty", "mysql.h", "qpicture.cpp" };
+    m_filesToIgnore = {"3rdparty", "mysql.h", "qpicture.cpp"};
 }
 
 void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
 {
-    VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-    if (!varDecl || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() ||
-        !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace() || varDecl->hasExternalStorage())
+    auto *varDecl = dyn_cast<VarDecl>(decl);
+    if (!varDecl || !varDecl->hasGlobalStorage() || varDecl->isCXXClassMember() || !varDecl->hasExternalFormalLinkage() || decl->isInAnonymousNamespace()
+        || varDecl->hasExternalStorage()) {
         return;
+    }
 
-    if (shouldIgnoreFile(clazy::getLocStart(decl)))
+    if (shouldIgnoreFile(clazy::getLocStart(decl))) {
         return;
+    }
 
     QualType qt = varDecl->getType();
     const Type *type = qt.getTypePtrOrNull();
-    if (!type || !type->isPointerType() || qt.isConstQualified() || varDecl->isStaticLocal())
+    if (!type || !type->isPointerType() || qt.isConstQualified() || varDecl->isStaticLocal()) {
         return;
+    }
 
     QualType pointeeQt = type->getPointeeType();
     const Type *pointeeType = pointeeQt.getTypePtrOrNull();
-    if (!pointeeType || !pointeeType->isCharType())
+    if (!pointeeType || !pointeeType->isCharType()) {
         return;
+    }
 
     emitWarning(clazy::getLocStart(decl), "non const global char *");
 }

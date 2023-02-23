@@ -21,17 +21,17 @@
 */
 
 #include "AccessSpecifierManager.h"
+#include "ClazyContext.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
-#include "ClazyContext.h"
 
-#include <clang/Basic/SourceManager.h>
-#include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclBase.h>
+#include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PPCallbacks.h>
 #include <clang/Lex/Preprocessor.h>
@@ -42,16 +42,15 @@
 #include <memory>
 #include <utility>
 
-namespace clang {
+namespace clang
+{
 class MacroArgs;
 class MacroDefinition;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
 
-static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs,
-                                   const SourceManager &sm)
+static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs, const SourceManager &sm)
 {
     if (lhs.loc.isMacroID() || rhs.loc.isMacroID()) {
         // Q_SIGNALS is special because it hides a "public", which is expanded by this macro.
@@ -62,9 +61,8 @@ static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyA
         SourceLocation realRHSLoc = sm.getFileLoc(rhs.loc);
         if (realLHSLoc == realRHSLoc) {
             return lhs.loc.isMacroID();
-        } else {
-            return realLHSLoc < realRHSLoc;
         }
+        return realLHSLoc < realRHSLoc;
     }
 
     return lhs.loc < rhs.loc;
@@ -72,16 +70,16 @@ static bool accessSpecifierCompare(const ClazyAccessSpecifier &lhs, const ClazyA
 
 static void sorted_insert(ClazySpecifierList &v, const ClazyAccessSpecifier &item, const clang::SourceManager &sm)
 {
-    auto pred = [&sm] (const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs) {
+    auto pred = [&sm](const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs) {
         return accessSpecifierCompare(lhs, rhs, sm);
     };
     v.insert(std::upper_bound(v.begin(), v.end(), item, pred), item);
 }
 
-class AccessSpecifierPreprocessorCallbacks
-    : public clang::PPCallbacks
+class AccessSpecifierPreprocessorCallbacks : public clang::PPCallbacks
 {
     AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
+
 public:
     AccessSpecifierPreprocessorCallbacks(const clang::CompilerInstance &ci)
         : clang::PPCallbacks()
@@ -90,12 +88,12 @@ public:
         m_qtAccessSpecifiers.reserve(30); // bootstrap it
     }
 
-    void MacroExpands(const Token &MacroNameTok, const MacroDefinition &,
-                      SourceRange range, const MacroArgs *) override
+    void MacroExpands(const Token &MacroNameTok, const MacroDefinition &, SourceRange range, const MacroArgs *) override
     {
         IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-        if (!ii)
+        if (!ii) {
             return;
+        }
 
         auto name = ii->getName();
         const bool isSlots = name == "slots" || name == "Q_SLOTS";
@@ -105,22 +103,24 @@ public:
         const bool isSignal = (isSlots || isSignals || isSlot) ? false : name == "Q_SIGNAL";
         const bool isInvokable = (isSlots || isSignals || isSlot || isSignal) ? false : name == "Q_INVOKABLE";
         const bool isScriptable = (isSlot || isSignal || isInvokable) ? false : name == "Q_SCRIPTABLE";
-        if (!isSlots && !isSignals && !isSlot && !isSignal && !isInvokable && !isScriptable)
+        if (!isSlots && !isSignals && !isSlot && !isSignal && !isInvokable && !isScriptable) {
             return;
+        }
 
         SourceLocation loc = range.getBegin();
-        if (loc.isMacroID())
+        if (loc.isMacroID()) {
             return;
+        }
 
         if (isSignals || isSlots) {
-            QtAccessSpecifierType qtAccessSpecifier = isSlots ? QtAccessSpecifier_Slot
-                                                              : QtAccessSpecifier_Signal;
-            m_qtAccessSpecifiers.push_back( { loc, clang::AS_none, qtAccessSpecifier } );
+            QtAccessSpecifierType qtAccessSpecifier = isSlots ? QtAccessSpecifier_Slot : QtAccessSpecifier_Signal;
+            m_qtAccessSpecifiers.push_back({loc, clang::AS_none, qtAccessSpecifier});
         } else {
             // Get the location of the method declaration, so we can compare directly when we visit methods
             loc = Utils::locForNextToken(loc, m_ci.getSourceManager(), m_ci.getLangOpts());
-            if (loc.isInvalid())
+            if (loc.isInvalid()) {
                 return;
+            }
             if (isSignal) {
                 m_individualSignals.push_back(loc.getRawEncoding());
             } else if (isSlot) {
@@ -133,10 +133,10 @@ public:
         }
     }
 
-    vector<unsigned> m_individualSignals; // Q_SIGNAL
-    vector<unsigned> m_individualSlots;   // Q_SLOT
-    vector<unsigned> m_invokables; // Q_INVOKABLE
-    vector<unsigned> m_scriptables; // Q_SCRIPTABLE
+    std::vector<unsigned> m_individualSignals; // Q_SIGNAL
+    std::vector<unsigned> m_individualSlots; // Q_SLOT
+    std::vector<unsigned> m_invokables; // Q_INVOKABLE
+    std::vector<unsigned> m_scriptables; // Q_SCRIPTABLE
     const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
 };
@@ -147,11 +147,11 @@ AccessSpecifierManager::AccessSpecifierManager(ClazyContext *context)
     , m_fixitsEnabled(context->exportFixesEnabled())
 {
     Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
     m_visitsNonQObjects = getenv("CLAZY_ACCESSSPECIFIER_NON_QOBJECT") != nullptr;
 }
 
-ClazySpecifierList& AccessSpecifierManager::entryForClassDefinition(CXXRecordDecl *classDecl)
+ClazySpecifierList &AccessSpecifierManager::entryForClassDefinition(CXXRecordDecl *classDecl)
 {
     ClazySpecifierList &specifiers = m_specifiersMap[classDecl];
     return specifiers;
@@ -161,17 +161,19 @@ const CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocatio
 {
     for (const auto &it : m_specifiersMap) {
         const CXXRecordDecl *record = it.first;
-        if (clazy::getLocStart(record) < loc && loc < clazy::getLocEnd(record))
+        if (clazy::getLocStart(record) < loc && loc < clazy::getLocEnd(record)) {
             return record;
+        }
     }
     return nullptr;
 }
 
 void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 {
-    auto record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record)
+    auto *record = dyn_cast<CXXRecordDecl>(decl);
+    if (!record) {
         return;
+    }
 
     const bool isQObject = clazy::isQObject(record);
     const bool visits = isQObject || (m_fixitsEnabled && m_visitsNonQObjects);
@@ -193,7 +195,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 
     auto it = m_preprocessorCallbacks->m_qtAccessSpecifiers.begin();
     while (it != m_preprocessorCallbacks->m_qtAccessSpecifiers.end()) {
-         if (classDefinitionForLoc((*it).loc) == record) {
+        if (classDefinitionForLoc((*it).loc) == record) {
             sorted_insert(specifiers, *it, sm);
             it = m_preprocessorCallbacks->m_qtAccessSpecifiers.erase(it);
         } else {
@@ -203,67 +205,74 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
 
     // Now lets add the normal C++ access specifiers (public, private etc.)
 
-    for (auto d : record->decls()) {
-        auto accessSpec = dyn_cast<AccessSpecDecl>(d);
-        if (!accessSpec || accessSpec->getDeclContext() != record)
+    for (auto *d : record->decls()) {
+        auto *accessSpec = dyn_cast<AccessSpecDecl>(d);
+        if (!accessSpec || accessSpec->getDeclContext() != record) {
             continue;
+        }
         ClazySpecifierList &specifiers = entryForClassDefinition(record);
-        sorted_insert(specifiers, {clazy::getLocStart(accessSpec), accessSpec->getAccess(), QtAccessSpecifier_None }, sm);
+        sorted_insert(specifiers, {clazy::getLocStart(accessSpec), accessSpec->getAccess(), QtAccessSpecifier_None}, sm);
     }
 }
 
 QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMethodDecl *method) const
 {
-    if (!method || clazy::getLocStart(method).isMacroID())
+    if (!method || clazy::getLocStart(method).isMacroID()) {
         return QtAccessSpecifier_Unknown;
+    }
 
     // We want the declaration that's inside class {}, not the ones that are also a method definition
     // and possibly outside the class
     method = method->getCanonicalDecl();
 
     const CXXRecordDecl *record = method->getParent();
-    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record) || method->isTemplateInstantiation())
+    if (!record || isa<clang::ClassTemplateSpecializationDecl>(record) || method->isTemplateInstantiation()) {
         return QtAccessSpecifier_None;
+    }
 
     const SourceLocation methodLoc = clazy::getLocStart(method);
 
     // Process Q_SIGNAL:
     for (auto signalLoc : m_preprocessorCallbacks->m_individualSignals) {
-        if (signalLoc == methodLoc.getRawEncoding())
+        if (signalLoc == methodLoc.getRawEncoding()) {
             return QtAccessSpecifier_Signal;
+        }
     }
 
     // Process Q_SLOT:
     for (auto slotLoc : m_preprocessorCallbacks->m_individualSlots) {
-        if (slotLoc == methodLoc.getRawEncoding())
+        if (slotLoc == methodLoc.getRawEncoding()) {
             return QtAccessSpecifier_Slot;
+        }
     }
 
     // Process Q_INVOKABLE:
     for (auto loc : m_preprocessorCallbacks->m_invokables) {
-        if (loc == methodLoc.getRawEncoding())
+        if (loc == methodLoc.getRawEncoding()) {
             return QtAccessSpecifier_Invokable;
+        }
     }
 
     // Process Q_SLOTS and Q_SIGNALS:
 
     auto it = m_specifiersMap.find(record);
-    if (it == m_specifiersMap.cend())
+    if (it == m_specifiersMap.cend()) {
         return QtAccessSpecifier_None;
+    }
 
     const ClazySpecifierList &accessSpecifiers = it->second;
 
-    auto pred = [this] (const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs) {
+    auto pred = [this](const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs) {
         return accessSpecifierCompare(lhs, rhs, m_ci.getSourceManager());
     };
 
-    const ClazyAccessSpecifier dummy = { methodLoc, // we're only interested in the location
-                                         /*dummy*/ clang::AS_none,
-                                         /*dummy*/ QtAccessSpecifier_None };
+    const ClazyAccessSpecifier dummy = {methodLoc, // we're only interested in the location
+                                        /*dummy*/ clang::AS_none,
+                                        /*dummy*/ QtAccessSpecifier_None};
     auto i = std::upper_bound(accessSpecifiers.cbegin(), accessSpecifiers.cend(), dummy, pred);
-    if (i == accessSpecifiers.cbegin())
+    if (i == accessSpecifiers.cbegin()) {
         return QtAccessSpecifier_None;
-
+    }
 
     --i; // One before the upper bound is the last access specifier before our method
     return (*i).qtAccessSpecifier;
@@ -271,16 +280,19 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
 
 bool AccessSpecifierManager::isScriptable(const CXXMethodDecl *method) const
 {
-    if (!method)
+    if (!method) {
         return false;
+    }
 
     const SourceLocation methodLoc = clazy::getLocStart(method);
-     if (methodLoc.isMacroID())
-         return false;
+    if (methodLoc.isMacroID()) {
+        return false;
+    }
 
     for (auto loc : m_preprocessorCallbacks->m_scriptables) {
-        if (loc == methodLoc.getRawEncoding())
+        if (loc == methodLoc.getRawEncoding()) {
             return true;
+        }
     }
 
     return false;
@@ -303,12 +315,12 @@ llvm::StringRef AccessSpecifierManager::qtAccessSpecifierTypeStr(QtAccessSpecifi
     return "";
 }
 
-SourceLocation AccessSpecifierManager::firstLocationOfSection(
-    AccessSpecifier specifier, clang::CXXRecordDecl *decl) const {
-
+SourceLocation AccessSpecifierManager::firstLocationOfSection(AccessSpecifier specifier, clang::CXXRecordDecl *decl) const
+{
     auto it = m_specifiersMap.find(decl);
-    if (it == m_specifiersMap.end())
+    if (it == m_specifiersMap.end()) {
         return {};
+    }
 
     for (const auto &record : it->second) {
         if (record.accessSpecifier == specifier) {

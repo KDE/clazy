@@ -21,25 +21,24 @@
 */
 
 #include "qt-keyword-emit.h"
-#include "FixItUtils.h"
 #include "ClazyContext.h"
+#include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
 #include "clazy_stl.h"
 
-#include <clang/Lex/MacroInfo.h>
 #include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Lex/MacroInfo.h>
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/StringRef.h>
 
-#include <ctype.h>
 #include <algorithm>
-#include <vector>
+#include <ctype.h>
 #include <string_view>
+#include <vector>
 
 using namespace clang;
-using namespace std;
 
 QtKeywordEmit::QtKeywordEmit(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)

@@ -36,12 +36,12 @@
 #include <vector>
 
 class ClazyContext;
-namespace clang {
+namespace clang
+{
 class Decl;
-}  // namespace clang
+} // namespace clang
 
 using namespace clang;
-using namespace std;
 
 BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -50,28 +50,31 @@ BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
 
 void BaseClassEvent::VisitDecl(Decl *decl)
 {
-    auto method = dyn_cast<CXXMethodDecl>(decl);
-    if (!method || !method->hasBody() || !method->isThisDeclarationADefinition())
+    auto *method = dyn_cast<CXXMethodDecl>(decl);
+    if (!method || !method->hasBody() || !method->isThisDeclarationADefinition()) {
         return;
+    }
 
-    const string methodName = method->getNameAsString();
+    const std::string methodName = method->getNameAsString();
     const bool isEvent = methodName == "event";
     const bool isEventFilter = isEvent ? false : methodName == "eventFilter";
 
-    if (!isEvent && !isEventFilter)
+    if (!isEvent && !isEventFilter) {
         return;
+    }
 
     CXXRecordDecl *classDecl = method->getParent();
-    if (!clazy::isQObject(classDecl))
+    if (!clazy::isQObject(classDecl)) {
         return;
+    }
 
-    const string className = classDecl->getQualifiedNameAsString();
-    if (clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), className))
+    const std::string className = classDecl->getQualifiedNameAsString();
+    if (clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), className)) {
         return;
+    }
 
     CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
-    const string baseClassName = baseClass ? baseClass->getQualifiedNameAsString()
-                                           : string("BaseClass");
+    const std::string baseClassName = baseClass ? baseClass->getQualifiedNameAsString() : std::string("BaseClass");
 
     if (isEventFilter && clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), baseClassName)) {
         // This is fine, QObject and QWidget eventFilter() don't do anything
@@ -79,15 +82,17 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     }
 
     Stmt *body = method->getBody();
-    std::vector<ReturnStmt*> returns;
+    std::vector<ReturnStmt *> returns;
     clazy::getChilds<ReturnStmt>(body, /*by-ref*/ returns);
     for (ReturnStmt *returnStmt : returns) {
         Stmt *maybeBoolExpr = clazy::childAt(returnStmt, 0);
-        if (!maybeBoolExpr)
+        if (!maybeBoolExpr) {
             continue;
-        auto boolExpr = dyn_cast<CXXBoolLiteralExpr>(maybeBoolExpr);
-        if (!boolExpr || boolExpr->getValue()) // if getValue() is true that's a return true, which is fine
+        }
+        auto *boolExpr = dyn_cast<CXXBoolLiteralExpr>(maybeBoolExpr);
+        if (!boolExpr || boolExpr->getValue()) { // if getValue() is true that's a return true, which is fine
             continue;
+        }
 
         emitWarning(clazy::getLocStart(returnStmt), "Return " + baseClassName + "::" + methodName + "() instead of false");
     }

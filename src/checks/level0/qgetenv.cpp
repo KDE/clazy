@@ -23,10 +23,10 @@
 */
 
 #include "qgetenv.h"
-#include "Utils.h"
-#include "StringUtils.h"
 #include "FixItUtils.h"
 #include "SourceCompatibilityHelpers.h"
+#include "StringUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -43,7 +43,6 @@
 class ClazyContext;
 
 using namespace clang;
-using namespace std;
 
 QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
@@ -56,12 +55,14 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     // to implicit cast to bool when checking pointers for validity, like if (ptr)
 
     auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!memberCall)
+    if (!memberCall) {
         return;
+    }
 
     CXXMethodDecl *method = memberCall->getMethodDecl();
-    if (!method)
+    if (!method) {
         return;
+    }
 
     CXXRecordDecl *record = method->getParent();
     if (!record || clazy::name(record) != "QByteArray") {
@@ -69,18 +70,20 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<CallExpr *> calls = Utils::callListForChain(memberCall);
-    if (calls.size() != 2)
+    if (calls.size() != 2) {
         return;
+    }
 
     CallExpr *qgetEnvCall = calls.back();
 
     FunctionDecl *func = qgetEnvCall->getDirectCallee();
 
-    if (!func || clazy::name(func) != "qgetenv")
+    if (!func || clazy::name(func) != "qgetenv") {
         return;
+    }
 
     StringRef methodname = clazy::name(method);
-    string errorMsg;
+    std::string errorMsg;
     std::string replacement;
     if (methodname == "isEmpty") {
         errorMsg = "qgetenv().isEmpty() allocates.";

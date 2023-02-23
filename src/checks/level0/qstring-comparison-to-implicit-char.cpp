@@ -20,16 +20,14 @@
 */
 
 #include "qstring-comparison-to-implicit-char.h"
-#include "Utils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
+#include "Utils.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
-using namespace std;
-
 
 QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -38,27 +36,31 @@ QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::stri
 
 void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
 {
-    auto callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
-    if (!callExpr || !callExpr->getCalleeDecl() || callExpr->getNumArgs() != 2)
+    auto *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
+    if (!callExpr || !callExpr->getCalleeDecl() || callExpr->getNumArgs() != 2) {
         return;
+    }
 
     Expr *arg1 = callExpr->getArg(1);
-    IntegerLiteral *il = clazy::getFirstChildOfType2<IntegerLiteral>(arg1);
-    if (!il)
+    auto *il = clazy::getFirstChildOfType2<IntegerLiteral>(arg1);
+    if (!il) {
         return;
+    }
 
-    auto functionDecl = dyn_cast<FunctionDecl>(callExpr->getCalleeDecl());
-    if (!functionDecl || functionDecl->getQualifiedNameAsString() != "operator==")
+    auto *functionDecl = dyn_cast<FunctionDecl>(callExpr->getCalleeDecl());
+    if (!functionDecl || functionDecl->getQualifiedNameAsString() != "operator==") {
         return;
+    }
 
     ParmVarDecl *parm1 = functionDecl->getParamDecl(0);
-    if (parm1->getType().getAsString() != "const class QString &")
+    if (parm1->getType().getAsString() != "const class QString &") {
         return;
+    }
 
     ParmVarDecl *parm2 = functionDecl->getParamDecl(1);
-    if (parm2->getType().getAsString() != "class QChar")
+    if (parm2->getType().getAsString() != "class QChar") {
         return;
-
+    }
 
     emitWarning(stmt, "QString being compared to implicit QChar");
 }
