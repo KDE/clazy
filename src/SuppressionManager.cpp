@@ -22,7 +22,6 @@
 #include "SuppressionManager.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
-#include <iostream>
 
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
