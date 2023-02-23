@@ -22,9 +22,10 @@
 #include "SuppressionManager.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
+#include <iostream>
 
-#include <clang/Basic/SourceManager.h>
 #include <clang/Basic/SourceLocation.h>
+#include <clang/Basic/SourceManager.h>
 #include <clang/Basic/TokenKinds.h>
 #include <clang/Lex/Token.h>
 #include <llvm/Support/MemoryBuffer.h>
@@ -39,8 +40,10 @@ SuppressionManager::SuppressionManager()
 {
 }
 
-bool SuppressionManager::isSuppressed(const std::string &checkName, clang::SourceLocation loc,
-                                      const clang::SourceManager &sm, const clang::LangOptions &lo) const
+bool SuppressionManager::isSuppressed(const std::string &checkName,
+                                      clang::SourceLocation loc,
+                                      const clang::SourceManager &sm,
+                                      const clang::LangOptions &lo) const
 {
     if (loc.isMacroID())
         loc = sm.getExpansionLoc(loc);
@@ -72,8 +75,14 @@ bool SuppressionManager::isSuppressed(const std::string &checkName, clang::Sourc
         return false;
 
     const int lineNumber = sm.getSpellingLineNumber(loc);
-    const bool checkIsSuppressedByLine = suppressions.checksToSkipByLine.find(LineAndCheckName(lineNumber, checkName)) != suppressions.checksToSkipByLine.cend();
-    return checkIsSuppressedByLine;
+    if (suppressions.skipNextLine.count(lineNumber) > 0) {
+        suppressions.skipNextLine.erase(lineNumber);
+        return true;
+    }
+    if (suppressions.checksToSkipByLine.find(LineAndCheckName(lineNumber, checkName)) != suppressions.checksToSkipByLine.cend())
+        return true;
+
+    return false;
 }
 
 void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const clang::LangOptions &lo) const
@@ -102,6 +111,16 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             if (clazy::contains(comment, "clazy:skip")) {
                 suppressions.skipEntireFile = true;
                 return;
+            }
+
+            if (clazy::contains(comment, "NOLINTNEXTLINE")) {
+                if (sm.getSpellingLineNumber(token.getLocation()) < 0) {
+                    llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << sm.getSpellingLineNumber(token.getLocation()) << "\n";
+                    continue;
+                }
+
+                const int nextLineNumber = sm.getSpellingLineNumber(token.getLocation()) + 1;
+                suppressions.skipNextLine.insert(nextLineNumber);
             }
 
             static regex rx(R"(clazy:excludeall=(.*?)(\s|$))");

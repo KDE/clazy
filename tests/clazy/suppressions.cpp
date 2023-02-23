@@ -6,8 +6,9 @@
 // clazy:excludeall=qdatetime-utc comment with junk
 
 void suppress_qstring_allocation()
-{
-    QString s = "foo"; // clazy:exclude=qstring-allocations
+{   
+    // NOLINTNEXTLINE
+    QString s = "foo";
     if (s == "foo") {} // clazy:exclude=qstring-allocations
     if (s == "foo") {} // clazy:exclude=qstring-allocations comment with other junk
     if (s == "foo") {}
