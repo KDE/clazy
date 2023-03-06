@@ -38,7 +38,6 @@ class Stmt;
 /**
  * Detects when you're using QVariant::value<Foo>() instead of QVariant::toFoo().
  *
- * TODO: Missing QVariants of QHash<QString,QVariant>, QList<QVariant> and QMap<QString, QVariant>
  */
 class QVariantTemplateInstantiation : public CheckBase
 {

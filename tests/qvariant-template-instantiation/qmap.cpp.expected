@@ -1,0 +1,1 @@
+qvariant-template-instantiation/qmap.cpp:17:5: warning: Use QVariant::toInt() instead of QVariant::value<int>() [-Wclazy-qvariant-template-instantiation]
