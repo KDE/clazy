@@ -5,9 +5,9 @@
 # The man page is not available on Windows.
 #
 
-project(clazy)
-
 cmake_minimum_required(VERSION 3.7)
+
+project(clazy)
 
 if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
     cmake_policy(SET CMP0074 NEW)
