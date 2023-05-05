@@ -26,8 +26,6 @@ Qt3DAnimation/QAbstractAnimation                     replaced  by  QtCore/QAbstr
 Qt3DAnimation/QAnimationGroup                        replaced  by  QtCore/QAnimationGroup
 Qt3DAnimation/qabstractanimation.h                   replaced  by  QtCore/qabstractanimation.h
 Qt3DAnimation/qanimationgroup.h                      replaced  by  QtCore/qanimationgroup.h
-Qt3DCore/QTransform                                  replaced  by  QtGui/QTransform
-Qt3DCore/qtransform.h                                replaced  by  QtGui/qtransform.h
 Qt3DInput/QAction                                    replaced  by  QtGui/QAction
 Qt3DInput/QKeyEvent                                  replaced  by  QtGui/QKeyEvent
 Qt3DInput/QMouseEvent                                replaced  by  QtGui/QMouseEvent
@@ -38,14 +36,12 @@ Qt3DRender/QAbstractFunctor                          replaced  by  Qt3DCore/QAbs
 Qt3DRender/QAttribute                                replaced  by  Qt3DCore/QAttribute
 Qt3DRender/QBuffer                                   replaced  by  QtCore/QBuffer
 Qt3DRender/QBufferPtr                                replaced  by  Qt3DCore/QBufferPtr
-Qt3DRender/QCamera                                   replaced  by  QtMultimedia/QCamera
 Qt3DRender/QGeometry                                 replaced  by  Qt3DCore/QGeometry
 Qt3DRender/QGeometryFactoryPtr                       replaced  by  Qt3DCore/QGeometryFactoryPtr
 Qt3DRender/QProximityFilter                          replaced  by  QtSensors/QProximityFilter
 Qt3DRender/qabstractfunctor.h                        replaced  by  Qt3DCore/qabstractfunctor.h
 Qt3DRender/qattribute.h                              replaced  by  Qt3DCore/qattribute.h
 Qt3DRender/qbuffer.h                                 replaced  by  QtCore/qbuffer.h
-Qt3DRender/qcamera.h                                 replaced  by  QtMultimedia/qcamera.h
 Qt3DRender/qgeometry.h                               replaced  by  Qt3DCore/qgeometry.h
 QtCore/QAbstractState                                replaced  by  QtStateMachine/QAbstractState
 QtCore/QAbstractTransition                           replaced  by  QtStateMachine/QAbstractTransition
