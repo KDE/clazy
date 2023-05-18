@@ -45,7 +45,7 @@ public:
 
     struct Suppressions {
         bool skipEntireFile = false;
-
+        std::set<unsigned> skipNextLine;
         std::set<CheckName> checksToSkip;
         std::set<LineAndCheckName> checksToSkipByLine;
     };
