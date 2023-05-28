@@ -127,8 +127,8 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 suppressions.skipNextLine.insert(nextLineNumber);
             }
 
-            static regex rx(R"(clazy:excludeall=(.*?)(\s|$))");
-            smatch match;
+            static std::regex rx(R"(clazy:excludeall=(.*?)(\s|$))");
+            std::smatch match;
             if (regex_search(comment, match, rx) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
