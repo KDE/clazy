@@ -68,6 +68,7 @@ add_test(NAME detaching-temporary COMMAND python3 run_tests.py detaching-tempora
 add_test(NAME foreach COMMAND python3 run_tests.py foreach WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME incorrect-emit COMMAND python3 run_tests.py incorrect-emit WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME install-event-filter COMMAND python3 run_tests.py install-event-filter WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+add_test(NAME no-module-include COMMAND python3 run_tests.py no-module-include WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME non-pod-global-static COMMAND python3 run_tests.py non-pod-global-static WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME overridden-signal COMMAND python3 run_tests.py overridden-signal WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME post-event COMMAND python3 run_tests.py post-event WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
@@ -97,3 +98,4 @@ add_test(NAME returning-void-expression COMMAND python3 run_tests.py returning-v
 add_test(NAME rule-of-three COMMAND python3 run_tests.py rule-of-three WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME static-pmf COMMAND python3 run_tests.py static-pmf WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME virtual-call-ctor COMMAND python3 run_tests.py virtual-call-ctor WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+
