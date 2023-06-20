@@ -50,7 +50,7 @@
   <summary xml:lang="eu">Clang konpilatzailearen plugin bat, Qt-ren gaineko praktika onenen abisuak igortzen dituena</summary>
   <summary xml:lang="fi">Clang-kääntäjäliitännäinen, joka esittää varoituksia hyvistä Qt-käytänteistä</summary>
   <summary xml:lang="fr">Un module externe pour le compilateur Clang émettant des avertissements concernant les bonnes pratiques Qt.</summary>
-  <summary xml:lang="gl">Un complemento do compilador Clang que emite avisos relacionados con boas prácticas de Qt</summary>
+  <summary xml:lang="gl">Un complemento do compilador Clang que emite avisos relacionados con boas prácticas de Qt.</summary>
   <summary xml:lang="hi">एक सीलैंग कंपाइलर प्लगिन जो क्यूट के सर्वोत्तम विधिओं के सम्बन्ध में चेतावनीसंदेश देता है.</summary>
   <summary xml:lang="hu">A Clang fordítóprogram bővítménye, amely a Qt legjobb gyakorlataihoz kapcsolódó figyelmeztetéseket ad</summary>
   <summary xml:lang="it">Un'estensione per il compilatore Clang che emette avvisi relativi alle migliori pratiche per Qt</summary>
