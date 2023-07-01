@@ -11,6 +11,7 @@
   <name xml:lang="de">Clazy</name>
   <name xml:lang="el">Clazy</name>
   <name xml:lang="en-GB">Clazy</name>
+  <name xml:lang="eo">Clazy</name>
   <name xml:lang="es">Clazy</name>
   <name xml:lang="et">Clazy</name>
   <name xml:lang="eu">Clazy</name>
@@ -45,6 +46,7 @@
   <summary xml:lang="de">Ein Clang-Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt</summary>
   <summary xml:lang="el">Ένα πρόσθετο μεταγλωττιστή Clang με προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt</summary>
   <summary xml:lang="en-GB">A Clang compiler plugin which emits warnings related to Qt best practices</summary>
+  <summary xml:lang="eo">Clang-kompilila kromprogramo kiu elmetas avertojn rilatajn al plej konsilindaj praktikoj de Qt</summary>
   <summary xml:lang="es">Un complemento del compilador Clang que emite advertencias relacionadas con las prácticas adecuadas de Qt</summary>
   <summary xml:lang="et">Clangi kompilaatori plugin, mis väljastab Qt parima praktikaga seonduvaid hoiatusi</summary>
   <summary xml:lang="eu">Clang konpilatzailearen plugin bat, Qt-ren gaineko praktika onenen abisuak igortzen dituena</summary>
@@ -79,6 +81,7 @@
     <p xml:lang="de">Clazy ist ein Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt.</p>
     <p xml:lang="el">Το Clazy είναι ένα πρόσθετο μεταγλωττιστή clang το οποίο στέλνει προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt.</p>
     <p xml:lang="en-GB">Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
+    <p xml:lang="eo">Clazy estas clang-kompilila kromaô kiu donas avertojn rilatajn al plej konsilindaj praktikoj de Qt.</p>
     <p xml:lang="es">Clazy es un complemento del compilador clang que emite advertencias relacionadas con las prácticas adecuadas de Qt.</p>
     <p xml:lang="et">Clazy on Clangi kompilaatori plugin, mis väljastab Qt parima praktikaga seonduvaid hoiatusi.</p>
     <p xml:lang="eu">Clazy Clang konpilatzailearen plugin bat da, Qt-ren gaineko praktika onenen abisuak igortzen dituena.</p>
