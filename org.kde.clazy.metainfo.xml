@@ -38,6 +38,7 @@
   <name xml:lang="uk">Clazy</name>
   <name xml:lang="vi">Clazy</name>
   <name xml:lang="x-test">xxClazyxx</name>
+  <name xml:lang="zh-CN">Clazy</name>
   <name xml:lang="zh-TW">Clazy</name>
   <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
   <summary xml:lang="az">Ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən Clang komplilyatoru qoşması</summary>
