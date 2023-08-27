@@ -244,6 +244,7 @@ clazy runs all checks from level1 by default.
     - [qvariant-template-instantiation](docs/checks/README-qvariant-template-instantiation.md)
     - [raw-environment-function](docs/checks/README-raw-environment-function.md)
     - [reserve-candidates](docs/checks/README-reserve-candidates.md)
+    - [sanitize-inline-keyword](docs/checks/README-sanitize-inline-keyword.md)    (fix-sanitize-inline-keyword)
     - [signal-with-return-value](docs/checks/README-signal-with-return-value.md)
     - [thread-with-slots](docs/checks/README-thread-with-slots.md)
     - [tr-non-literal](docs/checks/README-tr-non-literal.md)

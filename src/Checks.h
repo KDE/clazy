@@ -114,6 +114,7 @@
 #include "checks/manuallevel/qvariant-template-instantiation.h"
 #include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/reserve-candidates.h"
+#include "checks/manuallevel/sanitize-inline-keyword.h"
 #include "checks/manuallevel/signal-with-return-value.h"
 #include "checks/manuallevel/thread-with-slots.h"
 #include "checks/manuallevel/tr-non-literal.h"
@@ -170,6 +171,7 @@ void CheckManager::registerChecks()
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnexpectedFlagEnumeratorValue>("unexpected-flag-enumerator-value", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<SanitizeInlineKeyword>("sanitize-inline-keyword", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
 #ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<UnusedResultCheck>("unused-result-check", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
 #endif

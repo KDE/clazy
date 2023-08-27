@@ -23,6 +23,16 @@
             "name"  : "signal-with-return-value",
             "level" : -1,
             "visits_decls" : true
+        },
+        {
+            "name"  : "sanitize-inline-keyword",
+            "level" : -1,
+            "visits_decls" : true,
+            "fixits" : [
+                {
+                    "name" : "sanitize-inline-keyword"
+                }
+            ]
 
         },
         {

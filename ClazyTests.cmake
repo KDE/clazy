@@ -22,6 +22,7 @@ add_test(NAME qt6-qlatin1stringchar-to-u COMMAND python3 run_tests.py qt6-qlatin
 add_test(NAME qvariant-template-instantiation COMMAND python3 run_tests.py qvariant-template-instantiation WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME raw-environment-function COMMAND python3 run_tests.py raw-environment-function WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME reserve-candidates COMMAND python3 run_tests.py reserve-candidates WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+add_test(NAME sanitize-inline-keyword COMMAND python3 run_tests.py sanitize-inline-keyword WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME signal-with-return-value COMMAND python3 run_tests.py signal-with-return-value WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME thread-with-slots COMMAND python3 run_tests.py thread-with-slots WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
 add_test(NAME tr-non-literal COMMAND python3 run_tests.py tr-non-literal WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
