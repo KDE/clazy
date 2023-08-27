@@ -74,7 +74,9 @@ static cl::opt<bool> s_visitImplicitCode(
 
 static cl::opt<bool>
     s_ignoreIncludedFiles("ignore-included-files",
-                          cl::desc("Only emit warnings for the current file being compiled and ignore any includes. Useful for performance reasons."),
+                          cl::desc("Only emit warnings for the current file being compiled and ignore any includes. "
+                                   "Useful for performance reasons. Have a look at a check's README*.md file to see "
+                                   "if it supports this feature or not."),
                           cl::init(false),
                           cl::cat(s_clazyCategory));
 
