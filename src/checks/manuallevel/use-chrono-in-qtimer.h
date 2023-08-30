@@ -1,7 +1,7 @@
 /*
   This file is part of the clazy static checker.
 
-  Copyright (C) 2020 Author <your@email>
+  Copyright (C) 2020 Jesper K. Pedersen <jesper.pedersen@kdab.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
