@@ -1,0 +1,7 @@
+Environment:
+  KDECI_BUILD: "TRUE"
+  CXX: "clang++"
+
+Options:
+  setup-dbus-session: False
+  run-tests: False
