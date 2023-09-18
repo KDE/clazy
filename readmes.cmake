@@ -43,6 +43,7 @@ SET(README_LEVEL0_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-lambda-unique-connection.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-lowercase-qml-type-name.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-mutable-container-key.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-no-module-include.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-overloaded-signal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qcolor-from-literal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qdatetime-utc.md
