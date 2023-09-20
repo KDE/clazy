@@ -24,6 +24,8 @@
 #include <QtMultimedia>
 #include <QtSql/QtSql>
 #include <QtSql>
+#include <QtPrintSupport/QtPrintSupport>
+#include <QtPrintSupport>
 
 
 
