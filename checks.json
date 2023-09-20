@@ -372,6 +372,12 @@
             "visits_stmts" : true
         },
         {
+            "name" : "no-module-include",
+            "level" : 0,
+            "categories" : ["performance"],
+            "visits_stmts" : true
+        },
+        {
             "name"  : "auto-unexpected-qstringbuilder",
             "class_name" : "AutoUnexpectedQStringBuilder",
             "level" : 1,
