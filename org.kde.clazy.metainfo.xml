@@ -37,7 +37,6 @@
   <name xml:lang="tr">Clazy</name>
   <name xml:lang="uk">Clazy</name>
   <name xml:lang="vi">Clazy</name>
-  <name xml:lang="x-test">xxClazyxx</name>
   <name xml:lang="zh-CN">Clazy</name>
   <name xml:lang="zh-TW">Clazy</name>
   <summary>A Clang compiler plugin which emits warnings related to Qt best practices</summary>
@@ -72,7 +71,6 @@
   <summary xml:lang="tr">Qt için Kod Düzenleyici</summary>
   <summary xml:lang="uk">Додаток до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt</summary>
   <summary xml:lang="vi">Một phần cài cắm trình biên dịch Clang, đưa ra các cảnh báo liên quan đến các thực hành Qt tốt nhất</summary>
-  <summary xml:lang="x-test">xxA Clang compiler plugin which emits warnings related to Qt best practicesxx</summary>
   <summary xml:lang="zh-CN">一个 Clang 编译器插件，发出与 Qt 最佳实践相关的警告</summary>
   <summary xml:lang="zh-TW">一個會發出與 Qt 最佳實踐相關警告的 Clang 編譯器外掛程式</summary>
   <description>
@@ -108,7 +106,6 @@
     <p xml:lang="tr">Clazy, Qt kabul görmüş davranışları üzerine uyarılar veren bir Clang derleyici eklentisidir.</p>
     <p xml:lang="uk">Clazy є додатком до компілятора Clang, який попереджає про порушення правил правильного програмування з використанням Qt.</p>
     <p xml:lang="vi">Clazy là một phần cài cắm trình biên dịch clang, đưa ra các cảnh báo liên quan đến các thực hành Qt tốt nhất.</p>
-    <p xml:lang="x-test">xxClazy is a clang compiler plugin which emits warnings related to Qt best practices.xx</p>
     <p xml:lang="zh-CN">Clazy 是一个 Clang 编译器插件，发出与 Qt 最佳实践相关的警告。</p>
     <p xml:lang="zh-TW">Clazy 是一個會發出與 Qt 最佳實踐相關警告的 Clang 編譯器外掛程式。</p>
   </description>
