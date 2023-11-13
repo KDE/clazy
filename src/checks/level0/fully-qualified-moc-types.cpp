@@ -119,11 +119,6 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
             return true;
         }
 
-        // KAuth helpers
-        if (qualifiedTypeName == "KAuth::ActionReply") {
-            return typeName != qualifiedTypeName;
-        }
-
         return typeName == qualifiedTypeName;
     }
     return true;
