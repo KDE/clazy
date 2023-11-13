@@ -120,10 +120,6 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         }
 
         // KAuth helpers
-        // Unlike other types, KAuth::ActionReply needs to be used without
-        // the namespace specified. Here we pretend that KAuth::ActionReply
-        // is the unqualified name (and therefore bad) and that ActionReply
-        // is the qualified name (and therefore good).
         if (qualifiedTypeName == "KAuth::ActionReply") {
             return typeName != qualifiedTypeName;
         }
