@@ -37,7 +37,23 @@ using namespace clang;
 NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    m_modulesList = {"Core", "Gui", "Qml", "QmlModels", "Test", "Network", "DBus", "Quick", "Svg", "Widgets", "Xml", "Concurrent", "Multimedia", "Sql", "PrintSupport"};
+    m_modulesList = {
+        "Core",
+        "Gui",
+        "Qml",
+        "QmlModels",
+        "Test",
+        "Network",
+        "DBus",
+        "Quick",
+        "Svg",
+        "Widgets",
+        "Xml",
+        "Concurrent",
+        "Multimedia",
+        "Sql",
+        "PrintSupport",
+    };
     for (const std::string &module : m_modulesList) {
         m_filesToIgnore.emplace_back("Qt" + module + "Depends");
     }
