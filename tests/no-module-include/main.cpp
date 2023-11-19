@@ -26,6 +26,8 @@
 #include <QtSql>
 #include <QtPrintSupport/QtPrintSupport>
 #include <QtPrintSupport>
+#include <QtNetworkAuth/QtNetworkAuth>
+#include <QtNetworkAuth>
 
 
 

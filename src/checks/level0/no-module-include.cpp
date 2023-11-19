@@ -53,6 +53,7 @@ NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)
         "Multimedia",
         "Sql",
         "PrintSupport",
+        "NetworkAuth",
     };
     for (const std::string &module : m_modulesList) {
         m_filesToIgnore.emplace_back("Qt" + module + "Depends");
