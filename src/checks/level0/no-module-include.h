@@ -52,7 +52,7 @@ public:
                                  clang::SrcMgr::CharacteristicKind FileType) override;
 
 private:
-    std::vector<std::string> m_modulesList;
+    const std::vector<std::string> m_modulesList;
 };
 
 #endif
