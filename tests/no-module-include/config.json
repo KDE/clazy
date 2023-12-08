@@ -2,6 +2,9 @@
     "tests" : [
         {
             "filename" : "main.cpp"
+        },
+        {
+            "filename" : "dummy_qdbusxml2cpp.cpp"
         }
     ]
 }
