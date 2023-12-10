@@ -17,6 +17,7 @@
 #include <clang/ASTMatchers/ASTMatchers.h>
 #include <clang/ASTMatchers/ASTMatchersInternal.h>
 #include <clang/Basic/LLVM.h>
+#include <iostream>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
@@ -27,19 +28,39 @@ using namespace clang::ast_matchers;
 
 // TODO: setNameFromString()
 
+static bool isSingleDigitRgb(llvm::StringRef ref)
+{
+    return ref.size() == 4;
+}
+static bool isDoubleDigitRgb(llvm::StringRef ref)
+{
+    return ref.size() == 7;
+}
+static bool isDoubleDigitRgba(llvm::StringRef ref)
+{
+    return ref.size() == 9;
+}
+static bool isTripleDigitRgb(llvm::StringRef ref)
+{
+    return ref.size() == 10;
+}
+static bool isQuadrupleDigitRgb(llvm::StringRef ref)
+{
+    return ref.size() == 13;
+}
+
 static bool handleStringLiteral(const StringLiteral *literal)
 {
     if (!literal) {
         return false;
     }
 
-    int length = literal->getLength();
-    if (length != 4 && length != 7 && length != 9 && length != 13) {
+    llvm::StringRef str = literal->getString();
+    if (!str.startswith("#")) {
         return false;
     }
 
-    llvm::StringRef str = literal->getString();
-    return str.startswith("#");
+    return isSingleDigitRgb(str) || isDoubleDigitRgb(str) || isDoubleDigitRgba(str) || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str);
 }
 
 class QColorFromLiteral_Callback : public ClazyAstMatcherCallback
@@ -53,8 +74,51 @@ public:
     void run(const MatchFinder::MatchResult &result) override
     {
         const auto *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
-        if (handleStringLiteral(lt)) {
-            m_check->emitWarning(lt, "The QColor ctor taking ints is cheaper than the one taking string literals");
+        if (!handleStringLiteral(lt)) {
+            return;
+        }
+        llvm::StringRef str = lt->getString();
+        const bool singleDigit = isSingleDigitRgb(str);
+        const bool doubleDigit = isDoubleDigitRgb(str);
+        const bool doubleDigitA = isDoubleDigitRgba(str);
+        if (singleDigit || doubleDigit || doubleDigitA) {
+            const int increment = singleDigit ? 1 : 2;
+            int endPos = 1;
+            int startPos = 1;
+
+            std::string aColor = doubleDigitA ? getHexValue(str, startPos, endPos, increment) : "";
+            std::string rColor = getHexValue(str, startPos, endPos, increment);
+            std::string gColor = getHexValue(str, startPos, endPos, increment);
+            std::string bColor = getHexValue(str, startPos, endPos, increment);
+
+            const static std::string hex = "0x";
+            std::string fixit;
+            std::string message;
+            if (doubleDigitA) {
+                const static std::string sep = ", ";
+                fixit = hex + aColor + sep + hex + rColor + sep + hex + gColor + sep + hex + bColor;
+                message = "The QColor ctor taking ints is cheaper than one taking string literals";
+            } else {
+                fixit = hex + rColor + gColor + bColor;
+                message = "The QColor ctor taking RGB int value is cheaper than one taking string literals";
+            }
+            m_check->emitWarning(clazy::getLocStart(lt), message, {clang::FixItHint::CreateReplacement(lt->getSourceRange(), fixit)});
+        } else {
+            m_check->emitWarning(clazy::getLocStart(lt), "The QColor ctor taking ints is cheaper than the one taking string literals");
+        }
+    }
+    inline std::string getHexValue(StringRef fullStr, int &startPos, int &endPos, int increment) const
+    {
+        endPos += increment;
+        clang::StringRef color = fullStr.slice(startPos, endPos);
+        startPos = endPos;
+
+        int result = 0;
+        color.getAsInteger(16, result);
+        if (result == 0) {
+            return "0";
+        } else {
+            return color.str();
         }
     }
 };

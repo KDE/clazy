@@ -179,6 +179,7 @@ void CheckManager::registerChecks()
     registerCheck(check<OverloadedSignal>("overloaded-signal", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
 #ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<QColorFromLiteral>("qcolor-from-literal", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-qcolor-from-literal", "qcolor-from-literal");
 #endif
     registerCheck(check<QDateTimeUtc>("qdatetime-utc", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qdatetime-utc", "qdatetime-utc");

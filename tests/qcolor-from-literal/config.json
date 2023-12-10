@@ -1,7 +1,8 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp"
+            "filename": "main.cpp",
+            "has_fixits": false
         }
     ]
 }
