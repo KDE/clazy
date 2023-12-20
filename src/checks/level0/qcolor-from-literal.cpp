@@ -17,7 +17,6 @@
 #include <clang/ASTMatchers/ASTMatchers.h>
 #include <clang/ASTMatchers/ASTMatchersInternal.h>
 #include <clang/Basic/LLVM.h>
-#include <iostream>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
@@ -103,7 +102,8 @@ public:
             }
             m_check->emitWarning(clazy::getLocStart(lt), message, {clang::FixItHint::CreateReplacement(lt->getSourceRange(), fixit)});
         } else {
-            m_check->emitWarning(clazy::getLocStart(lt), "The QColor ctor taking ints is cheaper than the one taking string literals");
+            // triple or quadruple digit RGBA
+            m_check->emitWarning(clazy::getLocStart(lt), "The QColor ctor taking QRgba64 is cheaper than one taking string literals");
         }
     }
     inline std::string twoDigit(const std::string &in)
