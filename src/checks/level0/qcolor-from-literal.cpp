@@ -91,21 +91,29 @@ public:
             std::string gColor = getHexValue(str, startPos, endPos, increment);
             std::string bColor = getHexValue(str, startPos, endPos, increment);
 
-            const static std::string hex = "0x";
             std::string fixit;
             std::string message;
             if (doubleDigitA) {
                 const static std::string sep = ", ";
-                fixit = hex + aColor + sep + hex + rColor + sep + hex + gColor + sep + hex + bColor;
+                fixit = prefixHex(rColor) + sep + prefixHex(gColor) + sep + prefixHex(bColor) + sep + prefixHex(aColor);
                 message = "The QColor ctor taking ints is cheaper than one taking string literals";
             } else {
-                fixit = hex + rColor + gColor + bColor;
+                fixit = "0x" + twoDigit(rColor) + twoDigit(gColor) + twoDigit(bColor);
                 message = "The QColor ctor taking RGB int value is cheaper than one taking string literals";
             }
             m_check->emitWarning(clazy::getLocStart(lt), message, {clang::FixItHint::CreateReplacement(lt->getSourceRange(), fixit)});
         } else {
             m_check->emitWarning(clazy::getLocStart(lt), "The QColor ctor taking ints is cheaper than the one taking string literals");
         }
+    }
+    inline std::string twoDigit(const std::string &in)
+    {
+        return in.length() == 1 ? in + in : in;
+    }
+    inline std::string prefixHex(const std::string &in)
+    {
+        const static std::string hex = "0x";
+        return in == "0" ? in : hex + in;
     }
     inline std::string getHexValue(StringRef fullStr, int &startPos, int &endPos, int increment) const
     {

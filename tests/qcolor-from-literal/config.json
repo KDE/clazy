@@ -2,7 +2,7 @@
     "tests": [
         {
             "filename": "main.cpp",
-            "has_fixits": false
+            "has_fixits": true
         }
     ]
 }
