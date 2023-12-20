@@ -322,11 +322,17 @@ def find_qt_installation(major_version, qmakes):
 
 def libraryName():
     if _platform == 'win32':
-        return 'ClazyPlugin.dll'
+        libname = 'ClazyPlugin.dll'
     elif _platform == 'darwin':
-        return 'ClazyPlugin.dylib'
+        libname = 'ClazyPlugin.dylib'
     else:
-        return 'ClazyPlugin.so'
+        libname = 'ClazyPlugin.so'
+    # Maybe some smarter resolving for later, but for now this should suffice
+    file_path = "../build/lib/" + libname
+    if os.path.exists(file_path):
+        return file_path
+    else:
+        return libname
 
 
 def link_flags():
