@@ -45,6 +45,19 @@ static Expr *getVarInitExpr(VarDecl *VDef)
     return VDef->getDefinition() ? VDef->getDefinition()->getInit() : nullptr;
 }
 
+static bool isQStringModifiedAfterCreation(Expr *expr)
+{
+    // This QString is the result of a .arg/.mid or similar call, check all args if they are a literal
+    if (auto *methodCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(expr)) {
+        if (auto *callee = methodCall->getMethodDecl()) {
+            if (callee->getReturnType().getAsString() == "class QString") {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 static bool isQStringFromStringLiteral(Expr *qstring)
 {
     if (isArgTemporaryObj(qstring)) {
@@ -54,8 +67,7 @@ static bool isQStringFromStringLiteral(Expr *qstring)
             return false;
         }
 
-        auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(qstringCtor);
-        return stringLit != nullptr;
+        return clazy::getFirstChildOfType<StringLiteral>(qstringCtor) && !isQStringModifiedAfterCreation(qstring);
     }
 
     if (auto *VD = getVarDecl(qstring)) {
@@ -81,10 +93,7 @@ static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
         return false;
     }
 
-    if (isQStringFromStringLiteral(qstrArg)) {
-        return true;
-    }
-    return false;
+    return isQStringFromStringLiteral(qstrArg) && !isQStringModifiedAfterCreation(qstrArg);
 }
 
 static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
@@ -107,7 +116,7 @@ static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
     }
 
     auto *qstringArg = ctorCall->getArg(0);
-    return qstringArg && isQStringFromStringLiteral(qstringArg);
+    return qstringArg && isQStringFromStringLiteral(qstringArg) && !isQStringModifiedAfterCreation(qstringArg);
 }
 
 static bool isArgNonStaticLocalVar(Expr *qregexp)
