@@ -131,9 +131,8 @@ void testArgs()
         QString().contains(reg); // OK
     }
     {
-        QString pattern{QString("test%1").arg("123")};
+        QString pattern = QString("test%1").arg("123");
         QRegularExpression reg(pattern);
-        Q_UNUSED(reg)
-        QString().contains(reg); // FIXME, should be OK
+        QString().contains(reg); // OK
     }
 }

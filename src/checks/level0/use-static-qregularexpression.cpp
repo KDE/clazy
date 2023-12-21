@@ -45,7 +45,7 @@ static Expr *getVarInitExpr(VarDecl *VDef)
     return VDef->getDefinition() ? VDef->getDefinition()->getInit() : nullptr;
 }
 
-static bool isQStringModifiedAfterCreation(Expr *expr)
+static bool isQStringModifiedAfterCreation(clang::Stmt *expr)
 {
     // This QString is the result of a .arg/.mid or similar call, check all args if they are a literal
     if (auto *methodCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(expr)) {
@@ -67,13 +67,18 @@ static bool isQStringFromStringLiteral(Expr *qstring)
             return false;
         }
 
-        return clazy::getFirstChildOfType<StringLiteral>(qstringCtor) && !isQStringModifiedAfterCreation(qstring);
+        return clazy::getFirstChildOfType<StringLiteral>(qstringCtor);
     }
 
     if (auto *VD = getVarDecl(qstring)) {
         auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(getVarInitExpr(VD));
         if (stringLit) {
-            return true;
+            // If we have a string literal somewhere in there, but modify it using QString::arg or friends, we don't have a literal for th regex
+            if (auto *constructExpr = clazy::getFirstChildOfType<CXXConstructExpr>(VD->getInit())) {
+                return !isQStringModifiedAfterCreation(constructExpr);
+            } else {
+                return true;
+            }
         }
     }
     return false;
