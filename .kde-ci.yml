@@ -4,4 +4,3 @@ Environment:
 
 Options:
   setup-dbus-session: False
-  run-tests: False
