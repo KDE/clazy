@@ -321,7 +321,9 @@ def find_qt_installation(major_version, qmakes):
 
 
 def libraryName():
-    if _platform == 'win32':
+    if 'CLAZYPLUGIN_CXX' in os.environ: # Running tests uninstalled
+        return os.environ['CLAZYPLUGIN_CXX']
+    elif _platform == 'win32':
         return 'ClazyPlugin.dll'
     elif _platform == 'darwin':
         return 'ClazyPlugin.dylib'
