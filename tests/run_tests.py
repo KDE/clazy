@@ -46,7 +46,7 @@ class QtInstallation:
 
         # Also include the modules folders
         qt_modules_includes = ["-isystem " + self.qmake_header_path +"/" + f for f in next(os.walk(self.qmake_header_path))[1]];
-        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + extra_includes + ' '.join(qt_modules_includes)
+        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
 
 class Test:
