@@ -41,6 +41,9 @@ def isMacOS():
 def isLinux():
     return _platform.startswith('linux')
 
+def isBsd():
+    return _platform.startswith('bsd')
+
 class QtInstallation:
     def __init__(self):
         self.int_version = 000
@@ -59,6 +62,7 @@ class QtInstallation:
         c_header_option = ""
         if c_headerpath:
             c_header_option = "-isystem " + c_headerpath + "/include "
+        c_header_option += "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H " # Avoid issues where this header is not found
 
         return c_header_option + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
