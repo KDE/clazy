@@ -21,6 +21,16 @@ os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 _verbose = False
 _hasStdFileSystem = True
 
+c_headerpath = False
+if 'CI' in os.environ:
+    try:
+        result = subprocess.run(['clang', '-v'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
+        match = re.search(r'Selected .* installation: (.*)', result.stderr)
+        if match:
+            c_headerpath = match.group(1).strip()
+    except e:
+        pass
+
 
 def isWindows():
     return _platform == 'win32'
@@ -46,7 +56,11 @@ class QtInstallation:
 
         # Also include the modules folders
         qt_modules_includes = ["-isystem " + self.qmake_header_path +"/" + f for f in next(os.walk(self.qmake_header_path))[1]];
-        return "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
+        c_header_option = ""
+        if c_headerpath:
+            c_header_option = "-isystem " + c_headerpath + "/include "
+
+        return c_header_option + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
 
 class Test:
