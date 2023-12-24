@@ -190,36 +190,31 @@ void replacementForQProcess(const std::string &functionName, std::string &messag
     replacement += "Command";
 }
 
-void replacementForQSignalMapper(clang::MemberExpr *membExpr, std::string &message, std::string &replacement)
+void replacementForQSignalMapper(clang::MemberExpr *membExpr, std::string &message, std::string &replacement, clang::LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
     std::string paramType;
     for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType().getAsString();
+        paramType = param->getType().getAsString(lo);
     }
 
     std::string functionNameExtention;
-    std::string paramTypeCor;
     if (paramType == "int") {
         functionNameExtention = "Int";
-        paramTypeCor = "int";
-    } else if (paramType == "const class QString &") {
+    } else if (paramType == "const QString &") {
         functionNameExtention = "String";
-        paramTypeCor = "const QString &";
-    } else if (paramType == "class QWidget *") {
+    } else if (paramType == "QWidget *") {
         functionNameExtention = "Object";
-        paramTypeCor = "QWidget *";
-    } else if (paramType == "class QObject *") {
+    } else if (paramType == "QObject *") {
         functionNameExtention = "Object";
-        paramTypeCor = "QObject *";
     }
 
     message = "call function QSignalMapper::mapped(";
-    message += paramTypeCor;
+    message += paramType;
     message += "). Use function QSignalMapper::mapped";
     message += functionNameExtention;
     message += "(";
-    message += paramTypeCor;
+    message += paramType;
     message += ") instead.";
 
     replacement = "mapped";
@@ -791,7 +786,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         } else if (clazy::startsWith(className, "QResource") && functionName == "isCompressed") {
             replacementForQResource(functionName, message, replacement);
         } else if (clazy::startsWith(className, "QSignalMapper") && functionName == "mapped") {
-            replacementForQSignalMapper(membExpr, message, replacement);
+            replacementForQSignalMapper(membExpr, message, replacement, lo());
         } else if (clazy::startsWith(className, "QWizard") && functionName == "visitedPages") {
             replacementForQWizard(functionName, message, replacement);
         } else if (clazy::startsWith(className, "QButtonGroup")
