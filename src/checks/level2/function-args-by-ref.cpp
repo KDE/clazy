@@ -135,7 +135,8 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
         if (classif.passBigTypeByConstRef || classif.passNonTriviallyCopyableByConstRef) {
             std::string error;
             std::vector<FixItHint> fixits;
-            const std::string paramStr = param->getType().getAsString();
+
+            const std::string paramStr = param->getType().getAsString(lo());
             if (classif.passBigTypeByConstRef) {
                 error = warningMsgForSmallType(classif.size_of_T, paramStr);
             } else if (classif.passNonTriviallyCopyableByConstRef) {
