@@ -40,12 +40,12 @@ void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
     }
 
     ParmVarDecl *parm1 = functionDecl->getParamDecl(0);
-    if (parm1->getType().getAsString() != "const class QString &") {
+    if (parm1->getType().getAsString(lo()) != "const QString &") {
         return;
     }
 
     ParmVarDecl *parm2 = functionDecl->getParamDecl(1);
-    if (parm2->getType().getAsString() != "class QChar") {
+    if (parm2->getType().getAsString(lo()) != "QChar") {
         return;
     }
 
