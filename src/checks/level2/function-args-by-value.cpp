@@ -195,7 +195,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
                 }
             }
 
-            const std::string paramStr = param->getType().getAsString();
+            const std::string paramStr = param->getType().getAsString(lo());
             std::string error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
             emitWarning(clazy::getLocStart(param), error.c_str(), fixits);
         }
