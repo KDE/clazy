@@ -50,26 +50,18 @@ static bool isQLatin1StringDecl(CXXConstructorDecl *decl)
 
 bool Qt6QLatin1StringCharToU::foundQCharOrQString(Stmt *stmt)
 {
-    std::string type;
-
-    auto *opp = dyn_cast<CXXOperatorCallExpr>(stmt);
-    auto *constr = dyn_cast<CXXConstructExpr>(stmt);
-    auto *memb = dyn_cast<CXXMemberCallExpr>(stmt);
-    auto *init = dyn_cast<InitListExpr>(stmt);
-    auto *func = dyn_cast<CXXFunctionalCastExpr>(stmt);
-    auto *decl = dyn_cast<DeclRefExpr>(stmt);
-
-    if (init) {
-        type = init->getType().getAsString();
-    } else if (opp) {
-        type = opp->getType().getAsString();
-    } else if (constr) {
-        type = constr->getType().getAsString();
-    } else if (decl) {
-        type = decl->getType().getAsString();
-    } else if (func) {
-        type = func->getType().getAsString();
-    } else if (memb) {
+    QualType type;
+    if (auto *init = dyn_cast<InitListExpr>(stmt)) {
+        type = init->getType();
+    } else if (auto *opp = dyn_cast<CXXOperatorCallExpr>(stmt)) {
+        type = opp->getType();
+    } else if (auto *constr = dyn_cast<CXXConstructExpr>(stmt)) {
+        type = constr->getType();
+    } else if (auto *decl = dyn_cast<DeclRefExpr>(stmt)) {
+        type = decl->getType();
+    } else if (auto *func = dyn_cast<CXXFunctionalCastExpr>(stmt)) {
+        type = func->getType();
+    } else if (auto *memb = dyn_cast<CXXMemberCallExpr>(stmt)) {
         Stmt *child = clazy::childAt(stmt, 0);
         while (child) {
             if (foundQCharOrQString(child)) {
@@ -79,8 +71,11 @@ bool Qt6QLatin1StringCharToU::foundQCharOrQString(Stmt *stmt)
         }
     }
 
-    StringRef ttype = type;
-    return ttype.contains("class QString") || ttype.contains("class QChar");
+    if (auto *ptr = type.getTypePtrOrNull(); !ptr || (!ptr->isRecordType() && !ptr->isConstantArrayType())) {
+        return false;
+    }
+    std::string typeStr = type.getAsString(lo());
+    return typeStr.find("QString") != std::string::npos || typeStr.find("QChar") != std::string::npos;
 }
 
 bool Qt6QLatin1StringCharToU::relatedToQStringOrQChar(Stmt *stmt, const ClazyContext *const context)
