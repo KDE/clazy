@@ -27,6 +27,7 @@
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Lex/Lexer.h>
+#include <iostream>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
@@ -730,7 +731,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             return;
         }
         std::string functionName = membExpr->getMemberNameInfo().getAsString();
-        std::string className = decl->getType().getAsString();
+        std::string className = decl->getType().getAsString(lo());
         warningLocation = membExpr->getEndLoc();
 
         if (clazy::startsWith(className, "QMap<") && qMapFunctions.find(functionName) != qMapFunctions.end()) {
@@ -743,11 +744,11 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "Use QMultiHash for maps storing multiple values with the same key.";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QDir") && functionName == "addResourceSearchPath") {
+        } else if (clazy::startsWith(className, "QDir") && functionName == "addResourceSearchPath") {
             message = "call function QDir::addResourceSearchPath(). Use function QDir::addSearchPath() with prefix instead";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QTimeLine") && (functionName == "curveShape" || functionName == "setCurveShape")) {
+        } else if (clazy::startsWith(className, "QTimeLine") && (functionName == "curveShape" || functionName == "setCurveShape")) {
             if (functionName == "curveShape") {
                 message = "call QTimeLine::curveShape. Use QTimeLine::easingCurve instead";
             } else {
@@ -763,23 +764,23 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             message = "QHash iterator categories changed from bidirectional to forward. Please port your code manually";
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QComboBox") && functionName == "currentIndexChanged") {
+        } else if (clazy::startsWith(className, "QComboBox") && functionName == "currentIndexChanged") {
             if (!warningForQComboBox(membExpr, message)) {
                 return;
             }
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QTextBrowser") && functionName == "highlighted") {
+        } else if (clazy::startsWith(className, "QTextBrowser") && functionName == "highlighted") {
             if (!warningForQTextBrowser(membExpr, message)) {
                 return;
             }
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QGraphicsView") && qGraphicsViewFunctions.find(functionName) != qMapFunctions.end()) {
+        } else if (clazy::startsWith(className, "QGraphicsView") && qGraphicsViewFunctions.find(functionName) != qMapFunctions.end()) {
             warningForGraphicsViews(functionName, message);
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (className == "class QDate" && functionName == "toString") {
+        } else if (className == "QDate" && functionName == "toString") {
             Stmt *parent = clazy::parent(m_context->parentMap, stmt);
             if (!replacementForQDate(parent, message, replacement, warningLocation, fixitRange)) {
                 return;
@@ -787,20 +788,20 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "class QProcess") && qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
+        } else if (clazy::startsWith(className, "QProcess") && qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
             replacementForQProcess(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QResource") && functionName == "isCompressed") {
+        } else if (clazy::startsWith(className, "QResource") && functionName == "isCompressed") {
             replacementForQResource(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QSignalMapper") && functionName == "mapped") {
+        } else if (clazy::startsWith(className, "QSignalMapper") && functionName == "mapped") {
             replacementForQSignalMapper(membExpr, message, replacement);
-        } else if (clazy::startsWith(className, "class QWizard") && functionName == "visitedPages") {
+        } else if (clazy::startsWith(className, "QWizard") && functionName == "visitedPages") {
             replacementForQWizard(functionName, message, replacement);
-        } else if (clazy::startsWith(className, "class QButtonGroup")
+        } else if (clazy::startsWith(className, "QButtonGroup")
                    && qButtonGroupDeprecatedFunctions.find(functionName) != qButtonGroupDeprecatedFunctions.end()) {
             if (!replacementForQButtonGroup(membExpr, message, replacement)) {
                 return;
             }
-        } else if (clazy::startsWith(className, "class QComboBox") && (functionName == "activated" || functionName == "highlighted")) {
+        } else if (clazy::startsWith(className, "QComboBox") && (functionName == "activated" || functionName == "highlighted")) {
             if (!replacementForQComboBox(membExpr, functionName, message, replacement)) {
                 return;
             }
