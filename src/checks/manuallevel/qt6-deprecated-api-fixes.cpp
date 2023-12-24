@@ -118,15 +118,20 @@ bool replacementForQButtonGroup(clang::MemberExpr *membExpr, std::string &messag
     return true;
 }
 
-bool warningForQTextBrowser(clang::MemberExpr *membExpr, std::string &message)
+inline bool isQStringConstRef(QualType type, LangOptions lo)
+{
+    return type.getAsString(lo) == "const QString &";
+}
+
+bool warningForQTextBrowser(clang::MemberExpr *membExpr, std::string &message, LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
-    std::string paramType;
+    QualType paramType;
     for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType().getAsString();
+        paramType = param->getType();
         break;
     }
-    if (paramType != "const class QString &") {
+    if (!isQStringConstRef(paramType, lo)) {
         return false;
     }
 
@@ -134,16 +139,16 @@ bool warningForQTextBrowser(clang::MemberExpr *membExpr, std::string &message)
     return true;
 }
 
-bool warningForQComboBox(clang::MemberExpr *membExpr, std::string &message)
+bool warningForQComboBox(clang::MemberExpr *membExpr, std::string &message, LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
-    std::string paramType;
+    QualType paramType;
     for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType().getAsString();
+        paramType = param->getType();
         break;
     }
     // only the function with "const QString &" as first argument are deprecated
-    if (paramType != "const class QString &") {
+    if (!isQStringConstRef(paramType, lo)) {
         return false;
     }
 
@@ -151,16 +156,16 @@ bool warningForQComboBox(clang::MemberExpr *membExpr, std::string &message)
     return true;
 }
 
-bool replacementForQComboBox(clang::MemberExpr *membExpr, const std::string &functionName, std::string &message, std::string &replacement)
+bool replacementForQComboBox(clang::MemberExpr *membExpr, const std::string &functionName, std::string &message, std::string &replacement, LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
-    std::string paramType;
+    QualType paramType;
     for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType().getAsString();
+        paramType = param->getType();
         break;
     }
     // only the function with "const QString &" as first argument are deprecated
-    if (paramType != "const class QString &") {
+    if (!isQStringConstRef(paramType, lo)) {
         return false;
     }
 
@@ -758,13 +763,13 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             emitWarning(warningLocation, message, fixits);
             return;
         } else if (clazy::startsWith(className, "QComboBox") && functionName == "currentIndexChanged") {
-            if (!warningForQComboBox(membExpr, message)) {
+            if (!warningForQComboBox(membExpr, message, lo())) {
                 return;
             }
             emitWarning(warningLocation, message, fixits);
             return;
         } else if (clazy::startsWith(className, "QTextBrowser") && functionName == "highlighted") {
-            if (!warningForQTextBrowser(membExpr, message)) {
+            if (!warningForQTextBrowser(membExpr, message, lo())) {
                 return;
             }
             emitWarning(warningLocation, message, fixits);
@@ -795,7 +800,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
                 return;
             }
         } else if (clazy::startsWith(className, "QComboBox") && (functionName == "activated" || functionName == "highlighted")) {
-            if (!replacementForQComboBox(membExpr, functionName, message, replacement)) {
+            if (!replacementForQComboBox(membExpr, functionName, message, replacement, lo())) {
                 return;
             }
         } else {
