@@ -118,54 +118,36 @@ bool replacementForQButtonGroup(clang::MemberExpr *membExpr, std::string &messag
     return true;
 }
 
-inline bool isQStringConstRef(QualType type, LangOptions lo)
+inline bool isFirstArgQStringConstRef(FunctionDecl *declfunc, LangOptions lo)
 {
-    return type.getAsString(lo) == "const QString &";
+    auto params = Utils::functionParameters(declfunc);
+    return !params.empty() && params.front()->getType().getAsString(lo) == "const QString &";
 }
 
 bool warningForQTextBrowser(clang::MemberExpr *membExpr, std::string &message, LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
-    QualType paramType;
-    for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType();
-        break;
+    if (isFirstArgQStringConstRef(declfunc, lo)) {
+        message = "Using QTextBrowser::highlighted(const QString &). Use QTextBrowser::highlighted(const QUrl &) instead.";
+        return true;
     }
-    if (!isQStringConstRef(paramType, lo)) {
-        return false;
-    }
-
-    message = "Using QTextBrowser::highlighted(const QString &). Use QTextBrowser::highlighted(const QUrl &) instead.";
-    return true;
+    return false;
 }
 
 bool warningForQComboBox(clang::MemberExpr *membExpr, std::string &message, LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
-    QualType paramType;
-    for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType();
-        break;
+    if (isFirstArgQStringConstRef(declfunc, lo)) {
+        message = "Use currentIndexChanged(int) instead, and get the text using itemText(index).";
+        return true;
     }
-    // only the function with "const QString &" as first argument are deprecated
-    if (!isQStringConstRef(paramType, lo)) {
-        return false;
-    }
-
-    message = "Use currentIndexChanged(int) instead, and get the text using itemText(index).";
-    return true;
+    return false;
 }
 
 bool replacementForQComboBox(clang::MemberExpr *membExpr, const std::string &functionName, std::string &message, std::string &replacement, LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
-    QualType paramType;
-    for (auto *param : Utils::functionParameters(declfunc)) {
-        paramType = param->getType();
-        break;
-    }
-    // only the function with "const QString &" as first argument are deprecated
-    if (!isQStringConstRef(paramType, lo)) {
+    if (!isFirstArgQStringConstRef(declfunc, lo)) {
         return false;
     }
 
