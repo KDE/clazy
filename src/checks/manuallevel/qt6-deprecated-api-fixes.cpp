@@ -12,7 +12,6 @@
 #include "ContextUtils.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -27,7 +26,6 @@
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Lex/Lexer.h>
-#include <iostream>
 #include <llvm/ADT/ArrayRef.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
@@ -560,7 +558,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             if (consExpr->getNumArgs() == 0) {
                 return;
             }
-            if (consExpr->getArg(0)->getType().getAsString() != "class QWidget *") {
+            if (consExpr->getArg(0)->getType().getAsString(lo()) != "QWidget *") {
                 return;
             }
             message = "Use the constructor taking a QScreen * instead.";
@@ -574,7 +572,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         if (consExpr->getNumArgs() != 1) {
             return;
         }
-        if (consExpr->getArg(0)->getType().getAsString() != "const class QDate") {
+        if (consExpr->getArg(0)->getType().getAsString(lo()) != "const QDate") {
             return;
         }
         Stmt *child = clazy::childAt(stmt, 0);
