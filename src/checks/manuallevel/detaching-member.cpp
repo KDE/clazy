@@ -114,7 +114,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    const bool returnsNonConstIterator = clazy::endsWith(memberCall ? memberCall->getType().getAsString() : "", "::iterator");
+    const bool returnsNonConstIterator = memberCall && clazy::endsWith(memberCall->getType().getAsString(lo()), "iterator");
     if (returnsNonConstIterator) {
         // If we're calling begin()/end() as arguments to a function taking non-const iterators it's fine
         // Such as qSort(list.begin(), list.end());
@@ -127,7 +127,10 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
                     if (expr2 == memberCall) {
                         // Success, we found which arg
                         ParmVarDecl *parm = parentFunc->getParamDecl(i);
-                        if (parm->getType().getAsString() == memberCall->getType().getAsString()) {
+
+                        // Check that the record declarations have the same type
+                        if (parm->getType().getTypePtr()->getAsRecordDecl()->getNameAsString()
+                            == memberCall->getType().getTypePtr()->getAsRecordDecl()->getNameAsString()) {
                             return;
                         }
                         break;
