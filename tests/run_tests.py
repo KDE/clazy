@@ -377,7 +377,7 @@ def more_clazy_standalone_args():
 def clazy_standalone_command(test, qt):
     result = " -- " + clazy_cpp_args(test.cppStandard) + \
         qt.compiler_flags() + " " + test.flags + more_clazy_standalone_args()
-    result = " -checks=" + ','.join(test.checks) + " " + result
+    result = " -checks=" + ','.join(test.checks) + " " + result + suppress_line_numbers_opt
 
     if test.has_fixits:
         result = " -export-fixes=" + \
@@ -409,12 +409,12 @@ def clazy_command(qt, test, filename):
 
     if 'CLAZY_CXX' in os.environ:  # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX'] + \
-            more_clazy_args(test.cppStandard) + qt.compiler_flags()
+            more_clazy_args(test.cppStandard) + qt.compiler_flags() + suppress_line_numbers_opt
     else:
         clang = clang_name()
         result = clang + " -Xclang -load -Xclang " + libraryName() + \
             " -Xclang -add-plugin -Xclang clazy " + \
-            more_clazy_args(test.cppStandard) + qt.compiler_flags()
+            more_clazy_args(test.cppStandard) + qt.compiler_flags() + suppress_line_numbers_opt
 
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt4-compat "
@@ -519,6 +519,9 @@ if _verbose:
 
 CLANG_VERSION = int(version.replace('.', ''))
 
+suppress_line_numbers_opt = ""
+if CLANG_VERSION >= 1700: # See https://releases.llvm.org/17.0.1/tools/clang/docs/ReleaseNotes.html
+    suppress_line_numbers_opt = " -fno-diagnostics-show-line-numbers"
 
 def qt_installation(major_version):
     if major_version == 5:
