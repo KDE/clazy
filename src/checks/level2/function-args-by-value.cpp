@@ -65,19 +65,21 @@ bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
         return true;
     }
 
-    static const std::vector<std::string> ignoreList = {"QDebug", // Too many warnings
-                                                        "QGenericReturnArgument",
-                                                        "QColor", // TODO: Remove in Qt6
-                                                        "QStringRef", // TODO: Remove in Qt6
-                                                        "QList::const_iterator", // TODO: Remove in Qt6
-                                                        "QJsonArray::const_iterator", // TODO: Remove in Qt6
-                                                        "QList<QString>::const_iterator", // TODO: Remove in Qt6
-                                                        "QtMetaTypePrivate::QSequentialIterableImpl",
-                                                        "QtMetaTypePrivate::QAssociativeIterableImpl",
-                                                        "QVariantComparisonHelper",
-                                                        "QHashDummyValue",
-                                                        "QCharRef",
-                                                        "QString::Null"};
+    static const std::vector<std::string> ignoreList = {
+        "QDebug", // Too many warnings
+        "QGenericReturnArgument",
+        "QColor", // TODO: Remove in Qt6
+        "QStringRef", // TODO: Remove in Qt6
+        "QList::const_iterator", // TODO: Remove in Qt6
+        "QJsonArray::const_iterator", // TODO: Remove in Qt6
+        "QList<QString>::const_iterator", // TODO: Remove in Qt6
+        "QtMetaTypePrivate::QSequentialIterableImpl",
+        "QtMetaTypePrivate::QAssociativeIterableImpl",
+        "QVariantComparisonHelper",
+        "QHashDummyValue",
+        "QCharRef",
+        "QString::Null",
+    };
     return clazy::contains(ignoreList, record->getQualifiedNameAsString());
 }
 
@@ -101,7 +103,7 @@ bool FunctionArgsByValue::shouldIgnoreFunction(clang::FunctionDecl *function)
         "QTreeWidget::mimeData", // Fixed in Qt6
         "QWidget::addActions", // Fixed in Qt6
         "QSslCertificate::verify", // Fixed in Qt6
-        "QSslConfiguration::setAllowedNextProtocols" // Fixed in Qt6
+        "QSslConfiguration::setAllowedNextProtocols", // Fixed in Qt6
     };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
