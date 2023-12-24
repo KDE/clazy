@@ -62,6 +62,6 @@ void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
             return;
         }
 
-        emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString());
+        emitWarning(init, "Don't heap-allocate small trivially copyable/destructible types: " + qualType.getAsString(lo()));
     }
 }
