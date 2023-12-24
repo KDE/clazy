@@ -47,7 +47,12 @@ void replacementForQWizard(const std::string &functionName, std::string &message
     replacement = "visitedIds";
 }
 
-bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string &replacement, SourceLocation &warningLocation, SourceRange &fixitRange)
+bool replacementForQDate(clang::Stmt *parent,
+                         std::string &message,
+                         std::string &replacement,
+                         SourceLocation &warningLocation,
+                         SourceRange &fixitRange,
+                         LangOptions lo)
 {
     // The one with two arguments: Qt::DateFormat format, QCalendar cal
     auto *callExp = dyn_cast<CXXMemberCallExpr>(parent);
@@ -64,10 +69,10 @@ bool replacementForQDate(clang::Stmt *parent, std::string &message, std::string 
     }
     for (auto *it = func->param_begin(); it != func->param_end(); it++) {
         ParmVarDecl *param = *it;
-        if (i == 1 && param->getType().getAsString() != "Qt::DateFormat") {
+        if (i == 1 && param->getType().getAsString(lo) != "Qt::DateFormat") {
             return false;
         }
-        if (i == 2 && param->getType().getAsString() != "class QCalendar") {
+        if (i == 2 && param->getType().getAsString(lo) != "QCalendar") {
             return false;
         }
         i++;
@@ -762,7 +767,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             return;
         } else if (className == "QDate" && functionName == "toString") {
             Stmt *parent = clazy::parent(m_context->parentMap, stmt);
-            if (!replacementForQDate(parent, message, replacement, warningLocation, fixitRange)) {
+            if (!replacementForQDate(parent, message, replacement, warningLocation, fixitRange, lo())) {
                 return;
             }
             fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));
