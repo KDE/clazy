@@ -94,19 +94,19 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
     qualifiedTypeName.clear();
     typeName.clear();
 
-    if (!t.isNull()) {
-        typeName = clazy::name(t, lo(), /*asWritten=*/true);
+    if (auto *ptr = t.getTypePtrOrNull(); ptr && ptr->isRecordType()) {
+        typeName = clazy::name(t.getUnqualifiedType(), lo(), /*asWritten=*/true); // Ignore qualifiers like const here
         if (typeName == "QPrivateSignal") {
             return true;
         }
 
-        qualifiedTypeName = clazy::name(t, lo(), /*asWritten=*/false);
-        if (qualifiedTypeName.empty() || qualifiedTypeName[0] == '(') {
-            // We don't care about (anonymous namespace)::
-            return true;
+        auto *decl = ptr->getAsRecordDecl();
+        qualifiedTypeName = decl->getQualifiedNameAsString();
+        if (decl->isInAnonymousNamespace()) {
+            return true; // Ignore anonymous namespaces
         }
 
-        return typeName == qualifiedTypeName;
+        return qualifiedTypeName.empty() || typeName == qualifiedTypeName;
     }
     return true;
 }
@@ -157,23 +157,17 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                     auto reinterprets = clazy::getStatements<CXXReinterpretCastExpr>(s);
                     for (auto *reinterpret : reinterprets) {
                         QualType qt = clazy::pointeeQualType(reinterpret->getTypeAsWritten());
-                        auto *record = qt->getAsCXXRecordDecl();
-                        if (!record || !isGadget(record)) {
+                        if (auto *record = qt->getAsCXXRecordDecl(); !record || !isGadget(record)) {
                             continue;
                         }
 
-                        std::string nameAsWritten = clazy::name(qt, lo(), /*asWritten=*/true);
-                        std::string fullyQualifiedName = clazy::name(qt, lo(), /*asWritten=*/false);
-                        if (fullyQualifiedName.empty() || fullyQualifiedName[0] == '(') {
-                            // We don't care about (anonymous namespace)::
-                            continue;
-                        }
-
-                        if (nameAsWritten != fullyQualifiedName) {
+                        std::string nameAsWritten;
+                        std::string qualifiedName;
+                        if (!typeIsFullyQualified(qt, qualifiedName, nameAsWritten)) {
                             // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
                             // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
                             emitWarning(clazy::getLocStart(method->getParent()),
-                                        "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + fullyQualifiedName + ")");
+                                        "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + qualifiedName + ")");
                         }
                     }
                 }
