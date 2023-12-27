@@ -105,12 +105,13 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             }
 
             if (clazy::contains(comment, "NOLINTNEXTLINE")) {
-                if (sm.getSpellingLineNumber(token.getLocation()) < 0) {
-                    llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << sm.getSpellingLineNumber(token.getLocation()) << "\n";
+                bool invalid = false;
+                const int nextLineNumber = sm.getSpellingLineNumber(token.getLocation(), &invalid) + 1;
+                if (invalid) {
+                    llvm::errs() << "SuppressionManager::parseFile: Invalid line number for token location where NOLINTNEXTLINE was found\n";
                     continue;
                 }
 
-                const int nextLineNumber = sm.getSpellingLineNumber(token.getLocation()) + 1;
                 suppressions.skipNextLine.insert(nextLineNumber);
             }
 
