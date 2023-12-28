@@ -7,3 +7,4 @@ include:
       - /gitlab-templates/linux.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/freebsd.yml
+      - /gitlab-templates/json-validation.yml
