@@ -73,7 +73,7 @@ class Test:
         self.link = False  # If true we also call the linker
         self.check = check
         self.expects_failure = False
-        self.qt_major_version = 5  # Tests use Qt 5 by default
+        self.qt_major_versions = [ 5 ]  # Tests use Qt 5 by default
         self.env = os.environ
         self.checks = []
         self.flags = ""
@@ -122,11 +122,14 @@ class Test:
     def dir(self):
         return self.check.name
 
-    def setQtMajorVersion(self, major_version):
-        if major_version == 4:
-            self.qt_major_version = 4
+    def setQtMajorVersions(self, major_versions):
+        self.qt_major_versions = major_versions
+        if 4 in major_versions:
             if self.minimum_qt_version >= 500:
                 self.minimum_qt_version = 400
+        elif 6 in major_versions:
+            if self.maximum_qt_version == 59999:
+                self.maximum_qt_version = 69999 # implied
 
     def envString(self):
         result = ""
@@ -142,12 +145,14 @@ class Test:
 
             self.env[key] = e[key]
 
-    def printableName(self, cppStandard, is_standalone, is_fixits):
+    def printableName(self, cppStandard, qt_major_version, is_standalone, is_fixits):
         name = self.check.name
         if len(self.check.tests) > 1:
             name += "/" + self.filename()
         if len(cppStandard) > 0:
             name += " (" + cppStandard + ")"
+        if qt_major_version > 0:
+            name += " (Qt " + str(qt_major_version) + ")"
         if is_fixits and is_standalone:
             name += " (standalone, fixits)"
         elif is_standalone:
@@ -267,8 +272,10 @@ def load_json(check_name):
                 test.compare_everything = t['compare_everything']
             if 'link' in t:
                 test.link = t['link']
-            if 'qt_major_version' in t:
-                test.setQtMajorVersion(t['qt_major_version'])
+            if 'qt_major_version' in t: # single value (for compatibility)
+                test.setQtMajorVersions([t['qt_major_version']])
+            if 'qt_major_versions' in t:
+                test.setQtMajorVersions(t['qt_major_versions'])
             if 'env' in t:
                 test.setEnv(t['env'])
             if 'checks' in t:
@@ -437,9 +444,8 @@ def clazy_command(test, cppStandard, qt, filename):
     return result
 
 
-def dump_ast_command(test, cppStandard):
-    return "clang -std=" + cppStandard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
-
+def dump_ast_command(test, cppStandard, qt_major_version):
+    return "clang -std=" + cppStandard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
 
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
@@ -484,6 +490,8 @@ _only_standalone = args.only_standalone
 _num_threads = args.jobs
 _lock = threading.Lock()
 _was_successful = True
+_qt6_installation = find_qt_installation(
+    6, ["QT_SELECT=6 qmake", "qmake-qt6", "qmake", "qmake6"])
 _qt5_installation = find_qt_installation(
     5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake", "qmake5"])
 _qt4_installation = find_qt_installation(
@@ -521,7 +529,9 @@ if CLANG_VERSION >= 1700: # See https://releases.llvm.org/17.0.1/tools/clang/doc
     suppress_line_numbers_opt = " -fno-diagnostics-show-line-numbers"
 
 def qt_installation(major_version):
-    if major_version == 5:
+    if major_version == 6:
+        return _qt6_installation
+    elif major_version == 5:
         return _qt5_installation
     elif major_version == 4:
         return _qt4_installation
@@ -696,17 +706,21 @@ def is32Bit():
     return platform.architecture()[0] == '32bit'
 
 
-def run_unit_test(test, is_standalone, cppStandard):
+def run_unit_test(test, is_standalone, cppStandard, qt_major_version):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
 
-    qt = qt_installation(test.qt_major_version)
+    qt = qt_installation(qt_major_version)
 
     if _verbose:
-        print("Qt version: " + str(qt.int_version))
+        print
+        print("Qt major versions required by the test: " + str(test.qt_major_versions))
+        print("Currently considering Qt major version: " + str(qt_major_version))
+        print("Qt versions required by the test: min=" + str(test.minimum_qt_version) + " max=" + str(test.maximum_qt_version))
+        print("Qt int version: " + str(qt.int_version))
         print("Qt headers: " + qt.qmake_header_path)
 
-    printableName = test.printableName(cppStandard, is_standalone, False)
+    printableName = test.printableName(cppStandard, qt_major_version, is_standalone, False)
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
@@ -789,8 +803,13 @@ def run_unit_test_for_each_configuration(test, is_standalone):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
     result = True
-    for cppStandard in test.cppStandards:
-        result = result and run_unit_test(test, is_standalone, cppStandard)
+    for qt_major_version in test.qt_major_versions:
+        for cppStandard in test.cppStandards:
+            if cppStandard == "c++14" and qt_major_version == 6: # Qt6 requires C++17
+                continue
+            if cppStandard == "c++17" and qt_major_version == 5: # valid combination but let's skip it
+                continue
+            result = result and run_unit_test(test, is_standalone, cppStandard, qt_major_version)
     return result
 
 def run_unit_tests(tests):
@@ -841,7 +860,7 @@ def compare_fixit_results(test, is_standalone):
         return True
 
     # Check that the rewritten file is identical to the expected one
-    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName("", is_standalone, True)):
+    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName("", 0, is_standalone, True)):
         return False
 
     # Some fixed cpp files have an header that was also fixed. Compare it here too.
@@ -849,7 +868,7 @@ def compare_fixit_results(test, is_standalone):
     if os.path.exists(possible_headerfile_expected):
         possible_headerfile = test.fixedFilename(
             is_standalone).replace('.cpp', '.h')
-        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", is_standalone, True).replace('.cpp', '.h')):
+        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", 0, is_standalone, True).replace('.cpp', '.h')):
             return False
 
     return True
