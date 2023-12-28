@@ -884,6 +884,10 @@ def run_fixit_tests(requested_checks):
         requested_checks, is_standalone=True) and success
 
     for check in requested_checks:
+
+        if not any(map(lambda test : test.should_run_fixits_test, check.tests)):
+            continue
+
         # Call clazy-apply-replacements[.exe]
         if not run_clang_apply_replacements(check):
             return False
