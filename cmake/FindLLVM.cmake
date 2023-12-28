@@ -19,7 +19,7 @@
 #=============================================================================
 # SPDX-FileCopyrightText: 2014 Kevin Funk <kfunk@kde.org>
 #
-# SPDX-License-Identifier: BSD-2-Clause.
+# SPDX-License-Identifier: BSD-2-Clause
 #=============================================================================
 
 if (NOT LLVM_ROOT AND DEFINED ENV{LLVM_ROOT})
