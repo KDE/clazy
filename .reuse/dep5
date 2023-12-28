@@ -1,0 +1,417 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: clazy
+Upstream-Contact: KDE Community
+Source: https://invent.kde.org/sdk/clazy
+
+Files: tests/qcolor-from-literal/*
+Copyright: Alexander Lohnau <alexander.lonau@gmx.de>
+License: CC0-1.0
+
+Files: dev-scripts/template/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/assert-with-side-effects/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/auto-unexpected-qstringbuilder/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/base-class-event/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/child-event-qobject-cast/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/clazy/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/clazy-standalone/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/connect-3arg-lambda/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/connect-by-name/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/connect-non-signal/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/connect-not-normalized/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/const-signal-or-slot/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/container-anti-pattern/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/container-inside-loop/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/copyable-polymorphic/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/ctor-missing-parent-argument/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/detaching-member/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/detaching-temporary/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/docker/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/empty-qstringliteral/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/foreach/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/fully-qualified-moc-types/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/function-args-by-ref/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/function-args-by-value/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/global-const-char-pointer/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/heap-allocated-small-trivial-type/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/ifndef-define-typo/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/implicit-casts/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/incorrect-emit/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/install-event-filter/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/isempty-vs-count/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/jni-signatures/*
+Copyright: Nicolas Fella <nicolas.fella@gmx.de>
+License: LGPL-2.0-or-later
+
+Files: tests/lambda-in-connect/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/lambda-unique-connection/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/lowercase-qml-type-name/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/missing-qobject-macro/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/missing-typeinfo/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/mutable-container-key/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/no-module-include/*
+Copyright: Johnny Jazeix <jazeix@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/non-pod-global-static/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/old-style-connect/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/overloaded-signal/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/overridden-signal/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/post-event/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qcolor-from-literal/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qdatetime-utc/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qdeleteall/*
+Copyright: Albert Astals Cid <aacid@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qenums/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qfileinfo-exists/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qgetenv/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qhash-namespace/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qhash-with-char-pointer-key/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qlatin1string-non-ascii/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qmap-with-pointer-key/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qproperty-type-mismatch/*
+Copyright: Jean-Michaël Celerier <jeanmichael.celerier@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/qproperty-without-notify/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qrequiredresult-candidates/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-allocations/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-arg/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-comparison-to-implicit-char/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-insensitive-allocation/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-left/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-ref/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qstring-varargs/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qt-keyword-emit/*
+Copyright: Ahmad Samir <a.samirh78@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/qt-keywords/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qt-macros/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qt4-qstring-from-array/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/qt6-deprecated-api-fixes/*
+Copyright: Lucie Gérard <lucie.gerard@qt.io>
+License: LGPL-2.0-or-later
+
+Files: tests/qt6-fwd-fixes/*
+Copyright: Lucie Gérard <lucie.gerard@qt.io>
+License: LGPL-2.0-or-later
+
+Files: tests/qt6-header-fixes/*
+Copyright: Lucie Gérard <lucie.gerard@qt.io>
+License: LGPL-2.0-or-later
+
+Files: tests/qt6-qhash-signature/*
+Copyright: Lucie Gérard <lucie.gerard@qt.io>
+License: LGPL-2.0-or-later
+
+Files: tests/qt6-qlatin1stringchar-to-u/*
+Copyright: Lucie Gérard <lucie.gerard@qt.io>
+License: LGPL-2.0-or-later
+
+Files: tests/qvariant-template-instantiation/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/range-loop-detach/*
+Copyright: Christian Schärf <c.schaerf@t-online.de>
+License: LGPL-2.0-or-later
+
+Files: tests/range-loop-reference/*
+Copyright: Christian Schärf <c.schaerf@t-online.de>
+License: LGPL-2.0-or-later
+
+Files: tests/raw-environment-function/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/reserve-candidates/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/returning-data-from-temporary/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/returning-void-expression/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/rule-of-three/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/rule-of-two-soft/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/sanitize-inline-keyword/*
+Copyright: Ahmad Samir <a.samirh78@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/signal-with-return-value/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/skipped-base-method/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/static-pmf/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/strict-iterators/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/temporary-iterator/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/thread-with-slots/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/tr-non-literal/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/unexpected-flag-enumerator-value/*
+Copyright: Waqar Ahmed <waqar.17a@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/unneeded-cast/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/unused-non-trivial-variable/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/unused-result-check/*
+Copyright: Shivam kunwar <shivam.kunwar@kdab.com>
+License: LGPL-2.0-or-later
+
+Files: tests/use-arrow-operator-instead-of-data/*
+Copyright: Waqar Ahmed <waqar.17a@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/use-chrono-in-qtimer/*
+Copyright: Jesper K. Pedersen <jesper.pedersen@kdab.com>
+License: LGPL-2.0-or-later
+
+Files: tests/use-static-qregularexpression/*
+Copyright: Waqar Ahmed <waqar.17a@gmail.com>
+License: LGPL-2.0-or-later
+
+Files: tests/virtual-call-ctor/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/virtual-signal/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/writing-to-temporary/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/wrong-qevent-cast/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
+Files: tests/wrong-qglobalstatic/*
+Copyright: Sergio Martins <smartins@kde.org>
+License: LGPL-2.0-or-later
+
