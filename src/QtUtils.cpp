@@ -315,10 +315,10 @@ CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex)
     }
 
     Expr *expr = funcCall->getArg(argIndex);
-    return pmfFromUnary(expr);
+    return pmfFromExpr(expr);
 }
 
-CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
+CXXMethodDecl *clazy::pmfFromExpr(Expr *expr)
 {
     if (auto *uo = dyn_cast<UnaryOperator>(expr)) {
         return pmfFromUnary(uo);
@@ -350,14 +350,17 @@ CXXMethodDecl *clazy::pmfFromUnary(Expr *expr)
 
         return pmfFromUnary(dyn_cast<UnaryOperator>(call->getArg(1)));
     } else if (auto *staticCast = dyn_cast<CXXStaticCastExpr>(expr)) {
-        return pmfFromUnary(staticCast->getSubExpr());
+        return pmfFromExpr(staticCast->getSubExpr());
     } else if (auto *callexpr = dyn_cast<CallExpr>(expr)) {
         // QOverload case, go deeper one level to get to the UnaryOperator
         if (callexpr->getNumArgs() == 1) {
-            return pmfFromUnary(callexpr->getArg(0));
+            return pmfFromExpr(callexpr->getArg(0));
         }
+    } else if (auto *matTempExpr = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+        // Qt6 PMF, go deeper one level to get to the UnaryOperator
+        return pmfFromExpr(matTempExpr->getSubExpr());
     } else if (auto *impl = dyn_cast<ImplicitCastExpr>(expr)) {
-        return pmfFromUnary(impl->getSubExpr());
+        return pmfFromExpr(impl->getSubExpr());
     }
 
     return nullptr;

@@ -215,7 +215,7 @@ bool connectHasPMFStyle(clang::FunctionDecl *func);
  */
 clang::CXXMethodDecl *pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
 
-clang::CXXMethodDecl *pmfFromUnary(clang::Expr *e);
+clang::CXXMethodDecl *pmfFromExpr(clang::Expr *e);
 clang::CXXMethodDecl *pmfFromUnary(clang::UnaryOperator *uo);
 
 /**
