@@ -1,6 +1,4 @@
 /*
-    This file is part of the clazy static checker.
-
     SPDX-FileCopyrightText: 2020 The Qt Company Ltd.
     SPDX-FileCopyrightText: 2020 Lucie Gerard <lucie.gerard@qt.io>
 

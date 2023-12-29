@@ -1,6 +1,4 @@
 /*
-   This file is part of the clazy static checker.
-
   Copyright (C) 2015 Sergio Martins <smartins@kde.org>
 
   This library is free software; you can redistribute it and/or

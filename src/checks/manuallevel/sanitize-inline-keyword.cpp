@@ -1,7 +1,5 @@
 /*
-  This file is part of the clazy static checker.
-
-  SPDX-FileCopyrightText: 2023 Ahmad Samir <a.samirh78@gmail.com>
+    SPDX-FileCopyrightText: 2023 Ahmad Samir <a.samirh78@gmail.com>
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */

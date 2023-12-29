@@ -1,6 +1,4 @@
 /*
-  This file is part of the clazy static checker.
-
     SPDX-FileCopyrightText: 2016 Sergio Martins <smartins@kde.org>
     SPDX-FileCopyrightText: 2016 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
 

@@ -1,7 +1,5 @@
 /*
-  This file is part of the clazy static checker.
-
-  SPDX-FileCopyrightText: 2021 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
+    SPDX-FileCopyrightText: 2021 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
   Author: Waqar Ahmed <waqar.ahmed@kdab.com>
 
   SPDX-FileCopyrightText: 2021 Waqar Ahmed <waqar.17a@gmail.com>

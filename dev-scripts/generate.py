@@ -2,8 +2,6 @@
 
 _license_text = \
 """/*
-  This file is part of the clazy static checker.
-
   SPDX-FileCopyrightText: 2017 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 

@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
 
-#  This file is part of the clazy static checker.
-
 #  SPDX-FileCopyrightText: 2018 Klaralvdalens Datakonsult AB a KDAB Group company info@kdab.com
-
 #  SPDX-License-Identifier: LGPL-2.0-or-later
 
 

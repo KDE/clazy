@@ -1,7 +1,5 @@
 /*
-  This file is part of the clazy static checker.
-
-  %4
+    %4
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */

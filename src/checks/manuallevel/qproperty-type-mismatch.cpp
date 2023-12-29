@@ -1,6 +1,4 @@
 /*
-  This file is part of the clazy static checker.
-
     SPDX-FileCopyrightText: 2019 Jean-Michaël Celerier <jeanmichael.celerier@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later

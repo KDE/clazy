@@ -1,10 +1,8 @@
 /*
-    This file is part of the clazy static checker.
-
-     SPDX-FileCopyrightText: 2015 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
+    SPDX-FileCopyrightText: 2015 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
      Author: Sérgio Martins <sergio.martins@kdab.com>
 
-     SPDX-FileCopyrightText: 2015-2016 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2015-2016 Sergio Martins <smartins@kde.org>
 
      SPDX-License-Identifier: LGPL-2.0-or-later
  */

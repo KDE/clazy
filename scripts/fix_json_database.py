@@ -1,9 +1,7 @@
 #!/usr/bin/env python2
 
 
-# This file is part of the clazy static checker.
-
-# SPDX-FileCopyrightText: 2017 Sergio Martins <smartins@kde.org>
+# # SPDX-FileCopyrightText: 2017 Sergio Martins <smartins@kde.org>
 
 # SPDX-License-Identifier: LGPL-2.0-or-later
 

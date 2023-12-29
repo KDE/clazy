@@ -1,6 +1,4 @@
 /*
-  This file is part of the clazy static checker.
-
     SPDX-FileCopyrightText: 2018 Sergio Martins <smartins@kde.org>
     SPDX-FileCopyrightText: 2023 Ahmad Samir <a.samirh78@gmail.com>
 
