@@ -1,5 +1,5 @@
 /*
-      Copyright (C) Sérgio Martins <iamsergio@gmail.com>
+    Copyright (C) Sérgio Martins <iamsergio@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

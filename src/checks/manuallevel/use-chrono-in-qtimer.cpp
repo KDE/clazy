@@ -1,7 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2020 Jesper K. Pedersen <jesper.pedersen@kdab.com>
 
-  SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "use-chrono-in-qtimer.h"

@@ -1,14 +1,14 @@
-/****************************************************************************
-**
-** SPDX-FileCopyrightText: 2015 The Qt Company Ltd.
-** SPDX-FileCopyrightText: 2015 Olivier Goffart <ogoffart@woboq.com>
-** Contact: http://www.qt.io/licensing/
-**
-** This file contains code copied from Qt 5.6 (https://github.com/qt/qtbase/blob/5.6/src/corelib/kernel/qmetaobject.cpp).
-**
+/*
+
+    SPDX-FileCopyrightText: 2015 The Qt Company Ltd.
+    SPDX-FileCopyrightText: 2015 Olivier Goffart <ogoffart@woboq.com>
+    Contact: http://www.qt.io/licensing/
+
+    This file contains code copied from Qt 5.6 (https://github.com/qt/qtbase/blob/5.6/src/corelib/kernel/qmetaobject.cpp).
+
 SPDX-License-Identifier: LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR LGPL-3.0-only WITH Qt-LGPL-exception-1.1 OR LicenseRef-Qt-Commercial
-**
-****************************************************************************/
+
+*/
 
 #ifndef CLAZY_NORMALIZED_SIGNATURE_UTILS_H
 #define CLAZY_NORMALIZED_SIGNATURE_UTILS_H

@@ -1,7 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2020 Sergio Martins <smartins@kde.org>
 
-  SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef CLAZY_QSTRING_COMPARISON_TO_IMPLICIT_CHAR_H

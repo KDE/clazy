@@ -1,8 +1,8 @@
 /*
     SPDX-FileCopyrightText: 2021 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-  Author: Waqar Ahmed <waqar.ahmed@kdab.com>
+    Author: Waqar Ahmed <waqar.ahmed@kdab.com>
 
-  SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "unexpected-flag-enumerator-value.h"

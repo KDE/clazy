@@ -1,7 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2019 Sergio Martins <smartins@kde.org>
 
-  SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef CLAZY_HEAP_ALLOCATED_SMALL_TRIVIAL_TYPE_H

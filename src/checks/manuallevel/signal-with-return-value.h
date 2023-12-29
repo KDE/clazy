@@ -1,8 +1,8 @@
 /*
     SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-  Author: Sergio Martins <sergio.martins@kdab.com>
+    Author: Sergio Martins <sergio.martins@kdab.com>
 
-  SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef CLAZY_SIGNAL_WITH_RETURN_VALUE_H

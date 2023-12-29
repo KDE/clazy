@@ -1,7 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2019 Sergio Martins <smartins@kde.org>
 
-  SPDX-License-Identifier: LGPL-2.0-or-later
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "heap-allocated-small-trivial-type.h"
