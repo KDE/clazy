@@ -135,4 +135,9 @@ void testArgs()
         QRegularExpression reg(pattern);
         QString().contains(reg); // OK
     }
+    {
+        QString pattern = QString("someteststring").mid(1, 2);
+        QRegularExpression reg(pattern);
+        QString().contains(reg); // OK
+    }
 }
