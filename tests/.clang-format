@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Alexander Lohnau <alexander.lohnau@gmx.de>
+# SPDX-License-Identifier: CC0-1.0
+# We don't want the formatter to meddle with linenumbers, because those are contained in the diff we test against
+# Thus we often make use of a shorter syntax that focuses on reproducing a problem and does not necessarily comply with the KDE coding conventions
+DisableFormat: true
+SortIncludes: false
