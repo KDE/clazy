@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2023 Alexander Lohnau <alexander.lohnau@gmx.de>
+# SPDX-License-Identifier: CC0-1.0
+DisableFormat: true
+SortIncludes: false
