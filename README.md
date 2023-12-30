@@ -378,7 +378,7 @@ $ ln -sf /opt/local/libexec/llvm-8.0/include/c++/ /myprefix/include/c++ # Requir
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
 
-`clang-tidy` support will be added after <https://bugs.llvm.org//show_bug.cgi?id=32739> is fixed.
+`clang-tidy` support will be added after <https://github.com/llvm/llvm-project/issues/32086> is fixed.
 
 # Enabling Fixits
 

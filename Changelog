@@ -127,7 +127,7 @@
 
 * v1.2 (July 8th, 2017)
   - clazy-standalone executable. Allows to run clazy against a JSON compilation database
-    instead of as a plugin. clang-tidy doesn't support loading external modules (https://bugs.llvm.org/show_bug.cgi?id=32739)
+    instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086)
     so this is a good workaround.
   - qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat
   - New checks:
