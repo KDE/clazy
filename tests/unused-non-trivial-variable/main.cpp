@@ -3,8 +3,8 @@
 #include <QtCore/QVector>
 #include <QtCore/QByteArray>
 #include <QtCore/QRect>
+#include <QtCore/QJsonValue>
 #include "other.h"
-
 
 
 
@@ -50,6 +50,7 @@ void test4()
     QVector<int> v; //Warn
     QByteArray b; //Warn
     QRect r; // Warn
+    QJsonValue jsv; // Warn
     FOO(QRect) r2; // OK
     r2.setX(0);
 }

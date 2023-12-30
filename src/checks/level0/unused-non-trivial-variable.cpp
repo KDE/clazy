@@ -2,6 +2,7 @@
     This file is part of the clazy static checker.
 
     SPDX-FileCopyrightText: 2016-2017 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2023 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -141,6 +142,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
         "QStorageInfo",
         "QPersistentModelIndex",
         "QJsonArray",
+        "QJsonValue",
         "QJsonDocument",
         "QMimeType",
         "QBitArray",
