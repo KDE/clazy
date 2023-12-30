@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="console-application">
   <id>org.kde.clazy</id>
+<!--
+  SPDX-License-Identifier: CC0-1.0
+  SPDX-FileCopyrightText: KDE Community
+ -->
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-or-later</project_license>
   <name>Clazy</name>
