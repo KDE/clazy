@@ -2,7 +2,6 @@
 
 
 # SPDX-FileCopyrightText: 2017 Sergio Martins <smartins@kde.org>
-
 # SPDX-License-Identifier: LGPL-2.0-or-later
 
 # This script is useful for fixing the json database, in case there's compiler flags
