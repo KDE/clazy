@@ -9,7 +9,6 @@
 #include "strict-iterators.h"
 #include "ClazyContext.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "clazy_stl.h"
