@@ -9,7 +9,6 @@ Table of contents
 =================
 
    * [Source Code](#source-code)
-   * [Pre-built binaries](#pre-built-binaries)
    * [Build Instructions](#build-instructions)
       * [Linux](#linux)
          * [Install dependencies](#install-dependencies)
@@ -51,10 +50,6 @@ You can get clazy from:
 Clazy has been tested on Linux, macOS and Windows/MSVC.
 Other platforms are not supported but we'll gladly accept patches.
 
-
-# Pre-built binaries
-
-Pre-built clazy binaries for MSVC and Linux AppImage are produced by KDAB, you can get them from https://downloads.kdab.com/clazy/.
 
 # Build Instructions
 ## Linux
