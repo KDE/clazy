@@ -249,7 +249,7 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
   install(FILES ${README_manuallevel_FILES} DESTINATION ${CMAKE_INSTALL_DOCDIR}/manuallevel)
 
   # Install more doc files
-  install(FILES README.md COPYING-LGPL2.txt checks.json DESTINATION ${CMAKE_INSTALL_DOCDIR})
+  install(FILES README.md LICENSES/LGPL-2.0-or-later.txt checks.json DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
   # Build docs
   if (CLAZY_MAN_PAGE)

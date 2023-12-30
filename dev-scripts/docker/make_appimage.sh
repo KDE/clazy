@@ -28,7 +28,7 @@ echo "Fixing permissions..."
 chown -R $2 /tmp/clazy_work/clazy.AppDir/
 
 cp /clazy/README.md /tmp/clazy_work/clazy.AppDir/
-cp /clazy/COPYING-LGPL2.txt /tmp/clazy_work/clazy.AppDir/
+cp /clazy/LICENSES/LGPL-2.0-or-later.txt /tmp/clazy_work/clazy.AppDir/
 
 
 echo "Done"
