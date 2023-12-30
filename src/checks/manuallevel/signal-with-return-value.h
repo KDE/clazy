@@ -1,6 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    Author: Sergio Martins <sergio.martins@kdab.com>
+    SPDX-FileContributor: Sergio Martins <sergio.martins@kdab.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

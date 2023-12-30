@@ -1,7 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2021 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    Author: Waqar Ahmed <waqar.ahmed@kdab.com>
-
+    SPDX-FileContributor: Waqar Ahmed <waqar.ahmed@kdab.com>
     SPDX-FileCopyrightText: 2021 Waqar Ahmed <waqar.17a@gmail.com>
     SPDX-FileCopyrightText: 2023 Alexander Lohnau <alexander.lohnau@gmx.de>
 

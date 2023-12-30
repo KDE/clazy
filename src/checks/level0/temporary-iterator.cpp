@@ -1,7 +1,5 @@
 /*
     SPDX-FileCopyrightText: 2015 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    Author: Sérgio Martins <sergio.martins@kdab.com>
-
     SPDX-FileCopyrightText: 2015 Nyall Dawson <nyall.dawson@gmail.com>
     SPDX-FileCopyrightText: 2015-2016 Sergio Martins <smartins@kde.org>
 

@@ -1,6 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    Author: Nicolas Fella <nicolas.fella@kdab.com>
+    SPDX-FileContributor: Nicolas Fella <nicolas.fella@kdab.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
