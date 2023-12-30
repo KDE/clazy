@@ -20,7 +20,7 @@
 #=============================================================================
 # SPDX-FileCopyrightText: 2014-2015 Kevin Funk <kfunk@kde.org>
 #
-# SPDX-License-Identifier: BSD-2-Clause.
+# SPDX-License-Identifier: BSD-2-Clause
 #=============================================================================
 
 if (${Clang_FIND_REQUIRED})
