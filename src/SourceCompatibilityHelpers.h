@@ -33,7 +33,6 @@ using namespace boost;
 
 namespace clazy
 {
-
 template<typename T>
 inline clang::SourceLocation getLocStart(const T *t)
 {

@@ -45,7 +45,6 @@ class SourceManager;
 
 namespace clazy
 {
-
 // Returns the class name.
 // The name will not include any templates, so  "QVector::iterator" would be returned for QVector<int>::iterator
 // Use record->getQualifiedNameAsString() if you want the templates.

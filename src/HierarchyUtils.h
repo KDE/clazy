@@ -24,7 +24,6 @@
 
 namespace clazy
 {
-
 enum IgnoreStmt { IgnoreNone = 0, IgnoreImplicitCasts = 1, IgnoreExprWithCleanups = 2 };
 
 using IgnoreStmts = int;

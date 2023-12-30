@@ -57,7 +57,6 @@ struct StmtBodyRange;
 
 namespace clazy
 {
-
 /**
  * Returns true if the class is a Qt class which can be iterated with foreach.
  * Which means all containers and also stuff like QAssociativeIterable.

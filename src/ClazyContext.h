@@ -51,7 +51,8 @@ public:
         ClazyOption_OnlyQt = 4, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
         ClazyOption_QtDeveloper = 8, // For running clazy on Qt itself, optional, but honours specific guidelines
         ClazyOption_VisitImplicitCode = 16, // Inspect compiler generated code aswell, useful for custom checks, if they need it
-        ClazyOption_IgnoreIncludedFiles = 32 // Only warn for the current file being compiled, not on includes (useful for performance reasons); note that the check has to support this feature i.e. has clazy::CheckBase::Option_CanIgnoreIncludes set
+        ClazyOption_IgnoreIncludedFiles = 32 // Only warn for the current file being compiled, not on includes (useful for performance reasons); note that the
+                                             // check has to support this feature i.e. has clazy::CheckBase::Option_CanIgnoreIncludes set
     };
     using ClazyOptions = int;
 

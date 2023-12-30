@@ -78,9 +78,8 @@ void SanitizeInlineKeyword::VisitDecl(Decl *decl)
         return; // Can't emit a warning without a method name
     }
 
-    auto defHasInline = [] (auto def) {
-        return def->isInlineSpecified() && def->isThisDeclarationADefinition()
-            && def->isOutOfLine();
+    auto defHasInline = [](auto def) {
+        return def->isInlineSpecified() && def->isThisDeclarationADefinition() && def->isOutOfLine();
     };
 
     if (!member->isInlineSpecified() && defHasInline(cxxDefinition)) {

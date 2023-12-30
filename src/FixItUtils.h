@@ -31,7 +31,6 @@ class Stmt;
 
 namespace clazy
 {
-
 /**
  * Replaces whatever is in range, with replacement
  */

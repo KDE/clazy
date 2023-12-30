@@ -24,7 +24,6 @@
 
 namespace clazy
 {
-
 inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
 {
     if (expected_arguments != -1 && (int)func->param_size() != expected_arguments) {

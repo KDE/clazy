@@ -59,13 +59,12 @@ static cl::opt<bool> s_visitImplicitCode(
     cl::init(false),
     cl::cat(s_clazyCategory));
 
-static cl::opt<bool>
-    s_ignoreIncludedFiles("ignore-included-files",
-                          cl::desc("Only emit warnings for the current file being compiled and ignore any includes. "
-                                   "Useful for performance reasons. Have a look at a check's README*.md file to see "
-                                   "if it supports this feature or not."),
-                          cl::init(false),
-                          cl::cat(s_clazyCategory));
+static cl::opt<bool> s_ignoreIncludedFiles("ignore-included-files",
+                                           cl::desc("Only emit warnings for the current file being compiled and ignore any includes. "
+                                                    "Useful for performance reasons. Have a look at a check's README*.md file to see "
+                                                    "if it supports this feature or not."),
+                                           cl::init(false),
+                                           cl::cat(s_clazyCategory));
 
 static cl::opt<std::string> s_headerFilter("header-filter",
                                            cl::desc(R"(Regular expression matching the names of the

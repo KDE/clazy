@@ -18,7 +18,6 @@ SPDX-License-Identifier: LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR LGPL-3.0-on
 
 namespace clazy
 {
-
 inline bool is_space(char s)
 {
     return (s == ' ' || s == '\t');

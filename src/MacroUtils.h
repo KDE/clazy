@@ -27,7 +27,6 @@ class SourceLocation;
 
 namespace clazy
 {
-
 /**
  * Returns true is macroName was defined via compiler invocation argument.
  * Like $ gcc -Dfoo main.cpp

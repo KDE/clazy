@@ -64,27 +64,26 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     const auto *decl = dyn_cast<CXXRecordDecl>(memberExpr->getBase()->getType()->getAsCXXRecordDecl());
-    if (!decl || !decl->getDefinition() || !(decl->getNameAsString() == "QVariant" || decl->getNameAsString() == "QHash" || decl->getNameAsString() == "QMap")) {
+    if (!decl || !decl->getDefinition()
+        || !(decl->getNameAsString() == "QVariant" || decl->getNameAsString() == "QHash" || decl->getNameAsString() == "QMap")) {
         return;
     }
 
     if (const auto *specDecl = dyn_cast<ClassTemplateSpecializationDecl>(decl)) {
-      if (const auto *templateDecl = specDecl->getSpecializedTemplate()) {
-        if (templateDecl->getNameAsString() == "QHash" || templateDecl->getNameAsString() == "QMap") {
-            const TemplateArgumentList &templateArgs = specDecl->getTemplateArgs();
-            if (!(templateArgs.size() == 2) || !(templateArgs.get(1).getAsType().getAsString() == "QVariant")) {
-               return;
+        if (const auto *templateDecl = specDecl->getSpecializedTemplate()) {
+            if (templateDecl->getNameAsString() == "QHash" || templateDecl->getNameAsString() == "QMap") {
+                const TemplateArgumentList &templateArgs = specDecl->getTemplateArgs();
+                if (!(templateArgs.size() == 2) || !(templateArgs.get(1).getAsType().getAsString() == "QVariant")) {
+                    return;
+                }
+            } else if (templateDecl->getNameAsString() == "QList") {
+                const TemplateArgumentList &templateArgs = specDecl->getTemplateArgs();
+                if (!(templateArgs.size() == 1) || !(templateArgs.get(0).getAsType().getAsString() == "QVariant")) {
+                    return;
+                }
             }
         }
-        else if(templateDecl->getNameAsString() == "QList") {
-            const TemplateArgumentList &templateArgs = specDecl->getTemplateArgs();
-            if (!(templateArgs.size() == 1) || !(templateArgs.get(0).getAsType().getAsString() == "QVariant")) {
-               return;
-            }
-        }
-      }
     }
-
 
     std::vector<QualType> typeList = clazy::getTemplateArgumentsTypes(methodDecl);
     const Type *t = typeList.empty() ? nullptr : typeList[0].getTypePtrOrNull();

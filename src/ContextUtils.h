@@ -33,7 +33,6 @@ class ParentMap;
 
 namespace clazy
 {
-
 /**
  * Returns true if a decl is inside a function, instead of say a class field.
  * This returns true if "QList<int> l;" is a local variable, instead of being a class field such

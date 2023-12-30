@@ -18,7 +18,6 @@
 
 namespace clazy
 {
-
 // Don't use .begin() or cend(), clang's ranges don't have them
 // Don't use .size(), clang's ranges doesn't have it
 
