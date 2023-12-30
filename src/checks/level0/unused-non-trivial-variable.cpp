@@ -89,7 +89,12 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
         return true;
     }
 
-    static const std::vector<StringRef> blacklistedTemplates = {"QScopedPointer", "QSetValueOnDestroy", "QScopedValueRollback"};
+    static const std::vector<StringRef> blacklistedTemplates = {
+        "QScopedPointer",
+        "QSetValueOnDestroy",
+        "QScopedValueRollback",
+        "QScopeGuard",
+    };
     StringRef className = clazy::name(record);
     for (StringRef templateName : blacklistedTemplates) {
         if (clazy::startsWith(static_cast<std::string>(className), static_cast<std::string>(templateName))) {

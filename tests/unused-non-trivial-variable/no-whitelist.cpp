@@ -5,8 +5,8 @@
 #include <QtCore/QRect>
 #include <QtCore/QMutex>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QScopeGuard>
 #include "other.h"
-
 
 
 extern void external(QString);
@@ -56,6 +56,7 @@ void test4()
 
 void mutex()
 {
+    auto myGuard = qScopeGuard([](){}); // OK, this needs to be around
     QMutex m;
     QMutexLocker ml(&m); // OK, is uninteresting
     QScopedPointer<QMutex> p(&m);  // OK, is uninteresting
