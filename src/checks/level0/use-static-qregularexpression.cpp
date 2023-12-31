@@ -45,12 +45,12 @@ static Expr *getVarInitExpr(VarDecl *VDef)
     return VDef->getDefinition() ? VDef->getDefinition()->getInit() : nullptr;
 }
 
-static bool isQStringModifiedAfterCreation(clang::Stmt *expr)
+static bool isQStringModifiedAfterCreation(clang::Stmt *expr, LangOptions lo)
 {
     // This QString is the result of a .arg/.mid or similar call, check all args if they are a literal
     if (auto *methodCall = clazy::getFirstChildOfType<CXXMemberCallExpr>(expr)) {
         if (auto *callee = methodCall->getMethodDecl()) {
-            if (callee->getReturnType().getAsString() == "class QString") {
+            if (callee->getReturnType().getAsString(lo) == "QString") {
                 return true;
             }
         }
@@ -58,7 +58,7 @@ static bool isQStringModifiedAfterCreation(clang::Stmt *expr)
     return false;
 }
 
-static bool isQStringFromStringLiteral(Expr *qstring)
+static bool isQStringFromStringLiteral(Expr *qstring, LangOptions lo)
 {
     if (isArgTemporaryObj(qstring)) {
         // Is it compile time known QString i.e., not from a function call
@@ -75,7 +75,7 @@ static bool isQStringFromStringLiteral(Expr *qstring)
         if (stringLit) {
             // If we have a string literal somewhere in there, but modify it using QString::arg or friends, we don't have a literal for th regex
             if (auto *constructExpr = clazy::getFirstChildOfType<CXXConstructExpr>(VD->getInit())) {
-                return !isQStringModifiedAfterCreation(constructExpr);
+                return !isQStringModifiedAfterCreation(constructExpr, lo);
             } else {
                 return true;
             }
@@ -98,10 +98,10 @@ static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
         return false;
     }
 
-    return isQStringFromStringLiteral(qstrArg) && !isQStringModifiedAfterCreation(qstrArg);
+    return isQStringFromStringLiteral(qstrArg, lo) && !isQStringModifiedAfterCreation(qstrArg, lo);
 }
 
-static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
+static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl, LangOptions lo)
 {
     Expr *initExpr = getVarInitExpr(qregexVarDecl);
     if (!initExpr) {
@@ -121,17 +121,17 @@ static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl)
     }
 
     auto *qstringArg = ctorCall->getArg(0);
-    return qstringArg && isQStringFromStringLiteral(qstringArg) && !isQStringModifiedAfterCreation(qstringArg);
+    return qstringArg && isQStringFromStringLiteral(qstringArg, lo) && !isQStringModifiedAfterCreation(qstringArg, lo);
 }
 
-static bool isArgNonStaticLocalVar(Expr *qregexp)
+static bool isArgNonStaticLocalVar(Expr *qregexp, LangOptions lo)
 {
     auto *varDecl = getVarDecl(qregexp);
     if (!varDecl) {
         return false;
     }
 
-    if (!isQRegexpFromStringLiteral(varDecl)) {
+    if (!isQRegexpFromStringLiteral(varDecl, lo)) {
         return false;
     }
 
@@ -182,7 +182,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
         }
 
         if (obj->isLValue()) {
-            if (isArgNonStaticLocalVar(obj)) {
+            if (isArgNonStaticLocalVar(obj, lo())) {
                 emitWarning(clazy::getLocStart(obj),
                             "Don't create temporary QRegularExpression objects. Use "
                             "a static QRegularExpression object instead");
@@ -222,7 +222,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
     }
 
     // Its a local QRegularExpression variable?
-    if (isArgNonStaticLocalVar(qregexArg)) {
+    if (isArgNonStaticLocalVar(qregexArg, lo())) {
         emitWarning(clazy::getLocStart(qregexArg), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
     }
 }
