@@ -11,7 +11,7 @@ _license_text = \
 */
 """
 
-import sys, os, json, argparse, datetime, io
+import sys, os, json, argparse, datetime, io, subprocess
 from shutil import copyfile
 
 CHECKS_FILENAME = 'checks.json'
@@ -64,10 +64,12 @@ def read_file(filename):
     f.close()
     return contents
 
-def write_file(filename, contents):
+def write_file(filename: str, contents):
     f = io.open(filename, 'w', newline='\n', encoding='utf8')
     f.write(contents)
     f.close()
+    if filename.endswith('.h') or filename.endswith('.cpp'):
+        subprocess.run(['clang-format', '-i', filename])
 
 def get_copyright():
     year = datetime.datetime.now().year
