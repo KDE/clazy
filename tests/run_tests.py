@@ -22,14 +22,13 @@ _verbose = False
 _hasStdFileSystem = True
 
 c_headerpath = False
-if 'CI' in os.environ:
-    try:
-        result = subprocess.run(['clang', '-v'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
-        match = re.search(r'Selected .* installation: (.*)', result.stderr)
-        if match:
-            c_headerpath = match.group(1).strip()
-    except e:
-        pass
+try:
+    result = subprocess.run(['clang', '-v'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
+    match = re.search(r'Selected .* installation: (.*)', result.stderr)
+    if match:
+        c_headerpath = match.group(1).strip()
+except:
+    pass
 
 
 def isWindows():
@@ -40,9 +39,6 @@ def isMacOS():
 
 def isLinux():
     return _platform.startswith('linux')
-
-def isBsd():
-    return _platform.startswith('bsd')
 
 class QtInstallation:
     def __init__(self):
