@@ -80,10 +80,12 @@ else()
 endif()
 
 # Look for std::regex support
-message("Looking for std::regex support...")
-try_run(REGEX_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
+if(NOT DEFINED REGEX_RUN_RESULT)
+  message("Looking for std::regex support...")
+  try_compile(REGEX_RUN_RESULT SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
+endif()
 
-if(NOT REGEX_RUN_RESULT EQUAL 0)
+if(NOT DEFINED REGEX_RUN_RESULT)
   message("Using boost::regex instead of std::regex")
   set(CLAZY_USES_BOOST_REGEX TRUE)
   add_definitions(-DCLAZY_USES_BOOST_REGEX)
@@ -95,8 +97,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 
 # Compiler might support c++17 but not have std::filesystem in the standard library
-message("Looking for std::filesystem support...")
-try_run(FILESYSTEM_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
+if (NOT FILESYSTEM_RUN_RESULT)
+  message("Looking for std::filesystem support...")
+  try_compile(FILESYSTEM_RUN_RESULT SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
+endif()
 
 if (FILESYSTEM_RUN_RESULT)
     add_definitions(-DHAS_STD_FILESYSTEM)
