@@ -154,12 +154,13 @@ void CheckManager::registerChecks()
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<SanitizeInlineKeyword>("sanitize-inline-keyword", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
+    registerFixIt(1, "fix-sanitize-inline-keyword", "sanitize-inline-keyword");
     registerCheck(check<SignalWithReturnValue>("signal-with-return-value", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ThreadWithSlots>("thread-with-slots", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnexpectedFlagEnumeratorValue>("unexpected-flag-enumerator-value", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<SanitizeInlineKeyword>("sanitize-inline-keyword", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
 #ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<UnusedResultCheck>("unused-result-check", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
 #endif
