@@ -3,7 +3,6 @@
 import sys
 import os
 import subprocess
-import string
 import re
 import json
 import threading
@@ -700,7 +699,6 @@ def run_unit_test(test, is_standalone):
     qt = qt_installation(test.qt_major_version)
 
     if _verbose:
-        print
         print("Qt version: " + str(qt.int_version))
         print("Qt headers: " + qt.qmake_header_path)
 
@@ -765,7 +763,6 @@ def run_unit_test(test, is_standalone):
         print("Contents of %s:" % output_file)
         print_file(output_file)
         print("-------------------")
-        print
         return False
 
     if not test.compare_everything:
@@ -890,7 +887,6 @@ def load_checks(all_check_names):
         except:
             print("Error while loading " + name)
             raise
-            sys.exit(-1)
     return checks
 # -------------------------------------------------------------------------------
 def try_compile(filename):
@@ -917,7 +913,6 @@ requested_check_names = list(
 for check_name in requested_check_names:
     if check_name not in all_check_names:
         print("Unknown check: " + check_name)
-        print
         sys.exit(-1)
 
 if not requested_check_names:
@@ -938,7 +933,7 @@ if _dump_ast:
 else:
     cleanup_fixit_files(requested_checks)
     # Each list is a list of Test to be worked on by a thread
-    list_of_chunks = [[] for x in range(_num_threads)]
+    list_of_chunks = [[] for _ in range(_num_threads)]
     i = _num_threads
     for check in requested_checks:
         for test in check.tests:
