@@ -79,6 +79,9 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
+
 # Look for std::regex support
 if(NOT DEFINED REGEX_RUN_RESULT)
   message("Looking for std::regex support...")
@@ -92,9 +95,6 @@ if(NOT DEFINED REGEX_RUN_RESULT)
   find_package(Boost REQUIRED COMPONENTS regex)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
-
-set(CMAKE_CXX_STANDARD 17)
-set(CXX_STANDARD_REQUIRED ON)
 
 # Compiler might support c++17 but not have std::filesystem in the standard library
 if (NOT FILESYSTEM_RUN_RESULT)
