@@ -175,11 +175,11 @@ class Check:
 # utility functions #1
 
 
-def get_command_output(cmd, test_env=os.environ, cwd=None):
+def get_command_output(cmd, test_env=os.environ, cwd=None, ignore_verbose=False):
     success = True
 
     try:
-        if _verbose:
+        if _verbose and not ignore_verbose:
             print(cmd)
 
         # Polish up the env to fix "TypeError: environment can only contain strings" exception
@@ -527,8 +527,8 @@ def qt_installation(major_version):
     return None
 
 
-def run_command(cmd, output_file="", test_env=os.environ, cwd=None):
-    lines, success = get_command_output(cmd, test_env, cwd=cwd)
+def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbose_command=False):
+    lines, success = get_command_output(cmd, test_env, cwd=cwd, ignore_verbose=ignore_verbose_command)
     # Hack for Windows, we have std::_Vector_base in the expected data
     lines = lines.replace("std::_Container_base0", "std::_Vector_base")
     lines = lines.replace("std::__1::__vector_base_common",
@@ -751,7 +751,7 @@ def run_unit_test(test, is_standalone):
 
     must_fail = test.must_fail
 
-    cmd_success = run_command(cmd_to_run, output_file, test.env)
+    cmd_success = run_command(cmd_to_run, output_file, test.env, ignore_verbose_command=True)
 
     if file_contains(output_file, 'Invalid check: '):
         return True
