@@ -98,8 +98,9 @@ set(CXX_STANDARD_REQUIRED ON)
 message("Looking for std::filesystem support...")
 try_run(FILESYSTEM_RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
 
-if (FILESYSTEM_RUN_RESULT EQUAL 0 AND COMPILE_RESULT)
+if (FILESYSTEM_RUN_RESULT)
     add_definitions(-DHAS_STD_FILESYSTEM)
+    set(HAS_STD_FILESYSTEM TRUE)
 endif()
 
 include(ClazySources.cmake)

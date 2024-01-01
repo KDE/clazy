@@ -899,7 +899,7 @@ def try_compile(filename):
 
 if isLinux():
     # On Windows and macOS we have recent enough toolchains
-    _hasStdFileSystem = try_compile('../.cmake_has_filesystem_test.cpp')
+    _hasStdFileSystem = 'CLAZY_HAS_FILESYSTEM' in os.environ or try_compile('../.cmake_has_filesystem_test.cpp')
 
 if 'CLAZY_NO_WERROR' in os.environ:
     del os.environ['CLAZY_NO_WERROR']

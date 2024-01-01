@@ -2,7 +2,9 @@
 
 macro(add_clazy_test name)
   add_test(NAME ${name} COMMAND python3 run_tests.py ${name} --verbose WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
-  set_property(TEST ${name} PROPERTY ENVIRONMENT "CLAZYPLUGIN_CXX=$<TARGET_FILE:ClazyPlugin>;CLAZYSTANDALONE_CXX=$<TARGET_FILE:clazy-standalone>")
+  set_property(TEST ${name} PROPERTY
+    ENVIRONMENT "CLAZYPLUGIN_CXX=$<TARGET_FILE:ClazyPlugin>;CLAZYSTANDALONE_CXX=$<TARGET_FILE:clazy-standalone>;$<$<BOOL:${HAS_STD_FILESYSTEM}>:CLAZY_HAS_FILESYSTEM=>"
+  )
 endmacro()
 
 add_clazy_test(assert-with-side-effects)
