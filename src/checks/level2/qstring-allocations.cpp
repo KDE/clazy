@@ -122,6 +122,12 @@ Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator *&
         }
     }
 
+    // C++17 elides the QLatin1String constructor
+    if (Utils::userDefinedLiteral(stm, "QLatin1String", lo())) {
+        return {constructExpr, /*enableFixits=*/false};
+    }
+
+
     if (!ternary) {
         ternary = dyn_cast<ConditionalOperator>(stm);
     }
