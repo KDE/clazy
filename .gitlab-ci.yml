@@ -6,4 +6,16 @@ include:
     file:
       - /gitlab-templates/linux.yml
       - /gitlab-templates/freebsd.yml
-      - /gitlab-templates/clang-format.yml
+
+# Copied from sysadmin/ci-utilities/templates/clang-format.yaml
+formatting-and-codegen:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt66:latest
+  tags:
+    - Linux
+  script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - ./dev-scripts/generate.py --generate
+    - git diff --exit-code
+    - find . \( -name "*.cpp" -or -name "*.h"  -or -name "*.c"  -or -name "*.cc" \) | xargs clang-format -i
+    - git diff --exit-code
