@@ -19,7 +19,7 @@ set(CLAZY_CHECKS_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/detachingbase.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/ruleofbase.cpp
 )
-include(CheckSources.cmake)
+include(CheckSources.generated.cmake)
 
 set(CLAZY_SHARED_SRCS # sources shared between clazy-standalone and clazy plugin
   ${CLAZY_CHECKS_SRCS}
