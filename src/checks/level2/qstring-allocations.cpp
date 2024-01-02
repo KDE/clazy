@@ -127,7 +127,6 @@ Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator *&
         return {constructExpr, /*enableFixits=*/false};
     }
 
-
     if (!ternary) {
         ternary = dyn_cast<ConditionalOperator>(stm);
     }
@@ -272,7 +271,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                     bool shouldRemoveQString = clazy::getLocStart(qlatin1Ctor).getRawEncoding() != clazy::getLocStart(ctorExpr).getRawEncoding()
                         && dyn_cast_or_null<CXXBindTemporaryExpr>(clazy::parent(m_context->parentMap, ctorExpr));
                     if (shouldRemoveQString) {
-                        // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo)), so now remove QString
+                        // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo")), so now remove QString
                         auto removalFixits = clazy::fixItRemoveToken(&m_astContext, ctorExpr, true);
                         if (removalFixits.empty()) {
                             queueManualFixitWarning(clazy::getLocStart(ctorExpr), "Internal error: invalid start or end location");
@@ -444,12 +443,24 @@ static bool isQStringLiteralCandidate(Stmt *s, ParentMap *map, const LangOptions
         }
     }
 
+    // C++17 elides the QString constructor call in QString s = QString::fromLatin1("foo");
+    if (currentCall > 0) {
+        auto exprWithCleanups = dyn_cast<ExprWithCleanups>(s);
+        if (exprWithCleanups) {
+            if (auto bindTemp = dyn_cast<CXXBindTemporaryExpr>(exprWithCleanups->getSubExpr())) {
+                if (dyn_cast<CallExpr>(bindTemp->getSubExpr()))
+                    return true;
+            }
+        }
+    }
+
     if (currentCall > 0 && callExpr) {
         auto *fDecl = callExpr->getDirectCallee();
         return !(fDecl && betterTakeQLatin1String(dyn_cast<CXXMethodDecl>(fDecl), literal));
     }
 
-    if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s) || dyn_cast<MaterializeTemporaryExpr>(s)) { // skip this cruft
+    if (currentCall == 0 || dyn_cast<ImplicitCastExpr>(s) || dyn_cast<CXXBindTemporaryExpr>(s)
+        || dyn_cast<MaterializeTemporaryExpr>(s)) { // recurse over this cruft
         return isQStringLiteralCandidate(clazy::parent(map, s), map, lo, sm, currentCall + 1);
     }
 
