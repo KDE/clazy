@@ -121,7 +121,19 @@ static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl, LangOptions lo)
     }
 
     auto *qstringArg = ctorCall->getArg(0);
-    return qstringArg && isQStringFromStringLiteral(qstringArg, lo) && !isQStringModifiedAfterCreation(qstringArg, lo);
+    if (!qstringArg) {
+        return false;
+    }
+
+    // For C++17, we have to put in more effort to resolving the initialization
+    if (auto *expr = clazy::getFirstChildOfType<DeclRefExpr>(qstringArg)) {
+        if (auto *exprClean = dyn_cast<VarDecl>(expr->getDecl())) {
+            if (isQStringModifiedAfterCreation(exprClean->getInit(), lo)) {
+                return false;
+            }
+        }
+    }
+    return isQStringFromStringLiteral(qstringArg, lo) && !isQStringModifiedAfterCreation(qstringArg, lo);
 }
 
 static bool isArgNonStaticLocalVar(Expr *qregexp, LangOptions lo)
