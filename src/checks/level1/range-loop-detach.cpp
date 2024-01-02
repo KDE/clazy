@@ -69,6 +69,8 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
                     // When initing via copy or move ctor there's possible detachments.
                     return false;
                 }
+            } else if (auto *bte = dyn_cast<clang::CXXBindTemporaryExpr>(cleanupExpr->getSubExpr())) {
+                return false;
             }
         }
     }

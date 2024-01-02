@@ -87,7 +87,7 @@ class Test:
         self.has_fixits = False
         self.should_run_fixits_test = False
         self.should_run_on_32bit = True
-        self.cppStandard = "c++14"
+        self.cppStandard = "c++17"
         self.requires_std_filesystem = False
 
     def filename(self):
@@ -436,7 +436,7 @@ def clazy_command(qt, test, filename):
 
 
 def dump_ast_command(test):
-    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
+    return "clang -std=c++17 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
 
 
 def compiler_name():
