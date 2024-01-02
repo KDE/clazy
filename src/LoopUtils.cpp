@@ -88,6 +88,7 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
         return rangeLoop->getRangeInit();
     }
 
+    // foreach with C++14
     if (auto *constructExpr = dyn_cast<CXXConstructExpr>(loop)) {
         if (constructExpr->getNumArgs() < 1) {
             return nullptr;
@@ -99,6 +100,21 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
         }
 
         return constructExpr;
+    }
+
+    // foreach with C++17
+    if (auto *bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(loop)) {
+        CallExpr *callExpr = dyn_cast<CallExpr>(bindTempExpr->getSubExpr());
+        if (!callExpr)
+            return nullptr;
+        FunctionDecl *func = callExpr->getDirectCallee();
+        if (!func || func->getQualifiedNameAsString() != "QtPrivate::qMakeForeachContainer") {
+            return nullptr;
+        }
+        if (callExpr->getNumArgs() < 1) {
+            return nullptr;
+        }
+        return callExpr->getArg(0);
     }
 
     return nullptr;
