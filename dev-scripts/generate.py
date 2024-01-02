@@ -290,8 +290,8 @@ void CheckManager::registerChecks()
     comment_text = \
 """
 /**
- * To add a new check you can either edit this file, or use the python script:
- * dev-scripts/generate.py > src/Checks.h
+ * New scripts should be added to the check.json file and the files should be regenerated
+ * ./dev-scripts/generate.py --generate
  */
 """
     text = _license_text + '\n' + comment_text + '\n' + text
