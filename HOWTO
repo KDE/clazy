@@ -66,7 +66,3 @@ Running tests
     ./run_tests.py my-check # This runs one tests
     ./run_tests.py my-check --verbose # Prints the compiler invocation command
     ./run_tests.py my-check --dump-ast # dumps the AST into a file with .ast extension
---------------------------------------------------------------------------------
-Format the code with uncrustify
-  Example:
-  $ uncrustify --replace -c ..uncrustify src/Utils.cpp
