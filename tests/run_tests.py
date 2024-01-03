@@ -87,7 +87,7 @@ class Test:
         self.has_fixits = False
         self.should_run_fixits_test = False
         self.should_run_on_32bit = True
-        self.cppStandard = "c++14"
+        self.cppStandards = ["c++14", "c++17"]
         self.requires_std_filesystem = False
 
     def filename(self):
@@ -142,10 +142,12 @@ class Test:
 
             self.env[key] = e[key]
 
-    def printableName(self, is_standalone, is_fixits):
+    def printableName(self, cppStandard, is_standalone, is_fixits):
         name = self.check.name
         if len(self.check.tests) > 1:
             name += "/" + self.filename()
+        if len(cppStandard) > 0:
+            name += " (" + cppStandard + ")"
         if is_fixits and is_standalone:
             name += " (standalone, fixits)"
         elif is_standalone:
@@ -283,8 +285,8 @@ def load_json(check_name):
                 test.qt4compat = t['qt4compat']
             if 'only_qt' in t:
                 test.only_qt = t['only_qt']
-            if 'cppStandard' in t:
-                test.cppStandard = t['cppStandard']
+            if 'cppStandards' in t:
+                test.cppStandards = t['cppStandards']
             if 'qt_developer' in t:
                 test.qt_developer = t['qt_developer']
             if 'header_filter' in t:
@@ -369,8 +371,8 @@ def more_clazy_standalone_args():
         return ' -I ' + os.environ['CLANG_BUILTIN_INCLUDE_DIR']
     return ''
 
-def clazy_standalone_command(test, qt):
-    result = " -- " + clazy_cpp_args(test.cppStandard) + \
+def clazy_standalone_command(test, cppStandard, qt):
+    result = " -- " + clazy_cpp_args(cppStandard) + \
         qt.compiler_flags() + " " + test.flags + more_clazy_standalone_args()
     result = " -checks=" + ','.join(test.checks) + " " + result + suppress_line_numbers_opt
 
@@ -398,18 +400,18 @@ def clazy_standalone_command(test, qt):
 def clang_name():
     return os.getenv('CLANGXX', 'clang')
 
-def clazy_command(qt, test, filename):
+def clazy_command(test, cppStandard, qt, filename):
     if test.isScript():
         return "./" + filename
 
     if 'CLAZY_CXX' in os.environ:  # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX'] + \
-            more_clazy_args(test.cppStandard) + qt.compiler_flags() + suppress_line_numbers_opt
+            more_clazy_args(cppStandard) + qt.compiler_flags() + suppress_line_numbers_opt
     else:
         clang = clang_name()
         result = clang + " -Xclang -load -Xclang " + libraryName() + \
             " -Xclang -add-plugin -Xclang clazy " + \
-            more_clazy_args(test.cppStandard) + qt.compiler_flags() + suppress_line_numbers_opt
+            more_clazy_args(cppStandard) + qt.compiler_flags() + suppress_line_numbers_opt
 
     if test.qt4compat:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt4-compat "
@@ -435,8 +437,8 @@ def clazy_command(qt, test, filename):
     return result
 
 
-def dump_ast_command(test):
-    return "clang -std=c++14 -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
+def dump_ast_command(test, cppStandard):
+    return "clang -std=" + cppStandard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(test.qt_major_version).compiler_flags() + " " + test.flags + " " + test.filename()
 
 
 def compiler_name():
@@ -694,7 +696,7 @@ def is32Bit():
     return platform.architecture()[0] == '32bit'
 
 
-def run_unit_test(test, is_standalone):
+def run_unit_test(test, is_standalone, cppStandard):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
 
@@ -704,27 +706,29 @@ def run_unit_test(test, is_standalone):
         print("Qt version: " + str(qt.int_version))
         print("Qt headers: " + qt.qmake_header_path)
 
+    printableName = test.printableName(cppStandard, is_standalone, False)
+
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
-            print("Skipping " + test.check.name +
+            print("Skipping " + printableName +
                   " because required version is not available")
         return True
 
     if test.requires_std_filesystem and not _hasStdFileSystem:
         if (_verbose):
-            print("Skipping " + test.check.name +
+            print("Skipping " + printableName +
                   " because it requires std::filesystem")
         return True
 
     if _platform in test.blacklist_platforms:
         if (_verbose):
-            print("Skipping " + test.check.name +
+            print("Skipping " + printableName +
                   " because it is blacklisted for this platform")
         return True
 
     if not test.should_run_on_32bit and is32Bit():
         if (_verbose):
-            print("Skipping " + test.check.name +
+            print("Skipping " + printableName +
                   " because it is blacklisted on 32bit")
         return True
 
@@ -744,9 +748,9 @@ def run_unit_test(test, is_standalone):
 
     if is_standalone:
         cmd_to_run = clazy_standalone_binary() + " " + filename + " " + \
-            clazy_standalone_command(test, qt)
+            clazy_standalone_command(test, cppStandard, qt)
     else:
-        cmd_to_run = clazy_command(qt, test, filename)
+        cmd_to_run = clazy_command(test, cppStandard, qt, filename)
 
     if test.compare_everything:
         result_file = output_file
@@ -759,7 +763,7 @@ def run_unit_test(test, is_standalone):
         return True
 
     if (not cmd_success and not must_fail) or (cmd_success and must_fail):
-        print("[FAIL] " + checkname +
+        print("[FAIL] " + printableName +
               " (Failed to build test. Check " + output_file + " for details)")
         print("-------------------")
         print("Contents of %s:" % output_file)
@@ -772,7 +776,7 @@ def run_unit_test(test, is_standalone):
         extract_word(word_to_grep, output_file, result_file)
 
     # Check that it printed the expected warnings
-    if not compare_files(test.expects_failure, expected_file, result_file, test.printableName(is_standalone, False)):
+    if not compare_files(test.expects_failure, expected_file, result_file, printableName):
         return False
 
     if test.has_fixits:
@@ -781,17 +785,24 @@ def run_unit_test(test, is_standalone):
 
     return True
 
+def run_unit_test_for_each_configuration(test, is_standalone):
+    if test.check.clazy_standalone_only and not is_standalone:
+        return True
+    result = True
+    for cppStandard in test.cppStandards:
+        result = result and run_unit_test(test, is_standalone, cppStandard)
+    return result
 
 def run_unit_tests(tests):
     result = True
     for test in tests:
         test_result = True
         if not _only_standalone:
-            test_result = run_unit_test(test, False)
+            test_result = run_unit_test_for_each_configuration(test, False)
             result = result and test_result
 
         if not _no_standalone:
-            test_result = test_result and run_unit_test(test, True)
+            test_result = test_result and run_unit_test_for_each_configuration(test, True)
             result = result and test_result
 
         if not test_result:
@@ -830,7 +841,7 @@ def compare_fixit_results(test, is_standalone):
         return True
 
     # Check that the rewritten file is identical to the expected one
-    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName(is_standalone, True)):
+    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName("", is_standalone, True)):
         return False
 
     # Some fixed cpp files have an header that was also fixed. Compare it here too.
@@ -838,7 +849,7 @@ def compare_fixit_results(test, is_standalone):
     if os.path.exists(possible_headerfile_expected):
         possible_headerfile = test.fixedFilename(
             is_standalone).replace('.cpp', '.h')
-        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName(is_standalone, True).replace('.cpp', '.h')):
+        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", is_standalone, True).replace('.cpp', '.h')):
             return False
 
     return True
@@ -875,9 +886,11 @@ def run_fixit_tests(requested_checks):
 
 def dump_ast(check):
     for test in check.tests:
-        ast_filename = test.filename() + ".ast"
-        run_command(dump_ast_command(test) + " > " + ast_filename)
-        print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
+        for cppStandard in test.cppStandards:
+            ast_filename = test.filename() + f"_{cppStandard}.ast"
+            run_command(dump_ast_command(test, cppStandard) + " > " + ast_filename)
+            print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
+
 # -------------------------------------------------------------------------------
 def load_checks(all_check_names):
     checks = []
