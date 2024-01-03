@@ -210,13 +210,13 @@ inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
  */
 inline clang::CXXRecordDecl *parentRecordForTypedef(clang::QualType qt)
 {
-    const auto *t = qt.getTypePtrOrNull();
-    if (!t) {
-        return nullptr;
+    auto *t = qt.getTypePtrOrNull();
+
+    if (const auto *elab = llvm::dyn_cast<clang::ElaboratedType>(t)) {
+        t = elab->desugar().getTypePtrOrNull();
     }
 
-    if (t->getTypeClass() == clang::Type::Typedef) {
-        const auto *tdt = static_cast<const clang::TypedefType *>(t);
+    if (const auto *tdt = llvm::dyn_cast<clang::TypedefType>(t)) {
         clang::TypedefNameDecl *tdnd = tdt->getDecl();
         return llvm::dyn_cast_or_null<clang::CXXRecordDecl>(tdnd->getDeclContext());
     }
