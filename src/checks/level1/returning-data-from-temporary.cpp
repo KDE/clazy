@@ -97,7 +97,7 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
     CXXBindTemporaryExpr *temporaryExpr = nullptr;
 
     while (t) {
-        if (dyn_cast<ImplicitCastExpr>(t) || dyn_cast<MaterializeTemporaryExpr>(t)) {
+        if (dyn_cast<ImplicitCastExpr>(t) || dyn_cast<MaterializeTemporaryExpr>(t) || dyn_cast<CXXFunctionalCastExpr>(t)) {
             t = clazy::getFirstChild(t);
             continue;
         }
