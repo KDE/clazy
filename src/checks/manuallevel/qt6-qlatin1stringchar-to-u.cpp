@@ -61,7 +61,7 @@ bool Qt6QLatin1StringCharToU::foundQCharOrQString(Stmt *stmt)
         type = decl->getType();
     } else if (auto *func = dyn_cast<CXXFunctionalCastExpr>(stmt)) {
         type = func->getType();
-    } else if (auto *memb = dyn_cast<CXXMemberCallExpr>(stmt)) {
+    } else if (dyn_cast<CXXMemberCallExpr>(stmt)) {
         Stmt *child = clazy::childAt(stmt, 0);
         while (child) {
             if (foundQCharOrQString(child)) {
@@ -102,7 +102,7 @@ bool Qt6QLatin1StringCharToU::relatedToQStringOrQChar(Stmt *stmt, const ClazyCon
  *    (to pick only one of two the CXXContructExpr of class QLatin1String)
  * 3/ must not be nested within an other QLatin1String call (unless looking for left over)
  *    This is done by looking for CXXFunctionalCastExpr with name QLatin1String among parents
- *    QLatin1String call nesting in other QLatin1String call are treating while visiting the outer call.
+ *    QLatin1String call nesting in other QLatin1String call are treated while visiting the outer call.
  */
 bool Qt6QLatin1StringCharToU::isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent)
 {
@@ -176,13 +176,7 @@ bool Qt6QLatin1StringCharToU::isInterestingCtorCall(CXXConstructExpr *ctorExpr, 
 
 bool Qt6QLatin1StringCharToU::warningAlreadyEmitted(SourceLocation sploc)
 {
-    for (auto loc : m_emittedWarningsInMacro) {
-        if (sploc == loc) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::find(m_emittedWarningsInMacro.begin(), m_emittedWarningsInMacro.end(), sploc) != m_emittedWarningsInMacro.end();
 }
 
 void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
@@ -226,42 +220,37 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
     std::string message;
 
     // parents are not checked when looking inside a QLatin1Char/String that does not support fixes
-    // extra paratheses might be needed for the inner QLatin1Char/String fix
+    // extra parentheses might be needed for the inner QLatin1Char/String fix
     bool extra_parentheses = !check_parents;
 
     bool noFix = false;
 
     SourceLocation warningLocation = clazy::getLocStart(stmt);
 
-    if (ctorExpr) {
-        if (!isInterestingCtorCall(ctorExpr, m_context, check_parents)) {
+    if (!isInterestingCtorCall(ctorExpr, m_context, check_parents)) {
+        return false;
+    }
+    message = "QLatin1Char or QLatin1String is being called";
+    if (clazy::getLocStart(stmt).isMacroID()) {
+        SourceLocation callLoc = clazy::getLocStart(stmt);
+        message += " in macro ";
+        message += Lexer::getImmediateMacroName(callLoc, m_sm, lo());
+        message += ". Please replace with `u` call manually.";
+        SourceLocation sploc = sm().getSpellingLoc(callLoc);
+        warningLocation = sploc;
+        if (warningAlreadyEmitted(sploc)) {
             return false;
         }
-        message = "QLatin1Char or QLatin1String is being called";
-        if (clazy::getLocStart(stmt).isMacroID()) {
-            SourceLocation callLoc = clazy::getLocStart(stmt);
-            message += " in macro ";
-            message += Lexer::getImmediateMacroName(callLoc, m_sm, lo());
-            message += ". Please replace with `u` call manually.";
-            SourceLocation sploc = sm().getSpellingLoc(callLoc);
-            warningLocation = sploc;
-            if (warningAlreadyEmitted(sploc)) {
-                return false;
-            }
 
-            m_emittedWarningsInMacro.push_back(sploc);
-            // We don't support fixit within macro. (because the replacement is wrong within the #define)
-            emitWarning(sploc, message, fixits);
-            return true;
-        }
+        m_emittedWarningsInMacro.push_back(sploc);
+        // We don't support fixit within macro. (because the replacement is wrong within the #define)
+        emitWarning(sploc, message, fixits);
+        return true;
+    }
 
-        std::string replacement = buildReplacement(stmt, noFix, extra_parentheses);
-        if (!noFix) {
-            fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));
-        }
-
-    } else {
-        return false;
+    std::string replacement = buildReplacement(stmt, noFix, extra_parentheses);
+    if (!noFix) {
+        fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));
     }
 
     emitWarning(warningLocation, message, fixits);
