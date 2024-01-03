@@ -4,6 +4,6 @@ Environment:
 
 Options:
   setup-dbus-session: False
-  require-passing-tests-on: [ 'FreeBSD' ]
+  require-passing-tests-on: [ '@all' ]
   tests-run-in-parallel: True
   cppcheck-arguments: '-i tests/'
