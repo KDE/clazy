@@ -1,10 +1,12 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
+            "filename" : "main.cpp",
+            "qt_major_versions" : [5]
         },
         {
-            "filename" : "dummy_qdbusxml2cpp.cpp"
+            "filename" : "dummy_qdbusxml2cpp.cpp",
+            "qt_major_versions" : [5]
         }
     ]
 }

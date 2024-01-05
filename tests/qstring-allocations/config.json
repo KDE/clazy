@@ -3,14 +3,17 @@
     "tests" : [
         {
             "filename" : "main.cpp",
+            "qt_major_versions" : [5],
             "has_fixits" : true
         },
         {
             "filename" : "msvc-compat.cpp",
+            "qt_major_versions" : [5],
             "has_fixits" : true
         },
         {
             "filename" : "no-msvc-compat.cpp",
+            "qt_major_versions" : [5],
             "has_fixits" : true,
             "env" : {
                 "CLAZY_EXTRA_OPTIONS" : "qstring-allocations-no-msvc-compat"
@@ -18,11 +21,13 @@
         },
         {
             "filename" : "364092.cpp",
+            "qt_major_versions" : [5],
             "blacklist_platforms" : ["win32"],
             "has_fixits" : true
         },
         {
             "filename" : "ui_foo.cpp",
+            "qt_major_versions" : [5],
             "blacklist_platforms" : ["win32"]
         }
     ]

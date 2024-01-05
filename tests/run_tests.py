@@ -66,14 +66,14 @@ class Test:
     def __init__(self, check):
         self.filenames = []
         self.minimum_qt_version = 500
-        self.maximum_qt_version = 59999
+        self.maximum_qt_version = 69999
         self.minimum_clang_version = 380
         self.minimum_clang_version_for_fixits = 380
         self.compare_everything = False
         self.link = False  # If true we also call the linker
         self.check = check
         self.expects_failure = False
-        self.qt_major_versions = [ 5 ]  # Tests use Qt 5 by default
+        self.qt_major_versions = [5, 6]
         self.env = os.environ
         self.checks = []
         self.flags = ""
@@ -127,9 +127,6 @@ class Test:
         if 4 in major_versions:
             if self.minimum_qt_version >= 500:
                 self.minimum_qt_version = 400
-        elif 6 in major_versions:
-            if self.maximum_qt_version == 59999:
-                self.maximum_qt_version = 69999 # implied
 
     def envString(self):
         result = ""
@@ -174,7 +171,7 @@ class Check:
         self.name = name
         self.minimum_clang_version = 380  # clang 3.8.0
         self.minimum_qt_version = 500
-        self.maximum_qt_version = 59999
+        self.maximum_qt_version = 69999
         self.enabled = True
         self.clazy_standalone_only = False
         self.tests = []

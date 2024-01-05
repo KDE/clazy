@@ -3,27 +3,32 @@
     "tests" : [
         {
             "filename" : "main.cpp",
+            "qt_major_versions" : [5],
             "link" : true,
             "has_fixits" : true
         },
         {
             "filename" : "usingnamespace.cpp",
+            "qt_major_versions" : [5],
             "link" : true,
             "has_fixits" : true,
             "blacklist_platforms" : ["darwin", "win32"]
         },
         {
             "filename" : "namespaces.cpp",
+            "qt_major_versions" : [5],
             "link" : true,
             "has_fixits" : true
         },
         {
             "filename" : "q_private_slot.cpp",
+            "qt_major_versions" : [5],
             "link" : true,
             "has_fixits" : true
         },
         {
             "filename" : "port_qsignalspy.cpp",
+            "qt_major_versions" : [5],
             "link" : true,
             "has_fixits" : true
         }

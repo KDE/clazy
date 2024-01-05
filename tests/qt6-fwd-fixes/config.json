@@ -4,14 +4,17 @@
     "tests" : [
         {
             "filename" : "main.cpp",
+            "qt_major_versions" : [5],
             "has_fixits" : true
         },
         {
             "filename" : "file1.cpp",
+            "qt_major_versions" : [5],
             "has_fixits" : true
         },
         {
             "filename" : "file2.cpp",
+            "qt_major_versions" : [5],
             "has_fixits" : true
         }
     ]

@@ -1,10 +1,12 @@
 {
     "tests" : [
         {
-            "filename" : "main.cpp"
+            "filename" : "main.cpp",
+            "qt_major_versions" : [5]
         },
         {
-            "filename" : "bug376737.cpp"
+            "filename" : "bug376737.cpp",
+            "qt_major_versions" : [5]
         }
     ]
 }

@@ -4,7 +4,8 @@
     ],
     "tests": [
         {
-            "filename": "main.cpp"
+            "filename": "main.cpp",
+            "qt_major_versions" : [5]
         }
     ]
 }

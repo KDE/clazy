@@ -4,47 +4,56 @@
     "tests" : [
         {
             "filename" : "test_requested_checks.sh",
+            "qt_major_versions" : [5],
             "compare_everything" : true,
             "minimum_qt_version" : 50500
         },
         {
             "filename" : "suppressions.cpp",
+            "qt_major_versions" : [5],
             "checks"   : ["qstring-allocations", "foreach", "qdatetime-utc"]
         },
         {
             "filename" : "suppressionsWholeFile.cpp",
+            "qt_major_versions" : [5],
             "checks"   : ["qstring-allocations", "foreach"]
         },
         {
             "filename" : "werror.cpp",
+            "qt_major_versions" : [5],
             "flags"    : "-Werror",
             "must_fail": true,
             "checks"   : ["qgetenv"]
         },
         {
             "filename" : "werror2.cpp",
+            "qt_major_versions" : [5],
             "flags"    : "-Werror",
             "checks"   : ["qgetenv"],
             "env"      : { "CLAZY_NO_WERROR" : "1" }
         },
         {
             "filename" : "qt4compat1.cpp",
+            "qt_major_versions" : [5],
             "checks"   : ["old-style-connect"],
             "has_fixits" : true
         },
         {
             "filename" : "qt4compat2.cpp",
+            "qt_major_versions" : [5],
             "checks"   : ["old-style-connect"],
             "qt4compat": true
         },
         {
             "filename" : "onlyQt1.cpp",
+            "qt_major_versions" : [5],
             "checks"   : ["old-style-connect"],
             "only_qt"  : false,
             "has_fixits" : true
         },
         {
             "filename" : "onlyQt2.cpp",
+            "qt_major_versions" : [5],
             "checks"   : ["old-style-connect"],
             "only_qt"  : true
         }
