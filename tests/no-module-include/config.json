@@ -2,7 +2,8 @@
     "tests" : [
         {
             "filename" : "main.cpp",
-            "qt_major_versions" : [5]
+            "qt_major_versions" : [5],
+            "extra_defintions": "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H "
         },
         {
             "filename" : "dummy_qdbusxml2cpp.cpp",

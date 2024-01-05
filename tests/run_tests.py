@@ -57,7 +57,6 @@ class QtInstallation:
         c_header_option = ""
         if c_headerpath:
             c_header_option = "-isystem " + c_headerpath + "/include "
-        c_header_option += "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H " # Avoid issues where this header is not found
 
         return c_header_option + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
@@ -88,6 +87,7 @@ class Test:
         self.should_run_on_32bit = True
         self.cppStandards = ["c++14", "c++17"]
         self.requires_std_filesystem = False
+        self.extra_definitions = False
 
     def filename(self):
         if len(self.filenames) == 1:
@@ -290,6 +290,8 @@ def load_json(check_name):
                 test.cppStandards = t['cppStandards']
             if 'qt_developer' in t:
                 test.qt_developer = t['qt_developer']
+            if 'extra_definitions' in t:
+                test.extra_definitions = t['extra_definitions']
             if 'header_filter' in t:
                 test.header_filter = t['header_filter']
             if 'ignore_dirs' in t:
@@ -415,6 +417,8 @@ def clazy_command(test, cppStandard, qt, filename):
 
     if test.qt_developer:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt-developer "
+    if test.extra_definitions:
+        result = result + test.extra_definitions
 
     # Linking on one platform is enough. Won't waste time on macOS and Windows.
     if test.link and _platform.startswith('linux'):
