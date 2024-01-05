@@ -361,12 +361,7 @@ def link_flags():
 
 
 def clazy_cpp_args(cppStandard):
-    return '-Wno-unused-value -Qunused-arguments -std=' + cppStandard + ' '
-
-
-def more_clazy_args(cppStandard):
-    return " " + clazy_cpp_args(cppStandard)
-
+    return ' -Wno-unused-value -Qunused-arguments -std=' + cppStandard + ' '
 
 def clazy_standalone_binary():
     if 'CLAZYSTANDALONE_CXX' in os.environ:  # in case we want to use "clazy.AppImage --standalone" instead
@@ -409,17 +404,13 @@ def clazy_command(test, cppStandard, qt, filename):
         return "./" + filename
 
     if 'CLAZY_CXX' in os.environ:  # In case we want to use clazy.bat
-        result = os.environ['CLAZY_CXX'] + \
-            more_clazy_args(cppStandard) + qt.compiler_flags(test.qt_modules_includes) + suppress_line_numbers_opt
+        result = os.environ['CLAZY_CXX']
     else:
-        clang = clang_name()
-        result = clang + " -Xclang -load -Xclang " + libraryName() + \
-            " -Xclang -add-plugin -Xclang clazy " + \
-            more_clazy_args(cppStandard) + qt.compiler_flags(test.qt_modules_includes) + suppress_line_numbers_opt
+        result = clang_name() + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clazy " 
+    result += clazy_cpp_args(cppStandard) + qt.compiler_flags(test.qt_modules_includes) + suppress_line_numbers_opt 
 
     if test.only_qt:
         result = result + " -Xclang -plugin-arg-clazy -Xclang only-qt "
-
     if test.qt_developer:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt-developer "
     if test.extra_definitions:
