@@ -3,12 +3,14 @@
         {
             "filename" : "main.cpp",
             "qt_major_versions" : [5],
-            "extra_definitions": "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H"
+            "extra_definitions": "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H",
+            "qt_modules_includes": true
         },
         {
             "filename" : "dummy_qdbusxml2cpp.cpp",
             "extra_definitions": "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H",
-            "qt_major_versions" : [5]
+            "qt_major_versions" : [5],
+            "qt_modules_includes": true
         }
     ]
 }
