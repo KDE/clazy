@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="console-application">
   <id>org.kde.clazy</id>
-<!--
+  <!--
   SPDX-License-Identifier: CC0-1.0
   SPDX-FileCopyrightText: KDE Community
  -->
