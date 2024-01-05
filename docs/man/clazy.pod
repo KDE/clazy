@@ -47,19 +47,6 @@ Any of the options above will print the requested information and then exit.
 
 =over 4
 
-=item B<--qt4compat>
-
-This option runs clazy in Qt4 compatibility mode.
-Use this when your source code can build with Qt4 and Qt5 in order to easily
-suppress issues that cannot be fixed due to the requirement of the Qt4 API.
-
-This is a convenience option which is identical to directly passing:
-  "-Xclang -plugin-arg-clazy -Xclang qt4-compat"
-
-=back
-
-=over 4
-
 =item B<--qtdeveloper>
 
 B<For Qt developers only.>  This option is special for running clazy on Qt itself.

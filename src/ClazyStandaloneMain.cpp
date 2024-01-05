@@ -38,8 +38,6 @@ static cl::opt<std::string>
                   cl::init(""),
                   cl::cat(s_clazyCategory));
 
-static cl::opt<bool> s_qt4Compat("qt4-compat", cl::desc("Turns off checks not compatible with Qt 4"), cl::init(false), cl::cat(s_clazyCategory));
-
 static cl::opt<bool> s_onlyQt("only-qt",
                               cl::desc("Won't emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing."),
                               cl::init(false),
@@ -111,10 +109,6 @@ public:
 
         if (!s_exportFixes.getValue().empty()) {
             options |= ClazyContext::ClazyOption_ExportFixes;
-        }
-
-        if (s_qt4Compat.getValue()) {
-            options |= ClazyContext::ClazyOption_Qt4Compat;
         }
 
         if (s_qtDeveloper.getValue()) {
@@ -197,7 +191,7 @@ int main(int argc, const char **argv)
     if (s_listEnabledChecks.getValue()) {
         std::string checksFromArgs = s_checks.getValue();
         std::vector<std::string> checks = {checksFromArgs.empty() ? "level1" : checksFromArgs};
-        const RegisteredCheck::List enabledChecks = CheckManager::instance()->requestedChecks(checks, s_qt4Compat.getValue());
+        const RegisteredCheck::List enabledChecks = CheckManager::instance()->requestedChecks(checks);
 
         if (!enabledChecks.empty()) {
             llvm::outs() << "Enabled checks:";

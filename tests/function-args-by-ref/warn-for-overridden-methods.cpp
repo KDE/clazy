@@ -9,14 +9,14 @@ struct NonTrivial {
 class BaseWithVirtuals
 {
 public:
-    virtual void virtualMethod1(NonTrivial) {}; // Warn
-    virtual void virtualMethod2(NonTrivial) {}; // Warn
-    void nonVirtualMethod(NonTrivial) {}; // Warn
+    virtual void virtualMethod1(const NonTrivial&) {}; // Warn
+    virtual void virtualMethod2(const NonTrivial&) {}; // Warn
+    void nonVirtualMethod(const NonTrivial&) {}; // Warn
 };
 
 class DerivedWithVirtuals : BaseWithVirtuals {
 public:
-    void virtualMethod1(NonTrivial) override {}; // Warn
-    void virtualMethod2(NonTrivial) {}; // Warn
-    void nonVirtualMethod(NonTrivial) {}; // Warn
+    void virtualMethod1(const NonTrivial&) override {}; // Warn
+    void virtualMethod2(const NonTrivial&) {}; // Warn
+    void nonVirtualMethod(const NonTrivial&) {}; // Warn
 };

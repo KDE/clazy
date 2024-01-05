@@ -33,18 +33,6 @@
             "env"      : { "CLAZY_NO_WERROR" : "1" }
         },
         {
-            "filename" : "qt4compat1.cpp",
-            "qt_major_versions" : [5],
-            "checks"   : ["old-style-connect"],
-            "has_fixits" : true
-        },
-        {
-            "filename" : "qt4compat2.cpp",
-            "qt_major_versions" : [5],
-            "checks"   : ["old-style-connect"],
-            "qt4compat": true
-        },
-        {
             "filename" : "onlyQt1.cpp",
             "qt_major_versions" : [5],
             "checks"   : ["old-style-connect"],

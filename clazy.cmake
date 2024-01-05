@@ -20,8 +20,6 @@ HELP() {
   echo "Any of the options above will print the requested information and then exit."
   echo
   echo "Convenience Options:"
-  echo "  --qt4compat        Qt4 compatibility mode. useful for source code that can build with Qt4"
-  echo "  (this is the same as passing \"-Xclang -plugin-arg-clazy -Xclang qt4-compat\")"
   echo "  --qtdeveloper      Special option for building Qt5 itself resulting in fewer false positives"
   echo "  (this is the same as passing \"-Xclang -plugin-arg-clazy -Xclang qt-developer\")"
   echo
@@ -100,11 +98,6 @@ then
 fi
 
 ExtraClangOptions=""
-if ( test $# -gt 0 -a "$1" = "--qt4compat" )
-then
-  shift
-  ExtraClangOptions="-Xclang -plugin-arg-clazy -Xclang qt4-compat"
-fi
 if ( test $# -gt 0 -a "$1" = "--qtdeveloper" )
 then
   shift

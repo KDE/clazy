@@ -8,5 +8,5 @@ struct ConstRefMember
 struct ConstMember
 {
     const int m_a;
-    ConstMember(const int& a) : m_a(a) { } // Warn
+    ConstMember(int a) : m_a(a) { } // Warn
 };

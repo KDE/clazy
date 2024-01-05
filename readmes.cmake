@@ -12,7 +12,6 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keyword-emit.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt4-qstring-from-array.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-deprecated-api-fixes.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-fwd-fixes.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-header-fixes.md

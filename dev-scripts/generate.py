@@ -124,9 +124,6 @@ class Check:
         return docs_path() + self.readme_name()
 
 
-    def supportsQt4(self):
-        return self.minimum_qt_version < 50000
-
     def get_class_name(self):
         if self.class_name:
             return self.class_name
@@ -259,21 +256,18 @@ void CheckManager::registerChecks()
 """
 
     for c in checks:
-        qt4flag = "RegisteredCheck::Option_None"
-        if not c.supportsQt4():
-            qt4flag = "RegisteredCheck::Option_Qt4Incompatible"
-
+        flags = "RegisteredCheck::Option_None"
         if c.visits_stmts:
-            qt4flag += " | RegisteredCheck::Option_VisitsStmts"
+            flags += " | RegisteredCheck::Option_VisitsStmts"
         if c.visits_decls:
-            qt4flag += " | RegisteredCheck::Option_VisitsDecls"
+            flags += " | RegisteredCheck::Option_VisitsDecls"
 
-        qt4flag = qt4flag.replace("RegisteredCheck::Option_None |", "")
+        flags = flags.replace("RegisteredCheck::Option_None |", "")
 
         if c.ifndef:
             text += "#ifndef " + c.ifndef + "\n"
 
-        text += '    registerCheck(check<%s>("%s", %s, %s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), qt4flag)
+        text += '    registerCheck(check<%s>("%s", %s, %s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), flags)
 
         fixitID = 1
         for fixit in c.fixits:

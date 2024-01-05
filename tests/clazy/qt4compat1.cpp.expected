@@ -1,2 +1,0 @@
-clazy/qt4compat1.cpp:6:5: warning: Old Style Connect [-Wclazy-old-style-connect]
-clazy/qt4compat1.cpp:6:19: warning: FixIt failed, requires manual intervention:  No such method foo in class QObject [-Wclazy-old-style-connect]

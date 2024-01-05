@@ -45,7 +45,7 @@ struct RegisteredFixIt {
 using FactoryFunction = std::function<CheckBase *(ClazyContext *context)>;
 
 struct RegisteredCheck {
-    enum Option { Option_None = 0, Option_Qt4Incompatible = 1, Option_VisitsStmts = 2, Option_VisitsDecls = 4 };
+    enum Option { Option_None = 0, Option_VisitsStmts = 1, Option_VisitsDecls = 2 };
 
     using List = std::vector<RegisteredCheck>;
     using Options = int;
@@ -101,7 +101,7 @@ public:
      * Returns all the requested checks.
      * This is a union of the requested checks via env variable and via arguments passed to compiler
      */
-    RegisteredCheck::List requestedChecks(std::vector<std::string> &args, bool qt4Compat);
+    RegisteredCheck::List requestedChecks(std::vector<std::string> &args);
     std::vector<std::pair<CheckBase *, RegisteredCheck>> createChecks(const RegisteredCheck::List &requestedChecks, ClazyContext *context);
 
     static void removeChecksFromList(RegisteredCheck::List &list, std::vector<std::string> &checkNames);

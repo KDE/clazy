@@ -45,7 +45,6 @@ public:
     enum ClazyOption {
         ClazyOption_None = 0,
         ClazyOption_ExportFixes = 1,
-        ClazyOption_Qt4Compat = 2,
         ClazyOption_OnlyQt = 4, // Ignore non-Qt files. This is done by bailing out if QT_CORE_LIB is not set.
         ClazyOption_QtDeveloper = 8, // For running clazy on Qt itself, optional, but honours specific guidelines
         ClazyOption_VisitImplicitCode = 16, // Inspect compiler generated code aswell, useful for custom checks, if they need it
