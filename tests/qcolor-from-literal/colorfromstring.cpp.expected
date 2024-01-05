@@ -1,0 +1,1 @@
+qcolor-from-literal/colorfromstring.cpp:7:17: warning: The QColor ctor taking RGB int value is cheaper than one taking string literals [-Wclazy-qcolor-from-literal]

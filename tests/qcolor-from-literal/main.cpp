@@ -16,5 +16,4 @@ void test()
     c4.setNamedColor("#001020"); // Warning
     c4.setNamedColor(QLatin1String("#001020")); // Warning
     takingColor("#001122"); // Warning
-    // TODO Qt6 QColor c8 = QColor::fromString("#123");
 }

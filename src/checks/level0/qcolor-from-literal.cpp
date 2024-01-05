@@ -24,8 +24,6 @@ class ClazyContext;
 using namespace clang;
 using namespace clang::ast_matchers;
 
-// TODO: setNameFromString()
-
 static bool isSingleDigitRgb(llvm::StringRef ref)
 {
     return ref.size() == 4;
@@ -71,7 +69,16 @@ public:
 
     void run(const MatchFinder::MatchResult &result) override
     {
-        const auto *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
+        auto *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
+        const Expr *replaceExpr = lt; // When QColor::fromString is used, we want to wrap the QString constructor around it
+        bool isStaticFromString = false;
+        if (auto res = result.Nodes.getNodeAs<CallExpr>("methodCall"); res && res->getNumArgs() == 1) {
+            if (Expr *argExpr = const_cast<Expr *>(res->getArg(0))) {
+                lt = clazy::getFirstChildOfType<StringLiteral>(argExpr);
+                replaceExpr = res;
+                isStaticFromString = true;
+            }
+        }
         if (!handleStringLiteral(lt)) {
             return;
         }
@@ -99,10 +106,13 @@ public:
                 fixit = "0x" + twoDigit(rColor) + twoDigit(gColor) + twoDigit(bColor);
                 message = "The QColor ctor taking RGB int value is cheaper than one taking string literals";
             }
-            m_check->emitWarning(clazy::getLocStart(lt), message, {clang::FixItHint::CreateReplacement(lt->getSourceRange(), fixit)});
+            if (isStaticFromString) {
+                fixit = "QColor(" + fixit + ")";
+            }
+            m_check->emitWarning(clazy::getLocStart(replaceExpr), message, {clang::FixItHint::CreateReplacement(replaceExpr->getSourceRange(), fixit)});
         } else {
             // triple or quadruple digit RGBA
-            m_check->emitWarning(clazy::getLocStart(lt), "The QColor ctor taking QRgba64 is cheaper than one taking string literals");
+            m_check->emitWarning(clazy::getLocStart(replaceExpr), "The QColor ctor taking QRgba64 is cheaper than one taking string literals");
         }
     }
     inline std::string twoDigit(const std::string &in)
@@ -162,4 +172,6 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
 {
     finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))), hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
+    finder.addMatcher(callExpr(hasDeclaration(cxxMethodDecl(hasName("fromString"), hasParent(cxxRecordDecl(hasName("QColor")))))).bind("methodCall"),
+                      m_astMatcherCallBack);
 }
