@@ -401,6 +401,9 @@ def clazy_standalone_command(test, cppStandard, qt):
     if test.ignore_dirs:
         result = " -ignore-dirs " + test.ignore_dirs + " " + result
 
+    if test.extra_definitions:
+        result += test.extra_definitions
+
     return result
 
 def clang_name():
@@ -424,7 +427,7 @@ def clazy_command(test, cppStandard, qt, filename):
     if test.qt_developer:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt-developer "
     if test.extra_definitions:
-        result = result + test.extra_definitions
+        result += test.extra_definitions
 
     # Linking on one platform is enough. Won't waste time on macOS and Windows.
     if test.link and _platform.startswith('linux'):
