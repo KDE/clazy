@@ -216,8 +216,15 @@ bool clazy::isJavaIterator(CXXRecordDecl *record)
         return false;
     }
 
-    static const std::vector<StringRef> names =
-        {"QHashIterator", "QMapIterator", "QSetIterator", "QListIterator", "QVectorIterator", "QLinkedListIterator", "QStringListIterator"};
+    static const std::vector<StringRef> names = {
+        "QHashIterator",
+        "QMapIterator",
+        "QSetIterator",
+        "QListIterator",
+        "QVectorIterator", // typedef in Qt6
+        "QStringListIterator", // typedef in Qt6
+        "QLinkedListIterator", // removed in Qt6
+    };
 
     return clazy::contains(names, clazy::name(record));
 }
