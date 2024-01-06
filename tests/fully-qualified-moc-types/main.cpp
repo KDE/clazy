@@ -1,7 +1,7 @@
 #include <QtCore/QObject>
+#include <QtDBus/QDBusPendingReply>
 
 struct A {};
-
 struct NonNamespacedGadget {
     Q_GADGET
 };
@@ -70,6 +70,11 @@ class MyObj2 : public QObject
 {
 Q_SIGNALS:
     void mySig(AnnonFoo);
+public Q_SLOTS:
+    inline QDBusPendingReply<> closeAllVaults() // Should be ignored, because it is used in generated DBus interfaces
+    {
+        return {};
+    }
 };
 
 
