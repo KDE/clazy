@@ -76,6 +76,7 @@ public Q_SLOTS:
     {
         return {};
     }
+    QStringList qt6TypedefIssues(); // Technically unqualified in Qt6, but we use it consistently in tons of places
 };
 
 #if QT_VERSION_MAJOR == 5
