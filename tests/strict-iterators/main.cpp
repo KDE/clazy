@@ -90,3 +90,10 @@ struct Bar {
     QVector<int>::iterator mFooIt;
 };
 
+#include <QtCore/QJsonObject>
+void testJsonObj()
+{
+    QJsonObject obj;
+    if (obj.begin() == obj.end()) {} // OK
+    if (obj.begin() == obj.constEnd()) {} // Warn
+}

@@ -11,3 +11,4 @@ strict-iterators/main.cpp:47:5: warning: Mixing iterators with const_iterators [
 strict-iterators/main.cpp:48:5: warning: Mixing iterators with const_iterators [-Wclazy-strict-iterators]
 strict-iterators/main.cpp:49:5: warning: Mixing iterators with const_iterators [-Wclazy-strict-iterators]
 strict-iterators/main.cpp:50:5: warning: Mixing iterators with const_iterators [-Wclazy-strict-iterators]
+strict-iterators/main.cpp:98:9: warning: Mixing iterators with const_iterators [-Wclazy-strict-iterators]

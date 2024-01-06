@@ -46,6 +46,7 @@ const std::vector<StringRef> &clazy::qtContainers()
         "QSequentialIterable",
         "QAssociativeIterable",
         "QJsonArray",
+        "QJsonObject",
         "QLinkedList",
     };
     return classes;
@@ -68,6 +69,7 @@ const std::vector<StringRef> &clazy::qtCOWContainers()
         "QStringRef",
         "QByteArray",
         "QJsonArray",
+        "QJsonObject",
         "QLinkedList",
     };
     return classes;
