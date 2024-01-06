@@ -68,15 +68,17 @@ namespace { // annonymous
 
 class MyObj2 : public QObject
 {
+    struct QualMe {};
 Q_OBJECT
 Q_SIGNALS:
     void mySig(AnnonFoo);
 public Q_SLOTS:
-    inline QDBusPendingReply<> closeAllVaults() // Should be ignored, because it is used in generated DBus interfaces
+    inline std::pair<bool,QualMe> closeAllVaults() // Warn
     {
         return {};
     }
-    QStringList qt6TypedefIssues(); // Technically unqualified in Qt6, but we use it consistently in tons of places
+    inline QDBusPendingReply<bool> boolDbusReply() {return {};} // OK
+    inline QDBusPendingReply<> voidDbusReply() {return {};} // OK
 };
 
 #if QT_VERSION_MAJOR == 5

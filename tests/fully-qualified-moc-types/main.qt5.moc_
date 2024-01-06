@@ -1,17 +1,18 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'main.cpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.5)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.11)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
+#include <memory>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'main.cpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.9.5. It"
+#error "This file was generated using the moc from 5.15.11. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -40,7 +41,7 @@ QT_MOC_LITERAL(0, 0, 19) // "NonNamespacedGadget"
 static const uint qt_meta_data_NonNamespacedGadget[] = {
 
  // content:
-       7,       // revision
+       8,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -53,10 +54,14 @@ static const uint qt_meta_data_NonNamespacedGadget[] = {
        0        // eod
 };
 
-const QMetaObject NonNamespacedGadget::staticMetaObject = {
-    { nullptr, qt_meta_stringdata_NonNamespacedGadget.data,
-      qt_meta_data_NonNamespacedGadget,  nullptr, nullptr, nullptr}
-};
+QT_INIT_METAOBJECT const QMetaObject NonNamespacedGadget::staticMetaObject = { {
+    nullptr,
+    qt_meta_stringdata_NonNamespacedGadget.data,
+    qt_meta_data_NonNamespacedGadget,
+    nullptr,
+    nullptr,
+    nullptr
+} };
 
 struct qt_meta_stringdata_NS__NamespacedGadget_t {
     QByteArrayData data[1];
@@ -79,7 +84,7 @@ QT_MOC_LITERAL(0, 0, 20) // "NS::NamespacedGadget"
 static const uint qt_meta_data_NS__NamespacedGadget[] = {
 
  // content:
-       7,       // revision
+       8,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -92,14 +97,18 @@ static const uint qt_meta_data_NS__NamespacedGadget[] = {
        0        // eod
 };
 
-const QMetaObject NS::NamespacedGadget::staticMetaObject = {
-    { nullptr, qt_meta_stringdata_NS__NamespacedGadget.data,
-      qt_meta_data_NS__NamespacedGadget,  nullptr, nullptr, nullptr}
-};
+QT_INIT_METAOBJECT const QMetaObject NS::NamespacedGadget::staticMetaObject = { {
+    nullptr,
+    qt_meta_stringdata_NS__NamespacedGadget.data,
+    qt_meta_data_NS__NamespacedGadget,
+    nullptr,
+    nullptr,
+    nullptr
+} };
 
 struct qt_meta_stringdata_NS__MyObject_t {
-    QByteArrayData data[41];
-    char stringdata0[407];
+    QByteArrayData data[43];
+    char stringdata0[428];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -139,16 +148,18 @@ QT_MOC_LITERAL(27, 217, 12), // "myinvokable5"
 QT_MOC_LITERAL(28, 230, 12), // "myinvokable6"
 QT_MOC_LITERAL(29, 243, 12), // "myinvokable7"
 QT_MOC_LITERAL(30, 256, 12), // "myinvokable8"
-QT_MOC_LITERAL(31, 269, 3), // "foo"
-QT_MOC_LITERAL(32, 273, 4), // "foo1"
-QT_MOC_LITERAL(33, 278, 7), // "enumFoo"
-QT_MOC_LITERAL(34, 286, 7), // "EnumFoo"
-QT_MOC_LITERAL(35, 294, 16), // "namespacedGadget"
-QT_MOC_LITERAL(36, 311, 16), // "NamespacedGadget"
-QT_MOC_LITERAL(37, 328, 17), // "namespacedGadget2"
-QT_MOC_LITERAL(38, 346, 20), // "NS::NamespacedGadget"
-QT_MOC_LITERAL(39, 367, 19), // "nonNamespacedGadget"
-QT_MOC_LITERAL(40, 387, 19) // "NonNamespacedGadget"
+QT_MOC_LITERAL(31, 269, 12), // "myinvokable9"
+QT_MOC_LITERAL(32, 282, 7), // "MyType*"
+QT_MOC_LITERAL(33, 290, 3), // "foo"
+QT_MOC_LITERAL(34, 294, 4), // "foo1"
+QT_MOC_LITERAL(35, 299, 7), // "enumFoo"
+QT_MOC_LITERAL(36, 307, 7), // "EnumFoo"
+QT_MOC_LITERAL(37, 315, 16), // "namespacedGadget"
+QT_MOC_LITERAL(38, 332, 16), // "NamespacedGadget"
+QT_MOC_LITERAL(39, 349, 17), // "namespacedGadget2"
+QT_MOC_LITERAL(40, 367, 20), // "NS::NamespacedGadget"
+QT_MOC_LITERAL(41, 388, 19), // "nonNamespacedGadget"
+QT_MOC_LITERAL(42, 408, 19) // "NonNamespacedGadget"
 
     },
     "NS::MyObject\0mysig\0\0NS::MyType\0mysig2\0"
@@ -158,55 +169,56 @@ QT_MOC_LITERAL(40, 387, 19) // "NonNamespacedGadget"
     "myslot7\0myslot8\0myinvokable1\0myinvokable2\0"
     "myinvokable3\0myinvokable4\0myinvokable5\0"
     "myinvokable6\0myinvokable7\0myinvokable8\0"
-    "foo\0foo1\0enumFoo\0EnumFoo\0namespacedGadget\0"
-    "NamespacedGadget\0namespacedGadget2\0"
-    "NS::NamespacedGadget\0nonNamespacedGadget\0"
-    "NonNamespacedGadget"
+    "myinvokable9\0MyType*\0foo\0foo1\0enumFoo\0"
+    "EnumFoo\0namespacedGadget\0NamespacedGadget\0"
+    "namespacedGadget2\0NS::NamespacedGadget\0"
+    "nonNamespacedGadget\0NonNamespacedGadget"
 };
 #undef QT_MOC_LITERAL
 
 static const uint qt_meta_data_NS__MyObject[] = {
 
  // content:
-       7,       // revision
+       8,       // revision
        0,       // classname
        0,    0, // classinfo
-      24,   14, // methods
-       6,  206, // properties
+      25,   14, // methods
+       6,  214, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  134,    2, 0x06 /* Public */,
-       4,    1,  137,    2, 0x06 /* Public */,
-       6,    1,  140,    2, 0x06 /* Public */,
-       7,    1,  143,    2, 0x06 /* Public */,
-       8,    1,  146,    2, 0x06 /* Public */,
-      10,    1,  149,    2, 0x06 /* Public */,
-      11,    1,  152,    2, 0x06 /* Public */,
-      13,    1,  155,    2, 0x06 /* Public */,
+       1,    1,  139,    2, 0x06 /* Public */,
+       4,    1,  142,    2, 0x06 /* Public */,
+       6,    1,  145,    2, 0x06 /* Public */,
+       7,    1,  148,    2, 0x06 /* Public */,
+       8,    1,  151,    2, 0x06 /* Public */,
+      10,    1,  154,    2, 0x06 /* Public */,
+      11,    1,  157,    2, 0x06 /* Public */,
+      13,    1,  160,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      15,    1,  158,    2, 0x0a /* Public */,
-      16,    1,  161,    2, 0x0a /* Public */,
-      17,    1,  164,    2, 0x0a /* Public */,
-      18,    1,  167,    2, 0x0a /* Public */,
-      19,    1,  170,    2, 0x0a /* Public */,
-      20,    1,  173,    2, 0x0a /* Public */,
-      21,    1,  176,    2, 0x0a /* Public */,
-      22,    1,  179,    2, 0x0a /* Public */,
+      15,    1,  163,    2, 0x0a /* Public */,
+      16,    1,  166,    2, 0x0a /* Public */,
+      17,    1,  169,    2, 0x0a /* Public */,
+      18,    1,  172,    2, 0x0a /* Public */,
+      19,    1,  175,    2, 0x0a /* Public */,
+      20,    1,  178,    2, 0x0a /* Public */,
+      21,    1,  181,    2, 0x0a /* Public */,
+      22,    1,  184,    2, 0x0a /* Public */,
 
  // methods: name, argc, parameters, tag, flags
-      23,    1,  182,    2, 0x02 /* Public */,
-      24,    1,  185,    2, 0x02 /* Public */,
-      25,    1,  188,    2, 0x02 /* Public */,
-      26,    1,  191,    2, 0x02 /* Public */,
-      27,    1,  194,    2, 0x02 /* Public */,
-      28,    1,  197,    2, 0x02 /* Public */,
-      29,    1,  200,    2, 0x02 /* Public */,
-      30,    1,  203,    2, 0x02 /* Public */,
+      23,    1,  187,    2, 0x02 /* Public */,
+      24,    1,  190,    2, 0x02 /* Public */,
+      25,    1,  193,    2, 0x02 /* Public */,
+      26,    1,  196,    2, 0x02 /* Public */,
+      27,    1,  199,    2, 0x02 /* Public */,
+      28,    1,  202,    2, 0x02 /* Public */,
+      29,    1,  205,    2, 0x02 /* Public */,
+      30,    1,  208,    2, 0x02 /* Public */,
+      31,    1,  211,    2, 0x02 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -237,14 +249,15 @@ static const uint qt_meta_data_NS__MyObject[] = {
     QMetaType::Void, 0x80000000 | 9,    2,
     QMetaType::Void, 0x80000000 | 12,    2,
     QMetaType::Void, 0x80000000 | 14,    2,
+    0x80000000 | 32, 0x80000000 | 3,    2,
 
  // properties: name, type, flags
-      31, 0x80000000 | 3, 0x00095009,
-      32, 0x80000000 | 5, 0x00095009,
-      33, 0x80000000 | 34, 0x00095409,
+      33, 0x80000000 | 3, 0x00095009,
+      34, 0x80000000 | 5, 0x00095009,
       35, 0x80000000 | 36, 0x00095409,
       37, 0x80000000 | 38, 0x00095409,
       39, 0x80000000 | 40, 0x00095409,
+      41, 0x80000000 | 42, 0x00095409,
 
        0        // eod
 };
@@ -252,8 +265,8 @@ static const uint qt_meta_data_NS__MyObject[] = {
 void NS::MyObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        MyObject *_t = static_cast<MyObject *>(_o);
-        Q_UNUSED(_t)
+        auto *_t = static_cast<MyObject *>(_o);
+        (void)_t;
         switch (_id) {
         case 0: _t->mysig((*reinterpret_cast< NS::MyType(*)>(_a[1]))); break;
         case 1: _t->mysig2((*reinterpret_cast< MyType(*)>(_a[1]))); break;
@@ -279,61 +292,63 @@ void NS::MyObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 21: _t->myinvokable6((*reinterpret_cast< const A(*)>(_a[1]))); break;
         case 22: _t->myinvokable7((*reinterpret_cast< const A*(*)>(_a[1]))); break;
         case 23: _t->myinvokable8((*reinterpret_cast< A*(*)>(_a[1]))); break;
+        case 24: { MyType* _r = _t->myinvokable9((*reinterpret_cast< NS::MyType(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< MyType**>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            typedef void (MyObject::*_t)(NS::MyType );
+            using _t = void (MyObject::*)(NS::MyType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig)) {
                 *result = 0;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(MyType );
+            using _t = void (MyObject::*)(MyType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig2)) {
                 *result = 1;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(NS::MyType );
+            using _t = void (MyObject::*)(NS::MyType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig3)) {
                 *result = 2;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(const NS::MyType & );
+            using _t = void (MyObject::*)(const NS::MyType & );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig4)) {
                 *result = 3;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(A );
+            using _t = void (MyObject::*)(A );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig5)) {
                 *result = 4;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(const A );
+            using _t = void (MyObject::*)(const A );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig6)) {
                 *result = 5;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(const A * );
+            using _t = void (MyObject::*)(const A * );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig7)) {
                 *result = 6;
                 return;
             }
         }
         {
-            typedef void (MyObject::*_t)(A * );
+            using _t = void (MyObject::*)(A * );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObject::mysig8)) {
                 *result = 7;
                 return;
@@ -342,8 +357,8 @@ void NS::MyObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     }
 #ifndef QT_NO_PROPERTIES
     else if (_c == QMetaObject::ReadProperty) {
-        MyObject *_t = static_cast<MyObject *>(_o);
-        Q_UNUSED(_t)
+        auto *_t = static_cast<MyObject *>(_o);
+        (void)_t;
         void *_v = _a[0];
         switch (_id) {
         case 0: *reinterpret_cast< NS::MyType*>(_v) = _t->foo(); break;
@@ -360,10 +375,14 @@ void NS::MyObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 #endif // QT_NO_PROPERTIES
 }
 
-const QMetaObject NS::MyObject::staticMetaObject = {
-    { &QObject::staticMetaObject, qt_meta_stringdata_NS__MyObject.data,
-      qt_meta_data_NS__MyObject,  qt_static_metacall, nullptr, nullptr}
-};
+QT_INIT_METAOBJECT const QMetaObject NS::MyObject::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_NS__MyObject.data,
+    qt_meta_data_NS__MyObject,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
 
 
 const QMetaObject *NS::MyObject::metaObject() const
@@ -385,16 +404,16 @@ int NS::MyObject::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 24)
+        if (_id < 25)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 24;
+        _id -= 25;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 24)
+        if (_id < 25)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 24;
+        _id -= 25;
     }
 #ifndef QT_NO_PROPERTIES
-   else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
+    else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::RegisterPropertyMetaType) {
         qt_static_metacall(this, _c, _id, _a);
         _id -= 6;
@@ -416,57 +435,192 @@ int NS::MyObject::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void NS::MyObject::mysig(NS::MyType _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
 void NS::MyObject::mysig2(MyType _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
 void NS::MyObject::mysig3(NS::MyType _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
 void NS::MyObject::mysig4(const NS::MyType & _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
 }
 
 // SIGNAL 4
 void NS::MyObject::mysig5(A _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 
 // SIGNAL 5
 void NS::MyObject::mysig6(const A _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6
 void NS::MyObject::mysig7(const A * _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 
 // SIGNAL 7
 void NS::MyObject::mysig8(A * _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
+}
+struct qt_meta_stringdata_MyObj2_t {
+    QByteArrayData data[10];
+    char stringdata0[133];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_MyObj2_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_MyObj2_t qt_meta_stringdata_MyObj2 = {
+    {
+QT_MOC_LITERAL(0, 0, 6), // "MyObj2"
+QT_MOC_LITERAL(1, 7, 5), // "mySig"
+QT_MOC_LITERAL(2, 13, 0), // ""
+QT_MOC_LITERAL(3, 14, 8), // "AnnonFoo"
+QT_MOC_LITERAL(4, 23, 14), // "closeAllVaults"
+QT_MOC_LITERAL(5, 38, 22), // "std::pair<bool,QualMe>"
+QT_MOC_LITERAL(6, 61, 13), // "boolDbusReply"
+QT_MOC_LITERAL(7, 75, 23), // "QDBusPendingReply<bool>"
+QT_MOC_LITERAL(8, 99, 13), // "voidDbusReply"
+QT_MOC_LITERAL(9, 113, 19) // "QDBusPendingReply<>"
+
+    },
+    "MyObj2\0mySig\0\0AnnonFoo\0closeAllVaults\0"
+    "std::pair<bool,QualMe>\0boolDbusReply\0"
+    "QDBusPendingReply<bool>\0voidDbusReply\0"
+    "QDBusPendingReply<>"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_MyObj2[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       4,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   34,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       4,    0,   37,    2, 0x0a /* Public */,
+       6,    0,   38,    2, 0x0a /* Public */,
+       8,    0,   39,    2, 0x0a /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+
+ // slots: parameters
+    0x80000000 | 5,
+    0x80000000 | 7,
+    0x80000000 | 9,
+
+       0        // eod
+};
+
+void MyObj2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<MyObj2 *>(_o);
+        (void)_t;
+        switch (_id) {
+        case 0: _t->mySig((*reinterpret_cast< AnnonFoo(*)>(_a[1]))); break;
+        case 1: { std::pair<bool,QualMe> _r = _t->closeAllVaults();
+            if (_a[0]) *reinterpret_cast< std::pair<bool,QualMe>*>(_a[0]) = std::move(_r); }  break;
+        case 2: { QDBusPendingReply<bool> _r = _t->boolDbusReply();
+            if (_a[0]) *reinterpret_cast< QDBusPendingReply<bool>*>(_a[0]) = std::move(_r); }  break;
+        case 3: { QDBusPendingReply<> _r = _t->voidDbusReply();
+            if (_a[0]) *reinterpret_cast< QDBusPendingReply<>*>(_a[0]) = std::move(_r); }  break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (MyObj2::*)(AnnonFoo );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObj2::mySig)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
+}
+
+QT_INIT_METAOBJECT const QMetaObject MyObj2::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_MyObj2.data,
+    qt_meta_data_MyObj2,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *MyObj2::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *MyObj2::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_MyObj2.stringdata0))
+        return static_cast<void*>(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int MyObj2::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 4)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 4;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 4)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 4;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void MyObj2::mySig(AnnonFoo _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
