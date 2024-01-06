@@ -14,3 +14,5 @@ detaching-temporary/main.cpp:140:5: warning: Modifying temporary container is po
 detaching-temporary/main.cpp:145:5: warning: Don't call QListSpecialMethods::removeDuplicates() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/main.cpp:151:5: warning: Don't call QString::begin() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/main.cpp:152:5: warning: Don't call QString::operator[]() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:173:5: warning: Don't call QJsonObject::operator[]() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:174:5: warning: Don't call QJsonObject::find() on temporary [-Wclazy-detaching-temporary]

@@ -57,25 +57,27 @@ bool isAllowedChainedClass(const std::string &className)
 
 bool isAllowedChainedMethod(const std::string &methodName)
 {
-    static const std::vector<std::string> allowed = {"QMap::keys",
-                                                     "QMap::values",
-                                                     "QHash::keys",
-                                                     "QMap::values",
-                                                     "QApplication::topLevelWidgets",
-                                                     "QAbstractItemView::selectedIndexes",
-                                                     "QListWidget::selectedItems",
-                                                     "QFile::encodeName",
-                                                     "QFile::decodeName",
-                                                     "QItemSelectionModel::selectedRows",
-                                                     "QTreeWidget::selectedItems",
-                                                     "QTableWidget::selectedItems",
-                                                     "QNetworkReply::rawHeaderList",
-                                                     "Mailbox::address",
-                                                     "QItemSelection::indexes",
-                                                     "QItemSelectionModel::selectedIndexes",
-                                                     "QMimeData::formats",
-                                                     "i18n",
-                                                     "QAbstractTransition::targetStates"};
+    static const std::vector<std::string> allowed = {
+        "QMap::keys",
+        "QMap::values",
+        "QHash::keys",
+        "QMap::values",
+        "QApplication::topLevelWidgets",
+        "QAbstractItemView::selectedIndexes",
+        "QListWidget::selectedItems",
+        "QFile::encodeName",
+        "QFile::decodeName",
+        "QItemSelectionModel::selectedRows",
+        "QTreeWidget::selectedItems",
+        "QTableWidget::selectedItems",
+        "QNetworkReply::rawHeaderList",
+        "Mailbox::address",
+        "QItemSelection::indexes",
+        "QItemSelectionModel::selectedIndexes",
+        "QMimeData::formats",
+        "i18n",
+        "QAbstractTransition::targetStates",
+    };
     return clazy::contains(allowed, methodName);
 }
 
@@ -195,9 +197,7 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
     }
 
     StringRef className = clazy::name(record);
-
-    auto it = m_writeMethodsByType.find(className);
-    if (it != m_writeMethodsByType.cend()) {
+    if (auto it = m_writeMethodsByType.find(className); it != m_writeMethodsByType.cend()) {
         const auto &methods = it->second;
         if (clazy::contains(methods, clazy::name(method))) {
             return true;

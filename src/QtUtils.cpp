@@ -5,7 +5,6 @@
 */
 
 #include "QtUtils.h"
-#include "StmtBodyRange.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -29,44 +28,48 @@ bool clazy::isQtIterableClass(clang::CXXRecordDecl *record)
 
 const std::vector<StringRef> &clazy::qtContainers()
 {
-    static const std::vector<StringRef> classes = {"QListSpecialMethods",
-                                                   "QList",
-                                                   "QVector",
-                                                   "QVarLengthArray",
-                                                   "QMap",
-                                                   "QHash",
-                                                   "QMultiMap",
-                                                   "QMultiHash",
-                                                   "QSet",
-                                                   "QStack",
-                                                   "QQueue",
-                                                   "QString",
-                                                   "QStringRef",
-                                                   "QByteArray",
-                                                   "QSequentialIterable",
-                                                   "QAssociativeIterable",
-                                                   "QJsonArray",
-                                                   "QLinkedList"};
+    static const std::vector<StringRef> classes = {
+        "QListSpecialMethods",
+        "QList",
+        "QVector",
+        "QVarLengthArray",
+        "QMap",
+        "QHash",
+        "QMultiMap",
+        "QMultiHash",
+        "QSet",
+        "QStack",
+        "QQueue",
+        "QString",
+        "QStringRef",
+        "QByteArray",
+        "QSequentialIterable",
+        "QAssociativeIterable",
+        "QJsonArray",
+        "QLinkedList",
+    };
     return classes;
 }
 
 const std::vector<StringRef> &clazy::qtCOWContainers()
 {
-    static const std::vector<StringRef> classes = {"QListSpecialMethods",
-                                                   "QList",
-                                                   "QVector",
-                                                   "QMap",
-                                                   "QHash",
-                                                   "QMultiMap",
-                                                   "QMultiHash",
-                                                   "QSet",
-                                                   "QStack",
-                                                   "QQueue",
-                                                   "QString",
-                                                   "QStringRef",
-                                                   "QByteArray",
-                                                   "QJsonArray",
-                                                   "QLinkedList"};
+    static const std::vector<StringRef> classes = {
+        "QListSpecialMethods",
+        "QList",
+        "QVector",
+        "QMap",
+        "QHash",
+        "QMultiMap",
+        "QMultiHash",
+        "QSet",
+        "QStack",
+        "QQueue",
+        "QString",
+        "QStringRef",
+        "QByteArray",
+        "QJsonArray",
+        "QLinkedList",
+    };
     return classes;
 }
 
@@ -100,6 +103,7 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsW
         map["QString"] = {"begin", "end", "data", "operator[]"};
         map["QByteArray"] = {"data", "operator[]"};
         map["QImage"] = {"bits", "scanLine"};
+        map["QJsonObject"] = {"begin", "end", "operator[]", "find"};
     }
 
     return map;

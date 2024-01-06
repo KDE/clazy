@@ -5,12 +5,12 @@
 #include <QtCore/QFile>
 #include <QtCore/QHash>
 #include <QtCore/QSet>
+#include <QtCore/QJsonObject>
 
 QList<int> getList()
 {
     return QList<int>();
 }
-
 void detach1()
 {
     getList().first(); // Warning
@@ -166,4 +166,11 @@ void testIntersect()
 {
     QSet<int> other;
     auto s = getSet().intersect(other); // OK
+}
+
+QJsonObject getObj(){return {};}
+void testJsonDetach() {
+    getObj()[QLatin1String("bla")]; // Warning
+    getObj().find(QLatin1String("bla")); // Warning
+    getObj().value(QLatin1String("bla")); // OK
 }
