@@ -19,11 +19,7 @@ using namespace clang;
 
 bool clazy::isQtIterableClass(clang::CXXRecordDecl *record)
 {
-    if (!record) {
-        return false;
-    }
-
-    return isQtIterableClass(record->getQualifiedNameAsString());
+    return record && isQtIterableClass(record->getQualifiedNameAsString());
 }
 
 const std::vector<StringRef> &clazy::qtContainers()
@@ -129,11 +125,7 @@ bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex)
 
 bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record)
 {
-    if (!record) {
-        return false;
-    }
-
-    return isQtCOWIterableClass(record->getQualifiedNameAsString());
+    return record && isQtCOWIterableClass(record->getQualifiedNameAsString());
 }
 
 bool clazy::isQtCOWIterableClass(const std::string &className)
@@ -150,11 +142,7 @@ bool clazy::isQtIterableClass(StringRef className)
 
 bool clazy::isQtAssociativeContainer(clang::CXXRecordDecl *record)
 {
-    if (!record) {
-        return false;
-    }
-
-    return isQtAssociativeContainer(record->getNameAsString());
+    return record && isQtAssociativeContainer(record->getNameAsString());
 }
 
 bool clazy::isQtAssociativeContainer(StringRef className)
@@ -233,21 +221,13 @@ bool clazy::isJavaIterator(CXXRecordDecl *record)
 
 bool clazy::isJavaIterator(CXXMemberCallExpr *call)
 {
-    if (!call) {
-        return false;
-    }
-
-    return isJavaIterator(call->getRecordDecl());
+    return call && isJavaIterator(call->getRecordDecl());
 }
 
 bool clazy::isQtContainer(QualType t)
 {
     CXXRecordDecl *record = clazy::typeAsRecord(t);
-    if (!record) {
-        return false;
-    }
-
-    return isQtContainer(record);
+    return record && isQtContainer(record);
 }
 
 bool clazy::isQtContainer(const CXXRecordDecl *record)
@@ -265,7 +245,6 @@ bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
     }
 
     static const std::vector<std::string> classes = {"QVector", "std::vector", "QList", "QSet"};
-
     return clazy::any_of(classes, [recordDecl](const std::string &className) {
         return clazy::derivesFrom(recordDecl, className);
     });
@@ -278,8 +257,7 @@ clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDec
     }
 
     for (auto baseClass : recordDecl->bases()) {
-        CXXRecordDecl *record = clazy::recordFromBaseSpecifier(baseClass);
-        if (isQObject(record)) {
+        if (CXXRecordDecl *record = clazy::recordFromBaseSpecifier(baseClass); isQObject(record)) {
             return record;
         }
     }
