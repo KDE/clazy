@@ -68,6 +68,7 @@ namespace { // annonymous
 
 class MyObj2 : public QObject
 {
+Q_OBJECT
 Q_SIGNALS:
     void mySig(AnnonFoo);
 public Q_SLOTS:
@@ -77,5 +78,8 @@ public Q_SLOTS:
     }
 };
 
-
-#include "main.moc_"
+#if QT_VERSION_MAJOR == 5
+#include "main.qt5.moc_"
+#else
+#include "main.qt6.moc_"
+#endif
