@@ -106,7 +106,12 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
             // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
             std::vector<TemplateArgument> args;
             for (auto arg : specType->template_arguments()) {
-                args.push_back(TemplateArgument{arg.getAsType()});
+                if (auto *argTypePtr = arg.getAsType().getTypePtrOrNull(); argTypePtr && argTypePtr->isRecordType()) {
+                    clang::QualType qualType = clang::QualType::getFromOpaquePtr(argTypePtr->getAsRecordDecl()->getTypeForDecl());
+                    args.push_back(TemplateArgument{qualType});
+                } else {
+                    args.push_back(TemplateArgument{arg.getAsType()});
+                }
             }
             QualType specializedType = m_astContext.getTemplateSpecializationType(specType->getTemplateName(), args);
             qualifiedTypeName = specializedType.getAsString(m_astContext.getPrintingPolicy());
