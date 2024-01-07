@@ -6,5 +6,6 @@ fully-qualified-moc-types/main.cpp:79:5: warning: slot return types need to be f
 fully-qualified-moc-types/main.cpp:80:5: warning: slot return types need to be fully-qualified (std::pair<bool, MyObj2::QualMe> instead of pair<bool, QualMe>) [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:82:5: warning: slot return types need to be fully-qualified (MyObj2::MyList instead of MyList) [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:83:5: warning: slot return types need to be fully-qualified (QList<MyObj2::QualMe> instead of QList<QualMe>) [-Wclazy-fully-qualified-moc-types]
-fully-qualified-moc-types/main.cpp:86:5: warning: slot return types need to be fully-qualified (QDBusPendingReply<MyObj2::QualMe> instead of QDBusPendingReply<QualMe>) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:87:5: warning: slot return types need to be fully-qualified (QDBusPendingReply<MyObj2::QualMe> instead of QDBusPendingReply<QualMe>) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:90:5: warning: slot return types need to be fully-qualified (QDBusPendingReply<MyObj2::MyList> instead of QDBusPendingReply<MyList>) [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:18:5: warning: Q_PROPERTY of type NamespacedGadget should use full qualification (NS::NamespacedGadget) [-Wclazy-fully-qualified-moc-types]

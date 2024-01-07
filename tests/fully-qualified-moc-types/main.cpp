@@ -66,12 +66,12 @@ namespace { // annonymous
     struct AnnonFoo {};
 };
 
-using namespace std;
+using namespace std; // pair<bool,QualMe> is returned for one method, the check should warn about the missing "std::" prefix
 class MyObj2 : public QObject
 {
 public:
     struct QualMe {};
-    using MyList = QList<QualMe>; // QualMe is not fully qualified here
+    using MyList = QList<QualMe>; // QualMe is not fully qualified here, but it shouldn't matter when using the typedef
 Q_OBJECT
 Q_SIGNALS:
     void mySig(AnnonFoo);
@@ -82,10 +82,12 @@ public Q_SLOTS:
     inline MyList typeAlias() {return {};} // WARN
     inline QList<QualMe> genericWithoutFullyQual() {return {};} // WARN
     inline QList<MyObj2::QualMe> genericFullyQual() {return {};} // OK
+    inline QStringList qstringListTypealias() {return {};} // OK
     inline MyObj2::MyList fullTypeAlias() {return {};} // OK
-    inline QDBusPendingReply<QualMe> UnqualGenericDbusReply() {return {};} // WARN
+    inline QDBusPendingReply<QualMe> unqualGenericDbusReply() {return {};} // WARN
     inline QDBusPendingReply<bool> boolDbusReply() {return {};} // OK
     inline QDBusPendingReply<> voidDbusReply() {return {};} // OK
+    inline QDBusPendingReply<MyList> typedefInGeneric() {return {};} // OK
 };
 
 Q_DECLARE_METATYPE(MyObj2::QualMe);

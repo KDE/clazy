@@ -101,16 +101,20 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
             qualifiedTypeName = typedefDecl->getDecl()->getQualifiedNameAsString();
         } else if (auto specType = ptr->getAs<TemplateSpecializationType>()) {
-            // In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void> ---
+            // In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void>
             // Thus we need to do all of the shenanigans below
             // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
             std::vector<TemplateArgument> args;
             for (auto arg : specType->template_arguments()) {
                 if (auto *argTypePtr = arg.getAsType().getTypePtrOrNull(); argTypePtr && argTypePtr->isRecordType()) {
-                    clang::QualType qualType = clang::QualType::getFromOpaquePtr(argTypePtr->getAsRecordDecl()->getTypeForDecl());
-                    args.push_back(TemplateArgument{qualType});
+                    if (auto *typdefPtr = argTypePtr->getAs<TypedefType>()) {
+                        args.push_back(TemplateArgument{QualType::getFromOpaquePtr(typdefPtr->getDecl()->getTypeForDecl())});
+                    } else {
+                        clang::QualType qualType = QualType::getFromOpaquePtr(argTypePtr->getAsRecordDecl()->getTypeForDecl());
+                        args.push_back(TemplateArgument{qualType});
+                    }
                 } else {
-                    args.push_back(TemplateArgument{arg.getAsType()});
+                    args.push_back(TemplateArgument{arg.getAsType()}); // trivial types like booöean
                 }
             }
             QualType specializedType = m_astContext.getTemplateSpecializationType(specType->getTemplateName(), args);
