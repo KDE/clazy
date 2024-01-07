@@ -96,18 +96,20 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         typeName = clazy::name(t.getUnqualifiedType(), lo(), /*asWritten=*/true); // Ignore qualifiers like const here
         if (typeName == "QPrivateSignal"
             || typeName.find("QDBusPendingReply<") != std::string::npos // QDBusPendingReply is mostly used in generated code and causes weird Qt5 issues
-            || typeName == "QStringList" // This is a typedef in Qt6, but was a separate type in Qt5
         ) {
             return true;
         }
 
-        auto *decl = ptr->getAsRecordDecl();
-        if (decl->isInAnonymousNamespace()) {
-            return true; // Ignore anonymous namespaces
-        }
+        if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
+            qualifiedTypeName = typedefDecl->getDecl()->getQualifiedNameAsString();
+        } else if (auto *decl = ptr->getAsRecordDecl()) {
+            if (decl->isInAnonymousNamespace()) {
+                return true; // Ignore anonymous namespaces
+            }
 
-        if (auto *declRecordType = dyn_cast<RecordType>(decl->getTypeForDecl())) {
-            qualifiedTypeName = declRecordType->getCanonicalTypeInternal().getAsString(lo());
+            if (auto *declRecordType = decl->getTypeForDecl()) {
+                qualifiedTypeName = declRecordType->getCanonicalTypeInternal().getAsString(lo());
+            }
         }
         return qualifiedTypeName.empty() || typeName == qualifiedTypeName;
     }

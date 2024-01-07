@@ -561,6 +561,14 @@ constexpr auto qt_meta_stringdata_CLASSMyObj2ENDCLASS = QtMocHelpers::stringData
     "AnnonFoo",
     "closeAllVaults",
     "std::pair<bool,QualMe>",
+    "typeAlias",
+    "MyList",
+    "genericWithoutFullyQual",
+    "QList<QualMe>",
+    "genericFullyQual",
+    "QList<MyObj2::QualMe>",
+    "fullTypeAlias",
+    "MyObj2::MyList",
     "boolDbusReply",
     "QDBusPendingReply<bool>",
     "voidDbusReply",
@@ -577,7 +585,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMyObj2ENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -585,12 +593,16 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMyObj2ENDCLASS[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   38,    2, 0x06,    1 /* Public */,
+       1,    1,   62,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       4,    0,   41,    2, 0x0a,    3 /* Public */,
-       6,    0,   42,    2, 0x0a,    4 /* Public */,
-       8,    0,   43,    2, 0x0a,    5 /* Public */,
+       4,    0,   65,    2, 0x0a,    3 /* Public */,
+       6,    0,   66,    2, 0x0a,    4 /* Public */,
+       8,    0,   67,    2, 0x0a,    5 /* Public */,
+      10,    0,   68,    2, 0x0a,    6 /* Public */,
+      12,    0,   69,    2, 0x0a,    7 /* Public */,
+      14,    0,   70,    2, 0x0a,    8 /* Public */,
+      16,    0,   71,    2, 0x0a,    9 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -599,6 +611,10 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMyObj2ENDCLASS[] = {
     0x80000000 | 5,
     0x80000000 | 7,
     0x80000000 | 9,
+    0x80000000 | 11,
+    0x80000000 | 13,
+    0x80000000 | 15,
+    0x80000000 | 17,
 
        0        // eod
 };
@@ -617,6 +633,14 @@ Q_CONSTINIT const QMetaObject MyObj2::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<AnnonFoo, std::false_type>,
         // method 'closeAllVaults'
         QtPrivate::TypeAndForceComplete<std::pair<bool,QualMe>, std::false_type>,
+        // method 'typeAlias'
+        QtPrivate::TypeAndForceComplete<MyList, std::false_type>,
+        // method 'genericWithoutFullyQual'
+        QtPrivate::TypeAndForceComplete<QList<QualMe>, std::false_type>,
+        // method 'genericFullyQual'
+        QtPrivate::TypeAndForceComplete<QList<MyObj2::QualMe>, std::false_type>,
+        // method 'fullTypeAlias'
+        QtPrivate::TypeAndForceComplete<MyObj2::MyList, std::false_type>,
         // method 'boolDbusReply'
         QtPrivate::TypeAndForceComplete<QDBusPendingReply<bool>, std::false_type>,
         // method 'voidDbusReply'
@@ -634,9 +658,17 @@ void MyObj2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 0: _t->mySig((*reinterpret_cast< std::add_pointer_t<AnnonFoo>>(_a[1]))); break;
         case 1: { std::pair<bool,QualMe> _r = _t->closeAllVaults();
             if (_a[0]) *reinterpret_cast< std::pair<bool,QualMe>*>(_a[0]) = std::move(_r); }  break;
-        case 2: { QDBusPendingReply<bool> _r = _t->boolDbusReply();
+        case 2: { MyList _r = _t->typeAlias();
+            if (_a[0]) *reinterpret_cast< MyList*>(_a[0]) = std::move(_r); }  break;
+        case 3: { QList<QualMe> _r = _t->genericWithoutFullyQual();
+            if (_a[0]) *reinterpret_cast< QList<QualMe>*>(_a[0]) = std::move(_r); }  break;
+        case 4: { QList<MyObj2::QualMe> _r = _t->genericFullyQual();
+            if (_a[0]) *reinterpret_cast< QList<MyObj2::QualMe>*>(_a[0]) = std::move(_r); }  break;
+        case 5: { MyObj2::MyList _r = _t->fullTypeAlias();
+            if (_a[0]) *reinterpret_cast< MyObj2::MyList*>(_a[0]) = std::move(_r); }  break;
+        case 6: { QDBusPendingReply<bool> _r = _t->boolDbusReply();
             if (_a[0]) *reinterpret_cast< QDBusPendingReply<bool>*>(_a[0]) = std::move(_r); }  break;
-        case 3: { QDBusPendingReply<> _r = _t->voidDbusReply();
+        case 7: { QDBusPendingReply<> _r = _t->voidDbusReply();
             if (_a[0]) *reinterpret_cast< QDBusPendingReply<>*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -671,13 +703,13 @@ int MyObj2::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 8)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 8;
     }
     return _id;
 }
