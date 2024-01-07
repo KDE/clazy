@@ -66,25 +66,29 @@ namespace { // annonymous
     struct AnnonFoo {};
 };
 
+using namespace std;
 class MyObj2 : public QObject
 {
+public:
     struct QualMe {};
     using MyList = QList<QualMe>; // QualMe is not fully qualified here
 Q_OBJECT
 Q_SIGNALS:
     void mySig(AnnonFoo);
 public Q_SLOTS:
-    inline std::pair<bool,QualMe> closeAllVaults() // Warn
-    {
-        return {};
-    }
+    inline std::pair<bool,QualMe> unqualPairParam() {return {};} // Warn
+    inline pair<bool,QualMe> unqualPairClass() {return {};} // Warn
+    inline std::pair<bool, MyObj2::QualMe> fullyQUalPair() {return {};} // OK
     inline MyList typeAlias() {return {};} // WARN
     inline QList<QualMe> genericWithoutFullyQual() {return {};} // WARN
     inline QList<MyObj2::QualMe> genericFullyQual() {return {};} // OK
     inline MyObj2::MyList fullTypeAlias() {return {};} // OK
+    inline QDBusPendingReply<QualMe> UnqualGenericDbusReply() {return {};} // WARN
     inline QDBusPendingReply<bool> boolDbusReply() {return {};} // OK
     inline QDBusPendingReply<> voidDbusReply() {return {};} // OK
 };
+
+Q_DECLARE_METATYPE(MyObj2::QualMe);
 
 #if QT_VERSION_MAJOR == 5
 #include "main.qt5.moc_"

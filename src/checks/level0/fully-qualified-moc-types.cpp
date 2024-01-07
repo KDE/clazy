@@ -94,14 +94,30 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
 
     if (auto *ptr = t.getTypePtrOrNull(); ptr && ptr->isRecordType()) {
         typeName = clazy::name(t.getUnqualifiedType(), lo(), /*asWritten=*/true); // Ignore qualifiers like const here
-        if (typeName == "QPrivateSignal"
-            || typeName.find("QDBusPendingReply<") != std::string::npos // QDBusPendingReply is mostly used in generated code and causes weird Qt5 issues
-        ) {
+        if (typeName == "QPrivateSignal") {
             return true;
         }
 
         if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
             qualifiedTypeName = typedefDecl->getDecl()->getQualifiedNameAsString();
+        } else if (auto specType = ptr->getAs<TemplateSpecializationType>()) {
+            // In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void> ---
+            // Thus we need to do all of the shenanigans below
+            // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
+            std::vector<TemplateArgument> args;
+            for (auto arg : specType->template_arguments()) {
+                args.push_back(TemplateArgument{arg.getAsType()});
+            }
+            QualType specializedType = m_astContext.getTemplateSpecializationType(specType->getTemplateName(), args);
+            qualifiedTypeName = specializedType.getAsString(m_astContext.getPrintingPolicy());
+            std::string qualifiedTypePrefix = specType->getAsRecordDecl()->getQualifiedNameAsString();
+            std::string unqualifiedTypePrefix = specType->getAsRecordDecl()->getNameAsString();
+
+            // We would miss namespace prefixes here otherwise
+            if (qualifiedTypeName.compare(0, unqualifiedTypePrefix.length(), unqualifiedTypePrefix) == 0) {
+                qualifiedTypeName.replace(0, unqualifiedTypePrefix.length(), qualifiedTypePrefix);
+            }
+
         } else if (auto *decl = ptr->getAsRecordDecl()) {
             if (decl->isInAnonymousNamespace()) {
                 return true; // Ignore anonymous namespaces
