@@ -87,6 +87,16 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 }
 
+static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo)
+{
+    if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
+        return typedefDecl->getDecl()->getQualifiedNameAsString();
+    } else if (auto recordDecl = ptr->getAsRecordDecl()) {
+        return recordDecl->getQualifiedNameAsString();
+    }
+    return QualType::getFromOpaquePtr(ptr).getAsString(lo);
+}
+
 bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, std::string &typeName) const
 {
     qualifiedTypeName.clear();
@@ -98,45 +108,26 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
             return true;
         }
 
-        if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
-            qualifiedTypeName = typedefDecl->getDecl()->getQualifiedNameAsString();
-        } else if (auto specType = ptr->getAs<TemplateSpecializationType>()) {
+        if (auto specType = ptr->getAs<TemplateSpecializationType>(); specType && !ptr->getAs<TypedefType>()) {
             // In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void>
             // Thus we need to do all of the shenanigans below
             // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
-            std::vector<TemplateArgument> args;
+            std::string str = getQualifiedNameOfType(specType, lo()) + "<";
+            bool firstArg = true;
             for (auto arg : specType->template_arguments()) { // We reconstruct the type with the explicitly specified template params
-                if (auto *argTypePtr = arg.getAsType().getTypePtrOrNull(); argTypePtr && argTypePtr->isRecordType()) {
-                    if (auto *typdefPtr = argTypePtr->getAs<TypedefType>()) { // Don't resolve underlying record type for typedefs
-                        args.push_back(TemplateArgument{QualType::getFromOpaquePtr(typdefPtr->getDecl()->getTypeForDecl())});
-                    } else {
-                        args.push_back(TemplateArgument{QualType::getFromOpaquePtr(argTypePtr->getAsRecordDecl()->getTypeForDecl())});
-                    }
-                } else {
-                    args.push_back(TemplateArgument{arg.getAsType()}); // trivial types like bool
+                if (!firstArg) {
+                    str += ", ";
                 }
+                firstArg = false;
+                str += getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo());
             }
-            // Get the name with generic params, this will result in sth. like "QDBusPendingReply<MyObj2::QualMe>"
-            QualType specializedType = m_astContext.getTemplateSpecializationType(specType->getTemplateName(), args);
-            qualifiedTypeName = specializedType.getAsString(m_astContext.getPrintingPolicy());
+            str += ">";
 
-            // the assigned constructed might miss the namespace prefix, replace it if needed
-            // We could construct the whole qualifiedTypeName based on the qualifiedTypePrefix and generic params above,
-            // but that would be more hacky due to spaces and such
-            std::string qualifiedTypePrefix = specType->getAsRecordDecl()->getQualifiedNameAsString();
-            std::string unqualifiedTypePrefix = specType->getAsRecordDecl()->getNameAsString();
-            if (qualifiedTypeName.compare(0, unqualifiedTypePrefix.length(), unqualifiedTypePrefix) == 0) {
-                qualifiedTypeName.replace(0, unqualifiedTypePrefix.length(), qualifiedTypePrefix);
-            }
-
-        } else if (auto *decl = ptr->getAsRecordDecl()) {
-            if (decl->isInAnonymousNamespace()) {
-                return true; // Ignore anonymous namespaces
-            }
-
-            if (auto *declRecordType = decl->getTypeForDecl()) {
-                qualifiedTypeName = declRecordType->getCanonicalTypeInternal().getAsString(lo());
-            }
+            qualifiedTypeName = str;
+        } else if (auto recordDecl = ptr->getAsRecordDecl(); recordDecl && recordDecl->isInAnonymousNamespace()) {
+            return true;
+        } else {
+            qualifiedTypeName = getQualifiedNameOfType(ptr, lo());
         }
         return qualifiedTypeName.empty() || typeName == qualifiedTypeName;
     }
