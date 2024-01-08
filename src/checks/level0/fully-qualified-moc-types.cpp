@@ -105,24 +105,26 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
             // Thus we need to do all of the shenanigans below
             // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
             std::vector<TemplateArgument> args;
-            for (auto arg : specType->template_arguments()) {
+            for (auto arg : specType->template_arguments()) { // We reconstruct the type with the explicitly specified template params
                 if (auto *argTypePtr = arg.getAsType().getTypePtrOrNull(); argTypePtr && argTypePtr->isRecordType()) {
-                    if (auto *typdefPtr = argTypePtr->getAs<TypedefType>()) {
+                    if (auto *typdefPtr = argTypePtr->getAs<TypedefType>()) { // Don't resolve underlying record type for typedefs
                         args.push_back(TemplateArgument{QualType::getFromOpaquePtr(typdefPtr->getDecl()->getTypeForDecl())});
                     } else {
-                        clang::QualType qualType = QualType::getFromOpaquePtr(argTypePtr->getAsRecordDecl()->getTypeForDecl());
-                        args.push_back(TemplateArgument{qualType});
+                        args.push_back(TemplateArgument{QualType::getFromOpaquePtr(argTypePtr->getAsRecordDecl()->getTypeForDecl())});
                     }
                 } else {
-                    args.push_back(TemplateArgument{arg.getAsType()}); // trivial types like booöean
+                    args.push_back(TemplateArgument{arg.getAsType()}); // trivial types like bool
                 }
             }
+            // Get the name with generic params, this will result in sth. like "QDBusPendingReply<MyObj2::QualMe>"
             QualType specializedType = m_astContext.getTemplateSpecializationType(specType->getTemplateName(), args);
             qualifiedTypeName = specializedType.getAsString(m_astContext.getPrintingPolicy());
+
+            // the assigned constructed might miss the namespace prefix, replace it if needed
+            // We could construct the whole qualifiedTypeName based on the qualifiedTypePrefix and generic params above,
+            // but that would be more hacky due to spaces and such
             std::string qualifiedTypePrefix = specType->getAsRecordDecl()->getQualifiedNameAsString();
             std::string unqualifiedTypePrefix = specType->getAsRecordDecl()->getNameAsString();
-
-            // We would miss namespace prefixes here otherwise
             if (qualifiedTypeName.compare(0, unqualifiedTypePrefix.length(), unqualifiedTypePrefix) == 0) {
                 qualifiedTypeName.replace(0, unqualifiedTypePrefix.length(), qualifiedTypePrefix);
             }
