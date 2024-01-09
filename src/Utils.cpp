@@ -125,15 +125,17 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
         return true;
     }
 
-    static const std::vector<StringRef> method_blacklist = {"isDestroyed",
-                                                            "isRecursive", // TODO: Use qualified name instead ?
-                                                            "q_func",
-                                                            "d_func",
-                                                            "begin",
-                                                            "end",
-                                                            "data",
-                                                            "fragment",
-                                                            "glIsRenderbuffer"};
+    static const std::vector<StringRef> method_blacklist = {
+        "isDestroyed",
+        "isRecursive", // TODO: Use qualified name instead ?
+        "q_func",
+        "d_func",
+        "begin",
+        "end",
+        "data",
+        "fragment",
+        "glIsRenderbuffer",
+    };
 
     auto *memberCall = dyn_cast<MemberExpr>(stm);
     if (memberCall) {

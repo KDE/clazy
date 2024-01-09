@@ -53,18 +53,20 @@ static bool functionIsOk(StringRef name)
 
 static bool methodIsOK(const std::string &name)
 {
-    static const std::vector<std::string> whitelist = {"QList::begin",
-                                                       "QList::end",
-                                                       "QVector::begin",
-                                                       "QVector::end",
-                                                       "QHash::begin",
-                                                       "QHash::end",
-                                                       "QByteArray::data",
-                                                       "QBasicMutex::isRecursive",
-                                                       "QLinkedList::begin",
-                                                       "QLinkedList::end",
-                                                       "QDataBuffer::first",
-                                                       "QOpenGLFunctions::glIsRenderbuffer"};
+    static const std::vector<std::string> whitelist = {
+        "QList::begin",
+        "QList::end",
+        "QVector::begin",
+        "QVector::end",
+        "QHash::begin",
+        "QHash::end",
+        "QByteArray::data",
+        "QBasicMutex::isRecursive",
+        "QLinkedList::begin",
+        "QLinkedList::end",
+        "QDataBuffer::first",
+        "QOpenGLFunctions::glIsRenderbuffer",
+    };
     return clazy::contains(whitelist, name);
 }
 
