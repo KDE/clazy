@@ -160,5 +160,7 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         }
     }
 
-    emitWarning(clazy::getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + record->getQualifiedNameAsString() + ')', fixits);
+    auto *typedefType = t->getAs<TypedefType>(); // Typedefs in internal Qt code, like QStringList should not be resolved
+    const std::string name = typedefType ? typedefType->getDecl()->getNameAsString() : record->getNameAsString();
+    emitWarning(clazy::getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + name + ')', fixits);
 }

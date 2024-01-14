@@ -7,7 +7,7 @@
         },
         {
             "filename" : "main_cpp17.cpp",
-            "qt_major_versions" : [5],
+            "qt_major_versions" : [5, 6],
             "cppStandards": ["c++17"],
             "has_fixits" : true
         },

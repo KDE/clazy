@@ -26,6 +26,7 @@ const std::vector<StringRef> &clazy::qtContainers()
 {
     static const std::vector<StringRef> classes = {
         "QListSpecialMethods",
+        "QListSpecialMethodsBase", // Qt6
         "QList",
         "QVector",
         "QVarLengthArray",
@@ -52,6 +53,7 @@ const std::vector<StringRef> &clazy::qtCOWContainers()
 {
     static const std::vector<StringRef> classes = {
         "QListSpecialMethods",
+        "QListSpecialMethodsBase", // Qt6
         "QList",
         "QVector",
         "QMap",
