@@ -6,3 +6,5 @@ qcolor-from-literal/main.cpp:12:15: warning: The QColor ctor taking ints is chea
 qcolor-from-literal/main.cpp:13:15: warning: The QColor ctor taking QRgba64 is cheaper than one taking string literals [-Wclazy-qcolor-from-literal]
 qcolor-from-literal/main.cpp:14:15: warning: The QColor ctor taking QRgba64 is cheaper than one taking string literals [-Wclazy-qcolor-from-literal]
 qcolor-from-literal/main.cpp:18:17: warning: The QColor ctor taking RGB int value is cheaper than one taking string literals [-Wclazy-qcolor-from-literal]
+qcolor-from-literal/main.cpp:21:28: warning: Pattern does not match any supported one by QColor, check the documentation [-Wclazy-qcolor-from-literal]
+qcolor-from-literal/main.cpp:22:28: warning: QColor pattern may only contain valid hexadecimal values [-Wclazy-qcolor-from-literal]

@@ -9,6 +9,7 @@
 #include "HierarchyUtils.h"
 #include "StringUtils.h"
 
+#include <cctype>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
@@ -45,32 +46,23 @@ static bool isQuadrupleDigitRgb(llvm::StringRef ref)
     return ref.size() == 13;
 }
 
-static bool handleStringLiteral(const StringLiteral *literal)
+static bool isStringColorLiteralPattern(StringRef str)
 {
-    if (!literal) {
-        return false;
-    }
-
-    llvm::StringRef str = literal->getString();
     if (!str.startswith("#")) {
         return false;
     }
-
     return isSingleDigitRgb(str) || isDoubleDigitRgb(str) || isDoubleDigitRgba(str) || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str);
 }
 
 class QColorFromLiteral_Callback : public ClazyAstMatcherCallback
 {
 public:
-    QColorFromLiteral_Callback(CheckBase *base)
-        : ClazyAstMatcherCallback(base)
-    {
-    }
+    using ClazyAstMatcherCallback::ClazyAstMatcherCallback;
 
     void run(const MatchFinder::MatchResult &result) override
     {
         auto *lt = result.Nodes.getNodeAs<StringLiteral>("myLiteral");
-        const Expr *replaceExpr = lt; // When QColor::fromString is used, we want to wrap the QString constructor around it
+        const Expr *replaceExpr = lt; // When QColor::fromString is used, we want to wrap the QColor constructor around it
         bool isStaticFromString = false;
         if (auto res = result.Nodes.getNodeAs<CallExpr>("methodCall"); res && res->getNumArgs() == 1) {
             if (Expr *argExpr = const_cast<Expr *>(res->getArg(0))) {
@@ -79,13 +71,30 @@ public:
                 isStaticFromString = true;
             }
         }
-        if (!handleStringLiteral(lt)) {
+        if (!lt) {
             return;
         }
+
         llvm::StringRef str = lt->getString();
+        if (!str.startswith("#")) {
+            return;
+        }
+
         const bool singleDigit = isSingleDigitRgb(str);
         const bool doubleDigit = isDoubleDigitRgb(str);
         const bool doubleDigitA = isDoubleDigitRgba(str);
+        if (bool isAnyValidPattern = singleDigit || doubleDigit || doubleDigitA || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str); !isAnyValidPattern) {
+            m_check->emitWarning(clazy::getLocStart(replaceExpr), "Pattern does not match any supported one by QColor, check the documentation");
+            return;
+        }
+
+        for (unsigned int i = 1; i < str.size(); ++i) {
+            if (!isxdigit(str[i])) {
+                m_check->emitWarning(clazy::getLocStart(replaceExpr), "QColor pattern may only contain valid hexadecimal values");
+                return;
+            }
+        }
+
         if (singleDigit || doubleDigit || doubleDigitA) {
             const int increment = singleDigit ? 1 : 2;
             int endPos = 1;
@@ -164,7 +173,7 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
     }
 
     auto *lt = clazy::getFirstChildOfType2<StringLiteral>(call->getArg(0));
-    if (handleStringLiteral(lt)) {
+    if (lt && isStringColorLiteralPattern(lt->getString())) {
         emitWarning(lt, "The ctor taking ints is cheaper than QColor::setNamedColor(QString)");
     }
 }

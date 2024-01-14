@@ -16,4 +16,8 @@ void test()
     c4.setNamedColor("#001020"); // Warning
     c4.setNamedColor(QLatin1String("#001020")); // Warning
     takingColor("#001122"); // Warning
+
+    // Invalid patterns
+    QColor invalidPattern1("#0000011112222"); // Warning, one digit too much
+    QColor invalidPattern2("#G00011112222"); // Warning, not a proper hex code
 }
