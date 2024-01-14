@@ -92,6 +92,7 @@ class Test:
         self.requires_std_filesystem = False
         self.extra_definitions = False
         self.qt_modules_includes = False
+        self.fixed_file_base = None
 
     def filename(self):
         if len(self.filenames) == 1:
@@ -805,7 +806,7 @@ def run_unit_test_for_each_configuration(test, is_standalone):
         for cppStandard in test.cppStandards:
             if cppStandard == "c++14" and qt_major_version == 6: # Qt6 requires C++17
                 continue
-            if cppStandard == "c++17" and qt_major_version == 5: # valid combination but let's skip it
+            if cppStandard == "c++17" and qt_major_version == 5 and len(test.cppStandards) > 1: # valid combination but let's skip it unless it was the only specified standard
                 continue
             result = result and run_unit_test(test, is_standalone, cppStandard, qt_major_version)
     return result

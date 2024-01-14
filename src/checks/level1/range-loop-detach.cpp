@@ -154,7 +154,8 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
             SourceLocation start = clazy::getLocStart(containerExpr);
-            fixits.push_back(clazy::createInsertion(start, "qAsConst("));
+            std::string insertion = lo().CPlusPlus17 ? "std::as_const(" : "qAsConst(";
+            fixits.push_back(clazy::createInsertion(start, insertion));
             // SourceLocation end = getLocEnd(containerExpr);
             fixits.push_back(clazy::createInsertion(end, ")"));
         }

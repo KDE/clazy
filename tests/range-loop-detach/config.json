@@ -6,6 +6,12 @@
             "has_fixits" : true
         },
         {
+            "filename" : "main_cpp17.cpp",
+            "qt_major_versions" : [5],
+            "cppStandards": ["c++17"],
+            "has_fixits" : true
+        },
+        {
             "filename" : "bug370609.cpp",
             "qt_major_versions" : [5],
             "has_fixits" : true
