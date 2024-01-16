@@ -1,21 +1,18 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_versions" : [5]
+            "filename": "main.cpp"
         },
         {
-            "filename" : "fill-char-overloads.cpp",
-            "qt_major_versions" : [5],
-            "env" :
-                {
-                    "CLAZY_EXTRA_OPTIONS" : "qstring-arg-fillChar-overloads"
-                }
+            "filename": "fill-char-overloads.cpp",
+            "env": {
+                "CLAZY_EXTRA_OPTIONS": "qstring-arg-fillChar-overloads"
+            }
         },
         {
-            "filename" : "qlatin1string.cpp",
-            "qt_major_versions" : [5],
-            "minimum_qt_version" : 51400
+            "filename": "qlatin1string.cpp",
+            "qt_major_versions": [5],
+            "minimum_qt_version": 51400
         }
     ]
 }

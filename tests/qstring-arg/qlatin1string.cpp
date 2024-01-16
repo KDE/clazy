@@ -1,6 +1,6 @@
 #include <QtCore/QString>
 
-void test()
+void test() // The QChar conversion is ambiguous in Qt6 resulting in a compilation error
 {
     int a;
     QLatin1String("%1").arg(1); // Warn
