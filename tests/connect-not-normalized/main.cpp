@@ -37,9 +37,8 @@ class MyObj :public QObject
 public:
     MyObj()
     {
-        // volker mentioned this not working, but I can't reproduce
         connect(ui->host, SIGNAL(textChanged(QString)), // OK
-                SLOT(validateHostAddress(const QString&))); // OK
+                SLOT(validateHostAddress(const QString&))); // WARN
     }
 
     MyObj *ui;

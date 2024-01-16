@@ -4,4 +4,4 @@ connect-not-normalized/main.cpp:18:5: warning: Signature is not normalized. Use 
 connect-not-normalized/main.cpp:20:5: warning: Signature is not normalized. Use QVariant instead of const QVariant & [-Wclazy-connect-not-normalized]
 connect-not-normalized/main.cpp:26:19: warning: Signature is not normalized. Use destroyed(int,int) instead of destroyed(int, int) [-Wclazy-connect-not-normalized]
 connect-not-normalized/main.cpp:27:19: warning: Signature is not normalized. Use void foo(int) instead of void foo(const int) [-Wclazy-connect-not-normalized]
-connect-not-normalized/main.cpp:42:17: warning: Signature is not normalized. Use validateHostAddress(QString) instead of validateHostAddress(const QString&) [-Wclazy-connect-not-normalized]
+connect-not-normalized/main.cpp:41:17: warning: Signature is not normalized. Use validateHostAddress(QString) instead of validateHostAddress(const QString&) [-Wclazy-connect-not-normalized]
