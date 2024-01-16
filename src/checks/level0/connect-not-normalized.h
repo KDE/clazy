@@ -32,8 +32,9 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:
-    bool handleQ_ARG(clang::CXXConstructExpr *);
+    bool handleQ_ARG(clang::Stmt *);
     bool handleConnect(clang::CallExpr *);
+    bool checkNormalizedLiteral(clang::StringLiteral *, clang::Expr *);
 };
 
 #endif

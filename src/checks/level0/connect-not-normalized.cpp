@@ -31,15 +31,21 @@ ConnectNotNormalized::ConnectNotNormalized(const std::string &name, ClazyContext
 
 void ConnectNotNormalized::VisitStmt(clang::Stmt *stmt)
 {
-    if (handleQ_ARG(dyn_cast<CXXConstructExpr>(stmt))) {
-        return;
-    }
-
-    handleConnect(dyn_cast<CallExpr>(stmt));
+    handleQ_ARG(stmt) || handleConnect(dyn_cast<CallExpr>(stmt));
 }
 
-bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
+bool ConnectNotNormalized::handleQ_ARG(clang::Stmt *stmt)
 {
+    if (auto *casted = dyn_cast<CallExpr>(stmt); casted && casted->getNumArgs() == 2) {
+        if (auto *func = casted->getDirectCallee()) {
+            const std::string retTypeName = func->getReturnType().getAsString(lo());
+            if (retTypeName == "QMetaMethodArgument" || retTypeName == "QMetaMethodReturnArgument") {
+                auto *literal = clazy::getFirstChildOfType2<StringLiteral>(casted->getArg(0));
+                return literal ? checkNormalizedLiteral(literal, casted) : false;
+            }
+        }
+    }
+    auto *expr = dyn_cast<CXXConstructExpr>(stmt);
     if (!expr || expr->getNumArgs() != 2) {
         return false;
     }
@@ -55,10 +61,10 @@ bool ConnectNotNormalized::handleQ_ARG(CXXConstructExpr *expr)
     }
 
     auto *sl = clazy::getFirstChildOfType2<clang::StringLiteral>(expr->getArg(0));
-    if (!sl) {
-        return false;
-    }
-
+    return sl && checkNormalizedLiteral(sl, expr);
+}
+bool ConnectNotNormalized::checkNormalizedLiteral(clang::StringLiteral *sl, clang::Expr *expr)
+{
     const std::string original = sl->getString().str();
     const std::string normalized = clazy::normalizedType(original.c_str());
 
