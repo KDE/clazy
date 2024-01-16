@@ -102,7 +102,11 @@ void test356699()
 void test356755()
 {
     S s;
+#if QT_VERSION_MAJOR == 5
     qSort(s.m_listOfPointers.begin(), s.m_listOfPointers.end());
+#else
+    std::sort(s.m_listOfPointers.begin(), s.m_listOfPointers.end());
+#endif
 }
 
 void testFill() {
