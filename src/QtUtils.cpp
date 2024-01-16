@@ -149,7 +149,7 @@ bool clazy::isQtAssociativeContainer(clang::CXXRecordDecl *record)
 
 bool clazy::isQtAssociativeContainer(StringRef className)
 {
-    static const std::vector<StringRef> classes = {"QSet", "QMap", "QHash"};
+    static const std::vector<StringRef> classes = {"QSet", "QMap", "QHash", "QMultiHash", "QMultiMap"};
     return clazy::contains(classes, className);
 }
 
