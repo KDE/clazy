@@ -38,8 +38,17 @@ static bool isInterestingCall(CallExpr *call)
         return false;
     }
 
-    static const std::vector<std::string> methods =
-        {"QVector::toList", "QList::toVector", "QMap::values", "QMap::keys", "QSet::toList", "QSet::values", "QHash::values", "QHash::keys"};
+    static const std::vector<std::string> methods = {
+        "QVector::toList",
+        "QList::toVector",
+        "QMap::values",
+        "QMap::keys",
+        "QSet::toList",
+        "QSet::values",
+        "QHash::values",
+        "QHash::keys",
+        "QList::toList", // In case one has code compiling against Qt6, but Qt5 compat
+    };
 
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
