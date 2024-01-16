@@ -909,9 +909,12 @@ def run_fixit_tests(requested_checks):
 def dump_ast(check):
     for test in check.tests:
         for cppStandard in test.cppStandards:
-            ast_filename = test.filename() + f"_{cppStandard}.ast"
-            run_command(dump_ast_command(test, cppStandard) + " > " + ast_filename)
-            print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
+            for version in test.qt_major_versions:
+                if version == 6 and cppStandard == "c++14":
+                    continue # Qt6 requires C++17
+                ast_filename = test.filename() + f"_{cppStandard}_{version}.ast"
+                run_command(dump_ast_command(test, cppStandard, version) + " > " + ast_filename)
+                print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
 
 # -------------------------------------------------------------------------------
 def load_checks(all_check_names):
