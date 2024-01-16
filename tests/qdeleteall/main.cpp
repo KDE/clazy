@@ -67,6 +67,9 @@ int main()
     qDeleteAll(m.keys()); // warning
     qDeleteAll(keys()); // ok
 
-    qDeleteAll(h.values(1)); // warning
+#if QT_VERSION_MAJOR == 5
+    qDeleteAll(h.values(1)); // OK, we have specified a key
+#endif
+    qDeleteAll(mh.values(1)); // We only want to delete a subset of the container - ok
 
 }
