@@ -51,6 +51,27 @@ class SourceManager;
 
 using namespace clang;
 
+inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
+{
+    if (expected_arguments != -1 && (int)func->param_size() != expected_arguments) {
+        return false;
+    }
+
+    for (auto *param : Utils::functionParameters(func)) {
+        clang::QualType qt = param->getType();
+        const clang::Type *t = qt.getTypePtrOrNull();
+        if (!t) {
+            continue;
+        }
+
+        if (const clang::Type *realT = t->getPointeeType().getTypePtrOrNull(); realT && realT->isCharType()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 enum Fixit {
     FixitNone = 0,
     QLatin1StringAllocations = 0x1,
@@ -174,7 +195,7 @@ static StringLiteral *stringLiteralForCall(Stmt *call)
     }
 
     std::vector<StringLiteral *> literals;
-    clazy::getChilds(call, literals, 2);
+    clazy::getChilds(call, literals, 3);
     return literals.empty() ? nullptr : literals[0];
 }
 
@@ -192,7 +213,8 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 #if LLVM_VERSION_MAJOR >= 10
     // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
     // Do it manually.
-    if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")) {
+    if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")
+        || ctorExpr->getConstructor()->getQualifiedNameAsString() == "QList<QString>::QList") { // In Qt6, QStringList is an alias
         auto *p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
         while (p) {
             if (clazy::isOfClass(p, "QString")) {
@@ -234,9 +256,10 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
 
     bool isQLatin1String = false;
     std::string paramType;
-    if (clazy::hasCharPtrArgument(ctorDecl, 1)) {
+    if (hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
-    } else if (ctorDecl->param_size() == 1 && clazy::hasArgumentOfType(ctorDecl, "QLatin1String", lo())) {
+    } else if (ctorDecl->param_size() == 1
+               && (clazy::hasArgumentOfType(ctorDecl, "QLatin1String", lo()) || clazy::hasArgumentOfType(ctorDecl, "QLatin1StringView", lo()))) {
         paramType = "QLatin1String";
         isQLatin1String = true;
     } else {
@@ -568,7 +591,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
         return;
     }
 
-    if (!clazy::hasCharPtrArgument(methodDecl)) {
+    if (!hasCharPtrArgument(methodDecl)) {
         return;
     }
 
@@ -578,6 +601,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     clazy::getChilds<StringLiteral>(stm, literals, 2);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
+        llvm::errs() << "literal non empty\n";
         if (literals[0]->getNumConcatenated() > 1) {
             return; // Nothing to do here, MSVC doesn't like it
         }
@@ -611,10 +635,15 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
         return;
     }
 
-    if (!Utils::callHasDefaultArguments(callExpr) || !clazy::hasCharPtrArgument(functionDecl, 2)) { // QString::fromLatin1("foo", 1) is ok
+    bool isKnownLiteralOverload = false;
+    for (auto e : Utils::functionParameters(functionDecl)) {
+        if (e->getType().getAsString(lo()) == "QByteArrayView") {
+            isKnownLiteralOverload = true;
+        }
+    }
+    if (!isKnownLiteralOverload && (!Utils::callHasDefaultArguments(callExpr) || !hasCharPtrArgument(functionDecl, 2))) { // QString::fromLatin1("foo", 1) is ok
         return;
     }
-
     if (!containsStringLiteralNoCallExpr(callExpr)) {
         return;
     }
@@ -627,7 +656,7 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
     }
 
     std::vector<ConditionalOperator *> ternaries;
-    clazy::getChilds(callExpr, ternaries, 2);
+    clazy::getChilds(callExpr, ternaries); // In Qt5 it is always 2 levels down, but in Qt6 more
     if (!ternaries.empty()) {
         auto *ternary = ternaries[0];
         if (Utils::ternaryOperatorIsOfStringLiteral(ternary)) {
@@ -650,7 +679,10 @@ void QStringAllocations::VisitFromLatin1OrUtf8(Stmt *stmt)
 void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
 {
     auto *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
-    if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo())) {
+    if (!callExpr) {
+        return;
+    }
+    if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo()) && !Utils::isAssignOperator(callExpr, "QString", "QLatin1StringView", lo())) {
         return;
     }
 

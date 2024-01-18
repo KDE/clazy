@@ -18,37 +18,8 @@
 
 #include <clang/AST/Decl.h>
 
-#include <string>
-
 namespace clazy
 {
-inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
-{
-    if (expected_arguments != -1 && (int)func->param_size() != expected_arguments) {
-        return false;
-    }
-
-    for (auto *param : Utils::functionParameters(func)) {
-        clang::QualType qt = param->getType();
-        const clang::Type *t = qt.getTypePtrOrNull();
-        if (!t) {
-            continue;
-        }
-
-        const clang::Type *realT = t->getPointeeType().getTypePtrOrNull();
-
-        if (!realT) {
-            continue;
-        }
-
-        if (realT->isCharType()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 inline clang::ValueDecl *valueDeclForCallArgument(clang::CallExpr *call, unsigned int argIndex)
 {
     if (!call || call->getNumArgs() <= argIndex) {

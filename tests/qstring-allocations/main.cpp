@@ -186,14 +186,14 @@ void TestCharsets::test2()
 
 
 
-
-
+#if QT_MAJOR_VERSION == 5
 #include <QtCore/QRegExp>
 void testBlacklistedQRegExp()
 {
     QRegExp exp1("literal");
     QRegExp exp2(QLatin1String("literal"));
 }
+#endif
 
 
 void charsetEdgeCase()
@@ -214,8 +214,8 @@ void testEmpty()
 
 void test_bug358732()
 {
-    QString("foo").sprintf("0x%02X", 0x1E); // Warn and use QSL
-    QString("").sprintf("0x%02X", 0x1E); // Warn and use QSL
+    QString("foo").asprintf("0x%02X", 0x1E); // Warn and use QSL
+    QString("").asprintf("0x%02X", 0x1E); // Warn and use QSL
 }
 
 
