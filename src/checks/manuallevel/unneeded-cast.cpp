@@ -28,6 +28,46 @@
 using namespace llvm;
 using namespace clang;
 
+// Returns if callExpr is a call to qobject_cast()
+inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = nullptr, clang::CXXRecordDecl **castFrom = nullptr)
+{
+    if (auto *callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
+        clang::FunctionDecl *func = callExpr->getDirectCallee();
+        if (!func || clazy::name(func) != "qobject_cast") {
+            return false;
+        }
+
+        if (castFrom) {
+            clang::Expr *expr = callExpr->getArg(0);
+            if (auto *implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
+                if (implicitCast->getCastKind() == clang::CK_DerivedToBase) {
+                    expr = implicitCast->getSubExpr();
+                }
+            }
+            clang::QualType qt = clazy::pointeeQualType(expr->getType());
+            if (!qt.isNull()) {
+                clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
+                *castFrom = record ? record->getCanonicalDecl() : nullptr;
+            }
+        }
+
+        if (castTo) {
+            const auto *templateArgs = func->getTemplateSpecializationArgs();
+            if (templateArgs->size() == 1) {
+                const clang::TemplateArgument &arg = templateArgs->get(0);
+                clang::QualType qt = clazy::pointeeQualType(arg.getAsType());
+                if (!qt.isNull()) {
+                    clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
+                    *castTo = record ? record->getCanonicalDecl() : nullptr;
+                }
+            }
+        }
+        return true;
+    }
+
+    return false;
+}
+
 UnneededCast::UnneededCast(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
@@ -95,7 +135,7 @@ bool UnneededCast::handleQObjectCast(Stmt *stm)
     CXXRecordDecl *castTo = nullptr;
     CXXRecordDecl *castFrom = nullptr;
 
-    if (!clazy::is_qobject_cast(stm, &castTo, &castFrom)) {
+    if (!is_qobject_cast(stm, &castTo, &castFrom)) {
         return false;
     }
 

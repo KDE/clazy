@@ -5,6 +5,8 @@
 */
 
 #include "QtUtils.h"
+#include "FunctionUtils.h"
+#include "MacroUtils.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -402,4 +404,28 @@ bool clazy::recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::stri
     }
 
     return false;
+}
+
+clang::ValueDecl *clazy::signalReceiverForConnect(clang::CallExpr *call)
+{
+    if (!call || call->getNumArgs() < 5) {
+        return nullptr;
+    }
+
+    return clazy::valueDeclForCallArgument(call, 2);
+}
+
+clang::ValueDecl *clazy::signalSenderForConnect(clang::CallExpr *call)
+{
+    return clazy::valueDeclForCallArgument(call, 0);
+}
+
+bool clazy::isBootstrapping(const clang::PreprocessorOptions &ppOpts)
+{
+    return clazy::isPredefined(ppOpts, "QT_BOOTSTRAPPED");
+}
+
+bool clazy::isInForeach(const clang::ASTContext *context, clang::SourceLocation loc)
+{
+    return clazy::isInAnyMacro(context, loc, {"Q_FOREACH", "foreach"});
 }

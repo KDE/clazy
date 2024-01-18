@@ -6,6 +6,7 @@
 
 #include "overloaded-signal.h"
 #include "AccessSpecifierManager.h"
+#include "FunctionUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"

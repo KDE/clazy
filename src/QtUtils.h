@@ -7,10 +7,7 @@
 #ifndef CLAZY_QT_UTILS_H
 #define CLAZY_QT_UTILS_H
 
-#include "FunctionUtils.h"
-#include "MacroUtils.h"
 #include "StringUtils.h"
-#include "TypeUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 
@@ -134,10 +131,7 @@ bool isQtContainer(const clang::CXXRecordDecl *);
 /**
  * Returns true if -DQT_BOOTSTRAPPED was passed to the compiler
  */
-inline bool isBootstrapping(const clang::PreprocessorOptions &ppOpts)
-{
-    return clazy::isPredefined(ppOpts, "QT_BOOTSTRAPPED");
-}
+bool isBootstrapping(const clang::PreprocessorOptions &ppOpts);
 
 /**
  * Returns if decl is or derives from QObject
@@ -157,10 +151,7 @@ bool isConvertibleTo(const clang::Type *source, const clang::Type *target);
 /**
  * Returns true if \a loc is in a foreach macro
  */
-inline bool isInForeach(const clang::ASTContext *context, clang::SourceLocation loc)
-{
-    return clazy::isInAnyMacro(context, loc, {"Q_FOREACH", "foreach"});
-}
+bool isInForeach(const clang::ASTContext *context, clang::SourceLocation loc);
 
 /**
  * Returns true if \a record is a java-style iterator
@@ -168,15 +159,6 @@ inline bool isInForeach(const clang::ASTContext *context, clang::SourceLocation 
 bool isJavaIterator(clang::CXXRecordDecl *record);
 
 bool isJavaIterator(clang::CXXMemberCallExpr *call);
-
-/**
- * Returns true if the call is on a java-style iterator class.
- * Returns if sizeof(T) > sizeof(void*), which would make QList<T> inefficient
- */
-inline bool isTooBigForQList(clang::QualType qt, const clang::ASTContext *context)
-{
-    return (int)context->getTypeSize(qt) <= clazy::sizeOfPointer(context, qt);
-}
 
 /**
  * Returns true if a class has a ctor that has a parameter of type paramType.
@@ -221,23 +203,13 @@ clang::CXXMethodDecl *pmfFromUnary(clang::UnaryOperator *uo);
 /**
  * Returns the varDecl for the 1st argument in a connect call
  */
-inline clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call)
-{
-    return clazy::valueDeclForCallArgument(call, 0);
-}
+clang::ValueDecl *signalSenderForConnect(clang::CallExpr *call);
 
 /**
  * Returns the varDecl for 3rd argument in connects that are passed an explicit
  * receiver or context QObject.
  */
-inline clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call)
-{
-    if (!call || call->getNumArgs() < 5) {
-        return nullptr;
-    }
-
-    return clazy::valueDeclForCallArgument(call, 2);
-}
+clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call);
 
 /**
  * Returns the receiver method, in a PMF connect statement.
@@ -252,46 +224,6 @@ inline clang::CXXMethodDecl *receiverMethodForConnect(clang::CallExpr *call)
 
     // It's either third or fourth argument
     return clazy::pmfFromConnect(call, 3);
-}
-
-// Returns if callExpr is a call to qobject_cast()
-inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = nullptr, clang::CXXRecordDecl **castFrom = nullptr)
-{
-    if (auto *callExpr = llvm::dyn_cast<clang::CallExpr>(s)) {
-        clang::FunctionDecl *func = callExpr->getDirectCallee();
-        if (!func || clazy::name(func) != "qobject_cast") {
-            return false;
-        }
-
-        if (castFrom) {
-            clang::Expr *expr = callExpr->getArg(0);
-            if (auto *implicitCast = llvm::dyn_cast<clang::ImplicitCastExpr>(expr)) {
-                if (implicitCast->getCastKind() == clang::CK_DerivedToBase) {
-                    expr = implicitCast->getSubExpr();
-                }
-            }
-            clang::QualType qt = clazy::pointeeQualType(expr->getType());
-            if (!qt.isNull()) {
-                clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
-                *castFrom = record ? record->getCanonicalDecl() : nullptr;
-            }
-        }
-
-        if (castTo) {
-            const auto *templateArgs = func->getTemplateSpecializationArgs();
-            if (templateArgs->size() == 1) {
-                const clang::TemplateArgument &arg = templateArgs->get(0);
-                clang::QualType qt = clazy::pointeeQualType(arg.getAsType());
-                if (!qt.isNull()) {
-                    clang::CXXRecordDecl *record = qt->getAsCXXRecordDecl();
-                    *castTo = record ? record->getCanonicalDecl() : nullptr;
-                }
-            }
-        }
-        return true;
-    }
-
-    return false;
 }
 
 inline bool isUIFile(clang::SourceLocation loc, const clang::SourceManager &sm)

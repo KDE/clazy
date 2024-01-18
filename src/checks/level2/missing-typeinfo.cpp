@@ -12,6 +12,7 @@
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TemplateUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
@@ -26,6 +27,15 @@ class Decl;
 } // namespace clang
 
 using namespace clang;
+
+/**
+ * Returns true if the call is on a java-style iterator class.
+ * Returns if sizeof(T) > sizeof(void*), which would make QList<T> inefficient
+ */
+inline bool checkTooBigForQList(clang::QualType qt, const clang::ASTContext *context)
+{
+    return (int)context->getTypeSize(qt) <= clazy::sizeOfPointer(context, qt);
+}
 
 MissingTypeInfo::MissingTypeInfo(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -55,7 +65,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
     }
 
     const bool isCopyable = qt2.isTriviallyCopyableType(m_astContext);
-    const bool isTooBigForQList = isQList && clazy::isTooBigForQList(qt2, &m_astContext);
+    const bool isTooBigForQList = isQList && checkTooBigForQList(qt2, &m_astContext);
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
         if (sm().isInSystemHeader(clazy::getLocStart(record))) {
