@@ -19,7 +19,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <memory>
 #include <vector>
 
 class ClazyContext;

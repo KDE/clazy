@@ -17,8 +17,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-#include <vector>
-
 class ClazyContext;
 
 using namespace clang;

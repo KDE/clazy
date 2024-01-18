@@ -6,7 +6,6 @@
 
 #include "heap-allocated-small-trivial-type.h"
 #include "ClazyContext.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "StmtBodyRange.h"
 #include "TypeUtils.h"

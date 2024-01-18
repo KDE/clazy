@@ -10,7 +10,6 @@
 #include "qstring-allocations.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "FunctionUtils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"

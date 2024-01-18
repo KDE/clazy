@@ -12,7 +12,6 @@
 
 #include "checkbase.h"
 
-#include <map>
 #include <string>
 #include <vector>
 

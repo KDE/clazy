@@ -9,7 +9,6 @@
 
 #include "virtual-call-ctor.h"
 #include "ClazyContext.h"
-#include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
