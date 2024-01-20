@@ -1,2 +1,0 @@
-qdatetime-utc/main.cpp:7:5: warning: Use QDateTime::currentDateTimeUtc().toTime_t() instead [-Wclazy-qdatetime-utc]
-qdatetime-utc/main.cpp:8:5: warning: Use QDateTime::currentDateTimeUtc() instead [-Wclazy-qdatetime-utc]
