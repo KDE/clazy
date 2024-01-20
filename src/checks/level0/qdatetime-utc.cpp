@@ -75,5 +75,5 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         queueManualFixitWarning(clazy::getLocStart(secondCall));
     }
 
-    emitWarning(clazy::getLocStart(stmt), "Use QDateTime" + replacement + " instead", fixits);
+    emitWarning(clazy::getLocStart(stmt), "Use QDateTime" + replacement + " instead. It is significantly faster", fixits);
 }
