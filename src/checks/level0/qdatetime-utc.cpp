@@ -3,6 +3,7 @@
     SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
 
     SPDX-FileCopyrightText: 2015 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2024 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -40,10 +41,11 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
     const std::string secondMethodName = secondMethod->getQualifiedNameAsString();
-    const bool isTimeT = secondMethodName == "QDateTime::toTime_t";
-    const bool isMsecSinceEpoc = secondMethodName == "QDateTime::toMSecsSinceEpoch"; // Qt6 version and undeprecated of the above
+    const bool isMSecSinceEpoc = secondMethodName == "QDateTime::toTime_t" // Deprecated version
+        || secondMethodName == "QDateTime::toMSecsSinceEpoch"; // Qt6 version and undeprecated of the above
+    const bool isSecSinceEpoc = secondMethodName == "QDateTime::toSecsSinceEpoch";
     const bool isToUtcConversion = secondMethodName == "QDateTime::toUTC";
-    if (!isTimeT && !isMsecSinceEpoc && !isToUtcConversion) {
+    if (!isMSecSinceEpoc && !isSecSinceEpoc && !isToUtcConversion) {
         return;
     }
 
@@ -58,15 +60,17 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    std::string firstmethodName = firstMethod->getQualifiedNameAsString();
-    if (!firstMethod || (firstmethodName != "QDateTime::currentDateTime" && firstmethodName != "QDateTime::currentDateTimeUtc")) {
+    if (auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc); !firstMethod
+        || (firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime"
+            && firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTimeUtc")) {
         return;
     }
 
     std::string replacement = "::currentDateTimeUtc()";
-    if (!isToUtcConversion) {
+    if (isMSecSinceEpoc) {
         replacement = "::currentMSecsSinceEpoch()";
+    } else if (isSecSinceEpoc) {
+        replacement = "::currentSecsSinceEpoch()";
     }
 
     std::vector<FixItHint> fixits;

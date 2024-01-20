@@ -10,4 +10,6 @@ void test()
 #endif
     QDateTime::currentDateTime().toMSecsSinceEpoch(); // Warning
     QDateTime::currentDateTimeUtc().toMSecsSinceEpoch(); // Warning, this may even be improved!
+    QDateTime::currentDateTime().toSecsSinceEpoch(); // Warning
+    QDateTime::currentDateTimeUtc().toSecsSinceEpoch(); // Warning, this may even be improved!
 }
