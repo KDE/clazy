@@ -5,8 +5,8 @@ Source: https://invent.kde.org/sdk/clazy
 
 Files: tests/qcolor-from-literal/*
 Copyright: Alexander Lohnau <alexander.lonau@gmx.de>
-License: CC0-1.0
+License: CC-BY-SA-4.0
 
 Files: docs/checks/README-qcolor-from-literal.md
 Copyright: Alexander Lohnau <alexander.lonau@gmx.de>
-License: CC0-1.0
+License: CC-BY-SA-4.0
