@@ -751,6 +751,8 @@ def run_unit_test(test, is_standalone, cppStandard, qt_major_version):
     output_file = filename + ".out"
     result_file = filename + ".result"
     expected_file = filename + ".expected"
+    if not os.path.exists(expected_file):
+        expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
 
     # Some tests have different output on 32 bit
     if is32Bit() and os.path.exists(expected_file + '.x86'):

@@ -1,0 +1,4 @@
+detaching-temporary/multi_containers.cpp:8:5: warning: Don't call QMultiMap::begin() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/multi_containers.cpp:9:5: warning: Modifying temporary container is pointless and it also detaches [-Wclazy-detaching-temporary]
+detaching-temporary/multi_containers.cpp:15:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/multi_containers.cpp:24:5: warning: Don't call QByteArray::data() on temporary [-Wclazy-detaching-temporary]
