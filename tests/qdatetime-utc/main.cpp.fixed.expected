@@ -9,4 +9,5 @@ void test()
     QDateTime::currentMSecsSinceEpoch(); // Warning, but this method is removed in Qt6
 #endif
     QDateTime::currentMSecsSinceEpoch(); // Warning
+    QDateTime::currentMSecsSinceEpoch(); // Warning, this may even be improved!
 }

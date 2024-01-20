@@ -1,2 +1,3 @@
 qdatetime-utc/main.cpp:7:5: warning: Use QDateTime::currentDateTimeUtc() instead. It is significantly faster [-Wclazy-qdatetime-utc]
 qdatetime-utc/main.cpp:11:5: warning: Use QDateTime::currentMSecsSinceEpoch() instead. It is significantly faster [-Wclazy-qdatetime-utc]
+qdatetime-utc/main.cpp:12:5: warning: Use QDateTime::currentMSecsSinceEpoch() instead. It is significantly faster [-Wclazy-qdatetime-utc]

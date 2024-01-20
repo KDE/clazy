@@ -42,7 +42,8 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     const std::string secondMethodName = secondMethod->getQualifiedNameAsString();
     const bool isTimeT = secondMethodName == "QDateTime::toTime_t";
     const bool isMsecSinceEpoc = secondMethodName == "QDateTime::toMSecsSinceEpoch"; // Qt6 version and undeprecated of the above
-    if (!(isTimeT || isMsecSinceEpoc) && secondMethodName != "QDateTime::toUTC") {
+    const bool isToUtcConversion = secondMethodName == "QDateTime::toUTC";
+    if (!isTimeT && !isMsecSinceEpoc && !isToUtcConversion) {
         return;
     }
 
@@ -58,12 +59,13 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc);
-    if (!firstMethod || firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime") {
+    std::string firstmethodName = firstMethod->getQualifiedNameAsString();
+    if (!firstMethod || (firstmethodName != "QDateTime::currentDateTime" && firstmethodName != "QDateTime::currentDateTimeUtc")) {
         return;
     }
 
     std::string replacement = "::currentDateTimeUtc()";
-    if (isTimeT || isMsecSinceEpoc) {
+    if (!isToUtcConversion) {
         replacement = "::currentMSecsSinceEpoch()";
     }
 

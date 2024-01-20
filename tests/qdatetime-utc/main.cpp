@@ -9,4 +9,5 @@ void test()
     QDateTime::currentDateTime().toTime_t(); // Warning, but this method is removed in Qt6
 #endif
     QDateTime::currentDateTime().toMSecsSinceEpoch(); // Warning
+    QDateTime::currentDateTimeUtc().toMSecsSinceEpoch(); // Warning, this may even be improved!
 }
