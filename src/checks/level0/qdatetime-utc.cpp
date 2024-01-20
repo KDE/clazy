@@ -63,10 +63,8 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     std::string replacement = "::currentDateTimeUtc()";
-    if (isTimeT) {
-        replacement += ".toTime_t()";
-    } else if (isMsecSinceEpoc) {
-        replacement += ".toMSecsSinceEpoch()";
+    if (isTimeT || isMsecSinceEpoc) {
+        replacement = "::currentMSecsSinceEpoch()";
     }
 
     std::vector<FixItHint> fixits;

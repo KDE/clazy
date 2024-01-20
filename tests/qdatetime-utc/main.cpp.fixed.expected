@@ -6,7 +6,7 @@ void test()
     QDateTime::currentDateTimeUtc(); // OK
     QDateTime::currentDateTimeUtc(); // Warning
 #if QT_VERSION_MAJOR == 5
-    QDateTime::currentDateTime().toTime_t(); // Warning, but this method is removed in Qt6
+    QDateTime::currentMSecsSinceEpoch(); // Warning, but this method is removed in Qt6
 #endif
-    QDateTime::currentDateTimeUtc().toMSecsSinceEpoch(); // Warning
+    QDateTime::currentMSecsSinceEpoch(); // Warning
 }
