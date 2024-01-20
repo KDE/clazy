@@ -84,13 +84,13 @@ public:
         const bool doubleDigit = isDoubleDigitRgb(str);
         const bool doubleDigitA = isDoubleDigitRgba(str);
         if (bool isAnyValidPattern = singleDigit || doubleDigit || doubleDigitA || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str); !isAnyValidPattern) {
-            m_check->emitWarning(clazy::getLocStart(replaceExpr), "Pattern does not match any supported one by QColor, check the documentation");
+            m_check->emitWarning(clazy::getLocStart(replaceExpr), "Pattern length does not match any supported one by QColor, check the documentation");
             return;
         }
 
         for (unsigned int i = 1; i < str.size(); ++i) {
             if (!isxdigit(str[i])) {
-                m_check->emitWarning(clazy::getLocStart(replaceExpr), "QColor pattern may only contain valid hexadecimal values");
+                m_check->emitWarning(clazy::getLocStart(replaceExpr), "QColor pattern may only contain hexadecimal digits");
                 return;
             }
         }
