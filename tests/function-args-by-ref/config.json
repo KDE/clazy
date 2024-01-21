@@ -1,27 +1,24 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "has_fixits": true
         },
         {
-            "filename" : "lambdas.cpp",
-            "qt_major_versions" : [5]
+            "filename": "lambdas.cpp"
         },
         {
-            "filename" : "sharedptrs.cpp",
-            "qt_major_versions" : [5]
+            "filename": "sharedptrs.cpp"
         },
         {
-            "filename" : "warn-for-overridden-methods.cpp",
-            "qt_major_versions" : [5],
-            "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-ref-warn-for-overridden-methods" }
+            "filename": "warn-for-overridden-methods.cpp",
+            "env": {
+                "CLAZY_EXTRA_OPTIONS": "function-args-by-ref-warn-for-overridden-methods"
+            }
         },
         {
-            "filename" : "more_fixits.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "more_fixits.cpp",
+            "has_fixits": true
         }
     ]
 }
