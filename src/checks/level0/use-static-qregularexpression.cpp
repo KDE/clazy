@@ -151,7 +151,7 @@ static bool isArgNonStaticLocalVar(Expr *qregexp, LangOptions lo)
 static bool isOfAcceptableType(CXXMethodDecl *methodDecl)
 {
     const auto type = clazy::classNameFor(methodDecl);
-    return type == "QString" || type == "QStringList" || type == "QRegularExpression";
+    return type == "QString" || type == "QStringList" || type == "QRegularExpression" || type == "QListSpecialMethods" /* for QStringList in Qt6 */;
 }
 
 static bool firstArgIsQRegularExpression(CXXMethodDecl *methodDecl, const LangOptions &lo)
@@ -193,9 +193,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
 
         if (obj->isLValue()) {
             if (isArgNonStaticLocalVar(obj, lo())) {
-                emitWarning(clazy::getLocStart(obj),
-                            "Don't create temporary QRegularExpression objects. Use "
-                            "a static QRegularExpression object instead");
+                emitWarning(clazy::getLocStart(obj), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
                 return;
             }
         } else if (obj->isXValue()) {
@@ -205,9 +203,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
                 return;
             }
             if (isTemporaryQRegexObj(temp, lo())) {
-                emitWarning(clazy::getLocStart(temp),
-                            "Don't create temporary QRegularExpression objects. Use "
-                            "a static QRegularExpression object instead");
+                emitWarning(clazy::getLocStart(temp), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
             }
         }
         return;
@@ -225,9 +221,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
     // Its a QString*().method(QRegularExpression(arg)) ?
     if (auto *temp = isArgTemporaryObj(qregexArg)) {
         if (isTemporaryQRegexObj(temp, lo())) {
-            emitWarning(clazy::getLocStart(qregexArg),
-                        "Don't create temporary QRegularExpression objects. Use a "
-                        "static QRegularExpression object instead");
+            emitWarning(clazy::getLocStart(qregexArg), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
         }
     }
 

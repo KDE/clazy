@@ -15,7 +15,6 @@
 #include "QtUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StmtBodyRange.h"
-#include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 

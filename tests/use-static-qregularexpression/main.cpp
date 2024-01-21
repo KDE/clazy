@@ -41,14 +41,10 @@ void test()
     h.split(e); // Warn
     h.split(staticRegex); // Ok
 
-    h.splitRef(QRegularExpression("[hel]")); // Warn
-    h.splitRef(e); // Warn
-    h.splitRef(staticRegex); // Ok
-
     QStringList strList;
 
     strList.indexOf(e); // Warn
-    strList.indexOf(staticRegex);
+    strList.indexOf(staticRegex); // Ok
 
     strList.lastIndexOf(e); // Warn
     strList.lastIndexOf(staticRegex); // Ok

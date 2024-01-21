@@ -1,0 +1,2 @@
+use-static-qregularexpression/splitref.qt5.cpp:11:16: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
+use-static-qregularexpression/splitref.qt5.cpp:12:16: warning: Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead [-Wclazy-use-static-qregularexpression]
