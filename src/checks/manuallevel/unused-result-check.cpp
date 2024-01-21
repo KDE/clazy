@@ -6,6 +6,7 @@
 */
 
 #include "unused-result-check.h"
+#include "StringUtils.h"
 
 #include <clang/AST/AST.h>
 #include <clang/AST/ExprCXX.h>
@@ -35,7 +36,10 @@ public:
                     if (!llvm::dyn_cast<Expr>(parents[0].get<Stmt>()) && !llvm::dyn_cast<ReturnStmt>(parents[0].get<Stmt>())
                         && !llvm::dyn_cast<IfStmt>(parents[0].get<Stmt>()) && !llvm::dyn_cast<WhileStmt>(parents[0].get<Stmt>())
                         && !llvm::dyn_cast<DoStmt>(parents[0].get<Stmt>()) && !llvm::dyn_cast<SwitchStmt>(parents[0].get<Stmt>())
-                        && !llvm::dyn_cast<ForStmt>(parents[0].get<Stmt>()) && !llvm::dyn_cast<CXXThisExpr>(parents[0].get<Stmt>())) {
+                        && !llvm::dyn_cast<ForStmt>(parents[0].get<Stmt>())
+                        && !llvm::dyn_cast<CXXThisExpr>(parents[0].get<Stmt>())
+                        // Ignore this false positive from a Qt header for now, we pass a mutable pointer to a static function
+                        && clazy::qualifiedMethodName(callExpr->getMethodDecl()) != "QMetaType::registerHelper") {
                         m_check->emitWarning(callExpr->getExprLoc(), "Result of const member function is not used.");
                     }
                 }
@@ -60,10 +64,6 @@ UnusedResultCheck::~UnusedResultCheck() = default;
 
 void UnusedResultCheck::VisitStmt(Stmt *stmt)
 {
-    auto *call = dyn_cast<CXXMemberCallExpr>(stmt);
-    if (!call || call->getNumArgs() != 1) {
-        return;
-    }
 }
 
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)
