@@ -1,16 +1,14 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "has_fixits" : true,
-            "minimum_clang_version_for_fixits" : 1100,
-            "qt_major_versions" : [5, 6]
+            "filename": "main.cpp",
+            "has_fixits": true,
+            "minimum_clang_version_for_fixits": 1100
         },
         {
-            "filename" : "missing-include.cpp",
-            "has_fixits" : true,
-            "minimum_clang_version_for_fixits" : 1100,
-            "qt_major_versions" : [5, 6]
+            "filename": "missing-include.cpp",
+            "has_fixits": true,
+            "minimum_clang_version_for_fixits": 1100
         }
     ]
 }
