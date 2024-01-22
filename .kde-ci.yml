@@ -6,6 +6,7 @@ Environment:
 
 Options:
   setup-dbus-session: False
+  setup-x-environment: False
   require-passing-tests-on: [ '@all' ]
   tests-run-in-parallel: True
   cppcheck-arguments: '-i tests/'
