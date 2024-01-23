@@ -1,22 +1,25 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'namespaces.cpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.0)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.12)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
+#include <memory>
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'namespaces.cpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.5.0. It"
+#error "This file was generated using the moc from 5.15.12. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Foo__MyObj2_t {
     QByteArrayData data[3];
     char stringdata0[28];
@@ -40,7 +43,7 @@ QT_MOC_LITERAL(2, 27, 0) // ""
 static const uint qt_meta_data_Foo__MyObj2[] = {
 
  // content:
-       7,       // revision
+       8,       // revision
        0,       // classname
        0,    0, // classinfo
        1,   14, // methods
@@ -62,20 +65,24 @@ static const uint qt_meta_data_Foo__MyObj2[] = {
 void Foo::MyObj2::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        MyObj2 *_t = static_cast<MyObj2 *>(_o);
-        Q_UNUSED(_t)
+        auto *_t = static_cast<MyObj2 *>(_o);
+        (void)_t;
         switch (_id) {
         case 0: _t->separateNSSlot(); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
+    (void)_a;
 }
 
-const QMetaObject Foo::MyObj2::staticMetaObject = {
-    { &QObject::staticMetaObject, qt_meta_stringdata_Foo__MyObj2.data,
-      qt_meta_data_Foo__MyObj2,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
-};
+QT_INIT_METAOBJECT const QMetaObject Foo::MyObj2::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_Foo__MyObj2.data,
+    qt_meta_data_Foo__MyObj2,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
 
 
 const QMetaObject *Foo::MyObj2::metaObject() const
@@ -85,9 +92,9 @@ const QMetaObject *Foo::MyObj2::metaObject() const
 
 void *Foo::MyObj2::qt_metacast(const char *_clname)
 {
-    if (!_clname) return Q_NULLPTR;
+    if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_Foo__MyObj2.stringdata0))
-        return static_cast<void*>(const_cast< MyObj2*>(this));
+        return static_cast<void*>(this);
     return QObject::qt_metacast(_clname);
 }
 
@@ -132,7 +139,7 @@ QT_MOC_LITERAL(4, 26, 5) // "slot2"
 static const uint qt_meta_data_Foo__MyObj[] = {
 
  // content:
-       7,       // revision
+       8,       // revision
        0,       // classname
        0,    0, // classinfo
        3,   14, // methods
@@ -162,8 +169,8 @@ static const uint qt_meta_data_Foo__MyObj[] = {
 void Foo::MyObj::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        MyObj *_t = static_cast<MyObj *>(_o);
-        Q_UNUSED(_t)
+        auto *_t = static_cast<MyObj *>(_o);
+        (void)_t;
         switch (_id) {
         case 0: _t->signal1(); break;
         case 1: _t->slot1(); break;
@@ -172,21 +179,25 @@ void Foo::MyObj::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
-        void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (MyObj::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MyObj::signal1)) {
+            using _t = void (MyObj::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyObj::signal1)) {
                 *result = 0;
+                return;
             }
         }
     }
-    Q_UNUSED(_a);
+    (void)_a;
 }
 
-const QMetaObject Foo::MyObj::staticMetaObject = {
-    { &QObject::staticMetaObject, qt_meta_stringdata_Foo__MyObj.data,
-      qt_meta_data_Foo__MyObj,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
-};
+QT_INIT_METAOBJECT const QMetaObject Foo::MyObj::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_Foo__MyObj.data,
+    qt_meta_data_Foo__MyObj,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
 
 
 const QMetaObject *Foo::MyObj::metaObject() const
@@ -196,9 +207,9 @@ const QMetaObject *Foo::MyObj::metaObject() const
 
 void *Foo::MyObj::qt_metacast(const char *_clname)
 {
-    if (!_clname) return Q_NULLPTR;
+    if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_Foo__MyObj.stringdata0))
-        return static_cast<void*>(const_cast< MyObj*>(this));
+        return static_cast<void*>(this);
     return QObject::qt_metacast(_clname);
 }
 
@@ -222,6 +233,7 @@ int Foo::MyObj::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void Foo::MyObj::signal1()
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
+QT_WARNING_POP
 QT_END_MOC_NAMESPACE

@@ -1,22 +1,22 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
-#include <QtCore/QState>
 #include <QtCore/QPointer>
 #include <QtCore/QModelIndex>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QProgressDialog>
 #include <QtDBus/QDBusInterface>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMessageBox>
-
-
-
+#if QT_VERSION_MAJOR == 5
+#include <QtCore/QState>
+#include <QtWidgets/QAction>
+#else
+#include <QtStateMachine/QState>
+#include <QtGui/QAction>
+#endif
 
 class MyObj : public QObject
 {
     Q_OBJECT
-public:
-
 public Q_SLOTS:
     void slot1();
     void slot2() {};
@@ -75,9 +75,9 @@ void testDerived()
 class OtherObj : public QObject
 {
     Q_OBJECT
-public:
 public Q_SLOTS:
     void otherSlot() {}
+    void otherSlotArg(bool) {}
 };
 
 void testOther()
@@ -348,10 +348,10 @@ int main() { return 0; }
 
 class TestStatic : public QObject
 {
+    Q_OBJECT
 public:
     TestStatic(QObject *parent = nullptr) : QObject(parent)
-    {
-    }
+    {}
 
 public slots:
     static void test(QObject *)
@@ -381,6 +381,12 @@ void testQMenuAndQMessageBox()
     QMessageBox box;
     box.open(); // OK
     box.open(&o,SLOT(otherSlot())); // Warn
+
+    m.addAction("test", &o, SLOT(otherSlotArg(bool))); // Warn
 }
 
-#include "main.moc"
+#if QT_VERSION_MAJOR == 5
+#include "main.qt5.moc_"
+#else
+#include "main.qt6.moc_"
+#endif

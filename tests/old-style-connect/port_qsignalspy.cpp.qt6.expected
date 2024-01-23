@@ -1,0 +1,4 @@
+old-style-connect/port_qsignalspy.cpp:14:20: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/port_qsignalspy.cpp:18:20: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/port_qsignalspy.cpp:22:20: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/port_qsignalspy.cpp:24:20: warning: Old Style Connect [-Wclazy-old-style-connect]

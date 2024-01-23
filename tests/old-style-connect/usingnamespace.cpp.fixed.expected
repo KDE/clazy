@@ -25,4 +25,8 @@ void foo1()
 
 int main() { return 0; }
 
-#include "usingnamespace.moc"
+#if QT_VERSION_MAJOR == 5
+#include "usingnamespace.qt5.moc_"
+#else
+#include "usingnamespace.qt6.moc_"
+#endif

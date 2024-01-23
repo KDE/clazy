@@ -46,4 +46,8 @@ void foo2()
 
 using namespace Foo; // Comes after, so shouldn't have influence
 int main() { return 0; }
-#include "namespaces.moc"
+#if QT_VERSION_MAJOR == 5
+#include "namespaces.qt5.moc_"
+#else
+#include "namespaces.qt6.moc_"
+#endif

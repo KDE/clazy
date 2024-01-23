@@ -19,9 +19,9 @@ private Q_SLOTS:
         QVERIFY(textChangedSpy.isValid());
 
         QComboBox combo;
-        QSignalSpy activatedIntSpy(&combo, SIGNAL(activated(int))); // Warn
+        QSignalSpy activatedIntSpy(&combo, SIGNAL(activated(int))); // Warn and no fixit due to overloads in Qt5
         QVERIFY(activatedIntSpy.isValid());
-        QSignalSpy activatedStringSpy(&combo, SIGNAL(activated(QString))); // Warn
+        QSignalSpy activatedStringSpy(&combo, SIGNAL(activated(QString))); // Warn and no fixit due to overloads in Qt5
         QVERIFY(activatedStringSpy.isValid());
     }
 };
