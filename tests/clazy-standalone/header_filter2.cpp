@@ -3,5 +3,5 @@
 
 void t()
 {
-    QDateTime::currentDateTime().toTime_t();
+    QDateTime::currentDateTime().toSecsSinceEpoch();
 }

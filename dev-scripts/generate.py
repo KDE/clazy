@@ -483,6 +483,9 @@ endmacro()\n
     for c in checks:
         contents += 'add_clazy_test(%s)\n' % (c.name)
 
+
+    contents += 'add_clazy_test(clazy-standalone)\n'
+
     f = io.open(filename, 'w', newline='\n', encoding='utf8')
     f.write(contents)
     f.close()

@@ -3,31 +3,26 @@
     "tests" : [
         {
             "filename" : "header_filter.cpp",
-            "qt_major_versions" : [5],
             "header_filter" : "",
             "checks" : ["qdatetime-utc"]
         },
         {
             "filename" : "header_filter2.cpp",
-            "qt_major_versions" : [5],
             "header_filter" : ".*_foo.*.h",
             "checks" : ["qdatetime-utc"]
         },
         {
             "filename" : "header_filter2.cpp",
-            "qt_major_versions" : [5],
             "header_filter" : ".*_foo.*.h",
             "checks" : ["qdatetime-utc"]
         },
         {
             "filename" : "fileToIgnore.cpp",
-            "qt_major_versions" : [5],
             "ignore_dirs" : ".*fileToIgnore.*",
             "checks" : ["qdatetime-utc"]
         },
         {
             "filename" : "fileToNotIgnore.cpp",
-            "qt_major_versions" : [5],
             "ignore_dirs" : ".*fileToIgnore.*",
             "checks" : ["qdatetime-utc"]
         }

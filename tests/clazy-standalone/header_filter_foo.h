@@ -2,5 +2,5 @@
 
 void test()
 {
-    QDateTime::currentDateTime().toTime_t();
+    QDateTime::currentDateTime().toSecsSinceEpoch();
 }
