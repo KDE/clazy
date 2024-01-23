@@ -86,7 +86,7 @@ enum ConnectFlag {
     ConnectFlag_QMenuAddAction = 0x800,
     ConnectFlag_QMessageBoxOpen = 0x1000,
     ConnectFlag_QSignalSpy = 0x2000,
-    ConnectFlag_Bogus = 0x4000
+    ConnectFlag_Bogus = 0x4000,
 };
 
 static bool classIsOk(StringRef className)
@@ -116,7 +116,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
         classification |= ConnectFlag_QTimerSingleShot;
     } else if (methodName == "QState::addTransition") {
         classification |= ConnectFlag_QStateAddTransition;
-    } else if (methodName == "QMenu::addAction") {
+    } else if (methodName == "QMenu::addAction" || methodName == "QWidget::addAction") {
         classification |= ConnectFlag_QMenuAddAction;
     } else if (methodName == "QMessageBox::open") {
         classification |= ConnectFlag_QMessageBoxOpen;
