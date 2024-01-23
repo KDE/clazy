@@ -357,10 +357,14 @@ def libraryName():
         return 'ClazyPlugin.so'
 
 
-def link_flags():
-    flags = "-lQt5Core -lQt5Gui -lQt5Widgets"
+def link_flags(qt:QtInstallation):
+    is_qt6 = qt.int_version > 60000
+    major_version = "6" if is_qt6 else "5"
+    flags = f"-lQt{major_version}Core -lQt{major_version}Gui -lQt{major_version}Widgets"
     if _platform.startswith('linux'):
         flags += " -lstdc++"
+        if is_qt6:
+            flags += " -lQt6StateMachine"
     return flags
 
 
@@ -431,7 +435,7 @@ def clazy_command(test, cppStandard, qt, filename):
 
     # Linking on one platform is enough. Won't waste time on macOS and Windows.
     if test.link and _platform.startswith('linux'):
-        result = result + " " + link_flags()
+        result = result + " " + link_flags(qt)
     else:
         result = result + " -c "
 
