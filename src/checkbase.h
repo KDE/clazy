@@ -11,7 +11,7 @@
 #define CHECK_BASE_H
 
 #include "SourceCompatibilityHelpers.h"
-#include "clazy_stl.h"
+#include "clazy_stl.h" // IWYU pragma: keep
 
 #include <clang/AST/ASTContext.h>
 #include <clang/ASTMatchers/ASTMatchFinder.h>

@@ -8,14 +8,16 @@
 
 #ifndef UNTITLED_H
 #define UNTITLED_H
-
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QWidget>
-
+#if QT_VERSION_MAJOR == 5
+#include <QtWidgets/QAction>
+#else
+#include <QtGui/QAction>
+#endif
 QT_BEGIN_NAMESPACE
 
 class Ui_Form
