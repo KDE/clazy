@@ -52,10 +52,9 @@ class QtInstallation:
             extra_includes += " -iframework %s" % self.qmake_lib_path
 
         # Also include the modules folders
+        qt_modules_includes = []
         if module_includes:
-            qt_modules_includes = ["-isystem " + self.qmake_header_path +"/" + f for f in next(os.walk(self.qmake_header_path))[1]];
-        else:
-            qt_modules_includes = ["-isystem " + self.qmake_header_path +"/"];
+            qt_modules_includes = ["-isystem " + self.qmake_header_path + "/" + f for f in next(os.walk(self.qmake_header_path))[1]];
         c_header_option = ""
         if c_headerpath:
             c_header_option = "-isystem " + c_headerpath + "/include "
