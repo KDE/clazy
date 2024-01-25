@@ -38,6 +38,7 @@ NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)
           "Sql",
           "PrintSupport",
           "NetworkAuth",
+          "QmlIntegration",
       }
 {
     for (const std::string &module : m_modulesList) {
