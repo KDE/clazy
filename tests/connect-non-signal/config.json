@@ -1,39 +1,31 @@
 {
-    "minimum_clang_version" : 370,
-    "tests" : [
+    "minimum_clang_version": 370,
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_versions" : [5]
+            "filename": "main.cpp"
         },
         {
-            "filename" : "test_qmetamethod.cpp",
-            "qt_major_versions" : [5]
+            "filename": "test_qmetamethod.cpp"
         },
         {
-            "filename" : "bug374951.cpp",
-            "qt_major_versions" : [5],
-            "minimum_qt_version" : 50700
+            "filename": "bug374951.cpp",
+            "minimum_qt_version": 50700
         },
         {
-            "filename" : "392441.cpp",
-            "qt_major_versions" : [5],
-            "minimum_qt_version" : 50700
+            "filename": "392441.cpp",
+            "minimum_qt_version": 50700
         },
         {
-            "filename" : "bug375239.cpp",
-            "qt_major_versions" : [5]
+            "filename": "bug375239.cpp"
         },
         {
-            "filename" : "bug375748.cpp",
-            "qt_major_versions" : [5]
+            "filename": "bug375748.cpp"
         },
         {
-            "filename" : "bug376137.cpp",
-            "qt_major_versions" : [5]
+            "filename": "bug376137.cpp"
         },
         {
-            "filename" : "bug431186.cpp",
-            "qt_major_versions" : [5]
+            "filename": "bug431186.cpp"
         }
     ]
 }
