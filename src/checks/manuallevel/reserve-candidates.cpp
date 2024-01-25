@@ -2,6 +2,7 @@
     SPDX-FileCopyrightText: 2015 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
     SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
     SPDX-FileCopyrightText: 2015-2016 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2024 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -229,6 +230,14 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     clazy::getChilds<CallExpr>(expr, callExprs);
 
     for (CallExpr *callExpr : callExprs) {
+        // In Qt5, this would have been a BinaryOperator. Ignore iterator unequality checks here
+        if (auto operatorCall = dyn_cast<CXXOperatorCallExpr>(callExpr)) {
+            std::string name = operatorCall->getDirectCallee()->getAsFunction()->getQualifiedNameAsString();
+            if (clazy::contains(name, "iterator::operator")) {
+                continue;
+            }
+        }
+
         if (clazy::isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr))) {
             continue;
         }
