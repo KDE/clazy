@@ -27,5 +27,5 @@ void suppress_foreach()
 
 void qdatetimeutc()
 {
-    QDateTime::currentDateTime().toTime_t();
+    QDateTime::currentDateTime().toSecsSinceEpoch();
 }

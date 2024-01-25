@@ -485,6 +485,7 @@ endmacro()\n
 
 
     contents += 'add_clazy_test(clazy-standalone)\n'
+    contents += 'add_clazy_test(clazy)\n'
 
     f = io.open(filename, 'w', newline='\n', encoding='utf8')
     f.write(contents)
