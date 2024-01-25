@@ -30,6 +30,7 @@ public:
 private:
     void processQTimer(clang::FunctionDecl *, clang::Stmt *);
     void processQMenu(clang::FunctionDecl *, clang::Stmt *);
+    void processWidget(clang::FunctionDecl *, clang::Stmt *);
 };
 
 #endif

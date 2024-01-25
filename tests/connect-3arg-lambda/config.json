@@ -1,9 +1,8 @@
 {
-    "minimum_clang_version" : 500,
-    "tests" : [
+    "minimum_clang_version": 500,
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_versions" : [5]
+            "filename": "main.cpp"
         }
     ]
 }

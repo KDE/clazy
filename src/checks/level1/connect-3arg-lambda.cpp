@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2017 Sergio Martins <sergio.martins@kdab.com>
+    SPDX-FileCopyrightText: 2024 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -54,6 +55,10 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 
     if (qualifiedName == "QMenu::addAction") {
         processQMenu(fdecl, stmt);
+        return;
+    }
+    if (qualifiedName == "QWidget::addAction") {
+        processWidget(fdecl, stmt);
         return;
     }
 
@@ -147,7 +152,18 @@ void Connect3ArgLambda::processQMenu(FunctionDecl *func, Stmt *stmt)
     if (numParams == 3) {
         if (func->getParamDecl(0)->getNameAsString() == "text" && func->getParamDecl(1)->getNameAsString() == "slot"
             && func->getParamDecl(2)->getNameAsString() == "shortcut") {
-            emitWarning(stmt, "Pass a context object as 2nd singleShot parameter");
+            emitWarning(stmt, "Pass a context object as 2nd addAction parameter");
+        }
+    }
+}
+
+void Connect3ArgLambda::processWidget(clang::FunctionDecl *func, clang::Stmt *stmt)
+{
+    if (const uint numParams = func->getNumParams(); numParams > 1) {
+        auto *possiblyFwdArgToConnect = func->getParamDecl(numParams - 2);
+        auto *fwdArgToConnect = func->getParamDecl(numParams - 1);
+        if (possiblyFwdArgToConnect->getNameAsString() != "args" && fwdArgToConnect->getNameAsString() == "args") {
+            emitWarning(stmt, "Pass a context object as 2nd addAction parameter");
         }
     }
 }
