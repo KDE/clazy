@@ -252,3 +252,10 @@ QString s3 = true ? "ö" : "\xc3\xb6";
 
 // bug #391807
 Q_GLOBAL_STATIC_WITH_ARGS(const QString, strUnit, (QLatin1String("unit"))) // OK, since QStringLiteral doesn't work inside Q_GLOBAL_STATIC_WITH_ARGS
+
+void testEmptyString()
+{
+    QString s1, s2, s3;
+    if (s1 == "" && s2 != "" && s3 == "foo")
+        s1 = s3;
+}

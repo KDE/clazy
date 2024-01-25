@@ -347,7 +347,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                             }
                         }
 
-                        fixits = fixItRawLiteral(lt, replacement);
+                        fixits = fixItRawLiteral(lt, replacement, nullptr);
                     }
                 }
             }
@@ -526,7 +526,25 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceFromLatin1OrFromUtf8(Call
     return fixits;
 }
 
-std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral *lt, const std::string &replacement)
+namespace
+{
+// Start at <loc> and go left as long as there's whitespace, stopping at <start> in the worst case
+SourceLocation eatLeadingWhitespace(SourceLocation start, SourceLocation loc, const SourceManager &sm, const LangOptions &lo)
+{
+    const SourceRange range(start, loc);
+    const CharSourceRange cr = Lexer::getAsCharRange(range, sm, lo);
+    const StringRef str = Lexer::getSourceText(cr, sm, lo);
+    const int initialPos = sm.getDecomposedLoc(loc).second - sm.getDecomposedLoc(start).second;
+    int i = initialPos;
+    while (--i >= 0) {
+        if (!isHorizontalWhitespace(str[i]))
+            return loc.getLocWithOffset(i - initialPos + 1);
+    }
+    return loc;
+}
+}
+
+std::vector<FixItHint> QStringAllocations::fixItRawLiteral(StringLiteral *lt, const std::string &replacement, CXXOperatorCallExpr *operatorCall)
 {
     std::vector<FixItHint> fixits;
 
@@ -544,6 +562,27 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(clang::StringLiteral 
     } else {
         if (Utils::literalContainsEscapedBytes(lt, sm(), lo())) {
             return {};
+        }
+
+        // Turn str == "" into str.isEmpty()
+        if (operatorCall && operatorCall->getOperator() == OO_EqualEqual && lt->getLength() == 0) {
+            // For some reason this returns the same as getStartLoc
+            // SourceLocation start = operatorCall->getArg(0)->getEndLoc();
+            // So instead, we have to start from the "==" sign and eat whitespace to the left
+            SourceLocation start = eatLeadingWhitespace(operatorCall->getBeginLoc(), operatorCall->getExprLoc(), sm(), lo());
+            fixits.push_back(clazy::createReplacement({start, range.getEnd()}, ".isEmpty()"));
+            return fixits;
+        }
+
+        // Turn str != "" into !str.isEmpty()
+        if (operatorCall && operatorCall->getOperator() == OO_ExclaimEqual && lt->getLength() == 0) {
+            // For some reason this returns the same as getStartLoc
+            // SourceLocation start = operatorCall->getArg(0)->getEndLoc();
+            // So instead, we have to start from the "==" sign and eat whitespace to the left
+            SourceLocation start = eatLeadingWhitespace(operatorCall->getBeginLoc(), operatorCall->getExprLoc(), sm(), lo());
+            fixits.push_back(clazy::createReplacement({start, range.getEnd()}, ".isEmpty()"));
+            fixits.push_back(clazy::createInsertion(operatorCall->getBeginLoc(), "!"));
+            return fixits;
         }
 
         std::string revisedReplacement = lt->getLength() == 0 ? "QLatin1String" : replacement; // QLatin1String("") is better than QStringLiteral("")
@@ -610,7 +649,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
         queueManualFixitWarning(clazy::getLocStart(stm), "Couldn't find literal");
     } else {
         const std::string replacement = Utils::isAscii(literals[0]) ? "QLatin1String" : "QStringLiteral";
-        fixits = fixItRawLiteral(literals[0], replacement);
+        fixits = fixItRawLiteral(literals[0], replacement, operatorCall);
     }
 
     std::string msg("QString(const char*) being called");

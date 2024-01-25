@@ -57,7 +57,7 @@ private:
     std::vector<clang::FixItHint> fixItReplaceWordWithWord(clang::Stmt *begin, const std::string &replacement, const std::string &replacee);
     std::vector<clang::FixItHint> fixItReplaceWordWithWordInTernary(clang::ConditionalOperator *);
     std::vector<clang::FixItHint> fixItReplaceFromLatin1OrFromUtf8(clang::CallExpr *callExpr, FromFunction);
-    std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt, const std::string &replacement);
+    std::vector<clang::FixItHint> fixItRawLiteral(clang::StringLiteral *stmt, const std::string &replacement, clang::CXXOperatorCallExpr *operatorCall);
 
     Latin1Expr qlatin1CtorExpr(clang::Stmt *stm, clang::ConditionalOperator *&ternary);
 };
