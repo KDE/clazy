@@ -1,9 +1,9 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_version": 4,
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "qt_major_versions": [4],
+            "has_fixits": true
         }
     ]
 }

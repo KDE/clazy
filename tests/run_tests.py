@@ -273,8 +273,6 @@ def load_json(check_name):
                 test.compare_everything = t['compare_everything']
             if 'link' in t:
                 test.link = t['link']
-            if 'qt_major_version' in t: # single value (for compatibility)
-                test.setQtMajorVersions([t['qt_major_version']])
             if 'qt_major_versions' in t:
                 test.setQtMajorVersions(t['qt_major_versions'])
             if 'env' in t:

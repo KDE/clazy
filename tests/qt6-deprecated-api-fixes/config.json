@@ -1,12 +1,12 @@
 {
-    "minimum_clang_version" : 1000,
-    "tests" : [
+    "minimum_clang_version": 1000,
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_version": 5,
-            "minimum_qt_version" : 51400,
-            "maximum_qt_version" : 60000,
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "qt_major_versions": [5],
+            "minimum_qt_version": 51400,
+            "maximum_qt_version": 60000,
+            "has_fixits": true
         }
     ]
 }

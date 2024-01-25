@@ -1,10 +1,10 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_version": 5,
-            "has_fixits" : true,
-            "extra_definitions": "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H "
+            "filename": "main.cpp",
+            "qt_major_versions": [5],
+            "has_fixits": true,
+            "extra_definitions": "-DQT_NO_OPENGL -DQT_QTQUICK_MODULE_H"
         }
     ]
 }
