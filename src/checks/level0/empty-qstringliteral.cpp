@@ -56,7 +56,7 @@ void EmptyQStringliteral::handleQt6StringLiteral(clang::Stmt *stmt)
     if (auto c = dyn_cast<CallExpr>(stmt)) {
         if (clazy::qualifiedMethodName(c->getDirectCallee()) == "QtPrivate::qMakeStringPrivate") {
             if (auto lt = clazy::getFirstChildOfType<StringLiteral>(c); lt && lt->getByteLength() == 0) {
-                emitWarning(stmt, "Use an empty QLatin1String instead of an empty QStringLiteral");
+                emitWarning(stmt, "Use QLatin1String(\"\") or QString() instead of an empty QStringLiteral");
             }
         }
     }
@@ -86,5 +86,5 @@ void EmptyQStringliteral::handleQt5StringLiteral(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(stmt, "Use an empty QLatin1String instead of an empty QStringLiteral");
+    emitWarning(stmt, "Use QLatin1String(\"\") or QString() instead of an empty QStringLiteral");
 }
