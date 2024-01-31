@@ -43,11 +43,6 @@ class ParentMap;
 class SourceManager;
 } // namespace clang
 
-/// WARNING
-///
-/// This code is a bit unreadable and unmaintanable due to the fact that there are more corner-cases than normal cases.
-/// It will be rewritten in a new check, so don't bother.
-
 using namespace clang;
 
 inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)
