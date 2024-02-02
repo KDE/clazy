@@ -49,7 +49,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<CallExpr *> chainedCalls = Utils::callListForChain(secondCall);
-    if (chainedCalls.size() < 2) {
+    if (chainedCalls.size() != 2) {
         return;
     }
 

@@ -12,4 +12,5 @@ void test()
     QDateTime::currentDateTimeUtc().toMSecsSinceEpoch(); // Warning, this may even be improved!
     QDateTime::currentDateTime().toSecsSinceEpoch(); // Warning
     QDateTime::currentDateTimeUtc().toSecsSinceEpoch(); // Warning, this may even be improved!
+    QDateTime::currentDateTimeUtc().addYears(1).toMSecsSinceEpoch();
 }
