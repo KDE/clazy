@@ -265,7 +265,7 @@ clazy runs all checks from level1 by default.
     - [qcolor-from-literal](docs/checks/README-qcolor-from-literal.md)    (fix-qcolor-from-literal)
     - [qdatetime-utc](docs/checks/README-qdatetime-utc.md)    (fix-qdatetime-utc)
     - [qenums](docs/checks/README-qenums.md)
-    - [qfileinfo-exists](docs/checks/README-qfileinfo-exists.md)
+    - [qfileinfo-exists](docs/checks/README-qfileinfo-exists.md)    (fix-qfileinfo-exists)
     - [qgetenv](docs/checks/README-qgetenv.md)    (fix-qgetenv)
     - [qmap-with-pointer-key](docs/checks/README-qmap-with-pointer-key.md)
     - [qstring-arg](docs/checks/README-qstring-arg.md)

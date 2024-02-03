@@ -332,7 +332,12 @@
             "class_name" : "QFileInfoExists",
             "level" : 0,
             "categories" : ["performance"],
-            "visits_stmts" : true
+            "visits_stmts" : true,
+            "fixits" : [
+                {
+                    "name" : "qfileinfo-exists"
+                }
+            ]
         },
         {
             "name"  : "qstring-arg",

@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2016 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2023 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -37,5 +38,8 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "Use the static QFileInfo::exists() instead. It's documented to be faster.");
+    std::string userArgText = Lexer::getSourceText(CharSourceRange::getTokenRange(ctorExpr->getArg(0)->getSourceRange()), sm(), lo()).str();
+    emitWarning(clazy::getLocStart(stmt),
+                "Use the static QFileInfo::exists() instead. It's documented to be faster.",
+                {clang::FixItHint::CreateReplacement(stmt->getSourceRange(), "QFileInfo::exists(" + userArgText + ")")});
 }

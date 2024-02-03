@@ -184,6 +184,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qdatetime-utc", "qdatetime-utc");
     registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible));
     registerCheck(check<QFileInfoExists>("qfileinfo-exists", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-qfileinfo-exists", "qfileinfo-exists");
     registerCheck(check<QGetEnv>("qgetenv", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qgetenv", "qgetenv");
     registerCheck(check<QMapWithPointerKey>("qmap-with-pointer-key", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
