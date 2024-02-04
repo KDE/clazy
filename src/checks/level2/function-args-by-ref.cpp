@@ -144,7 +144,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
             }
 
             addFixits(fixits, func, i);
-            emitWarning(clazy::getLocStart(param), error.c_str(), fixits);
+            emitWarning(clazy::getLocStart(param), error, fixits);
         }
     }
 }

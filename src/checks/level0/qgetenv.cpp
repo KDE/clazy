@@ -89,6 +89,6 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         }
 
         errorMsg += " Use " + replacement + "() instead";
-        emitWarning(clazy::getLocStart(memberCall), errorMsg.c_str(), fixits);
+        emitWarning(clazy::getLocStart(memberCall), errorMsg, fixits);
     }
 }

@@ -81,7 +81,7 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
             continue;
 
         std::string methodName = methodDecl->getQualifiedNameAsString();
-        if (shouldIgnoreMethod(StringRef(methodName.c_str()))) // Filter out some false positives
+        if (shouldIgnoreMethod(methodName)) // Filter out some false positives
             continue;
 
         QualType qt = methodDecl->getReturnType();
@@ -108,7 +108,7 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
 
         if (!bailout) {
             std::string error = std::string("Unused result of const member (") + methodName + ')';
-            emitWarning(clazy::getLocStart(callExpr), error.c_str());
+            emitWarning(clazy::getLocStart(callExpr), error);
         }
     }
 }
