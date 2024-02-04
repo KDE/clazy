@@ -26,7 +26,7 @@ namespace NS {
         Q_PROPERTY(NonNamespacedGadget nonNamespacedGadget READ nonNamespacedGadget CONSTANT) // OK
     Q_SIGNALS:
         void mysig(NS::MyType);
-        void mysig2(MyType); // Warn
+        void mysig2(MyType &); // Warn
         void mysig3(NS::MyType);
         void mysig4(const NS::MyType &);
         void mysig5(A);
@@ -88,11 +88,12 @@ public Q_SLOTS:
     inline QDBusPendingReply<bool> boolDbusReply() {return {};} // OK
     inline QDBusPendingReply<> voidDbusReply() {return {};} // OK
     inline QDBusPendingReply<MyList> typedefInGeneric() {return {};} // WARN
-    inline QDBusPendingReply<std::shared_ptr<MyObj2>> nestedGeneric() {return {};} // OK
-    inline QDBusPendingReply<std::shared_ptr<MyList>> nestedNotFullyQualifiedGeneric() {return {};} // WARN
+    inline void nestedGeneric(QDBusPendingReply<std::shared_ptr<MyObj2>>) {} // OK
+    inline void nestedNotFullyQualifiedGeneric(QDBusPendingReply<std::shared_ptr<MyList>>) {} // WARN
 };
 
 Q_DECLARE_METATYPE(MyObj2::QualMe);
+Q_DECLARE_METATYPE(std::shared_ptr<MyObj2::MyList>);
 
 #if QT_VERSION_MAJOR == 5
 #include "main.qt5.moc_"

@@ -71,9 +71,15 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     for (auto *param : method->parameters()) {
         QualType t = clazy::pointeeQualType(param->getType());
         if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
-            emitWarning(method,
-                        std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " arguments need to be fully-qualified (" + qualifiedTypeName
-                            + " instead of " + typeName + ")");
+            SourceRange fixitRange = param->getTypeSourceInfo()->getTypeLoc().getSourceRange();
+            // We don't want to include the & or * characters for the fixit range
+            if (param->getType()->isReferenceType() || param->getType()->isPointerType()) {
+                fixitRange = SourceRange(fixitRange.getBegin(), fixitRange.getEnd().getLocWithOffset(-1));
+            }
+            std::vector fixits{FixItHint::CreateReplacement(fixitRange, qualifiedTypeName)};
+            std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " arguments need to be fully-qualified (" + qualifiedTypeName
+                + " instead of " + typeName + ")";
+            emitWarning(param->getTypeSpecStartLoc(), warning, fixits);
         }
     }
 
