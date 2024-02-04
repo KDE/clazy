@@ -70,6 +70,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     StringRef methodname = clazy::name(method);
     std::string errorMsg;
     std::string replacement;
+    bool shouldIncludeBaseParameter = false;
     if (methodname == "isEmpty") {
         errorMsg = "qgetenv().isEmpty() allocates.";
         replacement = "qEnvironmentVariableIsEmpty";
@@ -79,16 +80,25 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     } else if (methodname == "toInt") {
         errorMsg = "qgetenv().toInt() is slow.";
         replacement = "qEnvironmentVariableIntValue";
-    }
-
-    if (!errorMsg.empty()) {
-        std::vector<FixItHint> fixits;
-        const bool success = clazy::transformTwoCallsIntoOne(&m_astContext, qgetEnvCall, memberCall, replacement, fixits);
-        if (!success) {
-            queueManualFixitWarning(clazy::getLocStart(memberCall));
+        for (unsigned int i = 0; i < memberCall->getNumArgs(); ++i) {
+            if (!dyn_cast<CXXDefaultArgExpr>(memberCall->getArg(i))) {
+                if (i == 0) {
+                    shouldIncludeBaseParameter = true;
+                }
+                if (i > 0) {
+                    return; // Second toInt arg (base) is not supported by qEnvironmentVariableIntValue
+                }
+            }
         }
-
-        errorMsg += " Use " + replacement + "() instead";
-        emitWarning(clazy::getLocStart(memberCall), errorMsg, fixits);
+    } else {
+        return;
     }
+
+    std::string getEnvArgStr = Lexer::getSourceText(CharSourceRange::getTokenRange(qgetEnvCall->getArg(0)->getSourceRange()), sm(), lo()).str();
+    if (shouldIncludeBaseParameter) {
+        getEnvArgStr += ", " + Lexer::getSourceText(CharSourceRange::getTokenRange(memberCall->getArg(0)->getSourceRange()), sm(), lo()).str();
+    }
+
+    errorMsg += " Use " + replacement + "() instead";
+    emitWarning(clazy::getLocStart(memberCall), errorMsg, {FixItHint::CreateReplacement(stmt->getSourceRange(), replacement + "(" + getEnvArgStr + ")")});
 }
