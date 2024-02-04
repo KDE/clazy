@@ -170,6 +170,7 @@ void CheckManager::registerChecks()
     registerCheck(check<ContainerAntiPattern>("container-anti-pattern", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<EmptyQStringliteral>("empty-qstringliteral", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<FullyQualifiedMocTypes>("fully-qualified-moc-types", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
+    registerFixIt(1, "fix-fully-qualified-moc-types", "fully-qualified-moc-types");
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaUniqueConnection>("lambda-unique-connection", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LowercaseQMlTypeName>("lowercase-qml-type-name", CheckLevel0, RegisteredCheck::Option_VisitsStmts));

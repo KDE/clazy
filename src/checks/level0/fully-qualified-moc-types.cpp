@@ -77,8 +77,7 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
                 fixitRange = SourceRange(fixitRange.getBegin(), fixitRange.getEnd().getLocWithOffset(-1));
             }
             std::vector fixits{FixItHint::CreateReplacement(fixitRange, qualifiedTypeName)};
-            std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " arguments need to be fully-qualified (" + qualifiedTypeName
-                + " instead of " + typeName + ")";
+            std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " arguments need to be fully-qualified";
             emitWarning(param->getTypeSpecStartLoc(), warning, fixits);
         }
     }
@@ -87,8 +86,7 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
         QualType returnT = clazy::pointeeQualType(method->getReturnType());
         if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             SourceRange returnTypeSourceRange = method->getReturnTypeSourceRange();
-            std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " return types need to be fully-qualified (" + qualifiedTypeName
-                + " instead of " + typeName + ")";
+            std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " return types need to be fully-qualified";
             std::vector fixits{FixItHint::CreateReplacement(returnTypeSourceRange, qualifiedTypeName)};
             emitWarning(returnTypeSourceRange.getBegin(), warning, fixits);
         }

@@ -243,7 +243,12 @@
             "class_name" : "FullyQualifiedMocTypes",
             "level" : 0,
             "categories" : ["bug", "qml"],
-            "visits_decls" : true
+            "visits_decls" : true,
+            "fixits" : [
+                {
+                    "name" : "fully-qualified-moc-types"
+                }
+            ]
         },
         {
             "name"  : "qvariant-template-instantiation",
