@@ -1,6 +1,6 @@
 #include <QtCore/QObject>
 #include <QtDBus/QDBusPendingReply>
-
+#include <memory>
 struct A {};
 struct NonNamespacedGadget {
     Q_GADGET
@@ -87,7 +87,9 @@ public Q_SLOTS:
     inline QDBusPendingReply<QualMe> unqualGenericDbusReply() {return {};} // WARN
     inline QDBusPendingReply<bool> boolDbusReply() {return {};} // OK
     inline QDBusPendingReply<> voidDbusReply() {return {};} // OK
-    inline QDBusPendingReply<MyList> typedefInGeneric() {return {};} // OK
+    inline QDBusPendingReply<MyList> typedefInGeneric() {return {};} // WARN
+    inline QDBusPendingReply<std::shared_ptr<MyObj2>> nestedGeneric() {return {};} // OK
+    inline QDBusPendingReply<std::shared_ptr<MyList>> nestedNotFullyQualifiedGeneric() {return {};} // WARN
 };
 
 Q_DECLARE_METATYPE(MyObj2::QualMe);

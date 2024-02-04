@@ -8,4 +8,5 @@ fully-qualified-moc-types/main.cpp:82:5: warning: slot return types need to be f
 fully-qualified-moc-types/main.cpp:83:5: warning: slot return types need to be fully-qualified (QList<MyObj2::QualMe> instead of QList<QualMe>) [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:87:5: warning: slot return types need to be fully-qualified (QDBusPendingReply<MyObj2::QualMe> instead of QDBusPendingReply<QualMe>) [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:90:5: warning: slot return types need to be fully-qualified (QDBusPendingReply<MyObj2::MyList> instead of QDBusPendingReply<MyList>) [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:92:5: warning: slot return types need to be fully-qualified (QDBusPendingReply<std::shared_ptr<MyObj2::MyList>> instead of QDBusPendingReply<std::shared_ptr<MyList>>) [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:18:5: warning: Q_PROPERTY of type NamespacedGadget should use full qualification (NS::NamespacedGadget) [-Wclazy-fully-qualified-moc-types]
