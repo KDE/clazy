@@ -49,8 +49,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    CXXRecordDecl *record = method->getParent();
-    if (!record || clazy::name(record) != "QByteArray") {
+    if (CXXRecordDecl *record = method->getParent(); !record || clazy::name(record) != "QByteArray") {
         return;
     }
 
@@ -60,10 +59,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     }
 
     CallExpr *qgetEnvCall = calls.back();
-
-    FunctionDecl *func = qgetEnvCall->getDirectCallee();
-
-    if (!func || clazy::name(func) != "qgetenv") {
+    if (FunctionDecl *func = qgetEnvCall->getDirectCallee(); !func || clazy::name(func) != "qgetenv") {
         return;
     }
 
