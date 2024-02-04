@@ -87,8 +87,25 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 }
 
-static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo)
+static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo, bool checkElabType = true)
 {
+    if (auto *elabType = dyn_cast<ElaboratedType>(ptr); elabType && checkElabType) {
+        if (auto *specType = dyn_cast<TemplateSpecializationType>(elabType->getNamedType().getTypePtrOrNull()); specType && !ptr->getAs<TypedefType>()) {
+            std::string str = getQualifiedNameOfType(ptr, lo, false);
+            str += "<";
+            bool firstArg = true;
+            for (auto arg : specType->template_arguments()) { // We reconstruct the type with the explicitly specified template params
+                if (!firstArg) {
+                    str += ", ";
+                }
+                firstArg = false;
+                llvm::errs() << "str template arg   " << getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo) << "\n";
+                str += getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo);
+            }
+            str += ">";
+            return str;
+        }
+    }
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
         return typedefDecl->getDecl()->getQualifiedNameAsString();
     } else if (auto recordDecl = ptr->getAsRecordDecl()) {
