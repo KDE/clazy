@@ -51,7 +51,7 @@ namespace NS {
         Q_INVOKABLE void myinvokable6(const A);
         Q_INVOKABLE void myinvokable7(const A *);
         Q_INVOKABLE void myinvokable8(A *);
-        Q_INVOKABLE NS::MyType myinvokable9(NS::MyType); // Warn
+        Q_INVOKABLE NS::MyType* myinvokable9(NS::MyType); // Warn
         NS::MyType foo();
         NamespacedGadget namespacedGadget() const;
         NamespacedGadget namespacedGadget2() const;
@@ -90,6 +90,9 @@ public Q_SLOTS:
     inline QDBusPendingReply<MyObj2::MyList> typedefInGeneric() {return {};} // WARN
     inline void nestedGeneric(QDBusPendingReply<std::shared_ptr<MyObj2>>) {} // OK
     inline void nestedNotFullyQualifiedGeneric(QDBusPendingReply<std::shared_ptr<MyObj2::MyList>>) {} // WARN
+    inline const MyObj2::MyList& notQualWithModifier() {return lst;};
+private:
+    MyList lst;
 };
 
 Q_DECLARE_METATYPE(MyObj2::QualMe);

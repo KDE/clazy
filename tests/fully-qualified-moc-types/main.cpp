@@ -90,6 +90,9 @@ public Q_SLOTS:
     inline QDBusPendingReply<MyList> typedefInGeneric() {return {};} // WARN
     inline void nestedGeneric(QDBusPendingReply<std::shared_ptr<MyObj2>>) {} // OK
     inline void nestedNotFullyQualifiedGeneric(QDBusPendingReply<std::shared_ptr<MyList>>) {} // WARN
+    inline const MyList& notQualWithModifier() {return lst;};
+private:
+    MyList lst;
 };
 
 Q_DECLARE_METATYPE(MyObj2::QualMe);

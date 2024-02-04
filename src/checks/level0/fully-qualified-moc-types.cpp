@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2018 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2024 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -86,6 +87,10 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
         QualType returnT = clazy::pointeeQualType(method->getReturnType());
         if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
             SourceRange returnTypeSourceRange = method->getReturnTypeSourceRange();
+            // We don't want to include the & or * characters for the fixit range
+            if (method->getReturnType()->isReferenceType() || method->getReturnType()->isPointerType()) {
+                returnTypeSourceRange = SourceRange(returnTypeSourceRange.getBegin(), returnTypeSourceRange.getEnd().getLocWithOffset(-1));
+            }
             std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " return types need to be fully-qualified";
             std::vector fixits{FixItHint::CreateReplacement(returnTypeSourceRange, qualifiedTypeName)};
             emitWarning(returnTypeSourceRange.getBegin(), warning, fixits);
