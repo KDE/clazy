@@ -87,23 +87,12 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 }
 
+static std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, LangOptions lo, bool checkElabType = true);
 static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo, bool checkElabType = true)
 {
     if (auto *elabType = dyn_cast<ElaboratedType>(ptr); elabType && checkElabType) {
         if (auto *specType = dyn_cast<TemplateSpecializationType>(elabType->getNamedType().getTypePtrOrNull()); specType && !ptr->getAs<TypedefType>()) {
-            std::string str = getQualifiedNameOfType(ptr, lo, false);
-            str += "<";
-            bool firstArg = true;
-            for (auto arg : specType->template_arguments()) { // We reconstruct the type with the explicitly specified template params
-                if (!firstArg) {
-                    str += ", ";
-                }
-                firstArg = false;
-                llvm::errs() << "str template arg   " << getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo) << "\n";
-                str += getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo);
-            }
-            str += ">";
-            return str;
+            return resolveTemplateType(specType, lo, false);
         }
     }
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
@@ -112,6 +101,25 @@ static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo
         return recordDecl->getQualifiedNameAsString();
     }
     return QualType::getFromOpaquePtr(ptr).getAsString(lo);
+}
+
+// In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void>
+// Thus we need to do all of the shenanigans below
+// specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
+static std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, LangOptions lo, bool checkElabType)
+{
+    std::string str = getQualifiedNameOfType(ptr, lo, checkElabType);
+    str += "<";
+    bool firstArg = true;
+    for (auto arg : ptr->template_arguments()) { // We reconstruct the type with the explicitly specified template params
+        if (!firstArg) {
+            str += ", ";
+        }
+        firstArg = false;
+        str += getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo);
+    }
+    str += ">";
+    return str;
 }
 
 bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, std::string &typeName) const
@@ -126,21 +134,7 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         }
 
         if (auto specType = ptr->getAs<TemplateSpecializationType>(); specType && !ptr->getAs<TypedefType>()) {
-            // In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void>
-            // Thus we need to do all of the shenanigans below
-            // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
-            std::string str = getQualifiedNameOfType(specType, lo()) + "<";
-            bool firstArg = true;
-            for (auto arg : specType->template_arguments()) { // We reconstruct the type with the explicitly specified template params
-                if (!firstArg) {
-                    str += ", ";
-                }
-                firstArg = false;
-                str += getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo());
-            }
-            str += ">";
-
-            qualifiedTypeName = str;
+            qualifiedTypeName = resolveTemplateType(specType, lo());
         } else if (auto recordDecl = ptr->getAsRecordDecl(); recordDecl && recordDecl->isInAnonymousNamespace()) {
             return true;
         } else {
