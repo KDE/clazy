@@ -86,9 +86,11 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
         QualType returnT = clazy::pointeeQualType(method->getReturnType());
         if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
-            emitWarning(method,
-                        std::string(accessSpecifierManager->qtAccessSpecifierTypeStr(qst)) + " return types need to be fully-qualified (" + qualifiedTypeName
-                            + " instead of " + typeName + ")");
+            SourceRange returnTypeSourceRange = method->getReturnTypeSourceRange();
+            std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " return types need to be fully-qualified (" + qualifiedTypeName
+                + " instead of " + typeName + ")";
+            std::vector fixits{FixItHint::CreateReplacement(returnTypeSourceRange, qualifiedTypeName)};
+            emitWarning(returnTypeSourceRange.getBegin(), warning, fixits);
         }
     }
 }
