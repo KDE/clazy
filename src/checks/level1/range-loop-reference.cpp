@@ -77,6 +77,6 @@ void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(clazy::getLocStart(varDecl), msg.c_str(), fixits);
+        emitWarning(clazy::getLocStart(varDecl), msg, fixits);
     }
 }

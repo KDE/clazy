@@ -169,7 +169,7 @@ void Foreach::checkBigTypeMissingRef()
             return;
         }
 
-        emitWarning(clazy::getLocStart(varDecl), error.c_str());
+        emitWarning(clazy::getLocStart(varDecl), error);
     }
 }
 

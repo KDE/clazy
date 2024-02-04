@@ -177,7 +177,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     }
 
     if (!error.empty()) {
-        emitWarning(clazy::getLocStart(stm), error.c_str());
+        emitWarning(clazy::getLocStart(stm), error);
     }
 }
 
