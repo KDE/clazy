@@ -20,23 +20,6 @@
 namespace clazy
 {
 
-inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
-{
-    auto RetType = func->getReturnType();
-    if (const auto *Ret = RetType->getAsRecordDecl()) {
-        if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>()) {
-            return R != nullptr;
-        }
-    } else if (const auto *ET = RetType->getAs<clang::EnumType>()) {
-        if (const clang::EnumDecl *ED = ET->getDecl()) {
-            if (const auto *R = ED->getAttr<clang::WarnUnusedResultAttr>()) {
-                return R != nullptr;
-            }
-        }
-    }
-    return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
-}
-
 inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *invalid)
 {
 #if LLVM_VERSION_MAJOR >= 16

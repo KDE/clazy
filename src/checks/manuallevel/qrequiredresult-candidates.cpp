@@ -5,7 +5,6 @@
 */
 
 #include "qrequiredresult-candidates.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -13,6 +12,23 @@
 #include <clang/AST/AST.h>
 
 using namespace clang;
+
+static bool hasUnusedResultAttr(clang::FunctionDecl *func)
+{
+    auto RetType = func->getReturnType();
+    if (const auto *Ret = RetType->getAsRecordDecl()) {
+        if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>()) {
+            return R != nullptr;
+        }
+    } else if (const auto *ET = RetType->getAs<clang::EnumType>()) {
+        if (const clang::EnumDecl *ED = ET->getDecl()) {
+            if (const auto *R = ED->getAttr<clang::WarnUnusedResultAttr>()) {
+                return R != nullptr;
+            }
+        }
+    }
+    return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
+}
 
 QRequiredResultCandidates::QRequiredResultCandidates(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
@@ -30,7 +46,7 @@ void QRequiredResultCandidates::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    if (clazy::hasUnusedResultAttr(method)) { // Also catches nodiscard
+    if (hasUnusedResultAttr(method)) { // Also catches nodiscard
         return;
     }
 
