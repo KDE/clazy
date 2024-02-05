@@ -22,3 +22,7 @@ License: LGPL-2.0-or-later
 Files: docs/checks/README-qdatetime-utc.md
 Copyright: Alexander Lohnau <alexander.lonau@gmx.de>
 License: CC-BY-SA-4.0
+
+Files: tests/fully-qualified-moc-types/*
+Copyright: Alexander Lohnau <alexander.lonau@gmx.de>
+License: LGPL-2.0-or-later
