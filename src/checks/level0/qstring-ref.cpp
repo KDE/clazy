@@ -48,7 +48,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
         return false;
     }
 
-    static const llvm::SmallVector<StringRef, 3> list = {{"left", "mid", "right"}};
+    static const llvm::SmallVector<StringRef, 3> list{"left", "mid", "right"};
     return clazy::contains(list, clazy::name(method));
 }
 
@@ -58,25 +58,10 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
         return false;
     }
 
-    static const std::array<StringRef, 19> list = {{"compare",
-                                                    "contains",
-                                                    "count",
-                                                    "startsWith",
-                                                    "endsWith",
-                                                    "indexOf",
-                                                    "isEmpty",
-                                                    "isNull",
-                                                    "lastIndexOf",
-                                                    "length",
-                                                    "size",
-                                                    "toDouble",
-                                                    "toFloat",
-                                                    "toInt",
-                                                    "toUInt",
-                                                    "toULong",
-                                                    "toULongLong",
-                                                    "toUShort",
-                                                    "toUcs4"}};
+    static const std::array<StringRef, 19> list{
+        "compare", "contains", "count",   "startsWith", "endsWith", "indexOf", "isEmpty",     "isNull",   "lastIndexOf", "length",
+        "size",    "toDouble", "toFloat", "toInt",      "toUInt",   "toULong", "toULongLong", "toUShort", "toUcs4",
+    };
 
     if (!clazy::contains(list, clazy::name(method))) {
         return false;
@@ -91,7 +76,7 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
         return false;
     }
 
-    static const std::array<StringRef, 8> list = {{"append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth"}};
+    static const std::array<StringRef, 8> list{"append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth"};
 
     if (clazy::contains(list, clazy::name(method))) {
         return true;
