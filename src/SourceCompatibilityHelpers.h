@@ -88,15 +88,6 @@ inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *in
 #define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile, sm, lo)
 #endif
 
-inline bool isFinal(const clang::CXXRecordDecl *record)
-{
-#if LLVM_VERSION_MAJOR >= 11
-    return record->isEffectivelyFinal();
-#else
-    return record->hasAttr<clang::FinalAttr>();
-#endif
-}
-
 inline bool contains_lower(clang::StringRef haystack, clang::StringRef needle)
 {
 #if LLVM_VERSION_MAJOR >= 13
