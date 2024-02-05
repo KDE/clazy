@@ -16,12 +16,6 @@
 
 #include <vector>
 
-class ClazyContext;
-namespace clang
-{
-class FunctionDecl;
-} // namespace clang
-
 using namespace clang;
 
 QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &name, ClazyContext *context)
