@@ -7,9 +7,6 @@
 #include "qproperty-type-mismatch.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
-#include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
-#include "StringUtils.h"
 #include "TypeUtils.h"
 
 #include <clang/AST/Decl.h>

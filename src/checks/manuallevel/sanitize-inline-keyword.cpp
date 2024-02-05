@@ -86,11 +86,11 @@ void SanitizeInlineKeyword::VisitDecl(Decl *decl)
               "This could lead to hard-to-suppress warnings with some compilers (e.g. MinGW). "
               "The 'inline' keyword should be used for the declaration only.";
 
-        SourceLocation loc = clazy::getLocStart(member);
+        SourceLocation loc = member->getBeginLoc();
         std::vector<FixItHint> fixits{clazy::createInsertion(loc, "inline "s)};
 
-        SourceLocation def = clazy::getLocStart(cxxDefinition);
-        SourceLocation defEnd = clazy::getLocEnd(cxxDefinition);
+        SourceLocation def = cxxDefinition->getBeginLoc();
+        SourceLocation defEnd = cxxDefinition->getEndLoc();
         Token tok;
         for (; def.isValid() && def != defEnd; def = Utils::locForNextToken(def, sm(), lo())) {
             if (!Lexer::getRawToken(def, tok, sm(), lo())) { // false means success!

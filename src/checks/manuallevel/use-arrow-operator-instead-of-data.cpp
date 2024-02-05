@@ -69,5 +69,5 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
     FixItHint removal = FixItHint::CreateRemoval(sourceRange);
     fixits.push_back(std::move(removal));
 
-    emitWarning(clazy::getLocStart(callExpr), "Use operator -> directly instead of " + ClassName + "::data()->", fixits);
+    emitWarning(callExpr->getBeginLoc(), "Use operator -> directly instead of " + ClassName + "::data()->", fixits);
 }

@@ -8,8 +8,6 @@
 #ifndef MOREWARNINGS_UTILS_H
 #define MOREWARNINGS_UTILS_H
 
-#include "SourceCompatibilityHelpers.h"
-
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
 #include <clang/AST/Expr.h>
@@ -21,7 +19,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Config/llvm-config.h>
 
-#include <map>
 #include <string>
 #include <vector>
 

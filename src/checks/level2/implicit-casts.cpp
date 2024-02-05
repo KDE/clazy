@@ -87,7 +87,7 @@ static bool iterateCallExpr(T *callExpr, CheckBase *check)
             continue;
         }
 
-        check->emitWarning(clazy::getLocStart(implicitCast), "Implicit pointer to bool cast (argument " + std::to_string(i) + ')');
+        check->emitWarning(implicitCast->getBeginLoc(), "Implicit pointer to bool cast (argument " + std::to_string(i) + ')');
         result = true;
     }
 
@@ -139,7 +139,7 @@ static bool iterateCallExpr2(T *callExpr, CheckBase *check, ParentMap *parentMap
             continue;
         }
 
-        check->emitWarning(clazy::getLocStart(implicitCast), "Implicit bool to int cast (argument " + std::to_string(i) + ')');
+        check->emitWarning(implicitCast->getBeginLoc(), "Implicit bool to int cast (argument " + std::to_string(i) + ')');
         result = true;
     }
 
@@ -164,11 +164,11 @@ void ImplicitCasts::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (isMacroToIgnore(clazy::getLocStart(stmt))) {
+    if (isMacroToIgnore(stmt->getBeginLoc())) {
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stmt))) {
+    if (shouldIgnoreFile(stmt->getBeginLoc())) {
         return;
     }
 

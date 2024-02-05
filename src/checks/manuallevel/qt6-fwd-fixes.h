@@ -11,7 +11,6 @@
 #include "checkbase.h"
 
 #include <string>
-#include <vector>
 
 class ClazyContext;
 

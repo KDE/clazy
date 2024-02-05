@@ -8,7 +8,6 @@
 */
 
 #include "LoopUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
 
@@ -61,7 +60,7 @@ bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &
 
     if (isa<ReturnStmt>(stmt) || isa<BreakStmt>(stmt) || isa<ContinueStmt>(stmt)) {
         if (onlyBeforeThisLoc.isValid()) {
-            FullSourceLoc sourceLoc(clazy::getLocStart(stmt), sm);
+            FullSourceLoc sourceLoc(stmt->getBeginLoc(), sm);
             FullSourceLoc otherSourceLoc(onlyBeforeThisLoc, sm);
             if (sourceLoc.isBeforeInTranslationUnitThan(otherSourceLoc)) {
                 return true;

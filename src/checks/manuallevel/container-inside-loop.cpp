@@ -7,7 +7,6 @@
 #include "container-inside-loop.h"
 #include "ClazyContext.h"
 #include "LoopUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StmtBodyRange.h"
 #include "StringUtils.h"
 #include "Utils.h"
@@ -63,5 +62,5 @@ void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "container inside loop causes unneeded allocations");
+    emitWarning(stmt->getBeginLoc(), "container inside loop causes unneeded allocations");
 }

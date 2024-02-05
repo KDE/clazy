@@ -63,7 +63,7 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
 
     if (m_context->isQtDeveloper()) {
         PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
-        if (preProcessorVisitor && !preProcessorVisitor->isBetweenQtNamespaceMacros(clazy::getLocStart(func))) {
+        if (preProcessorVisitor && !preProcessorVisitor->isBetweenQtNamespaceMacros(func->getBeginLoc())) {
             emitWarning(decl, "qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") must be declared before QT_END_NAMESPACE");
         }
     }

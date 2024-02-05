@@ -73,9 +73,9 @@ void VirtualCallCtor::VisitDecl(Decl *decl)
     SourceLocation loc = containsVirtualCall(classDecl, ctorOrDtorBody, processedStmts);
     if (loc.isValid()) {
         if (ctorDecl) {
-            emitWarning(clazy::getLocStart(decl), "Calling pure virtual function in CTOR");
+            emitWarning(decl->getBeginLoc(), "Calling pure virtual function in CTOR");
         } else {
-            emitWarning(clazy::getLocStart(decl), "Calling pure virtual function in DTOR");
+            emitWarning(decl->getBeginLoc(), "Calling pure virtual function in DTOR");
         }
         emitWarning(loc, "Called here");
     }
@@ -112,10 +112,10 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
 #else
             if (memberDecl->isPure()) {
 #endif
-                return clazy::getLocStart(callExpr);
+                return callExpr->getBeginLoc();
             }
             if (containsVirtualCall(classDecl, memberDecl->getBody(), processedStmts).isValid()) {
-                return clazy::getLocStart(callExpr);
+                return callExpr->getBeginLoc();
             }
         }
     }

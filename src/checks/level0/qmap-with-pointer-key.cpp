@@ -8,7 +8,6 @@
 */
 
 #include "qmap-with-pointer-key.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 
@@ -42,6 +41,6 @@ void QMapWithPointerKey::VisitDecl(clang::Decl *decl)
     QualType qt = templateArguments[0].getAsType();
     const Type *t = qt.getTypePtrOrNull();
     if (t && t->isPointerType()) {
-        emitWarning(clazy::getLocStart(decl), "Use QHash<K,T> instead of QMap<K,T> when K is a pointer");
+        emitWarning(decl->getBeginLoc(), "Use QHash<K,T> instead of QMap<K,T> when K is a pointer");
     }
 }

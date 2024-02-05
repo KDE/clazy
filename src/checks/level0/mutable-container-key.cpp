@@ -5,7 +5,6 @@
 */
 
 #include "mutable-container-key.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -56,5 +55,5 @@ void MutableContainerKey::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    emitWarning(clazy::getLocStart(decl), "Associative container key might be modified externally");
+    emitWarning(decl->getBeginLoc(), "Associative container key might be modified externally");
 }

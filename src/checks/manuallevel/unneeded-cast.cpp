@@ -11,7 +11,6 @@
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 
@@ -95,7 +94,7 @@ bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
         return false;
     }
 
-    if (clazy::getLocStart(namedCast).isMacroID()) {
+    if (namedCast->getBeginLoc().isMacroID()) {
         return false;
     }
 
@@ -119,7 +118,7 @@ bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
     }
 
     if (isDynamicCast && !isOptionSet("prefer-dynamic-cast-over-qobject") && clazy::isQObject(castFrom)) {
-        emitWarning(clazy::getLocStart(namedCast), "Use qobject_cast rather than dynamic_cast");
+        emitWarning(namedCast->getBeginLoc(), "Use qobject_cast rather than dynamic_cast");
     }
 
     CXXRecordDecl *castTo = Utils::namedCastOuterDecl(namedCast);
@@ -148,19 +147,19 @@ bool UnneededCast::maybeWarn(Stmt *stmt, CXXRecordDecl *castFrom, CXXRecordDecl 
     castTo = castTo->getCanonicalDecl();
 
     if (castFrom == castTo) {
-        emitWarning(clazy::getLocStart(stmt), "Casting to itself");
+        emitWarning(stmt->getBeginLoc(), "Casting to itself");
         return true;
     }
     if (clazy::derivesFrom(/*child=*/castFrom, castTo)) {
         if (isQObjectCast) {
             const bool isTernaryOperator = clazy::getFirstParentOfType<ConditionalOperator>(m_context->parentMap, stmt) != nullptr;
             if (isTernaryOperator) {
-                emitWarning(clazy::getLocStart(stmt), "use static_cast instead of qobject_cast");
+                emitWarning(stmt->getBeginLoc(), "use static_cast instead of qobject_cast");
             } else {
-                emitWarning(clazy::getLocStart(stmt), "explicitly casting to base is unnecessary");
+                emitWarning(stmt->getBeginLoc(), "explicitly casting to base is unnecessary");
             }
         } else {
-            emitWarning(clazy::getLocStart(stmt), "explicitly casting to base is unnecessary");
+            emitWarning(stmt->getBeginLoc(), "explicitly casting to base is unnecessary");
         }
 
         return true;

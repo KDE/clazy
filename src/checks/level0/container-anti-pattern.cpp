@@ -7,7 +7,6 @@
 #include "container-anti-pattern.h"
 #include "HierarchyUtils.h"
 #include "LoopUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -76,7 +75,7 @@ void ContainerAntiPattern::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "allocating an unneeded temporary container");
+    emitWarning(stmt->getBeginLoc(), "allocating an unneeded temporary container");
 }
 
 bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
@@ -108,7 +107,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
         return false;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "Use QSet::intersects() instead");
+    emitWarning(stmt->getBeginLoc(), "Use QSet::intersects() instead");
     return true;
 }
 
@@ -121,7 +120,7 @@ bool ContainerAntiPattern::handleLoop(Stmt *stm)
 
     auto *memberExpr = clazy::getFirstChildOfType2<CXXMemberCallExpr>(containerExpr);
     if (isInterestingCall(memberExpr)) {
-        emitWarning(clazy::getLocStart(stm), "allocating an unneeded temporary container");
+        emitWarning(stm->getBeginLoc(), "allocating an unneeded temporary container");
         return true;
     }
 

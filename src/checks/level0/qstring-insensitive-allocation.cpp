@@ -66,5 +66,5 @@ void QStringInsensitiveAllocation::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "unneeded allocation");
+    emitWarning(stmt->getBeginLoc(), "unneeded allocation");
 }

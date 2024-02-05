@@ -14,7 +14,6 @@
 #include "LoopUtils.h"
 #include "MacroUtils.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -131,15 +130,15 @@ bool ReserveCandidates::isReserveCandidate(ValueDecl *valueDecl, Stmt *loopBody,
 
     const bool isMemberVariable = Utils::isMemberVariable(valueDecl);
     // We only want containers defined outside of the loop we're examining
-    if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(clazy::getLocStart(loopBody), clazy::getLocStart(valueDecl))) {
+    if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(loopBody->getBeginLoc(), valueDecl->getBeginLoc())) {
         return false;
     }
 
-    if (isInComplexLoop(callExpr, clazy::getLocStart(valueDecl), isMemberVariable)) {
+    if (isInComplexLoop(callExpr, valueDecl->getBeginLoc(), isMemberVariable)) {
         return false;
     }
 
-    if (clazy::loopCanBeInterrupted(loopBody, m_context->sm, clazy::getLocStart(callExpr))) {
+    if (clazy::loopCanBeInterrupted(loopBody, m_context->sm, callExpr->getBeginLoc())) {
         return false;
     }
 
@@ -157,7 +156,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    const bool isForeach = clazy::isInMacro(&m_astContext, clazy::getLocStart(stm), "Q_FOREACH");
+    const bool isForeach = clazy::isInMacro(&m_astContext, stm->getBeginLoc(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body))) {
@@ -185,7 +184,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
         ValueDecl *valueDecl = Utils::valueDeclForCallExpr(callExpr);
         if (isReserveCandidate(valueDecl, body, callExpr)) {
-            emitWarning(clazy::getLocStart(callExpr), "Reserve candidate");
+            emitWarning(callExpr->getBeginLoc(), "Reserve candidate");
         }
     }
 }
@@ -302,7 +301,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
 
     static std::vector<unsigned int> nonComplexOnesCache;
     static std::vector<unsigned int> complexOnesCache;
-    auto rawLoc = clazy::getLocStart(s).getRawEncoding();
+    auto rawLoc = s->getBeginLoc().getRawEncoding();
 
     // For some reason we generate two warnings on some foreaches, so cache the ones we processed
     // and return true so we don't trigger a warning
@@ -313,7 +312,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
     Stmt *parent = s;
     PresumedLoc lastForeachForStm;
     while ((parent = clazy::parent(m_context->parentMap, parent))) {
-        const SourceLocation parentStart = clazy::getLocStart(parent);
+        const SourceLocation parentStart = parent->getBeginLoc();
         if (!isMemberVariable && sm().isBeforeInSLocAddrSpace(parentStart, declLocation)) {
             nonComplexOnesCache.push_back(rawLoc);
             return false;

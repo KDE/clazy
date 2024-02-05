@@ -72,7 +72,7 @@ static bool methodIsOK(const std::string &name)
 
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
-    const SourceLocation stmStart = clazy::getLocStart(stm);
+    const SourceLocation stmStart = stm->getBeginLoc();
     if (!clazy::isInMacro(&m_astContext, stmStart, "Q_ASSERT")) {
         return;
     }
@@ -108,7 +108,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
         if (op->isAssignmentOp()) {
             if (auto *declRef = dyn_cast<DeclRefExpr>(op->getLHS())) {
                 ValueDecl *valueDecl = declRef->getDecl();
-                if (valueDecl && sm().isBeforeInSLocAddrSpace(clazy::getLocStart(valueDecl), stmStart)) {
+                if (valueDecl && sm().isBeforeInSLocAddrSpace(valueDecl->getBeginLoc(), stmStart)) {
                     // llvm::errs() << "reason3\n";
                     warn = true;
                 }
@@ -119,7 +119,7 @@ void AssertWithSideEffects::VisitStmt(Stmt *stm)
             ValueDecl *valueDecl = declRef->getDecl();
             auto type = op->getOpcode();
             if (type != UnaryOperatorKind::UO_Deref && type != UnaryOperatorKind::UO_AddrOf) {
-                if (valueDecl && sm().isBeforeInSLocAddrSpace(clazy::getLocStart(valueDecl), stmStart)) {
+                if (valueDecl && sm().isBeforeInSLocAddrSpace(valueDecl->getBeginLoc(), stmStart)) {
                     // llvm::errs() << "reason5 " << op->getOpcodeStr() << "\n";
                     warn = true;
                 }

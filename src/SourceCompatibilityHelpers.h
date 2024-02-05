@@ -19,25 +19,6 @@
 
 namespace clazy
 {
-template<typename T>
-inline clang::SourceLocation getLocStart(const T *t)
-{
-#if LLVM_VERSION_MAJOR >= 8
-    return t->getBeginLoc();
-#else
-    return t->getLocStart();
-#endif
-}
-
-template<typename T>
-inline clang::SourceLocation getLocEnd(const T *t)
-{
-#if LLVM_VERSION_MAJOR >= 8
-    return t->getEndLoc();
-#else
-    return t->getLocEnd();
-#endif
-}
 
 inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
 {

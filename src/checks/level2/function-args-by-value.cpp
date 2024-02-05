@@ -195,7 +195,7 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
 
             const std::string paramStr = param->getType().getAsString(lo());
             std::string error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
-            emitWarning(clazy::getLocStart(param), error, fixits);
+            emitWarning(param->getBeginLoc(), error, fixits);
         }
     }
 }
@@ -206,15 +206,15 @@ FixItHint FunctionArgsByValue::fixit(FunctionDecl *func, const ParmVarDecl *para
     qt.removeLocalConst();
     const std::string typeName = qt.getAsString(PrintingPolicy(lo()));
     std::string replacement = typeName + ' ' + std::string(clazy::name(param));
-    SourceLocation startLoc = clazy::getLocStart(param);
-    SourceLocation endLoc = clazy::getLocEnd(param);
+    SourceLocation startLoc = param->getBeginLoc();
+    SourceLocation endLoc = param->getEndLoc();
 
     const int numRedeclarations = std::distance(func->redecls_begin(), func->redecls_end());
     const bool definitionIsAlsoDeclaration = numRedeclarations == 1;
     const bool isDeclarationButNotDefinition = !func->doesThisDeclarationHaveABody();
 
     if (param->hasDefaultArg() && (isDeclarationButNotDefinition || definitionIsAlsoDeclaration)) {
-        endLoc = clazy::getLocStart(param->getDefaultArg()).getLocWithOffset(-1);
+        endLoc = param->getDefaultArg()->getBeginLoc().getLocWithOffset(-1);
         replacement += " =";
     }
 

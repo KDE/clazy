@@ -15,6 +15,7 @@
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
 
+#include <regex>
 #include <vector>
 
 using namespace clang;

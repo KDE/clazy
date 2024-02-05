@@ -5,7 +5,6 @@
 */
 
 #include "qhash-with-char-pointer-key.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -41,7 +40,7 @@ void QHashWithCharPointerKey::VisitDecl(clang::Decl *decl)
     if (!qt.isNull() && qt->isPointerType()) {
         qt = clazy::pointeeQualType(qt);
         if (!qt.isNull() && !qt->isPointerType() && qt->isCharType()) {
-            emitWarning(clazy::getLocStart(decl), "Using QHash<const char *, T> is dangerous");
+            emitWarning(decl->getBeginLoc(), "Using QHash<const char *, T> is dangerous");
         }
     }
 }

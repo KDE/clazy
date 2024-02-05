@@ -9,7 +9,6 @@
 #include "ClazyContext.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -192,15 +191,15 @@ void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
     std::string message;
 
     for (auto macro_pos : m_listingMacroExpand) {
-        if (m_sm.isPointWithin(macro_pos, clazy::getLocStart(stmt), clazy::getLocEnd(stmt))) {
+        if (m_sm.isPointWithin(macro_pos, stmt->getBeginLoc(), stmt->getEndLoc())) {
             message = "QLatin1Char or QLatin1String is being called (fix it not supported because of macro)";
-            emitWarning(clazy::getLocStart(stmt), message, fixits);
+            emitWarning(stmt->getBeginLoc(), message, fixits);
             return;
         }
     }
     if (!m_QStringOrQChar_fix) {
         message = "QLatin1Char or QLatin1String is being called (fix it not supported)";
-        emitWarning(clazy::getLocStart(stmt), message, fixits);
+        emitWarning(stmt->getBeginLoc(), message, fixits);
         return;
     }
 
@@ -223,14 +222,14 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
 
     bool noFix = false;
 
-    SourceLocation warningLocation = clazy::getLocStart(stmt);
+    SourceLocation warningLocation = stmt->getBeginLoc();
 
     if (!isInterestingCtorCall(ctorExpr, m_context, check_parents)) {
         return false;
     }
     message = "QLatin1Char or QLatin1String is being called";
-    if (clazy::getLocStart(stmt).isMacroID()) {
-        SourceLocation callLoc = clazy::getLocStart(stmt);
+    if (stmt->getBeginLoc().isMacroID()) {
+        SourceLocation callLoc = stmt->getBeginLoc();
         message += " in macro ";
         message += Lexer::getImmediateMacroName(callLoc, m_sm, lo());
         message += ". Please replace with `u` call manually.";

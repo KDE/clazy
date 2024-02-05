@@ -10,7 +10,6 @@
 
 #include "qdatetime-utc.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 
 #include <clang/AST/Decl.h>
@@ -75,8 +74,8 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     std::vector<FixItHint> fixits;
     const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
     if (!success) {
-        queueManualFixitWarning(clazy::getLocStart(secondCall));
+        queueManualFixitWarning(secondCall->getBeginLoc());
     }
 
-    emitWarning(clazy::getLocStart(stmt), "Use QDateTime" + replacement + " instead. It is significantly faster", fixits);
+    emitWarning(stmt->getBeginLoc(), "Use QDateTime" + replacement + " instead. It is significantly faster", fixits);
 }

@@ -84,13 +84,13 @@ public:
         const bool doubleDigit = isDoubleDigitRgb(str);
         const bool doubleDigitA = isDoubleDigitRgba(str);
         if (bool isAnyValidPattern = singleDigit || doubleDigit || doubleDigitA || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str); !isAnyValidPattern) {
-            m_check->emitWarning(clazy::getLocStart(replaceExpr), "Pattern length does not match any supported one by QColor, check the documentation");
+            m_check->emitWarning(replaceExpr->getBeginLoc(), "Pattern length does not match any supported one by QColor, check the documentation");
             return;
         }
 
         for (unsigned int i = 1; i < str.size(); ++i) {
             if (!isxdigit(str[i])) {
-                m_check->emitWarning(clazy::getLocStart(replaceExpr), "QColor pattern may only contain hexadecimal digits");
+                m_check->emitWarning(replaceExpr->getBeginLoc(), "QColor pattern may only contain hexadecimal digits");
                 return;
             }
         }
@@ -118,10 +118,10 @@ public:
             if (isStaticFromString) {
                 fixit = "QColor(" + fixit + ")";
             }
-            m_check->emitWarning(clazy::getLocStart(replaceExpr), message, {clang::FixItHint::CreateReplacement(replaceExpr->getSourceRange(), fixit)});
+            m_check->emitWarning(replaceExpr->getBeginLoc(), message, {clang::FixItHint::CreateReplacement(replaceExpr->getSourceRange(), fixit)});
         } else {
             // triple or quadruple digit RGBA
-            m_check->emitWarning(clazy::getLocStart(replaceExpr), "The QColor ctor taking QRgba64 is cheaper than one taking string literals");
+            m_check->emitWarning(replaceExpr->getBeginLoc(), "The QColor ctor taking QRgba64 is cheaper than one taking string literals");
         }
     }
     inline std::string twoDigit(const std::string &in)

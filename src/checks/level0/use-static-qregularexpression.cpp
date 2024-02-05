@@ -193,7 +193,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
 
         if (obj->isLValue()) {
             if (isArgNonStaticLocalVar(obj, lo())) {
-                emitWarning(clazy::getLocStart(obj), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+                emitWarning(obj->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
                 return;
             }
         } else if (obj->isXValue()) {
@@ -203,7 +203,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
                 return;
             }
             if (isTemporaryQRegexObj(temp, lo())) {
-                emitWarning(clazy::getLocStart(temp), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+                emitWarning(temp->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
             }
         }
         return;
@@ -221,12 +221,12 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
     // Its a QString*().method(QRegularExpression(arg)) ?
     if (auto *temp = isArgTemporaryObj(qregexArg)) {
         if (isTemporaryQRegexObj(temp, lo())) {
-            emitWarning(clazy::getLocStart(qregexArg), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+            emitWarning(qregexArg->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
         }
     }
 
     // Its a local QRegularExpression variable?
     if (isArgNonStaticLocalVar(qregexArg, lo())) {
-        emitWarning(clazy::getLocStart(qregexArg), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+        emitWarning(qregexArg->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
     }
 }

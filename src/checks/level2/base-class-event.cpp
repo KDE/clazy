@@ -79,6 +79,6 @@ void BaseClassEvent::VisitDecl(Decl *decl)
             continue;
         }
 
-        emitWarning(clazy::getLocStart(returnStmt), "Return " + baseClassName + "::" + methodName + "() instead of false");
+        emitWarning(returnStmt->getBeginLoc(), "Return " + baseClassName + "::" + methodName + "() instead of false");
     }
 }

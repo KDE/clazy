@@ -10,7 +10,6 @@
 #ifndef CLANG_LAZY_STRING_UTILS_H
 #define CLANG_LAZY_STRING_UTILS_H
 
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 
@@ -189,7 +188,7 @@ inline void printRange(const clang::SourceManager &sm, clang::SourceRange range,
 inline void printLocation(const clang::SourceManager &sm, const clang::Stmt *s, bool newLine = true)
 {
     if (s) {
-        printLocation(sm, clazy::getLocStart(s), newLine);
+        printLocation(sm, s->getBeginLoc(), newLine);
     }
 }
 
@@ -315,7 +314,7 @@ inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
         return;
     }
 
-    llvm::errs() << "Start=" << getLocStart(s).printToString(sm) << "; end=" << getLocStart(s).printToString(sm) << "\n";
+    llvm::errs() << "Start=" << s->getBeginLoc().printToString(sm) << "; end=" << s->getBeginLoc().printToString(sm) << "\n";
 
     for (auto *child : s->children()) {
         dump(sm, child);

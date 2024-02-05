@@ -59,12 +59,12 @@ void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
         replacement = "const " + replacement;
     }
 
-    SourceLocation start = clazy::getLocStart(varDecl);
+    SourceLocation start = varDecl->getBeginLoc();
     SourceLocation end = varDecl->getLocation();
     std::vector<FixItHint> fixits;
     fixits.push_back(clazy::createReplacement({start, end}, replacement));
 
-    emitWarning(clazy::getLocStart(decl), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);
+    emitWarning(decl->getBeginLoc(), "auto deduced to be QStringBuilder instead of QString. Possible crash.", fixits);
 }
 
 void AutoUnexpectedQStringBuilder::VisitStmt(Stmt *stmt)
@@ -79,5 +79,5 @@ void AutoUnexpectedQStringBuilder::VisitStmt(Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "lambda return type deduced to be QStringBuilder instead of QString. Possible crash.");
+    emitWarning(stmt->getBeginLoc(), "lambda return type deduced to be QStringBuilder instead of QString. Possible crash.");
 }

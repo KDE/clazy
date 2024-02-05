@@ -8,11 +8,9 @@
 #include "qt6-fwd-fixes.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "HierarchyUtils.h"
 #include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
-#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -28,7 +26,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include "llvm/MC/MCAsmMacro.h"
 #include <clang/Basic/Specifiers.h>
 
 using namespace clang;

@@ -9,7 +9,6 @@
 
 #include "qgetenv.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 
@@ -108,5 +107,5 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     if (changesToBaseAutodetection) {
         errorMsg += ". This uses internally a base of 0, supporting decimal, hex and octal values";
     }
-    emitWarning(clazy::getLocStart(memberCall), errorMsg, {FixItHint::CreateReplacement(stmt->getSourceRange(), replacement + "(" + getEnvArgStr + ")")});
+    emitWarning(memberCall->getBeginLoc(), errorMsg, {FixItHint::CreateReplacement(stmt->getSourceRange(), replacement + "(" + getEnvArgStr + ")")});
 }

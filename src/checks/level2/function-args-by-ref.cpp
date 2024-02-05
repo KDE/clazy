@@ -144,7 +144,7 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
             }
 
             addFixits(fixits, func, i);
-            emitWarning(clazy::getLocStart(param), error, fixits);
+            emitWarning(param->getBeginLoc(), error, fixits);
         }
     }
 }
@@ -163,7 +163,7 @@ void FunctionArgsByRef::addFixits(std::vector<FixItHint> &fixits, FunctionDecl *
         const bool isConst = paramQt.isConstQualified();
 
         if (!isConst) {
-            SourceLocation start = clazy::getLocStart(param);
+            SourceLocation start = param->getBeginLoc();
             fixits.push_back(clazy::createInsertion(start, "const "));
         }
 
@@ -180,7 +180,7 @@ void FunctionArgsByRef::VisitDecl(Decl *decl)
 void FunctionArgsByRef::VisitStmt(Stmt *stmt)
 {
     if (auto *lambda = dyn_cast<LambdaExpr>(stmt)) {
-        if (!shouldIgnoreFile(clazy::getLocStart(stmt))) {
+        if (!shouldIgnoreFile(stmt->getBeginLoc())) {
             processFunction(lambda->getCallOperator());
         }
     }

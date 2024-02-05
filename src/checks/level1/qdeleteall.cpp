@@ -69,7 +69,7 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
                     } else {
                         msg += ", use qDeleteAll(mycontainer.keyBegin(), mycontainer.keyEnd()) instead";
                     }
-                    emitWarning(clazy::getLocStart(p), msg);
+                    emitWarning(p->getBeginLoc(), msg);
                 }
             }
             break;

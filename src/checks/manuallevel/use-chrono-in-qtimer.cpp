@@ -78,7 +78,7 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
 #endif
     m_hasInsertedInclude = true;
 
-    emitWarning(clazy::getLocStart(stmt), "make code more robust: use " + suggestion + " instead.", fixits);
+    emitWarning(stmt->getBeginLoc(), "make code more robust: use " + suggestion + " instead.", fixits);
 }
 
 static std::string functionName(CallExpr *callExpr)

@@ -16,7 +16,6 @@
 #include <llvm/ADT/StringRef.h>
 
 #include <unordered_map>
-#include <utility>
 #include <vector>
 
 class ClazyContext;

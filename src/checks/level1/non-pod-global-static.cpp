@@ -49,7 +49,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stm))) {
+    if (shouldIgnoreFile(stm->getBeginLoc())) {
         return;
     }
 
@@ -58,7 +58,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    const SourceLocation declStart = clazy::getLocStart(varDecl);
+    const SourceLocation declStart = varDecl->getBeginLoc();
 
     if (declStart.isMacroID()) {
         auto macroName = static_cast<std::string>(Lexer::getImmediateMacroName(declStart, sm(), lo()));

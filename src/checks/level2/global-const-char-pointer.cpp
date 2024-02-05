@@ -36,7 +36,7 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(decl))) {
+    if (shouldIgnoreFile(decl->getBeginLoc())) {
         return;
     }
 
@@ -52,5 +52,5 @@ void GlobalConstCharPointer::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    emitWarning(clazy::getLocStart(decl), "non const global char *");
+    emitWarning(decl->getBeginLoc(), "non const global char *");
 }

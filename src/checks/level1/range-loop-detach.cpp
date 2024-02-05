@@ -97,7 +97,7 @@ void RangeLoopDetach::VisitStmt(clang::Stmt *stmt)
 bool RangeLoopDetach::islvalue(Expr *exp, SourceLocation &endLoc)
 {
     if (isa<DeclRefExpr>(exp)) {
-        endLoc = clazy::locForEndOfToken(&m_astContext, clazy::getLocStart(exp));
+        endLoc = clazy::locForEndOfToken(&m_astContext, exp->getBeginLoc());
         return true;
     }
 
@@ -141,7 +141,7 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         return;
     }
 
-    StmtBodyRange bodyRange(nullptr, &sm(), clazy::getLocStart(rangeLoop));
+    StmtBodyRange bodyRange(nullptr, &sm(), rangeLoop->getBeginLoc());
     if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange)) {
         return;
     }
@@ -161,5 +161,5 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
     auto *typedefType = t->getAs<TypedefType>(); // Typedefs in internal Qt code, like QStringList should not be resolved
     const std::string name = typedefType ? typedefType->getDecl()->getNameAsString() : record->getNameAsString();
-    emitWarning(clazy::getLocStart(rangeLoop), "c++11 range-loop might detach Qt container (" + name + ')', fixits);
+    emitWarning(rangeLoop->getBeginLoc(), "c++11 range-loop might detach Qt container (" + name + ')', fixits);
 }

@@ -9,7 +9,6 @@
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -43,7 +42,7 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
         if (clazy::isQMetaMethod(call, 1)) {
             return;
         }
-        emitWarning(clazy::getLocStart(call), "couldn't find method from pmf connect, please report a bug");
+        emitWarning(call->getBeginLoc(), "couldn't find method from pmf connect, please report a bug");
         return;
     }
 

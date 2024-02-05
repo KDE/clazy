@@ -230,7 +230,7 @@ std::vector<T *> getStatements(clang::Stmt *body,
             continue; // can happen
         }
         if (T *childT = clang::dyn_cast<T>(child)) {
-            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), clazy::getLocStart(child)))) {
+            if (!startLocation.isValid() || (sm && sm->isBeforeInSLocAddrSpace(sm->getSpellingLoc(startLocation), child->getBeginLoc()))) {
                 statements.push_back(childT);
             }
         }

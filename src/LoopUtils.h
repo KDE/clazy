@@ -10,8 +10,6 @@
 #ifndef CLAZY_LOOP_UTILS_H
 #define CLAZY_LOOP_UTILS_H
 
-#include "clazy_stl.h"
-
 #include <clang/AST/Stmt.h>
 #include <clang/AST/StmtCXX.h>
 #include <llvm/Support/Casting.h>

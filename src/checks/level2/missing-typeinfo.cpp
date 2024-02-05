@@ -68,7 +68,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
     const bool isTooBigForQList = isQList && checkTooBigForQList(qt2, &m_astContext);
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
-        if (sm().isInSystemHeader(clazy::getLocStart(record))) {
+        if (sm().isInSystemHeader(record->getBeginLoc())) {
             return;
         }
 

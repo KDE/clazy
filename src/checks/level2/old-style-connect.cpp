@@ -14,7 +14,6 @@
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -161,7 +160,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
         // It's old style, but check if all macros are literals
         int numLiterals = 0;
         for (auto arg : connectCall->arguments()) {
-            auto argLocation = clazy::getLocStart(arg);
+            auto argLocation = arg->getBeginLoc();
             std::string dummy;
             if (isSignalOrSlot(argLocation, dummy)) {
                 ++numLiterals;
@@ -254,11 +253,11 @@ void OldStyleConnect::VisitStmt(Stmt *s)
     }
 
     if (classification & ConnectFlag_Bogus) {
-        emitWarning(clazy::getLocStart(s), "Internal error");
+        emitWarning(s->getBeginLoc(), "Internal error");
         return;
     }
 
-    emitWarning(clazy::getLocStart(s), "Old Style Connect", call ? fixits(classification, call) : fixits(classification, ctorExpr));
+    emitWarning(s->getBeginLoc(), "Old Style Connect", call ? fixits(classification, call) : fixits(classification, ctorExpr));
 }
 
 void OldStyleConnect::addPrivateSlot(const PrivateSlot &slot)
@@ -330,7 +329,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
         return {};
     }
 
-    const SourceLocation locStart = clazy::getLocStart(callOrCtor);
+    const SourceLocation locStart = callOrCtor->getBeginLoc();
 
     if (classification & ConnectFlag_2ArgsDisconnect) {
         // Not implemented yet
@@ -358,7 +357,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
     std::string macroName;
     CXXMethodDecl *senderMethod = nullptr;
     for (auto arg : callOrCtor->arguments()) {
-        SourceLocation s = clazy::getLocStart(arg);
+        SourceLocation s = arg->getBeginLoc();
         static const CXXRecordDecl *lastRecordDecl = nullptr;
         if (isSignalOrSlot(s, macroName)) {
             macroNum++;
@@ -498,7 +497,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = clazy::locForNextToken(&m_astContext, clazy::getLocStart(arg), tok::comma);
+                    auto endLoc = clazy::locForNextToken(&m_astContext, arg->getBeginLoc(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

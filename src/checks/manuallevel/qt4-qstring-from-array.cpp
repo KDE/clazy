@@ -9,7 +9,6 @@
 #include "ClazyContext.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -163,7 +162,7 @@ void Qt4QStringFromArray::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    emitWarning(clazy::getLocStart(stm), message, fixits);
+    emitWarning(stm->getBeginLoc(), message, fixits);
 }
 
 std::vector<FixItHint> Qt4QStringFromArray::fixCtorCall(CXXConstructExpr *ctorExpr)
@@ -182,19 +181,19 @@ std::vector<FixItHint> Qt4QStringFromArray::fixOperatorCall(CXXOperatorCallExpr 
     std::vector<FixItHint> fixits;
     if (op->getNumArgs() == 2) {
         Expr *e = op->getArg(1);
-        SourceLocation start = clazy::getLocStart(e);
+        SourceLocation start = e->getBeginLoc();
         SourceLocation end = Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
 
         SourceRange range = {start, end};
         if (range.isInvalid()) {
-            emitWarning(clazy::getLocStart(op), "internal error");
+            emitWarning(op->getBeginLoc(), "internal error");
             return {};
         }
 
         clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/ fixits);
 
     } else {
-        emitWarning(clazy::getLocStart(op), "internal error");
+        emitWarning(op->getBeginLoc(), "internal error");
     }
 
     return fixits;
@@ -206,18 +205,18 @@ std::vector<FixItHint> Qt4QStringFromArray::fixMethodCallCall(clang::CXXMemberCa
 
     if (memberExpr->getNumArgs() == 1) {
         Expr *e = *(memberExpr->arg_begin());
-        SourceLocation start = clazy::getLocStart(e);
+        SourceLocation start = e->getBeginLoc();
         SourceLocation end = Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), e), 0, sm(), lo());
 
         SourceRange range = {start, end};
         if (range.isInvalid()) {
-            emitWarning(clazy::getLocStart(memberExpr), "internal error");
+            emitWarning(memberExpr->getBeginLoc(), "internal error");
             return {};
         }
 
         clazy::insertParentMethodCall("QString::fromLatin1", {start, end}, /*by-ref*/ fixits);
     } else {
-        emitWarning(clazy::getLocStart(memberExpr), "internal error");
+        emitWarning(memberExpr->getBeginLoc(), "internal error");
     }
 
     return fixits;
@@ -229,7 +228,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstr
     const std::string replacee = "QString";
     std::vector<FixItHint> fixits;
 
-    SourceLocation rangeStart = clazy::getLocStart(ctorExpr);
+    SourceLocation rangeStart = ctorExpr->getBeginLoc();
     SourceLocation rangeEnd = Lexer::getLocForEndOfToken(rangeStart, -1, sm(), lo());
 
     if (rangeEnd.isInvalid()) {
@@ -239,7 +238,7 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitReplaceWithFromLatin1(CXXConstr
             clazy::printLocation(sm(), rangeStart);
             clazy::printLocation(sm(), rangeEnd);
             clazy::printLocation(sm(), Lexer::getLocForEndOfToken(rangeStart, 0, sm(), lo()));
-            queueManualFixitWarning(clazy::getLocStart(ctorExpr));
+            queueManualFixitWarning(ctorExpr->getBeginLoc());
             return {};
         }
     }
@@ -254,10 +253,10 @@ std::vector<FixItHint> Qt4QStringFromArray::fixitInsertFromLatin1(CXXConstructEx
     SourceRange range;
 
     Expr *arg = *(ctorExpr->arg_begin());
-    range.setBegin(clazy::getLocStart(arg));
+    range.setBegin(arg->getBeginLoc());
     range.setEnd(Lexer::getLocForEndOfToken(clazy::biggestSourceLocationInStmt(sm(), ctorExpr), 0, sm(), lo()));
     if (range.isInvalid()) {
-        emitWarning(clazy::getLocStart(ctorExpr), "Internal error");
+        emitWarning(ctorExpr->getBeginLoc(), "Internal error");
         return {};
     }
 

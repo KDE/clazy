@@ -147,7 +147,7 @@ const CXXRecordDecl *AccessSpecifierManager::classDefinitionForLoc(SourceLocatio
 {
     for (const auto &it : m_specifiersMap) {
         const CXXRecordDecl *record = it.first;
-        if (clazy::getLocStart(record) < loc && loc < clazy::getLocEnd(record)) {
+        if (record->getBeginLoc() < loc && loc < record->getEndLoc()) {
             return record;
         }
     }
@@ -197,13 +197,13 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
             continue;
         }
         ClazySpecifierList &specifiers = entryForClassDefinition(record);
-        sorted_insert(specifiers, {clazy::getLocStart(accessSpec), accessSpec->getAccess(), QtAccessSpecifier_None}, sm);
+        sorted_insert(specifiers, {accessSpec->getBeginLoc(), accessSpec->getAccess(), QtAccessSpecifier_None}, sm);
     }
 }
 
 QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMethodDecl *method) const
 {
-    if (!method || clazy::getLocStart(method).isMacroID()) {
+    if (!method || method->getBeginLoc().isMacroID()) {
         return QtAccessSpecifier_Unknown;
     }
 
@@ -216,7 +216,7 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
         return QtAccessSpecifier_None;
     }
 
-    const SourceLocation methodLoc = clazy::getLocStart(method);
+    const SourceLocation methodLoc = method->getBeginLoc();
 
     // Process Q_SIGNAL:
     for (auto signalLoc : m_preprocessorCallbacks->m_individualSignals) {
@@ -270,7 +270,7 @@ bool AccessSpecifierManager::isScriptable(const CXXMethodDecl *method) const
         return false;
     }
 
-    const SourceLocation methodLoc = clazy::getLocStart(method);
+    const SourceLocation methodLoc = method->getBeginLoc();
     if (methodLoc.isMacroID()) {
         return false;
     }

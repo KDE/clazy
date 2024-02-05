@@ -14,7 +14,6 @@ SPDX-License-Identifier: LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR LGPL-3.0-on
 #define CLAZY_NORMALIZED_SIGNATURE_UTILS_H
 
 #include <string>
-#include <vector>
 
 namespace clazy
 {

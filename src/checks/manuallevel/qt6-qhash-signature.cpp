@@ -9,7 +9,6 @@
 #include "ClazyContext.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 
 #include <clang/AST/Decl.h>
@@ -143,15 +142,15 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
         }
         declType = funcDecl->getReturnType().getAsString();
         fixitRange = funcDecl->getReturnTypeSourceRange();
-        warningLocation = clazy::getLocStart(funcDecl);
+        warningLocation = funcDecl->getBeginLoc();
     } else if (varDecl) {
         declType = varDecl->getType().getAsString();
         fixitRange = varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange();
-        warningLocation = clazy::getLocStart(varDecl);
+        warningLocation = varDecl->getBeginLoc();
     } else if (fieldDecl) {
         declType = fieldDecl->getType().getAsString();
         fixitRange = fieldDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange();
-        warningLocation = clazy::getLocStart(fieldDecl);
+        warningLocation = fieldDecl->getBeginLoc();
     }
 
     std::string qhashReturnType = declRefExpr->getDecl()->getAsFunction()->getReturnType().getAsString();
@@ -165,7 +164,7 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     // just emit warning...
     if (declType == "size_t" && qhashReturnType != "size_t") {
         message = name + " should return size_t";
-        emitWarning(clazy::getLocStart(declRefExpr), message, fixits);
+        emitWarning(declRefExpr->getBeginLoc(), message, fixits);
         return;
     }
 
@@ -198,7 +197,7 @@ void Qt6QHashSignature::VisitDecl(clang::Decl *decl)
         std::string message;
         message = funcDecl->getNameAsString() + " with uint signature";
         fixits = fixitReplace(funcDecl, wrongReturnType, wrongParamType);
-        emitWarning(clazy::getLocStart(funcDecl), message, fixits);
+        emitWarning(funcDecl->getBeginLoc(), message, fixits);
     }
 
     return;

@@ -8,7 +8,6 @@
 */
 
 #include "writing-to-temporary.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 
@@ -62,7 +61,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stmt))) {
+    if (shouldIgnoreFile(stmt->getBeginLoc())) {
         return;
     }
 
@@ -115,5 +114,5 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(clazy::getLocStart(stmt), "Call to temporary is a no-op: " + methodName);
+    emitWarning(stmt->getBeginLoc(), "Call to temporary is a no-op: " + methodName);
 }

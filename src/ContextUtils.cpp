@@ -78,7 +78,7 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
     for (UsingDirectiveDecl *u : usings) {
         NamespaceDecl *ns = u->getNominatedNamespace();
         if (ns) {
-            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, clazy::getLocStart(u))) {
+            if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, u->getBeginLoc())) {
                 continue;
             }
 

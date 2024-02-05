@@ -7,7 +7,6 @@
 
 #include "qfileinfo-exists.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>
@@ -39,7 +38,7 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
     }
 
     std::string userArgText = Lexer::getSourceText(CharSourceRange::getTokenRange(ctorExpr->getArg(0)->getSourceRange()), sm(), lo()).str();
-    emitWarning(clazy::getLocStart(stmt),
+    emitWarning(stmt->getBeginLoc(),
                 "Use the static QFileInfo::exists() instead. It's documented to be faster.",
                 {clang::FixItHint::CreateReplacement(stmt->getSourceRange(), "QFileInfo::exists(" + userArgText + ")")});
 }

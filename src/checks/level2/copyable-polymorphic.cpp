@@ -85,7 +85,7 @@ void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    emitWarning(clazy::getLocStart(record), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.", fixits(record));
+    emitWarning(record->getBeginLoc(), "Polymorphic class " + record->getQualifiedNameAsString() + " is copyable. Potential slicing.", fixits(record));
 }
 
 std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *record)

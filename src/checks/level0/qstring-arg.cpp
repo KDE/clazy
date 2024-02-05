@@ -99,7 +99,7 @@ bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &
     for (int i = 1; i < size; ++i) {
         auto *call = calls.at(i);
         if (calls.at(i - 1)->getNumArgs() + call->getNumArgs() <= 9) {
-            emitWarning(clazy::getLocEnd(call), "Use multi-arg instead");
+            emitWarning(call->getEndLoc(), "Use multi-arg instead");
             return true;
         }
     }
@@ -113,8 +113,8 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
         return;
     }
 
-    if (clazy::getLocStart(memberCall).isMacroID()) {
-        auto macroName = Lexer::getImmediateMacroName(clazy::getLocStart(memberCall), sm(), lo());
+    if (memberCall->getBeginLoc().isMacroID()) {
+        auto macroName = Lexer::getImmediateMacroName(memberCall->getBeginLoc(), sm(), lo());
         if (macroName == "QT_REQUIRE_VERSION") { // bug #391851
             return;
         }
@@ -170,7 +170,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stmt))) {
+    if (shouldIgnoreFile(stmt->getBeginLoc())) {
         return;
     }
 
@@ -226,6 +226,6 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
             }
         }
 
-        emitWarning(clazy::getLocStart(stmt), "Using QString::arg() with fillChar overload");
+        emitWarning(stmt->getBeginLoc(), "Using QString::arg() with fillChar overload");
     }
 }

@@ -6,6 +6,7 @@
 */
 
 #include "jnisignatures.h"
+#include "HierarchyUtils.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
 

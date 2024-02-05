@@ -58,14 +58,14 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    const SourceLocation startLoc = clazy::getLocStart(decl);
+    const SourceLocation startLoc = decl->getBeginLoc();
 
     for (const SourceLocation &loc : m_qobjectMacroLocations) {
         if (sm().getFileID(loc) != sm().getFileID(startLoc)) {
             continue; // Different file
         }
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(decl))) {
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, decl->getEndLoc())) {
             return; // We found a Q_OBJECT after start and before end, it's ours.
         }
     }

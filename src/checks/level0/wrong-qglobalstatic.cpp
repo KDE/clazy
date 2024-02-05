@@ -46,7 +46,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
         return; // Only consider relevant Qt5 and Qt6 ctors
     }
 
-    SourceLocation loc = clazy::getLocStart(stmt);
+    SourceLocation loc = stmt->getBeginLoc();
     if (clazy::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS")) {
         return;
     }

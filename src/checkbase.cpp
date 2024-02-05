@@ -211,12 +211,12 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 
 void CheckBase::emitWarning(const clang::Decl *d, const std::string &error, bool printWarningTag)
 {
-    emitWarning(clazy::getLocStart(d), error, printWarningTag);
+    emitWarning(d->getBeginLoc(), error, printWarningTag);
 }
 
 void CheckBase::emitWarning(const clang::Stmt *s, const std::string &error, bool printWarningTag)
 {
-    emitWarning(clazy::getLocStart(s), error, printWarningTag);
+    emitWarning(s->getBeginLoc(), error, printWarningTag);
 }
 
 void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error, bool printWarningTag)

@@ -10,7 +10,6 @@
 #include "detaching-member.h"
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "checkbase.h"
@@ -49,7 +48,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stm))) {
+    if (shouldIgnoreFile(stm->getBeginLoc())) {
         return;
     }
 
@@ -142,5 +141,5 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    emitWarning(clazy::getLocStart(stm), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
+    emitWarning(stm->getBeginLoc(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
 }

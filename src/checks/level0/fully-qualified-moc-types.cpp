@@ -9,7 +9,6 @@
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 
@@ -158,13 +157,13 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
 
 bool FullyQualifiedMocTypes::isGadget(CXXRecordDecl *record) const
 {
-    SourceLocation startLoc = clazy::getLocStart(record);
+    SourceLocation startLoc = record->getBeginLoc();
     for (const SourceLocation &loc : m_qgadgetMacroLocations) {
         if (sm().getFileID(loc) != sm().getFileID(startLoc)) {
             continue; // Different file
         }
 
-        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, clazy::getLocEnd(record))) {
+        if (sm().isBeforeInSLocAddrSpace(startLoc, loc) && sm().isBeforeInSLocAddrSpace(loc, record->getEndLoc())) {
             return true; // We found a Q_GADGET after start and before end, it's ours.
         }
     }
@@ -211,7 +210,7 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                         if (!typeIsFullyQualified(qt, qualifiedName, nameAsWritten)) {
                             // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
                             // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
-                            emitWarning(clazy::getLocStart(method->getParent()),
+                            emitWarning(method->getParent()->getBeginLoc(),
                                         "Q_PROPERTY of type " + nameAsWritten + " should use full qualification (" + qualifiedName + ")");
                         }
                     }

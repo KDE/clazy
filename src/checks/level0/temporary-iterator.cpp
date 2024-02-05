@@ -148,5 +148,5 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
 
     std::string error = "Don't call " + clazy::qualifiedMethodName(methodDecl) + "() on temporary";
-    emitWarning(clazy::getLocStart(stm), error);
+    emitWarning(stm->getBeginLoc(), error);
 }

@@ -108,7 +108,7 @@ void RequiredResults::VisitStmt(clang::Stmt *stm)
 
         if (!bailout) {
             std::string error = std::string("Unused result of const member (") + methodName + ')';
-            emitWarning(clazy::getLocStart(callExpr), error);
+            emitWarning(callExpr->getBeginLoc(), error);
         }
     }
 }

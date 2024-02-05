@@ -61,7 +61,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
         return;
     }
 
-    if (shouldIgnoreFile(clazy::getLocStart(stmt))) {
+    if (shouldIgnoreFile(stmt->getBeginLoc())) {
         return;
     }
 
@@ -112,12 +112,12 @@ void IncorrectEmit::checkCallSignalInsideCTOR(CXXMemberCallExpr *callExpr)
         return; // Emit is inside a lambda, it's fine
     }
 
-    emitWarning(clazy::getLocStart(callExpr), "Emitting inside constructor probably has no effect");
+    emitWarning(callExpr->getBeginLoc(), "Emitting inside constructor probably has no effect");
 }
 
 bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
 {
-    SourceLocation callLoc = clazy::getLocStart(call);
+    SourceLocation callLoc = call->getBeginLoc();
     if (callLoc.isMacroID()) {
         callLoc = sm().getFileLoc(callLoc);
     }

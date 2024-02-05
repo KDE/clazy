@@ -30,7 +30,7 @@ struct StmtBodyRange {
 
     bool isOutsideRange(clang::Stmt *stmt) const
     {
-        return isOutsideRange(stmt ? clazy::getLocStart(stmt) : clang::SourceLocation());
+        return isOutsideRange(stmt ? stmt->getBeginLoc() : clang::SourceLocation());
     }
 
     bool isOutsideRange(clang::SourceLocation loc) const

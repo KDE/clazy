@@ -68,7 +68,7 @@ void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
         const bool isConst = varDecl->getType().isConstQualified();
 
         if (!isConst) {
-            SourceLocation start = clazy::getLocStart(varDecl);
+            SourceLocation start = varDecl->getBeginLoc();
             fixits.push_back(clazy::createInsertion(start, "const "));
         }
 
@@ -77,6 +77,6 @@ void RangeLoopReference::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
         // We ignore classif.passSmallTrivialByValue because it doesn't matter, the compiler is able
         // to optimize it, generating the same assembly, regardless of pass by value.
-        emitWarning(clazy::getLocStart(varDecl), msg, fixits);
+        emitWarning(varDecl->getBeginLoc(), msg, fixits);
     }
 }

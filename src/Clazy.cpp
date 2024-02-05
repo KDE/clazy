@@ -10,7 +10,6 @@
 #include "Clazy.h"
 #include "AccessSpecifierManager.h"
 #include "FixItExporter.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 #include "checkbase.h"
 #include "clazy_stl.h"
@@ -94,7 +93,7 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
     }
 
     const bool isTypeDefToVisit = m_context->visitsAllTypedefs() && isa<TypedefNameDecl>(decl);
-    const SourceLocation locStart = clazy::getLocStart(decl);
+    const SourceLocation locStart = decl->getBeginLoc();
     if (locStart.isInvalid() || (m_context->sm.isInSystemHeader(locStart) && !isTypeDefToVisit)) {
         return true;
     }
@@ -121,7 +120,7 @@ bool ClazyASTConsumer::VisitDecl(Decl *decl)
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stm)
 {
-    const SourceLocation locStart = clazy::getLocStart(stm);
+    const SourceLocation locStart = stm->getBeginLoc();
     if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart)) {
         return true;
     }

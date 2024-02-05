@@ -9,7 +9,6 @@
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "NormalizedSignatureUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>
@@ -120,6 +119,6 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
     normalized.erase(0, 1);
     original.erase(0, 1);
 
-    emitWarning(clazy::getLocStart(callExpr), "Signature is not normalized. Use " + normalized + " instead of " + original);
+    emitWarning(callExpr->getBeginLoc(), "Signature is not normalized. Use " + normalized + " instead of " + original);
     return true;
 }
