@@ -5,7 +5,6 @@
 */
 
 #include "FixItExporter.h"
-#include "SourceCompatibilityHelpers.h"
 
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/FrontendDiagnostic.h>
@@ -152,7 +151,7 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
                          << Hint.BeforePreviousInsertions << " " << Hint.CodeToInsert << "\n";
             llvm::errs() << "R: " << replacement.toString() << "\n";
 #endif
-            clang::tooling::Replacements &Replacements = clazy::DiagnosticFix(ToolingDiag, replacement.getFilePath());
+            clang::tooling::Replacements &Replacements = ToolingDiag.Message.Fix[replacement.getFilePath()];
             llvm::Error error = Replacements.add(ConvertFixIt(Hint));
             if (error) {
                 Diag(Info.getLocation(), diag::note_fixit_failed);

@@ -37,15 +37,6 @@ inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
     return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
 }
 
-inline clang::tooling::Replacements &DiagnosticFix(clang::tooling::Diagnostic &diag, llvm::StringRef filePath)
-{
-#if LLVM_VERSION_MAJOR >= 9
-    return diag.Message.Fix[filePath];
-#else
-    return diag.Fix[filePath];
-#endif
-}
-
 inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *invalid)
 {
 #if LLVM_VERSION_MAJOR >= 16
