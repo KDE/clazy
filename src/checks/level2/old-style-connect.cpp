@@ -292,7 +292,7 @@ std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
         return "error";
     }
 
-    CharSourceRange expansionRange = clazy::getImmediateExpansionRange(macroLoc, sm());
+    CharSourceRange expansionRange = sm().getImmediateExpansionRange(macroLoc);
     SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
     const std::string text = static_cast<std::string>(Lexer::getSourceText(charRange, sm(), lo()));
@@ -480,7 +480,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                 qualifiedName = clazy::getMostNeededQualifiedName(sm(), methodDecl, context, locStart, !isInInclude); // (In includes ignore using directives)
             }
 
-            CharSourceRange expansionRange = clazy::getImmediateExpansionRange(s, sm());
+            CharSourceRange expansionRange = sm().getImmediateExpansionRange(s);
             SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
 
             const std::string functionPointer = '&' + qualifiedName;

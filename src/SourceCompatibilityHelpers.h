@@ -39,16 +39,6 @@ inline clang::SourceLocation getLocEnd(const T *t)
 #endif
 }
 
-inline clang::CharSourceRange getImmediateExpansionRange(clang::SourceLocation macroLoc, const clang::SourceManager &sm)
-{
-#if LLVM_VERSION_MAJOR >= 7
-    return sm.getImmediateExpansionRange(macroLoc);
-#else
-    auto pair = sm.getImmediateExpansionRange(macroLoc);
-    return clang::CharSourceRange(clang::SourceRange(pair.first, pair.second), false);
-#endif
-}
-
 inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
 {
 #if LLVM_VERSION_MAJOR >= 8
