@@ -41,7 +41,6 @@ inline clang::SourceLocation getLocEnd(const T *t)
 
 inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
 {
-#if LLVM_VERSION_MAJOR >= 8
     auto RetType = func->getReturnType();
     if (const auto *Ret = RetType->getAsRecordDecl()) {
         if (const auto *R = Ret->getAttr<clang::WarnUnusedResultAttr>()) {
@@ -55,9 +54,6 @@ inline bool hasUnusedResultAttr(clang::FunctionDecl *func)
         }
     }
     return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
-#else
-    return func->hasUnusedResultAttr();
-#endif
 }
 
 inline clang::tooling::Replacements &DiagnosticFix(clang::tooling::Diagnostic &diag, llvm::StringRef filePath)
