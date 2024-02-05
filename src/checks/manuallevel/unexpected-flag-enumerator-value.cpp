@@ -7,6 +7,7 @@
 
 #include "unexpected-flag-enumerator-value.h"
 #include "HierarchyUtils.h"
+#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/AST.h>
 

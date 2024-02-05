@@ -10,7 +10,6 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
-#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h" // IWYU pragma: keep
 
 #include <clang/AST/ASTContext.h>
@@ -26,6 +25,17 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+namespace clazy
+{
+#if LLVM_VERSION_MAJOR >= 16
+using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
+#elif LLVM_VERSION_MAJOR >= 15
+using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
+#else
+using OptionalFileEntryRef = const clang::FileEntry *;
+#endif
+}
 
 namespace clang
 {
