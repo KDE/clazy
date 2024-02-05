@@ -8,7 +8,6 @@
 #include "qt6-header-fixes.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 
 #include <clang/AST/Decl.h>

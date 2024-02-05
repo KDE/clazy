@@ -8,7 +8,6 @@
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>

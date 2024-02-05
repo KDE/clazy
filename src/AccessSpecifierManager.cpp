@@ -9,7 +9,6 @@
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 
 #include <clang/AST/DeclBase.h>

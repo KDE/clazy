@@ -7,7 +7,6 @@
 
 #include "wrong-qglobalstatic.h"
 #include "MacroUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TemplateUtils.h"
 

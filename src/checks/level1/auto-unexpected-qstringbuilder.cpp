@@ -7,7 +7,6 @@
 
 #include "auto-unexpected-qstringbuilder.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 

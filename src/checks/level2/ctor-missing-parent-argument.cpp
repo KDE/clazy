@@ -6,7 +6,6 @@
 
 #include "ctor-missing-parent-argument.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 

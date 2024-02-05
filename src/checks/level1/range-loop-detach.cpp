@@ -13,7 +13,6 @@
 #include "LoopUtils.h"
 #include "PreProcessorVisitor.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StmtBodyRange.h"
 #include "TypeUtils.h"
 #include "Utils.h"

@@ -8,7 +8,6 @@
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 
 #include <clang/AST/DeclCXX.h>

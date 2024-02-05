@@ -9,7 +9,6 @@
 #include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/DeclCXX.h>

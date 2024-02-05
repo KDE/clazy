@@ -9,7 +9,6 @@
 
 #include "checkbase.h"
 #include "ClazyContext.h"
-#include "SourceCompatibilityHelpers.h"
 #include "SuppressionManager.h"
 #include "Utils.h"
 #include "clazy_stl.h"

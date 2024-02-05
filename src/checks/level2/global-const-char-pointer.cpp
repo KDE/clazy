@@ -8,7 +8,6 @@
 */
 
 #include "global-const-char-pointer.h"
-#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>

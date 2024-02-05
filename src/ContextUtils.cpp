@@ -5,7 +5,6 @@
 */
 
 #include "ContextUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "TypeUtils.h"
 #include "clazy_stl.h"
 

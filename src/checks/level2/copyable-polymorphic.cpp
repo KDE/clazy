@@ -8,7 +8,6 @@
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 

@@ -8,7 +8,6 @@
 #include "qt6-fwd-fixes.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 

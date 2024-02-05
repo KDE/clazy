@@ -9,7 +9,6 @@
 
 #include "assert-with-side-effects.h"
 #include "MacroUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
 

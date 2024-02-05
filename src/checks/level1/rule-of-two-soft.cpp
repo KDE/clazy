@@ -5,7 +5,6 @@
 */
 
 #include "rule-of-two-soft.h"
-#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>

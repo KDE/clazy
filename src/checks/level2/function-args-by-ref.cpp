@@ -10,7 +10,6 @@
 #include "function-args-by-ref.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"

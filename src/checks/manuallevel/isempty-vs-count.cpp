@@ -6,7 +6,6 @@
 
 #include "isempty-vs-count.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 
 #include <clang/AST/DeclCXX.h>

@@ -9,7 +9,6 @@
 
 #include "detaching-temporary.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "checkbase.h"

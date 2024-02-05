@@ -7,7 +7,6 @@
 #include "base-class-event.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/DeclCXX.h>

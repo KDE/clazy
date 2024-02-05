@@ -9,7 +9,6 @@
 
 #include "missing-typeinfo.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TemplateUtils.h"
 #include "TypeUtils.h"

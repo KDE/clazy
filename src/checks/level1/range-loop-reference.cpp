@@ -12,7 +12,6 @@
 #include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 

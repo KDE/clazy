@@ -8,7 +8,6 @@
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "PreProcessorVisitor.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"

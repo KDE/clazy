@@ -8,7 +8,6 @@
 */
 
 #include "qvariant-template-instantiation.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TemplateUtils.h"
 #include "clazy_stl.h"
@@ -22,7 +21,6 @@
 #include <llvm/Support/Casting.h>
 
 #include <ctype.h>
-#include <memory>
 #include <vector>
 
 class ClazyContext;

@@ -10,7 +10,6 @@
 #include "non-pod-global-static.h"
 #include "ClazyContext.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>

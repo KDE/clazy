@@ -9,7 +9,6 @@
 #include "ContextUtils.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "clazy_stl.h"

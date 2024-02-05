@@ -8,7 +8,6 @@
 #include "ClazyContext.h"
 #include "ContextUtils.h"
 #include "PreProcessorVisitor.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 
 #include <clang/AST/Decl.h>

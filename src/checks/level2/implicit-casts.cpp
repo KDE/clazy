@@ -10,7 +10,6 @@
 #include "implicit-casts.h"
 #include "ClazyContext.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "Utils.h"
 #include "clazy_stl.h"
 

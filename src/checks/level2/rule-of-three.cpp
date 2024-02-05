@@ -6,7 +6,6 @@
 
 #include "rule-of-three.h"
 #include "MacroUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
