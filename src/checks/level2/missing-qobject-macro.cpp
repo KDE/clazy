@@ -71,7 +71,6 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
     }
 
     std::vector<FixItHint> fixits;
-#if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
     fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
 
@@ -85,7 +84,6 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
             m_hasAddedMocFile = true;
         }
     }
-#endif
 
     emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro", fixits);
 }

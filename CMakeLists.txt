@@ -107,11 +107,7 @@ include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/src)
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
-if (${LLVM_VERSION} VERSION_GREATER_EQUAL "9.0.0")
-    set(clang_tooling_refactoring_lib clangToolingRefactoring)
-else()
-    set(clang_tooling_refactoring_lib clangToolingRefactor)
-endif()
+set(clang_tooling_refactoring_lib clangToolingRefactoring)
 
 if (${LLVM_VERSION} VERSION_GREATER_EQUAL "15.0.0")
   set(clang_support_lib clangSupport)

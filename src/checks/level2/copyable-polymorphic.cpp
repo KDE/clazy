@@ -95,7 +95,6 @@ std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *
         return {};
     }
 
-#if LLVM_VERSION_MAJOR >= 11 // older llvm has problems with \n in the yaml file
     const StringRef className = clazy::name(record);
 
     // Insert Q_DISABLE_COPY(classname) in the private section if one exists,
@@ -124,7 +123,6 @@ std::vector<clang::FixItHint> CopyablePolymorphic::fixits(clang::CXXRecordDecl *
             result.push_back(clazy::createInsertion(pos, std::string("\n\t") + className.data() + std::string("() = default;")));
         }
     }
-#endif
 
     return result;
 }

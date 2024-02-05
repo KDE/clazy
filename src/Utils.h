@@ -224,12 +224,7 @@ clang::UserDefinedLiteral *userDefinedLiteral(clang::Stmt *stm, const std::strin
  * This should be used instead of calling FunctionDecl::params() since it changed signature in
  * clang 3.9.
  */
-#if LLVM_VERSION_MAJOR == 3 && LLVM_VERSION_MINOR <= 8
-clang::FunctionDecl::param_range
-#else
-clang::ArrayRef<clang::ParmVarDecl *>
-#endif
-functionParameters(clang::FunctionDecl *func);
+clang::ArrayRef<clang::ParmVarDecl *> functionParameters(clang::FunctionDecl *func);
 
 /**
  * For the given ctor, and ctor param, returns the ctor member initializers that used that param.

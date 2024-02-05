@@ -134,21 +134,12 @@ public:
         }
 
         // TODO: We need to agregate the fixes with previous run
-#if LLVM_VERSION_MAJOR >= 10
         return std::make_unique<ClazyStandaloneASTAction>(s_checks.getValue(),
                                                           s_headerFilter.getValue(),
                                                           s_ignoreDirs.getValue(),
                                                           s_exportFixes.getValue(),
                                                           m_paths,
                                                           options);
-#else
-        return new ClazyStandaloneASTAction(s_checks.getValue(),
-                                            s_headerFilter.getValue(),
-                                            s_ignoreDirs.getValue(),
-                                            s_exportFixes.getValue(),
-                                            m_paths,
-                                            options);
-#endif
     }
     std::vector<std::string> m_paths;
 };

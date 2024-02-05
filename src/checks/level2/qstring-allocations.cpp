@@ -204,7 +204,6 @@ void QStringAllocations::VisitCtor(Stmt *stm)
         return;
     }
 
-#if LLVM_VERSION_MAJOR >= 10
     // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
     // Do it manually.
     if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")
@@ -219,9 +218,6 @@ void QStringAllocations::VisitCtor(Stmt *stm)
     } else {
         VisitCtor(ctorExpr);
     }
-#else
-    VisitCtor(ctorExpr);
-#endif
 }
 
 void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
@@ -395,8 +391,7 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWordInTernary(cla
     addConstructExpr(ternary->getFalseExpr());
 
     if (constructExprs.size() != 2) {
-        llvm::errs() << "Weird ternary operator with " << constructExprs.size() << " constructExprs at " << ternary->getBeginLoc().printToString(sm())
-                     << "\n";
+        llvm::errs() << "Weird ternary operator with " << constructExprs.size() << " constructExprs at " << ternary->getBeginLoc().printToString(sm()) << "\n";
         ternary->dump();
         assert(false);
         return {};
