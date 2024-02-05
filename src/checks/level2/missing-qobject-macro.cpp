@@ -17,12 +17,9 @@
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Lex/Token.h>
+#include <filesystem>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
-
-#ifdef HAS_STD_FILESYSTEM
-#include <filesystem>
-#endif
 
 namespace clang
 {
@@ -78,7 +75,6 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
     const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
     fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
 
-#ifdef HAS_STD_FILESYSTEM
     const std::string fileName = static_cast<std::string>(sm().getFilename(startLoc));
     if (clazy::endsWith(fileName, ".cpp")) {
         const std::string basename = std::filesystem::path(fileName).stem().string();
@@ -89,7 +85,6 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
             m_hasAddedMocFile = true;
         }
     }
-#endif
 #endif
 
     emitWarning(startLoc, record->getQualifiedNameAsString() + " is missing a Q_OBJECT macro", fixits);

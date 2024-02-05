@@ -89,22 +89,16 @@ if(NOT DEFINED REGEX_RUN_RESULT)
 endif()
 
 if(NOT DEFINED REGEX_RUN_RESULT)
-  message("Using boost::regex instead of std::regex")
-  set(CLAZY_USES_BOOST_REGEX TRUE)
-  add_definitions(-DCLAZY_USES_BOOST_REGEX)
-  find_package(Boost REQUIRED COMPONENTS regex)
-  include_directories(${Boost_INCLUDE_DIRS})
+  message(FATAL_ERROR "std::regex support is mndatory")
 endif()
 
 # Compiler might support c++17 but not have std::filesystem in the standard library
 if (NOT FILESYSTEM_RUN_RESULT)
-  message("Looking for std::filesystem support...")
   try_compile(FILESYSTEM_RUN_RESULT SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
 endif()
 
-if (FILESYSTEM_RUN_RESULT)
-    add_definitions(-DHAS_STD_FILESYSTEM)
-    set(HAS_STD_FILESYSTEM TRUE)
+if (NOT FILESYSTEM_RUN_RESULT)
+  message(FATAL_ERROR "std::filesystem support is mndatory")
 endif()
 
 include(ClazySources.cmake)
@@ -167,9 +161,6 @@ macro(link_to_llvm name is_standalone)
 
   if(WIN32)
     target_link_libraries(${name} version.lib)
-  endif()
-  if (CLAZY_USES_BOOST_REGEX)
-    target_link_libraries(${name} ${Boost_LIBRARIES})
   endif()
 endmacro()
 

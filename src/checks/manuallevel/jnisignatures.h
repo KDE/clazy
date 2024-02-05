@@ -10,6 +10,7 @@
 
 #include "checkbase.h"
 
+#include <regex>
 #include <string>
 
 class ClazyContext;

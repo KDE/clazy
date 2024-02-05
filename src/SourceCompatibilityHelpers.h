@@ -17,18 +17,6 @@
 #include <clang/Lex/Lexer.h>
 #include <clang/Tooling/Core/Diagnostic.h>
 
-#if defined(CLAZY_USES_BOOST_REGEX)
-#define BOOST_NO_EXCEPTIONS
-#include <boost/throw_exception.hpp>
-inline void boost::throw_exception(std::exception const &)
-{
-}
-#include <boost/regex.hpp>
-using namespace boost;
-#else
-#include <regex>
-#endif
-
 namespace clazy
 {
 template<typename T>

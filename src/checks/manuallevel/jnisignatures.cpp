@@ -6,9 +6,6 @@
 */
 
 #include "jnisignatures.h"
-#include "FunctionUtils.h"
-#include "MacroUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
 
@@ -23,10 +20,6 @@
 #include <clang/Basic/SourceManager.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
-
-#include <vector>
-
-#include <iostream>
 
 class ClazyContext;
 
