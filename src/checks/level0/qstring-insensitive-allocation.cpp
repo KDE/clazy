@@ -30,7 +30,7 @@ static bool isInterestingCall1(CallExpr *call)
         return false;
     }
 
-    static const std::vector<std::string> methods = {"QString::toUpper", "QString::toLower"};
+    static const std::vector<std::string> methods{"QString::toUpper", "QString::toLower"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
@@ -41,7 +41,7 @@ static bool isInterestingCall2(CallExpr *call)
         return false;
     }
 
-    static const std::vector<std::string> methods = {"QString::endsWith", "QString::startsWith", "QString::contains", "QString::compare"};
+    static const std::vector<std::string> methods{"QString::endsWith", "QString::startsWith", "QString::contains", "QString::compare"};
     return clazy::contains(methods, clazy::qualifiedMethodName(func));
 }
 
