@@ -107,7 +107,11 @@ SourceLocation VirtualCallCtor::containsVirtualCall(clang::CXXRecordDecl *classD
         }
 
         if (memberDecl->getParent() == classDecl) {
+#if LLVM_VERSION_MAJOR >= 18
+            if (memberDecl->isPureVirtual()) {
+#else
             if (memberDecl->isPure()) {
+#endif
                 return clazy::getLocStart(callExpr);
             }
             if (containsVirtualCall(classDecl, memberDecl->getBody(), processedStmts).isValid()) {
