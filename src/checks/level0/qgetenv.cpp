@@ -66,7 +66,8 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     StringRef methodname = clazy::name(method);
     std::string errorMsg;
     std::string replacement;
-    bool shouldIncludeBaseParameter = false;
+    bool shouldIncludeOkParameter = false;
+    bool changesToBaseAutodetection = false;
     if (methodname == "isEmpty") {
         errorMsg = "qgetenv().isEmpty() allocates.";
         replacement = "qEnvironmentVariableIsEmpty";
@@ -77,9 +78,10 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
         errorMsg = "qgetenv().toInt() is slow.";
         replacement = "qEnvironmentVariableIntValue";
         for (unsigned int i = 0; i < memberCall->getNumArgs(); ++i) {
-            if (!dyn_cast<CXXDefaultArgExpr>(memberCall->getArg(i))) {
-                if (i == 0) {
-                    shouldIncludeBaseParameter = true;
+            auto *arg = memberCall->getArg(i);
+            if (i == 0 && !isa<CXXDefaultArgExpr>(arg)) {
+                if (!isa<CastExpr>(arg) || !isa<CXXNullPtrLiteralExpr>(dyn_cast<CastExpr>(arg)->getSubExpr())) {
+                    shouldIncludeOkParameter = true;
                 }
                 if (i > 0) {
                     return; // Second toInt arg (base) is not supported by qEnvironmentVariableIntValue
@@ -91,7 +93,7 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     }
 
     std::string getEnvArgStr = Lexer::getSourceText(CharSourceRange::getTokenRange(qgetEnvCall->getArg(0)->getSourceRange()), sm(), lo()).str();
-    if (shouldIncludeBaseParameter) {
+    if (shouldIncludeOkParameter) {
         getEnvArgStr += ", " + Lexer::getSourceText(CharSourceRange::getTokenRange(memberCall->getArg(0)->getSourceRange()), sm(), lo()).str();
     }
 
