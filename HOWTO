@@ -58,7 +58,6 @@ Tips for fixits
     functionargsbyref.cpp
     autounexpectedqstringbuilder.cpp
     qstringref.cpp
-    qt4-qstring-from-array.cpp
 
 --------------------------------------------------------------------------------
 Running tests

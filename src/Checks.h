@@ -91,7 +91,6 @@
 #include "checks/manuallevel/qstring-varargs.h"
 #include "checks/manuallevel/qt-keyword-emit.h"
 #include "checks/manuallevel/qt-keywords.h"
-#include "checks/manuallevel/qt4-qstring-from-array.h"
 #include "checks/manuallevel/qt6-deprecated-api-fixes.h"
 #include "checks/manuallevel/qt6-fwd-fixes.h"
 #include "checks/manuallevel/qt6-header-fixes.h"
@@ -136,8 +135,6 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt-keyword-emit", "qt-keyword-emit");
     registerCheck(check<QtKeywords>("qt-keywords", ManualCheckLevel, RegisteredCheck::Option_None));
     registerFixIt(1, "fix-qt-keywords", "qt-keywords");
-    registerCheck(check<Qt4QStringFromArray>("qt4-qstring-from-array", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-    registerFixIt(1, "fix-qt4-qstring-from-array", "qt4-qstring-from-array");
     registerCheck(
         check<Qt6DeprecatedAPIFixes>("qt6-deprecated-api-fixes", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-qt6-deprecated-api-fixes", "qt6-deprecated-api-fixes");
@@ -165,7 +162,7 @@ void CheckManager::registerChecks()
     registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ContainerAntiPattern>("container-anti-pattern", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<EmptyQStringliteral>("empty-qstringliteral", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
@@ -183,10 +180,10 @@ void CheckManager::registerChecks()
 #endif
     registerCheck(check<QDateTimeUtc>("qdatetime-utc", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qdatetime-utc", "qdatetime-utc");
-    registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible));
+    registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_None));
     registerCheck(check<QFileInfoExists>("qfileinfo-exists", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qfileinfo-exists", "qfileinfo-exists");
-    registerCheck(check<QGetEnv>("qgetenv", CheckLevel0, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QGetEnv>("qgetenv", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qgetenv", "qgetenv");
     registerCheck(check<QMapWithPointerKey>("qmap-with-pointer-key", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringArg>("qstring-arg", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
@@ -240,9 +237,9 @@ void CheckManager::registerChecks()
     registerCheck(check<MissingQObjectMacro>("missing-qobject-macro", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-missing-qobject-macro", "missing-qobject-macro");
     registerCheck(check<MissingTypeInfo>("missing-typeinfo", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<OldStyleConnect>("old-style-connect", CheckLevel2, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<OldStyleConnect>("old-style-connect", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-old-style-connect", "old-style-connect");
-    registerCheck(check<QStringAllocations>("qstring-allocations", CheckLevel2, RegisteredCheck::Option_Qt4Incompatible | RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QStringAllocations>("qstring-allocations", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qlatin1string-allocations", "qstring-allocations");
     registerFixIt(2, "fix-fromLatin1_fromUtf8-allocations", "qstring-allocations");
     registerFixIt(4, "fix-fromCharPtrAllocations", "qstring-allocations");

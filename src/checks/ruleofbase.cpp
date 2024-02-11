@@ -51,8 +51,6 @@ bool RuleOfBase::isBlacklisted(CXXRecordDecl *record) const
         "QMutableListIterator",
         "QStringList",
         "QVariant::Private",
-        "QModelIndex", // Qt4
-        "QPair", // Qt4
         "QSet", // Fixed for Qt 5.7
         "QSet::iterator",
         "QSet::const_iterator",

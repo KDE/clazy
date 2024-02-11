@@ -242,10 +242,6 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         m_options |= ClazyContext::ClazyOption_ExportFixes;
     }
 
-    if (parseArgument("qt4-compat", args)) {
-        m_options |= ClazyContext::ClazyOption_Qt4Compat;
-    }
-
     if (parseArgument("only-qt", args)) {
         m_options |= ClazyContext::ClazyOption_OnlyQt;
     }
@@ -273,7 +269,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
 
     {
         std::lock_guard<std::mutex> lock(CheckManager::lock());
-        m_checks = m_checkManager->requestedChecks(args, m_options & ClazyContext::ClazyOption_Qt4Compat);
+        m_checks = m_checkManager->requestedChecks(args);
     }
 
     if (args.size() > 1) {
@@ -397,8 +393,7 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
 
     std::vector<std::string> checks;
     checks.push_back(m_checkList);
-    const bool qt4Compat = m_options & ClazyContext::ClazyOption_Qt4Compat;
-    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks, qt4Compat);
+    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks);
 
     if (requestedChecks.empty()) {
         llvm::errs() << "No checks were requested!\n"

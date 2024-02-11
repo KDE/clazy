@@ -28,16 +28,6 @@
             "env"      : { "CLAZY_NO_WERROR" : "1" }
         },
         {
-            "filename" : "qt4compat1.cpp",
-            "checks"   : ["old-style-connect"],
-            "has_fixits" : true
-        },
-        {
-            "filename" : "qt4compat2.cpp",
-            "checks"   : ["old-style-connect"],
-            "qt4compat": true
-        },
-        {
             "filename" : "onlyQt1.cpp",
             "checks"   : ["old-style-connect"],
             "only_qt"  : false,

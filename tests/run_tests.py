@@ -79,7 +79,6 @@ class Test:
         self.flags = ""
         self.must_fail = False
         self.blacklist_platforms = []
-        self.qt4compat = False
         self.only_qt = False
         self.qt_developer = False
         self.header_filter = ""
@@ -286,8 +285,6 @@ def load_json(check_name):
                 test.has_fixits = t['has_fixits'] and test.minimum_clang_version_for_fixits <= CLANG_VERSION
             if 'expects_failure' in t:
                 test.expects_failure = t['expects_failure']
-            if 'qt4compat' in t:
-                test.qt4compat = t['qt4compat']
             if 'only_qt' in t:
                 test.only_qt = t['only_qt']
             if 'cppStandards' in t:
@@ -337,9 +334,8 @@ def find_qt_installation(major_version, qmakes):
                           " using qmake " + qmake)
             break
 
-    if installation.int_version == 0 and major_version >= 5:  # Don't warn for missing Qt4 headers
-        print("Error: Couldn't find a Qt" +
-              str(major_version) + " installation")
+    if installation.int_version == 0:
+        print("Error: Couldn't find a Qt" + str(major_version) + " installation")
     return installation
 
 
@@ -387,9 +383,6 @@ def clazy_standalone_command(test, cppStandard, qt):
         result = " -export-fixes=" + \
             test.yamlFilename(is_standalone=True) + result
 
-    if test.qt4compat:
-        result = " -qt4-compat " + result
-
     if test.only_qt:
         result = " -only-qt " + result
 
@@ -419,9 +412,6 @@ def clazy_command(test, cppStandard, qt, filename):
     else:
         result = clang_name() + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clazy " 
     result += clazy_cpp_args(cppStandard) + qt.compiler_flags(test.qt_modules_includes) + suppress_line_numbers_opt 
-
-    if test.qt4compat:
-        result = result + " -Xclang -plugin-arg-clazy -Xclang qt4-compat "
 
     if test.only_qt:
         result = result + " -Xclang -plugin-arg-clazy -Xclang only-qt "
@@ -495,8 +485,6 @@ _qt6_installation = find_qt_installation(
     6, ["QT_SELECT=6 qmake", "qmake-qt6", "qmake", "qmake6"])
 _qt5_installation = find_qt_installation(
     5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake", "qmake5"])
-_qt4_installation = find_qt_installation(
-    4, ["QT_SELECT=4 qmake", "qmake-qt4", "qmake"])
 _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 
 # -------------------------------------------------------------------------------
@@ -534,9 +522,6 @@ def qt_installation(major_version):
         return _qt6_installation
     elif major_version == 5:
         return _qt5_installation
-    elif major_version == 4:
-        return _qt4_installation
-
     return None
 
 

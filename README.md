@@ -31,7 +31,6 @@ Table of contents
    * [clazy-standalone and JSON database support](#clazy-standalone-and-json-database-support)
    * [Enabling Fixits](#enabling-fixits)
    * [Troubleshooting](#troubleshooting)
-   * [Qt4 compatibility mode](#qt4-compatibility-mode)
    * [Reducing warning noise](#reducing-warning-noise)
    * [Reporting bugs and wishes](#reporting-bugs-and-wishes)
    * [Authors](#authors)
@@ -230,7 +229,6 @@ clazy runs all checks from level1 by default.
     - [qstring-varargs](docs/checks/README-qstring-varargs.md)
     - [qt-keyword-emit](docs/checks/README-qt-keyword-emit.md)    (fix-qt-keyword-emit)
     - [qt-keywords](docs/checks/README-qt-keywords.md)    (fix-qt-keywords)
-    - [qt4-qstring-from-array](docs/checks/README-qt4-qstring-from-array.md)    (fix-qt4-qstring-from-array)
     - [qt6-deprecated-api-fixes](docs/checks/README-qt6-deprecated-api-fixes.md)    (fix-qt6-deprecated-api-fixes)
     - [qt6-fwd-fixes](docs/checks/README-qt6-fwd-fixes.md)    (fix-qt6-fwd-fixes)
     - [qt6-header-fixes](docs/checks/README-qt6-header-fixes.md)    (fix-qt6-header-fixes)
@@ -431,16 +429,6 @@ with each other modifying the same source lines.
 - Windows: fatal error LNK1112: module machine type ‘X86’ conflicts with target machine type ‘x64’
   If you're building in 32-bit, open clazy-cl.bat and insert a -m32 argument.
   Should read: %~dp0\clang\clang.exe –driver-mode=cl -m32 (...)
-
-# Qt4 compatibility mode
-
-When running on codebases that must still compile with Qt4, you can pass `--qt4compat`
-(a convenience option equivalent to passing `-Xclang -plugin-arg-clazy -Xclang qt4-compat`)
-to disable checks that only make sense with Qt5.
-
-For example, to build a CMake project with Qt4 compatibility use:
- `CXX="clazy --qt4compat"; cmake .`
-and rebuild.
 
 # Reducing warning noise
 
