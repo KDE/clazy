@@ -1,4 +1,6 @@
 qgetenv/main.cpp:7:5: warning: qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsEmpty() instead [-Wclazy-qgetenv]
 qgetenv/main.cpp:8:14: warning: qgetenv().isNull() allocates. Use qEnvironmentVariableIsSet() instead [-Wclazy-qgetenv]
-qgetenv/main.cpp:10:20: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead [-Wclazy-qgetenv]
-qgetenv/main.cpp:11:19: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead [-Wclazy-qgetenv]
+qgetenv/main.cpp:10:36: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead. This uses internally a base of 0, supporting decimal, hex and octal values [-Wclazy-qgetenv]
+qgetenv/main.cpp:11:45: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead. This uses internally a base of 0, supporting decimal, hex and octal values [-Wclazy-qgetenv]
+qgetenv/main.cpp:13:44: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead [-Wclazy-qgetenv]
+qgetenv/main.cpp:14:57: warning: qgetenv().toInt() is slow. Use qEnvironmentVariableIntValue() instead [-Wclazy-qgetenv]

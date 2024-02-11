@@ -83,13 +83,20 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
                 if (!isa<CastExpr>(arg) || !isa<CXXNullPtrLiteralExpr>(dyn_cast<CastExpr>(arg)->getSubExpr())) {
                     shouldIncludeOkParameter = true;
                 }
-                if (i > 0) {
-                    return; // Second toInt arg (base) is not supported by qEnvironmentVariableIntValue
+            } else if (i == 1) {
+                if (auto *intLiteral = dyn_cast<IntegerLiteral>(arg)) {
+                    if (intLiteral->getValue() != 0) {
+                        return; // Custom base is specified - ignore this case
+                    }
+                } else if (isa<CXXDefaultArgExpr>(arg)) {
+                    changesToBaseAutodetection = true;
+                } else {
+                    return; // If the base is neither the 0 literal or the default, skip checking it
                 }
             }
         }
     } else {
-        return;
+        return; // Some different method on QByteArray, nothing to warn about
     }
 
     std::string getEnvArgStr = Lexer::getSourceText(CharSourceRange::getTokenRange(qgetEnvCall->getArg(0)->getSourceRange()), sm(), lo()).str();
@@ -98,5 +105,8 @@ void QGetEnv::VisitStmt(clang::Stmt *stmt)
     }
 
     errorMsg += " Use " + replacement + "() instead";
+    if (changesToBaseAutodetection) {
+        errorMsg += ". This uses internally a base of 0, supporting decimal, hex and octal values";
+    }
     emitWarning(clazy::getLocStart(memberCall), errorMsg, {FixItHint::CreateReplacement(stmt->getSourceRange(), replacement + "(" + getEnvArgStr + ")")});
 }
