@@ -6,6 +6,7 @@
 
 #include "QtUtils.h"
 #include "FunctionUtils.h"
+#include "HierarchyUtils.h"
 #include "MacroUtils.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
@@ -310,6 +311,19 @@ CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex)
     }
 
     Expr *expr = funcCall->getArg(argIndex);
+    if (auto casted = dyn_cast<ImplicitCastExpr>(expr)) {
+        if (auto *declRef = dyn_cast<DeclRefExpr>(casted->getSubExpr())) {
+            if (auto *varDecl = dyn_cast<VarDecl>(declRef->getDecl())) {
+                auto *varDeclInit = varDecl->getInit();
+                // In Qt5, we have multiple DeclRefExprs, only the last one is actually relevant for determining if we have a signal or not
+                std::vector<DeclRefExpr *> res;
+                clazy::getChilds<DeclRefExpr>(varDeclInit, res);
+                if (!res.empty()) {
+                    return dyn_cast<CXXMethodDecl>(res.at(res.size() - 1)->getFoundDecl());
+                }
+            }
+        }
+    }
     return pmfFromExpr(expr);
 }
 

@@ -1,0 +1,3 @@
+connect-non-signal/signal_as_variable.cpp:14:5: warning: QObject::property is not a signal [-Wclazy-connect-non-signal]
+connect-non-signal/signal_as_variable.cpp:17:5: warning: QTimer::start is not a signal [-Wclazy-connect-non-signal]
+connect-non-signal/signal_as_variable.cpp:20:5: warning: QTimer::start is not a signal [-Wclazy-connect-non-signal]
