@@ -11,6 +11,7 @@
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
+#include "clang/Basic/Diagnostic.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
@@ -94,13 +95,43 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
 
 bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls)
 {
-    const int size = calls.size();
-    for (int i = 1; i < size; ++i) {
-        auto *call = calls.at(i);
-        if (calls.at(i - 1)->getNumArgs() + call->getNumArgs() <= 9) {
-            emitWarning(call->getEndLoc(), "Use multi-arg instead");
-            return true;
+    if (calls.size() == 1) {
+        return false; // Nothing to do
+    }
+    std::string replacement;
+    SourceLocation beginLoc;
+    CallExpr *call = nullptr;
+    int argAggregated = 0;
+    for (int i = 0, size = calls.size(); i < size; ++i) {
+        call = calls.at(i);
+        for (auto *arg : call->arguments()) {
+            if (!isa<CXXDefaultArgExpr>(arg)) {
+                ++argAggregated;
+            }
         }
+        if (argAggregated > 9) { // Relevant for Qt5
+            return false;
+        }
+        if (!beginLoc.isValid()) {
+            beginLoc = call->getBeginLoc();
+        }
+
+        std::string callArgs;
+        for (auto *arg : call->arguments()) {
+            if (!isa<CXXDefaultArgExpr>(arg)) {
+                if (!callArgs.empty()) {
+                    callArgs += ", ";
+                }
+                callArgs += Lexer::getSourceText(CharSourceRange::getTokenRange(arg->getSourceRange()), sm(), lo()).str();
+            }
+        }
+        // The args for the chained calls have to be prepended instead of appended
+        replacement = callArgs + (replacement.empty() ? "" : ", ") + replacement;
+    }
+    if (auto *subexprCall = clazy::getFirstChildOfType<MemberExpr>(call)) {
+        emitWarning(beginLoc,
+                    "Use multi-arg instead",
+                    {FixItHint::CreateReplacement(SourceRange(subexprCall->getEndLoc(), calls.at(0)->getEndLoc()), "arg(" + replacement + ")")});
     }
 
     return false;
