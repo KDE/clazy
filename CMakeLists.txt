@@ -89,7 +89,7 @@ if(NOT DEFINED REGEX_RUN_RESULT)
 endif()
 
 if(NOT DEFINED REGEX_RUN_RESULT)
-  message(FATAL_ERROR "std::regex support is mndatory")
+  message(FATAL_ERROR "std::regex support is mandatory")
 endif()
 
 # Compiler might support c++17 but not have std::filesystem in the standard library
@@ -98,7 +98,7 @@ if (NOT FILESYSTEM_RUN_RESULT)
 endif()
 
 if (NOT FILESYSTEM_RUN_RESULT)
-  message(FATAL_ERROR "std::filesystem support is mndatory")
+  message(FATAL_ERROR "std::filesystem support is mandatory")
 endif()
 
 include(ClazySources.cmake)
