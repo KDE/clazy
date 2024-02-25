@@ -85,7 +85,7 @@ set(CXX_STANDARD_REQUIRED ON)
 # Look for std::regex support
 if(NOT DEFINED REGEX_RUN_RESULT)
   message("Looking for std::regex support...")
-  try_compile(REGEX_RUN_RESULT SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
+  try_compile(REGEX_RUN_RESULT ${CMAKE_CURRENT_BINARY_DIR} SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_regex_test.cpp)
 endif()
 
 if(NOT DEFINED REGEX_RUN_RESULT)
@@ -94,7 +94,7 @@ endif()
 
 # Compiler might support c++17 but not have std::filesystem in the standard library
 if (NOT FILESYSTEM_RUN_RESULT)
-  try_compile(FILESYSTEM_RUN_RESULT SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
+  try_compile(FILESYSTEM_RUN_RESULT ${CMAKE_CURRENT_BINARY_DIR} SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
 endif()
 
 if (NOT FILESYSTEM_RUN_RESULT)
