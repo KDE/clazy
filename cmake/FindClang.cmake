@@ -86,8 +86,12 @@ if(CLANG_FOUND)
   set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
 
   # check whether llvm-config comes from an install prefix
+  set(LLVM_CONFIG_INCLUDE_FLAG "--src-root")
+  if (${LLVM_VERSION} VERSION_GREATER_EQUAL 16)
+    set(LLVM_CONFIG_INCLUDE_FLAG "--includedir")
+  endif()
   execute_process(
-    COMMAND ${LLVM_CONFIG_EXECUTABLE} --src-root
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} ${LLVM_CONFIG_INCLUDE_FLAG}
     OUTPUT_VARIABLE _llvmSourceRoot
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
@@ -96,7 +100,7 @@ if(CLANG_FOUND)
     message(STATUS "Detected that llvm-config comes from a build-tree, adding more include directories for Clang")
     list(APPEND CLANG_INCLUDE_DIRS
          "${LLVM_INSTALL_PREFIX}/tools/clang/include" # build dir
-         "${_llvmSourceRoot}/tools/clang/include"     # source dir
+         "${_llvmSourceRoot}/../../clang/include"     # source dir
     )
   endif()
 

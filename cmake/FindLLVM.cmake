@@ -131,8 +131,12 @@ if (LLVM_FOUND)
   endif()
 
   # potentially add include dir from binary dir for non-installed LLVM
+  set(LLVM_CONFIG_INCLUDE_FLAG "--src-root")
+  if (${LLVM_VERSION} VERSION_GREATER_EQUAL 16)
+    set(LLVM_CONFIG_INCLUDE_FLAG "--includedir")
+  endif()
   execute_process(
-    COMMAND ${LLVM_CONFIG_EXECUTABLE} --src-root
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} ${LLVM_CONFIG_INCLUDE_FLAG}
     OUTPUT_VARIABLE _llvmSourceRoot
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
