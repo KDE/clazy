@@ -107,6 +107,12 @@ static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo
     }
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
         return typedefDecl->getDecl()->getQualifiedNameAsString();
+    } else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>()) {
+        // In case one uses a typedef with generics, like QVector<QString> in Qt6
+        // The docs indicate getAsTemplateDecl might be null - so be prepared for that
+        if (auto *decl = templateSpec->getTemplateName().getAsTemplateDecl()) {
+            return decl->getQualifiedNameAsString();
+        }
     } else if (auto recordDecl = ptr->getAsRecordDecl()) {
         return recordDecl->getQualifiedNameAsString();
     }

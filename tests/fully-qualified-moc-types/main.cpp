@@ -61,7 +61,7 @@ namespace NS {
 }
 
 
-
+template<typename T> using DummyListAlias = QList<T>;
 namespace { // annonymous
     struct AnnonFoo {};
 };
@@ -91,6 +91,7 @@ public Q_SLOTS:
     inline void nestedGeneric(QDBusPendingReply<std::shared_ptr<MyObj2>>) {} // OK
     inline void nestedNotFullyQualifiedGeneric(QDBusPendingReply<std::shared_ptr<MyList>>) {} // WARN
     inline const MyList& notQualWithModifier() {return lst;};
+    DummyListAlias<int> myList() { return {1,2,3};};
 private:
     MyList lst;
 };
