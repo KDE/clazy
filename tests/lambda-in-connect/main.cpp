@@ -45,8 +45,6 @@ struct C
 
         QObject::connect(o3, &QObject::destroyed, &o2, [&m]() { m; }); // OK, o2 is on the stack
     }
-
-    int m;
 };
 
 
