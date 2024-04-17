@@ -134,7 +134,9 @@ public:
     void emitWarning(clang::SourceLocation loc, std::string error, const std::vector<clang::FixItHint> &fixits, bool printWarningTag = true);
     void emitInternalError(clang::SourceLocation loc, std::string error);
 
-    virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &){};
+    virtual void registerASTMatchers(clang::ast_matchers::MatchFinder &)
+    {
+    }
 
     bool canIgnoreIncludes() const
     {

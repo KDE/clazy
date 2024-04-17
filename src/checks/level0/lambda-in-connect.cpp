@@ -55,6 +55,12 @@ void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
     }
 
     ValueDecl *receiverDecl = clazy::signalReceiverForConnect(callExpr);
+    if (receiverDecl) {
+        const Type *t = receiverDecl->getType().getTypePtrOrNull();
+        if (t && !t->isPointerType()) {
+            return;
+        }
+    }
 
     for (auto capture : captures) {
         if (capture.getCaptureKind() == clang::LCK_ByRef) {
