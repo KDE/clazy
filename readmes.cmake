@@ -104,6 +104,7 @@ SET(README_LEVEL2_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-returning-void-expression.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-rule-of-three.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-static-pmf.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-used-qunused-variable.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-virtual-call-ctor.md
 )
 

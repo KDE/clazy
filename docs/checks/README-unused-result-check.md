@@ -1,7 +1,6 @@
 # unused-result-check
 
-Warns about the unused return value of const member functions.
-for e.g. 
+Warns about the unused return value of const member functions. For example:  
 ```cpp
     class A : public QObject
 {

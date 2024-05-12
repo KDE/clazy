@@ -755,6 +755,14 @@
             "categories" : ["bug"],
             "visits_stmts" : true,
             "ifndef" : "CLAZY_DISABLE_AST_MATCHERS"
+        },
+        {
+            "name"  : "used-qunused-variable",
+            "class_name" : "UsedQUnusedVariable",
+            "level" : 2,
+            "categories" : ["readability"],
+            "visits_decls" : true
         }
+
     ]
 }

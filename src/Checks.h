@@ -77,6 +77,7 @@
 #include "checks/level2/returning-void-expression.h"
 #include "checks/level2/rule-of-three.h"
 #include "checks/level2/static-pmf.h"
+#include "checks/level2/used-qunused-variable.h"
 #include "checks/level2/virtual-call-ctor.h"
 #include "checks/manuallevel/assert-with-side-effects.h"
 #include "checks/manuallevel/container-inside-loop.h"
@@ -246,5 +247,6 @@ void CheckManager::registerChecks()
     registerCheck(check<ReturningVoidExpression>("returning-void-expression", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfThree>("rule-of-three", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<StaticPmf>("static-pmf", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<UsedQUnusedVariable>("used-qunused-variable", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<VirtualCallCtor>("virtual-call-ctor", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
 }

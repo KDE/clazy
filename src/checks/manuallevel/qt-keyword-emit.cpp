@@ -18,8 +18,6 @@
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/StringRef.h>
 
-#include <algorithm>
-#include <ctype.h>
 #include <string_view>
 #include <vector>
 

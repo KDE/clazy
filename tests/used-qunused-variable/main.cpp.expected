@@ -1,0 +1,2 @@
+used-qunused-variable/main.cpp:9:14: warning: Q_UNUSED used even though variable has usages [-Wclazy-used-qunused-variable]
+used-qunused-variable/main.cpp:22:10: warning: void cast used even though variable has usages [-Wclazy-used-qunused-variable]

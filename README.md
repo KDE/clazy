@@ -313,6 +313,7 @@ clazy runs all checks from level1 by default.
     - [returning-void-expression](docs/checks/README-returning-void-expression.md)
     - [rule-of-three](docs/checks/README-rule-of-three.md)
     - [static-pmf](docs/checks/README-static-pmf.md)
+    - [used-qunused-variable](docs/checks/README-used-qunused-variable.md)
     - [virtual-call-ctor](docs/checks/README-virtual-call-ctor.md)
 
 # Selecting which checks to enable
