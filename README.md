@@ -56,7 +56,7 @@ Other platforms are not supported but we'll gladly accept patches.
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
-clang and LLVM >= 8.0 are required.
+clang and LLVM >= 11.0 are required.
 
 If your distro provides clang then you can skip this step.
 
@@ -85,9 +85,9 @@ See troubleshooting section if you have problems.
 
 ### Build and install clang
 These instructions assume your terminal is suitable for development.
-Ninja (or equivalent), git, cmake, and cl (msvc2019) should be in your PATH.
+Ninja (or equivalent), git, cmake, and cl (msvc2022) should be in your PATH.
 
-clang and LLVM >= 9.0 are required.
+clang and LLVM >= 11.0 are required.
 
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
 
