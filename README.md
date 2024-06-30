@@ -1,8 +1,3 @@
--*WARNING:* master is the development branch. Please use the v1.11 branch.
-
-clazy v1.12
-===========
-
 clazy is a compiler plugin which allows clang to understand Qt semantics. You get more than 50 Qt related compiler warnings, ranging from unneeded memory allocations to misusage of API, including fix-its for automatic refactoring.
 
 Table of contents
@@ -504,7 +499,7 @@ and thanks to:
 
 # Contributing patches
 
-New features go to master and bug fixes go to the 1.11 branch.
+New features go to master and bug fixes go to the last 1.X branch.
 The preferred way to contributing is by using KDE's GitLab instance,
 see <https://community.kde.org/Infrastructure/GitLab>.
 
