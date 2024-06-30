@@ -78,4 +78,8 @@ branch (search for clazy in that file).
 
 - Edit ChangeLog
 
+- Tag, for example: `git tag -a v1.12 -m "Version 1.12"`
+
+- `git push --tags`
+
 - Merge to master, and bump `CLAZY_VERSION_MINOR` to the next version.
