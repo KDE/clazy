@@ -1,9 +1,15 @@
 # Changelog
 
-* v1.12 (TBD)
+* v1.12 (June 30th 2024)
     - New Checks:
       - qt-keyword-emit
       - sanitize-inline-keyword
+      - no-module-include
+    - Support for LLVM 18
+    - Fixit for QFileInfo::exists
+    - Fixit for qstring-arg
+    - Removed Qt4 compatibility
+    - 2 years worth of bug fixes
 
 * v1.11 (January 21st 2022)
     - New Checks:
