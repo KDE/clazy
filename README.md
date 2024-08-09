@@ -241,6 +241,7 @@ clazy runs all checks from level1 by default.
     - [unused-result-check](docs/checks/README-unused-result-check.md)
     - [use-arrow-operator-instead-of-data](docs/checks/README-use-arrow-operator-instead-of-data.md)
     - [use-chrono-in-qtimer](docs/checks/README-use-chrono-in-qtimer.md)
+    - [used-qunused-variable](docs/checks/README-used-qunused-variable.md)
 
 - Checks from Level 0:
     - [connect-by-name](docs/checks/README-connect-by-name.md)
@@ -313,7 +314,6 @@ clazy runs all checks from level1 by default.
     - [returning-void-expression](docs/checks/README-returning-void-expression.md)
     - [rule-of-three](docs/checks/README-rule-of-three.md)
     - [static-pmf](docs/checks/README-static-pmf.md)
-    - [used-qunused-variable](docs/checks/README-used-qunused-variable.md)
     - [virtual-call-ctor](docs/checks/README-virtual-call-ctor.md)
 
 # Selecting which checks to enable

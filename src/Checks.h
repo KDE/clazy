@@ -77,7 +77,6 @@
 #include "checks/level2/returning-void-expression.h"
 #include "checks/level2/rule-of-three.h"
 #include "checks/level2/static-pmf.h"
-#include "checks/level2/used-qunused-variable.h"
 #include "checks/level2/virtual-call-ctor.h"
 #include "checks/manuallevel/assert-with-side-effects.h"
 #include "checks/manuallevel/container-inside-loop.h"
@@ -109,6 +108,7 @@
 #include "checks/manuallevel/unused-result-check.h"
 #include "checks/manuallevel/use-arrow-operator-instead-of-data.h"
 #include "checks/manuallevel/use-chrono-in-qtimer.h"
+#include "checks/manuallevel/used-qunused-variable.h"
 
 template<typename T>
 RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options = RegisteredCheck::Option_None)
@@ -162,6 +162,7 @@ void CheckManager::registerChecks()
 #endif
     registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<UsedQUnusedVariable>("used-qunused-variable", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectByName>("connect-by-name", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ConnectNonSignal>("connect-non-signal", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
@@ -247,6 +248,5 @@ void CheckManager::registerChecks()
     registerCheck(check<ReturningVoidExpression>("returning-void-expression", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfThree>("rule-of-three", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<StaticPmf>("static-pmf", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<UsedQUnusedVariable>("used-qunused-variable", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<VirtualCallCtor>("virtual-call-ctor", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
 }

@@ -29,6 +29,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-unused-result-check.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-use-arrow-operator-instead-of-data.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-use-chrono-in-qtimer.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-used-qunused-variable.md
 )
 
 SET(README_LEVEL0_FILES
@@ -104,7 +105,6 @@ SET(README_LEVEL2_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-returning-void-expression.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-rule-of-three.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-static-pmf.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-used-qunused-variable.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-virtual-call-ctor.md
 )
 

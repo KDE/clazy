@@ -759,7 +759,7 @@
         {
             "name"  : "used-qunused-variable",
             "class_name" : "UsedQUnusedVariable",
-            "level" : 2,
+            "level" : -1,
             "categories" : ["readability"],
             "visits_decls" : true
         }
