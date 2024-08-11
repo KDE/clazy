@@ -83,31 +83,31 @@ void test()
     c1 = true ? (true ? u'*' : u'/') : u'*';
     // nested QLatin1String should not be picked explicitly
 
-    c1 = QLatin1Char(s.startsWith(u"sd"_qs) ? '/' : '*');// fix not supported (bool under CXXMemberCallExpr)
+    c1 = QLatin1Char(s.startsWith("sd"_L1) ? '/' : '*');// fix not supported (bool under CXXMemberCallExpr)
 
     // The outer QLatin1Char fix is not supported, but the inside ones are.
     c1 = QLatin1Char(s.startsWith(u'_') ? '*' : '/');
-    c1 = QLatin1Char(s.startsWith(u"aa"_qs) ?
+    c1 = QLatin1Char(s.startsWith("aa"_L1) ?
                            (true ? u'_' : u'_') : u'_');
     c1 = QLatin1Char(s.startsWith(u'/') ?
                            u'_' : QLatin1Char(s.startsWith(u'_') ? u'*' : u'/'));
     // Support fixit for the QLatin1Char("_") calls in the above cases
 
-    QString s1 = u"str"_qs;
-    s2 = QString(u"s2"_qs);
-    s1 += u"str"_qs;
-    s1 = true ? u"foo"_qs : u"bar"_qs;
-    s1.append(u"appending"_qs);
+    QString s1 = "str"_L1;
+    s2 = QString("s2"_L1);
+    s1 += "str"_L1;
+    s1 = true ? "foo"_L1 : "bar"_L1;
+    s1.append("appending"_L1);
 
-    s1 = myBool ? (true ? u"foo"_qs : u"bar"_qs) : u"bar"_qs;
+    s1 = myBool ? (true ? "foo"_L1 : "bar"_L1) : "bar"_L1;
 
-    receivingQString( u"str"_qs);
+    receivingQString( "str"_L1);
     receivingQLatin1String( QLatin1String("latin"));
 
     QLatin1String totoo = QLatin1String("toto");
 
-    QString sss = u"str"_qs;
-    s1 = true ? (true ? u"foo"_qs : u"bar"_qs) : u"bar"_qs;
+    QString sss = "str"_L1;
+    s1 = true ? (true ? "foo"_L1 : "bar"_L1) : "bar"_L1;
     // nested QLatin1String should not be picked explicitly
 
     const char* myChar = "foo";
@@ -117,16 +117,16 @@ void test()
     s1 = QLatin1String(s.startsWith(u'/') ? "foo" : "bar");// fix not supported (bool under CXXMemberCallExpr)
 
     // The outer QLatin1String fix is not supported, but the inside ones are.
-    s1 = QLatin1String(s.startsWith(u"fixme"_qs) ? "foo" : "bar");//
+    s1 = QLatin1String(s.startsWith("fixme"_L1) ? "foo" : "bar");//
     s1 = QLatin1String(s.startsWith(u'/') ?
                            QLatin1String(true ? QLatin1String("dontfixme") : QLatin1String("dontfixme")) : QLatin1String("dontfixme"));
     s1 = QLatin1String(s.startsWith(u'/') ?
-                           QLatin1String("foo") : QLatin1String(s.startsWith(u"fixme"_qs) ? "foo" : "bar"));
+                           QLatin1String("foo") : QLatin1String(s.startsWith("fixme"_L1) ? "foo" : "bar"));
 
     QString s2df = "dfg";
     s1 = QLatin1String(s.startsWith(u'/') ? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
-    s1 = QLatin1String(return_bool(u"fixme"_qs)? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
-    s1 = QLatin1String(s2df.contains(u"caught"_qs)? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
+    s1 = QLatin1String(return_bool("fixme"_L1)? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
+    s1 = QLatin1String(s2df.contains("caught"_L1)? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
 
 }
 

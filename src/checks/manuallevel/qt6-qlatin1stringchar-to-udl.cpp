@@ -344,10 +344,10 @@ std::string Qt6QLatin1StringCharToUdl::buildReplacement(clang::Stmt *stmt, bool 
         auto *child_stringliteral = dyn_cast<StringLiteral>(child);
 
         if (child_stringliteral) {
-            replacement += "u\"";
+            replacement += "\"";
             replacement += child_stringliteral->getString();
             replacement += "\"";
-            replacement += "_qs";
+            replacement += "_L1";
         } else if (child_charliteral) {
             replacement += "u\'";
             if (child_charliteral->getValue() == 92 || child_charliteral->getValue() == 39) {
