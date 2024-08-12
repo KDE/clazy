@@ -1,6 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2020 The Qt Company Ltd.
     SPDX-FileCopyrightText: 2020 Lucie Gerard <lucie.gerard@qt.io>
+    SPDX-FileCopyrightText: 2024 Ahmad Samir <a.samirh78@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -109,26 +110,27 @@ bool Qt6QLatin1StringCharToUdl::relatedToQStringOrQChar(Stmt *stmt, const ClazyC
  *    This is done by looking for CXXFunctionalCastExpr with name QLatin1String among parents
  *    QLatin1String call nesting in other QLatin1String call are treated while visiting the outer call.
  */
-bool Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent)
+std::optional<std::string> Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent)
 {
     CXXConstructorDecl *ctorDecl = ctorExpr->getConstructor();
     if (!isQLatin1CharDecl(ctorDecl) && !isQLatin1StringDecl(ctorDecl)) {
-        return false;
+        return {};
     }
 
     Stmt *parent_stmt = clazy::parent(context->parentMap, ctorExpr);
     if (!parent_stmt) {
-        return false;
+        return {};
     }
     bool oneFunctionalCast = false;
+    std::string ctorName;
     // A given QLatin1Char/String call will have two ctorExpr passing the isQLatin1CharDecl/StringDecl
     // To avoid creating multiple fixit in case of nested QLatin1Char/String calls
     // it is important to only test the one right after a CXXFunctionalCastExpr with QLatin1Char/String name
     if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
         auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
-        const auto name = parent->getConversionFunction()->getNameAsString();
-        if (!isQLatin1ClassName(name)) {
-            return false;
+        ctorName = parent->getConversionFunction()->getNameAsString();
+        if (!isQLatin1ClassName(ctorName)) {
+            return {};
         } // need to check that this call is related to a QString or a QChar
         if (check_parent) {
             m_QStringOrQChar_fix = relatedToQStringOrQChar(parent_stmt, context);
@@ -144,7 +146,7 @@ bool Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXConstructExpr *ctorExpr
 
     // Not checking the parent when looking for left over QLatin1String call nested in a QLatin1String whose fix is not supported
     if (!check_parent) {
-        return oneFunctionalCast;
+        return oneFunctionalCast ? std::optional{ctorName} : std::nullopt;
     }
 
     parent_stmt = context->parentMap->getParent(parent_stmt);
@@ -166,19 +168,19 @@ bool Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXConstructExpr *ctorExpr
                         auto parent_spl_end = sm().getSpellingLoc(parent_stmt_end);
                         auto ctorSpelling_loc = sm().getSpellingLoc(ctorExpr->getBeginLoc());
                         if (m_sm.isPointWithin(ctorSpelling_loc, parent_spl_begin, parent_spl_end)) {
-                            return false;
+                            return {};
                         }
-                        return oneFunctionalCast;
+                        return oneFunctionalCast ? std::optional{name} : std::nullopt;;
                     }
 
-                    return false;
+                    return {};
                 }
             }
         }
         parent_stmt = context->parentMap->getParent(parent_stmt);
     }
 
-    return oneFunctionalCast;
+    return oneFunctionalCast ? std::optional{ctorName} : std::nullopt;
 }
 
 bool Qt6QLatin1StringCharToUdl::warningAlreadyEmitted(SourceLocation sploc)
@@ -193,7 +195,8 @@ void Qt6QLatin1StringCharToUdl::VisitStmt(clang::Stmt *stmt)
         return;
     }
     m_QStringOrQChar_fix = false;
-    if (!isInterestingCtorCall(ctorExpr, m_context, true)) {
+    auto ctorName = isInterestingCtorCall(ctorExpr, m_context, true);
+    if (!ctorName) {
         return;
     }
 
@@ -202,13 +205,13 @@ void Qt6QLatin1StringCharToUdl::VisitStmt(clang::Stmt *stmt)
 
     for (auto macro_pos : m_listingMacroExpand) {
         if (m_sm.isPointWithin(macro_pos, stmt->getBeginLoc(), stmt->getEndLoc())) {
-            message = "QLatin1Char or QLatin1String is being called (fix it not supported because of macro)";
+            message = *ctorName + " is being called (fixit not supported because of macro)";
             emitWarning(stmt->getBeginLoc(), message, fixits);
             return;
         }
     }
     if (!m_QStringOrQChar_fix) {
-        message = "QLatin1Char or QLatin1String is being called (fix it not supported)";
+        message =  *ctorName + " is being called (fixit not supported)";
         emitWarning(stmt->getBeginLoc(), message, fixits);
         return;
     }
@@ -234,10 +237,11 @@ bool Qt6QLatin1StringCharToUdl::checkCTorExpr(clang::Stmt *stmt, bool check_pare
 
     SourceLocation warningLocation = stmt->getBeginLoc();
 
-    if (!isInterestingCtorCall(ctorExpr, m_context, check_parents)) {
+    auto ctorName = isInterestingCtorCall(ctorExpr, m_context, check_parents);
+    if (!ctorName) {
         return false;
     }
-    message = "QLatin1Char or QLatin1String is being called";
+    message = *ctorName + " is being called";
     if (stmt->getBeginLoc().isMacroID()) {
         SourceLocation callLoc = stmt->getBeginLoc();
         message += " in macro ";

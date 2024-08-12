@@ -47,7 +47,7 @@ private:
     void lookForLeftOver(clang::Stmt *stmt, bool found_QString_QChar = false);
     std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false, int ancestorConditionChildNumber = 0);
 
-    bool isInterestingCtorCall(clang::CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true);
+    std::optional<std::string> isInterestingCtorCall(clang::CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true);
     bool relatedToQStringOrQChar(clang::Stmt *stmt, const ClazyContext *const context);
     bool foundQCharOrQString(clang::Stmt *stmt);
 
