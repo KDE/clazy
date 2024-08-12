@@ -42,7 +42,15 @@ static bool isQLatin1CharDecl(CXXConstructorDecl *decl)
 
 static bool isQLatin1StringDecl(CXXConstructorDecl *decl)
 {
-    return decl && clazy::isOfClass(decl, "QLatin1String");
+    if (!decl)
+        return false;
+    auto name = decl->getNameAsString();
+    return name == "QLatin1StringView" || name == "QLatin1String";
+}
+
+static bool isQLatin1ClassName(StringRef str)
+{
+    return str == "QLatin1StringView" || str == "QLatin1String" || str == "QLatin1Char";
 }
 
 bool Qt6QLatin1StringCharToUdl::foundQCharOrQString(Stmt *stmt)
@@ -118,7 +126,8 @@ bool Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXConstructExpr *ctorExpr
     // it is important to only test the one right after a CXXFunctionalCastExpr with QLatin1Char/String name
     if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
         auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
-        if (parent->getConversionFunction()->getNameAsString() != "QLatin1Char" && parent->getConversionFunction()->getNameAsString() != "QLatin1String") {
+        const auto name = parent->getConversionFunction()->getNameAsString();
+        if (!isQLatin1ClassName(name)) {
             return false;
         } // need to check that this call is related to a QString or a QChar
         if (check_parent) {
@@ -148,7 +157,8 @@ bool Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXConstructExpr *ctorExpr
             auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
             NamedDecl *ndecl = parent->getConversionFunction();
             if (ndecl) {
-                if (ndecl->getNameAsString() == "QLatin1Char" || ndecl->getNameAsString() == "QLatin1String") {
+                const auto name = ndecl->getNameAsString();
+                if (isQLatin1ClassName(name)) {
                     if (parent_stmt->getBeginLoc().isMacroID()) {
                         auto parent_stmt_begin = parent_stmt->getBeginLoc();
                         auto parent_stmt_end = parent_stmt->getEndLoc();
