@@ -18,6 +18,7 @@
 
 #=============================================================================
 # SPDX-FileCopyrightText: 2014 Kevin Funk <kfunk@kde.org>
+# SPDX-FileCopyrightText: 2024 Shivan Kunwar <shivam.kunwar@kdab.com>
 #
 # SPDX-License-Identifier: BSD-2-Clause
 #=============================================================================
@@ -30,14 +31,10 @@ endif()
 if (LLVM_ROOT)
   find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config HINTS ${LLVM_ROOT}/bin DOC "llvm-config executable" NO_DEFAULT_PATH)
 else()
-  # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.5
-  # note: FreeBSD installs llvm-config as llvm-config35 and so on
-  # note: on some distributions, only 'llvm-config' is shipped, so let's always try to fallback on that
+  # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-14
   string(REPLACE "." "" LLVM_FIND_VERSION_CONCAT ${LLVM_FIND_VERSION})
-  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config${LLVM_FIND_VERSION_CONCAT} llvm-config DOC "llvm-config executable")
+  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config${LLVM_FIND_VERSION_CONCAT} llvm-config-14 llvm-config-15 llvm-config-16 llvm-config-17 llvm-config-18 llvm-config-19 llvm-config DOC "llvm-config executable")
 
-  # other distributions don't ship llvm-config, but only some llvm-config-VERSION binary
-  # try to deduce installed LLVM version by looking up llvm-nm in PATH and *then* find llvm-config-VERSION via that
   if (NOT LLVM_CONFIG_EXECUTABLE)
     find_program(_llvmNmExecutable llvm-nm)
     if (_llvmNmExecutable)
@@ -58,7 +55,7 @@ if (LLVM_CONFIG_EXECUTABLE)
 
   if (NOT LLVM_VERSION)
     set(_LLVM_ERROR_MESSAGE "Failed to parse version from llvm-config")
-  elseif (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
+  elseif (LLVM_VERSION VERSION_LESS "14.0")
     set(_LLVM_ERROR_MESSAGE "LLVM version too old: ${LLVM_VERSION}")
   else()
     set(LLVM_FOUND TRUE)
@@ -103,7 +100,7 @@ if (LLVM_FOUND)
     OUTPUT_VARIABLE LLVM_LIBS
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  string(REPLACE " " ";" LLVM_LIBS ${LLVM_LIBS}) # Make it consistent with --libs
+  string(REPLACE " " ";" LLVM_LIBS ${LLVM_LIBS})
 
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --system-libs
@@ -144,6 +141,17 @@ if (LLVM_FOUND)
   if (NOT _llvmIsInstalled)
     list(APPEND LLVM_INCLUDE_DIRS "${LLVM_INSTALL_PREFIX}/include")
   endif()
+
+  # LLVM 19 specific handling
+  if (LLVM_VERSION VERSION_GREATER_EQUAL "19.0")
+    execute_process(
+      COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs all
+      OUTPUT_VARIABLE LLVM_LIBS_19
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    string(REPLACE " " ";" LLVM_LIBS_19 ${LLVM_LIBS_19})
+    list(APPEND LLVM_LIBS ${LLVM_LIBS_19})
+  endif()
 endif()
 
 if (LLVM_FIND_REQUIRED AND NOT LLVM_FOUND)
@@ -157,4 +165,38 @@ if (LLVM_FOUND)
   message(STATUS "  Include dirs:   ${LLVM_INCLUDE_DIRS}")
   message(STATUS "  LLVM libraries: ${LLVM_LIBS}")
   message(STATUS "  LLVM System libraries: ${LLVM_SYSTEM_LIBS}")
+
+  if (LLVM_VERSION VERSION_GREATER_EQUAL "19.0")
+    message(STATUS "  LLVM 19+ detected, additional libraries may be available")
+  endif()
 endif()
+
+execute_process(
+  COMMAND ${LLVM_CONFIG_EXECUTABLE} --cxxflags
+  OUTPUT_VARIABLE LLVM_DEFINITIONS
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+string(REGEX REPLACE "[ \t]+" ";" LLVM_DEFINITIONS "${LLVM_DEFINITIONS}")
+
+if(LLVM_FIND_COMPONENTS)
+  foreach(component ${LLVM_FIND_COMPONENTS})
+    string(TOUPPER ${component} component_upcase)
+    set(LLVM_${component_upcase}_FOUND TRUE)
+    set(LLVM_${component_upcase}_LIBRARY ${component})
+  endforeach()
+endif()
+
+if (LLVM_VERSION VERSION_GREATER_EQUAL "14.0")
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --has-rtti
+    OUTPUT_VARIABLE LLVM_HAS_RTTI
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  if (LLVM_HAS_RTTI)
+    message(STATUS "  LLVM built with RTTI: ${LLVM_HAS_RTTI}")
+  endif()
+endif()
+
+set(LLVM_VERSION "${LLVM_VERSION}" CACHE STRING "LLVM version")
+
+mark_as_advanced(LLVM_INCLUDE_DIRS LLVM_LIBRARY_DIRS LLVM_CFLAGS LLVM_LFLAGS LLVM_MODULE_LIBS LLVM_LIBS LLVM_DEFINITIONS)
