@@ -19,6 +19,7 @@
 
 #=============================================================================
 # SPDX-FileCopyrightText: 2014-2015 Kevin Funk <kfunk@kde.org>
+# SPDX-FileCopyrightText: 2024 Shivan Kunwar <shivam.kunwar@kdab.com>
 #
 # SPDX-License-Identifier: BSD-2-Clause
 #=============================================================================
@@ -32,10 +33,6 @@ endif ()
 set(CLANG_FOUND FALSE)
 
 if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
-  macro(FIND_CLANG_LIB _libname_)
-    string(TOUPPER ${_libname_} _prettylibname_)
-    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS})
-  endmacro(FIND_CLANG_LIB)
   macro(FIND_AND_ADD_CLANG_LIB _libname_)
     string(TOUPPER ${_libname_} _prettylibname_)
     find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS})
@@ -47,12 +44,11 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
   find_library(CLANG_LIBCLANG_LIB NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
 
-  FIND_CLANG_LIB(clang-cpp)
+  FIND_AND_ADD_CLANG_LIB(clang-cpp)
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
   FIND_AND_ADD_CLANG_LIB(clangDriver)
   FIND_AND_ADD_CLANG_LIB(clangCodeGen)
   FIND_AND_ADD_CLANG_LIB(clangSema)
-  FIND_AND_ADD_CLANG_LIB(clangChecker)
   FIND_AND_ADD_CLANG_LIB(clangAnalysis)
   FIND_AND_ADD_CLANG_LIB(clangRewriteFrontend)
   FIND_AND_ADD_CLANG_LIB(clangRewrite)
@@ -64,15 +60,27 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangARCMigrate)
   FIND_AND_ADD_CLANG_LIB(clangEdit)
   FIND_AND_ADD_CLANG_LIB(clangFrontendTool)
-  FIND_AND_ADD_CLANG_LIB(clangRewrite)
   FIND_AND_ADD_CLANG_LIB(clangSerialization)
   FIND_AND_ADD_CLANG_LIB(clangTooling)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCheckers)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCore)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerFrontend)
-  FIND_AND_ADD_CLANG_LIB(clangSema)
-  FIND_AND_ADD_CLANG_LIB(clangRewriteCore)
   FIND_AND_ADD_CLANG_LIB(clangAPINotes)
+
+  if (LLVM_VERSION VERSION_GREATER_EQUAL "15.0")
+    FIND_AND_ADD_CLANG_LIB(clangSupport)
+  endif()
+
+  # LLVM 19 specific libraries
+  if (LLVM_VERSION VERSION_GREATER_EQUAL "19.0")
+    FIND_AND_ADD_CLANG_LIB(clangASTMatchers)
+    FIND_AND_ADD_CLANG_LIB(clangTransformer)
+    FIND_AND_ADD_CLANG_LIB(clangToolingCore)
+    FIND_AND_ADD_CLANG_LIB(clangToolingInclusions)
+    FIND_AND_ADD_CLANG_LIB(clangToolingRefactoring)
+    FIND_AND_ADD_CLANG_LIB(clangToolingSyntax)
+    FIND_AND_ADD_CLANG_LIB(clangDependencyScanning)
+  endif()
 endif()
 
 if(CLANG_LIBS OR CLANG_LIBCLANG_LIB OR CLANG_CLANG-CPP_LIB)
