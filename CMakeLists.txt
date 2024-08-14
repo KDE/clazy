@@ -26,7 +26,7 @@ set(CLAZY_PRINT_VERSION "${CLAZY_VERSION_MAJOR}.${CLAZY_VERSION_MINOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake)
 if (NOT CLAZY_BUILD_WITH_CLANG)
-  find_package(Clang 11.0 MODULE REQUIRED)
+  find_package(Clang 14.0 MODULE REQUIRED)
 
   if (CLANG_CLANG-CPP_LIB AND NOT APPLE)
     set(default_use_clang_cpp ON)
@@ -44,7 +44,6 @@ add_definitions(-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 add_definitions(-D_GNU_SOURCE -DHAVE_CLANG_CONFIG_H)
 add_definitions(-DCLAZY_VERSION="${CLAZY_PRINT_VERSION}")
 
-option(CLAZY_AST_MATCHERS_CRASH_WORKAROUND "Disable AST Matchers if being built with clang. See bug #392223" ON)
 option(LINK_CLAZY_TO_LLVM "Links the clazy plugin to LLVM. Switch to OFF if your clang binary has all symbols already. Might need to be OFF if your LLVM is static." ON)
 option(APPIMAGE_HACK "Links the clazy plugin to the clang tooling libs only. For some reason this is needed when building on our old CentOS 6.8 to create the AppImage." OFF)
 option(CLAZY_MAN_PAGE "Builds the man page." ON)
@@ -55,11 +54,6 @@ if (CLAZY_ENABLE_SANITIZERS)
     if (NOT MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
     endif()
-endif()
-
-if (CLAZY_AST_MATCHERS_CRASH_WORKAROUND AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
-    message("Enabling AST Matchers workaround. Consider updating clang or building with gcc instead. See bug #392223.")
-    add_definitions(-DCLAZY_DISABLE_AST_MATCHERS)
 endif()
 
 if(NOT CLAZY_BUILD_WITH_CLANG AND MSVC AND NOT CLANG_LIBRARY_IMPORT)
@@ -110,7 +104,9 @@ link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
 set(clang_tooling_refactoring_lib clangToolingRefactoring)
 
-if (${LLVM_VERSION} VERSION_GREATER_EQUAL "15.0.0")
+if (${LLVM_VERSION} VERSION_GREATER_EQUAL "19.0.0")
+  set(clang_support_lib clangSupport)
+elseif (${LLVM_VERSION} VERSION_GREATER_EQUAL "15.0.0")
   set(clang_support_lib clangSupport)
 endif()
 
