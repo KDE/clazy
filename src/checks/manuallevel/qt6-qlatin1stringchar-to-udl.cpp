@@ -149,12 +149,11 @@ std::optional<std::string> Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXC
         return oneFunctionalCast ? std::optional{ctorName} : std::nullopt;
     }
 
-    parent_stmt = context->parentMap->getParent(parent_stmt);
     // If an other CXXFunctionalCastExpr QLatin1String is found among the parents
     // the present QLatin1String call is nested in an other QLatin1String call and should be ignored.
     // The outer call will take care of it.
     // Unless the outer call is from a Macro, in which case the current call should not be ignored
-    while (parent_stmt) {
+    while ((parent_stmt = context->parentMap->getParent(parent_stmt))) {
         if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
             auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
             NamedDecl *ndecl = parent->getConversionFunction();
@@ -177,7 +176,6 @@ std::optional<std::string> Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXC
                 }
             }
         }
-        parent_stmt = context->parentMap->getParent(parent_stmt);
     }
 
     return oneFunctionalCast ? std::optional{ctorName} : std::nullopt;
