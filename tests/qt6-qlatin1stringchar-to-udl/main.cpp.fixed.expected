@@ -102,9 +102,9 @@ void test()
     s1 = myBool ? (true ? "foo"_L1 : "bar"_L1) : "bar"_L1;
 
     receivingQString( "str"_L1);
-    receivingQLatin1String( QLatin1String("latin"));
+    receivingQLatin1String( "latin"_L1);
 
-    QLatin1String totoo = QLatin1String("toto");
+    QLatin1String totoo = "toto"_L1;
 
     QString sss = "str"_L1;
     s1 = true ? (true ? "foo"_L1 : "bar"_L1) : "bar"_L1;
@@ -119,14 +119,14 @@ void test()
     // The outer QLatin1String fix is not supported, but the inside ones are.
     s1 = QLatin1String(s.startsWith("fixme"_L1) ? "foo" : "bar");//
     s1 = QLatin1String(s.startsWith(u'/') ?
-                           QLatin1String(true ? QLatin1String("dontfixme") : QLatin1String("dontfixme")) : QLatin1String("dontfixme"));
+                           (true ? "foo"_L1 : "bar"_L1) : "literal"_L1);
     s1 = QLatin1String(s.startsWith(u'/') ?
-                           QLatin1String("foo") : QLatin1String(s.startsWith("fixme"_L1) ? "foo" : "bar"));
+                           "foo"_L1 : QLatin1String(s.startsWith("fixme"_L1) ? "foo" : "bar"));
 
     QString s2df = "dfg";
-    s1 = QLatin1String(s.startsWith(u'/') ? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
-    s1 = QLatin1String(return_bool("fixme"_L1)? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
-    s1 = QLatin1String(s2df.contains("caught"_L1)? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
+    s1 = QLatin1String(s.startsWith(u'/') ? "foo"_L1 : "bar"_L1);
+    s1 = QLatin1String(return_bool("fixme"_L1)? "foo"_L1 : "bar"_L1);
+    s1 = QLatin1String(s2df.contains("caught"_L1)? "foo"_L1 : "bar"_L1);
 
 }
 

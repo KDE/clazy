@@ -119,14 +119,14 @@ void test()
     // The outer QLatin1String fix is not supported, but the inside ones are.
     s1 = QLatin1String(s.startsWith(QLatin1String("fixme")) ? "foo" : "bar");//
     s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ?
-                           QLatin1String(true ? QLatin1String("dontfixme") : QLatin1String("dontfixme")) : QLatin1String("dontfixme"));
+                           QLatin1String(true ? QLatin1String("foo") : QLatin1String("bar")) : QLatin1String("literal"));
     s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ?
                            QLatin1String("foo") : QLatin1String(s.startsWith(QLatin1String("fixme")) ? "foo" : "bar"));
 
     QString s2df = "dfg";
-    s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
-    s1 = QLatin1String(return_bool(QLatin1String("fixme"))? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
-    s1 = QLatin1String(s2df.contains(QLatin1String("caught"))? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
+    s1 = QLatin1String(s.startsWith(QLatin1Char('/')) ? QLatin1String("foo") : QLatin1String("bar"));
+    s1 = QLatin1String(return_bool(QLatin1String("fixme"))? QLatin1String("foo") : QLatin1String("bar"));
+    s1 = QLatin1String(s2df.contains(QLatin1String("caught"))? QLatin1String("foo") : QLatin1String("bar"));
 
 }
 
