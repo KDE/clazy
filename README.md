@@ -228,7 +228,7 @@ clazy runs all checks from level1 by default.
     - [qt6-fwd-fixes](docs/checks/README-qt6-fwd-fixes.md)    (fix-qt6-fwd-fixes)
     - [qt6-header-fixes](docs/checks/README-qt6-header-fixes.md)    (fix-qt6-header-fixes)
     - [qt6-qhash-signature](docs/checks/README-qt6-qhash-signature.md)    (fix-qt6-qhash-signature)
-    - [qt6-qlatin1stringchar-to-u](docs/checks/README-qt6-qlatin1stringchar-to-u.md)    (fix-qt6-qlatin1stringchar-to-u)
+    - [qt6-qlatin1stringchar-to-udl](docs/checks/README-qt6-qlatin1stringchar-to-udl.md)    (fix-qt6-qlatin1stringchar-to-udl)
     - [qvariant-template-instantiation](docs/checks/README-qvariant-template-instantiation.md)
     - [raw-environment-function](docs/checks/README-raw-environment-function.md)
     - [reserve-candidates](docs/checks/README-reserve-candidates.md)

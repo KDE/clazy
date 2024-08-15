@@ -95,7 +95,7 @@
 #include "checks/manuallevel/qt6-fwd-fixes.h"
 #include "checks/manuallevel/qt6-header-fixes.h"
 #include "checks/manuallevel/qt6-qhash-signature.h"
-#include "checks/manuallevel/qt6-qlatin1stringchar-to-u.h"
+#include "checks/manuallevel/qt6-qlatin1stringchar-to-udl.h"
 #include "checks/manuallevel/qvariant-template-instantiation.h"
 #include "checks/manuallevel/raw-environment-function.h"
 #include "checks/manuallevel/reserve-candidates.h"
@@ -144,8 +144,8 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt6-header-fixes", "qt6-header-fixes");
     registerCheck(check<Qt6QHashSignature>("qt6-qhash-signature", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-qt6-qhash-signature", "qt6-qhash-signature");
-    registerCheck(check<Qt6QLatin1StringCharToU>("qt6-qlatin1stringchar-to-u", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-    registerFixIt(1, "fix-qt6-qlatin1stringchar-to-u", "qt6-qlatin1stringchar-to-u");
+    registerCheck(check<Qt6QLatin1StringCharToUdl>("qt6-qlatin1stringchar-to-udl", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-qt6-qlatin1stringchar-to-udl", "qt6-qlatin1stringchar-to-udl");
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));

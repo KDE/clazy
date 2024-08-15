@@ -1,4 +1,4 @@
-# qt6-qlatin1stringchar-to-u
+# qt6-qlatin1stringchar-to-udl
 
 
 Warns when using `QLatin1String` and replaces it with `u`.

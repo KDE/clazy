@@ -67,13 +67,13 @@
             "visits_stmts" : true
         },
 	{
-            "name"  : "qt6-qlatin1stringchar-to-u",
-            "class_name" : "Qt6QLatin1StringCharToU",
+            "name"  : "qt6-qlatin1stringchar-to-udl",
+            "class_name" : "Qt6QLatin1StringCharToUdl",
             "level" : -1,
             "categories" : ["qt6", "qstring", "containers"],
             "fixits" : [
                 {
-                    "name" : "qt6-qlatin1stringchar-to-u"
+                    "name" : "qt6-qlatin1stringchar-to-udl"
                 }
             ],
             "visits_stmts" : true

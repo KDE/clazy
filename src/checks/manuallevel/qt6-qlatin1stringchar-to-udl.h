@@ -32,10 +32,10 @@ class CXXFunctionalCastExpr;
  * Replaces QLatin1Char( ) calls with u''.
  *
  */
-class Qt6QLatin1StringCharToU : public CheckBase
+class Qt6QLatin1StringCharToUdl : public CheckBase
 {
 public:
-    explicit Qt6QLatin1StringCharToU(const std::string &name, ClazyContext *context);
+    explicit Qt6QLatin1StringCharToUdl(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 
