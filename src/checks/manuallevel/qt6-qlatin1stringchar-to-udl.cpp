@@ -102,8 +102,7 @@ std::optional<std::string> Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXC
     // A given QLatin1Char/String call will have two ctorExpr passing the isQLatin1CharDecl/StringDecl
     // To avoid creating multiple fixit in case of nested QLatin1Char/String calls
     // it is important to only test the one right after a CXXFunctionalCastExpr with QLatin1Char/String name
-    if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
-        auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
+    if (auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt)) {
         ctorName = parent->getConversionFunction()->getNameAsString();
         if (!isQLatin1ClassName(ctorName)) {
             return {};
@@ -122,10 +121,8 @@ std::optional<std::string> Qt6QLatin1StringCharToUdl::isInterestingCtorCall(CXXC
     // The outer call will take care of it.
     // Unless the outer call is from a Macro, in which case the current call should not be ignored
     while ((parent_stmt = context->parentMap->getParent(parent_stmt))) {
-        if (isa<CXXFunctionalCastExpr>(parent_stmt)) {
-            auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt);
-            NamedDecl *ndecl = parent->getConversionFunction();
-            if (ndecl) {
+        if (auto *parent = dyn_cast<CXXFunctionalCastExpr>(parent_stmt)) {
+            if (NamedDecl *ndecl = parent->getConversionFunction()) {
                 const auto name = ndecl->getNameAsString();
                 if (isQLatin1ClassName(name)) {
                     if (parent_stmt->getBeginLoc().isMacroID()) {
