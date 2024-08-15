@@ -2,6 +2,9 @@
 #include <QtCore/QChar>
 #include <QtCore/QString>
 #include <QtCore/QDir>
+
+using namespace Qt::StringLiterals
+
 //static const type var{QLatin1String(value)};
 #define MY_CONSTANT(type, name, value)                \
 static const type &name() {                           \

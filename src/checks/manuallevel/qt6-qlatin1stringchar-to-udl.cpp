@@ -8,8 +8,10 @@
 
 #include "qt6-qlatin1stringchar-to-udl.h"
 #include "ClazyContext.h"
+#include "ContextUtils.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
+#include "PreProcessorVisitor.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -34,6 +36,7 @@ Qt6QLatin1StringCharToUdl::Qt6QLatin1StringCharToUdl(const std::string &name, Cl
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     enablePreProcessorCallbacks();
+    context->enablePreprocessorVisitor();
 }
 
 static bool isQLatin1CharDecl(CXXConstructorDecl *decl)
@@ -179,6 +182,59 @@ void Qt6QLatin1StringCharToUdl::VisitStmt(clang::Stmt *stmt)
     checkCTorExpr(stmt, true);
 }
 
+static bool checkFileExtension(const std::string &filename)
+{
+    // https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Overall-Options.html#index-file-name-suffix-71
+    using namespace std::string_view_literals;
+    constexpr std::array<std::string_view, 7> extensions = {
+        ".cc",
+        ".cp",
+        ".cxx",
+        ".cpp",
+        ".CPP",
+        ".c++",
+        ".C",
+    };
+
+    auto fileEndsWith = [&filename](std::string_view ext) {
+        return clazy::endsWith(filename, ext);
+    };
+    return std::find_if(extensions.begin(), extensions.end(), fileEndsWith) != extensions.end();
+}
+
+void Qt6QLatin1StringCharToUdl::insertUsingNamespace(Stmt *stmt)
+{
+    // "using namespace Qt::StringLiterals" already exists, or has been added
+    if (m_has_using_namespace)
+        return;
+
+    // Only in .cpp files
+    if (!checkFileExtension(Utils::filenameForLoc(stmt->getBeginLoc(), m_sm))) {
+        return;
+    }
+
+    static const std::string qtStringLiterals = "using namespace Qt::StringLiterals";
+    DeclContext *declContext = m_context->lastDecl->getDeclContext();
+    auto visibleContexts = clazy::contextsForDecl(declContext);
+    for (DeclContext *context : visibleContexts) {
+        for (const auto *udir : context->using_directives()) {
+            if (getTextFromRange(udir->getSourceRange()) == qtStringLiterals) {
+                m_has_using_namespace = true;
+                return;
+            }
+        }
+    }
+
+    if (!m_has_using_namespace) { // Doesn't exist, add it
+        std::vector<FixItHint> fixits;
+        // "\n\n" because endOfIncludeSection() doesn't end with a new line
+        fixits.push_back(clazy::createInsertion(m_context->preprocessorVisitor->endOfIncludeSection(),
+                                                "\n\n" + qtStringLiterals + "\n"));
+        emitWarning(stmt->getBeginLoc(), "Inserting \"using namespace Qt::StringLiterals\"", fixits);
+        m_has_using_namespace = true;
+    }
+}
+
 bool Qt6QLatin1StringCharToUdl::checkCTorExpr(clang::Stmt *stmt, bool check_parents)
 {
     auto *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);
@@ -201,7 +257,8 @@ bool Qt6QLatin1StringCharToUdl::checkCTorExpr(clang::Stmt *stmt, bool check_pare
     if (!ctorName) {
         return false;
     }
-    message = *ctorName + " is being called";
+    const std::string &name = *ctorName;
+    message = name + " is being called";
     if (stmt->getBeginLoc().isMacroID()) {
         SourceLocation callLoc = stmt->getBeginLoc();
         message += " in macro ";
@@ -222,6 +279,11 @@ bool Qt6QLatin1StringCharToUdl::checkCTorExpr(clang::Stmt *stmt, bool check_pare
     std::string replacement = buildReplacement(stmt, noFix, extra_parentheses);
     if (!noFix) {
         fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), replacement));
+    }
+
+    // At least one QLatin1String fixit, before inserting "using namespace Qt::StringLiterals"
+    if (!fixits.empty() && (name == "QLatin1StringView" || name == "QLatin1String")) {
+        insertUsingNamespace(stmt);
     }
 
     emitWarning(warningLocation, message, fixits);

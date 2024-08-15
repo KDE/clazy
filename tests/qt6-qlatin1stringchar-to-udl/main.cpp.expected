@@ -23,6 +23,7 @@ qt6-qlatin1stringchar-to-udl/main.cpp:80:29: warning: QLatin1Char is being calle
 qt6-qlatin1stringchar-to-udl/main.cpp:82:17: warning: QLatin1Char is being called [-Wclazy-qt6-qlatin1stringchar-to-udl]
 qt6-qlatin1stringchar-to-udl/main.cpp:83:10: warning: QLatin1Char is being called [-Wclazy-qt6-qlatin1stringchar-to-udl]
 qt6-qlatin1stringchar-to-udl/main.cpp:86:10: warning: QLatin1Char is being called [-Wclazy-qt6-qlatin1stringchar-to-udl]
+qt6-qlatin1stringchar-to-udl/main.cpp:86:35: warning: Inserting "using namespace Qt::StringLiterals" [-Wclazy-qt6-qlatin1stringchar-to-udl]
 qt6-qlatin1stringchar-to-udl/main.cpp:86:35: warning: QLatin1String is being called [-Wclazy-qt6-qlatin1stringchar-to-udl]
 qt6-qlatin1stringchar-to-udl/main.cpp:89:10: warning: QLatin1Char is being called [-Wclazy-qt6-qlatin1stringchar-to-udl]
 qt6-qlatin1stringchar-to-udl/main.cpp:89:35: warning: QLatin1Char is being called [-Wclazy-qt6-qlatin1stringchar-to-udl]

@@ -48,6 +48,10 @@ private:
     std::string buildReplacement(clang::Stmt *stmt, bool &noFix, bool extra = false, bool ancestorIsCondition = false, int ancestorConditionChildNumber = 0);
 
     std::optional<std::string> isInterestingCtorCall(clang::CXXConstructExpr *ctorExpr, const ClazyContext *const context, bool check_parent = true);
+
+    void insertUsingNamespace(clang::Stmt *stmt);
+
+    bool m_has_using_namespace = false;
 };
 
 #endif

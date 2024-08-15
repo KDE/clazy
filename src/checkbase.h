@@ -178,6 +178,12 @@ protected:
     bool manualFixitAlreadyQueued(clang::SourceLocation loc) const;
     bool isOptionSet(const std::string &optionName) const;
 
+    clang::StringRef getTextFromRange(const clang::SourceRange &range)
+    {
+        auto charRange = clang::Lexer::getAsCharRange(clang::CharSourceRange::getTokenRange(range), m_sm, lo());
+        return clang::Lexer::getSourceText(charRange, m_sm, lo());
+    }
+
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::SourceManager &sm() const
     {
