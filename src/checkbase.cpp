@@ -89,12 +89,12 @@ void ClazyPreprocessorCallbacks::MacroDefined(const Token &macroNameTok, const M
 
 void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLoc,
                                                     const clang::Token &IncludeTok,
-                                                    clang::StringRef FileName,
+                                                    llvm::StringRef FileName,
                                                     bool IsAngled,
                                                     clang::CharSourceRange FilenameRange,
-                                                    clazy::OptionalFileEntryRef File,
-                                                    clang::StringRef SearchPath,
-                                                    clang::StringRef RelativePath,
+                                                    const clang::FileEntry *File,
+                                                    llvm::StringRef SearchPath,
+                                                    llvm::StringRef RelativePath,
                                                     const clang::Module *Imported,
                                                     clang::SrcMgr::CharacteristicKind FileType)
 {
@@ -173,12 +173,12 @@ void CheckBase::VisitEndif(SourceLocation, SourceLocation)
 
 void CheckBase::VisitInclusionDirective(clang::SourceLocation,
                                         const clang::Token &,
-                                        clang::StringRef,
+                                        llvm::StringRef,
                                         bool,
                                         clang::CharSourceRange,
-                                        clazy::OptionalFileEntryRef,
-                                        clang::StringRef,
-                                        clang::StringRef,
+                                        const clang::FileEntry *,
+                                        llvm::StringRef,
+                                        llvm::StringRef,
                                         const clang::Module *,
                                         clang::SrcMgr::CharacteristicKind)
 {
