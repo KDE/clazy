@@ -21,34 +21,20 @@ namespace clazy
 {
 inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *invalid)
 {
-#if LLVM_VERSION_MAJOR >= 16
     auto buffer = sm.getBufferOrNone(id);
+#if LLVM_VERSION_MAJOR >= 15
     *invalid = !buffer.has_value();
-    return buffer;
-#elif LLVM_VERSION_MAJOR >= 12
-    auto buffer = sm.getBufferOrNone(id);
-    *invalid = !buffer.hasValue();
-    return buffer;
 #else
-    return sm.getBuffer(id, invalid);
+    *invalid = !buffer.hasValue();
 #endif
+    return buffer;
 }
 
-#if LLVM_VERSION_MAJOR >= 16
-#define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile.value(), sm, lo)
-#elif LLVM_VERSION_MAJOR >= 12
 #define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile.getValue(), sm, lo)
-#else
-#define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile, sm, lo)
-#endif
 
 inline bool contains_lower(clang::StringRef haystack, clang::StringRef needle)
 {
-#if LLVM_VERSION_MAJOR >= 13
     return haystack.contains_insensitive(needle);
-#else
-    return haystack.contains_lower(needle);
-#endif
 }
 
 inline bool isAscii(clang::StringLiteral *lt)

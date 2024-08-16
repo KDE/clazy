@@ -357,9 +357,8 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
     }
 
     std::vector<FixItHint> fixits;
-#if LLVM_VERSION_MAJOR >= 10
-    const std::string type = qualType.getAsString();
 
+    const std::string type = qualType.getAsString();
     if (clazy::endsWith(type, "QString::SplitBehavior")) {
         bool isQtNamespaceExplicit = false;
         DeclContext *newcontext = clazy::contextForDecl(m_context->lastDecl);
@@ -383,7 +382,6 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
         SourceRange sourceRange(declaratorDecl->getTypeSpecStartLoc(), declaratorDecl->getTypeSpecEndLoc());
         fixits.push_back(FixItHint::CreateReplacement(sourceRange, replacement));
     }
-#endif
 
     emitWarning(decl->getBeginLoc(), message, fixits);
     return;

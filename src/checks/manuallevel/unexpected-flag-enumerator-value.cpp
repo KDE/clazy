@@ -50,13 +50,11 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en)
 
 #if LLVM_VERSION_MAJOR >= 17
     if (val.isShiftedMask() && val.popcount() >= MinOnesToQualifyAsMask) {
-        return true;
-    }
 #else
     if (val.isShiftedMask() && val.countPopulation() >= MinOnesToQualifyAsMask) {
+#endif
         return true;
     }
-#endif
 
     if (clazy::contains_lower(en->getName(), "mask")) {
         return true;

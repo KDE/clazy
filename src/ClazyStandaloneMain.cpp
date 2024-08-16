@@ -99,11 +99,7 @@ public:
     {
     }
 
-#if LLVM_VERSION_MAJOR >= 10
     std::unique_ptr<FrontendAction> create() override
-#else
-    FrontendAction *create() override
-#endif
     {
         ClazyContext::ClazyOptions options = ClazyContext::ClazyOption_None;
 
@@ -135,6 +131,8 @@ public:
                                                           m_paths,
                                                           options);
     }
+
+private:
     std::vector<std::string> m_paths;
 };
 
