@@ -11,3 +11,4 @@ Options:
   per-test-timeout: 120 # Increase timeout, because some tests are parallelized in themselves and include really large headers
   tests-run-in-parallel: True
   cppcheck-arguments: '-i tests/'
+  ctest-arguments: -V
