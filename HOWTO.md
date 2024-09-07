@@ -79,3 +79,4 @@ branch (search for clazy in that file).
 - Edit ChangeLog
 
 - Merge to master, and bump `CLAZY_VERSION_MINOR` to the next version.
+
