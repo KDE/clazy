@@ -117,6 +117,19 @@ if (LLVM_FOUND)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --bindir
+    OUTPUT_VARIABLE LLVM_BIN_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  set(CLANG_EXECUTABLE_PATH "${LLVM_BIN_DIR}/clang")
+  if(EXISTS ${CLANG_EXECUTABLE_PATH})
+    message(STATUS "Clang found: ${CLANG_EXECUTABLE_PATH}")
+    set(CLANG_EXECUTABLE ${CLANG_EXECUTABLE_PATH})
+  else()
+    message(WARNING "Clang not found in LLVM bin directory: ${LLVM_BIN_DIR}")
+  endif()
+
   # potentially add include dir from binary dir for non-installed LLVM
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --src-root

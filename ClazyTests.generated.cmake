@@ -2,8 +2,11 @@
 
 macro(add_clazy_test name)
   add_test(NAME ${name} COMMAND python3 run_tests.py ${name} --verbose WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/)
+  if (CLANG_EXECUTABLE_PATH)
+    set(CLANG_CXX_TEST "CLANGXX=${CLANG_EXECUTABLE_PATH};")
+  endif()
   set_property(TEST ${name} PROPERTY
-    ENVIRONMENT "CLAZYPLUGIN_CXX=$<TARGET_FILE:ClazyPlugin>;CLAZYSTANDALONE_CXX=$<TARGET_FILE:clazy-standalone>;$<$<BOOL:${HAS_STD_FILESYSTEM}>:CLAZY_HAS_FILESYSTEM=>"
+    ENVIRONMENT "${CLANG_CXX_TEST}CLAZYPLUGIN_CXX=$<TARGET_FILE:ClazyPlugin>;CLAZYSTANDALONE_CXX=$<TARGET_FILE:clazy-standalone>;$<$<BOOL:${HAS_STD_FILESYSTEM}>:CLAZY_HAS_FILESYSTEM=>"
   )
 endmacro()
 
