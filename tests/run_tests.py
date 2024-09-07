@@ -491,6 +491,9 @@ if 5 in args.qt_versions:
     _qt5_installation = find_qt_installation(5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake", "qmake5"])
 else:
     _qt5_installation = None
+if (_qt5_installation == None or _qt5_installation.int_version == 0) \
+    and (_qt6_installation == None or _qt6_installation.int_version == 0):
+    sys.exit(1)
 _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 
 # -------------------------------------------------------------------------------
