@@ -12,6 +12,9 @@
         },
         {
             "filename" : "bug403193.cpp"
+        },
+        {
+            "filename" : "bug_qca.cpp"
         }
     ]
 }
