@@ -56,7 +56,14 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     CXXConstructorDecl *copyCtor = Utils::copyCtor(record);
     CXXMethodDecl *copyAssign = Utils::copyAssign(record);
-    CXXDestructorDecl *destructor = record->getDestructor();
+    CXXDestructorDecl *destructor = nullptr;
+    // Getting the destructor using record->getDestructor() does not work for later clang versions, e.g. clang 16
+    for (auto *decl : record->decls()) {
+        if (auto *destructorDecl = dyn_cast<CXXDestructorDecl>(decl)) {
+            destructor = destructorDecl;
+            break;
+        }
+    }
     const bool dtorDefaultedByUser = destructor && destructor->isDefaulted() && !destructor->isImplicit();
 
     const bool hasUserCopyCtor = copyCtor && copyCtor->isUserProvided();
