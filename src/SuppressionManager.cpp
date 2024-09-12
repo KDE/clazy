@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2016 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2024 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -8,6 +9,7 @@
 #include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
+#include <algorithm>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Basic/TokenKinds.h>
@@ -94,8 +96,48 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     lexer.SetCommentRetentionState(true);
 
     Token token;
+    std::stack<std::pair<SourceLocation, std::vector<CheckName>>> scopeStack;
+
+    std::stack<SourceLocation> openingBraceStack;
+    SourceRange range;
+    std::vector<CheckName> rangeChecks;
+
     while (!lexer.LexFromRawLexer(token)) {
-        if (token.getKind() == tok::comment) {
+        if (token.getKind() == tok::l_brace) {
+            openingBraceStack.push(token.getLocation());
+
+            // if we open a new scope, but have spressions parsed. Write them away, we will put the end in later
+            if (!rangeChecks.empty()) {
+                suppressions.checksSuppressionScope.insert(suppressions.checksSuppressionScope.end(), {range, rangeChecks});
+                rangeChecks = {};
+            }
+            range = SourceRange();
+            range.setBegin(token.getLocation());
+
+        } else if (token.getKind() == tok::r_brace) {
+            const SourceLocation openingSourceLocation = openingBraceStack.top();
+            openingBraceStack.pop();
+
+            // Find the suppression entry, because we might have had other scopes opened in between
+            auto foundIt = std::find_if(suppressions.checksSuppressionScope.begin(),
+                                        suppressions.checksSuppressionScope.end(),
+                                        [&openingSourceLocation](const auto &entry) {
+                                            SourceRange entryRange = entry.first;
+                                            return entryRange.getBegin() == openingSourceLocation;
+                                        });
+            if (foundIt == suppressions.checksSuppressionScope.end()) {
+                if (!rangeChecks.empty()) {
+                    range.setEnd(token.getLocation());
+                    suppressions.checksSuppressionScope.insert(suppressions.checksSuppressionScope.end(), {range, rangeChecks});
+                }
+            } else {
+                (*foundIt).first.setEnd(token.getLocation());
+            }
+
+            range = {};
+            rangeChecks = {};
+        } else if (token.getKind() == tok::comment) {
+            token.getLocation().dump(sm);
             std::string comment = Lexer::getSpelling(token, sm, lo);
 
             if (clazy::contains(comment, "clazy:skip")) {
@@ -118,7 +160,11 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             std::smatch match;
             if (regex_search(comment, match, rx) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
-                suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
+                if (range.getBegin().isValid()) {
+                    rangeChecks.insert(rangeChecks.begin(), checks.cbegin(), checks.cend());
+                } else {
+                    suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
+                }
             }
 
             const int lineNumber = sm.getSpellingLineNumber(token.getLocation());
