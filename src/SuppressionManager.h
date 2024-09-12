@@ -11,10 +11,12 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace clang
 {
 class SourceLocation;
+class SourceRange;
 class LangOptions;
 class SourceManager;
 class FileID;
@@ -33,6 +35,7 @@ public:
         std::set<unsigned> skipNextLine;
         std::set<CheckName> checksToSkip;
         std::set<LineAndCheckName> checksToSkipByLine;
+        std::vector<std::pair<clang::SourceRange, std::vector<CheckName>>> checksSuppressionScope;
     };
 
     SuppressionManager();
