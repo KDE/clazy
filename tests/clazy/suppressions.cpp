@@ -14,6 +14,17 @@ void suppress_qstring_allocation()
     if (s == "foo") {}
 }
 
+void suppress_qstring_allocation_scoped()
+{
+    {
+        // clazy:excludeall=qstring-allocations
+        QString s = "foo";
+        if (s == "foo") {
+            QString scopeDisabled = "yxz";
+        }
+    }
+    QString outOfDisabledScope = "abc";
+}
 struct BigTrivial
 {
     int a, b, c, d, e;

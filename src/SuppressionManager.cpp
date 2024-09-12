@@ -70,6 +70,20 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
         suppressions.skipNextLine.erase(lineNumber);
         return true;
     }
+    bool isLocallySupresses = //
+        std::any_of(suppressions.checksSuppressionScope.begin(),
+                    suppressions.checksSuppressionScope.end(),
+                    [&checkName, &loc](const ScopedSupression &scopedSuppression) {
+                        const std::vector<CheckName> checks = scopedSuppression.second;
+                        const bool supressesCheck = //
+                            checks.end() != std::find_if(checks.begin(), checks.end(), [&checkName](const std::string &name) {
+                                return name == checkName;
+                            });
+                        return supressesCheck && scopedSuppression.first.fullyContains(SourceRange(loc));
+                    });
+    if (isLocallySupresses) {
+        return true;
+    }
     if (suppressions.checksToSkipByLine.find(LineAndCheckName(lineNumber, checkName)) != suppressions.checksToSkipByLine.cend())
         return true;
 

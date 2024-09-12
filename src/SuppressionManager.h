@@ -29,13 +29,14 @@ public:
     using LineNumber = unsigned int;
     using CheckName = std::string;
     using LineAndCheckName = std::pair<LineNumber, CheckName>;
+    using ScopedSupression = std::pair<clang::SourceRange, std::vector<CheckName>>;
 
     struct Suppressions {
         bool skipEntireFile = false;
         std::set<unsigned> skipNextLine;
         std::set<CheckName> checksToSkip;
         std::set<LineAndCheckName> checksToSkipByLine;
-        std::vector<std::pair<clang::SourceRange, std::vector<CheckName>>> checksSuppressionScope;
+        std::vector<ScopedSupression> checksSuppressionScope;
     };
 
     SuppressionManager();
