@@ -24,6 +24,8 @@ void suppress_qstring_allocation_scoped()
         }
     }
     QString outOfDisabledScope = "abc";
+    // clazy:exclude=qstring-allocations
+    QString disabledPrevLine = "abc";
 }
 struct BigTrivial
 {

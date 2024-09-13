@@ -17,6 +17,7 @@
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
 
+#include <iostream>
 #include <regex>
 #include <vector>
 
@@ -86,6 +87,14 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
         return true;
 
     return false;
+}
+
+bool isEmptyOrWhitespace(const std::string &str)
+{
+    // Check if the string is empty or if all characters are whitespace
+    return str.empty() || std::all_of(str.begin(), str.end(), [](unsigned char c) {
+               return std::isspace(c);
+           });
 }
 
 void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const clang::LangOptions &lo) const
@@ -187,10 +196,22 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
 
             static std::regex rx2(R"(clazy:exclude=(.*?)(\s|$))");
             if (regex_search(comment, match, rx2) && match.size() > 1) {
-                std::vector<std::string> checks = clazy::splitString(match[1], ',');
+                // check
+                SourceLocation tokenLocation = token.getLocation();
+                unsigned lineNum = sm.getSpellingLineNumber(tokenLocation);
+                SourceLocation lineStartLoc = sm.translateLineCol(sm.getFileID(tokenLocation), lineNum, 1);
+                const char *lineStart = sm.getCharacterData(lineStartLoc);
+                const char *bufferEnd = sm.getBufferData(sm.getFileID(tokenLocation)).end();
+                const char *lineEnd = lineStart;
+                while (lineEnd < bufferEnd && *lineEnd != '\n' && *lineEnd != '\r') {
+                    ++lineEnd;
+                }
 
+                const std::string prevFileContent = std::string(lineStart, lineEnd).substr(0, sm.getPresumedColumnNumber(token.getLocation()) - 1);
+                std::vector<std::string> checks = clazy::splitString(match[1], ',');
+                const int checkLineNumber = isEmptyOrWhitespace(prevFileContent) ? lineNumber + 1 : lineNumber;
                 for (const std::string &checkName : checks) {
-                    suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
+                    suppressions.checksToSkipByLine.insert(LineAndCheckName(checkLineNumber, checkName));
                 }
             }
         }
