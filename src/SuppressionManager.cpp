@@ -41,13 +41,12 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
     }
 
     auto it = m_processedFileIDs.find(fileID.getHashValue());
-    const bool notProcessedYet = (it == m_processedFileIDs.cend());
-    if (notProcessedYet) {
+    if ((it == m_processedFileIDs.end())) {
         parseFile(fileID, sm, lo);
         it = m_processedFileIDs.find(fileID.getHashValue());
     }
 
-    Suppressions &suppressions = (*it).second;
+    Suppressions &suppressions = it->second;
 
     // Case 1: clazy:skip, the whole file is skipped, regardless of which check
     if (suppressions.skipEntireFile) {
@@ -55,8 +54,7 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
     }
 
     // Case 2: clazy:excludeall=foo, the check foo will be ignored for this file
-    const bool checkIsSuppressed = suppressions.checksToSkip.find(checkName) != suppressions.checksToSkip.cend();
-    if (checkIsSuppressed) {
+    if (suppressions.checksToSkip.find(checkName) != suppressions.checksToSkip.cend()) {
         return true;
     }
 
