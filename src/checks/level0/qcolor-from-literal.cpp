@@ -25,6 +25,12 @@ class ClazyContext;
 using namespace clang;
 using namespace clang::ast_matchers;
 
+#if LLVM_VERSION_MAJOR >= 19
+#define STARTS_WITH starts_with
+#else
+#define STARTS_WITH startswith
+#endif
+
 static bool isSingleDigitRgb(llvm::StringRef ref)
 {
     return ref.size() == 4;
@@ -48,7 +54,7 @@ static bool isQuadrupleDigitRgb(llvm::StringRef ref)
 
 static bool isStringColorLiteralPattern(StringRef str)
 {
-    if (!str.startswith("#")) {
+    if (!str.STARTS_WITH("#")) {
         return false;
     }
     return isSingleDigitRgb(str) || isDoubleDigitRgb(str) || isDoubleDigitRgba(str) || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str);
@@ -76,7 +82,7 @@ public:
         }
 
         llvm::StringRef str = lt->getString();
-        if (!str.startswith("#")) {
+        if (!str.STARTS_WITH("#")) {
             return;
         }
 
