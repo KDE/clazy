@@ -48,7 +48,7 @@ static bool isQuadrupleDigitRgb(llvm::StringRef ref)
 
 static bool isStringColorLiteralPattern(StringRef str)
 {
-    if (!str.startswith("#")) {
+    if (!clazy::startsWith(str, "#")) {
         return false;
     }
     return isSingleDigitRgb(str) || isDoubleDigitRgb(str) || isDoubleDigitRgba(str) || isTripleDigitRgb(str) || isQuadrupleDigitRgb(str);
@@ -76,7 +76,7 @@ public:
         }
 
         llvm::StringRef str = lt->getString();
-        if (!str.startswith("#")) {
+        if (!clazy::startsWith(str, "#")) {
             return;
         }
 
