@@ -122,8 +122,7 @@ public:
         if (s_ignoreIncludedFiles.getValue()) {
             options |= ClazyContext::ClazyOption_IgnoreIncludedFiles;
         }
-
-        // TODO: We need to agregate the fixes with previous run
+        // TODO: We need to aggregate the fixes with previous run
         return std::make_unique<ClazyStandaloneASTAction>(s_checks.getValue(),
                                                           s_headerFilter.getValue(),
                                                           s_ignoreDirs.getValue(),
