@@ -489,7 +489,12 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, const std::stri
             }
             auto *uni = dyn_cast<UnaryOperator>(child);
             if (uni) {
-                if (clang::UnaryOperator::getOpcodeStr(uni->getOpcode()).equals("*")) {
+#if LLVM_VERSION_MAJOR >= 19
+#define STRING_EQUALS(a, b) a == b
+#else
+#define STRING_EQUALS(a, b) a.equals(b)
+#endif
+                if (STRING_EQUALS(clang::UnaryOperator::getOpcodeStr(uni->getOpcode()), "*")) {
                     isPointer = true;
                 }
             }

@@ -184,6 +184,9 @@ void PreProcessorVisitor::InclusionDirective(clang::SourceLocation,
                                              clang::StringRef,
                                              clang::StringRef,
                                              const clang::Module *,
+#if LLVM_VERSION_MAJOR >= 19
+                                             bool,
+#endif
                                              clang::SrcMgr::CharacteristicKind)
 {
     if (m_ci.getPreprocessor().isInPrimaryFile() && !clazy::endsWith(FileName.str(), ".moc")) {
