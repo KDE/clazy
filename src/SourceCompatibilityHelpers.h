@@ -30,7 +30,11 @@ inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *in
     return buffer;
 }
 
+#if LLVM_VERSION_MAJOR >= 16
+#define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile.value(), sm, lo)
+#else
 #define GET_LEXER(id, inputFile, sm, lo) clang::Lexer(id, inputFile.getValue(), sm, lo)
+#endif
 
 inline bool contains_lower(clang::StringRef haystack, clang::StringRef needle)
 {
