@@ -157,9 +157,7 @@ void CheckManager::registerChecks()
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnexpectedFlagEnumeratorValue>("unexpected-flag-enumerator-value", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-#ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<UnusedResultCheck>("unused-result-check", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-#endif
     registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UsedQUnusedVariable>("used-qunused-variable", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
@@ -176,10 +174,8 @@ void CheckManager::registerChecks()
     registerCheck(check<MutableContainerKey>("mutable-container-key", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<NoModuleInclude>("no-module-include", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<OverloadedSignal>("overloaded-signal", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
-#ifndef CLAZY_DISABLE_AST_MATCHERS
     registerCheck(check<QColorFromLiteral>("qcolor-from-literal", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qcolor-from-literal", "qcolor-from-literal");
-#endif
     registerCheck(check<QDateTimeUtc>("qdatetime-utc", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qdatetime-utc", "qdatetime-utc");
     registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_None));

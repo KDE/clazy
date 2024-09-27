@@ -313,7 +313,6 @@
             "level" : 0,
             "categories" : ["performance"],
             "visits_stmts" : true,
-            "ifndef" : "CLAZY_DISABLE_AST_MATCHERS",
             "fixits" : [
                 {
                     "name" : "qcolor-from-literal"
@@ -753,8 +752,7 @@
             "name"  : "unused-result-check",
             "level" : -1,
             "categories" : ["bug"],
-            "visits_stmts" : true,
-            "ifndef" : "CLAZY_DISABLE_AST_MATCHERS"
+            "visits_stmts" : true
         },
         {
             "name"  : "used-qunused-variable",
