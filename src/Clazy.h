@@ -117,9 +117,7 @@ private:
     // CheckBase::List m_createdChecks;
     CheckBase::List m_checksToVisitStmts;
     CheckBase::List m_checksToVisitDecls;
-#ifndef CLAZY_DISABLE_AST_MATCHERS
     clang::ast_matchers::MatchFinder *m_matchFinder = nullptr;
-#endif
 };
 
 #endif
