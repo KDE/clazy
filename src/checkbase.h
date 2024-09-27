@@ -94,7 +94,12 @@ public:
                             clazy::OptionalFileEntryRef File,
                             llvm::StringRef SearchPath,
                             llvm::StringRef RelativePath,
+#if LLVM_VERSION_MAJOR >= 19
+                            const clang::Module *SuggestedModule,
+                            bool ModuleImported,
+#else
                             const clang::Module *Imported,
+#endif
                             clang::SrcMgr::CharacteristicKind FileType) override;
 
 private:
@@ -164,7 +169,12 @@ protected:
                                          clazy::OptionalFileEntryRef File,
                                          llvm::StringRef SearchPath,
                                          llvm::StringRef RelativePath,
+#if LLVM_VERSION_MAJOR >= 19
+                                         const clang::Module *SuggestedModule,
+                                         bool ModuleImported,
+#else
                                          const clang::Module *Imported,
+#endif
                                          clang::SrcMgr::CharacteristicKind FileType);
 
     void enablePreProcessorCallbacks();
