@@ -52,7 +52,7 @@ bool MiniASTDumperConsumer::VisitStmt(Stmt *)
 void MiniASTDumperConsumer::HandleTranslationUnit(ASTContext &ctx)
 {
     auto &sm = ctx.getSourceManager();
-    const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
+    const auto fileEntry = sm.getFileEntryRefForID(sm.getMainFileID());
     llvm::errs() << "Found TU: " << fileEntry->getName() << "\n";
     TraverseDecl(ctx.getTranslationUnitDecl());
 }

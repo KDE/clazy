@@ -47,7 +47,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
         if (exportFixesFilename.empty()) {
             // Only clazy-standalone sets the filename by argument.
             // clazy plugin sets it automatically here:
-            const FileEntry *fileEntry = sm.getFileEntryForID(sm.getMainFileID());
+            const auto fileEntry = sm.getFileEntryRefForID(sm.getMainFileID());
             exportFixesFilename = fileEntry->getName().str() + ".clazy.yaml";
         }
 

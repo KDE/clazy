@@ -233,7 +233,6 @@ inline std::string unquoteString(const std::string &str)
 
     return str;
 }
-
 }
 
 #endif

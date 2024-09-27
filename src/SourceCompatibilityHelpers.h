@@ -19,7 +19,6 @@
 
 namespace clazy
 {
-
 inline auto getBuffer(const clang::SourceManager &sm, clang::FileID id, bool *invalid)
 {
 #if LLVM_VERSION_MAJOR >= 16

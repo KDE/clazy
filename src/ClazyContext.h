@@ -52,6 +52,11 @@ public:
                                              // check has to support this feature i.e. has clazy::CheckBase::Option_CanIgnoreIncludes set
     };
     using ClazyOptions = int;
+#if LLVM_VERSION_MAJOR >= 16
+    using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
+#else
+    using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
+#endif
 
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,
@@ -96,30 +101,29 @@ public:
         return clazy::contains(extraOptions, optionName);
     }
 
-    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc, const clang::FileEntry **file) const
+    bool fileMatchesLoc(const std::unique_ptr<llvm::Regex> &regex, clang::SourceLocation loc, ClazyContext::OptionalFileEntryRef &file) const
     {
         if (!regex) {
             return false;
         }
 
-        if (!(*file)) {
+        if (!file) {
             clang::FileID fid = sm.getDecomposedExpansionLoc(loc).first;
-            *file = sm.getFileEntryForID(fid);
-            if (!(*file)) {
+            file = sm.getFileEntryRefForID(fid);
+            if (!file) {
                 return false;
             }
         }
 
-        llvm::StringRef fileName((*file)->getName());
-        return regex->match(fileName);
+        return regex->match(file->getName());
     }
 
     bool shouldIgnoreFile(clang::SourceLocation loc) const
     {
         // 1. Process the regexp that excludes files
-        const clang::FileEntry *file = nullptr;
+        ClazyContext::OptionalFileEntryRef file;
         if (ignoreDirsRegex) {
-            const bool matches = fileMatchesLoc(ignoreDirsRegex, loc, &file);
+            const bool matches = fileMatchesLoc(ignoreDirsRegex, loc, file);
             if (matches) {
                 return true;
             }
@@ -130,7 +134,7 @@ public:
             return false;
         }
 
-        const bool matches = fileMatchesLoc(headerFilterRegex, loc, &file);
+        const bool matches = fileMatchesLoc(headerFilterRegex, loc, file);
         if (!file) {
             return false;
         }
