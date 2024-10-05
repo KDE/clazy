@@ -628,7 +628,6 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     clazy::getChilds<StringLiteral>(stm, literals, 2);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
-        llvm::errs() << "literal non empty\n";
         if (literals[0]->getNumConcatenated() > 1) {
             return; // Nothing to do here, MSVC doesn't like it
         }

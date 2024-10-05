@@ -68,17 +68,14 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
         suppressions.skipNextLine.erase(lineNumber);
         return true;
     }
-    bool isLocallySupresses = //
-        std::any_of(suppressions.checksSuppressionScope.begin(),
-                    suppressions.checksSuppressionScope.end(),
-                    [&checkName, &loc](const ScopedSupression &scopedSuppression) {
-                        const std::vector<CheckName> checks = scopedSuppression.second;
-                        const bool supressesCheck = //
-                            checks.end() != std::find_if(checks.begin(), checks.end(), [&checkName](const std::string &name) {
-                                return name == checkName;
-                            });
-                        return supressesCheck && scopedSuppression.first.fullyContains(SourceRange(loc));
-                    });
+    const auto checkLocallySuppressed = [&checkName, &loc](const ScopedSupression &scopedSuppression) {
+        const std::vector<CheckName> checks = scopedSuppression.second;
+        const bool supressesCheck = std::any_of(checks.begin(), checks.end(), [&checkName](const std::string &name) {
+            return name == checkName;
+        });
+        return supressesCheck && scopedSuppression.first.fullyContains(SourceRange(loc));
+    };
+    bool isLocallySupresses = std::any_of(suppressions.checksSuppressionScope.begin(), suppressions.checksSuppressionScope.end(), checkLocallySuppressed);
     if (isLocallySupresses) {
         return true;
     }
@@ -86,14 +83,6 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
         return true;
 
     return false;
-}
-
-bool isEmptyOrWhitespace(const std::string &str)
-{
-    // Check if the string is empty or if all characters are whitespace
-    return str.empty() || std::all_of(str.begin(), str.end(), [](unsigned char c) {
-               return std::isspace(c);
-           });
 }
 
 void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const clang::LangOptions &lo) const
@@ -121,6 +110,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     std::stack<SourceLocation> openingBraceStack;
     SourceRange range;
     std::vector<CheckName> rangeChecks;
+    bool semanticTokenInScope = false;
 
     while (!lexer.LexFromRawLexer(token)) {
         if (token.getKind() == tok::l_brace) {
@@ -131,8 +121,8 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 suppressions.checksSuppressionScope.insert(suppressions.checksSuppressionScope.end(), {range, rangeChecks});
                 rangeChecks = {};
             }
-            range = SourceRange();
-            range.setBegin(token.getLocation());
+            range = SourceRange(token.getLocation(), SourceLocation{});
+            semanticTokenInScope = false;
 
         } else if (token.getKind() == tok::r_brace) {
             const SourceLocation openingSourceLocation = openingBraceStack.top();
@@ -141,29 +131,20 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             // Find the suppression entry, because we might have had other scopes opened in between
             auto foundIt = std::find_if(suppressions.checksSuppressionScope.begin(),
                                         suppressions.checksSuppressionScope.end(),
-                                        [&openingSourceLocation](const auto &entry) {
-                                            SourceRange entryRange = entry.first;
-                                            return entryRange.getBegin() == openingSourceLocation;
+                                        [&openingSourceLocation](const ScopedSupression &entry) {
+                                            return entry.first.getBegin() == openingSourceLocation;
                                         });
-            if (foundIt == suppressions.checksSuppressionScope.end()) {
-                if (!rangeChecks.empty()) {
-                    range.setEnd(token.getLocation());
-                    suppressions.checksSuppressionScope.insert(suppressions.checksSuppressionScope.end(), {range, rangeChecks});
-                }
-            } else {
+            if (foundIt != suppressions.checksSuppressionScope.end()) { // Update entry to include end location
                 (*foundIt).first.setEnd(token.getLocation());
+            } else if (!rangeChecks.empty()) { // No scopes opened, append new entry
+                range.setEnd(token.getLocation());
+                suppressions.checksSuppressionScope.insert(suppressions.checksSuppressionScope.end(), {range, rangeChecks});
+                rangeChecks = {};
             }
 
             range = {};
-            rangeChecks = {};
         } else if (token.getKind() == tok::comment) {
-            token.getLocation().dump(sm);
             std::string comment = Lexer::getSpelling(token, sm, lo);
-
-            if (clazy::contains(comment, "clazy:skip")) {
-                suppressions.skipEntireFile = true;
-                return;
-            }
 
             if (clazy::contains(comment, "NOLINTNEXTLINE")) {
                 bool invalid = false;
@@ -172,24 +153,34 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                     llvm::errs() << "SuppressionManager::parseFile: Invalid line number for token location where NOLINTNEXTLINE was found\n";
                     continue;
                 }
-
                 suppressions.skipNextLine.insert(nextLineNumber);
+                continue;
+            }
+
+            if (!clazy::contains(comment, "clazy:")) {
+                return; // Early return, no need to look at any regex
+            }
+
+            if (clazy::contains(comment, "clazy:skip")) {
+                suppressions.skipEntireFile = true;
+                return;
             }
 
             static std::regex rx_all(R"(clazy:excludeall=(.*?)(\s|$))");
-            static std::regex rx_scope(R"(clazy:exclude-scope=(.*?)(\s|$))");
             std::smatch match;
             if (regex_search(comment, match, rx_all) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
             }
 
+            static std::regex rx_scope(R"(clazy:exclude-scope=(.*?)(\s|$))");
             if (regex_search(comment, match, rx_scope) && match.size() > 1) {
+                llvm::errs() << comment << "\n";
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
-                if (range.getBegin().isValid()) {
-                    rangeChecks.insert(rangeChecks.begin(), checks.cbegin(), checks.cend());
-                } else {
+                if (semanticTokenInScope) {
                     llvm::errs() << "SuppressionManager::parseFile: Suppressions should be defined at beginning of scope\n";
+                } else if (range.getBegin().isValid()) {
+                    rangeChecks.insert(rangeChecks.begin(), checks.cbegin(), checks.cend());
                 }
             }
 
@@ -206,6 +197,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
                 }
             }
+
             static std::regex rx_next(R"(clazy:exclude-next-line=(.*?)(\s|$))");
             if (regex_search(comment, match, rx_next) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
@@ -213,6 +205,8 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber + 1, checkName));
                 }
             }
+        } else {
+            semanticTokenInScope = true;
         }
     }
 }
