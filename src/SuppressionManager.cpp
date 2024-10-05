@@ -17,7 +17,6 @@
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
 
-#include <iostream>
 #include <regex>
 #include <vector>
 
@@ -177,14 +176,20 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 suppressions.skipNextLine.insert(nextLineNumber);
             }
 
-            static std::regex rx(R"(clazy:excludeall=(.*?)(\s|$))");
+            static std::regex rx_all(R"(clazy:excludeall=(.*?)(\s|$))");
+            static std::regex rx_scope(R"(clazy:exclude-scope=(.*?)(\s|$))");
             std::smatch match;
-            if (regex_search(comment, match, rx) && match.size() > 1) {
+            if (regex_search(comment, match, rx_all) && match.size() > 1) {
+                std::vector<std::string> checks = clazy::splitString(match[1], ',');
+                suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
+            }
+
+            if (regex_search(comment, match, rx_scope) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 if (range.getBegin().isValid()) {
                     rangeChecks.insert(rangeChecks.begin(), checks.cbegin(), checks.cend());
                 } else {
-                    suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
+                    llvm::errs() << "SuppressionManager::parseFile: Suppressions should be defined at beginning of scope\n";
                 }
             }
 
@@ -194,24 +199,18 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 continue;
             }
 
-            static std::regex rx2(R"(clazy:exclude=(.*?)(\s|$))");
-            if (regex_search(comment, match, rx2) && match.size() > 1) {
-                // check
-                SourceLocation tokenLocation = token.getLocation();
-                unsigned lineNum = sm.getSpellingLineNumber(tokenLocation);
-                SourceLocation lineStartLoc = sm.translateLineCol(sm.getFileID(tokenLocation), lineNum, 1);
-                const char *lineStart = sm.getCharacterData(lineStartLoc);
-                const char *bufferEnd = sm.getBufferData(sm.getFileID(tokenLocation)).end();
-                const char *lineEnd = lineStart;
-                while (lineEnd < bufferEnd && *lineEnd != '\n' && *lineEnd != '\r') {
-                    ++lineEnd;
-                }
-
-                const std::string prevFileContent = std::string(lineStart, lineEnd).substr(0, sm.getPresumedColumnNumber(token.getLocation()) - 1);
+            static std::regex rx_current(R"(clazy:exclude=(.*?)(\s|$))");
+            if (regex_search(comment, match, rx_current) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
-                const int checkLineNumber = isEmptyOrWhitespace(prevFileContent) ? lineNumber + 1 : lineNumber;
                 for (const std::string &checkName : checks) {
-                    suppressions.checksToSkipByLine.insert(LineAndCheckName(checkLineNumber, checkName));
+                    suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
+                }
+            }
+            static std::regex rx_next(R"(clazy:exclude-next-line=(.*?)(\s|$))");
+            if (regex_search(comment, match, rx_next) && match.size() > 1) {
+                std::vector<std::string> checks = clazy::splitString(match[1], ',');
+                for (const std::string &checkName : checks) {
+                    suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber + 1, checkName));
                 }
             }
         }

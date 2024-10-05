@@ -17,14 +17,15 @@ void suppress_qstring_allocation()
 void suppress_qstring_allocation_scoped()
 {
     {
-        // clazy:excludeall=qstring-allocations
+        // clazy:exclude-scope=qstring-allocations
         QString s = "foo";
+        // clazy:exclude-scope=warnme-qstring-allocations
         if (s == "foo") {
             QString scopeDisabled = "yxz";
         }
     }
     QString outOfDisabledScope = "abc";
-    // clazy:exclude=qstring-allocations
+    // clazy:exclude-next-line=qstring-allocations
     QString disabledPrevLine = "abc";
 }
 struct BigTrivial
