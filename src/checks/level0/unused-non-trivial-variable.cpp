@@ -13,6 +13,7 @@
 #include "TypeUtils.h"
 #include "clazy_stl.h"
 
+#include <clang/AST/Attr.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -217,6 +218,9 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
     };
 
     if (!clazy::any_of(declRefs, pred)) {
-        emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()));
+        // Check for [[maybe_unused]] attribute
+        if (!varDecl->hasAttr<clang::UnusedAttr>()) {
+            emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()));
+        }
     }
 }
