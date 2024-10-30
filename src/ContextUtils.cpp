@@ -81,7 +81,9 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
                 continue;
             }
 
-            visibleContexts.push_back(ns->getOriginalNamespace());
+            // visibleContexts.push_back(ns->getOriginalNamespace());
+            // Since libclang 19.1.0 `getOriginalNamespace` function is removed.
+            visibleContexts.push_back(ns->getFirstDecl());
         }
     }
 

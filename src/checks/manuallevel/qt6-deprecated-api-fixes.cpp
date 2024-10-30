@@ -491,7 +491,8 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, const std::stri
             }
             auto *uni = dyn_cast<UnaryOperator>(child);
             if (uni) {
-                if (clang::UnaryOperator::getOpcodeStr(uni->getOpcode()).equals("*")) {
+                //if (clang::UnaryOperator::getOpcodeStr(uni->getOpcode()).equals("*")) {
+                if (clang::UnaryOperator::getOpcodeStr(uni->getOpcode()).equals_insensitive("*")) {
                     isPointer = true;
                 }
             }

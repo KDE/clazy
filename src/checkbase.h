@@ -97,6 +97,7 @@ public:
                             clang::StringRef SearchPath,
                             clang::StringRef RelativePath,
                             const clang::Module *Imported,
+                        	bool 	ModuleImported,
                             clang::SrcMgr::CharacteristicKind FileType) override;
 
 private:
