@@ -15,7 +15,6 @@ class ClazyContext;
 
 namespace clang
 {
-class Stmt;
 class Decl;
 }
 
