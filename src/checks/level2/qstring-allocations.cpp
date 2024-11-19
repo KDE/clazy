@@ -3,6 +3,7 @@
     SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
 
     SPDX-FileCopyrightText: 2015 Sergio Martins <smartins@kde.org>
+    SPDX-FileCopyrightText: 2024 Alexander Lohnau <alexander.lohnau@gmx.de>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -607,15 +608,18 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
         return;
     }
 
-    // Check if the quals macro was used int
-    if (funcDecl->isThisDeclarationADefinition() && funcDecl->getBeginLoc().isValid()) {
+    auto *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
+    if (methodDecl && !clazy::isOfClass(methodDecl, "QString")) {
+        return;
+    }
+
+    // For Qt6.8, we have the operators in the QString class deprecated and have defined them using macros
+    // Meaning we only have a function and /not/ a method
+    if (!methodDecl && funcDecl->isThisDeclarationADefinition() && funcDecl->getBeginLoc().isValid()) {
         StringRef fileName = sm().getFilename(sm().getExpansionLoc(funcDecl->getBeginLoc()));
         if (!fileName.contains("qstring.h")) {
             return;
         }
-    }
-    if (auto *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl); methodDecl && !clazy::isOfClass(methodDecl, "QString")) {
-        return;
     }
 
     if (!hasCharPtrArgument(funcDecl)) {
