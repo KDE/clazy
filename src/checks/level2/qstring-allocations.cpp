@@ -51,13 +51,7 @@ inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments
     }
 
     for (auto *param : Utils::functionParameters(func)) {
-        clang::QualType qt = param->getType();
-        const clang::Type *t = qt.getTypePtrOrNull();
-        if (!t) {
-            continue;
-        }
-
-        if (const clang::Type *realT = t->getPointeeType().getTypePtrOrNull(); realT && realT->isCharType()) {
+        if (clazy::startsWith(param->getType().getAsString(), "const char *")) { // On Qt6.8, an "&" is at the end
             return true;
         }
     }
@@ -613,12 +607,18 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
         return;
     }
 
-    auto *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl);
-    if (!clazy::isOfClass(methodDecl, "QString")) {
+    // Check if the quals macro was used int
+    if (funcDecl->isThisDeclarationADefinition() && funcDecl->getBeginLoc().isValid()) {
+        StringRef fileName = sm().getFilename(sm().getExpansionLoc(funcDecl->getBeginLoc()));
+        if (!fileName.contains("qstring.h")) {
+            return;
+        }
+    }
+    if (auto *methodDecl = dyn_cast<CXXMethodDecl>(funcDecl); methodDecl && !clazy::isOfClass(methodDecl, "QString")) {
         return;
     }
 
-    if (!hasCharPtrArgument(methodDecl)) {
+    if (!hasCharPtrArgument(funcDecl)) {
         return;
     }
 
@@ -628,7 +628,6 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     clazy::getChilds<StringLiteral>(stm, literals, 2);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
-        llvm::errs() << "literal non empty\n";
         if (literals[0]->getNumConcatenated() > 1) {
             return; // Nothing to do here, MSVC doesn't like it
         }
