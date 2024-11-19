@@ -625,7 +625,7 @@ void QStringAllocations::VisitOperatorCall(Stmt *stm)
     std::vector<FixItHint> fixits;
 
     std::vector<StringLiteral *> literals;
-    clazy::getChilds<StringLiteral>(stm, literals, 2);
+    clazy::getChilds<StringLiteral>(stm, literals, 3);
 
     if (!isOptionSet("no-msvc-compat") && !literals.empty()) {
         if (literals[0]->getNumConcatenated() > 1) {
