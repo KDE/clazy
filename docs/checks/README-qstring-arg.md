@@ -38,5 +38,5 @@ To reduce false positives, some cases won't be warned about:
         str.arg(foo); // We're only after cases where the second argument (or further) is specified, so this is safe
         str.arg(foo, width); // Second argument is named width, or contains the name "width", it's safe. Same for third argument and "base".
 
-Using these misleading overloads is perfectly valid, so only warning (1) is enabled by default.
-To enable warning (2), `export CLAZY_EXTRA_OPTIONS="qstring-arg-fillChar-overloads"`
+Using these misleading overloads is perfectly valid, so only warnings (1) and (2) are enabled by default.
+To enable warning (3), `export CLAZY_EXTRA_OPTIONS="qstring-arg-fillChar-overloads"`
