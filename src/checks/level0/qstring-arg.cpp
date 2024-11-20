@@ -60,7 +60,7 @@ static CXXMethodDecl *isArgMethod(FunctionDecl *func, const char *className)
         return nullptr;
     }
 
-    CXXRecordDecl *record = method->getParent();
+    const CXXRecordDecl *record = method->getParent();
     if (!record || clazy::name(record) != className) {
         return nullptr;
     }
@@ -169,7 +169,7 @@ void QStringArg::checkForMultiArgOpportunities(CXXMemberCallExpr *memberCall)
 
 bool QStringArg::checkQLatin1StringCase(CXXMemberCallExpr *memberCall)
 {
-    PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+    const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
     if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 51400) {
         // QLatin1String::arg() was introduced in Qt 5.14
         return false;
@@ -225,7 +225,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
             return;
         }
 
-        ParmVarDecl *p = method->getParamDecl(2);
+        const ParmVarDecl *p = method->getParamDecl(2);
         if (p && clazy::name(p) == "base") {
             // User went through the trouble specifying a base, lets allow it if it's a literal.
             std::vector<IntegerLiteral *> literals;

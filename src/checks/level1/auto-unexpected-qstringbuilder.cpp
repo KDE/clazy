@@ -30,7 +30,7 @@ using namespace clang;
 
 static bool isQStringBuilder(QualType t)
 {
-    CXXRecordDecl *record = clazy::typeAsRecord(t);
+    const CXXRecordDecl *record = clazy::typeAsRecord(t);
     return record && clazy::name(record) == "QStringBuilder";
 }
 

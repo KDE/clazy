@@ -69,7 +69,7 @@ static bool isQStringFromStringLiteral(Expr *qstring, LangOptions lo)
     }
 
     if (auto *VD = getVarDecl(qstring)) {
-        auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(getVarInitExpr(VD));
+        const auto *stringLit = clazy::getFirstChildOfType<StringLiteral>(getVarInitExpr(VD));
         if (stringLit) {
             // If we have a string literal somewhere in there, but modify it using QString::arg or friends, we don't have a literal for th regex
             if (auto *constructExpr = clazy::getFirstChildOfType<CXXConstructExpr>(VD->getInit())) {

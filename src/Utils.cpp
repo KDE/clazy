@@ -286,7 +286,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap * /*map*/, Stmt *body, c
     for (auto *memberCall : memberCallExprs) {
         CXXMethodDecl *methodDecl = memberCall->getMethodDecl();
         if (methodDecl && !methodDecl->isConst()) {
-            ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
+            const ValueDecl *valueDecl = Utils::valueDeclForMemberCall(memberCall);
             if (valueDecl == varDecl) {
                 return true;
             }
@@ -300,7 +300,7 @@ bool Utils::containsNonConstMemberCall(clang::ParentMap * /*map*/, Stmt *body, c
         if (fDecl) {
             auto *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
             if (methodDecl && !methodDecl->isConst()) {
-                ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorCall);
+                const ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorCall);
                 if (valueDecl == varDecl) {
                     return true;
                 }
@@ -499,7 +499,7 @@ bool Utils::isAssignedFrom(Stmt *body, const VarDecl *varDecl)
 
         auto *methodDecl = dyn_cast<CXXMethodDecl>(fDecl);
         if (methodDecl && methodDecl->isCopyAssignmentOperator()) {
-            ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
+            const ValueDecl *valueDecl = Utils::valueDeclForOperatorCall(operatorExpr);
             if (valueDecl == varDecl) {
                 return true;
             }
@@ -821,7 +821,7 @@ bool Utils::hasMember(CXXRecordDecl *record, const std::string &memberTypeName)
         QualType qt = field->getType();
         const Type *t = qt.getTypePtrOrNull();
         if (t && t->getAsCXXRecordDecl()) {
-            CXXRecordDecl *rec = t->getAsCXXRecordDecl();
+            const CXXRecordDecl *rec = t->getAsCXXRecordDecl();
             if (clazy::name(rec) == memberTypeName) {
                 return true;
             }

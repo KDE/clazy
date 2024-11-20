@@ -76,7 +76,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     }
 
     DeclRefExpr *senderDeclRef = nullptr;
-    MemberExpr *senderMemberExpr = nullptr;
+    const MemberExpr *senderMemberExpr = nullptr;
 
     Stmt *s = callExpr->getArg(0);
     while (s) {
@@ -92,12 +92,12 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     }
 
     // The sender can be: this
-    auto *senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
+    const auto *senderThis = clazy::unpeal<CXXThisExpr>(callExpr->getArg(0), clazy::IgnoreImplicitCasts);
 
     // The variables used inside the lambda
     auto declrefs = clazy::getStatements<DeclRefExpr>(lambda->getBody());
 
-    ValueDecl *senderDecl = senderDeclRef ? senderDeclRef->getDecl() : nullptr;
+    const ValueDecl *senderDecl = senderDeclRef ? senderDeclRef->getDecl() : nullptr;
 
     // We'll only warn if the lambda is dereferencing another QObject (besides the sender)
     bool found = false;

@@ -49,7 +49,7 @@ static bool hasPublicCopyInAncestors(const CXXRecordDecl *record)
 
     for (auto base : record->bases()) {
         if (const Type *t = base.getType().getTypePtrOrNull()) {
-            CXXRecordDecl *baseRecord = t->getAsCXXRecordDecl();
+            const CXXRecordDecl *baseRecord = t->getAsCXXRecordDecl();
             if (hasPublicCopy(baseRecord)) {
                 return true;
             }

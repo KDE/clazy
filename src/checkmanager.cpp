@@ -301,7 +301,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::str
 
 std::vector<std::string> CheckManager::checksAsErrors() const
 {
-    auto *checksAsErrosEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
+    const auto *checksAsErrosEnv = getenv("CLAZY_CHECKS_AS_ERRORS");
 
     if (checksAsErrosEnv) {
         auto checkNames = clazy::splitString(checksAsErrosEnv, ',');

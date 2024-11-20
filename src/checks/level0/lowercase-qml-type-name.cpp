@@ -27,7 +27,7 @@ void LowercaseQMlTypeName::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    FunctionDecl *func = callExpr->getDirectCallee();
+    const FunctionDecl *func = callExpr->getDirectCallee();
     if (!func) {
         return;
     }

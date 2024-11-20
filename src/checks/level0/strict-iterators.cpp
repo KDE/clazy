@@ -173,7 +173,7 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
     }
 
     ParmVarDecl *p = method->getParamDecl(0);
-    CXXRecordDecl *paramClass = p ? clazy::typeAsRecord(clazy::pointeeQualType(p->getType())) : nullptr;
+    const CXXRecordDecl *paramClass = p ? clazy::typeAsRecord(clazy::pointeeQualType(p->getType())) : nullptr;
     if (!paramClass || clazy::name(paramClass) != "const_iterator") {
         return false;
     }

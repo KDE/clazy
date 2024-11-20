@@ -149,7 +149,7 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
 
     SourceLocation end;
     if (islvalue(containerExpr, /*by-ref*/ end)) {
-        PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+        const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
             clang::SourceRange exprRange = containerExpr->getSourceRange();
             llvm::StringRef exprText = Lexer::getSourceText(CharSourceRange::getTokenRange(exprRange.getBegin(), exprRange.getEnd()), sm(), lo());

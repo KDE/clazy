@@ -118,7 +118,7 @@ bool ReserveCandidates::acceptsValueDecl(ValueDecl *valueDecl) const
         return false;
     }
 
-    CXXRecordDecl *record = Utils::isMemberVariable(valueDecl);
+    const CXXRecordDecl *record = Utils::isMemberVariable(valueDecl);
     return record && m_context->lastMethodDecl->getParent() == record;
 }
 

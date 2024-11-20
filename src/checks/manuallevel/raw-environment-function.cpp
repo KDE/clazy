@@ -30,7 +30,7 @@ void RawEnvironmentFunction::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    FunctionDecl *func = callexpr->getDirectCallee();
+    const FunctionDecl *func = callexpr->getDirectCallee();
     if (!func) {
         return;
     }

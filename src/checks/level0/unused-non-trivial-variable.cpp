@@ -170,7 +170,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
         "QDomNode",
     };
 
-    CXXRecordDecl *record = clazy::typeAsRecord(t);
+    const CXXRecordDecl *record = clazy::typeAsRecord(t);
     if (!record) {
         return false;
     }

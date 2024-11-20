@@ -33,7 +33,7 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
         return false;
     }
 
-    CXXRecordDecl *record = method->getParent();
+    const CXXRecordDecl *record = method->getParent();
     if (!record) {
         return false;
     }

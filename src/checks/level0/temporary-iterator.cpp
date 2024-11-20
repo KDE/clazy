@@ -58,7 +58,7 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    CXXRecordDecl *classDecl = memberExpr->getRecordDecl();
+    const CXXRecordDecl *classDecl = memberExpr->getRecordDecl();
     CXXMethodDecl *methodDecl = memberExpr->getMethodDecl();
     if (!classDecl || !methodDecl) {
         return;

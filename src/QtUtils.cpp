@@ -231,7 +231,7 @@ bool clazy::isJavaIterator(CXXMemberCallExpr *call)
 
 bool clazy::isQtContainer(QualType t)
 {
-    CXXRecordDecl *record = clazy::typeAsRecord(t);
+    const CXXRecordDecl *record = clazy::typeAsRecord(t);
     return record && isQtContainer(record);
 }
 

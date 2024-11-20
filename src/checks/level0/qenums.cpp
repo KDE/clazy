@@ -31,7 +31,7 @@ QEnums::QEnums(const std::string &name, ClazyContext *context)
 
 void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const clang::MacroInfo *)
 {
-    PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+    const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
     if (!preProcessorVisitor || preProcessorVisitor->qtVersion() < 50500) {
         return;
     }

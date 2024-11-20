@@ -93,7 +93,7 @@ bool ConnectNotNormalized::handleConnect(CallExpr *callExpr)
             return false;
         }
 
-        FunctionDecl *parentFunc = parentCallExpr->getDirectCallee();
+        const FunctionDecl *parentFunc = parentCallExpr->getDirectCallee();
         if (!parentFunc || clazy::name(parentFunc) != "connect") {
             return false;
         }

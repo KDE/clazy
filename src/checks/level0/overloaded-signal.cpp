@@ -24,7 +24,7 @@ OverloadedSignal::OverloadedSignal(const std::string &name, ClazyContext *contex
 
 void OverloadedSignal::VisitDecl(clang::Decl *decl)
 {
-    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
+    const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
     auto *method = dyn_cast<CXXMethodDecl>(decl);
     if (!accessSpecifierManager || !method) {
         return;

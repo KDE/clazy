@@ -152,7 +152,7 @@ bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
         TypeSourceInfo *si = fr->getFriendType();
         if (si) {
             const Type *t = si->getType().getTypePtrOrNull();
-            CXXRecordDecl *friendClass = t ? t->getAsCXXRecordDecl() : nullptr;
+            const CXXRecordDecl *friendClass = t ? t->getAsCXXRecordDecl() : nullptr;
             if (friendClass == contextRecord) {
                 return true;
             }

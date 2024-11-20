@@ -48,7 +48,7 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
+    const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
     if (!accessSpecifierManager) {
         return;
     }

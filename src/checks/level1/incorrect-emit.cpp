@@ -54,7 +54,7 @@ void IncorrectEmit::VisitStmt(Stmt *stmt)
         return;
     }
 
-    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
+    const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
     auto *method = dyn_cast<CXXMethodDecl>(methodCall->getCalleeDecl());
     if (!method || !accessSpecifierManager) {
         return;

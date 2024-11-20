@@ -38,13 +38,13 @@ void QStringVarargs::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    FunctionDecl *func = callexpr->getDirectCallee();
+    const FunctionDecl *func = callexpr->getDirectCallee();
     if (!func || clazy::name(func) != "__builtin_trap") {
         return;
     }
 
     QualType qt = binop->getRHS()->getType();
-    CXXRecordDecl *record = qt->getAsCXXRecordDecl();
+    const CXXRecordDecl *record = qt->getAsCXXRecordDecl();
     if (!record) {
         return;
     }

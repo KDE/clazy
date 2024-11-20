@@ -228,13 +228,13 @@ void WrongQEventCast::VisitStmt(clang::Stmt *stmt)
 
     QualType t = e ? e->getType() : QualType();
     QualType pointeeType = t.isNull() ? QualType() : clazy::pointeeQualType(t);
-    CXXRecordDecl *rec = pointeeType.isNull() ? nullptr : pointeeType->getAsCXXRecordDecl();
+    const CXXRecordDecl *rec = pointeeType.isNull() ? nullptr : pointeeType->getAsCXXRecordDecl();
 
     if (!rec || clazy::name(rec) != "QEvent") {
         return;
     }
 
-    CXXRecordDecl *castTo = Utils::namedCastOuterDecl(cast);
+    const CXXRecordDecl *castTo = Utils::namedCastOuterDecl(cast);
     if (!castTo) {
         return;
     }

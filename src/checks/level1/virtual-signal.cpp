@@ -33,7 +33,7 @@ void VirtualSignal::VisitDecl(Decl *stmt)
         return;
     }
 
-    AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
+    const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
     if (!accessSpecifierManager) {
         return;
     }

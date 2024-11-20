@@ -43,7 +43,7 @@ std::vector<QualType> clazy::getTemplateArgumentsTypes(CXXMethodDecl *method)
         return {};
     }
 
-    FunctionTemplateSpecializationInfo *specializationInfo = method->getTemplateSpecializationInfo();
+    const FunctionTemplateSpecializationInfo *specializationInfo = method->getTemplateSpecializationInfo();
     if (!specializationInfo || !specializationInfo->TemplateArguments) {
         return {};
     }

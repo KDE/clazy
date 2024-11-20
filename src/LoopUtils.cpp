@@ -91,7 +91,7 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
             return nullptr;
         }
 
-        CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
+        const CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
         if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer") {
             return nullptr;
         }
