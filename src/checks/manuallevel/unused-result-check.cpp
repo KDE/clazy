@@ -22,7 +22,7 @@ using namespace clang;
 class Caller : public ClazyAstMatcherCallback
 {
 public:
-    Caller(CheckBase *check)
+    explicit Caller(CheckBase *check)
         : ClazyAstMatcherCallback(check)
     {
     }

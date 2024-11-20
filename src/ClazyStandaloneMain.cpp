@@ -93,7 +93,7 @@ static cl::extrahelp s_commonHelp(CommonOptionsParser::HelpMessage);
 class ClazyToolActionFactory : public clang::tooling::FrontendActionFactory
 {
 public:
-    ClazyToolActionFactory(std::vector<std::string> paths)
+    explicit ClazyToolActionFactory(std::vector<std::string> paths)
         : FrontendActionFactory()
         , m_paths(std::move(paths))
     {
