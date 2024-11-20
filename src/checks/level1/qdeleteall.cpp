@@ -60,16 +60,15 @@ void QDeleteAll::VisitStmt(clang::Stmt *stmt)
     while (p) {
         auto *pc = dyn_cast<CallExpr>(p);
         if (FunctionDecl *f = pc ? pc->getDirectCallee() : nullptr) {
-            if (clazy::name(f) == "qDeleteAll") {
+            if ((clazy::name(f) == "qDeleteAll")
+                && (func->getNumParams() == 0)) { // Ignore values method calls where lookup-parameter is given, like the deprecated QHash::values(Key)
                 std::string msg = "qDeleteAll() is being used on an unnecessary temporary container created by " + offendingClassName + "::" + funcName + "()";
-                if (func->getNumParams() == 0) { // Ignore values method calls where lookup-parameter is given, like the deprecated QHash::values(Key)
-                    if (isValues) {
-                        msg += ", use qDeleteAll(mycontainer) instead";
-                    } else {
-                        msg += ", use qDeleteAll(mycontainer.keyBegin(), mycontainer.keyEnd()) instead";
-                    }
-                    emitWarning(p->getBeginLoc(), msg);
+                if (isValues) {
+                    msg += ", use qDeleteAll(mycontainer) instead";
+                } else {
+                    msg += ", use qDeleteAll(mycontainer.keyBegin(), mycontainer.keyEnd()) instead";
                 }
+                emitWarning(p->getBeginLoc(), msg);
             }
             break;
         }
