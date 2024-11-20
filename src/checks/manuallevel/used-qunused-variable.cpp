@@ -9,10 +9,10 @@
 #include "PreProcessorVisitor.h"
 #include "TypeUtils.h"
 #include "Utils.h"
-#include "clang/AST/Decl.h"
-#include "clang/AST/RecursiveASTVisitor.h"
 
 #include <clang/AST/AST.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/RecursiveASTVisitor.h>
 
 using namespace clang;
 

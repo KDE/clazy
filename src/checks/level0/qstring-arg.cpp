@@ -11,13 +11,13 @@
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
-#include "clang/Basic/Diagnostic.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
+#include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Lex/Lexer.h>
