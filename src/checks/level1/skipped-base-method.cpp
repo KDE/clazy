@@ -19,8 +19,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 SkippedBaseMethod::SkippedBaseMethod(const std::string &name, ClazyContext *context)

@@ -13,20 +13,6 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-class FixItHint;
-class CXXConstructExpr;
-class CXXOperatorCallExpr;
-class Expr;
-class CXXMemberCallExpr;
-
-class CXXFunctionalCastExpr;
-}
-
 /**
  * Idenfify deprecated API and replace them when possible
  *

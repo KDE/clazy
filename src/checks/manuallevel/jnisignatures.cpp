@@ -22,8 +22,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 static const std::regex methodSignatureRegex("\\((\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;))*\\)\\[?([ZBCSIJFD]|L([a-zA-Z]+\\/)*[a-zA-Z]+;|V)");

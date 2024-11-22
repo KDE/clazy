@@ -13,12 +13,8 @@
 
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
-class Stmt;
-class Decl;
 class FunctionDecl;
 class ParmVarDecl;
 }

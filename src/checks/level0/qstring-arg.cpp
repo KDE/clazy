@@ -26,8 +26,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 QStringArg::QStringArg(const std::string &name, ClazyContext *context)

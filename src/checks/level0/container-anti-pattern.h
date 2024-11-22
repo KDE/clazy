@@ -11,15 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-class CXXForRangeStmt;
-class CXXConstructExpr;
-}
-
 /**
  * Warns when there are unneeded allocations of temporary lists because of using values(), keys()
  * toVector() or toList().

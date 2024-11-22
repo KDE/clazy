@@ -13,18 +13,9 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
 namespace clang
 {
-class Stmt;
-class FixItHint;
 class CXXConstructExpr;
-class CXXOperatorCallExpr;
-class Expr;
-class CXXMemberCallExpr;
-
-class CXXFunctionalCastExpr;
 }
 
 /**

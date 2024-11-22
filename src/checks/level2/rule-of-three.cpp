@@ -21,8 +21,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 RuleOfThree::RuleOfThree(const std::string &name, ClazyContext *context)

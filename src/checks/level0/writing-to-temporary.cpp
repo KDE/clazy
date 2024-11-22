@@ -21,8 +21,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *context)

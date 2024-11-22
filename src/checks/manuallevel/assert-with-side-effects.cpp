@@ -26,8 +26,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 enum Aggressiveness {

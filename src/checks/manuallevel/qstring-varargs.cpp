@@ -17,8 +17,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 QStringVarargs::QStringVarargs(const std::string &name, ClazyContext *context)

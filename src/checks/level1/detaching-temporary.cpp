@@ -25,8 +25,6 @@
 #include <unordered_map>
 #include <utility>
 
-class ClazyContext;
-
 using namespace clang;
 
 DetachingTemporary::DetachingTemporary(const std::string &name, ClazyContext *context)

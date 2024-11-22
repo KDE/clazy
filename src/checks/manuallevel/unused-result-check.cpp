@@ -15,7 +15,6 @@
 #include <clang/ASTMatchers/ASTMatchersInternal.h>
 
 using namespace clang::ast_matchers;
-class ClazyContext;
 
 using namespace clang;
 

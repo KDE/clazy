@@ -17,8 +17,6 @@
 #include <clang/AST/Type.h>
 #include <llvm/ADT/StringRef.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 QMapWithPointerKey::QMapWithPointerKey(const std::string &name, ClazyContext *context)

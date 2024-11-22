@@ -12,11 +12,8 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
 namespace clang
 {
-class Stmt;
 class CallExpr;
 class CXXMemberCallExpr;
 class FixItHint;

@@ -24,8 +24,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)

@@ -24,8 +24,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 static bool isQStringBuilder(QualType t)

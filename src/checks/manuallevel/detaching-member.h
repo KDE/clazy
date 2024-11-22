@@ -14,12 +14,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * Finds places where you're calling non-const member functions on member containers.
  *

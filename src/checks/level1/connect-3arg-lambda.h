@@ -11,11 +11,9 @@
 
 #include <string>
 
-class ClazyContext;
 namespace clang
 {
 class FunctionDecl;
-class Stmt;
 } // namespace clang
 
 /**

@@ -12,12 +12,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * See README-connect-non-signal.md for more info.
  */

@@ -18,7 +18,6 @@
  * See README-qt-keyword-emit.md for more info.
  */
 
-class ClazyContext;
 namespace clang
 {
 class MacroInfo;

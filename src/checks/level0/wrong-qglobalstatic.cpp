@@ -21,8 +21,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *context)

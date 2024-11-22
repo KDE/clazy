@@ -20,8 +20,6 @@
 #include <clang/Basic/SourceLocation.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 namespace clazy

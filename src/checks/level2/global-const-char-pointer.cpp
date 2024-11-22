@@ -17,8 +17,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyContext *context)

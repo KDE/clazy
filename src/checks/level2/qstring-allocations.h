@@ -15,16 +15,12 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
 namespace clang
 {
 class FixItHint;
-class ConditionalOperator;
 class CallExpr;
 class StringLiteral;
 class ConditionalOperator;
-class Stmt;
 }
 
 struct Latin1Expr;

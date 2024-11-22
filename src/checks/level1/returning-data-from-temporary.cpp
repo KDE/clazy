@@ -17,8 +17,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name, ClazyContext *context)

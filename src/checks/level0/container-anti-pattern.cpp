@@ -21,8 +21,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 ContainerAntiPattern::ContainerAntiPattern(const std::string &name, ClazyContext *context)

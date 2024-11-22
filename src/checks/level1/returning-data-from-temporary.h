@@ -11,14 +11,11 @@
 
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
 class CXXMemberCallExpr;
 class DeclStmt;
 class ReturnStmt;
-class Stmt;
 }
 
 /**

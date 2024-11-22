@@ -15,15 +15,12 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
 namespace clang
 {
 class ValueDecl;
 class Expr;
 class CallExpr;
 class SourceLocation;
-class Stmt;
 }
 
 /**

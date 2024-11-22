@@ -22,8 +22,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 ChildEventQObjectCast::ChildEventQObjectCast(const std::string &name, ClazyContext *context)

@@ -21,8 +21,6 @@
 #include <clang/AST/Type.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *context)

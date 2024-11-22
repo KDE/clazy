@@ -11,13 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds unneeded allocations in the form of str.{toLower, toUpper}().{contains, compare, startsWith, endsWith}().
  *

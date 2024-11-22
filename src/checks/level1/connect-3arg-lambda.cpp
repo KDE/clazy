@@ -19,8 +19,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 using uint = unsigned;

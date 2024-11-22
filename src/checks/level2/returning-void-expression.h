@@ -11,12 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * See README-returning-void-expression.md for more info.
  */

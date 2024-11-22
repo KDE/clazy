@@ -20,8 +20,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 using namespace clang::ast_matchers;
 

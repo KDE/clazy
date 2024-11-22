@@ -14,13 +14,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds expensive calls to QDateTime::currentDateTime().
  *

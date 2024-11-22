@@ -15,8 +15,6 @@
 #include <clang/AST/Type.h>
 #include <llvm/ADT/StringRef.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name, ClazyContext *context)

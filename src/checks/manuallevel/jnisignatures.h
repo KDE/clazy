@@ -13,14 +13,6 @@
 #include <regex>
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-class CXXMemberCallExpr;
-class FunctionDecl;
-} // namespace clang
-
 class JniSignatures : public CheckBase
 {
 public:

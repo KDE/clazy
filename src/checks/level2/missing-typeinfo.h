@@ -15,8 +15,6 @@
 #include <set>
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
 class ClassTemplateSpecializationDecl;

@@ -11,13 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds places where you're using Container::count() instead of Container::isEmpty()
  *

@@ -12,14 +12,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-class FixItHint;
-}
-
 /**
  * Replaces wrong headers with correct ones.
  *

@@ -11,13 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds classes or structs which violate the rule of two.
  * If a class has a copy-ctor it should have copy-assignment operator too, and vice-versa.

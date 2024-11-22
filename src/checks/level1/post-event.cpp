@@ -13,8 +13,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 PostEvent::PostEvent(const std::string &name, ClazyContext *context)

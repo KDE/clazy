@@ -14,14 +14,9 @@
 
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
-class ImplicitCastExpr;
 class SourceLocation;
-class Stmt;
-class CallExpr;
 class FunctionDecl;
 }
 

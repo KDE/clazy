@@ -12,10 +12,8 @@
 #include <string>
 
 class QColorFromLiteral_Callback;
-class ClazyContext;
 namespace clang
 {
-class Stmt;
 namespace ast_matchers
 {
 class MatchFinder;

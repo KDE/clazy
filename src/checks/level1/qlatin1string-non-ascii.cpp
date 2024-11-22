@@ -16,8 +16,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyContext *context)

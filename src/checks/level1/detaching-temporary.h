@@ -18,11 +18,9 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
 namespace clang
 {
 class CXXMethodDecl;
-class Stmt;
 } // namespace clang
 
 /**

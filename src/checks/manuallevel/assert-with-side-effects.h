@@ -14,12 +14,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 class AssertWithSideEffects : public CheckBase
 {
 public:

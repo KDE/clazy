@@ -11,13 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds places defining containers inside loops. Defining them outside and using resize(0) will
  * save allocations.

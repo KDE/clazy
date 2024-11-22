@@ -12,14 +12,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-class FixItHint;
-}
-
 /**
  * Replaces forward declaration with #include <QtCore/qcontainerfwd.h>.
  *

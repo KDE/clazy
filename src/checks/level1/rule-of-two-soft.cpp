@@ -13,8 +13,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, ClazyContext *context)

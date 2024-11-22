@@ -14,8 +14,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 TrNonLiteral::TrNonLiteral(const std::string &name, ClazyContext *context)

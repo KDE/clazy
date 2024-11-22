@@ -16,7 +16,6 @@
 #include <clang/Basic/Specifiers.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
 namespace clang
 {
 class Decl;

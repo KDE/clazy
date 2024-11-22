@@ -11,12 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * See README-install-event-filter.md for more info.
  */

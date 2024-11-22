@@ -25,8 +25,6 @@
 #include <clang/AST/Type.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 namespace clazy

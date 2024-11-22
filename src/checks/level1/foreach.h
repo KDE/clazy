@@ -14,14 +14,10 @@
 
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
 class ForStmt;
 class ValueDecl;
-class Stmt;
-class CXXForRangeStmt;
 }
 
 /**

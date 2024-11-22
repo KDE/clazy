@@ -23,8 +23,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)

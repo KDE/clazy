@@ -14,8 +14,6 @@
 
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
 class CXXMethodDecl;

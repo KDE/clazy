@@ -11,7 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
 namespace clang
 {
 class Decl;

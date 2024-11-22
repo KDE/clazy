@@ -11,14 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-class Decl;
-}
-
 /**
  * Finds places where auto is deduced to be QStringBuilder instead of QString, which introduces crashes.
  *

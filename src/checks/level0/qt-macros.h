@@ -14,7 +14,7 @@
 #include <string>
 
 class QtMacrosPreprocessorCallbacks;
-class ClazyContext;
+
 namespace clang
 {
 class Token;

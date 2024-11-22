@@ -11,12 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * See README-lambda-unique-connection.md for more info.
  */

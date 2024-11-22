@@ -14,12 +14,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * Finds global static non-POD variables.
  *

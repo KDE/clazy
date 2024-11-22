@@ -11,13 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds Q_QGLOBAL_STATICs being used with trivial classes.
  *

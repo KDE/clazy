@@ -23,8 +23,6 @@
 #include <ctype.h>
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, ClazyContext *context)

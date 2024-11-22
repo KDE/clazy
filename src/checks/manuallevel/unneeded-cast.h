@@ -14,18 +14,11 @@
 
 #include <string>
 
-class ClazyContext;
 namespace clang
 {
 class CXXNamedCastExpr;
 class CXXRecordDecl;
-class Stmt;
 } // namespace clang
-
-namespace
-{
-class CXXNAmedCastExpr;
-}
 
 /**
  * Finds redundant casts.

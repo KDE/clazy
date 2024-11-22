@@ -17,12 +17,6 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * Finds places where you're using iterators on temporary containers.
  *

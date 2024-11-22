@@ -16,8 +16,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-class ClazyContext;
-
 using namespace clang;
 
 CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name, ClazyContext *context)

@@ -11,13 +11,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class Stmt;
-}
-
 /**
  * Finds places using QFileInfo("foo").exists() instead of the faster version QFileInfo::exists("foo")
  *

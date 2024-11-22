@@ -28,8 +28,6 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name, ClazyContext *context)

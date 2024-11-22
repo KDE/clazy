@@ -12,12 +12,6 @@
 
 #include <string>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * See README-qlatin1string-non-ascii.md for more info.
  */

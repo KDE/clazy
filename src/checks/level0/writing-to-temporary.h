@@ -14,15 +14,6 @@
 
 #include <string>
 
-class ClazyContext;
-
-namespace clang
-{
-class ImplicitCastExpr;
-class Stmt;
-class CallExpr;
-}
-
 /**
  * Finds places where writing to temporaries, which is a nop.
  *

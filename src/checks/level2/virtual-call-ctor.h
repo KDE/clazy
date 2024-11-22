@@ -15,14 +15,10 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-
 namespace clang
 {
 class CXXRecordDecl;
-class Stmt;
 class SourceLocation;
-class Decl;
 }
 
 /**

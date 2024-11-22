@@ -12,8 +12,6 @@
 
 #include <vector>
 
-class ClazyContext;
-
 using namespace clang;
 
 RuleOfBase::RuleOfBase(const std::string &name, ClazyContext *context)

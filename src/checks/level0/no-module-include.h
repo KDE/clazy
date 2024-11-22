@@ -12,12 +12,6 @@
 #include <string>
 #include <vector>
 
-class ClazyContext;
-namespace clang
-{
-class Stmt;
-} // namespace clang
-
 /**
  * See README-no-module-include.md for more info.
  */

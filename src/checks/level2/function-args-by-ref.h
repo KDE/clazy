@@ -14,16 +14,12 @@
 
 #include <string>
 
-class ClazyContext;
-
 namespace clang
 {
-class Decl;
 class VarDecl;
 class FixItHint;
 class ParmVarDecl;
 class FunctionDecl;
-class Stmt;
 }
 
 namespace clazy
