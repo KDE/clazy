@@ -9,7 +9,6 @@
 
 #include "checkbase.h"
 
-
 /**
  * See README-%3.md for more info.
  */
