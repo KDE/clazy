@@ -20,11 +20,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang
-{
-class MacroInfo;
-} // namespace clang
-
 using namespace clang;
 
 MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)

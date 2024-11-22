@@ -18,11 +18,6 @@
 
 #include <vector>
 
-namespace clang
-{
-class CXXMethodDecl;
-} // namespace clang
-
 using namespace clang;
 
 LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyContext *context)

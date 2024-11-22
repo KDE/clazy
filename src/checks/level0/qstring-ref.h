@@ -9,6 +9,7 @@
 
 #include "checkbase.h"
 
+#include <clang/Basic/Diagnostic.h>
 #include <string>
 #include <vector>
 
@@ -16,7 +17,6 @@ namespace clang
 {
 class CallExpr;
 class CXXMemberCallExpr;
-class FixItHint;
 }
 
 /**

@@ -15,11 +15,6 @@
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/StringRef.h>
 
-namespace clang
-{
-class MacroInfo;
-} // namespace clang
-
 using namespace clang;
 
 QEnums::QEnums(const std::string &name, ClazyContext *context)

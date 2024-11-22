@@ -16,11 +16,6 @@
 #include <clang/Basic/Specifiers.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 /// Returns whether the class has non-private copy-ctor or copy-assign

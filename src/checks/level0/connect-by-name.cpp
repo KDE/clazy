@@ -15,11 +15,6 @@
 
 #include <vector>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)

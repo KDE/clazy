@@ -14,11 +14,6 @@
 
 #include <string>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 /**
  * Finds cases where you're using QMap<K,T> and K is a pointer. QHash<K,T> should be used instead.
  *

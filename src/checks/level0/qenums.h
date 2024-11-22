@@ -13,12 +13,6 @@
 
 #include <string>
 
-namespace clang
-{
-class MacroInfo;
-class Token;
-} // namespace clang
-
 /**
  * See README-qenums for more info.
  */

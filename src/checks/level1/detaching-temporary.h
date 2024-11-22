@@ -18,11 +18,6 @@
 #include <string>
 #include <vector>
 
-namespace clang
-{
-class CXXMethodDecl;
-} // namespace clang
-
 /**
  * Finds places where you're calling non-const member functions on temporaries.
  *

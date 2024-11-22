@@ -16,11 +16,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang
-{
-class DeclContext;
-} // namespace clang
-
 using namespace clang;
 
 ReturningVoidExpression::ReturningVoidExpression(const std::string &name, ClazyContext *context)

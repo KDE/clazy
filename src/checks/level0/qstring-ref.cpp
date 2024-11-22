@@ -16,7 +16,6 @@
 #include <clang/AST/Expr.h>
 #include <clang/AST/ExprCXX.h>
 #include <clang/AST/Stmt.h>
-#include <clang/Basic/Diagnostic.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/LLVM.h>
 #include <clang/Basic/SourceLocation.h>
@@ -27,12 +26,6 @@
 
 #include <array>
 #include <vector>
-
-namespace clang
-{
-class Decl;
-class LangOptions;
-} // namespace clang
 
 using namespace clang;
 

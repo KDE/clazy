@@ -12,11 +12,6 @@
 
 #include <vector>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)

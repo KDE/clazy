@@ -27,12 +27,6 @@
 #include <cctype>
 #include <string_view>
 
-namespace clang
-{
-class Decl;
-class MacroInfo;
-} // namespace clang
-
 using namespace clang;
 
 QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name, ClazyContext *context)

@@ -19,11 +19,6 @@
 #include <array>
 #include <vector>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)

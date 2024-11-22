@@ -14,11 +14,6 @@
 
 #include <string>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 /**
  * Finds where you're using const char *foo; instead of const char *const foo; or const char []foo;
  * The first case adds a pointer in .data, pointing to .rodata, the other cases only use .rodata

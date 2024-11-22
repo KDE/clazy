@@ -11,11 +11,6 @@
 
 #include <string>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 /**
  * See README-qhash-with-char-pointer-key.md for more info.
  */

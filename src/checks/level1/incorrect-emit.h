@@ -18,8 +18,6 @@
 namespace clang
 {
 class CXXMemberCallExpr;
-class MacroInfo;
-class Token;
 }
 
 /**

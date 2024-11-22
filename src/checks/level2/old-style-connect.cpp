@@ -38,11 +38,6 @@
 
 #include <regex>
 
-namespace clang
-{
-class MacroInfo;
-} // namespace clang
-
 using namespace clang;
 
 namespace clazy

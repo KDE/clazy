@@ -17,12 +17,6 @@
 #include <clang/Basic/LLVM.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang
-{
-class Decl;
-class FunctionDecl;
-} // namespace clang
-
 using namespace clang;
 
 ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name, ClazyContext *context)

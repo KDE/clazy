@@ -19,7 +19,6 @@ namespace clang
 {
 class CXXMethodDecl;
 class FieldDecl;
-class Decl;
 class MacroInfo;
 class Token;
 class TypeAliasDecl;

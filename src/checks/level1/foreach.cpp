@@ -30,12 +30,6 @@
 #include <unordered_map>
 #include <vector>
 
-namespace clang
-{
-class Decl;
-class DeclContext;
-} // namespace clang
-
 using namespace clang;
 
 Foreach::Foreach(const std::string &name, ClazyContext *context)

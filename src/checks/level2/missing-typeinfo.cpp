@@ -19,11 +19,6 @@
 #include <clang/Basic/SourceManager.h>
 #include <llvm/ADT/StringRef.h>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 /**

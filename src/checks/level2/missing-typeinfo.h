@@ -18,8 +18,6 @@
 namespace clang
 {
 class ClassTemplateSpecializationDecl;
-class CXXRecordDecl;
-class Decl;
 class QualType;
 }
 

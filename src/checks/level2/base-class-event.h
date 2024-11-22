@@ -11,11 +11,6 @@
 
 #include <string>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 /**
  * See README-base-class-event.md for more info.
  */

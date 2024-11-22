@@ -21,11 +21,6 @@
 
 #include <vector>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 static bool hasMutexes(Stmt *body)

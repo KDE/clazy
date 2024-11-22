@@ -19,7 +19,6 @@
 
 namespace clang
 {
-class Expr;
 class FixItHint;
 class FunctionDecl;
 class MacroInfo;

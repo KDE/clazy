@@ -23,11 +23,6 @@
 
 #include <utility>
 
-namespace clang
-{
-class MacroInfo;
-} // namespace clang
-
 using namespace clang;
 
 IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)

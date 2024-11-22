@@ -16,11 +16,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)

@@ -36,13 +36,6 @@
 
 #include <utility>
 
-namespace clang
-{
-class LangOptions;
-class ParentMap;
-class SourceManager;
-} // namespace clang
-
 using namespace clang;
 
 inline bool hasCharPtrArgument(clang::FunctionDecl *func, int expected_arguments = -1)

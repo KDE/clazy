@@ -31,11 +31,6 @@
 #include <iterator>
 #include <vector>
 
-namespace clang
-{
-class Decl;
-} // namespace clang
-
 using namespace clang;
 
 // TODO, go over all these

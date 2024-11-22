@@ -26,12 +26,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-namespace clang
-{
-class Decl;
-class MacroInfo;
-} // namespace clang
-
 using namespace clang;
 
 FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyContext *context)

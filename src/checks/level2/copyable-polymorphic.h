@@ -11,11 +11,6 @@
 
 #include <string>
 
-namespace clang
-{
-class Decl;
-}
-
 /**
  * Finds polymorphic classes without Q_DISABLE_COPY
  *

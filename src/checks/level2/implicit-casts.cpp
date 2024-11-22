@@ -30,11 +30,6 @@
 
 #include <vector>
 
-namespace clang
-{
-class ParentMap;
-} // namespace clang
-
 using namespace clang;
 
 ImplicitCasts::ImplicitCasts(const std::string &name, ClazyContext *context)
