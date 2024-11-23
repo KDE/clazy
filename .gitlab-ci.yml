@@ -12,7 +12,7 @@ include:
 # Copied from sysadmin/ci-utilities/templates/clang-format.yaml
 formatting-and-codegen:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt67:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt68:latest
   tags:
     - Linux
   script:
