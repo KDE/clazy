@@ -1,18 +1,24 @@
 # Changelog
 
-* v1.12 (TBD)
+* v1.13 (TBD)
+   - New Checks:
+     - used-qunused-variable
+   - qstring-arg check provides a fix-it
+   - Fixed unused-non-trivial-variable to not warn when [[maybe_unused]] set
+
+* v1.12 (June 30, 2024)
     - New Checks:
       - qt-keyword-emit
       - sanitize-inline-keyword
 
-* v1.11 (January 21st 2022)
+* v1.11 (January 21st, 2022)
     - New Checks:
       - use-arrow-operator-instead-of-data
       - use-static-qregularexpression
       - unexpected-flag-enumerator-value
       - Removed inefficient-qlist check (Fixed in Qt6)
 
-* v1.10 (July 20th 2021)
+* v1.10 (July 20th, 2021)
    - Requires C++17
    - Fixed a -Wclazy-lambda-in-connect false-positive
    - Fixed crash in copyable-polymorphic when PCH was enabled
