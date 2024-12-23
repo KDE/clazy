@@ -64,12 +64,9 @@ bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
 
 bool FunctionArgsByValue::shouldIgnoreOperator(FunctionDecl *function)
 {
+    OverloadedOperatorKind op = function->getOverloadedOperator();
     // Too many warnings in operator<<, unrelated warnings for = or == operators
-    static const std::vector<StringRef> ignoreList = {"operator<<", "operator=", "operator=="};
-    if (auto *cxxFnc = dyn_cast<CXXMethodDecl>(function)) { // Get different clazy::name overload
-        return clazy::contains(ignoreList, clazy::name(cxxFnc));
-    }
-    return clazy::contains(ignoreList, clazy::name(function));
+    return op == clang::OO_LessLess || op == clang::OO_Equal || op == clang::OO_EqualEqual;
 }
 
 bool FunctionArgsByValue::shouldIgnoreFunction(clang::FunctionDecl *function)
