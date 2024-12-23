@@ -1,22 +1,27 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "has_fixits": true
         },
         {
-            "filename" : "lambdas.cpp"
+            "filename": "lambdas.cpp"
         },
         {
-            "filename" : "sharedptrs.cpp"
+            "filename": "sharedptrs.cpp"
         },
         {
-            "filename" : "bug379342.cpp"
+            "filename": "bug379342.cpp"
         },
         {
-            "filename" : "warn-for-overridden-methods.cpp",
-            "has_fixits" : true,
-            "env" : { "CLAZY_EXTRA_OPTIONS" : "function-args-by-value-warn-for-overridden-methods" }
+            "filename": "default_methods.cpp"
+        },
+        {
+            "filename": "warn-for-overridden-methods.cpp",
+            "has_fixits": true,
+            "env": {
+                "CLAZY_EXTRA_OPTIONS": "function-args-by-value-warn-for-overridden-methods"
+            }
         }
     ]
 }
