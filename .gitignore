@@ -45,3 +45,4 @@ compile_commands.json
 .cache
 Testing
 .idea
+*.pch
