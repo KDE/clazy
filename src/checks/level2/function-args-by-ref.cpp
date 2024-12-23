@@ -61,9 +61,8 @@ bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
 bool FunctionArgsByRef::shouldIgnoreOperator(FunctionDecl *function)
 {
     // Too many warnings in operator<<
-    static const std::vector<StringRef> ignoreList = {"operator<<"};
-
-    return clazy::contains(ignoreList, clazy::name(function));
+    OverloadedOperatorKind op = function->getOverloadedOperator();
+    return op == clang::OO_LessLess;
 }
 
 bool FunctionArgsByRef::shouldIgnoreFunction(clang::FunctionDecl *function)

@@ -189,22 +189,10 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
     std::vector<CXXMemberCallExpr *> memberCalls;
     clazy::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
-    for (auto *callExpr : memberCalls) {
-        if (!callExpr->getDirectCallee()) {
-            continue;
-        }
-        auto *method = dyn_cast<CXXMethodDecl>(callExpr->getDirectCallee());
-        if (!method) {
-            continue;
-        }
-
-        // Any better way to detect it's an operator ?
-        if (clazy::startsWith(method->getNameAsString(), "operator ")) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(memberCalls.begin(), memberCalls.end(), [](CXXMemberCallExpr *callExpr) {
+        auto *callee = callExpr->getDirectCallee();
+        return callee && dyn_cast<CXXConversionDecl>(callee);
+    });
 }
 
 bool OldStyleConnect::isPrivateSlot(const std::string &name) const

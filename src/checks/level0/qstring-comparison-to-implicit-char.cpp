@@ -33,7 +33,7 @@ void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
     }
 
     auto *functionDecl = dyn_cast<FunctionDecl>(callExpr->getCalleeDecl());
-    if (!functionDecl || functionDecl->getQualifiedNameAsString() != "operator==") {
+    if (!functionDecl || functionDecl->getOverloadedOperator() != clang::OO_EqualEqual) {
         return;
     }
 

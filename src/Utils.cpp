@@ -578,7 +578,7 @@ bool Utils::isAssignOperator(CXXOperatorCallExpr *op, StringRef className, Strin
         }
     }
 
-    if (functionDecl->getNameAsString() != "operator=") {
+    if (functionDecl->getOverloadedOperator() != clang::OO_Equal) {
         return false;
     }
 
