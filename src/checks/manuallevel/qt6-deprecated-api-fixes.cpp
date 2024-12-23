@@ -564,7 +564,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             return;
         }
         Stmt *child = clazy::childAt(stmt, 0);
-        DeclRefExpr *decl;
+        DeclRefExpr *decl = nullptr;
         while (child) {
             decl = dyn_cast<DeclRefExpr>(child);
             if (!decl) {
