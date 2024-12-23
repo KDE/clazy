@@ -131,6 +131,12 @@ inline llvm::StringRef name(const clang::CXXMethodDecl *method)
     if (op == clang::OO_PlusEqual) {
         return "operator+=";
     }
+    if (op == clang::OO_EqualEqual) {
+        return "operator==";
+    }
+    if (op == clang::OO_Equal) {
+        return "operator=";
+    }
 
     return name(static_cast<const clang::NamedDecl *>(method));
 }
