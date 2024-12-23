@@ -13,7 +13,6 @@
 #include <clang/AST/AST.h>
 
 using namespace clang;
-using namespace std;
 
 %2::%2(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
