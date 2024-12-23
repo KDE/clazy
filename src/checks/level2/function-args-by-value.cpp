@@ -111,6 +111,11 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
         return;
     }
 
+    if (func->isDefaulted()) {
+        // The C++ compiler enforces refs or do being used for defaulted methods
+        // https://invent.kde.org/sdk/clazy/-/issues/25
+        return;
+    }
     auto *ctor = dyn_cast<CXXConstructorDecl>(func);
     if (ctor && ctor->isCopyConstructor()) {
         return; // copy-ctor must take by ref
