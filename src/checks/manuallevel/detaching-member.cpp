@@ -22,6 +22,7 @@
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/OperatorKinds.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
@@ -57,7 +58,7 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
     if (operatorExpr) {
         FunctionDecl *func = operatorExpr->getDirectCallee();
         method = func ? dyn_cast<CXXMethodDecl>(func) : nullptr;
-        if (!method || clazy::name(method) != "operator[]") {
+        if (!method || method->getOverloadedOperator() != clang::OO_Subscript) {
             return;
         }
 
