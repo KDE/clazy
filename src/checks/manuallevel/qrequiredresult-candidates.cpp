@@ -64,7 +64,7 @@ void QRequiredResultCandidates::VisitDecl(clang::Decl *decl)
     CXXRecordDecl *classDecl = method->getParent();
     classDecl = classDecl ? classDecl->getCanonicalDecl() : nullptr;
 
-    if (classDecl->getAccess() == AS_private) { // A nested private class. We're only interested on our public API
+    if (classDecl == nullptr || classDecl->getAccess() == AS_private) { // A nested private class. We're only interested on our public API
         return;
     }
 
