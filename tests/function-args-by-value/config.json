@@ -14,7 +14,8 @@
             "filename": "bug379342.cpp"
         },
         {
-            "filename": "default_methods.cpp"
+            "filename": "default_methods.cpp",
+            "flags": "-Wno-c++20-extensions"
         },
         {
             "filename": "warn-for-overridden-methods.cpp",
