@@ -762,7 +762,7 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             }
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "QGraphicsView") && qGraphicsViewFunctions.find(functionName) != qMapFunctions.end()) {
+        } else if (clazy::startsWith(className, "QGraphicsView") && qGraphicsViewFunctions.find(functionName) != qGraphicsViewFunctions.end()) {
             warningForGraphicsViews(functionName, message);
             emitWarning(warningLocation, message, fixits);
             return;
