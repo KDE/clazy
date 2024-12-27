@@ -21,8 +21,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <utility>
-
 using namespace clang;
 
 IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
@@ -34,11 +32,31 @@ IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
     m_filesToIgnore = {"moc_", ".moc"};
 }
 
-void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const MacroInfo *)
+size_t countUntilNonSpaceOrParen(const char *start, size_t prefixLen)
+{
+    size_t count = prefixLen;
+    start += prefixLen;
+    // Skip spaces and '(' characters
+    while (*start && (isspace(*start) || *start == '(')) {
+        ++count;
+        ++start;
+    }
+    return count;
+}
+
+void IncorrectEmit::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const MacroInfo *info)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
-    if (ii && (ii->getName() == "emit" || ii->getName() == "Q_EMIT")) {
-        m_emitLocations.push_back(range.getBegin());
+    if (!ii) {
+        return;
+    }
+    const bool isEmit = ii->getName() == "emit";
+    const bool isQEmit = ii->getName() == "Q_EMIT";
+    if (isEmit || isQEmit) {
+        const char *start = sm().getCharacterData(range.getBegin());
+        const size_t char_offset = countUntilNonSpaceOrParen(start, isEmit ? strlen("emit") : strlen("Q_EMIT"));
+        SourceLocation newLocation = range.getBegin().getLocWithOffset(char_offset);
+        m_emitLocations.push_back(newLocation);
     }
 }
 
@@ -116,22 +134,7 @@ bool IncorrectEmit::hasEmitKeyboard(CXXMemberCallExpr *call) const
         callLoc = sm().getFileLoc(callLoc);
     }
 
-    for (const SourceLocation &emitLoc : m_emitLocations) {
-        // We cache the calculation of the next token because it uses the Lexer and hence expensive.
-        auto it = m_locationCache.find(emitLoc.getRawEncoding());
-
-        SourceLocation nextTokenLoc;
-        if (it == m_locationCache.end()) {
-            nextTokenLoc = Utils::locForNextToken(emitLoc, sm(), lo());
-            m_locationCache[emitLoc.getRawEncoding()] = nextTokenLoc;
-        } else {
-            nextTokenLoc = it->second;
-        }
-
-        if (nextTokenLoc == callLoc) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(m_emitLocations.begin(), m_emitLocations.end(), [&callLoc](const SourceLocation &emitLoc) {
+        return callLoc == emitLoc;
+    });
 }

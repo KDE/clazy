@@ -92,3 +92,16 @@ Q_SIGNALS:
 public:
     int otherMethod();
 };
+
+void wrapping_syntax()
+{
+    MyObject obj;
+    Q_EMIT(obj.sig());
+    Q_EMIT((obj.sig()));
+    Q_EMIT(( obj.sig() ));
+    Q_EMIT(( obj.memberFunc() )); // WARN
+
+    Q_EMIT obj.sig();
+    Q_EMIT  obj.sig();
+}
+
