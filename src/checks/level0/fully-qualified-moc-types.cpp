@@ -126,7 +126,11 @@ static std::string resolveTemplateType(const clang::TemplateSpecializationType *
             str += ", ";
         }
         firstArg = false;
-        str += getQualifiedNameOfType(arg.getAsType().getTypePtr(), lo);
+        QualType argType = arg.getAsType();
+        if (argType.isConstQualified()) {
+            str += "const ";
+        }
+        str += getQualifiedNameOfType(argType.getTypePtr(), lo);
     }
     str += ">";
     return str;
