@@ -1,0 +1,125 @@
+/****************************************************************************
+** Meta object code from reading C++ file 'usingnamespace.cpp'
+**
+** Created by: The Qt Meta Object Compiler version 69 (Qt 6.9.0)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include <QtCore/qmetatype.h>
+
+#include <QtCore/qtmochelpers.h>
+
+#include <memory>
+
+
+#include <QtCore/qxptype_traits.h>
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'usingnamespace.cpp' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 69
+#error "This file was generated using the moc from 6.9.0. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+#ifndef Q_CONSTINIT
+#define Q_CONSTINIT
+#endif
+
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+QT_WARNING_DISABLE_GCC("-Wuseless-cast")
+namespace {
+struct qt_meta_tag_ZN4Foo25MyObjE_t {};
+} // unnamed namespace
+
+template <> constexpr inline auto Foo2::MyObj::qt_create_metaobjectdata<qt_meta_tag_ZN4Foo25MyObjE_t>()
+{
+    namespace QMC = QtMocConstants;
+    QtMocHelpers::StringRefStorage qt_stringData {
+        "Foo2::MyObj",
+        "signal1",
+        "",
+        "slot1",
+        "slot2"
+    };
+
+    QtMocHelpers::UintData qt_methods {
+        // Signal 'signal1'
+        QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'slot1'
+        QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'slot2'
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPublic, QMetaType::Void),
+    };
+    QtMocHelpers::UintData qt_properties {
+    };
+    QtMocHelpers::UintData qt_enums {
+    };
+    return QtMocHelpers::metaObjectData<MyObj, qt_meta_tag_ZN4Foo25MyObjE_t>(QMC::MetaObjectFlag{}, qt_stringData,
+            qt_methods, qt_properties, qt_enums);
+}
+Q_CONSTINIT const QMetaObject Foo2::MyObj::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_staticMetaObjectStaticContent<qt_meta_tag_ZN4Foo25MyObjE_t>.stringdata,
+    qt_staticMetaObjectStaticContent<qt_meta_tag_ZN4Foo25MyObjE_t>.data,
+    qt_static_metacall,
+    nullptr,
+    qt_staticMetaObjectRelocatingContent<qt_meta_tag_ZN4Foo25MyObjE_t>.metaTypes,
+    nullptr
+} };
+
+void Foo2::MyObj::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    auto *_t = static_cast<MyObj *>(_o);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: _t->signal1(); break;
+        case 1: _t->slot1(); break;
+        case 2: _t->slot2(); break;
+        default: ;
+        }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (MyObj::*)()>(_a, &MyObj::signal1, 0))
+            return;
+    }
+}
+
+const QMetaObject *Foo2::MyObj::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *Foo2::MyObj::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_staticMetaObjectStaticContent<qt_meta_tag_ZN4Foo25MyObjE_t>.strings))
+        return static_cast<void*>(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int Foo2::MyObj::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 3)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 3;
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 3)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 3;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void Foo2::MyObj::signal1()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+QT_WARNING_POP

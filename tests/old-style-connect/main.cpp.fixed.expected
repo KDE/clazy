@@ -387,6 +387,8 @@ void testQMenuAndQMessageBox()
 
 #if QT_VERSION_MAJOR == 5
 #include "main.qt5.moc_"
+#elif Q_MOC_OUTPUT_REVISION == 69
+#include "main.qt6.moc_69"
 #else
 #include "main.qt6.moc_"
 #endif
