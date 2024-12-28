@@ -500,13 +500,12 @@ _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 # utility functions #2
 
 version, success = get_command_output(compiler_name() + ' --version')
-match = re.search('clang version ([^\s-]+)', version)
+match = re.search('clang version ([^\\s-]+)', version)
 try:
     version = match.group(1)
 except:
     # Now try the Clazy.AppImage way
     match = re.search('clang version: (.*)', version)
-
     try:
         version = match.group(1)
     except:
