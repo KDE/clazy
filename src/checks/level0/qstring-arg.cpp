@@ -83,7 +83,7 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
     }
 
     ParmVarDecl *firstParam = method->getParamDecl(0);
-    if (clazy::classNameFor(firstParam) != "QString") {
+    if (clazy::classNameFor(firstParam) != "QString" && !clazy::startsWith(firstParam->getType().getAsString(), "const char &")) {
         return false;
     }
 
