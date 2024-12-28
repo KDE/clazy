@@ -1,7 +1,11 @@
 {
-    "tests" : [
-        {
-            "filename" : "foo.cpp"
-        }
-    ]
+  "tests": [
+    {
+      "filename": "foo.cpp"
+    },
+    {
+      "filename": "qml_module.cpp",
+      "qt_major_versions": [6]
+    }
+  ]
 }

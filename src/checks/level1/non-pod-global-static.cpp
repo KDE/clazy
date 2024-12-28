@@ -30,8 +30,7 @@ using namespace clang;
 
 static bool shouldIgnoreType(StringRef name)
 {
-    // Q_GLOBAL_STATIC and such
-    static std::vector<StringRef> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage"};
+    static std::vector<StringRef> blacklist = {"Holder", "AFUNC", "QLoggingCategory", "QThreadStorage", "QQmlModuleRegistration"};
     return clazy::contains(blacklist, name);
 }
 
