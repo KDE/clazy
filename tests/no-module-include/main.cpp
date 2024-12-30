@@ -28,7 +28,8 @@
 #include <QtPrintSupport>
 #include <QtNetworkAuth/QtNetworkAuth>
 #include <QtNetworkAuth>
-
+#include <QtQuickTest>
+#include <QtQuickTest/QtQuickTest>
 
 
 

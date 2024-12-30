@@ -28,3 +28,5 @@ no-module-include/main.cpp:27:10: warning: Module QtPrintSupport should not be i
 no-module-include/main.cpp:28:10: warning: Module QtPrintSupport should not be included directly [-Wclazy-no-module-include]
 no-module-include/main.cpp:29:10: warning: Module QtNetworkAuth should not be included directly [-Wclazy-no-module-include]
 no-module-include/main.cpp:30:10: warning: Module QtNetworkAuth should not be included directly [-Wclazy-no-module-include]
+no-module-include/main.cpp:31:10: warning: Module QtQuickTest should not be included directly [-Wclazy-no-module-include]
+no-module-include/main.cpp:32:10: warning: Module QtQuickTest should not be included directly [-Wclazy-no-module-include]

@@ -35,6 +35,7 @@ NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)
           "NetworkAuth",
           "QmlBuiltins",
           "QmlIntegration",
+          "QuickTest" // Does not have an uppercase include, but we gotta live with it
       }
 {
     for (const std::string &module : m_modulesList) {
