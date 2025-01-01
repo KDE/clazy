@@ -93,15 +93,13 @@ static bool isArgFuncWithOnlyQString(CallExpr *callExpr)
 
 bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &calls)
 {
-    if (calls.size() == 1) {
+    if (calls.size() <= 1) {
         return false; // Nothing to do
     }
     std::string replacement;
     SourceLocation beginLoc;
-    CallExpr *call = nullptr;
     int argAggregated = 0;
-    for (int i = 0, size = calls.size(); i < size; ++i) {
-        call = calls.at(i);
+    for (CallExpr *call : calls) {
         for (auto *arg : call->arguments()) {
             if (!isa<CXXDefaultArgExpr>(arg)) {
                 ++argAggregated;
@@ -126,7 +124,7 @@ bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &
         // The args for the chained calls have to be prepended instead of appended
         replacement = callArgs + (replacement.empty() ? "" : ", ") + replacement;
     }
-    if (auto *subexprCall = clazy::getFirstChildOfType<MemberExpr>(call)) {
+    if (auto *subexprCall = clazy::getFirstChildOfType<MemberExpr>(calls.back())) {
         emitWarning(beginLoc,
                     "Use multi-arg instead",
                     {FixItHint::CreateReplacement(SourceRange(subexprCall->getEndLoc(), calls.at(0)->getEndLoc()), "arg(" + replacement + ")")});
