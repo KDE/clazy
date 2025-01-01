@@ -130,6 +130,7 @@ bool QStringArg::checkMultiArgWarningCase(const std::vector<clang::CallExpr *> &
         emitWarning(beginLoc,
                     "Use multi-arg instead",
                     {FixItHint::CreateReplacement(SourceRange(subexprCall->getEndLoc(), calls.at(0)->getEndLoc()), "arg(" + replacement + ")")});
+        return true;
     }
 
     return false;
