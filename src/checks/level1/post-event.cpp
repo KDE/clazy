@@ -50,7 +50,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
     if (isStack || isHeap) {
         if (isSendEvent && isHeap) {
             emitWarning(stmt, "Events passed to sendEvent should be stack allocated");
-        } else if (isPostEvent && isStack) {
+        } else if (isStack) {
             emitWarning(stmt, "Events passed to postEvent should be heap allocated");
         }
     } else {

@@ -218,7 +218,7 @@ inline std::string qualifiedMethodName(clang::FunctionDecl *func)
     }
 
     // method->getQualifiedNameAsString() returns the name with template arguments, so do a little hack here
-    if (!method || !method->getParent()) {
+    if (!method->getParent()) {
         return "";
     }
 
