@@ -363,9 +363,6 @@ void Qt6DeprecatedAPIFixes::VisitDecl(clang::Decl *decl)
         bool isQtNamespaceExplicit = false;
         DeclContext *newcontext = clazy::contextForDecl(m_context->lastDecl);
         while (newcontext) {
-            if (!newcontext) {
-                break;
-            }
             if (clang::isa<NamespaceDecl>(newcontext)) {
                 auto *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
                 if (namesdecl->getNameAsString() == "Qt") {
@@ -674,9 +671,6 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
         bool isQtNamespaceExplicit = false;
         DeclContext *newcontext = clazy::contextForDecl(m_context->lastDecl);
         while (newcontext) {
-            if (!newcontext) {
-                break;
-            }
             if (clang::isa<NamespaceDecl>(newcontext)) {
                 auto *namesdecl = dyn_cast<clang::NamespaceDecl>(newcontext);
                 if (namesdecl->getNameAsString() == "Qt") {
