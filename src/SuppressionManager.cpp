@@ -96,6 +96,12 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     Token token;
     while (!lexer.LexFromRawLexer(token)) {
         if (token.getKind() == tok::comment) {
+            const int lineNumber = sm.getSpellingLineNumber(token.getLocation());
+            if (lineNumber < 0) {
+                llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << lineNumber << "\n";
+                continue;
+            }
+
             const std::string comment = Lexer::getSpelling(token, sm, lo);
 
             if (clazy::contains(comment, "clazy:skip")) {
@@ -104,14 +110,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             }
 
             if (clazy::contains(comment, "NOLINTNEXTLINE")) {
-                bool invalid = false;
-                const int nextLineNumber = sm.getSpellingLineNumber(token.getLocation(), &invalid) + 1;
-                if (invalid) {
-                    llvm::errs() << "SuppressionManager::parseFile: Invalid line number for token location where NOLINTNEXTLINE was found\n";
-                    continue;
-                }
-
-                suppressions.skipNextLine.insert(nextLineNumber);
+                suppressions.skipNextLine.insert(lineNumber + 1);
             }
 
             const auto startIdx = comment.find("clazy:");
@@ -122,27 +121,19 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             const auto endIt = comment.end();
 
             static const std::regex rx_all("clazy:excludeall=([^\\s]+)");
+            static const std::regex rx_current("clazy:exclude=([^\\s]+)");
+            static const std::regex rx_next("clazy:exclude-next-line=([^\\s]+)");
+
             std::smatch match;
             if (std::regex_search(startIt, endIt, match, rx_all)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
-            }
-
-            const int lineNumber = sm.getSpellingLineNumber(token.getLocation());
-            if (lineNumber < 0) {
-                llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << lineNumber << "\n";
-                continue;
-            }
-
-            static const std::regex rx_current("clazy:exclude=([^\\s]+)");
-            if (std::regex_search(startIt, endIt, match, rx_current)) {
+            } else if (std::regex_search(startIt, endIt, match, rx_current)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
                 }
-            }
-            static const std::regex rx_next("clazy:exclude-next-line=([^\\s]+)");
-            if (std::regex_search(startIt, endIt, match, rx_next)) {
+            } else if (std::regex_search(startIt, endIt, match, rx_next)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber + 1, checkName));
