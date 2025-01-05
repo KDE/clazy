@@ -1,1 +1,2 @@
 clazy/suppressions.cpp:14:9: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+clazy/suppressions.cpp:36:18: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
