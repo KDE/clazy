@@ -97,16 +97,10 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     while (!lexer.LexFromRawLexer(token)) {
         if (token.getKind() == tok::comment) {
             const int lineNumber = sm.getSpellingLineNumber(token.getLocation());
+            const std::string comment = Lexer::getSpelling(token, sm, lo);
             if (lineNumber < 0) {
                 llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << lineNumber << "\n";
                 continue;
-            }
-
-            const std::string comment = Lexer::getSpelling(token, sm, lo);
-
-            if (clazy::contains(comment, "clazy:skip")) {
-                suppressions.skipEntireFile = true;
-                return;
             }
 
             if (clazy::contains(comment, "NOLINTNEXTLINE")) {
@@ -117,13 +111,18 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             if (startIdx == std::string::npos) {
                 continue; // Early return, no need to look at any regex
             }
-            const auto startIt = comment.begin() + startIdx;
-            const auto endIt = comment.end();
+
+            if (clazy::contains(comment, "clazy:skip")) {
+                suppressions.skipEntireFile = true;
+                return;
+            }
 
             static const std::regex rx_all("clazy:excludeall=([^\\s]+)");
             static const std::regex rx_current("clazy:exclude=([^\\s]+)");
             static const std::regex rx_next("clazy:exclude-next-line=([^\\s]+)");
 
+            const auto startIt = comment.begin() + startIdx;
+            const auto endIt = comment.end();
             std::smatch match;
             if (std::regex_search(startIt, endIt, match, rx_all)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
