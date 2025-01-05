@@ -114,13 +114,16 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 suppressions.skipNextLine.insert(nextLineNumber);
             }
 
-            if (!clazy::contains(comment, "clazy:")) {
+            const auto startIdx = comment.find("clazy:");
+            if (startIdx == std::string::npos) {
                 continue; // Early return, no need to look at any regex
             }
+            const auto startIt = comment.begin() + startIdx;
+            const auto endIt = comment.end();
 
             static std::regex rx_all("clazy:excludeall=([^\\s]+)");
             std::smatch match;
-            if (regex_search(comment, match, rx_all)) {
+            if (std::regex_search(startIt, endIt, match, rx_all)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
             }
@@ -132,14 +135,14 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             }
 
             static std::regex rx_current("clazy:exclude=([^\\s]+)");
-            if (regex_search(comment, match, rx_current)) {
+            if (std::regex_search(startIt, endIt, match, rx_current)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
                 }
             }
             static std::regex rx_next("clazy:exclude-next-line=([^\\s]+)");
-            if (regex_search(comment, match, rx_next)) {
+            if (std::regex_search(startIt, endIt, match, rx_next)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber + 1, checkName));
