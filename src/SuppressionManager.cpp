@@ -96,7 +96,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     Token token;
     while (!lexer.LexFromRawLexer(token)) {
         if (token.getKind() == tok::comment) {
-            std::string comment = Lexer::getSpelling(token, sm, lo);
+            const std::string comment = Lexer::getSpelling(token, sm, lo);
 
             if (clazy::contains(comment, "clazy:skip")) {
                 suppressions.skipEntireFile = true;
@@ -112,6 +112,10 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 }
 
                 suppressions.skipNextLine.insert(nextLineNumber);
+            }
+
+            if (!clazy::contains(comment, "clazy:")) {
+                continue; // Early return, no need to look at any regex
             }
 
             static std::regex rx_all(R"(clazy:excludeall=(.*?)(\s|$))");
@@ -130,7 +134,6 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             static std::regex rx_current(R"(clazy:exclude=(.*?)(\s|$))");
             if (regex_search(comment, match, rx_current) && match.size() > 1) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
-
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
                 }

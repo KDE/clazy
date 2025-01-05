@@ -32,6 +32,6 @@ void qdatetimeutc()
 
 void suppressionnextline()
 {   // clazy:exclude-next-line=qstring-allocations
-    QString s1 = "foo"; QString s11 = "foo";
+    QString s1 = "foo";
     QString s2 = "foo";
 }
