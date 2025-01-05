@@ -118,9 +118,9 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 continue; // Early return, no need to look at any regex
             }
 
-            static std::regex rx_all(R"(clazy:excludeall=(.*?)(\s|$))");
+            static std::regex rx_all("clazy:excludeall=([^\\s]+)");
             std::smatch match;
-            if (regex_search(comment, match, rx_all) && match.size() > 1) {
+            if (regex_search(comment, match, rx_all)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 suppressions.checksToSkip.insert(checks.cbegin(), checks.cend());
             }
@@ -131,15 +131,15 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
                 continue;
             }
 
-            static std::regex rx_current(R"(clazy:exclude=(.*?)(\s|$))");
-            if (regex_search(comment, match, rx_current) && match.size() > 1) {
+            static std::regex rx_current("clazy:exclude=([^\\s]+)");
+            if (regex_search(comment, match, rx_current)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber, checkName));
                 }
             }
-            static std::regex rx_next(R"(clazy:exclude-next-line=(.*?)(\s|$))");
-            if (regex_search(comment, match, rx_next) && match.size() > 1) {
+            static std::regex rx_next("clazy:exclude-next-line=([^\\s]+)");
+            if (regex_search(comment, match, rx_next)) {
                 std::vector<std::string> checks = clazy::splitString(match[1], ',');
                 for (const std::string &checkName : checks) {
                     suppressions.checksToSkipByLine.insert(LineAndCheckName(lineNumber + 1, checkName));
