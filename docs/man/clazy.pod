@@ -123,6 +123,10 @@ clazy supports the following list of in-code directives:
  The clazy checks tests name1, etc. will not be run on the line where
  this directive is found.
 
+=item clazy:exclude-next-line=<name1[,name2,...,nameN]>
+
+ Excludes the given clazy checks from the next line.
+
 =back
 
 Don't include the 'clazy-' prefix.  For example, to disable the "qstring-allocations"

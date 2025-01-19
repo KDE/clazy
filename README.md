@@ -449,6 +449,9 @@ You can also suppress individual warnings by file or by line by inserting commen
 - To disable specific checks in specific source lines, insert a comment in the same line as the warning:
 `(...) // clazy:exclude=check1,check2`
 
+- To disable specific checks in source files for the following line, insert a comment:
+`// clazy:exclude=check1,check2`
+
 Don't include the `clazy-` prefix. If, for example, you want to disable qstring-allocations you would write:
 `// clazy:exclude=qstring-allocations` not `clazy-qstring-allocations`.
 
