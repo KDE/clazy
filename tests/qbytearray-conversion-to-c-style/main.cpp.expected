@@ -1,0 +1,6 @@
+qbytearray-conversion-to-c-style/main.cpp:13:21: warning: Don't rely on the QByteArray implicit conversion to 'const char *'. [-Wclazy-qbytearray-conversion-to-c-style]
+qbytearray-conversion-to-c-style/main.cpp:14:10: warning: Don't rely on the QByteArray implicit conversion to 'const char *'. [-Wclazy-qbytearray-conversion-to-c-style]
+qbytearray-conversion-to-c-style/main.cpp:16:15: warning: Don't rely on the QByteArray implicit conversion to 'const char *'. [-Wclazy-qbytearray-conversion-to-c-style]
+qbytearray-conversion-to-c-style/main.cpp:17:15: warning: Don't rely on the QByteArray implicit conversion to 'const char *'. [-Wclazy-qbytearray-conversion-to-c-style]
+qbytearray-conversion-to-c-style/main.cpp:18:15: warning: Don't rely on the QByteArray implicit conversion to 'const char *'. [-Wclazy-qbytearray-conversion-to-c-style]
+qbytearray-conversion-to-c-style/main.cpp:21:47: warning: Don't rely on the QByteArray implicit conversion to 'const char *'. [-Wclazy-qbytearray-conversion-to-c-style]

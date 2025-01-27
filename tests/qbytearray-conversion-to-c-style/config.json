@@ -1,0 +1,9 @@
+{
+    "tests" : [
+        {
+            "filename" : "main.cpp",
+            "has_fixits" : true,
+            "qt_major_versions": [6]
+        }
+    ]
+}

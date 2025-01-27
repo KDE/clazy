@@ -85,6 +85,7 @@
 #include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/jnisignatures.h"
+#include "checks/manuallevel/qbytearray-conversion-to-c-style.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
 #include "checks/manuallevel/qproperty-type-mismatch.h"
 #include "checks/manuallevel/qrequiredresult-candidates.h"
@@ -128,6 +129,8 @@ void CheckManager::registerChecks()
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QBytearrayConversionToCStyle>("qbytearray-conversion-to-c-style", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerFixIt(1, "fix-qbytearray-conversion-to-c-style", "qbytearray-conversion-to-c-style");
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));

@@ -2,6 +2,16 @@
     "available_categories" : ["readability", "qt6", "containers", "qstring", "cpp", "bug", "performance", "deprecation", "qml"],
     "checks" : [
         {
+            "name"  : "qbytearray-conversion-to-c-style",
+            "level" : -1,
+            "visits_stmts" : true,
+            "fixits" : [
+                {
+                    "name" : "qbytearray-conversion-to-c-style"
+                }
+            ]
+        },
+        {
             "name"  : "qt-keywords",
             "level" : -1,
             "fixits" : [

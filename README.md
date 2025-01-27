@@ -218,6 +218,7 @@ clazy runs all checks from level1 by default.
     - [ifndef-define-typo](docs/checks/README-ifndef-define-typo.md)
     - [isempty-vs-count](docs/checks/README-isempty-vs-count.md)
     - [jni-signatures](docs/checks/README-jni-signatures.md)
+    - [qbytearray-conversion-to-c-style](docs/checks/README-qbytearray-conversion-to-c-style.md)    (fix-qbytearray-conversion-to-c-style)
     - [qhash-with-char-pointer-key](docs/checks/README-qhash-with-char-pointer-key.md)
     - [qproperty-type-mismatch](docs/checks/README-qproperty-type-mismatch.md)
     - [qrequiredresult-candidates](docs/checks/README-qrequiredresult-candidates.md)
