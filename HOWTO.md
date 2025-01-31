@@ -43,6 +43,12 @@ which will generate the files you need to write, and edit others for you.
 
 - Look in `Utils.h`, `StringUtils.h`, `QtUtils.h`, `FixitUtils.h`, etc for helper functions you might need.
 
+- If you try to run the tests from the build dir directly without installation, you may get error
+  messages about not finding `ClazyPlugin.so` and/or `clazy-standalone` when you call
+  `run_tests.py`. This can be resolved by exporting the following environment variables:
+
+  `export CLAZYPLUGIN_CXX=<path-to-builddir>/lib/ClazyPlugin.so && export CLAZYSTANDALONE_CXX=<path-to-builddir>/bin/clazy-standalone`
+
 ## Using ASTMatchers
 
 - See the `qcolor-from-literal` check for how to use ASTMatchers with clazy
