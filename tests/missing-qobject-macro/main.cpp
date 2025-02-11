@@ -31,3 +31,15 @@ template <typename T> class DerivedTemplate : public Derived1
 { // OK, moc doesn't accept Q_OBJECT in template classes
     public:
 };
+
+class OuterClass : public QObject
+ {
+    Q_OBJECT
+
+    class NestedClass : public QObject
+    { // OK, moc doesn't accept Q_OBJECT in nested classes
+        public:
+
+    };
+
+ };

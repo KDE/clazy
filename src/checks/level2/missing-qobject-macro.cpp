@@ -48,6 +48,10 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
         return;
     }
 
+    if (isa<CXXRecordDecl>(record->getDeclContext())) { // moc doesn't accept Q_OBJECT in nested classes
+        return;
+    }
+
     if (m_context->usingPreCompiledHeaders()) {
         return;
     }
