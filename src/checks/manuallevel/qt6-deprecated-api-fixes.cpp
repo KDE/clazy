@@ -411,9 +411,10 @@ Qt6DeprecatedAPIFixes::buildReplacementForQVariant(DeclRefExpr *decl_operator, c
     return replacement;
 }
 
-bool foundQDirDeprecatedOperator(DeclRefExpr *decl)
+bool foundQDirDeprecatedOperator(DeclRefExpr *decl, const clang::LangOptions &lo)
 {
-    return decl->getNameInfo().getAsString() == "operator=";
+    auto *method_decl = dyn_cast<CXXMethodDecl>(decl->getDecl());
+    return method_decl && (method_decl->getOverloadedOperator() == OO_Equal) && (clazy::simpleArgTypeName(method_decl, 0, lo) == "QString");
 }
 
 static std::set<std::string> qVariantDeprecatedOperator = {"operator<", "operator<=", "operator>", "operator>="};
@@ -442,7 +443,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, const std::stri
         }
 
         if (className == "QDir") {
-            foundOperator = foundQDirDeprecatedOperator(decl);
+            foundOperator = foundQDirDeprecatedOperator(decl, lo());
         } else if (className == "QVariant") {
             foundOperator = foundQVariantDeprecatedOperator(decl);
         }

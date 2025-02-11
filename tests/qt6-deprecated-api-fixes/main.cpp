@@ -45,11 +45,11 @@ void test()
 
     my_Class* test_class_bis = new my_Class;
     test_class_bis->m_dir = ("name");
-
     *test_class.m_dir_bis = "name";
 
     QDir dir2;
     dir2 = MYSTRING;
+    dir2 = dir;
 
     QDir dir3;
     dir3= "my" "Stuff";
