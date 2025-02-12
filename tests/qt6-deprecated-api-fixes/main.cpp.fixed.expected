@@ -80,7 +80,7 @@ void test()
     m.unite(mm);
 
     QProcess pp;
-    pp.startCommand("stringContainingACommandWithArguments");
+    pp.start("stringContainingACommandWithArguments");
     pp.execute("stringContainingACommandWithArguments");
     pp.startDetached("stringContainingACommandWithArguments");
 

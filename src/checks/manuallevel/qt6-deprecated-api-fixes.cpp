@@ -166,20 +166,6 @@ bool replacementForQComboBox(clang::MemberExpr *membExpr, const std::string &fun
     return true;
 }
 
-static std::set<std::string> qProcessDeprecatedFunctions = {"start"};
-
-void replacementForQProcess(const std::string &functionName, std::string &message, std::string &replacement)
-{
-    message = "call function QProcess::";
-    message += functionName;
-    message += "(). Use function QProcess::";
-    message += functionName;
-    message += "Command() instead";
-
-    replacement = functionName;
-    replacement += "Command";
-}
-
 void replacementForQSignalMapper(clang::MemberExpr *membExpr, std::string &message, std::string &replacement, clang::LangOptions lo)
 {
     auto *declfunc = membExpr->getReferencedDeclOfCallee()->getAsFunction();
@@ -769,8 +755,6 @@ void Qt6DeprecatedAPIFixes::VisitStmt(clang::Stmt *stmt)
             fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));
             emitWarning(warningLocation, message, fixits);
             return;
-        } else if (clazy::startsWith(className, "QProcess") && qProcessDeprecatedFunctions.find(functionName) != qProcessDeprecatedFunctions.end()) {
-            replacementForQProcess(functionName, message, replacement);
         } else if (clazy::startsWith(className, "QResource") && functionName == "isCompressed") {
             replacementForQResource(functionName, message, replacement);
         } else if (clazy::startsWith(className, "QSignalMapper") && functionName == "mapped") {

@@ -12,8 +12,6 @@ The code is fixed when possible.
 
 * Only warning are emitted for `addResourceSearchPath`.
 
-* `QProcess::start()` becomes `QProcess::startCommand()`.
-
 * `QResource::isCompressed()` is replaced with `QResource::compressionAlgorithm()`.
 
 * `QSignalMapper::mapped()` is replaced with `QSignalMapper::mappedInt`, `QSignalMapper::mappedString`, `QSignalMapper::mappedObject` depending on the argument of the function.

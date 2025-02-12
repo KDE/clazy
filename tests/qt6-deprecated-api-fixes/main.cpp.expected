@@ -17,7 +17,6 @@ qt6-deprecated-api-fixes/main.cpp:76:7: warning: Use QMultiMap for maps storing 
 qt6-deprecated-api-fixes/main.cpp:77:30: warning: Use QMultiMap for maps storing multiple values with the same key. [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:78:30: warning: Use QMultiMap for maps storing multiple values with the same key. [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:80:7: warning: Use QMultiMap for maps storing multiple values with the same key. [-Wclazy-qt6-deprecated-api-fixes]
-qt6-deprecated-api-fixes/main.cpp:83:8: warning: call function QProcess::start(). Use function QProcess::startCommand() instead [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:88:22: warning: call function QRessource::isCompressed(). Use function QProcess::compressionAlgorithm() instead. [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:91:23: warning: call Qt::MatchRegExp. Use Qt::MatchRegularExpression instead. [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:95:24: warning: call function QTextStream::endl. Use function Qt::endl instead [-Wclazy-qt6-deprecated-api-fixes]
