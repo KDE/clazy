@@ -4,7 +4,7 @@ Warns about usage of QByteArray to `const char *` implicit conversion operator. 
 sort of conversion is deemed dangerous given how `const char *` is a very common type.
 This can be fixed by making the conversion explicit, e.g. by using `QByteArray::constData()`.
 
-Note that this conversion operator can be disabled by defining the `QBYTEARRAY_NO_CAST_TO_ASCII`
+Note that this conversion operator can be disabled by defining the `QT_NO_CAST_FROM_BYTEARRAY`
 macro.
 
 #### Caveats
