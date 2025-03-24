@@ -1,10 +1,18 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
+
 static void func(const char *str) { }
 
-static void otherFunc(const char *str) { }
+static QByteArray returnBa() { return "foo"; }
+
+static bool boolFunc(const char *s) { return s != nullptr; }
 
 #define TEXT "macrotext"
+
+struct S {
+    QString key;
+    QByteArray keyAsUtf8() { return key.toUtf8(); }
+};
 
 void test()
 {
@@ -13,10 +21,25 @@ void test()
     const char *c = ba.constData();
     func(ba.constData());
 
-    otherFunc("foo");
-    otherFunc("ba-literal");
-    otherFunc("macrotext ba-literal");
+    func(returnBa().constData());
+
+    func("foo");
+    func(TEXT " ba");
+    func("ba-literal");
+    func(TEXT " ba-literal");
 
     QString utf16 = QString::fromLatin1("string");
     func(std::exchange(utf16, {}).toLocal8Bit().constData());
+
+    if (boolFunc(returnBa().constData())) {
+    }
+
+    if (__builtin_expect(!!(boolFunc(returnBa().constData())), true)) {
+    }
+    if (Q_LIKELY(boolFunc(returnBa().constData()))) {
+    }
+
+    S s{};
+    func(s.key.toUtf8().constData());
+    func(s.keyAsUtf8().constData());
 }
