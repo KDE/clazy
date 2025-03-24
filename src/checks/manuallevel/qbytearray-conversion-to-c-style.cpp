@@ -48,7 +48,14 @@ void QBytearrayConversionToCStyle::VisitStmt(clang::Stmt *stmt)
     static const std::string msg = "Don't rely on the QByteArray implicit conversion to 'const char *'.";
 
     SourceRange sr = callee->getSourceRange();
+    if (!sr.isValid()) {
+        return;
+    }
     CharSourceRange cr = Lexer::getAsCharRange(sr, sm(), lo());
+    if (!cr.isValid()) {
+        return;
+    }
+
     std::string str = Lexer::getSourceText(cr, sm(), lo()).str();
     if (clazy::getFirstChildOfType<DeclRefExpr>(stmt)) { // E.g. QByteArray ba = "foo"
         std::vector<FixItHint> fixits = {clazy::createReplacement(sr, str + ".constData()")};
@@ -58,6 +65,9 @@ void QBytearrayConversionToCStyle::VisitStmt(clang::Stmt *stmt)
 
     if (auto *funcCastExpr = clazy::getFirstChildOfType<CXXFunctionalCastExpr>(stmt)) {
         auto *literal = clazy::getFirstChildOfType<StringLiteral>(funcCastExpr);
+        if (!literal) {
+            return;
+        }
         if (str.find("QByteArrayLiteral") != std::string_view::npos) { // QByteArrayLiteral("foo").
             // This only works with Qt6 where QByteArrayLiteral is a macro, but not with
             // Qt5 where QByteArrayLiteral is a lambda.
@@ -65,10 +75,16 @@ void QBytearrayConversionToCStyle::VisitStmt(clang::Stmt *stmt)
             // The replacement has to be where the macro is expanded `QByteArrayLiteral("foo")`
             // not where it's defined.
             CharSourceRange expRange = sm().getExpansionRange(funcCastExpr->getBeginLoc());
+            if (!expRange.isValid()) {
+                return;
+            }
             std::vector<FixItHint> fixits = {clazy::createReplacement(expRange.getAsRange(), replacement)};
             emitWarning(expRange.getBegin(), msg, fixits);
         } else if (str.find("QByteArray") != std::string_view::npos) { // QByteArray("foo")
             CharSourceRange cr = Lexer::getAsCharRange(literal->getSourceRange(), sm(), lo());
+            if (!cr.isValid()) {
+                return;
+            }
             std::string replacement = Lexer::getSourceText(cr, sm(), lo()).str(); // "foo"
             std::vector<FixItHint> fixits = {clazy::createReplacement(sr, replacement)};
             emitWarning(sr.getBegin(), msg, fixits);
