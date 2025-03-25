@@ -194,6 +194,12 @@ Alternatively, if you want to use clang directly, without the wrapper:
 
 On Windows it's similar, just inspect the contents of `clazy-cl.bat`.
 
+To use clazy from a preset in `CMakePresets.json` or `CMakeUserPresets.json`:
+
+    "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-Xclang -plugin-arg-clazy -Xclang export-fixes -Xclang -plugin-arg-clazy -Xclang  level0,detaching-temporary",
+        "CMAKE_CXX_COMPILER": "clazy"
+    }
 
 It's recommended that you disable pre-compiled headers and don't use ccache.
 
