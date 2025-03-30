@@ -196,6 +196,12 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
                 emitWarning(obj->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
                 return;
             }
+
+            // In clang20, "auto m2 = QRegularExpression("[123]").globalMatch(selectedText);" is apparently an l-value
+            if (auto *temp = dyn_cast<MaterializeTemporaryExpr>(obj); temp && isTemporaryQRegexObj(temp, lo())) {
+                emitWarning(temp->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
+            }
+
         } else if (obj->isXValue()) {
             // is it a temporary?
             auto *temp = dyn_cast<MaterializeTemporaryExpr>(obj);
