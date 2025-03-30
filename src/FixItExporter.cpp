@@ -191,7 +191,9 @@ void FixItExporter::Diag(SourceLocation Loc, unsigned DiagID)
     // clear out any current diagnostic, and let the downstream client
     // format the diagnostic.
     DiagEngine.setClient(Client, false);
+#if LLVM_VERSION_MAJOR < 20
     DiagEngine.Clear();
+#endif
     DiagEngine.Report(Loc, DiagID);
     DiagEngine.setClient(this, false);
 }
