@@ -220,7 +220,8 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
     if (!clazy::any_of(declRefs, pred)) {
         // Check for [[maybe_unused]] attribute
         if (!varDecl->hasAttr<clang::UnusedAttr>()) {
-            emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()));
+            auto const varName = varDecl->getDeclName().getAsString();
+            emitWarning(locStart, "unused " + clazy::simpleTypeName(varDecl->getType(), lo()) + " " + varName);
         }
     }
 }
