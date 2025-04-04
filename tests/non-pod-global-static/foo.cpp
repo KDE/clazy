@@ -58,3 +58,7 @@ struct HasConstExprCtor
 
 constexpr static HasConstExprCtor p8(1);
 static HasConstExprCtor p9(1);
+
+namespace a_name_space{
+  static NonPod NonPod8;
+}

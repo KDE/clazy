@@ -1,3 +1,4 @@
-non-pod-global-static/foo.cpp:34:1: warning: non-POD static (NonPod) [-Wclazy-non-pod-global-static]
-non-pod-global-static/foo.cpp:35:1: warning: non-POD static (NonPod2) [-Wclazy-non-pod-global-static]
-non-pod-global-static/foo.cpp:36:1: warning: non-POD static (NonPod3) [-Wclazy-non-pod-global-static]
+non-pod-global-static/foo.cpp:34:1: warning: non-POD static (NonPod p1) [-Wclazy-non-pod-global-static]
+non-pod-global-static/foo.cpp:35:1: warning: non-POD static (NonPod2 p2) [-Wclazy-non-pod-global-static]
+non-pod-global-static/foo.cpp:36:1: warning: non-POD static (NonPod3 p3) [-Wclazy-non-pod-global-static]
+non-pod-global-static/foo.cpp:63:3: warning: non-POD static (NonPod a_name_space::NonPod8) [-Wclazy-non-pod-global-static]
