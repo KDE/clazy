@@ -94,8 +94,9 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
     }
 
     StringRef className = clazy::name(recordDecl);
+    auto const varName = varDecl->getDeclName().getAsString();
     if (!shouldIgnoreType(className)) {
-        std::string error = std::string("non-POD static (") + className.data() + std::string(")");
+        std::string error = std::string("non-POD static (") + className.data() + " " + varName + std::string(")");
         emitWarning(declStart, error);
     }
 }
