@@ -1,1 +1,1 @@
-function-args-by-value/sharedptrs.cpp:7:11: warning: Pass small and trivially-copyable type by value (const Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/sharedptrs.cpp:7:11: warning: test: Pass small and trivially-copyable type by value (const Trivial &) [-Wclazy-function-args-by-value]
