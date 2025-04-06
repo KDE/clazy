@@ -1,2 +1,2 @@
-function-args-by-ref/more_fixits.cpp:7:14: warning: Missing reference on non-trivial type (QString) [-Wclazy-function-args-by-ref]
-function-args-by-ref/more_fixits.cpp:10:16: warning: Missing reference on non-trivial type (QString) [-Wclazy-function-args-by-ref]
+function-args-by-ref/more_fixits.cpp:7:14: warning: Test::bar: Missing reference on non-trivial type (QString) [-Wclazy-function-args-by-ref]
+function-args-by-ref/more_fixits.cpp:10:16: warning: Test::foo: Missing reference on non-trivial type (QString) [-Wclazy-function-args-by-ref]
