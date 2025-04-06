@@ -134,9 +134,14 @@ void FunctionArgsByRef::processFunction(FunctionDecl *func)
             std::string error;
             std::vector<FixItHint> fixits;
 
-            const std::string paramStr = param->getType().getAsString(lo());
+            std::string paramStr = param->getType().getAsString(lo());
+            const std::string paramName = param->getNameAsString();
+            const std::string funcName = func->getQualifiedNameAsString();
+            if (!paramName.empty())
+                paramStr.append(" ");
+
             if (classif.passNonTriviallyCopyableByConstRef) { // Prefer this warning, because we might otherwise annoy user with specific size of Qt classes
-                error = "Missing reference on non-trivial type (" + paramStr + ')';
+                error = funcName + ": Missing reference on non-trivial type (" + paramStr + paramName + ')';
             } else if (classif.passBigTypeByConstRef) {
                 error = warningMsgForSmallType(classif.size_of_T, paramStr);
             }
