@@ -1,1 +1,1 @@
-function-args-by-value/lambdas.cpp:12:18: warning: Pass small and trivially-copyable type by value (const Trivial &) [-Wclazy-function-args-by-value]
+function-args-by-value/lambdas.cpp:12:18: warning: test()::(anonymous class)::operator(): Pass small and trivially-copyable type by value (const Trivial &) [-Wclazy-function-args-by-value]

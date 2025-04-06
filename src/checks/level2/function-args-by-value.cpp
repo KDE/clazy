@@ -191,8 +191,13 @@ void FunctionArgsByValue::processFunction(FunctionDecl *func)
                 }
             }
 
-            const std::string paramStr = param->getType().getAsString(lo());
-            std::string error = "Pass small and trivially-copyable type by value (" + paramStr + ')';
+            std::string paramStr = param->getType().getAsString(lo());
+
+            if (const std::string paramName = param->getNameAsString(); !paramName.empty())
+                paramStr.append(" " + paramName);
+
+            std::string funcName = func->getQualifiedNameAsString();
+            std::string error = funcName + ": Pass small and trivially-copyable type by value (" + paramStr + ')';
             emitWarning(param->getBeginLoc(), error, fixits);
         }
     }
