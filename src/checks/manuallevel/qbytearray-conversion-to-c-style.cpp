@@ -14,6 +14,8 @@
 
 #include <clang/AST/AST.h>
 
+// #include <iostream>
+
 using namespace clang;
 
 QBytearrayConversionToCStyle::QBytearrayConversionToCStyle(const std::string &name, ClazyContext *context)
@@ -98,10 +100,20 @@ void QBytearrayConversionToCStyle::VisitStmt(clang::Stmt *stmt)
     if (!r.isValid()) {
         return;
     }
+
     StringRef text = Lexer::getSourceText(r, sm(), lo());
     if (text.empty()) {
         return;
     }
+
+    if (auto *opCallExpr = clazy::getFirstChildOfType<CXXOperatorCallExpr>(stmt)) {
+        if (opCallExpr->getOperator() == clang::OO_Plus) {
+            std::string fixed = "QByteArray{" + std::string{text} + "}.constData()";
+            emitWarning(begin, msg, {clazy::createReplacement(sr, fixed)});
+            return;
+        }
+    }
+
     std::vector<FixItHint> fixits = {clazy::createReplacement(sr, std::string{text} + ".constData()")};
     emitWarning(begin, msg, fixits);
 }
