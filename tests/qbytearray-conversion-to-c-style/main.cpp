@@ -42,4 +42,6 @@ void test()
     S s{};
     func(s.key.toUtf8());
     func(s.keyAsUtf8());
+
+    func("foo" + ba + "bar");
 }

@@ -42,4 +42,6 @@ void test()
     S s{};
     func(s.key.toUtf8().constData());
     func(s.keyAsUtf8().constData());
+
+    func(QByteArray{"foo" + ba + "bar"}.constData());
 }
