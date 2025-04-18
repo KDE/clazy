@@ -110,7 +110,8 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     }
 
     Expr *expr = memberExpr->getImplicitObjectArgument();
-    if (!expr || expr->isLValue()) { // This check is about detaching temporaries, so check for r value
+    // This check is about detaching temporaries, so check for r value. But with clang20, the same code seems to be an l-value. Check type of expression instead
+    if (!expr || (expr->isLValue() && !isa<MaterializeTemporaryExpr>(expr))) {
         return;
     }
 
@@ -143,8 +144,6 @@ void TemporaryIterator::VisitStmt(clang::Stmt *stm)
     if (possibleThisCall) {
         return;
     }
-
-    // llvm::errs() << "Expression: " << expr->getStmtClassName() << "\n";
 
     std::string error = "Don't call " + clazy::qualifiedMethodName(methodDecl) + "() on temporary";
     emitWarning(stm->getBeginLoc(), error);
