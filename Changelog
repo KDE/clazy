@@ -2,6 +2,7 @@
 
 * v1.14 (TBD)
 - Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2
+- Support for compilation against Clang 20
 
 - New checks:
     - qbytearray-conversion-to-c-style
