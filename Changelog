@@ -3,6 +3,9 @@
 * v1.14 (TBD)
 - Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2
 - Support for compilation against Clang 20
+- increase verbosity of some warning messages
+    - checks `function-args-by-value` and `function-args-by-ref`: add function name and parameter name to warning message
+    - checks `unused-non-trivial-variable` and `non-pod-global-static`: add variable name to warning message
 
 - New checks:
     - qbytearray-conversion-to-c-style
