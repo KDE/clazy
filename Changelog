@@ -1,6 +1,6 @@
 # Changelog
 
-* v1.14 (TBD)
+* v1.14 (April 27, 2025)
 - Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2
 - Support for compilation against Clang 20
 - increase verbosity of some warning messages
