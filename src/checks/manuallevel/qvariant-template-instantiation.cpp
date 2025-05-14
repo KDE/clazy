@@ -58,8 +58,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     auto *recordDecl = memberExpr->getBase()->getType()->getAsCXXRecordDecl();
-    if (!recordDecl)
-    {
+    if (!recordDecl) {
         return;
     }
 
