@@ -52,11 +52,7 @@ public:
                                              // check has to support this feature i.e. has clazy::CheckBase::Option_CanIgnoreIncludes set
     };
     using ClazyOptions = int;
-#if LLVM_VERSION_MAJOR >= 16
     using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
-#else
-    using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
-#endif
 
     explicit ClazyContext(const clang::CompilerInstance &ci,
                           const std::string &headerFilter,

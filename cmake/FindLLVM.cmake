@@ -55,7 +55,7 @@ if (LLVM_CONFIG_EXECUTABLE)
 
   if (NOT LLVM_VERSION)
     set(_LLVM_ERROR_MESSAGE "Failed to parse version from llvm-config")
-  elseif (LLVM_VERSION VERSION_LESS "14.0")
+  elseif (LLVM_VERSION VERSION_LESS "19.0")
     set(_LLVM_ERROR_MESSAGE "LLVM version too old: ${LLVM_VERSION}")
   else()
     set(LLVM_FOUND TRUE)
@@ -128,12 +128,8 @@ if (LLVM_FOUND)
   endif()
 
   # potentially add include dir from binary dir for non-installed LLVM
-  set(LLVM_CONFIG_INCLUDE_FLAG "--src-root")
-  if (${LLVM_VERSION} VERSION_GREATER_EQUAL 16)
-    set(LLVM_CONFIG_INCLUDE_FLAG "--includedir")
-  endif()
   execute_process(
-    COMMAND ${LLVM_CONFIG_EXECUTABLE} ${LLVM_CONFIG_INCLUDE_FLAG}
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
     OUTPUT_VARIABLE _llvmSourceRoot
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
@@ -143,15 +139,13 @@ if (LLVM_FOUND)
   endif()
 
   # LLVM 19 specific handling
-  if (LLVM_VERSION VERSION_GREATER_EQUAL "19.0")
-    execute_process(
-      COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs all
-      OUTPUT_VARIABLE LLVM_LIBS_19
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    string(REPLACE " " ";" LLVM_LIBS_19 ${LLVM_LIBS_19})
-    list(APPEND LLVM_LIBS ${LLVM_LIBS_19})
-  endif()
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs all
+    OUTPUT_VARIABLE LLVM_LIBS_19
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  string(REPLACE " " ";" LLVM_LIBS_19 ${LLVM_LIBS_19})
+  list(APPEND LLVM_LIBS ${LLVM_LIBS_19})
 endif()
 
 if (LLVM_FIND_REQUIRED AND NOT LLVM_FOUND)
@@ -165,10 +159,6 @@ if (LLVM_FOUND)
   message(STATUS "  Include dirs:   ${LLVM_INCLUDE_DIRS}")
   message(STATUS "  LLVM libraries: ${LLVM_LIBS}")
   message(STATUS "  LLVM System libraries: ${LLVM_SYSTEM_LIBS}")
-
-  if (LLVM_VERSION VERSION_GREATER_EQUAL "19.0")
-    message(STATUS "  LLVM 19+ detected, additional libraries may be available")
-  endif()
 endif()
 
 execute_process(

@@ -253,12 +253,8 @@ void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc,
                                              clazy::OptionalFileEntryRef /*File*/,
                                              clang::StringRef /*SearchPath*/,
                                              clang::StringRef /*RelativePath*/,
-#if LLVM_VERSION_MAJOR >= 19
                                              const clang::Module * /*SuggestedModule*/,
                                              bool /*ModuleImported*/,
-#else
-                                             const clang::Module * /*Imported*/,
-#endif
                                              clang::SrcMgr::CharacteristicKind /*FileType*/)
 {
     if (shouldIgnoreFile(HashLoc)) {

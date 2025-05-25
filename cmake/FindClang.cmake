@@ -66,21 +66,15 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCore)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerFrontend)
   FIND_AND_ADD_CLANG_LIB(clangAPINotes)
+  FIND_AND_ADD_CLANG_LIB(clangSupport)
 
-  if (LLVM_VERSION VERSION_GREATER_EQUAL "15.0")
-    FIND_AND_ADD_CLANG_LIB(clangSupport)
-  endif()
-
-  # LLVM 19 specific libraries
-  if (LLVM_VERSION VERSION_GREATER_EQUAL "19.0")
-    FIND_AND_ADD_CLANG_LIB(clangASTMatchers)
-    FIND_AND_ADD_CLANG_LIB(clangTransformer)
-    FIND_AND_ADD_CLANG_LIB(clangToolingCore)
-    FIND_AND_ADD_CLANG_LIB(clangToolingInclusions)
-    FIND_AND_ADD_CLANG_LIB(clangToolingRefactoring)
-    FIND_AND_ADD_CLANG_LIB(clangToolingSyntax)
-    FIND_AND_ADD_CLANG_LIB(clangDependencyScanning)
-  endif()
+  FIND_AND_ADD_CLANG_LIB(clangASTMatchers)
+  FIND_AND_ADD_CLANG_LIB(clangTransformer)
+  FIND_AND_ADD_CLANG_LIB(clangToolingCore)
+  FIND_AND_ADD_CLANG_LIB(clangToolingInclusions)
+  FIND_AND_ADD_CLANG_LIB(clangToolingRefactoring)
+  FIND_AND_ADD_CLANG_LIB(clangToolingSyntax)
+  FIND_AND_ADD_CLANG_LIB(clangDependencyScanning)
 endif()
 
 if(CLANG_LIBS OR CLANG_LIBCLANG_LIB OR CLANG_CLANG-CPP_LIB)
@@ -94,12 +88,8 @@ if(CLANG_FOUND)
   set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
 
   # check whether llvm-config comes from an install prefix
-  set(LLVM_CONFIG_INCLUDE_FLAG "--src-root")
-  if (${LLVM_VERSION} VERSION_GREATER_EQUAL 16)
-    set(LLVM_CONFIG_INCLUDE_FLAG "--includedir")
-  endif()
   execute_process(
-    COMMAND ${LLVM_CONFIG_EXECUTABLE} ${LLVM_CONFIG_INCLUDE_FLAG}
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
     OUTPUT_VARIABLE _llvmSourceRoot
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )

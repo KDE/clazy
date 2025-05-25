@@ -8,7 +8,6 @@
 
 #include "Utils.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 #include "StmtBodyRange.h"
 #include "StringUtils.h"
 #include "clazy_stl.h"
@@ -717,7 +716,7 @@ const CXXRecordDecl *Utils::recordForMemberCall(CXXMemberCallExpr *call, std::st
 bool Utils::isAscii(StringLiteral *lt)
 {
     // 'é' for some reason has isAscii() == true, so also call containsNonAsciiOrNull
-    return lt && clazy::isAscii(lt) && !lt->containsNonAsciiOrNull();
+    return lt && lt->isOrdinary() && !lt->containsNonAsciiOrNull();
 }
 
 bool Utils::isInDerefExpression(Stmt *s, ParentMap *map)

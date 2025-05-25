@@ -89,12 +89,7 @@ include_directories(${CLANG_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURR
 link_directories("${LLVM_INSTALL_PREFIX}/lib" ${LLVM_LIBRARY_DIRS})
 
 set(clang_tooling_refactoring_lib clangToolingRefactoring)
-
-if (${LLVM_VERSION} VERSION_GREATER_EQUAL "19.0.0")
-  set(clang_support_lib clangSupport)
-elseif (${LLVM_VERSION} VERSION_GREATER_EQUAL "15.0.0")
-  set(clang_support_lib clangSupport)
-endif()
+set(clang_support_lib clangSupport)
 
 macro(link_to_llvm name is_standalone)
   if (CLAZY_LINK_CLANG_DYLIB)

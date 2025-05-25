@@ -80,12 +80,7 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
             if (sourceManager.isBeforeInSLocAddrSpace(usageLoc, u->getBeginLoc())) {
                 continue;
             }
-#if LLVM_VERSION_MAJOR >= 19
             visibleContexts.push_back(ns->getFirstDecl());
-#else
-
-            visibleContexts.push_back(ns->getOriginalNamespace());
-#endif
         }
     }
 

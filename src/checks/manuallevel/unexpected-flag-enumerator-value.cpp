@@ -7,7 +7,6 @@
 
 #include "unexpected-flag-enumerator-value.h"
 #include "HierarchyUtils.h"
-#include "SourceCompatibilityHelpers.h"
 
 #include <clang/AST/AST.h>
 
@@ -48,15 +47,11 @@ static bool isIntentionallyNotPowerOf2(EnumConstantDecl *en)
         return true;
     }
 
-#if LLVM_VERSION_MAJOR >= 17
     if (val.isShiftedMask() && val.popcount() >= MinOnesToQualifyAsMask) {
-#else
-    if (val.isShiftedMask() && val.countPopulation() >= MinOnesToQualifyAsMask) {
-#endif
         return true;
     }
 
-    if (clazy::contains_lower(en->getName(), "mask")) {
+    if (en->getName().contains_insensitive("mask")) {
         return true;
     }
 
@@ -157,11 +152,7 @@ void UnexpectedFlagEnumeratorValue::VisitDecl(clang::Decl *decl)
 
     for (EnumConstantDecl *enumerator : enumerators) {
         const auto &initVal = enumerator->getInitVal();
-#if LLVM_VERSION_MAJOR >= 17
         if (!initVal.isPowerOf2() && !initVal.isZero() && !initVal.isNegative()) {
-#else
-        if (!initVal.isPowerOf2() && !initVal.isNullValue() && !initVal.isNegative()) {
-#endif
             if (isIntentionallyNotPowerOf2(enumerator)) {
                 continue;
             }

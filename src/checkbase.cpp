@@ -95,12 +95,8 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
                                                     clazy::OptionalFileEntryRef File,
                                                     llvm::StringRef SearchPath,
                                                     llvm::StringRef RelativePath,
-#if LLVM_VERSION_MAJOR >= 19
                                                     const clang::Module *SuggestedModule,
                                                     bool ModuleImported,
-#else
-                                                    const clang::Module *Imported,
-#endif
                                                     clang::SrcMgr::CharacteristicKind FileType)
 {
     check->VisitInclusionDirective(HashLoc,
@@ -111,12 +107,8 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
                                    File,
                                    SearchPath,
                                    RelativePath,
-#if LLVM_VERSION_MAJOR >= 19
                                    SuggestedModule,
                                    ModuleImported,
-#else
-                                   Imported,
-#endif
                                    FileType);
 }
 
@@ -199,9 +191,7 @@ void CheckBase::VisitInclusionDirective(clang::SourceLocation,
                                         llvm::StringRef,
                                         llvm::StringRef,
                                         const clang::Module *,
-#if LLVM_VERSION_MAJOR >= 19
                                         bool ModuleImported,
-#endif
                                         clang::SrcMgr::CharacteristicKind)
 {
     // Overriden in derived classes

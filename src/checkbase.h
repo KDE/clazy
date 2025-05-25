@@ -28,13 +28,7 @@
 
 namespace clazy
 {
-#if LLVM_VERSION_MAJOR >= 16
 using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
-#elif LLVM_VERSION_MAJOR >= 15
-using OptionalFileEntryRef = clang::Optional<clang::FileEntryRef>;
-#else
-using OptionalFileEntryRef = const clang::FileEntry *;
-#endif
 }
 
 namespace clang
@@ -95,12 +89,8 @@ public:
                             clazy::OptionalFileEntryRef File,
                             llvm::StringRef SearchPath,
                             llvm::StringRef RelativePath,
-#if LLVM_VERSION_MAJOR >= 19
                             const clang::Module *SuggestedModule,
                             bool ModuleImported,
-#else
-                            const clang::Module *Imported,
-#endif
                             clang::SrcMgr::CharacteristicKind FileType) override;
 
 private:
@@ -170,12 +160,8 @@ protected:
                                          clazy::OptionalFileEntryRef File,
                                          llvm::StringRef SearchPath,
                                          llvm::StringRef RelativePath,
-#if LLVM_VERSION_MAJOR >= 19
                                          const clang::Module *SuggestedModule,
                                          bool ModuleImported,
-#else
-                                         const clang::Module *Imported,
-#endif
                                          clang::SrcMgr::CharacteristicKind FileType);
 
     void enablePreProcessorCallbacks();

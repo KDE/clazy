@@ -6,7 +6,6 @@
 */
 
 #include "SuppressionManager.h"
-#include "SourceCompatibilityHelpers.h"
 #include "clazy_stl.h"
 
 #include <clang/Basic/SourceLocation.h>
@@ -80,9 +79,8 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
     auto it = m_processedFileIDs.insert({hash, Suppressions()}).first;
     Suppressions &suppressions = (*it).second;
 
-    bool invalid = false;
-    auto buffer = clazy::getBuffer(sm, id, &invalid);
-    if (invalid) {
+    auto buffer = sm.getBufferOrNone(id);
+    if (!buffer.has_value()) {
         llvm::errs() << "SuppressionManager::parseFile: Invalid buffer ";
         if (buffer) {
             llvm::errs() << buffer->getBuffer() << "\n";
@@ -90,7 +88,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
         return;
     }
 
-    auto lexer = GET_LEXER(id, buffer, sm, lo);
+    clang::Lexer lexer(id, buffer.value(), sm, lo);
     lexer.SetCommentRetentionState(true);
 
     Token token;
