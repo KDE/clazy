@@ -11,6 +11,9 @@
         }, 
         {
             "filename" : "qlist.cpp"
+        },
+        {
+            "filename" : "qspinbox_crash.cpp"
         }
     ]
 }
