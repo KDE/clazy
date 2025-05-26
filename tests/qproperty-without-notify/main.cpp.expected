@@ -1,4 +1,4 @@
 qproperty-without-notify/main.cpp:6:5: warning: Q_PROPERTY should have either NOTIFY or CONSTANT [-Wclazy-qproperty-without-notify]
 qproperty-without-notify/main.cpp:9:5: warning: Q_PROPERTY should have either NOTIFY or CONSTANT [-Wclazy-qproperty-without-notify]
-qproperty-without-notify/main.cpp:21:5: warning: Q_PROPERTY should have either NOTIFY or CONSTANT [-Wclazy-qproperty-without-notify]
-qproperty-without-notify/main.cpp:22:5: warning: Q_PROPERTY should have either NOTIFY or CONSTANT [-Wclazy-qproperty-without-notify]
+qproperty-without-notify/main.cpp:23:5: warning: Q_PROPERTY should have either NOTIFY or CONSTANT [-Wclazy-qproperty-without-notify]
+qproperty-without-notify/main.cpp:24:5: warning: Q_PROPERTY should have either NOTIFY or CONSTANT [-Wclazy-qproperty-without-notify]

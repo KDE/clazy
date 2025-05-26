@@ -9,10 +9,12 @@ class MyObj : public QObject
     Q_PROPERTY(int foo3 READ foo3 WRITE setFoo) // Warn
 };
 
-class MyGadget
+class MyGadget // No signals allowed
 {
     Q_GADGET
     Q_PROPERTY(int foo READ foo) // Ok
+    Q_PROPERTY(int foo2 READ foo2 WRITE setFoo2)
+    Q_PROPERTY(int foo3 MEMBER foo3)
 };
 
 class MyObj2 : public QObject
