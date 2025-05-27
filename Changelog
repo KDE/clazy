@@ -205,3 +205,5 @@
   - (...)
 
   - <dont forget changelog entry for used-qunused-variable>
+
+  - <dont forget changelog entry for mutex-detaching>
