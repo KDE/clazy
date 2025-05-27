@@ -1,0 +1,161 @@
+/*
+    Copyright (C) 2025 Author <your@email>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
+#include "mutex-detaching.h"
+#include "HierarchyUtils.h"
+#include "QtUtils.h"
+#include "TypeUtils.h"
+#include "Utils.h"
+#include "clang/Basic/OperatorKinds.h"
+
+#include <clang/AST/AST.h>
+
+using namespace clang;
+using namespace clang::ast_matchers;
+
+template<typename T>
+const T *getParentOfTypeRecursive(const DynTypedNode &node, ASTContext &context, int depth = 0)
+{
+    if (depth > 20) // avoid infinite recursion
+        return nullptr;
+
+    auto parents = context.getParents(node);
+    for (const auto &parent : parents) {
+        if (const T *result = parent.get<T>())
+            return result;
+        if (const T *recursive = getParentOfTypeRecursive<T>(parent, context, depth + 1))
+            return recursive;
+    }
+
+    return nullptr;
+}
+
+bool isWithinRange(const SourceRange callLocRange, SourceRange range, const SourceManager &SM)
+{
+    return !SM.isBeforeInTranslationUnit(callLocRange.getBegin(), range.getBegin()) && !SM.isBeforeInTranslationUnit(range.getEnd(), callLocRange.getEnd());
+}
+
+#include "clang/AST/ASTContext.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/RecursiveASTVisitor.h"
+
+using namespace clang;
+
+class MemberCallVisitor : public RecursiveASTVisitor<MemberCallVisitor>
+{
+public:
+    explicit MemberCallVisitor(ASTContext *Context, CheckBase *check, SourceRange lockRange)
+        : Context(Context)
+        , check(check)
+        , lockRange(lockRange)
+    {
+    }
+
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const *call)
+    {
+        // We only care about members for now
+        if (!llvm::isa<MemberExpr>(call->getArg(0))) {
+            return true;
+        }
+
+        std::string className = "";
+        if (const auto *memberExpr = dyn_cast<MemberExpr>(call->getArg(0))) {
+            QualType qt = memberExpr->getType(); // 'QMap<QString, QString>'
+            if (qt->isRecordType()) {
+                className = qt->getAs<RecordType>()->getDecl()->getNameAsString();
+            }
+        }
+        if (className.empty()) {
+            return true;
+        }
+
+        const auto methods = clazy::detachingMethodsWithConstCounterParts();
+        const auto method = methods.find(className);
+        if (method == methods.end()) {
+            return true;
+        }
+        const auto methodName = std::string("operator") + getOperatorSpelling(call->getOperator());
+        if (std::find(method->second.begin(), method->second.end(), methodName) == method->second.end()) {
+            return true;
+        }
+
+        if (!isWithinRange(call->getSourceRange(), lockRange, Context->getSourceManager())) {
+            return true;
+        }
+
+        check->emitWarning(call, "Possibly detaching a member while inside of a read-only mutex scope", true);
+
+        return true;
+    }
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const *call)
+    {
+        // We only care about members for now
+        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument())) {
+            return true;
+        }
+
+        const auto methods = clazy::detachingMethodsWithConstCounterParts();
+        const auto method = methods.find(call->getRecordDecl()->getNameAsString());
+        if (method == methods.end()) {
+            return true;
+        }
+        const auto methodName = clazy::name(call->getMethodDecl());
+        if (std::find(method->second.begin(), method->second.end(), methodName) == method->second.end()) {
+            return true;
+        }
+
+        if (!isWithinRange(call->getSourceRange(), lockRange, Context->getSourceManager())) {
+            return true;
+        }
+
+        check->emitWarning(call, "Possibly detaching a member while inside of a read-only mutex scope", true);
+
+        return true;
+    }
+
+private:
+    ASTContext *const Context;
+    CheckBase *const check;
+    const SourceRange lockRange;
+};
+
+class MutexDetaching_Callback : public ClazyAstMatcherCallback
+{
+public:
+    using ClazyAstMatcherCallback::ClazyAstMatcherCallback;
+
+    void run(const MatchFinder::MatchResult &result) override
+    {
+        const auto *constructExpr = result.Nodes.getNodeAs<CXXConstructExpr>("qreadlockerCtor");
+        // constructExpr->dump();
+        const auto parents = result.Context->getParents(*constructExpr);
+        llvm::errs() << parents.size() << "\n";
+        for (auto parent : parents) {
+            if (auto surroundingFnc = getParentOfTypeRecursive<CompoundStmt>(parent, *result.Context, 10)) {
+                MemberCallVisitor visitor(result.Context, m_check, SourceRange(constructExpr->getBeginLoc(), surroundingFnc->getEndLoc()));
+                visitor.TraverseStmt(const_cast<CompoundStmt *>(surroundingFnc));
+            }
+        }
+    }
+};
+MutexDetaching::MutexDetaching(const std::string &name, ClazyContext *context)
+    : CheckBase(name, context)
+    , m_astMatcherCallBack(new MutexDetaching_Callback(this))
+{
+}
+
+void MutexDetaching::VisitDecl(clang::Decl *decl)
+{
+}
+
+void MutexDetaching::VisitStmt(clang::Stmt *stmt)
+{
+}
+
+void MutexDetaching::registerASTMatchers(MatchFinder &finder)
+{
+    finder.addMatcher(cxxConstructExpr(hasType(recordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack);
+}
