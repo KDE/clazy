@@ -13,8 +13,8 @@ class Test
     {
         m_someOtherMap.find(fileName); // OK, we did not pretend to lock anything here...
         QReadLocker locker(&m_projectLock);
-        auto it = m_fileToProjectParts.find(fileName); // WARN
-        auto lookup = m_fileToProjectParts[fileName]; // WARN
+        auto it = m_fileToProjectParts.find(fileName); // WARN, possible detach
+        auto lookup = m_fileToProjectParts[fileName]; // WARN, possible detach
         Q_UNUSED(lookup);
         auto it3 = QMap<QString, QString>().find(fileName); // OK, not a member
     }
@@ -33,5 +33,13 @@ class Test
         }
 
         auto it = m_fileToProjectParts.find(fileName); // OK, outside of locker
+    }
+
+    void testUnlock(const QString &fileName)
+    {
+        QReadLocker locker(&m_projectLock);
+        auto it = m_fileToProjectParts.find(fileName); // WARN
+        locker.unlock();
+        it = m_fileToProjectParts.find(fileName); // OK, we unlocked
     }
 };

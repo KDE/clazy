@@ -1,0 +1,3 @@
+mutex-detaching/main.cpp:16:19: warning: Possibly detaching a member while inside of a read-only mutex scope [-Wclazy-mutex-detaching]
+mutex-detaching/main.cpp:17:23: warning: Possibly detaching a member while inside of a read-only mutex scope [-Wclazy-mutex-detaching]
+mutex-detaching/main.cpp:41:19: warning: Possibly detaching a member while inside of a read-only mutex scope [-Wclazy-mutex-detaching]
