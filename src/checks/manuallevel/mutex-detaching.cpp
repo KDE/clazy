@@ -5,13 +5,13 @@
 */
 
 #include "mutex-detaching.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
+#include "clang/AST/ASTContext.h"
+#include "clang/AST/ExprCXX.h"
+#include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/OperatorKinds.h"
-
-#include <clang/AST/AST.h>
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -37,10 +37,6 @@ bool isWithinRange(const SourceRange callLocRange, SourceRange range, const Sour
 {
     return !SM.isBeforeInTranslationUnit(callLocRange.getBegin(), range.getBegin()) && !SM.isBeforeInTranslationUnit(range.getEnd(), callLocRange.getEnd());
 }
-
-#include "clang/AST/ASTContext.h"
-#include "clang/AST/ExprCXX.h"
-#include "clang/AST/RecursiveASTVisitor.h"
 
 using namespace clang;
 
@@ -92,17 +88,24 @@ public:
     }
     bool VisitCXXMemberCallExpr(CXXMemberCallExpr const *call)
     {
+        const auto recordName = call->getRecordDecl()->getNameAsString();
         // We only care about members for now
-        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument())) {
+        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument()) && recordName != "QReadLocker") {
             return true;
         }
 
         const auto methods = clazy::detachingMethodsWithConstCounterParts();
-        const auto method = methods.find(call->getRecordDecl()->getNameAsString());
+        const auto methodName = clazy::name(call->getMethodDecl());
+        if (recordName == "QReadLocker" && methodName == "unlock") {
+            lockRange.setEnd(call->getEndLoc());
+            return true;
+        }
+
+        const auto method = methods.find(recordName);
+
         if (method == methods.end()) {
             return true;
         }
-        const auto methodName = clazy::name(call->getMethodDecl());
         if (std::find(method->second.begin(), method->second.end(), methodName) == method->second.end()) {
             return true;
         }
@@ -119,7 +122,7 @@ public:
 private:
     ASTContext *const Context;
     CheckBase *const check;
-    const SourceRange lockRange;
+    SourceRange lockRange;
 };
 
 class MutexDetaching_Callback : public ClazyAstMatcherCallback
