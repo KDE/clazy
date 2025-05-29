@@ -103,7 +103,7 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsW
         map["QQueue"].push_back({"head"});
         map["QMultiMap"] = map["QMap"];
         map["QMultiHash"] = map["QHash"];
-        map["QString"] = {"begin", "end", "data", "operator[]"};
+        map["QString"] = {"begin", "end", "rbegin", "rend", "data", "operator[]"};
         map["QByteArray"] = {"begin", "end", "rbegin", "rend", "data", "operator[]"};
         map["QImage"] = {"bits", "scanLine"};
         map["QJsonObject"] = {"begin", "end", "operator[]", "find"};
