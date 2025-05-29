@@ -22,6 +22,9 @@ const T *getParentOfTypeRecursive(const DynTypedNode &node, ASTContext &context,
     if (depth > 20) // avoid infinite recursion
         return nullptr;
 
+    if (const T *result = node.get<T>()) {
+        return result;
+    }
     auto parents = context.getParents(node);
     for (const auto &parent : parents) {
         if (const T *result = parent.get<T>())
@@ -90,13 +93,13 @@ public:
     {
         const auto recordName = call->getRecordDecl()->getNameAsString();
         // We only care about members for now
-        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument()) && recordName != "QReadLocker") {
+        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument()) && recordName != "QReadLocker" && recordName != "QReadWriteLock") {
             return true;
         }
 
         const auto methods = clazy::detachingMethodsWithConstCounterParts();
         const auto methodName = clazy::name(call->getMethodDecl());
-        if (recordName == "QReadLocker" && methodName == "unlock") {
+        if ((recordName == "QReadLocker" || recordName == "QReadWriteLock") && methodName == "unlock") {
             lockRange.setEnd(call->getEndLoc());
             return true;
         }
@@ -132,15 +135,28 @@ public:
 
     void run(const MatchFinder::MatchResult &result) override
     {
-        const auto *constructExpr = result.Nodes.getNodeAs<CXXConstructExpr>("qreadlockerCtor");
-        // constructExpr->dump();
-        const auto parents = result.Context->getParents(*constructExpr);
-        llvm::errs() << parents.size() << "\n";
-        for (auto parent : parents) {
-            if (auto surroundingFnc = getParentOfTypeRecursive<CompoundStmt>(parent, *result.Context, 10)) {
-                MemberCallVisitor visitor(result.Context, m_check, SourceRange(constructExpr->getBeginLoc(), surroundingFnc->getEndLoc()));
-                visitor.TraverseStmt(const_cast<CompoundStmt *>(surroundingFnc));
+        const auto getSorroundingCompondStmt = [&result](auto &expr) -> const CompoundStmt * {
+            const auto parents = result.Context->getParents(expr);
+            for (auto parent : parents) {
+                if (auto surroundingFnc = getParentOfTypeRecursive<CompoundStmt>(parent, *result.Context)) {
+                    return surroundingFnc;
+                }
             }
+            return nullptr;
+        };
+
+        if (const auto *constructExpr = result.Nodes.getNodeAs<CXXConstructExpr>("qreadlockerCtor")) {
+            if (const auto surroundingStmt = getSorroundingCompondStmt(*constructExpr)) {
+                MemberCallVisitor visitor(result.Context, m_check, SourceRange(constructExpr->getBeginLoc(), surroundingStmt->getEndLoc()));
+                visitor.TraverseStmt(const_cast<CompoundStmt *>(surroundingStmt));
+            }
+        }
+
+        if (const auto lockCall = result.Nodes.getNodeAs<CXXMemberCallExpr>("qreadwritelockCall")) {
+            const auto surroundingStmt = getSorroundingCompondStmt(*lockCall);
+            // The end location for sure needs to be adjusted within the visitor. We just assume it is going to be in the same block the lock was locked
+            MemberCallVisitor visitor(result.Context, m_check, SourceRange(lockCall->getBeginLoc(), surroundingStmt->getEndLoc()));
+            visitor.TraverseStmt(const_cast<CompoundStmt *>(surroundingStmt));
         }
     }
 };
@@ -160,5 +176,8 @@ void MutexDetaching::VisitStmt(clang::Stmt *stmt)
 
 void MutexDetaching::registerASTMatchers(MatchFinder &finder)
 {
-    finder.addMatcher(cxxConstructExpr(hasType(recordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack);
+    finder.addMatcher(cxxConstructExpr(hasType(cxxRecordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack);
+    finder.addMatcher(
+        cxxMemberCallExpr(on(hasType(cxxRecordDecl(hasName("QReadWriteLock")))), callee(cxxMethodDecl(hasName("lockForRead")))).bind("qreadwritelockCall"),
+        m_astMatcherCallBack);
 }
