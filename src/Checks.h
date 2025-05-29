@@ -59,6 +59,7 @@
 #include "checks/level1/qstring-left.h"
 #include "checks/level1/range-loop-detach.h"
 #include "checks/level1/range-loop-reference.h"
+#include "checks/level1/readlock-detaching.h"
 #include "checks/level1/returning-data-from-temporary.h"
 #include "checks/level1/rule-of-two-soft.h"
 #include "checks/level1/skipped-base-method.h"
@@ -85,7 +86,6 @@
 #include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/jnisignatures.h"
-#include "checks/manuallevel/mutex-detaching.h"
 #include "checks/manuallevel/qbytearray-conversion-to-c-style.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
 #include "checks/manuallevel/qproperty-type-mismatch.h"
@@ -130,7 +130,6 @@ void CheckManager::registerChecks()
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<MutexDetaching>("mutex-detaching", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<QBytearrayConversionToCStyle>("qbytearray-conversion-to-c-style", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qbytearray-conversion-to-c-style", "qbytearray-conversion-to-c-style");
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
@@ -225,6 +224,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-range-loop-add-qasconst", "range-loop-detach");
     registerCheck(check<RangeLoopReference>("range-loop-reference", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-range-loop-add-ref", "range-loop-reference");
+    registerCheck(check<ReadlockDetaching>("readlock-detaching", CheckLevel1, RegisteredCheck::Option_None));
     registerCheck(check<ReturningDataFromTemporary>("returning-data-from-temporary", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RuleOfTwoSoft>("rule-of-two-soft", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<SkippedBaseMethod>("skipped-base-method", CheckLevel1, RegisteredCheck::Option_VisitsStmts));

@@ -12,10 +12,10 @@
 /**
  * See README-mutex-detaching.md for more info.
  */
-class MutexDetaching : public CheckBase
+class ReadlockDetaching : public CheckBase
 {
 public:
-    explicit MutexDetaching(const std::string &name, ClazyContext *context);
+    explicit ReadlockDetaching(const std::string &name, ClazyContext *context);
     void VisitDecl(clang::Decl *) override;
     void VisitStmt(clang::Stmt *) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;

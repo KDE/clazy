@@ -10,6 +10,9 @@
 - install-event-filter: Fix crash when there is no child at the given depth. BUG: 464372
 - `clazy-standalone --version` contains git version ( output of `git describe`) if it is not a tagged commit
 
+- New checks:
+    - readlock-detaching
+
 * v1.14 (April 27, 2025)
 - Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2
 - Support for compilation against Clang 20
@@ -209,6 +212,3 @@
 * v0.0.1 (June 10th, 2015)
   - (...)
 
-  - <dont forget changelog entry for used-qunused-variable>
-
-  - <dont forget changelog entry for mutex-detaching>
