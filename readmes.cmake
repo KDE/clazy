@@ -6,7 +6,6 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-ifndef-define-typo.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-jni-signatures.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-mutex-detaching.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qbytearray-conversion-to-c-style.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
@@ -86,6 +85,7 @@ SET(README_LEVEL1_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-left.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop-detach.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-range-loop-reference.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-readlock-detaching.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-returning-data-from-temporary.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-rule-of-two-soft.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-skipped-base-method.md

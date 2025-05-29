@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "mutex-detaching.h"
+#include "readlock-detaching.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -128,7 +128,7 @@ private:
     SourceRange lockRange;
 };
 
-class MutexDetaching_Callback : public ClazyAstMatcherCallback
+class ReadlockDetaching_Callback : public ClazyAstMatcherCallback
 {
 public:
     using ClazyAstMatcherCallback::ClazyAstMatcherCallback;
@@ -160,21 +160,21 @@ public:
         }
     }
 };
-MutexDetaching::MutexDetaching(const std::string &name, ClazyContext *context)
+ReadlockDetaching::ReadlockDetaching(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
-    , m_astMatcherCallBack(new MutexDetaching_Callback(this))
+    , m_astMatcherCallBack(new ReadlockDetaching_Callback(this))
 {
 }
 
-void MutexDetaching::VisitDecl(clang::Decl *decl)
+void ReadlockDetaching::VisitDecl(clang::Decl *decl)
 {
 }
 
-void MutexDetaching::VisitStmt(clang::Stmt *stmt)
+void ReadlockDetaching::VisitStmt(clang::Stmt *stmt)
 {
 }
 
-void MutexDetaching::registerASTMatchers(MatchFinder &finder)
+void ReadlockDetaching::registerASTMatchers(MatchFinder &finder)
 {
     finder.addMatcher(cxxConstructExpr(hasType(cxxRecordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack);
     finder.addMatcher(

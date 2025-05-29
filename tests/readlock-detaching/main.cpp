@@ -3,12 +3,12 @@
 #include <QtCore/QMap>
 #include <QtCore/QReadWriteLock>
 
+
 class Test
 {
     QReadWriteLock m_projectLock;
     QMap<QString, QString> m_fileToProjectParts;
     QMap<QString, QString> m_someOtherMap;
-    QReadWriteLock m_readWriteLock;
 
     void test(const QString &fileName)
     {
@@ -47,9 +47,9 @@ class Test
     void testLockUnlock(const QString &fileName)
     {
         auto it = m_fileToProjectParts.find(fileName); // OK, we did not lock yet
-        m_readWriteLock.lockForRead();
+        m_projectLock.lockForRead();
         it = m_fileToProjectParts.find(fileName); // WARN, inside of read-only lock
-        m_readWriteLock.unlock();
+        m_projectLock.unlock();
         it = m_fileToProjectParts.find(fileName); // OK, we unlocked
     }
 };

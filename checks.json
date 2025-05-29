@@ -780,8 +780,8 @@
             "visits_decls": true
         },
         {
-            "name": "mutex-detaching",
-            "level": -1,
+            "name": "readlock-detaching",
+            "level": 1,
             "categories": ["bug"]
         }
     ]
