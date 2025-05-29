@@ -57,7 +57,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    const auto *decl = dyn_cast<CXXRecordDecl>(memberExpr->getBase()->getType()->getAsCXXRecordDecl());
+    const auto *decl = memberExpr->getBase()->getType()->getAsCXXRecordDecl();
     if (!decl || !decl->getDefinition()
         || !(decl->getNameAsString() == "QVariant" || decl->getNameAsString() == "QHash" || decl->getNameAsString() == "QMap")) {
         return;
