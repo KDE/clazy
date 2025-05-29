@@ -8,6 +8,7 @@ class Test
     QReadWriteLock m_projectLock;
     QMap<QString, QString> m_fileToProjectParts;
     QMap<QString, QString> m_someOtherMap;
+    QReadWriteLock m_readWriteLock;
 
     void test(const QString &fileName)
     {
@@ -40,6 +41,15 @@ class Test
         QReadLocker locker(&m_projectLock);
         auto it = m_fileToProjectParts.find(fileName); // WARN
         locker.unlock();
+        it = m_fileToProjectParts.find(fileName); // OK, we unlocked
+    }
+
+    void testLockUnlock(const QString &fileName)
+    {
+        auto it = m_fileToProjectParts.find(fileName); // OK, we did not lock yet
+        m_readWriteLock.lockForRead();
+        it = m_fileToProjectParts.find(fileName); // WARN, inside of read-only lock
+        m_readWriteLock.unlock();
         it = m_fileToProjectParts.find(fileName); // OK, we unlocked
     }
 };
