@@ -1,7 +1,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 
-
+QMap<int,int> getMap() { return {}; }
 QMultiMap<int,int> getMultiMap() { return {}; }
 void testDerivedClass()
 {
@@ -15,8 +15,8 @@ void maps()
     map.value(0).first(); // OK for Qt5, value() returns const T
     map[0].removeAll("asd"); // OK
     map.values().first(); // OK, QMap::values() isn't shared
+    getMap().keyValueBegin(); // Warning
 }
-
 void test_ctor()
 {
     QStringList().first();

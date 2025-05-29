@@ -158,3 +158,11 @@ void testJsonDetach() {
     getObj().find(QLatin1String("bla")); // Warning
     getObj().value(QLatin1String("bla")); // OK
 }
+
+void testRIterators()
+{
+    getList().rbegin();
+    getList().rend();
+    getStringList().rbegin();
+    getStringList().rend();
+}

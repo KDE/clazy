@@ -1,2 +1,3 @@
 detaching-temporary/multi_containers.cpp:8:5: warning: Don't call QMap::begin() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/multi_containers.cpp:9:5: warning: Modifying temporary container is pointless and it also detaches [-Wclazy-detaching-temporary]
+detaching-temporary/multi_containers.cpp:18:5: warning: Don't call QMap::keyValueBegin() on temporary [-Wclazy-detaching-temporary]

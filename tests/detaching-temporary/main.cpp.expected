@@ -14,3 +14,7 @@ detaching-temporary/main.cpp:135:5: warning: Don't call QString::begin() on temp
 detaching-temporary/main.cpp:136:5: warning: Don't call QString::operator[]() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/main.cpp:157:5: warning: Don't call QJsonObject::operator[]() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/main.cpp:158:5: warning: Don't call QJsonObject::find() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:164:5: warning: Don't call QList::rbegin() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:165:5: warning: Don't call QList::rend() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:166:5: warning: Don't call QList::rbegin() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:167:5: warning: Don't call QList::rend() on temporary [-Wclazy-detaching-temporary]

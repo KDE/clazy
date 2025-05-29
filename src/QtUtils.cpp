@@ -91,11 +91,11 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsW
 {
     static std::unordered_map<std::string, std::vector<StringRef>> map;
     if (map.empty()) {
-        map["QList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
-        map["QVector"] = {"first", "last", "begin", "end", "front", "back", "data", "operator[]"};
-        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]", "lowerBound", "upperBound"};
+        map["QList"] = {"first", "last", "begin", "end", "rbegin", "rend", "front", "back", "operator[]"};
+        map["QVector"] = {"first", "last", "begin", "end", "rbegin", "rend", "front", "back", "data", "operator[]"};
+        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]", "lowerBound", "upperBound", "keyValueBegin", "keyValueEnd"};
         map["QHash"] = {"begin", "end", "find", "operator[]"};
-        map["QLinkedList"] = {"first", "last", "begin", "end", "front", "back", "operator[]"};
+        map["QLinkedList"] = {"first", "last", "begin", "end", "rbegin", "rend", "front", "back", "operator[]"};
         map["QSet"] = {"begin", "end", "find", "operator[]"};
         map["QStack"] = map["QVector"];
         map["QStack"].push_back({"top"});
@@ -104,7 +104,7 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsW
         map["QMultiMap"] = map["QMap"];
         map["QMultiHash"] = map["QHash"];
         map["QString"] = {"begin", "end", "data", "operator[]"};
-        map["QByteArray"] = {"data", "operator[]"};
+        map["QByteArray"] = {"begin", "end", "rbegin", "rend", "data", "operator[]"};
         map["QImage"] = {"bits", "scanLine"};
         map["QJsonObject"] = {"begin", "end", "operator[]", "find"};
     }
