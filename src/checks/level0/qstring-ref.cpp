@@ -24,7 +24,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <array>
 #include <vector>
 
 using namespace clang;
@@ -40,7 +39,7 @@ static bool isInterestingFirstMethod(CXXMethodDecl *method)
         return false;
     }
 
-    static const llvm::SmallVector<StringRef, 3> list{"left", "mid", "right"};
+    static const std::vector<StringRef> list{"left", "mid", "right"};
     return clazy::contains(list, clazy::name(method));
 }
 
@@ -50,7 +49,7 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
         return false;
     }
 
-    static const std::array<StringRef, 19> list{
+    static const std::vector<StringRef> list{
         "compare", "contains", "count",   "startsWith", "endsWith", "indexOf", "isEmpty",     "isNull",   "lastIndexOf", "length",
         "size",    "toDouble", "toFloat", "toInt",      "toUInt",   "toULong", "toULongLong", "toUShort", "toUcs4",
     };
@@ -68,7 +67,7 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
         return false;
     }
 
-    static const std::array<StringRef, 8> list{"append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth"};
+    static const std::vector<StringRef> list{"append", "compare", "count", "indexOf", "endsWith", "lastIndexOf", "localAwareCompare", "startsWidth"};
 
     if (clazy::contains(list, clazy::name(method))) {
         return true;
