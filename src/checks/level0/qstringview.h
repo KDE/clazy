@@ -24,10 +24,10 @@ class CXXMemberCallExpr;
  *
  * See README-qstringref for more info.
  */
-class StringRefCandidates : public CheckBase
+class QStringViewCandidates : public CheckBase
 {
 public:
-    StringRefCandidates(const std::string &name, ClazyContext *context);
+    QStringViewCandidates(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

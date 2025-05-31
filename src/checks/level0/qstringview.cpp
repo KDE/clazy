@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "qstring-ref.h"
+#include "qstringview.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
 #include "HierarchyUtils.h"
@@ -28,7 +28,7 @@
 
 using namespace clang;
 
-StringRefCandidates::StringRefCandidates(const std::string &name, ClazyContext *context)
+QStringViewCandidates::QStringViewCandidates(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
 }
@@ -81,7 +81,7 @@ static bool isMethodReceivingQStringRef(CXXMethodDecl *method)
     return false;
 }
 
-void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
+void QStringViewCandidates::VisitStmt(clang::Stmt *stmt)
 {
     // Here we look for code like str.firstMethod().secondMethod(), where firstMethod() is for example mid() and secondMethod is for example, toInt()
 
@@ -117,7 +117,7 @@ static bool containsChild(Stmt *s, Stmt *target)
     return false;
 }
 
-bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt *s) const
+bool QStringViewCandidates::isConvertedToSomethingElse(clang::Stmt *s) const
 {
     // While passing a QString to the QVariant ctor works fine, passing QStringRef doesn't
     // So let's not warn when QStrings are cast to something else.
@@ -140,7 +140,7 @@ bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt *s) const
 }
 
 // Catches cases like: int i = s.mid(1, 1).toInt()
-bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
+bool QStringViewCandidates::processCase1(CXXMemberCallExpr *memberCall)
 {
     // In the AST secondMethod() is parent of firstMethod() call, and will be visited first (because at runtime firstMethod() is resolved first().
     // So check for interesting second method first
@@ -173,7 +173,7 @@ bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 }
 
 // Catches cases like: s.append(s2.mid(1, 1));
-bool StringRefCandidates::processCase2(CallExpr *call)
+bool QStringViewCandidates::processCase2(CallExpr *call)
 {
     auto *memberCall = dyn_cast<CXXMemberCallExpr>(call);
     auto *operatorCall = memberCall ? nullptr : dyn_cast<CXXOperatorCallExpr>(call);
@@ -217,7 +217,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
     return true;
 }
 
-std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
+std::vector<FixItHint> QStringViewCandidates::fixit(CXXMemberCallExpr *call)
 {
     auto *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {

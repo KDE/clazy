@@ -284,8 +284,8 @@
             "visits_decls" : true
         },
         {
-            "name"  : "qstring-ref",
-            "class_name" : "StringRefCandidates",
+            "name"  : "qstringview",
+            "class_name" : "QStringViewCandidates",
             "level" : 0,
             "categories" : ["performance", "qstring"],
             "fixits" : [

@@ -272,7 +272,7 @@ clazy runs all checks from level1 by default.
     - [qstring-arg](docs/checks/README-qstring-arg.md)
     - [qstring-comparison-to-implicit-char](docs/checks/README-qstring-comparison-to-implicit-char.md)
     - [qstring-insensitive-allocation](docs/checks/README-qstring-insensitive-allocation.md)
-    - [qstring-ref](docs/checks/README-qstring-ref.md)    (fix-missing-qstringref)
+    - [qstringview](docs/checks/README-qstringview.md)    (fix-missing-qstringref)
     - [qt-macros](docs/checks/README-qt-macros.md)
     - [strict-iterators](docs/checks/README-strict-iterators.md)
     - [temporary-iterator](docs/checks/README-temporary-iterator.md)

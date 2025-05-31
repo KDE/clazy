@@ -26,7 +26,7 @@ clazylib_export.h
 output.log
 /clazy.bat
 /bin/*
-/build/
+/build*/
 clazy.1
 /dev-scripts/*.log
 clanglazy_export.h
