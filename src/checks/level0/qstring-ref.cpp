@@ -50,8 +50,9 @@ static bool isInterestingSecondMethod(CXXMethodDecl *method, const clang::LangOp
     }
 
     static const std::vector<StringRef> list{
-        "compare", "contains", "count",   "startsWith", "endsWith", "indexOf", "isEmpty",     "isNull",   "lastIndexOf", "length",
-        "size",    "toDouble", "toFloat", "toInt",      "toUInt",   "toULong", "toULongLong", "toUShort", "toUcs4",
+        "arg",      "at",      "back",  "compare", "contains", "count",       "empty",    "startsWith", "endsWith",
+        "indexOf",  "first",   "front", "isEmpty", "isNull",   "lastIndexOf", "length",   "mid",        "size",
+        "toDouble", "toFloat", "toInt", "toUInt",  "toULong",  "toULongLong", "toUShort", "toUcs4",
     };
 
     if (!clazy::contains(list, clazy::name(method))) {
@@ -85,7 +86,10 @@ void StringRefCandidates::VisitStmt(clang::Stmt *stmt)
     // Here we look for code like str.firstMethod().secondMethod(), where firstMethod() is for example mid() and secondMethod is for example, toInt()
 
     auto *call = dyn_cast<CallExpr>(stmt);
-    if (!call || processCase1(dyn_cast<CXXMemberCallExpr>(call))) {
+    if (!call) {
+        return;
+    }
+    if (auto memberCall = dyn_cast<CXXMemberCallExpr>(call); memberCall && processCase1(memberCall)) {
         return;
     }
 
@@ -138,10 +142,6 @@ bool StringRefCandidates::isConvertedToSomethingElse(clang::Stmt *s) const
 // Catches cases like: int i = s.mid(1, 1).toInt()
 bool StringRefCandidates::processCase1(CXXMemberCallExpr *memberCall)
 {
-    if (!memberCall) {
-        return false;
-    }
-
     // In the AST secondMethod() is parent of firstMethod() call, and will be visited first (because at runtime firstMethod() is resolved first().
     // So check for interesting second method first
     CXXMethodDecl *method = memberCall->getMethodDecl();
