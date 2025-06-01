@@ -4,6 +4,7 @@
 - Update minimum Clang/LLVM to 19
 - Fixed crash in qvariant-template-instantiation
 - Added missing methods to checks for detaching temporary/member lists or maps
+- Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset<int(8)>"
 
 * v1.14 (April 27, 2025)
 - Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2

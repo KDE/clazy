@@ -91,12 +91,12 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 }
 
-static std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, LangOptions lo, bool checkElabType = true);
-static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo, bool checkElabType = true)
+static std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, LangOptions lo, const PrintingPolicy &pp, bool checkElabType = true);
+static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo, const PrintingPolicy &pp, bool checkElabType = true)
 {
     if (auto *elabType = dyn_cast<ElaboratedType>(ptr); elabType && checkElabType) {
         if (auto *specType = dyn_cast<TemplateSpecializationType>(elabType->getNamedType().getTypePtrOrNull()); specType && !ptr->getAs<TypedefType>()) {
-            return resolveTemplateType(specType, lo, false);
+            return resolveTemplateType(specType, lo, pp, false);
         }
     }
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
@@ -116,9 +116,9 @@ static std::string getQualifiedNameOfType(const Type *ptr, const LangOptions &lo
 // In Qt5, the type would contain lots of unneeded parameters: QDBusPendingReply<bool, void, void, void, void, void, void, void>
 // Thus we need to do all of the shenanigans below
 // specType->getCanonicalTypeInternal().getAsString(m_astContext.getPrintingPolicy())
-static std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, LangOptions lo, bool checkElabType)
+static std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, LangOptions lo, const PrintingPolicy &pp, bool checkElabType)
 {
-    std::string str = getQualifiedNameOfType(ptr, lo, checkElabType);
+    std::string str = getQualifiedNameOfType(ptr, lo, pp, checkElabType);
     str += "<";
     bool firstArg = true;
     for (auto arg : ptr->template_arguments()) { // We reconstruct the type with the explicitly specified template params
@@ -126,11 +126,17 @@ static std::string resolveTemplateType(const clang::TemplateSpecializationType *
             str += ", ";
         }
         firstArg = false;
-        QualType argType = arg.getAsType();
-        if (argType.isConstQualified()) {
-            str += "const ";
+        if (arg.getKind() == TemplateArgument::Expression) {
+            // std::bitset<int(8)>, here int(8) is an expression!
+            llvm::raw_string_ostream outputStream(str);
+            arg.print(pp, outputStream, true);
+        } else {
+            QualType argType = arg.getAsType();
+            if (argType.isConstQualified()) {
+                str += "const ";
+            }
+            str += getQualifiedNameOfType(argType.getTypePtr(), lo, pp);
         }
-        str += getQualifiedNameOfType(argType.getTypePtr(), lo);
     }
     str += ">";
     return str;
@@ -148,11 +154,11 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         }
 
         if (auto specType = ptr->getAs<TemplateSpecializationType>(); specType && !ptr->getAs<TypedefType>()) {
-            qualifiedTypeName = resolveTemplateType(specType, lo());
+            qualifiedTypeName = resolveTemplateType(specType, lo(), m_astContext.getPrintingPolicy());
         } else if (auto recordDecl = ptr->getAsRecordDecl(); recordDecl && recordDecl->isInAnonymousNamespace()) {
             return true;
         } else {
-            qualifiedTypeName = getQualifiedNameOfType(ptr, lo());
+            qualifiedTypeName = getQualifiedNameOfType(ptr, lo(), m_astContext.getPrintingPolicy());
         }
         return qualifiedTypeName.empty() || typeName == qualifiedTypeName;
     }
