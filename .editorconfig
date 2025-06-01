@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: CC0-1.0
+
+# .editorconfig root file
+root = true
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 4
+tab_width = 4
+
