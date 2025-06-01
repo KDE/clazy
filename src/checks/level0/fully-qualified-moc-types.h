@@ -33,6 +33,8 @@ private:
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     void registerQ_GADGET(clang::SourceLocation);
     bool typeIsFullyQualified(clang::QualType t, std::string &qualifiedTypeName, std::string &typeName) const;
+    std::string getQualifiedNameOfType(const clang::Type *ptr, bool checkElabType = true) const;
+    std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, bool checkElabType = true) const;
 
     std::vector<clang::SourceLocation> m_qgadgetMacroLocations;
 };
