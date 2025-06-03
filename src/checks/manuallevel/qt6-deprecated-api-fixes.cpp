@@ -158,7 +158,7 @@ bool replacementForQComboBox(clang::MemberExpr *membExpr, const std::string &fun
         message = "Using QComboBox::activated(const QString &). Use textActiated() instead";
         replacement = "textActivated";
     } else if (functionName == "highlighted") {
-        message = "Using QComboBox::hilighted(const QString &). Use textHighlighted() instead";
+        message = "Using QComboBox::highlighted(const QString &). Use textHighlighted() instead";
         replacement = "textHighlighted";
     } else {
         return false;

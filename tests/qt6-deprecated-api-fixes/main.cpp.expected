@@ -95,7 +95,7 @@ qt6-deprecated-api-fixes/main.cpp:228:17: warning: call function QButtonGroup::b
 qt6-deprecated-api-fixes/main.cpp:231:34: warning: Use QComboBox::SizeAdjustPolicy::AdjustToContents or AdjustToContentsOnFirstShow instead [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:233:14: warning: Use currentIndexChanged(int) instead, and get the text using itemText(index). [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:234:14: warning: Using QComboBox::activated(const QString &). Use textActiated() instead [-Wclazy-qt6-deprecated-api-fixes]
-qt6-deprecated-api-fixes/main.cpp:235:14: warning: Using QComboBox::hilighted(const QString &). Use textHighlighted() instead [-Wclazy-qt6-deprecated-api-fixes]
+qt6-deprecated-api-fixes/main.cpp:235:14: warning: Using QComboBox::highlighted(const QString &). Use textHighlighted() instead [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:237:5: warning: Using QMacCocoaViewContainer. Use QWindow::fromWinId and QWidget::createWindowContainer instead [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:238:5: warning: Using QMacNativeWidget. Use QWidget::winId instead [-Wclazy-qt6-deprecated-api-fixes]
 qt6-deprecated-api-fixes/main.cpp:241:34: warning: Use the constructor taking a QScreen * instead. [-Wclazy-qt6-deprecated-api-fixes]
