@@ -278,8 +278,8 @@ bool clazy::isConnect(FunctionDecl *func)
 bool clazy::connectHasPMFStyle(FunctionDecl *func)
 {
     // Look for char* arguments
-    for (auto *parm : Utils::functionParameters(func)) {
-        QualType qt = parm->getType();
+    for (auto *param : Utils::functionParameters(func)) {
+        QualType qt = param->getType();
         const Type *t = qt.getTypePtrOrNull();
         if (!t || !t->isPointerType()) {
             continue;

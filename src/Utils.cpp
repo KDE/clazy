@@ -367,7 +367,7 @@ static bool isArgOfFunc(T expr, FunctionDecl *fDecl, const VarDecl *varDecl, boo
         }
 
         if ((t->isReferenceType() || t->isPointerType()) && !t->getPointeeType().isConstQualified()) {
-            return true; // function receives non-const ref, so our foreach variable cant be const-ref
+            return true; // function receives non-const ref, so our foreach variable can't be const-ref
         }
     }
 

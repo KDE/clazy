@@ -127,10 +127,10 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
                 if (expr2) {
                     if (expr2 == memberCall) {
                         // Success, we found which arg
-                        ParmVarDecl *parm = parentFunc->getParamDecl(i);
+                        ParmVarDecl *param = parentFunc->getParamDecl(i);
 
                         // Check that the record declarations have the same type
-                        if (parm->getType().getTypePtr()->getAsRecordDecl()->getNameAsString()
+                        if (param->getType().getTypePtr()->getAsRecordDecl()->getNameAsString()
                             == memberCall->getType().getTypePtr()->getAsRecordDecl()->getNameAsString()) {
                             return;
                         }

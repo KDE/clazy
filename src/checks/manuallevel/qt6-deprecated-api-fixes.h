@@ -14,7 +14,7 @@
 #include <vector>
 
 /**
- * Idenfify deprecated API and replace them when possible
+ * Identify deprecated API and replace them when possible
  *
  * Run only with Qt 5.
  */

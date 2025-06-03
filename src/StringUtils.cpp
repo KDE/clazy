@@ -25,8 +25,8 @@ std::string clazy::simpleArgTypeName(clang::FunctionDecl *func, unsigned int ind
         return {};
     }
 
-    ParmVarDecl *parm = func->getParamDecl(index);
-    return simpleTypeName(parm, lo);
+    ParmVarDecl *param = func->getParamDecl(index);
+    return simpleTypeName(param, lo);
 }
 
 bool clazy::anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleType, const clang::LangOptions &lo)

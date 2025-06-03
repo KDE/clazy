@@ -129,57 +129,57 @@ CheckBase::~CheckBase()
 
 void CheckBase::VisitStmt(Stmt *)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitDecl(Decl *)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitMacroExpands(const Token &, const SourceRange &, const clang::MacroInfo *)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitMacroDefined(const Token &)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitDefined(const Token &, const SourceRange &)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitIfndef(SourceLocation, const Token &)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitIf(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitElif(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind, SourceLocation)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitElse(SourceLocation, SourceLocation)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitEndif(SourceLocation, SourceLocation)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::VisitInclusionDirective(clang::SourceLocation,
@@ -194,7 +194,7 @@ void CheckBase::VisitInclusionDirective(clang::SourceLocation,
                                         bool ModuleImported,
                                         clang::SrcMgr::CharacteristicKind)
 {
-    // Overriden in derived classes
+    // Overridden in derived classes
 }
 
 void CheckBase::enablePreProcessorCallbacks()

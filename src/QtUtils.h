@@ -164,7 +164,7 @@ bool isJavaIterator(clang::CXXMemberCallExpr *call);
  * Returns true if a class has a ctor that has a parameter of type paramType.
  * ok will be false if an error occurred, or if the record is a fwd declaration, which isn't enough
  * for we to find out the signature.
- * numCtors will have the number of constructors analyized.
+ * numCtors will have the number of constructors analyzed.
  */
 bool recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &paramType, bool &ok, int &numCtors);
 

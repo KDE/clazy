@@ -220,7 +220,7 @@ clang::Expr *isWriteOperator(clang::Stmt *stm);
 clang::UserDefinedLiteral *userDefinedLiteral(clang::Stmt *stm, const std::string &type, const clang::LangOptions &lo);
 
 /**
- * Returns the function parameters fom @p func
+ * Returns the function parameters from @p func
  * This should be used instead of calling FunctionDecl::params() since it changed signature in
  * clang 3.9.
  */
@@ -241,7 +241,7 @@ std::vector<clang::CXXCtorInitializer *> ctorInitializer(clang::CXXConstructorDe
  */
 bool ctorInitializerContainsMove(clang::CXXCtorInitializer *);
 
-// Overload that recieves a vector and returns true if any ctor initializer contains a move()
+// Overload that receives a vector and returns true if any ctor initializer contains a move()
 bool ctorInitializerContainsMove(const std::vector<clang::CXXCtorInitializer *> &);
 
 /**

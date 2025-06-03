@@ -75,8 +75,8 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
 
     // Catch cases like: QList<T>::append(const QList<T> &), which don't make sense to reserve.
     // In this case, the parameter has the same type of the class
-    ParmVarDecl *parm = methodDecl->getParamDecl(0);
-    return !paramIsSameTypeAs(parm->getType().getTypePtrOrNull(), classDecl);
+    ParmVarDecl *param = methodDecl->getParamDecl(0);
+    return !paramIsSameTypeAs(param->getType().getTypePtrOrNull(), classDecl);
 }
 
 static bool isCandidate(CallExpr *oper)
@@ -168,7 +168,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    // Get the list of member calls and operator<< that are direct childs of the loop statements
+    // Get the list of member calls and operator<< that are direct children of the loop statements
     // If it's inside an if statement we don't care.
     auto callExprs = clazy::getStatements<CallExpr>(body,
                                                     nullptr,

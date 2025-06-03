@@ -155,7 +155,7 @@ bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
     }
 
     // There's still hope, lets see if the context is nested inside the class we're trying to access
-    // Inner classes can access private members of outter classes.
+    // Inner classes can access private members of outer classes.
     DeclContext *it = contextRecord;
     do {
         it = it->getParent();
@@ -168,7 +168,7 @@ bool clazy::canTakeAddressOf(CXXMethodDecl *method, DeclContext *context, bool &
         return false;
     }
 
-    if (method->getAccess() != clang::AccessSpecifier::AS_protected) { // shouldnt happen, must be protected at this point.
+    if (method->getAccess() != clang::AccessSpecifier::AS_protected) { // shouldn't happen, must be protected at this point.
         return false;
     }
 

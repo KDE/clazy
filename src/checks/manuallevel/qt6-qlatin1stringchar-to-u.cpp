@@ -265,8 +265,8 @@ void Qt6QLatin1StringCharToU::lookForLeftOver(clang::Stmt *stmt, bool found_QStr
 {
     Stmt *current_stmt = stmt;
     bool keep_looking = true;
-    // remebering the QString or QChar trace from the other sibbling in case of CXXMemberCallExpr
-    // in order to catch QLatin1String("notcaught") in the following exemple
+    // remembering the QString or QChar trace from the other sibling in case of CXXMemberCallExpr
+    // in order to catch QLatin1String("notcaught") in the following example
     // s1 = QLatin1String(s2df.contains(QLatin1String("notcaught"))? QLatin1String("dontfix1") : QLatin1String("dontfix2"));
     bool remember = false;
     if (isa<CXXMemberCallExpr>(current_stmt)) {

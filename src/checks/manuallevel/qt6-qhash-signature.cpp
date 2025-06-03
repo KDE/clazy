@@ -41,7 +41,7 @@ static int uintToSizetParam(clang::FunctionDecl *funcDecl)
 {
     std::string functionName = funcDecl->getNameAsString();
     // the uint signature is on the second parameter for the qHash function
-    // it is on the third paramater for qHashBits, qHashRange and qHashCommutative
+    // it is on the third parameter for qHashBits, qHashRange and qHashCommutative
     if (functionName == "qHash" && funcDecl->getNumParams() == 2) {
         return 1;
     }
@@ -111,16 +111,16 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     bool isPartReturnStmt = false;
     if (parent) {
         while (parent) {
-            Stmt *ancester = clazy::parent(m_context->parentMap, parent);
-            if (!ancester) {
+            Stmt *ancestor = clazy::parent(m_context->parentMap, parent);
+            if (!ancestor) {
                 break;
             }
-            auto *returnStmt = dyn_cast<ReturnStmt>(ancester);
+            auto *returnStmt = dyn_cast<ReturnStmt>(ancestor);
             if (returnStmt) {
                 isPartReturnStmt = true;
                 break;
             }
-            parent = ancester;
+            parent = ancestor;
         }
     }
 

@@ -198,7 +198,7 @@ inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
 }
 
 /**
- * Returns the class that the typedef refered by qt is in.
+ * Returns the class that the typedef referred by qt is in.
  *
  * class Foo {
  *     typedef A B;
