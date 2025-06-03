@@ -1,6 +1,6 @@
 # fully-qualified-moc-types
 
-Warns when a signal, slot or invokable declaration is not using *fully-qualified* type names, which will break *old-style* connects and interaction with QML.
+Warns when a signal, slot or invocable declaration is not using *fully-qualified* type names, which will break *old-style* connects and interaction with QML.
 
 Also warns if a `Q_PROPERTY` of type gadget is not fully-qualified (Enums and `QObject`s in `Q_PROPERTY` don't need
 to be fully qualified).

@@ -11,7 +11,7 @@ method redeclared without dllimport attribute after being referenced with dll li
 At the time of writing this (2023-08-27), there is no easy way to suppress this warning,
 and if warnings are treated as errors, the whole build can fail (e.g. on CI systems).
 
-The fix is simple, the inline keyword should be specificed for the declaration in-class, and
+The fix is simple, the inline keyword should be specified for the declaration in-class, and
 not the definition.
 
 For more details see [this thread on the Qt Development mailing list](https://lists.qt-project.org/pipermail/development/2023-August/044351.html).
@@ -29,7 +29,7 @@ method).
 - Removing the `inline` keyword from the definition leaves an extra space character,
   however clang-format can easily take care of that
 - This check doesn't show a warning for `constexpr` methods or `function templates`,
-  because both are implicitly inline, so it wouldn't cause the aformentioned problem
+  because both are implicitly inline, so it wouldn't cause the aforementioned problem
 
 #### Example
 ```
