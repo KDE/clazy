@@ -85,7 +85,6 @@
 #include "checks/manuallevel/ifndef-define-typo.h"
 #include "checks/manuallevel/isempty-vs-count.h"
 #include "checks/manuallevel/jnisignatures.h"
-#include "checks/manuallevel/mutex-detaching.h"
 #include "checks/manuallevel/qbytearray-conversion-to-c-style.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
 #include "checks/manuallevel/qproperty-type-mismatch.h"
@@ -100,6 +99,7 @@
 #include "checks/manuallevel/qt6-qlatin1stringchar-to-u.h"
 #include "checks/manuallevel/qvariant-template-instantiation.h"
 #include "checks/manuallevel/raw-environment-function.h"
+#include "checks/manuallevel/readlock-detaching.h"
 #include "checks/manuallevel/reserve-candidates.h"
 #include "checks/manuallevel/sanitize-inline-keyword.h"
 #include "checks/manuallevel/signal-with-return-value.h"
@@ -130,7 +130,6 @@ void CheckManager::registerChecks()
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<MutexDetaching>("mutex-detaching", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<QBytearrayConversionToCStyle>("qbytearray-conversion-to-c-style", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qbytearray-conversion-to-c-style", "qbytearray-conversion-to-c-style");
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
@@ -154,6 +153,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt6-qlatin1stringchar-to-u", "qt6-qlatin1stringchar-to-u");
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<ReadlockDetaching>("readlock-detaching", ManualCheckLevel, RegisteredCheck::Option_None));
     registerCheck(check<ReserveCandidates>("reserve-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<SanitizeInlineKeyword>("sanitize-inline-keyword", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-sanitize-inline-keyword", "sanitize-inline-keyword");

@@ -8,7 +8,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/ifndef-define-typo.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/isempty-vs-count.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/jnisignatures.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/mutex-detaching.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qbytearray-conversion-to-c-style.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qproperty-type-mismatch.cpp
@@ -23,6 +22,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt6-qlatin1stringchar-to-u.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qvariant-template-instantiation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/raw-environment-function.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/readlock-detaching.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/reserve-candidates.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/sanitize-inline-keyword.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/signal-with-return-value.cpp

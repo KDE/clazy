@@ -6,7 +6,6 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-ifndef-define-typo.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-isempty-vs-count.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-jni-signatures.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-mutex-detaching.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qbytearray-conversion-to-c-style.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
@@ -21,6 +20,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt6-qlatin1stringchar-to-u.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qvariant-template-instantiation.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-raw-environment-function.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-readlock-detaching.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-reserve-candidates.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-sanitize-inline-keyword.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-signal-with-return-value.md
