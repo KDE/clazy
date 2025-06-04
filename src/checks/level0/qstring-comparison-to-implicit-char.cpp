@@ -33,7 +33,9 @@ void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
     }
 
     auto *functionDecl = dyn_cast<FunctionDecl>(callExpr->getCalleeDecl());
-    if (!functionDecl || functionDecl->getOverloadedOperator() != clang::OO_EqualEqual || functionDecl->getNumParams() != 2) {
+    // We only care about the non-member functions
+    if (!functionDecl || functionDecl->getOverloadedOperator() != clang::OO_EqualEqual || isa<CXXMethodDecl>(functionDecl)
+        || functionDecl->getNumParams() != 2) {
         return;
     }
 
