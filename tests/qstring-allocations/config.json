@@ -1,29 +1,29 @@
 {
-    "minimum_clang_version" : 370,
-    "tests" : [
+    "minimum_clang_version": 370,
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "has_fixits": true
         },
         {
-            "filename" : "msvc-compat.cpp",
-            "has_fixits" : true
+            "filename": "msvc-compat.cpp",
+            "has_fixits": true
         },
         {
-            "filename" : "no-msvc-compat.cpp",
-            "has_fixits" : true,
-            "env" : {
-                "CLAZY_EXTRA_OPTIONS" : "qstring-allocations-no-msvc-compat"
+            "filename": "no-msvc-compat.cpp",
+            "has_fixits": true,
+            "env": {
+                "CLAZY_EXTRA_OPTIONS": "qstring-allocations-no-msvc-compat"
             }
         },
         {
-            "filename" : "364092.cpp",
-            "blacklist_platforms" : ["win32"],
-            "has_fixits" : true
+            "filename": "364092.cpp",
+            "blacklist_platforms": ["win32"],
+            "has_fixits": true
         },
         {
-            "filename" : "ui_foo.cpp",
-            "blacklist_platforms" : ["win32"]
+            "filename": "ui_foo.cpp",
+            "blacklist_platforms": ["win32"]
         }
     ]
 }

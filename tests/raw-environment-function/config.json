@@ -1,8 +1,8 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "flags" : "-Wno-deprecated-declarations"
+            "filename": "main.cpp",
+            "flags": "-Wno-deprecated-declarations"
         }
     ]
 }

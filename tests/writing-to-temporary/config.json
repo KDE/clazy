@@ -1,12 +1,12 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp"
+            "filename": "main.cpp"
         },
         {
-            "filename" : "widen-criteria.cpp",
-            "env" : {
-                "CLAZY_EXTRA_OPTIONS" : "writing-to-temporary-widen-criteria"
+            "filename": "widen-criteria.cpp",
+            "env": {
+                "CLAZY_EXTRA_OPTIONS": "writing-to-temporary-widen-criteria"
             }
         }
     ]

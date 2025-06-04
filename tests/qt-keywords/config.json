@@ -1,11 +1,11 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "has_fixits": true
         },
         {
-            "filename" : "no_keywords.cpp"
+            "filename": "no_keywords.cpp"
         }
     ]
 }

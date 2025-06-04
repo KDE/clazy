@@ -1,13 +1,13 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "minimum_clang_version" : 370
+            "filename": "main.cpp",
+            "minimum_clang_version": 370
         },
         {
-            "filename" : "q_os_windows.cpp",
-            "minimum_clang_version" : 370,
-            "maximum_qt_version" : 51203
+            "filename": "q_os_windows.cpp",
+            "minimum_clang_version": 370,
+            "maximum_qt_version": 51203
         }
     ]
 }

@@ -1,9 +1,9 @@
 {
-    "minimum_clang_version" : 370,
-    "minimum_qt_version" : 50500,
-    "tests" : [
+    "minimum_clang_version": 370,
+    "minimum_qt_version": 50500,
+    "tests": [
         {
-            "filename" : "main.cpp"
+            "filename": "main.cpp"
         }
     ]
 }

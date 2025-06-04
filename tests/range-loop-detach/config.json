@@ -1,20 +1,20 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "qt_major_versions": [5],
+            "has_fixits": true
         },
         {
-            "filename" : "main_cpp17.cpp",
-            "qt_major_versions" : [5, 6],
+            "filename": "main_cpp17.cpp",
+            "qt_major_versions": [5, 6],
             "cppStandards": ["c++17"],
-            "has_fixits" : true
+            "has_fixits": true
         },
         {
-            "filename" : "bug370609.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "bug370609.cpp",
+            "qt_major_versions": [5],
+            "has_fixits": true
         }
     ]
 }

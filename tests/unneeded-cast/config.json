@@ -1,14 +1,13 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp"
+            "filename": "main.cpp"
         },
         {
-            "filename" : "dynamic_cast_over_qobjectcast.cpp",
-            "env" :
-                {
-                    "CLAZY_EXTRA_OPTIONS" : "unneeded-cast-prefer-dynamic-cast-over-qobject"
-                }
+            "filename": "dynamic_cast_over_qobjectcast.cpp",
+            "env": {
+                "CLAZY_EXTRA_OPTIONS": "unneeded-cast-prefer-dynamic-cast-over-qobject"
+            }
         }
     ]
 }

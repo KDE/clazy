@@ -1,21 +1,20 @@
 {
-    "minimum_clang_version" : 370,
-    "tests" : [
+    "minimum_clang_version": 370,
+    "tests": [
         {
-            "filename" : "main.cpp"
+            "filename": "main.cpp"
         },
         {
-            "filename" : "fixit.cpp",
-            "has_fixits" : true,
-            "minimum_clang_version" : 1100,
-            "requires_std_filesystem" : true
+            "filename": "fixit.cpp",
+            "has_fixits": true,
+            "minimum_clang_version": 1100,
+            "requires_std_filesystem": true
         },
         {
-            "filename" : "file.hh",
-            "has_fixits" : true,
-            "minimum_clang_version" : 1100,
-            "requires_std_filesystem" : true
+            "filename": "file.hh",
+            "has_fixits": true,
+            "minimum_clang_version": 1100,
+            "requires_std_filesystem": true
         }
-
     ]
 }

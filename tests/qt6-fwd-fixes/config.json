@@ -1,21 +1,21 @@
 {
-    "minimum_qt_version" : 51500,
-    "minimum_clang_version" : 1000,
-    "tests" : [
+    "minimum_qt_version": 51500,
+    "minimum_clang_version": 1000,
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "main.cpp",
+            "qt_major_versions": [5],
+            "has_fixits": true
         },
         {
-            "filename" : "file1.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "file1.cpp",
+            "qt_major_versions": [5],
+            "has_fixits": true
         },
         {
-            "filename" : "file2.cpp",
-            "qt_major_versions" : [5],
-            "has_fixits" : true
+            "filename": "file2.cpp",
+            "qt_major_versions": [5],
+            "has_fixits": true
         }
     ]
 }

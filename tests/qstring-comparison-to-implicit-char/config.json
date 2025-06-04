@@ -2,7 +2,7 @@
     "tests": [
         {
             "filename": "main.cpp",
-            "qt_major_versions" : [5]
+            "qt_major_versions": [5]
         }
     ]
 }

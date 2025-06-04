@@ -8,8 +8,8 @@
             "binaryDir": "${sourceDir}/build-dev",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CLAZY_MAN_PAGE" : "OFF",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+                "CLAZY_MAN_PAGE": "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
@@ -19,9 +19,9 @@
             "binaryDir": "${sourceDir}/build-dev-asan",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CLAZY_MAN_PAGE" : "OFF",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
-                "CLAZY_ENABLE_SANITIZERS" : "ON"
+                "CLAZY_MAN_PAGE": "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CLAZY_ENABLE_SANITIZERS": "ON"
             }
         },
         {
@@ -31,9 +31,9 @@
             "binaryDir": "${sourceDir}/build-profile",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
@@ -43,9 +43,9 @@
             "binaryDir": "${sourceDir}/build-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "ON",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
@@ -55,15 +55,15 @@
             "binaryDir": "${sourceDir}/build-msvc-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "ON",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
-                "CMAKE_INSTALL_PREFIX" : "$env{LLVM_INSTALL_DIR}",
-                "CLANG_LIBRARY_IMPORT" : "$env{LLVM_INSTALL_DIR}/lib/clang.lib"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_INSTALL_PREFIX": "$env{LLVM_INSTALL_DIR}",
+                "CLANG_LIBRARY_IMPORT": "$env{LLVM_INSTALL_DIR}/lib/clang.lib"
             },
-            "environment" : {
-                "CC" : "cl",
-                "CXX" : "cl"
+            "environment": {
+                "CC": "cl",
+                "CXX": "cl"
             }
         },
         {
@@ -73,8 +73,8 @@
             "binaryDir": "${sourceDir}/build-ubuntu-18.04",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF"
             }
         },
         {
@@ -84,8 +84,8 @@
             "binaryDir": "${sourceDir}/build-ubuntu-20.04",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF"
             }
         },
         {
@@ -95,8 +95,8 @@
             "binaryDir": "${sourceDir}/build-ubuntu-21.04",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF"
             }
         },
         {
@@ -106,8 +106,8 @@
             "binaryDir": "${sourceDir}/build-debian-unstable",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF"
             }
         },
         {
@@ -117,13 +117,13 @@
             "binaryDir": "${sourceDir}/build-fedora-34",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF",
-                "CMAKE_INSTALL_PREFIX" : "/clazy"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF",
+                "CMAKE_INSTALL_PREFIX": "/clazy"
             },
-            "environment" : {
-                "PATH" : "/usr/lib/llvm-12/bin/:$penv{PATH}",
-                "LD_LIBRARY_PATH" : "/usr/lib/llvm-12/lib64/:$penv{LD_LIBRARY_PATH}"
+            "environment": {
+                "PATH": "/usr/lib/llvm-12/bin/:$penv{PATH}",
+                "LD_LIBRARY_PATH": "/usr/lib/llvm-12/lib64/:$penv{LD_LIBRARY_PATH}"
             }
         },
         {
@@ -133,8 +133,8 @@
             "binaryDir": "${sourceDir}/build-opensuse-leap",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF"
             }
         },
         {
@@ -144,8 +144,8 @@
             "binaryDir": "${sourceDir}/build-opensuse-tumbleweed",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_UNITY_BUILD" : "ON",
-                "CLAZY_MAN_PAGE" : "OFF"
+                "CMAKE_UNITY_BUILD": "ON",
+                "CLAZY_MAN_PAGE": "OFF"
             }
         }
     ]

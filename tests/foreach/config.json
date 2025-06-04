@@ -1,8 +1,8 @@
 {
-    "tests" : [
+    "tests": [
         {
-            "filename" : "main.cpp",
-            "maximum_qt_version" : 580
+            "filename": "main.cpp",
+            "maximum_qt_version": 580
         }
     ]
 }

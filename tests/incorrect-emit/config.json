@@ -1,20 +1,20 @@
 {
-    "minimum_clang_version" : 370,
-    "tests" : [
+    "minimum_clang_version": 370,
+    "tests": [
         {
-            "filename" : "main.cpp"
+            "filename": "main.cpp"
         },
         {
-            "filename" : "bug377140.cpp"
+            "filename": "bug377140.cpp"
         },
         {
-            "filename" : "bug377134.cpp"
+            "filename": "bug377134.cpp"
         },
         {
-            "filename" : "bug406798.cpp"
+            "filename": "bug406798.cpp"
         },
         {
-            "filename" : "bug437092.cpp"
+            "filename": "bug437092.cpp"
         }
     ]
 }

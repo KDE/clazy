@@ -1,42 +1,42 @@
 {
-    "minimum_clang_version" : 370,
-    "blacklist_platforms" : "win32",
-    "tests" : [
+    "minimum_clang_version": 370,
+    "blacklist_platforms": "win32",
+    "tests": [
         {
-            "filename" : "test_requested_checks.sh",
-            "compare_everything" : true,
-            "minimum_qt_version" : 50500
+            "filename": "test_requested_checks.sh",
+            "compare_everything": true,
+            "minimum_qt_version": 50500
         },
         {
-            "filename" : "suppressions.cpp",
-            "checks"   : ["qstring-allocations", "foreach", "qdatetime-utc"]
+            "filename": "suppressions.cpp",
+            "checks": ["qstring-allocations", "foreach", "qdatetime-utc"]
         },
         {
-            "filename" : "suppressionsWholeFile.cpp",
-            "checks"   : ["qstring-allocations", "foreach"]
+            "filename": "suppressionsWholeFile.cpp",
+            "checks": ["qstring-allocations", "foreach"]
         },
         {
-            "filename" : "werror.cpp",
-            "flags"    : "-Werror",
+            "filename": "werror.cpp",
+            "flags": "-Werror",
             "must_fail": true,
-            "checks"   : ["qgetenv"]
+            "checks": ["qgetenv"]
         },
         {
-            "filename" : "werror2.cpp",
-            "flags"    : "-Werror",
-            "checks"   : ["qgetenv"],
-            "env"      : { "CLAZY_NO_WERROR" : "1" }
+            "filename": "werror2.cpp",
+            "flags": "-Werror",
+            "checks": ["qgetenv"],
+            "env": { "CLAZY_NO_WERROR": "1" }
         },
         {
-            "filename" : "onlyQt1.cpp",
-            "checks"   : ["old-style-connect"],
-            "only_qt"  : false,
-            "has_fixits" : true
+            "filename": "onlyQt1.cpp",
+            "checks": ["old-style-connect"],
+            "only_qt": false,
+            "has_fixits": true
         },
         {
-            "filename" : "onlyQt2.cpp",
-            "checks"   : ["old-style-connect"],
-            "only_qt"  : true
+            "filename": "onlyQt2.cpp",
+            "checks": ["old-style-connect"],
+            "only_qt": true
         }
     ]
 }
