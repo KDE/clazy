@@ -7,6 +7,7 @@
 - Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset<int(8)>"
 - Fixed crash in qstring-comparison-to-implicit-char. BUG: 502458
 - fully-qualified-moc-types: Fix enum/enum class not being evaluated. BUG: 423780
+- install-event-filter: Fix crash when there is no child at the given depth. BUG: 464372
 
 * v1.14 (April 27, 2025)
 - Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2

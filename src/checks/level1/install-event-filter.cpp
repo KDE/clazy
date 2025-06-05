@@ -41,7 +41,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (!isa<CXXThisExpr>(clazy::getFirstChildAtDepth(expr, 1))) {
+    if (Stmt *firstChild = clazy::getFirstChildAtDepth(expr, 1); !firstChild || !isa<CXXThisExpr>(firstChild)) {
         return;
     }
 

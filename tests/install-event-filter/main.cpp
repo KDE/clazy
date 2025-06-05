@@ -43,3 +43,12 @@ class TestBiggerHierarchy : public QObject
         installEventFilter(d2); // OK
     }
 };
+
+class NoThisInvolved : public QObject
+{
+    void installEventFilterLocal()
+    {
+        QObject o;
+        o.installEventFilter(this); // OK, no crash
+    }
+};
