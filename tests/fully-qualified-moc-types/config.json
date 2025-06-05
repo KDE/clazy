@@ -7,6 +7,10 @@
         },
         {
             "filename": "bug_expression_in_generic.cpp"
+        },
+        {
+            "filename": "enums.cpp",
+            "has_fixits": true
         }
     ]
 }

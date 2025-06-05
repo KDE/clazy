@@ -97,6 +97,9 @@ std::string FullyQualifiedMocTypes::getQualifiedNameOfType(const Type *ptr, bool
         if (auto *specType = dyn_cast<TemplateSpecializationType>(elabType->getNamedType().getTypePtrOrNull()); specType && !ptr->getAs<TypedefType>()) {
             return resolveTemplateType(specType, false);
         }
+        if (elabType->isEnumeralType() && elabType->getAs<EnumType>()) {
+            return elabType->getAs<EnumType>()->getDecl()->getQualifiedNameAsString();
+        }
     }
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
         return typedefDecl->getDecl()->getQualifiedNameAsString();
@@ -146,7 +149,7 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
     qualifiedTypeName.clear();
     typeName.clear();
 
-    if (auto *ptr = t.getTypePtrOrNull(); ptr && ptr->isRecordType()) {
+    if (auto *ptr = t.getTypePtrOrNull(); ptr && (ptr->isRecordType() || ptr->isEnumeralType())) {
         typeName = clazy::name(t.getUnqualifiedType(), lo(), /*asWritten=*/true); // Ignore qualifiers like const here
         if (typeName == "QPrivateSignal") {
             return true;

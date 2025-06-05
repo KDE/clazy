@@ -1,0 +1,4 @@
+fully-qualified-moc-types/enums.cpp:14:20: warning: signal arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/enums.cpp:15:20: warning: signal arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/enums.cpp:18:20: warning: signal arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/enums.cpp:19:20: warning: signal arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
