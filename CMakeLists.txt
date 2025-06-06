@@ -295,6 +295,8 @@ else()
   install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 endif()
 
+add_clang_plugin(ClazyClangTidy src/ClazyClangTidyModule.cpp src/Utils.cpp)
+
 function(to_raw_string_literal input_string output_string)
     if (MSVC)
         # Work around "C2026: string too big, trailing characters truncated"
