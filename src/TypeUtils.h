@@ -38,7 +38,7 @@ namespace clazy
 /**
  * Returns the sizeof(void*) for the platform we're compiling for, in bits.
  */
-inline int sizeOfPointer(const clang::ASTContext *context, clang::QualType qt)
+inline int sizeOfPointer(const clang::ASTContext *context, const clang::QualType qt)
 {
     if (!qt.getTypePtrOrNull()) {
         return -1;
@@ -86,7 +86,7 @@ bool isSmallTrivial(const ClazyContext *context, clang::QualType qualType);
  * This is useful because sometimes you have an argument like "const QString &", but qualType.isConstQualified()
  * returns false. Must go through qualType->getPointeeType().isConstQualified().
  */
-inline clang::QualType unrefQualType(clang::QualType qualType)
+inline clang::QualType unrefQualType(const clang::QualType qualType)
 {
     const clang::Type *t = qualType.getTypePtrOrNull();
     return (t && t->isReferenceType()) ? t->getPointeeType() : qualType;
@@ -96,7 +96,7 @@ inline clang::QualType unrefQualType(clang::QualType qualType)
  * If qt is a pointer or ref, return it without * or &.
  * Otherwise return qt unchanged.
  */
-inline clang::QualType pointeeQualType(clang::QualType qualType)
+inline clang::QualType pointeeQualType(const clang::QualType qualType)
 {
     // TODO: Make this recursive when we need to remove more than one level of *
     const clang::Type *t = qualType.getTypePtrOrNull();
@@ -165,12 +165,12 @@ inline clang::CXXRecordDecl *recordFromBaseSpecifier(const clang::CXXBaseSpecifi
  * const A* a; => true
  * A *const a; => false
  */
-inline bool valueIsConst(clang::QualType qt)
+inline bool valueIsConst(const clang::QualType qt)
 {
     return pointeeQualType(qt).isConstQualified();
 }
 
-inline clang::CXXRecordDecl *typeAsRecord(clang::QualType qt)
+inline clang::CXXRecordDecl *typeAsRecord(const clang::QualType qt)
 {
     if (qt.isNull()) {
         return nullptr;
@@ -179,7 +179,7 @@ inline clang::CXXRecordDecl *typeAsRecord(clang::QualType qt)
     return qt->getAsCXXRecordDecl();
 }
 
-inline clang::CXXRecordDecl *typeAsRecord(clang::Expr *expr)
+inline clang::CXXRecordDecl *typeAsRecord(const clang::Expr *expr)
 {
     if (!expr) {
         return nullptr;
@@ -188,7 +188,7 @@ inline clang::CXXRecordDecl *typeAsRecord(clang::Expr *expr)
     return typeAsRecord(pointeeQualType(expr->getType()));
 }
 
-inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
+inline clang::CXXRecordDecl *typeAsRecord(const clang::ValueDecl *value)
 {
     if (!value) {
         return nullptr;
@@ -206,7 +206,7 @@ inline clang::CXXRecordDecl *typeAsRecord(clang::ValueDecl *value)
  *
  * For the above example Foo would be returned.
  */
-inline clang::CXXRecordDecl *parentRecordForTypedef(clang::QualType qt)
+inline clang::CXXRecordDecl *parentRecordForTypedef(const clang::QualType qt)
 {
     auto *t = qt.getTypePtrOrNull();
 
