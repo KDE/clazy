@@ -66,7 +66,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
     }
 
-    const std::string nameTo = clazy::simpleTypeName(implicitCast->getType(), m_context->ci.getLangOpts());
+    const std::string nameTo = clazy::simpleTypeName(implicitCast->getType(), lo());
 
     const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = clazy::parentRecordForTypedef(typeTo);
@@ -136,7 +136,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
         return false;
     }
 
-    const std::string nameFrom = clazy::simpleTypeName(typeFrom, m_context->ci.getLangOpts());
+    const std::string nameFrom = clazy::simpleTypeName(typeFrom, lo());
     const bool nameFromIsIterator = nameFrom == "iterator" || clazy::endsWith(nameFrom, "::iterator");
     if (!nameFromIsIterator) {
         return false;
