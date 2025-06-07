@@ -15,6 +15,7 @@
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
+#include <cstddef>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Regex.h>
 
@@ -42,6 +43,12 @@ class FixItExporter;
 class ClazyContext
 {
 public:
+    using WarningReporter = std::function<void(std::string checkName,
+                                               const clang::SourceLocation &loc,
+                                               clang::DiagnosticIDs::Level level,
+                                               std::string error,
+                                               const std::vector<clang::FixItHint> &fixits)>;
+
     enum ClazyOption {
         ClazyOption_None = 0,
         ClazyOption_ExportFixes = 1,
@@ -60,7 +67,8 @@ public:
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
                           const std::vector<std::string> &translationUnitPaths,
-                          ClazyOptions opts);
+                          ClazyOptions opts,
+                          std::optional<WarningReporter> warningReporter = std::nullopt);
     ~ClazyContext();
 
     bool usingPreCompiledHeaders() const;
@@ -179,6 +187,7 @@ public:
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
     const std::vector<std::string> m_translationUnitPaths;
     clang::Preprocessor &m_pp;
+    const WarningReporter p_warningReporter;
 };
 
 #endif
