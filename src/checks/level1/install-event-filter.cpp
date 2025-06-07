@@ -19,8 +19,9 @@
 
 using namespace clang;
 
-InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
+InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context, clang::tidy::ClangTidyCheck &Check)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
+    , m_check(Check)
 {
 }
 
@@ -57,5 +58,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    emitWarning(stmt, "'this' should usually be the filter object, not the monitored one.");
+    stmt->getBeginLoc().dump(sm());
+
+    m_check.diag(stmt->getBeginLoc(), "'this' should usually be the filter object, not the monitored one.");
 }

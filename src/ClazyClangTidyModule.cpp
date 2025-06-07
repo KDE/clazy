@@ -1,6 +1,9 @@
+#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
+#include "checkbase.h"
+#include "checks/level1/install-event-filter.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
 #include "clang-tidy/ClangTidyModuleRegistry.h"
@@ -14,10 +17,20 @@ using namespace clang;
 class FullASTVisitor : public RecursiveASTVisitor<FullASTVisitor>
 {
 public:
-    explicit FullASTVisitor(ASTContext &Context, ClangTidyCheck &Check)
-        : Context(Context)
-        , Check(Check)
+    explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check, ClangTidyContext *clangTidyCtx)
+        : m_check(Check)
+        , m_context(context)
+        , m_checks({new InstallEventFilter("install-event-filter", &context, Check)})
+        , clangTidyCtx(clangTidyCtx)
+
     {
+    }
+
+    ~FullASTVisitor()
+    {
+        std::for_each(m_checks.begin(), m_checks.end(), [](CheckBase *check) {
+            delete check;
+        });
     }
 
     bool VisitFunctionDecl(FunctionDecl *FD)
@@ -30,44 +43,32 @@ public:
 
     bool VisitStmt(Stmt *stmt)
     {
-        auto *memberCallExpr = dyn_cast<CXXMemberCallExpr>(stmt);
-        if (!memberCallExpr || memberCallExpr->getNumArgs() != 1) {
-            return true;
+        std::for_each(m_checks.begin(), m_checks.end(), [stmt](CheckBase *check) {
+            check->VisitStmt(stmt);
+        });
+        if (Utils::isMainFile(m_context.sm, stmt->getBeginLoc())) {
+            auto &engine = m_context.astContext.getDiagnostics();
+            const auto id = engine.getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, "oh no");
+            // llvm::errs() << id << engine.getDiagnosticIDs()->getWarningOptionForDiag(id).str() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+            //  engine.Report(FullSourceLoc(stmt->getBeginLoc(), m_context.astContext.getSourceManager()), id);
+            // m_check.diag(stmt->getBeginLoc(), "oh no");
+            // clangTidyCtx->diag("testmeeeeeeeeeee", stmt->getBeginLoc(), "däääääämn", DiagnosticIDs::Warning);
         }
-
-        const FunctionDecl *func = memberCallExpr->getDirectCallee();
-        if (!func || func->getQualifiedNameAsString() != "QObject::installEventFilter") {
-            return true;
-        }
-
-        Expr *expr = memberCallExpr->getImplicitObjectArgument();
-        if (!expr) {
-            return true;
-        }
-
-        if (Stmt *firstChild = clazy::getFirstChildAtDepth(expr, 1); !firstChild || !isa<CXXThisExpr>(firstChild)) {
-            return true;
-        }
-
-        const Expr *arg1 = memberCallExpr->getArg(0);
-        arg1 = arg1 ? arg1->IgnoreCasts() : nullptr;
-
-        const CXXRecordDecl *record = clazy::typeAsRecord(arg1);
-        auto methods = Utils::methodsFromString(record, "eventFilter");
-
-        for (auto *method : methods) {
-            if (method->getQualifiedNameAsString() != "QObject::eventFilter") { // It overrides it, probably on purpose then, don't warn.
-                return true;
-            }
-        }
-
-        Check.diag(stmt->getBeginLoc(), "'this' should usually be the filter object, not the monitored one.");
+        return true;
+    }
+    bool VisitDecl(Decl *decl)
+    {
+        std::for_each(m_checks.begin(), m_checks.end(), [decl](CheckBase *check) {
+            check->VisitDecl(decl);
+        });
         return true;
     }
 
 private:
-    ASTContext &Context;
-    ClangTidyCheck &Check;
+    ClangTidyCheck &m_check;
+    ClazyContext &m_context;
+    std::vector<CheckBase *> m_checks;
+    ClangTidyContext *clangTidyCtx;
 };
 
 class ClazyCheck : public ClangTidyCheck
@@ -75,6 +76,7 @@ class ClazyCheck : public ClangTidyCheck
 public:
     ClazyCheck(StringRef CheckName, ClangTidyContext *Context)
         : ClangTidyCheck(CheckName, Context)
+        , Context(Context)
     {
     }
 
@@ -91,16 +93,20 @@ public:
             return;
         }*/
 
-        FullASTVisitor visitor(*Result.Context, *this);
+        ClazyContext ctx(*Result.Context, *m_pp, "", "", "", {}, {});
+        FullASTVisitor visitor(ctx, *this, Context);
         // Result.Context->getDiagnostics().dump();
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
-        translationUnit->dump();
+        // translationUnit->getBeginLoc().dump(*Result.SourceManager);
         visitor.TraverseDecl(translationUnit);
     }
 
     void registerPPCallbacks(const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) override
     {
+        m_pp = PP;
     }
+    Preprocessor *m_pp;
+    ClangTidyContext *Context;
 };
 
 /// Create a subclass of ClangTidyModule to register Clazy checks.

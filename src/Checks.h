@@ -211,7 +211,7 @@ void CheckManager::registerChecks()
     registerCheck(check<DetachingTemporary>("detaching-temporary", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<Foreach>("foreach", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
+    // registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<PostEvent>("post-event", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
