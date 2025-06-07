@@ -91,7 +91,7 @@ void ClazyContext::enableAccessSpecifierManager()
 void ClazyContext::enablePreprocessorVisitor()
 {
     if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(ci);
+        preprocessorVisitor = new PreProcessorVisitor(ci.getSourceManager(), ci.getPreprocessor());
     }
 }
 

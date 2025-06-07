@@ -22,16 +22,16 @@
 
 using namespace clang;
 
-PreProcessorVisitor::PreProcessorVisitor(const clang::CompilerInstance &ci)
+PreProcessorVisitor::PreProcessorVisitor(const SourceManager &manager, Preprocessor &pp)
     : clang::PPCallbacks()
-    , m_ci(ci)
-    , m_sm(ci.getSourceManager())
+    , m_sm(manager)
+    , m_pp(pp)
+
 {
-    Preprocessor &pi = m_ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(this));
+    pp.addPPCallbacks(std::unique_ptr<PPCallbacks>(this));
 
     // This catches -DQT_NO_KEYWORDS passed to compiler. In MacroExpands() we catch when defined via in code
-    m_isQtNoKeywords = clazy::isPredefined(ci.getPreprocessorOpts(), "QT_NO_KEYWORDS");
+    m_isQtNoKeywords = clazy::isPredefined(pp.getPreprocessorOpts(), "QT_NO_KEYWORDS");
 }
 
 bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
@@ -88,10 +88,9 @@ std::string PreProcessorVisitor::getTokenSpelling(const MacroDefinition &def) co
         return {};
     }
 
-    const Preprocessor &pp = m_ci.getPreprocessor();
     std::string result;
     for (const auto &tok : info->tokens()) {
-        result += pp.getSpelling(tok);
+        result += m_pp.getSpelling(tok);
     }
 
     return result;
@@ -187,7 +186,7 @@ void PreProcessorVisitor::InclusionDirective(clang::SourceLocation,
                                              bool,
                                              clang::SrcMgr::CharacteristicKind)
 {
-    if (m_ci.getPreprocessor().isInPrimaryFile() && !clazy::endsWith(FileName.str(), ".moc")) {
+    if (m_pp.isInPrimaryFile() && !clazy::endsWith(FileName.str(), ".moc")) {
         m_includeInfo.push_back(IncludeInfo{FileName, IsAngled, FilenameRange});
     }
 }
