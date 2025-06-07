@@ -97,15 +97,11 @@ ClazyContext::~ClazyContext()
     parentMap = nullptr;
 }
 
-void ClazyContext::enableAccessSpecifierManager()
+void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &m_pp)
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
         accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), m_pp, exportFixesEnabled());
     }
-}
-
-void ClazyContext::enablePreprocessorVisitor()
-{
     if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
         preprocessorVisitor = new PreProcessorVisitor(sm, m_pp);
     }

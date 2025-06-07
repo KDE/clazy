@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "checkbase.h"
 #include "checks/level0/qcolor-from-literal.h"
+#include "checks/level0/qstring-arg.h"
 #include "checks/level1/install-event-filter.h"
 #include "checks/level1/non-pod-global-static.h"
 #include "clang-tidy/ClangTidyCheck.h"
@@ -70,6 +71,7 @@ public:
               new InstallEventFilter("install-event-filter", nullptr),
               new NonPodGlobalStatic("non-pod-global-static", nullptr),
               new QColorFromLiteral("non-pod-global-static", nullptr),
+              new QStringArg("qstring-arg", nullptr),
           })
     {
     }

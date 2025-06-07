@@ -69,6 +69,9 @@ public:
                           const std::vector<std::string> &translationUnitPaths,
                           ClazyOptions opts,
                           std::optional<WarningReporter> warningReporter = std::nullopt);
+
+    void registerPreprocessorCallbacks(clang::Preprocessor &m_pp);
+
     ~ClazyContext();
 
     bool usingPreCompiledHeaders() const;
@@ -161,8 +164,13 @@ public:
     /**
      * We only enable it if a check needs it, for performance reasons
      */
-    void enableAccessSpecifierManager();
-    void enablePreprocessorVisitor();
+    void enableAccessSpecifierManager()
+    {
+    }
+    void enablePreprocessorVisitor()
+    {
+    }
+
     void enableVisitallTypeDefs();
     bool visitsAllTypedefs() const;
 
