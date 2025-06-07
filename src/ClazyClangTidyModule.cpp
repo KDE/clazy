@@ -18,13 +18,9 @@ using namespace clang;
 class FullASTVisitor : public RecursiveASTVisitor<FullASTVisitor>
 {
 public:
-    explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check)
+    explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check, const std::vector<CheckBase *> &checks)
         : m_context(context)
-        , m_checks({
-              new InstallEventFilter("install-event-filter", &m_context),
-              new NonPodGlobalStatic("non-pod-global-static", &m_context),
-              new QColorFromLiteral("non-pod-global-static", &m_context),
-          })
+        , m_checks(checks)
 
     {
         std::for_each(m_checks.begin(), m_checks.end(), [this](CheckBase *check) { });
@@ -32,9 +28,6 @@ public:
 
     ~FullASTVisitor()
     {
-        std::for_each(m_checks.begin(), m_checks.end(), [](CheckBase *check) {
-            delete check;
-        });
     }
 
     bool VisitFunctionDecl(FunctionDecl *FD)
@@ -71,15 +64,31 @@ class ClazyCheck : public ClangTidyCheck
 public:
     ClazyCheck(StringRef CheckName, ClangTidyContext *Context)
         : ClangTidyCheck(CheckName, Context)
-        , Context(Context)
-        , masterContext(nullptr)
+        , clangTidyContext(Context)
+        , clazyContext(nullptr)
+        , m_checks({
+              new InstallEventFilter("install-event-filter", nullptr),
+              new NonPodGlobalStatic("non-pod-global-static", nullptr),
+              new QColorFromLiteral("non-pod-global-static", nullptr),
+          })
     {
+    }
+
+    ~ClazyCheck()
+    {
+        std::for_each(m_checks.begin(), m_checks.end(), [](CheckBase *check) {
+            delete check;
+        });
+        delete clazyContext;
     }
 
     void registerMatchers(ast_matchers::MatchFinder *Finder) override
     {
         llvm::errs() << "registermatchers\n";
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
+        std::for_each(m_checks.begin(), m_checks.end(), [Finder](CheckBase *check) {
+            check->registerASTMatchers(*Finder);
+        });
     }
 
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override
@@ -91,13 +100,17 @@ public:
                                            std::string error,
                                            const std::vector<clang::FixItHint> &fixits) {
             llvm::errs() << checkName << "\n";
-            Context->diag("clazy-" + checkName, loc, error, level) << fixits;
+            clangTidyContext->diag("clazy-" + checkName, loc, error, level) << fixits;
         };
 
         // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
-        ClazyContext ctx(*Result.Context, *m_pp, "", "", "", {}, {}, emitDiagnostic);
+        clazyContext = new ClazyContext(*Result.Context, *m_pp, "", "", "", {}, {}, emitDiagnostic);
 
-        FullASTVisitor visitor(ctx, *this);
+        std::for_each(m_checks.begin(), m_checks.end(), [this](CheckBase *check) mutable {
+            check->m_context = clazyContext;
+        });
+
+        FullASTVisitor visitor(*clazyContext, *this, m_checks);
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
         visitor.TraverseDecl(translationUnit);
     }
@@ -109,8 +122,9 @@ public:
     }
 
     Preprocessor *m_pp;
-    ClangTidyContext *Context;
-    ClazyContext const *masterContext;
+    ClangTidyContext *clangTidyContext;
+    ClazyContext *clazyContext;
+    std::vector<CheckBase *> m_checks;
 };
 
 class NoopCheck : public ClangTidyCheck
