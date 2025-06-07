@@ -84,7 +84,7 @@ ClazyContext::~ClazyContext()
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(this);
+        accessSpecifierManager = new AccessSpecifierManager(sm, ci.getLangOpts(), ci.getPreprocessor(), exportFixesEnabled());
     }
 }
 
