@@ -17,11 +17,9 @@ using namespace clang;
 class FullASTVisitor : public RecursiveASTVisitor<FullASTVisitor>
 {
 public:
-    explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check, ClangTidyContext *clangTidyCtx)
-        : m_check(Check)
-        , m_context(context)
-        , m_checks({new InstallEventFilter("install-event-filter", &context, Check)})
-        , clangTidyCtx(clangTidyCtx)
+    explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check)
+        : m_context(context)
+        , m_checks({new InstallEventFilter("install-event-filter", &m_context)})
 
     {
     }
@@ -46,14 +44,6 @@ public:
         std::for_each(m_checks.begin(), m_checks.end(), [stmt](CheckBase *check) {
             check->VisitStmt(stmt);
         });
-        if (Utils::isMainFile(m_context.sm, stmt->getBeginLoc())) {
-            auto &engine = m_context.astContext.getDiagnostics();
-            const auto id = engine.getDiagnosticIDs()->getCustomDiagID(DiagnosticIDs::Warning, "oh no");
-            // llvm::errs() << id << engine.getDiagnosticIDs()->getWarningOptionForDiag(id).str() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
-            //  engine.Report(FullSourceLoc(stmt->getBeginLoc(), m_context.astContext.getSourceManager()), id);
-            // m_check.diag(stmt->getBeginLoc(), "oh no");
-            // clangTidyCtx->diag("testmeeeeeeeeeee", stmt->getBeginLoc(), "däääääämn", DiagnosticIDs::Warning);
-        }
         return true;
     }
     bool VisitDecl(Decl *decl)
@@ -65,10 +55,8 @@ public:
     }
 
 private:
-    ClangTidyCheck &m_check;
     ClazyContext &m_context;
     std::vector<CheckBase *> m_checks;
-    ClangTidyContext *clangTidyCtx;
 };
 
 class ClazyCheck : public ClangTidyCheck
@@ -93,8 +81,21 @@ public:
             return;
         }*/
 
-        ClazyContext ctx(*Result.Context, *m_pp, "", "", "", {}, {});
-        FullASTVisitor visitor(ctx, *this, Context);
+        const auto emitDiagnostic = [this](const std::string &checkName,
+                                           const clang::SourceLocation &loc,
+                                           clang::DiagnosticIDs::Level level,
+                                           std::string error,
+                                           const std::vector<clang::FixItHint> &fixits) {
+            llvm::errs() << checkName << "\n";
+            Context->diag("clazy-" + checkName, loc, error, level) << fixits;
+        };
+
+        // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
+        ClazyContext ctx(*Result.Context, *m_pp, "", "", "", {}, {}, emitDiagnostic);
+        // auto &diags = Result.Context->getDiagnostics();
+        //  Context->setDiagnosticsEngine(&diags);
+
+        FullASTVisitor visitor(ctx, *this);
         // Result.Context->getDiagnostics().dump();
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
         // translationUnit->getBeginLoc().dump(*Result.SourceManager);

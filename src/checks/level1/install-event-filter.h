@@ -8,7 +8,6 @@
 #define CLAZY_INSTALL_EVENT_FILTER_H
 
 #include "checkbase.h"
-#include "clang-tidy/ClangTidyCheck.h"
 
 #include <string>
 
@@ -18,9 +17,8 @@
 class InstallEventFilter : public CheckBase
 {
 public:
-    explicit InstallEventFilter(const std::string &name, ClazyContext *context, clang::tidy::ClangTidyCheck &Check);
+    explicit InstallEventFilter(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
-    clang::tidy::ClangTidyCheck &m_check;
 };
 
 #endif
