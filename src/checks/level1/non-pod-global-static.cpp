@@ -89,7 +89,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->getPreprocessorOpts())) {
+    if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->m_pp.getPreprocessorOpts())) {
         return;
     }
 
