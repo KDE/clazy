@@ -127,29 +127,36 @@ void CheckManager::registerChecks()
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<HeapAllocatedSmallTrivialType>("heap-allocated-small-trivial-type", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_None));
+    registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel, RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<JniSignatures>("jni-signatures", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QBytearrayConversionToCStyle>("qbytearray-conversion-to-c-style", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qbytearray-conversion-to-c-style", "qbytearray-conversion-to-c-style");
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch",
+                                               ManualCheckLevel,
+                                               RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringVarargs>("qstring-varargs", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<QtKeywordEmit>("qt-keyword-emit", ManualCheckLevel, RegisteredCheck::Option_None));
+    registerCheck(check<QtKeywordEmit>("qt-keyword-emit", ManualCheckLevel, RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-qt-keyword-emit", "qt-keyword-emit");
-    registerCheck(check<QtKeywords>("qt-keywords", ManualCheckLevel, RegisteredCheck::Option_None));
+    registerCheck(check<QtKeywords>("qt-keywords", ManualCheckLevel, RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-qt-keywords", "qt-keywords");
-    registerCheck(
-        check<Qt6DeprecatedAPIFixes>("qt6-deprecated-api-fixes", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<Qt6DeprecatedAPIFixes>("qt6-deprecated-api-fixes",
+                                               ManualCheckLevel,
+                                               RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls
+                                                   | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-qt6-deprecated-api-fixes", "qt6-deprecated-api-fixes");
-    registerCheck(check<Qt6FwdFixes>("qt6-fwd-fixes", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<Qt6FwdFixes>("qt6-fwd-fixes", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-qt6-fwd-fixes", "qt6-fwd-fixes");
-    registerCheck(check<Qt6HeaderFixes>("qt6-header-fixes", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(
+        check<Qt6HeaderFixes>("qt6-header-fixes", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-qt6-header-fixes", "qt6-header-fixes");
     registerCheck(check<Qt6QHashSignature>("qt6-qhash-signature", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-qt6-qhash-signature", "qt6-qhash-signature");
-    registerCheck(check<Qt6QLatin1StringCharToU>("qt6-qlatin1stringchar-to-u", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<Qt6QLatin1StringCharToU>("qt6-qlatin1stringchar-to-u",
+                                                 ManualCheckLevel,
+                                                 RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-qt6-qlatin1stringchar-to-u", "qt6-qlatin1stringchar-to-u");
     registerCheck(check<QVariantTemplateInstantiation>("qvariant-template-instantiation", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RawEnvironmentFunction>("raw-environment-function", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
@@ -170,19 +177,22 @@ void CheckManager::registerChecks()
     registerCheck(check<ConnectNotNormalized>("connect-not-normalized", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ContainerAntiPattern>("container-anti-pattern", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<EmptyQStringliteral>("empty-qstringliteral", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<FullyQualifiedMocTypes>("fully-qualified-moc-types", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<FullyQualifiedMocTypes>("fully-qualified-moc-types",
+                                                CheckLevel0,
+                                                RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-fully-qualified-moc-types", "fully-qualified-moc-types");
     registerCheck(check<LambdaInConnect>("lambda-in-connect", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LambdaUniqueConnection>("lambda-unique-connection", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<LowercaseQMlTypeName>("lowercase-qml-type-name", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<MutableContainerKey>("mutable-container-key", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<NoModuleInclude>("no-module-include", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(
+        check<NoModuleInclude>("no-module-include", CheckLevel0, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<OverloadedSignal>("overloaded-signal", CheckLevel0, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QColorFromLiteral>("qcolor-from-literal", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qcolor-from-literal", "qcolor-from-literal");
     registerCheck(check<QDateTimeUtc>("qdatetime-utc", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qdatetime-utc", "qdatetime-utc");
-    registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_None));
+    registerCheck(check<QEnums>("qenums", CheckLevel0, RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<QFileInfoExists>("qfileinfo-exists", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qfileinfo-exists", "qfileinfo-exists");
     registerCheck(check<QGetEnv>("qgetenv", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
@@ -193,7 +203,7 @@ void CheckManager::registerChecks()
     registerCheck(check<QStringInsensitiveAllocation>("qstring-insensitive-allocation", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<StringRefCandidates>("qstring-ref", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-missing-qstringref", "qstring-ref");
-    registerCheck(check<QtMacros>("qt-macros", CheckLevel0, RegisteredCheck::Option_None));
+    registerCheck(check<QtMacros>("qt-macros", CheckLevel0, RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<StrictIterators>("strict-iterators", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<TemporaryIterator>("temporary-iterator", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0, RegisteredCheck::Option_VisitsStmts));
@@ -205,12 +215,14 @@ void CheckManager::registerChecks()
                                                       CheckLevel1,
                                                       RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerFixIt(1, "fix-auto-unexpected-qstringbuilder", "auto-unexpected-qstringbuilder");
-    registerCheck(check<ChildEventQObjectCast>("child-event-qobject-cast", CheckLevel1, RegisteredCheck::Option_VisitsDecls));
+    registerCheck(check<ChildEventQObjectCast>("child-event-qobject-cast",
+                                               CheckLevel1,
+                                               RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<Connect3ArgLambda>("connect-3arg-lambda", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<ConstSignalOrSlot>("const-signal-or-slot", CheckLevel1, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<DetachingTemporary>("detaching-temporary", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<Foreach>("foreach", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1, RegisteredCheck::Option_VisitsDecls));
@@ -218,7 +230,9 @@ void CheckManager::registerChecks()
     registerCheck(check<QDeleteAll>("qdeleteall", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QHashNamespace>("qhash-namespace", CheckLevel1, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QLatin1StringNonAscii>("qlatin1string-non-ascii", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<QPropertyWithoutNotify>("qproperty-without-notify", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<QPropertyWithoutNotify>("qproperty-without-notify",
+                                                CheckLevel1,
+                                                RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks));
     registerCheck(check<QStringLeft>("qstring-left", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<RangeLoopDetach>("range-loop-detach", CheckLevel1, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-range-loop-add-qasconst", "range-loop-detach");
@@ -237,10 +251,12 @@ void CheckManager::registerChecks()
     registerCheck(check<FunctionArgsByValue>("function-args-by-value", CheckLevel2, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<GlobalConstCharPointer>("global-const-char-pointer", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<ImplicitCasts>("implicit-casts", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
-    registerCheck(check<MissingQObjectMacro>("missing-qobject-macro", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
+    registerCheck(
+        check<MissingQObjectMacro>("missing-qobject-macro", CheckLevel2, RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-missing-qobject-macro", "missing-qobject-macro");
     registerCheck(check<MissingTypeInfo>("missing-typeinfo", CheckLevel2, RegisteredCheck::Option_VisitsDecls));
-    registerCheck(check<OldStyleConnect>("old-style-connect", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(
+        check<OldStyleConnect>("old-style-connect", CheckLevel2, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks));
     registerFixIt(1, "fix-old-style-connect", "old-style-connect");
     registerCheck(check<QStringAllocations>("qstring-allocations", CheckLevel2, RegisteredCheck::Option_VisitsStmts));
     registerFixIt(1, "fix-qlatin1string-allocations", "qstring-allocations");

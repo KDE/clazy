@@ -26,7 +26,6 @@ using namespace clang;
 QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    enablePreProcessorCallbacks();
     context->enablePreprocessorVisitor();
 }
 

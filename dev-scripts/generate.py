@@ -85,6 +85,7 @@ class Check:
         self.fixits = []
         self.visits_stmts = False
         self.visits_decls = False
+        self.preprocessor_callbacks = False
         self.ifndef = ""
 
     def include(self): # Returns for example: "returning-void-expression.h"
@@ -217,6 +218,9 @@ def load_json(filename):
         if 'visits_decls' in check:
             c.visits_decls = check['visits_decls']
 
+        if 'preprocessor_callbacks' in check:
+            c.preprocessor_callbacks = check['preprocessor_callbacks']
+
         if 'fixits' in check:
             for fixit in check['fixits']:
                 if 'name' not in fixit:
@@ -260,6 +264,8 @@ void CheckManager::registerChecks()
             qtflags += " | RegisteredCheck::Option_VisitsStmts"
         if c.visits_decls:
             qtflags += " | RegisteredCheck::Option_VisitsDecls"
+        if c.preprocessor_callbacks:
+            qtflags += " | RegisteredCheck::Option_PreprocessorCallbacks"
 
         qtflags = qtflags.replace("RegisteredCheck::Option_None |", "")
 

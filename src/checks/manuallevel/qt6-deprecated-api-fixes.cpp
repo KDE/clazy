@@ -33,7 +33,6 @@ using namespace clang;
 Qt6DeprecatedAPIFixes::Qt6DeprecatedAPIFixes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    enablePreProcessorCallbacks();
 }
 
 void replacementForQWizard(const std::string &functionName, std::string &message, std::string &replacement)

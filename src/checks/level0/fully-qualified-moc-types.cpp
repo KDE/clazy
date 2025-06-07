@@ -32,7 +32,6 @@ FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyCon
     : CheckBase(name, context)
 {
     context->enableAccessSpecifierManager();
-    enablePreProcessorCallbacks();
 }
 
 void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)

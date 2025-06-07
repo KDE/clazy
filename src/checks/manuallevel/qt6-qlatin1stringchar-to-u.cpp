@@ -32,7 +32,6 @@ using namespace clang;
 Qt6QLatin1StringCharToU::Qt6QLatin1StringCharToU(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    enablePreProcessorCallbacks();
 }
 
 static bool isQLatin1CharDecl(CXXConstructorDecl *decl)

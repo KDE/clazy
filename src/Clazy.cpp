@@ -188,7 +188,7 @@ ClazyASTAction::ClazyASTAction()
 {
 }
 
-std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &, llvm::StringRef)
+std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
     // NOTE: This method needs to be kept reentrant (but not necessarily thread-safe)
     // Might be called from multiple threads via libclang, each thread operates on a different instance though
@@ -196,9 +196,12 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     std::lock_guard<std::mutex> lock(CheckManager::lock());
 
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
-    auto createdChecks = m_checkManager->createChecks(m_checks, m_context);
-    for (const auto &check : createdChecks) {
-        astConsumer->addCheck(check);
+    for (const auto &requestedCheck : m_checks) {
+        auto *check = requestedCheck.factory(m_context);
+        if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
+            check->enablePreProcessorCallbacks(ci.getPreprocessor());
+        }
+        astConsumer->addCheck({check, requestedCheck});
     }
 
     return std::unique_ptr<clang::ASTConsumer>(astConsumer.release());
@@ -415,9 +418,12 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
         return nullptr;
     }
 
-    auto createdChecks = cm->createChecks(requestedChecks, context);
-    for (const auto &check : createdChecks) {
-        astConsumer->addCheck(check);
+    for (const auto &requestedCheck : requestedChecks) {
+        auto *check = requestedCheck.factory(context);
+        if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
+            check->enablePreProcessorCallbacks(ci.getPreprocessor());
+        }
+        astConsumer->addCheck({check, requestedCheck});
     }
 
     return std::unique_ptr<ASTConsumer>(astConsumer);

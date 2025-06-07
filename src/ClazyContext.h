@@ -63,6 +63,7 @@ public:
                           std::string exportFixesFilename,
                           const std::vector<std::string> &translationUnitPaths,
                           ClazyOptions opts);
+
     ~ClazyContext();
 
     bool usingPreCompiledHeaders() const;

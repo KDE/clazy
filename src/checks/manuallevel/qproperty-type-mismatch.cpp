@@ -32,7 +32,6 @@ using namespace clang;
 QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    enablePreProcessorCallbacks();
     context->enableVisitallTypeDefs();
 }
 

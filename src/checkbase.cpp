@@ -196,9 +196,9 @@ void CheckBase::VisitInclusionDirective(clang::SourceLocation,
     // Overridden in derived classes
 }
 
-void CheckBase::enablePreProcessorCallbacks()
+void CheckBase::enablePreProcessorCallbacks(clang::Preprocessor &pp)
 {
-    m_context->m_pp.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    pp.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 }
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
