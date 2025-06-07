@@ -1,9 +1,10 @@
 #include "ClazyContext.h"
-#include "HierarchyUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "checkbase.h"
+#include "checks/level0/qcolor-from-literal.h"
 #include "checks/level1/install-event-filter.h"
+#include "checks/level1/non-pod-global-static.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
 #include "clang-tidy/ClangTidyModuleRegistry.h"
@@ -19,9 +20,14 @@ class FullASTVisitor : public RecursiveASTVisitor<FullASTVisitor>
 public:
     explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check)
         : m_context(context)
-        , m_checks({new InstallEventFilter("install-event-filter", &m_context)})
+        , m_checks({
+              new InstallEventFilter("install-event-filter", &m_context),
+              new NonPodGlobalStatic("non-pod-global-static", &m_context),
+              new QColorFromLiteral("non-pod-global-static", &m_context),
+          })
 
     {
+        std::for_each(m_checks.begin(), m_checks.end(), [this](CheckBase *check) { });
     }
 
     ~FullASTVisitor()
@@ -48,6 +54,7 @@ public:
     }
     bool VisitDecl(Decl *decl)
     {
+        m_context.lastDecl = decl;
         std::for_each(m_checks.begin(), m_checks.end(), [decl](CheckBase *check) {
             check->VisitDecl(decl);
         });
@@ -65,22 +72,19 @@ public:
     ClazyCheck(StringRef CheckName, ClangTidyContext *Context)
         : ClangTidyCheck(CheckName, Context)
         , Context(Context)
+        , masterContext(nullptr)
     {
     }
 
     void registerMatchers(ast_matchers::MatchFinder *Finder) override
     {
-        // Finder->addMatcher(stmt().bind("Stmt"), this);
+        llvm::errs() << "registermatchers\n";
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
     }
 
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override
     {
-        /*auto *stmt = Result.Nodes.getNodeAs<Stmt>("Stmt");
-        if (!Utils::isMainFile(Result.Context->getSourceManager(), stmt->getBeginLoc())) {
-            return;
-        }*/
-
+        llvm::errs() << "check\n";
         const auto emitDiagnostic = [this](const std::string &checkName,
                                            const clang::SourceLocation &loc,
                                            clang::DiagnosticIDs::Level level,
@@ -92,31 +96,42 @@ public:
 
         // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
         ClazyContext ctx(*Result.Context, *m_pp, "", "", "", {}, {}, emitDiagnostic);
-        // auto &diags = Result.Context->getDiagnostics();
-        //  Context->setDiagnosticsEngine(&diags);
 
         FullASTVisitor visitor(ctx, *this);
-        // Result.Context->getDiagnostics().dump();
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
-        // translationUnit->getBeginLoc().dump(*Result.SourceManager);
         visitor.TraverseDecl(translationUnit);
     }
 
     void registerPPCallbacks(const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) override
     {
+        llvm::errs() << "ppcallbacks\n";
         m_pp = PP;
     }
+
     Preprocessor *m_pp;
     ClangTidyContext *Context;
+    ClazyContext const *masterContext;
 };
 
-/// Create a subclass of ClangTidyModule to register Clazy checks.
+class NoopCheck : public ClangTidyCheck
+{
+public:
+    NoopCheck(StringRef CheckName, ClangTidyContext *Context)
+        : ClangTidyCheck(CheckName, Context)
+    {
+        // Just for sake of registering a check
+    }
+};
+
 class ClazyModule : public ClangTidyModule
 {
 public:
     void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override
     {
-        CheckFactories.registerCheck<ClazyCheck>("clazy-install-event-filter");
+        CheckFactories.registerCheck<ClazyCheck>("clazy");
+        CheckFactories.registerCheck<NoopCheck>("clazy-install-event-filter");
+        CheckFactories.registerCheck<NoopCheck>("clazy-non-pod-global-static");
+        CheckFactories.registerCheck<NoopCheck>("clazy-qcolor-from-literal");
     }
 };
 

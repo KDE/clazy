@@ -295,7 +295,8 @@ else()
   install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 endif()
 
-add_clang_plugin(ClazyClangTidy src/ClazyClangTidyModule.cpp ${CLAZY_LIB_SRC} ${CMAKE_CURRENT_LIST_DIR}/src/ClazyContext.cpp ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/install-event-filter.cpp)
+add_clang_plugin(ClazyClangTidy src/ClazyClangTidyModule.cpp)
+target_link_libraries(ClazyClangTidy ClazyPlugin)
 
 function(to_raw_string_literal input_string output_string)
     if (MSVC)
