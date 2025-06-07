@@ -10,6 +10,7 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
+#include "ClazyContext.h"
 #include "clazy_stl.h" // IWYU pragma: keep
 
 #include <clang/AST/ASTContext.h>
@@ -51,7 +52,6 @@ class Token;
 }
 
 class CheckBase;
-class ClazyContext;
 
 enum CheckLevel { // See README.md for what each level does
     CheckLevelUndefined = -1,
@@ -177,14 +177,13 @@ protected:
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::SourceManager &sm() const
     {
-        return m_sm;
+        return m_context->sm;
     }
     const clang::LangOptions &lo() const
     {
         return m_astContext.getLangOpts();
     }
 
-    const clang::SourceManager &m_sm;
     const std::string m_name;
     const ClazyContext *const m_context;
     clang::ASTContext &m_astContext;

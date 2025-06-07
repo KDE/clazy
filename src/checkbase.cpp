@@ -113,8 +113,7 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
 }
 
 CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
-    : m_sm(context->sm)
-    , m_name(name)
+    : m_name(name)
     , m_context(context)
     , m_astContext(context->astContext)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
