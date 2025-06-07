@@ -52,7 +52,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
         }
 
         const bool isClazyStandalone = !translationUnitPaths.empty();
-        exporter = new FixItExporter(ci.getDiagnostics(), sm, ci.getLangOpts(), exportFixesFilename, isClazyStandalone);
+        exporter = new FixItExporter(ci.getDiagnostics(), sm, astContext.getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
 }
 
@@ -84,14 +84,14 @@ ClazyContext::~ClazyContext()
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(sm, ci.getLangOpts(), ci.getPreprocessor(), exportFixesEnabled());
+        accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), ci.getPreprocessor(), exportFixesEnabled());
     }
 }
 
 void ClazyContext::enablePreprocessorVisitor()
 {
     if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(ci.getSourceManager(), ci.getPreprocessor());
+        preprocessorVisitor = new PreProcessorVisitor(sm, ci.getPreprocessor());
     }
 }
 
