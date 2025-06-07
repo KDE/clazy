@@ -34,6 +34,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
     , m_translationUnitPaths(translationUnitPaths)
+    , m_ppOpts(ci.getPreprocessorOpts())
 {
     if (!headerFilter.empty()) {
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
@@ -110,7 +111,7 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (const auto &s : ci.getPreprocessorOpts().Macros) {
+        for (const auto &s : m_ppOpts.Macros) {
             if (s.first == "QT_CORE_LIB") {
                 return true;
             }
