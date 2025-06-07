@@ -280,7 +280,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                         && dyn_cast_or_null<CXXBindTemporaryExpr>(clazy::parent(m_context->parentMap, ctorExpr));
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo")), so now remove QString
-                        auto removalFixits = clazy::fixItRemoveToken(&m_astContext, ctorExpr, true);
+                        auto removalFixits = clazy::fixItRemoveToken(astContext(), ctorExpr, true);
                         if (removalFixits.empty()) {
                             queueManualFixitWarning(ctorExpr->getBeginLoc(), "Internal error: invalid start or end location");
                         } else {
@@ -360,7 +360,7 @@ std::vector<FixItHint> QStringAllocations::fixItReplaceWordWithWord(clang::Stmt 
     }
 
     std::vector<FixItHint> fixits;
-    FixItHint fixit = clazy::fixItReplaceWordWithWord(&m_astContext, begin, replacement, replacee);
+    FixItHint fixit = clazy::fixItReplaceWordWithWord(astContext(), begin, replacement, replacee);
     if (fixit.isNull()) {
         queueManualFixitWarning(begin->getBeginLoc(), "");
     } else {
@@ -535,7 +535,7 @@ std::vector<FixItHint> QStringAllocations::fixItRawLiteral(StringLiteral *lt, co
 {
     std::vector<FixItHint> fixits;
 
-    SourceRange range = clazy::rangeForLiteral(&m_astContext, lt);
+    SourceRange range = clazy::rangeForLiteral(astContext(), lt);
     if (range.isInvalid()) {
         if (lt) {
             queueManualFixitWarning(lt->getBeginLoc(), "Internal error: Can't calculate source location");

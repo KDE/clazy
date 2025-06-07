@@ -70,7 +70,7 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     std::vector<FixItHint> fixits;
-    const bool success = clazy::transformTwoCallsIntoOneV2(&m_astContext, secondCall, replacement, fixits);
+    const bool success = clazy::transformTwoCallsIntoOneV2(astContext(), secondCall, replacement, fixits);
     if (!success) {
         queueManualFixitWarning(secondCall->getBeginLoc());
     }

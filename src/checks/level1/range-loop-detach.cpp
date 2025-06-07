@@ -94,7 +94,7 @@ void RangeLoopDetach::VisitStmt(clang::Stmt *stmt)
 bool RangeLoopDetach::islvalue(Expr *exp, SourceLocation &endLoc)
 {
     if (isa<DeclRefExpr>(exp)) {
-        endLoc = clazy::locForEndOfToken(&m_astContext, exp->getBeginLoc());
+        endLoc = clazy::locForEndOfToken(astContext(), exp->getBeginLoc());
         return true;
     }
 
@@ -104,7 +104,7 @@ bool RangeLoopDetach::islvalue(Expr *exp, SourceLocation &endLoc)
             return false;
         }
 
-        endLoc = clazy::locForEndOfToken(&m_astContext, me->getMemberLoc());
+        endLoc = clazy::locForEndOfToken(astContext(), me->getMemberLoc());
         return true;
     }
 

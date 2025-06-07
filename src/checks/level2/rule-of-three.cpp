@@ -47,7 +47,7 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
 
     const SourceLocation recordStart = record->getBeginLoc();
     if (recordStart.isMacroID()) {
-        if (clazy::isInMacro(&m_astContext, recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
+        if (clazy::isInMacro(astContext(), recordStart, "Q_GLOBAL_STATIC_INTERNAL")) {
             return;
         }
     }

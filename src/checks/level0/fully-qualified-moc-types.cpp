@@ -131,7 +131,7 @@ std::string FullyQualifiedMocTypes::resolveTemplateType(const clang::TemplateSpe
         if (arg.getKind() == TemplateArgument::Expression) {
             // std::bitset<int(8)>, here int(8) is an expression!
             llvm::raw_string_ostream outputStream(str);
-            arg.print(m_astContext.getPrintingPolicy(), outputStream, true);
+            arg.print(astContext()->getPrintingPolicy(), outputStream, true);
         } else {
             QualType argType = arg.getAsType();
             if (argType.isConstQualified()) {
