@@ -61,7 +61,6 @@ void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &c
 {
     CheckBase *checkBase = check.first;
     checkBase->registerASTMatchers(*m_matchFinder);
-    // m_createdChecks.push_back(checkBase);
 
     const RegisteredCheck &rcheck = check.second;
 
