@@ -199,8 +199,7 @@ void CheckBase::VisitInclusionDirective(clang::SourceLocation,
 
 void CheckBase::enablePreProcessorCallbacks()
 {
-    Preprocessor &pi = m_context->ci.getPreprocessor();
-    pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    m_context->m_pp.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 }
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
@@ -278,7 +277,7 @@ void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
-    auto &engine = m_context->ci.getDiagnostics();
+    auto &engine = m_context->astContext.getDiagnostics();
     auto severity =
         (m_context->treatAsError(m_name) || (engine.getWarningsAsErrors() && !m_context->userDisabledWError())) ? DiagnosticIDs::Error : DiagnosticIDs::Warning;
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
