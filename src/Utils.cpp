@@ -413,7 +413,7 @@ bool Utils::isPassedToFunction(const StmtBodyRange &bodyRange, const VarDecl *va
     return false;
 }
 
-bool Utils::addressIsTaken(const clang::CompilerInstance & /*ci*/, Stmt *body, const clang::ValueDecl *valDecl)
+bool Utils::addressIsTaken(Stmt *body, const clang::ValueDecl *valDecl)
 {
     if (!body || !valDecl) {
         return false;

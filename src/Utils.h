@@ -118,7 +118,7 @@ bool isReturned(clang::Stmt *body, const clang::VarDecl *varDecl);
 bool isPassedToFunction(const StmtBodyRange &bodyRange, const clang::VarDecl *varDecl, bool byRefOrPtrOnly);
 
 // Returns true if we take the address of varDecl, such as: &foo
-bool addressIsTaken(const clang::CompilerInstance &ci, clang::Stmt *body, const clang::ValueDecl *valDecl);
+bool addressIsTaken(clang::Stmt *body, const clang::ValueDecl *valDecl);
 
 // QString::fromLatin1("foo")    -> true
 // QString::fromLatin1("foo", 1) -> false
