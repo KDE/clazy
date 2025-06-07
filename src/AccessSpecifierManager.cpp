@@ -16,6 +16,7 @@
 #include <clang/AST/DeclTemplate.h>
 #include <clang/Basic/IdentifierTable.h>
 #include <clang/Basic/LLVM.h>
+#include <clang/Basic/LangOptions.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PPCallbacks.h>
@@ -24,7 +25,6 @@
 #include <llvm/Support/Casting.h>
 
 #include <algorithm>
-#include <memory>
 #include <utility>
 
 namespace clang
@@ -66,9 +66,10 @@ class AccessSpecifierPreprocessorCallbacks : public clang::PPCallbacks
     AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
 
 public:
-    AccessSpecifierPreprocessorCallbacks(const clang::CompilerInstance &ci)
+    AccessSpecifierPreprocessorCallbacks(const clang::SourceManager &sm, clang::LangOptions opts)
         : clang::PPCallbacks()
-        , m_ci(ci)
+        , m_sm(sm)
+        , m_lo(opts)
     {
         m_qtAccessSpecifiers.reserve(30); // bootstrap it
     }
@@ -102,7 +103,7 @@ public:
             m_qtAccessSpecifiers.push_back({loc, clang::AS_none, qtAccessSpecifier});
         } else {
             // Get the location of the method declaration, so we can compare directly when we visit methods
-            loc = Utils::locForNextToken(loc, m_ci.getSourceManager(), m_ci.getLangOpts());
+            loc = Utils::locForNextToken(loc, m_sm, m_lo);
             if (loc.isInvalid()) {
                 return;
             }
@@ -122,13 +123,14 @@ public:
     std::vector<unsigned> m_individualSlots; // Q_SLOT
     std::vector<unsigned> m_invokables; // Q_INVOKABLE
     std::vector<unsigned> m_scriptables; // Q_SCRIPTABLE
-    const CompilerInstance &m_ci;
     ClazySpecifierList m_qtAccessSpecifiers;
+    const clang::SourceManager &m_sm;
+    const clang::LangOptions m_lo;
 };
 
 AccessSpecifierManager::AccessSpecifierManager(ClazyContext *context)
     : m_ci(context->ci)
-    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(m_ci))
+    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(context->sm, context->ci.getLangOpts()))
     , m_fixitsEnabled(context->exportFixesEnabled())
 {
     Preprocessor &pi = m_ci.getPreprocessor();
