@@ -44,7 +44,7 @@ void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
     }
 
     SourceLocation loc = stmt->getBeginLoc();
-    if (clazy::isInMacro(&m_astContext, loc, "Q_GLOBAL_STATIC_WITH_ARGS")) {
+    if (clazy::isInMacro(astContext(), loc, "Q_GLOBAL_STATIC_WITH_ARGS")) {
         return;
     }
 

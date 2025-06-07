@@ -156,7 +156,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    const bool isForeach = clazy::isInMacro(&m_astContext, stm->getBeginLoc(), "Q_FOREACH");
+    const bool isForeach = clazy::isInMacro(astContext(), stm->getBeginLoc(), "Q_FOREACH");
 
     // If the body is another loop, we have nesting, ignore it now since the inner loops will be visited soon.
     if (isa<DoStmt>(body) || isa<WhileStmt>(body) || (!isForeach && isa<ForStmt>(body))) {
@@ -324,7 +324,7 @@ bool ReserveCandidates::isInComplexLoop(clang::Stmt *s, SourceLocation declLocat
             return true;
         }
 
-        if (clazy::isInForeach(&m_astContext, parentStart)) {
+        if (clazy::isInForeach(astContext(), parentStart)) {
             auto ploc = sm().getPresumedLoc(parentStart);
             if (Utils::presumedLocationsEqual(ploc, lastForeachForStm)) {
                 // Q_FOREACH comes in pairs, because each has two for statements inside, so ignore one when counting

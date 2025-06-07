@@ -480,7 +480,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
             if (record) {
                 lastRecordDecl = record;
                 if (isQPointer(expr)) {
-                    auto endLoc = clazy::locForNextToken(&m_astContext, arg->getBeginLoc(), tok::comma);
+                    auto endLoc = clazy::locForNextToken(astContext(), arg->getBeginLoc(), tok::comma);
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {

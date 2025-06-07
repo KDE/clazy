@@ -181,12 +181,16 @@ protected:
     }
     const clang::LangOptions &lo() const
     {
-        return m_astContext.getLangOpts();
+        return m_context->astContext.getLangOpts();
+    }
+
+    clang::ASTContext *astContext() const
+    {
+        return &m_context->astContext;
     }
 
     const std::string m_name;
     const ClazyContext *const m_context;
-    clang::ASTContext &m_astContext;
     std::vector<std::string> m_filesToIgnore;
 
 private:
