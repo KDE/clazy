@@ -41,7 +41,6 @@ NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)
     for (const std::string &module : m_modulesList) {
         m_filesToIgnore.emplace_back("Qt" + module + "Depends");
     }
-    enablePreProcessorCallbacks();
 }
 
 void NoModuleInclude::VisitInclusionDirective(clang::SourceLocation HashLoc,

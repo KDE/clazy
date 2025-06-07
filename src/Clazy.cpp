@@ -187,7 +187,7 @@ ClazyASTAction::ClazyASTAction()
 {
 }
 
-std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &, llvm::StringRef)
+std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
     // NOTE: This method needs to be kept reentrant (but not necessarily thread-safe)
     // Might be called from multiple threads via libclang, each thread operates on a different instance though
@@ -195,9 +195,12 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     std::lock_guard<std::mutex> lock(CheckManager::lock());
 
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
-    auto createdChecks = m_checkManager->createChecks(m_checks, m_context);
-    for (const auto &check : createdChecks) {
-        astConsumer->addCheck(check);
+    for (const auto &requestedCheck : m_checks) {
+        auto *check = requestedCheck.factory(m_context);
+        if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
+            check->enablePreProcessorCallbacks(ci.getPreprocessor());
+        }
+        astConsumer->addCheck({check, requestedCheck});
     }
 
     return std::unique_ptr<clang::ASTConsumer>(astConsumer.release());
@@ -224,8 +227,13 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
-        m_context =
-            new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), headerFilter, ignoreDirs, exportFixesFilename, {}, ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(ci.getASTContext(),
+                                     ci.getPreprocessor().getPreprocessorOpts(),
+                                     headerFilter,
+                                     ignoreDirs,
+                                     exportFixesFilename,
+                                     {},
+                                     ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -254,7 +262,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         exportFixesFilename = args.at(0);
     }
 
-    m_context = new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), headerFilter, ignoreDirs, exportFixesFilename, {}, m_options);
+    m_context = new ClazyContext(ci.getASTContext(), ci.getPreprocessor().getPreprocessorOpts(), headerFilter, ignoreDirs, exportFixesFilename, {}, m_options);
     m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
 
     // This argument is for debugging purposes
@@ -377,8 +385,13 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const std::string &checkList,
 
 std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    auto *context =
-        new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), m_headerFilter, m_ignoreDirs, m_exportFixesFilename, m_translationUnitPaths, m_options);
+    auto *context = new ClazyContext(ci.getASTContext(),
+                                     ci.getPreprocessor().getPreprocessorOpts(),
+                                     m_headerFilter,
+                                     m_ignoreDirs,
+                                     m_exportFixesFilename,
+                                     m_translationUnitPaths,
+                                     m_options);
     context->registerPreprocessorCallbacks(ci.getPreprocessor());
     auto *astConsumer = new ClazyASTConsumer(context);
 
@@ -394,9 +407,12 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
         return nullptr;
     }
 
-    auto createdChecks = cm->createChecks(requestedChecks, context);
-    for (const auto &check : createdChecks) {
-        astConsumer->addCheck(check);
+    for (const auto &requestedCheck : requestedChecks) {
+        auto *check = requestedCheck.factory(context);
+        if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
+            check->enablePreProcessorCallbacks(ci.getPreprocessor());
+        }
+        astConsumer->addCheck({check, requestedCheck});
     }
 
     return std::unique_ptr<ASTConsumer>(astConsumer);

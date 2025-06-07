@@ -26,7 +26,6 @@ using namespace clang;
 QtKeywordEmit::QtKeywordEmit(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    enablePreProcessorCallbacks();
     context->enablePreprocessorVisitor();
 }
 

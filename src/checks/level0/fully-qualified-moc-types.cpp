@@ -32,7 +32,6 @@ FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyCon
     : CheckBase(name, context)
 {
     context->enableAccessSpecifierManager();
-    enablePreProcessorCallbacks();
 }
 
 void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
@@ -239,6 +238,7 @@ void FullyQualifiedMocTypes::VisitMacroExpands(const clang::Token &MacroNameTok,
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
     if (ii && ii->getName() == "Q_GADGET") {
+        llvm::errs() << "<<<<<<<<<<<<<QGADGETTTTTTTTTTTTT\n";
         registerQ_GADGET(range.getBegin());
     }
 }

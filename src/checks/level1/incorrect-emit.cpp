@@ -27,7 +27,6 @@ IncorrectEmit::IncorrectEmit(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     context->enableAccessSpecifierManager();
-    enablePreProcessorCallbacks();
     m_emitLocations.reserve(30); // bootstrap it
     m_filesToIgnore = {"moc_", ".moc"};
 }

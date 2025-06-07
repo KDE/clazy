@@ -113,8 +113,8 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
 }
 
 CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
-    : m_name(name)
-    , m_context(context)
+    : m_context(context)
+    , m_name(name)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
     , m_tag(" [-Wclazy-" + m_name + ']')
@@ -195,9 +195,9 @@ void CheckBase::VisitInclusionDirective(clang::SourceLocation,
     // Overridden in derived classes
 }
 
-void CheckBase::enablePreProcessorCallbacks()
+void CheckBase::enablePreProcessorCallbacks(clang::Preprocessor &pp)
 {
-    m_context->m_pp.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
+    pp.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
 }
 
 bool CheckBase::shouldIgnoreFile(SourceLocation loc) const

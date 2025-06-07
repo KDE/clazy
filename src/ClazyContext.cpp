@@ -21,7 +21,7 @@
 using namespace clang;
 
 ClazyContext::ClazyContext(clang::ASTContext &context,
-                           clang::Preprocessor &pp,
+                           clang::PreprocessorOptions &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
                            std::string exportFixesFilename,
@@ -97,13 +97,13 @@ ClazyContext::~ClazyContext()
     parentMap = nullptr;
 }
 
-void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &m_pp)
+void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &pp)
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), m_pp, exportFixesEnabled());
+        accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), pp, exportFixesEnabled());
     }
     if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(sm, m_pp);
+        preprocessorVisitor = new PreProcessorVisitor(sm, pp);
     }
 }
 
@@ -122,7 +122,7 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (const auto &s : m_pp.getPreprocessorOpts().Macros) {
+        for (const auto &s : m_pp.Macros) {
             if (s.first == "QT_CORE_LIB") {
                 return true;
             }
@@ -134,5 +134,5 @@ bool ClazyContext::isQt() const
 }
 bool ClazyContext::usingPreCompiledHeaders() const
 {
-    return !m_pp.getPreprocessorOpts().ImplicitPCHInclude.empty();
+    return !m_pp.ImplicitPCHInclude.empty();
 }

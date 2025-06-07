@@ -17,7 +17,6 @@ using namespace clang;
 IfndefDefineTypo::IfndefDefineTypo(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    enablePreProcessorCallbacks();
 }
 
 void IfndefDefineTypo::VisitMacroDefined(const Token &macroNameTok)

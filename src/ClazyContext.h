@@ -62,7 +62,7 @@ public:
     using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
 
     explicit ClazyContext(clang::ASTContext &context,
-                          clang::Preprocessor &pp,
+                          clang::PreprocessorOptions &pp,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
@@ -70,7 +70,7 @@ public:
                           ClazyOptions opts,
                           std::optional<WarningReporter> warningReporter = std::nullopt);
 
-    void registerPreprocessorCallbacks(clang::Preprocessor &m_pp);
+    void registerPreprocessorCallbacks(clang::Preprocessor &pp);
 
     ~ClazyContext();
 
@@ -194,7 +194,7 @@ public:
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
     const std::vector<std::string> m_translationUnitPaths;
-    clang::Preprocessor &m_pp;
+    const clang::PreprocessorOptions m_pp;
     const WarningReporter p_warningReporter;
 };
 

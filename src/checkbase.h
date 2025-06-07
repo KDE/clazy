@@ -140,6 +140,8 @@ public:
 
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
+
+    void enablePreProcessorCallbacks(clang::Preprocessor &pp);
     // To be initialized later
     const ClazyContext *m_context;
 
@@ -165,8 +167,6 @@ protected:
                                          const clang::Module *SuggestedModule,
                                          bool ModuleImported,
                                          clang::SrcMgr::CharacteristicKind FileType);
-
-    void enablePreProcessorCallbacks();
 
     bool shouldIgnoreFile(clang::SourceLocation) const;
     void reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<clang::FixItHint> &fixits);

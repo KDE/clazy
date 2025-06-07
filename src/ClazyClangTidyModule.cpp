@@ -2,6 +2,7 @@
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "checkbase.h"
+#include "checks/level0/no-module-include.h"
 #include "checks/level0/qcolor-from-literal.h"
 #include "checks/level0/qstring-arg.h"
 #include "checks/level1/install-event-filter.h"
@@ -72,6 +73,7 @@ public:
               new NonPodGlobalStatic("non-pod-global-static", nullptr),
               new QColorFromLiteral("non-pod-global-static", nullptr),
               new QStringArg("qstring-arg", nullptr),
+              new NoModuleInclude("no-module-include", nullptr),
           })
     {
     }

@@ -25,7 +25,6 @@ using namespace clang;
 MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    enablePreProcessorCallbacks();
     context->enablePreprocessorVisitor();
 }
 

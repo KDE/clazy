@@ -242,7 +242,6 @@ Qt6HeaderFixes::Qt6HeaderFixes(const std::string &name, ClazyContext *context)
                        "qopenglfunctions_4_4_core.h",
                        "qopenglfunctions_4_5_compatibility.h",
                        "qopenglfunctions_4_5_core.h"};
-    enablePreProcessorCallbacks();
 }
 
 void Qt6HeaderFixes::VisitInclusionDirective(clang::SourceLocation HashLoc,
