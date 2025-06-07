@@ -255,6 +255,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     }
 
     m_context = new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), headerFilter, ignoreDirs, exportFixesFilename, {}, m_options);
+    m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
 
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
@@ -378,6 +379,7 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
 {
     auto *context =
         new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), m_headerFilter, m_ignoreDirs, m_exportFixesFilename, m_translationUnitPaths, m_options);
+    context->registerPreprocessorCallbacks(ci.getPreprocessor());
     auto *astConsumer = new ClazyASTConsumer(context);
 
     auto *cm = CheckManager::instance();
