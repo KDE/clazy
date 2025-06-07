@@ -448,10 +448,10 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, const std::stri
     auto *oppCallExpr = dyn_cast<CXXOperatorCallExpr>(stmt);
     auto *arg0Size = oppCallExpr->getArg(0);
     auto *arg1Size = oppCallExpr->getArg(1);
-    auto charRange = Lexer::getAsCharRange(arg0Size->getSourceRange(), m_sm, lo());
-    auto replacementVar1 = Lexer::getSourceText(charRange, m_sm, lo());
-    charRange = Lexer::getAsCharRange(arg1Size->getSourceRange(), m_sm, lo());
-    auto replacementVar2 = Lexer::getSourceText(charRange, m_sm, lo());
+    auto charRange = Lexer::getAsCharRange(arg0Size->getSourceRange(), sm(), lo());
+    auto replacementVar1 = Lexer::getSourceText(charRange, sm(), lo());
+    charRange = Lexer::getAsCharRange(arg1Size->getSourceRange(), sm(), lo());
+    auto replacementVar2 = Lexer::getSourceText(charRange, sm(), lo());
 
     replacementVar1 = replacementVar1.rtrim(' ');
     replacementVar2 = replacementVar2.ltrim(' ');
@@ -492,7 +492,7 @@ void Qt6DeprecatedAPIFixes::fixForDeprecatedOperator(Stmt *stmt, const std::stri
 
     // If a macro is present in the stmt range the spelling location is used
     // This is producing a wrong fix. So we're forcing the use of expansion location
-    FullSourceLoc endLoc(stmt->getEndLoc(), m_sm);
+    FullSourceLoc endLoc(stmt->getEndLoc(), sm());
     SourceRange range(stmt->getBeginLoc(), endLoc.getExpansionLoc());
     fixitRange = range;
     fixits.push_back(FixItHint::CreateReplacement(fixitRange, replacement));

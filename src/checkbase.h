@@ -52,7 +52,6 @@ class Token;
 }
 
 class CheckBase;
-class ClazyContext;
 
 enum CheckLevel { // See README.md for what each level does
     CheckLevelUndefined = -1,
@@ -177,7 +176,7 @@ protected:
     // 3 shortcuts for stuff that litter the codebase all over.
     const clang::SourceManager &sm() const
     {
-        return m_sm;
+        return m_context->sm;
     }
     const clang::LangOptions &lo() const
     {
@@ -189,7 +188,6 @@ protected:
         return m_context->astContext;
     }
 
-    const clang::SourceManager &m_sm;
     const std::string m_name;
     const ClazyContext *const m_context;
     std::vector<std::string> m_filesToIgnore;

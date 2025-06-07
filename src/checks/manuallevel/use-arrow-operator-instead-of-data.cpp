@@ -58,7 +58,7 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 
     // find '.' in ptr.data()
     int dotOffset = 0;
-    const char *d = m_sm.getCharacterData(begin);
+    const char *d = sm().getCharacterData(begin);
     while (*d != '.') {
         dotOffset--;
         d--;

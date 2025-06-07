@@ -102,7 +102,7 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    const std::string currentFile = m_sm.getFilename(decl->getLocation()).str();
+    const std::string currentFile = sm().getFilename(decl->getLocation()).str();
     if (m_currentFile != currentFile) {
         m_currentFile = currentFile;
         m_including_qcontainerfwd = false;
@@ -111,7 +111,7 @@ void Qt6FwdFixes::VisitDecl(clang::Decl *decl)
         }
     }
 
-    SourceLocation endLoc = locForNextSemiColon(recDecl->getBeginLoc(), m_sm, lo());
+    SourceLocation endLoc = locForNextSemiColon(recDecl->getBeginLoc(), sm(), lo());
 
     SourceLocation beginLoc;
     auto *tempclass = recDecl->getDescribedClassTemplate();
@@ -158,7 +158,7 @@ void Qt6FwdFixes::VisitInclusionDirective(clang::SourceLocation HashLoc,
                                           bool /*ModuleImported*/,
                                           clang::SrcMgr::CharacteristicKind /*FileType*/)
 {
-    auto current_file = m_sm.getFilename(HashLoc);
+    auto current_file = sm().getFilename(HashLoc);
     if (FileName.str() == "QtCore/qcontainerfwd.h") {
         m_qcontainerfwd_included_in_files.insert(current_file);
         return;

@@ -154,7 +154,7 @@ bool Qt6QLatin1StringCharToU::isInterestingCtorCall(CXXConstructExpr *ctorExpr, 
                         auto parent_spl_begin = sm().getSpellingLoc(parent_stmt_begin);
                         auto parent_spl_end = sm().getSpellingLoc(parent_stmt_end);
                         auto ctorSpelling_loc = sm().getSpellingLoc(ctorExpr->getBeginLoc());
-                        if (m_sm.isPointWithin(ctorSpelling_loc, parent_spl_begin, parent_spl_end)) {
+                        if (sm().isPointWithin(ctorSpelling_loc, parent_spl_begin, parent_spl_end)) {
                             return false;
                         }
                         return oneFunctionalCast;
@@ -190,7 +190,7 @@ void Qt6QLatin1StringCharToU::VisitStmt(clang::Stmt *stmt)
     std::string message;
 
     for (auto macro_pos : m_listingMacroExpand) {
-        if (m_sm.isPointWithin(macro_pos, stmt->getBeginLoc(), stmt->getEndLoc())) {
+        if (sm().isPointWithin(macro_pos, stmt->getBeginLoc(), stmt->getEndLoc())) {
             message = "QLatin1Char or QLatin1String is being called (fix it not supported because of macro)";
             emitWarning(stmt->getBeginLoc(), message, fixits);
             return;
@@ -230,7 +230,7 @@ bool Qt6QLatin1StringCharToU::checkCTorExpr(clang::Stmt *stmt, bool check_parent
     if (stmt->getBeginLoc().isMacroID()) {
         SourceLocation callLoc = stmt->getBeginLoc();
         message += " in macro ";
-        message += Lexer::getImmediateMacroName(callLoc, m_sm, lo());
+        message += Lexer::getImmediateMacroName(callLoc, sm(), lo());
         message += ". Please replace with `u` call manually.";
         SourceLocation sploc = sm().getSpellingLoc(callLoc);
         warningLocation = sploc;
