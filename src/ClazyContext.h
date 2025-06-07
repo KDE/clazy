@@ -62,9 +62,14 @@ public:
                           ClazyOptions = ClazyOption_None);
     ~ClazyContext();
 
+    const clang::PreprocessorOptions &getPreprocessorOpts() const
+    {
+        return m_ppOpts;
+    }
+
     bool usingPreCompiledHeaders() const
     {
-        return !ci.getPreprocessorOpts().ImplicitPCHInclude.empty();
+        return !m_ppOpts.ImplicitPCHInclude.empty();
     }
 
     bool userDisabledWError() const
@@ -182,6 +187,7 @@ public:
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
     const std::vector<std::string> m_translationUnitPaths;
+    const clang::PreprocessorOptions &m_ppOpts;
 };
 
 #endif
