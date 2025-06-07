@@ -7,7 +7,6 @@
 */
 
 #include "AccessSpecifierManager.h"
-#include "ClazyContext.h"
 #include "QtUtils.h"
 #include "Utils.h"
 
@@ -124,16 +123,15 @@ public:
     std::vector<unsigned> m_invokables; // Q_INVOKABLE
     std::vector<unsigned> m_scriptables; // Q_SCRIPTABLE
     ClazySpecifierList m_qtAccessSpecifiers;
-    const clang::SourceManager &m_sm;
-    const clang::LangOptions m_lo;
+    const SourceManager &m_sm;
+    const LangOptions m_lo;
 };
 
-AccessSpecifierManager::AccessSpecifierManager(ClazyContext *context)
-    : m_ci(context->ci)
-    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(context->sm, context->ci.getLangOpts()))
-    , m_fixitsEnabled(context->exportFixesEnabled())
+AccessSpecifierManager::AccessSpecifierManager(const SourceManager &manager, const LangOptions lo, Preprocessor &pi, bool exportFixesEnabled)
+    : m_sm(manager)
+    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(manager, lo))
+    , m_fixitsEnabled(exportFixesEnabled)
 {
-    Preprocessor &pi = m_ci.getPreprocessor();
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));
     m_visitsNonQObjects = getenv("CLAZY_ACCESSSPECIFIER_NON_QOBJECT") != nullptr;
 }
@@ -175,15 +173,13 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
         return;
     }
 
-    const auto &sm = m_ci.getSourceManager();
-
     // We got a new record, lets fetch signals and slots that the pre-processor gathered
     ClazySpecifierList &specifiers = entryForClassDefinition(record);
 
     auto it = m_preprocessorCallbacks->m_qtAccessSpecifiers.begin();
     while (it != m_preprocessorCallbacks->m_qtAccessSpecifiers.end()) {
         if (classDefinitionForLoc((*it).loc) == record) {
-            sorted_insert(specifiers, *it, sm);
+            sorted_insert(specifiers, *it, m_sm);
             it = m_preprocessorCallbacks->m_qtAccessSpecifiers.erase(it);
         } else {
             ++it;
@@ -198,7 +194,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
             continue;
         }
         ClazySpecifierList &specifiers = entryForClassDefinition(record);
-        sorted_insert(specifiers, {accessSpec->getBeginLoc(), accessSpec->getAccess(), QtAccessSpecifier_None}, sm);
+        sorted_insert(specifiers, {accessSpec->getBeginLoc(), accessSpec->getAccess(), QtAccessSpecifier_None}, m_sm);
     }
 }
 
@@ -250,12 +246,14 @@ QtAccessSpecifierType AccessSpecifierManager::qtAccessSpecifierType(const CXXMet
     const ClazySpecifierList &accessSpecifiers = it->second;
 
     auto pred = [this](const ClazyAccessSpecifier &lhs, const ClazyAccessSpecifier &rhs) {
-        return accessSpecifierCompare(lhs, rhs, m_ci.getSourceManager());
+        return accessSpecifierCompare(lhs, rhs, m_sm);
     };
 
-    const ClazyAccessSpecifier dummy = {methodLoc, // we're only interested in the location
-                                        /*dummy*/ clang::AS_none,
-                                        /*dummy*/ QtAccessSpecifier_None};
+    const ClazyAccessSpecifier dummy = {
+        methodLoc, // we're only interested in the location
+        /*dummy*/ clang::AS_none,
+        /*dummy*/ QtAccessSpecifier_None,
+    };
     auto i = std::upper_bound(accessSpecifiers.cbegin(), accessSpecifiers.cend(), dummy, pred);
     if (i == accessSpecifiers.cbegin()) {
         return QtAccessSpecifier_None;
