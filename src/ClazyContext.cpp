@@ -20,21 +20,21 @@
 
 using namespace clang;
 
-ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
+ClazyContext::ClazyContext(clang::ASTContext &context,
+                           clang::Preprocessor &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
                            std::string exportFixesFilename,
                            const std::vector<std::string> &translationUnitPaths,
                            ClazyOptions opts)
-    : ci(compiler)
-    , astContext(ci.getASTContext())
-    , sm(ci.getSourceManager())
+    : astContext(context)
+    , sm(context.getSourceManager())
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , m_checksPromotedToErrors(CheckManager::instance()->checksAsErrors())
     , options(opts)
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
     , m_translationUnitPaths(translationUnitPaths)
-    , m_ppOpts(ci.getPreprocessorOpts())
+    , m_pp(pp)
 {
     if (!headerFilter.empty()) {
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
@@ -53,7 +53,7 @@ ClazyContext::ClazyContext(const clang::CompilerInstance &compiler,
         }
 
         const bool isClazyStandalone = !translationUnitPaths.empty();
-        exporter = new FixItExporter(ci.getDiagnostics(), sm, astContext.getLangOpts(), exportFixesFilename, isClazyStandalone);
+        exporter = new FixItExporter(context.getDiagnostics(), sm, astContext.getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
 }
 
@@ -85,14 +85,14 @@ ClazyContext::~ClazyContext()
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), ci.getPreprocessor(), exportFixesEnabled());
+        accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), m_pp, exportFixesEnabled());
     }
 }
 
 void ClazyContext::enablePreprocessorVisitor()
 {
     if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(sm, ci.getPreprocessor());
+        preprocessorVisitor = new PreProcessorVisitor(sm, m_pp);
     }
 }
 
@@ -111,7 +111,7 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (const auto &s : m_ppOpts.Macros) {
+        for (const auto &s : m_pp.getPreprocessorOpts().Macros) {
             if (s.first == "QT_CORE_LIB") {
                 return true;
             }
@@ -120,4 +120,8 @@ bool ClazyContext::isQt() const
     }();
 
     return s_isQt;
+}
+bool ClazyContext::usingPreCompiledHeaders() const
+{
+    return !m_pp.getPreprocessorOpts().ImplicitPCHInclude.empty();
 }

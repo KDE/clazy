@@ -92,6 +92,7 @@ public:
         }*/
 
         FullASTVisitor visitor(*Result.Context, *this);
+        // Result.Context->getDiagnostics().dump();
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
         translationUnit->dump();
         visitor.TraverseDecl(translationUnit);

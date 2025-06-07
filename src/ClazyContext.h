@@ -54,23 +54,16 @@ public:
     using ClazyOptions = int;
     using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
 
-    explicit ClazyContext(const clang::CompilerInstance &ci,
+    explicit ClazyContext(clang::ASTContext &context,
+                          clang::Preprocessor &pp,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
                           const std::vector<std::string> &translationUnitPaths,
-                          ClazyOptions = ClazyOption_None);
+                          ClazyOptions opts);
     ~ClazyContext();
 
-    const clang::PreprocessorOptions &getPreprocessorOpts() const
-    {
-        return m_ppOpts;
-    }
-
-    bool usingPreCompiledHeaders() const
-    {
-        return !m_ppOpts.ImplicitPCHInclude.empty();
-    }
+    bool usingPreCompiledHeaders() const;
 
     bool userDisabledWError() const
     {
@@ -167,8 +160,6 @@ public:
 
     bool isQt() const;
 
-    // TODO: More things will follow
-    const clang::CompilerInstance &ci;
     clang::ASTContext &astContext;
     clang::SourceManager &sm;
     AccessSpecifierManager *accessSpecifierManager = nullptr;
@@ -187,7 +178,7 @@ public:
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
     const std::vector<std::string> m_translationUnitPaths;
-    const clang::PreprocessorOptions &m_ppOpts;
+    clang::Preprocessor &m_pp;
 };
 
 #endif
