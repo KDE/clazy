@@ -71,7 +71,7 @@ static bool methodIsOK(const std::string &name)
 void AssertWithSideEffects::VisitStmt(Stmt *stm)
 {
     const SourceLocation stmStart = stm->getBeginLoc();
-    if (!clazy::isInMacro(&m_astContext, stmStart, "Q_ASSERT")) {
+    if (!clazy::isInMacro(astContext(), stmStart, "Q_ASSERT")) {
         return;
     }
 

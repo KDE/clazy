@@ -10,6 +10,7 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
+#include "ClazyContext.h"
 #include "clazy_stl.h" // IWYU pragma: keep
 
 #include <clang/AST/ASTContext.h>
@@ -181,13 +182,17 @@ protected:
     }
     const clang::LangOptions &lo() const
     {
-        return m_astContext.getLangOpts();
+        return m_context->astContext.getLangOpts();
+    }
+
+    clang::ASTContext *astContext() const
+    {
+        return &m_context->astContext;
     }
 
     const clang::SourceManager &m_sm;
     const std::string m_name;
     const ClazyContext *const m_context;
-    clang::ASTContext &m_astContext;
     std::vector<std::string> m_filesToIgnore;
 
 private:

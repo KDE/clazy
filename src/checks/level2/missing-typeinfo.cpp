@@ -57,8 +57,8 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
         return; // Don't crash if we only have a fwd decl
     }
 
-    const bool isCopyable = qt2.isTriviallyCopyableType(m_astContext);
-    const bool isTooBigForQList = isQList && checkTooBigForQList(qt2, &m_astContext);
+    const bool isCopyable = qt2.isTriviallyCopyableType(*astContext());
+    const bool isTooBigForQList = isQList && checkTooBigForQList(qt2, astContext());
 
     if ((isQVector || isTooBigForQList) && isCopyable) {
         if (sm().isInSystemHeader(record->getBeginLoc())) {
