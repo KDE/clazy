@@ -166,14 +166,6 @@ ReadlockDetaching::ReadlockDetaching(const std::string &name, ClazyContext *cont
 {
 }
 
-void ReadlockDetaching::VisitDecl(clang::Decl *decl)
-{
-}
-
-void ReadlockDetaching::VisitStmt(clang::Stmt *stmt)
-{
-}
-
 void ReadlockDetaching::registerASTMatchers(MatchFinder &finder)
 {
     finder.addMatcher(cxxConstructExpr(hasType(cxxRecordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack);

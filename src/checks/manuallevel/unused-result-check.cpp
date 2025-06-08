@@ -61,10 +61,6 @@ UnusedResultCheck::UnusedResultCheck(const std::string &name, ClazyContext *cont
 
 UnusedResultCheck::~UnusedResultCheck() = default;
 
-void UnusedResultCheck::VisitStmt(Stmt *stmt)
-{
-}
-
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)
 {
     finder.addMatcher(cxxMemberCallExpr().bind("callExpr"), m_astMatcherCallBack.get());
