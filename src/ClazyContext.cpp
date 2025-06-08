@@ -20,7 +20,9 @@
 
 using namespace clang;
 
-ClazyContext::ClazyContext(clang::ASTContext &context,
+ClazyContext::ClazyContext(clang::ASTContext *context,
+                           clang::SourceManager &manager,
+                           const clang::LangOptions &lo,
                            clang::PreprocessorOptions &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
@@ -29,7 +31,8 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
                            ClazyOptions opts,
                            std::optional<WarningReporter> warningReporter)
     : astContext(context)
-    , sm(context.getSourceManager())
+    , sm(manager)
+    , lo(lo)
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , m_checksPromotedToErrors(CheckManager::instance()->checksAsErrors())
     , options(opts)
@@ -41,7 +44,7 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
                                                         clang::DiagnosticIDs::Level level,
                                                         std::string error,
                                                         const std::vector<clang::FixItHint> &fixits) {
-        auto &engine = astContext.getDiagnostics();
+        auto &engine = astContext->getDiagnostics();
         unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(level, error.c_str());
         DiagnosticBuilder B = engine.Report(loc, id);
         for (const FixItHint &fixit : fixits) {
@@ -59,7 +62,7 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
         ignoreDirsRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(ignoreDirs));
     }
 
-    if (exportFixesEnabled()) {
+    if (exportFixesEnabled() && context) {
         if (exportFixesFilename.empty()) {
             // Only clazy-standalone sets the filename by argument.
             // clazy plugin sets it automatically here:
@@ -68,7 +71,7 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
         }
 
         const bool isClazyStandalone = !translationUnitPaths.empty();
-        exporter = new FixItExporter(context.getDiagnostics(), sm, astContext.getLangOpts(), exportFixesFilename, isClazyStandalone);
+        exporter = new FixItExporter(context->getDiagnostics(), sm, context->getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
 }
 

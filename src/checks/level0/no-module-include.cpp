@@ -7,6 +7,7 @@
 #include "no-module-include.h"
 #include "ClazyContext.h"
 #include "PreProcessorVisitor.h"
+#include "llvm/Support/raw_ostream.h"
 
 #include <clang/Basic/LLVM.h>
 

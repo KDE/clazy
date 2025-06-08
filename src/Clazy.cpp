@@ -119,7 +119,7 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
     }
 
     if (!m_context->parentMap) {
-        if (m_context->astContext.getDiagnostics().hasUnrecoverableErrorOccurred()) {
+        if (m_context->astContext->getDiagnostics().hasUnrecoverableErrorOccurred()) {
             return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
         }
 
@@ -227,7 +227,9 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(ci.getASTContext(),
+        m_context = new ClazyContext(&ci.getASTContext(),
+                                     ci.getSourceManager(),
+                                     ci.getASTContext().getLangOpts(),
                                      ci.getPreprocessor().getPreprocessorOpts(),
                                      headerFilter,
                                      ignoreDirs,
@@ -262,7 +264,15 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         exportFixesFilename = args.at(0);
     }
 
-    m_context = new ClazyContext(ci.getASTContext(), ci.getPreprocessor().getPreprocessorOpts(), headerFilter, ignoreDirs, exportFixesFilename, {}, m_options);
+    m_context = new ClazyContext(&ci.getASTContext(),
+                                 ci.getSourceManager(),
+                                 ci.getASTContext().getLangOpts(),
+                                 ci.getPreprocessor().getPreprocessorOpts(),
+                                 headerFilter,
+                                 ignoreDirs,
+                                 exportFixesFilename,
+                                 {},
+                                 m_options);
     m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
 
     // This argument is for debugging purposes
@@ -385,7 +395,9 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const std::string &checkList,
 
 std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    auto *context = new ClazyContext(ci.getASTContext(),
+    auto *context = new ClazyContext(&ci.getASTContext(),
+                                     ci.getSourceManager(),
+                                     ci.getASTContext().getLangOpts(),
                                      ci.getPreprocessor().getPreprocessorOpts(),
                                      m_headerFilter,
                                      m_ignoreDirs,

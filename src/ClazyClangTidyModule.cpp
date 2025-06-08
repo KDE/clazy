@@ -2,6 +2,7 @@
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "checkbase.h"
+#include "checkmanager.h"
 #include "checks/level0/no-module-include.h"
 #include "checks/level0/qcolor-from-literal.h"
 #include "checks/level0/qstring-arg.h"
@@ -25,7 +26,7 @@ public:
         , m_checks(checks)
 
     {
-        std::for_each(m_checks.begin(), m_checks.end(), [this](CheckBase *check) { });
+        std::for_each(m_checks.begin(), m_checks.end(), [](CheckBase *check) { });
     }
 
     ~FullASTVisitor()
@@ -97,22 +98,7 @@ public:
 
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override
     {
-        llvm::errs() << "check\n";
-        const auto emitDiagnostic = [this](const std::string &checkName,
-                                           const clang::SourceLocation &loc,
-                                           clang::DiagnosticIDs::Level level,
-                                           std::string error,
-                                           const std::vector<clang::FixItHint> &fixits) {
-            llvm::errs() << checkName << "\n";
-            clangTidyContext->diag("clazy-" + checkName, loc, error, level) << fixits;
-        };
-
-        // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
-        clazyContext = new ClazyContext(*Result.Context, *m_pp, "", "", "", {}, {}, emitDiagnostic);
-
-        std::for_each(m_checks.begin(), m_checks.end(), [this](CheckBase *check) mutable {
-            check->m_context = clazyContext;
-        });
+        clazyContext->astContext = Result.Context;
 
         FullASTVisitor visitor(*clazyContext, *this, m_checks);
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
@@ -122,13 +108,35 @@ public:
     void registerPPCallbacks(const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) override
     {
         llvm::errs() << "ppcallbacks\n";
-        m_pp = PP;
+        clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), PP->getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic);
+
+        const auto checks = CheckManager::instance()->availableChecks(MaxCheckLevel);
+        for (const auto check : m_checks) {
+            check->m_context = clazyContext;
+
+            const std::string checkName = check->name();
+            const auto foundIt = std::find_if(checks.begin(), checks.end(), [&checkName](const RegisteredCheck &availableCheck) {
+                return availableCheck.name == checkName;
+            });
+            if (foundIt->options & RegisteredCheck::Option_PreprocessorCallbacks) {
+                llvm::errs() << "enable pp" << foundIt->name << "\n";
+                check->enablePreProcessorCallbacks(*PP);
+            }
+        }
     }
 
-    Preprocessor *m_pp;
     ClangTidyContext *clangTidyContext;
     ClazyContext *clazyContext;
     std::vector<CheckBase *> m_checks;
+    // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
+    const ClazyContext::WarningReporter emitDiagnostic = //
+        [this](const std::string &checkName,
+               const clang::SourceLocation &loc,
+               clang::DiagnosticIDs::Level level,
+               std::string error,
+               const std::vector<clang::FixItHint> &fixits) {
+            clangTidyContext->diag("clazy-" + checkName, loc, error, level) << fixits;
+        };
 };
 
 class NoopCheck : public ClangTidyCheck
