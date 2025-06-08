@@ -15,7 +15,6 @@
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
-#include <cstddef>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Regex.h>
 

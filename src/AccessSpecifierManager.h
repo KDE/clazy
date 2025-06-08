@@ -56,7 +56,7 @@ using ClazySpecifierList = std::vector<ClazyAccessSpecifier>;
 class AccessSpecifierManager
 {
 public:
-    explicit AccessSpecifierManager(const clang::SourceManager &manager, clang::Preprocessor &pi, bool exportFixesEnabled);
+    explicit AccessSpecifierManager(clang::Preprocessor &pi, bool exportFixesEnabled);
     void VisitDeclaration(clang::Decl *decl);
 
     /**

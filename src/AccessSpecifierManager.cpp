@@ -127,9 +127,9 @@ public:
     const LangOptions m_lo;
 };
 
-AccessSpecifierManager::AccessSpecifierManager(const SourceManager &manager, Preprocessor &pi, bool exportFixesEnabled)
-    : m_sm(manager)
-    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(manager, pi.getLangOpts()))
+AccessSpecifierManager::AccessSpecifierManager(Preprocessor &pi, bool exportFixesEnabled)
+    : m_sm(pi.getSourceManager())
+    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(pi.getSourceManager(), pi.getLangOpts()))
     , m_fixitsEnabled(exportFixesEnabled)
 {
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));

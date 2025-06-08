@@ -39,7 +39,7 @@ class PreProcessorVisitor : public clang::PPCallbacks
     PreProcessorVisitor(const PreProcessorVisitor &) = delete;
 
 public:
-    explicit PreProcessorVisitor(const clang::SourceManager &manager, clang::Preprocessor &pi);
+    explicit PreProcessorVisitor(clang::Preprocessor &pi);
 
     // Returns for example 050601 (Qt 5.6.1), or -1 if we don't know the version
     int qtVersion() const

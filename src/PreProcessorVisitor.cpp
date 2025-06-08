@@ -22,9 +22,9 @@
 
 using namespace clang;
 
-PreProcessorVisitor::PreProcessorVisitor(const SourceManager &manager, Preprocessor &pp)
+PreProcessorVisitor::PreProcessorVisitor(Preprocessor &pp)
     : clang::PPCallbacks()
-    , m_sm(manager)
+    , m_sm(pp.getSourceManager())
     , m_pp(pp)
 
 {
