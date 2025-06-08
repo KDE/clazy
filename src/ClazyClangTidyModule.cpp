@@ -3,11 +3,6 @@
 #include "Utils.h"
 #include "checkbase.h"
 #include "checkmanager.h"
-#include "checks/level0/no-module-include.h"
-#include "checks/level0/qcolor-from-literal.h"
-#include "checks/level0/qstring-arg.h"
-#include "checks/level1/install-event-filter.h"
-#include "checks/level1/non-pod-global-static.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
 #include "clang-tidy/ClangTidyModuleRegistry.h"
@@ -62,6 +57,8 @@ private:
     std::vector<CheckBase *> m_checks;
 };
 
+std::vector<std::string> s_enabledChecks;
+
 class ClazyCheck : public ClangTidyCheck
 {
 public:
@@ -69,13 +66,6 @@ public:
         : ClangTidyCheck(CheckName, Context)
         , clangTidyContext(Context)
         , clazyContext(nullptr)
-        , m_checks({
-              new InstallEventFilter("install-event-filter", nullptr),
-              new NonPodGlobalStatic("non-pod-global-static", nullptr),
-              new QColorFromLiteral("non-pod-global-static", nullptr),
-              new QStringArg("qstring-arg", nullptr),
-              new NoModuleInclude("no-module-include", nullptr),
-          })
     {
     }
 
@@ -108,20 +98,21 @@ public:
     void registerPPCallbacks(const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) override
     {
         llvm::errs() << "ppcallbacks\n";
-        clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), PP->getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic);
+        clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic);
 
-        const auto checks = CheckManager::instance()->availableChecks(MaxCheckLevel);
-        for (const auto check : m_checks) {
-            check->m_context = clazyContext;
-
-            const std::string checkName = check->name();
-            const auto foundIt = std::find_if(checks.begin(), checks.end(), [&checkName](const RegisteredCheck &availableCheck) {
-                return availableCheck.name == checkName;
-            });
-            if (foundIt->options & RegisteredCheck::Option_PreprocessorCallbacks) {
-                llvm::errs() << "enable pp" << foundIt->name << "\n";
+        for (auto c : s_enabledChecks)
+            llvm::errs() << c + "\n";
+        const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);
+        for (const auto &availCheck : checks) {
+            const std::string checkName = "clazy-" + availCheck.name;
+            if (std::find(s_enabledChecks.begin(), s_enabledChecks.end(), checkName) == s_enabledChecks.end()) {
+                continue;
+            }
+            auto *check = availCheck.factory(clazyContext);
+            if (availCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
                 check->enablePreProcessorCallbacks(*PP);
             }
+            m_checks.emplace_back(check);
         }
     }
 
@@ -146,6 +137,7 @@ public:
         : ClangTidyCheck(CheckName, Context)
     {
         // Just for sake of registering a check
+        s_enabledChecks.emplace_back(CheckName);
     }
 };
 
@@ -155,9 +147,9 @@ public:
     void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override
     {
         CheckFactories.registerCheck<ClazyCheck>("clazy");
-        CheckFactories.registerCheck<NoopCheck>("clazy-install-event-filter");
-        CheckFactories.registerCheck<NoopCheck>("clazy-non-pod-global-static");
-        CheckFactories.registerCheck<NoopCheck>("clazy-qcolor-from-literal");
+        for (const auto &check : CheckManager::instance()->availableChecks(CheckLevel::ManualCheckLevel)) {
+            CheckFactories.registerCheck<NoopCheck>("clazy-" + check.name);
+        }
     }
 };
 
