@@ -1,214 +1,290 @@
-# Changelog
+Version 1.15
+~~~~~~~~~~~~
+Released: 2025-xx-xx
 
-* v1.15 (not released)
-- Update minimum Clang/LLVM to 19
-- Fixed crash in qvariant-template-instantiation
-- Added missing methods to checks for detaching temporary/member lists or maps
-- Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset<int(8)>"
-- Fixed crash in qstring-comparison-to-implicit-char. BUG: 502458
-- fully-qualified-moc-types: Fix enum/enum class not being evaluated. BUG: 423780
-- install-event-filter: Fix crash when there is no child at the given depth. BUG: 464372
-- `clazy-standalone --version` contains git version ( output of `git describe`) if it is not a tagged commit
+Bugfixes:
+ * install-event-filter: Fix crash when there is no child at the given depth. BUG: 464372
+ * fully-qualified-moc-types: Fix enum/enum class not being evaluated. BUG: 423780
+ * Fixed crash in qstring-comparison-to-implicit-char. BUG: 502458
+ * Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset<int(8)>"
+ * Fixed crash in qvariant-template-instantiation
 
-- New checks:
-    - readlock-detaching
+Features:
+ * New checks:
+  - readlock-detaching
+ * Update minimum Clang/LLVM to 19
+ * `clazy-standalone --version` contains git version ( output of `git describe`) if it is not a tagged commit
+ * Added missing methods to checks for detaching temporary/member lists or maps
 
-* v1.14 (April 27, 2025)
-- Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2
-- Support for compilation against Clang 20
-- increase verbosity of some warning messages
-    - checks `function-args-by-value` and `function-args-by-ref`: add function name and parameter name to warning message
-    - checks `unused-non-trivial-variable` and `non-pod-global-static`: add variable name to warning message
+Version 1.14
+~~~~~~~~~~~~
+Released: 2025-04-27
 
-- New checks:
-    - qbytearray-conversion-to-c-style
+Notes:
+ * Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2
+ * Support for compilation against Clang 20
+ * increase verbosity of some warning messages
+  - checks `function-args-by-value` and `function-args-by-ref`: add function name and parameter name to warning message
+  - checks `unused-non-trivial-variable` and `non-pod-global-static`: add variable name to warning message
 
-* v1.13 (December 28, 2024)
-   - New Checks:
-     - used-qunused-variable
-   - qstring-arg check provides a fix-it
-   - Fixed unused-non-trivial-variable to not warn when [[maybe_unused]] set
-   - Fixed qstring-arg for upcoming Qt 6.9
-   - Fixed fully-qualified-moc-types false positive for const modifiers of generic arguments
-   - Silence false positive non-pod-global-static warning for QML module initialization
-   - Fix function-args-by-value false positive that would cause compile error
-   in copy constructors, assignment operators and equal checks
-   - False positives for `Q_EMIT(someSignal())` are now fixed
+Features:
+ * New checks:
+  - qbytearray-conversion-to-c-style
 
+Version 1.13
+~~~~~~~~~~~~
+Released: 2024-12-28
 
-* v1.12 (June 30, 2024)
-    - New Checks:
-      - qt-keyword-emit
-      - sanitize-inline-keyword
+Features:
+ * New Checks:
+  - used-qunused-variable
 
-* v1.11 (January 21st, 2022)
-    - New Checks:
-      - use-arrow-operator-instead-of-data
-      - use-static-qregularexpression
-      - unexpected-flag-enumerator-value
-      - Removed inefficient-qlist check (Fixed in Qt6)
+Bugfixes:
+ * qstring-arg check provides a fix-it
+ * Fixed unused-non-trivial-variable to not warn when [[maybe_unused]] set
+ * Fixed qstring-arg for upcoming Qt 6.9
+ * Fixed fully-qualified-moc-types false positive for const modifiers of generic arguments
+ * Silence false positive non-pod-global-static warning for QML module initialization
+ * Fix function-args-by-value false positive that would cause compile error
+  in copy constructors, assignment operators and equal checks
+ * False positives for `Q_EMIT(someSignal())` are now fixed
 
-* v1.10 (July 20th, 2021)
-   - Requires C++17
-   - Fixed a -Wclazy-lambda-in-connect false-positive
-   - Fixed crash in copyable-polymorphic when PCH was enabled
+Version 1.12
+~~~~~~~~~~~~
+Released: 2024-06-30
 
-* v1.9 (Jan 10th, 2021)
-    - Fixed clazy slowdown introduced in 1.8. I can be up to 4x faster now.
-    - range-loop was split in range-loop-detach and range-loop-reference
-    - Fixed -Wclazy-connect-non-signal false positives
+Features:
+ * New Checks:
+  - qt-keyword-emit
+  - sanitize-inline-keyword
 
+Version 1.11
+~~~~~~~~~~~~
+Released: 2022-01-21
 
-* v1.8 (November 22nd, 2020)
-    - New Checks:
-      - qt6-qhash-signature
-      - qt6-header-fixes
-      - qt6-deprecated-api-fixes
-      - use-chrono-in-qtimer
-      - fixit for missing-qobject-macro
+Features:
+ * New Checks:
+  - use-arrow-operator-instead-of-data
+  - use-static-qregularexpression
+  - unexpected-flag-enumerator-value
+  - Removed inefficient-qlist check (Fixed in Qt6)
 
+Version 1.10
+~~~~~~~~~~~~
+Released: 2021-07-20
 
-* v1.7 (June 29th, 2020)
-  - New Checks:
-    - overloaded signal
-    - invalid JNI signatures
-    - qstring-comparison-to-implicit-char
-    - qt6-qlatin1string-to-u
-  - connect-non-signal: Fix case where it didn't find the pmf
-  - qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar
-  - Building clazy itself is 30% faster
+Features:
+ * Requires C++17
+Bugfixes:
+ * Fixed a -Wclazy-lambda-in-connect false-positive
+ * Fixed crash in copyable-polymorphic when PCH was enabled
+
+Version 1.9
+~~~~~~~~~~~
+Released: 2021-01-10
+
+Bugfixes:
+ * Fixed clazy slowdown introduced in 1.8. I can be up to 4x faster now.
+ * range-loop was split in range-loop-detach and range-loop-reference
+ * Fixed -Wclazy-connect-non-signal false positives
+
+Version 1.8
+~~~~~~~~~~~
+Released: 2020-11-22
+
+Features:
+ * New Checks:
+  - qt6-qhash-signature
+  - qt6-header-fixes
+  - qt6-deprecated-api-fixes
+  - use-chrono-in-qtimer
+  - fixit for missing-qobject-macro
+
+Version 1.7
+~~~~~~~~~~~
+Released: 2020-06-29
+
+Features:
+ * New Checks:
+  - overloaded signal
+  - invalid JNI signatures
+  - qstring-comparison-to-implicit-char
+  - qt6-qlatin1string-to-u
   - heap-allocated-small-trivial-type: less false-positives
 
+Bugfixes:
+ * connect-non-signal: Fix case where it didn't find the pmf
+ * qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar
 
-* v1.6 (October 12, 2019)
-  - New Checks:
-    - heap-allocated-small-trivial-type
-    - signal-with-return-value
-    - qproperty-type-mismatch, contributed by Jean-Michaël Celerier
-  - Removed level3. Moved all level3 checks to manual level. Doesn't make sense to enable all of them.
+Notes:
+ * Building clazy itself is 30% faster
+
+Version 1.6
+~~~~~~~~~~~
+Released: 2019-10-12
+
+Features:
+ * New Checks:
+  - heap-allocated-small-trivial-type
+  - signal-with-return-value
+  - qproperty-type-mismatch, contributed by Jean-Michaël Celerier
+
+Notes:
+ * Removed level3. Moved all level3 checks to manual level. Doesn't make sense to enable all of them.
   Each one must be carefully considered.
-  - Fixed regressions with LLVM 9.0
-  - Minimum LLVM was bumped to 5.0
-  - Fixit infrastructure was overhauled
-  - Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.
-  - Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements. 
-  The same way other clang tooling does it.
-  - The way to enable code rewrite is now: -Xclang -plugin-arg-clazy -Xclang export-fixes for clang
-  or -export-fixes=somefile.yaml for clazy-standalone
-  - All other fixit arguments and fixit env variables were removed
-  - Thanks to Christian Gagneraud for contributing the fixit yaml exporter!
+ * Minimum LLVM was bumped to 5.0
+ * Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.
+ * Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements. 
+The same way other clang tooling does it.
+ * The way to enable code rewrite is now: -Xclang -plugin-arg-clazy -Xclang export-fixes for clang
+or -export-fixes=somefile.yaml for clazy-standalone
+ * All other fixit arguments and fixit env variables were removed
+ * Thanks to Christian Gagneraud for contributing the fixit yaml exporter!
 
+Bugfixes:
+ * Fixed regressions with LLVM 9.0
+ * Fixit infrastructure was overhauled
 
-* v1.5 (January 31st, 2019)
-  - New Checks:
-      - ifndef-define-typo
-      - lowercase-qml-type-name
-      - qrequiredresult-candidates
-  - New Fixits:
-      - range-loop now supports adding missing refs or const-ref
-      - range-loop now supports adding qAsConst()
-      - function-args-by-ref now adding missing refs or const-ref (experimental)
-      - Introduced CLAZY_FIXIT_SUFFIX env variable
-  - Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt
-  - Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so
+Version 1.5
+~~~~~~~~~~~
+Released: 2019-01-31
+
+Features:
+ * New Checks:
+  - ifndef-define-typo
+  - lowercase-qml-type-name
+  - qrequiredresult-candidates
+ * New Fixits:
+  - range-loop now supports adding missing refs or const-ref
+  - range-loop now supports adding qAsConst()
+  - function-args-by-ref now adding missing refs or const-ref (experimental)
+  - Introduced CLAZY_FIXIT_SUFFIX env variable
+
+Notes:
+ * Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt
+ * Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so
   - fully-qualified-moc-types now warns for slot/invokable return values too.
-  They need to be fully qualified for QML.
-  - Fixed a crash (clang assert) in raw-environment-function
+    They need to be fully qualified for QML.
 
+Bugfixes:
+ * Fixed a crash (clang assert) in raw-environment-function
 
-* v1.4 (September 23rd, 2018)
-  - New Checks:
-      - connect-by-name
-      - skipped-base-method
-      - qstring-varargs
-      - fully-qualified-moc-types
-      - qt-keywords, with fixit included
-      - qhash-with-char-pointer-key
-      - wrong-qevent-cast
-      - static-pmf
-      - raw-environment-function
-      - empty-qstringliteral
-  - auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder
-  - performance optimizations
-  - Added -header-filter=<regex> option to clazy-standalone. Only headers matching the regexp will
-  have warnings, besides the .cpp file from the translation unit, which is never filtered out.
-  - Added -ignore-dirs=<regex> option to clazy-standalone, and its CLAZY_IGNORE_DIRS env variable equivalent.
-  - Added CLAZY_HEADER_FILTER env variable which adds above functionality to both clazy and clazy-standalone
-  - unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist option
-  - unused-non-trivial-variable got user-blacklist and user-whitelist support
-  - container-inside-loop is now a manual check instead of level2
-  - HiddenLevel was renamed to ManualLevel
-  - connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction()
-  without a context object
-  - old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now
+Version 1.4
+~~~~~~~~~~~
+Released: 2018-09-23
 
+Features:
+ * New Checks:
+  - connect-by-name
+  - skipped-base-method
+  - qstring-varargs
+  - fully-qualified-moc-types
+  - qt-keywords, with fixit included
+  - qhash-with-char-pointer-key
+  - wrong-qevent-cast
+  - static-pmf
+  - raw-environment-function
+  - empty-qstringliteral
+ * auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder
 
-* v1.3 (November 26th, 2017)
-  - New checks:
-      - thread-with-slots
-      - connect-3arg-lambda
-      - qproperty-without-notify
-      - virtual-signal
-      - overridden-signal
-      - qhash-namespace
-      - const-signal-or-slot
-      - lambda-unique-connection
-  - missing-qobject-macro is now a level2 check, instead of level1. Because, people can omit Q_OBJECT intentionally.
-  - Added -only-qt option, which will make clazy bailout early on non-Qt files.
-  For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed,
-  which is usually the case in most build systems.
-  - Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt,
-  which are not many right now but the list will grow.
+Notes:
+ * performance optimizations
+ * Added -header-filter=<regex> option to clazy-standalone. Only headers matching the regexp will
+ have warnings, besides the .cpp file from the translation unit, which is never filtered out.
+ * Added -ignore-dirs=<regex> option to clazy-standalone, and its CLAZY_IGNORE_DIRS env variable equivalent.
+ * Added CLAZY_HEADER_FILTER env variable which adds above functionality to both clazy and clazy-standalone
+ * unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist option
+ * unused-non-trivial-variable got user-blacklist and user-whitelist support
+ * container-inside-loop is now a manual check instead of level2
+ * HiddenLevel was renamed to ManualLevel
+ * connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction()
+without a context object
+ * old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now
 
+Version 1.3
+~~~~~~~~~~~
+Released: 2017-11-26
 
-* v1.2 (July 8th, 2017)
-  - clazy-standalone executable. Allows to run clazy against a JSON compilation database
-    instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086)
-    so this is a good workaround.
-  - qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat
-  - New checks:
-      - install-event-filter
-      - qcolor-from-literal
-      - strict-iterators
-      - connect-not-normalized
-  - returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned
+Features:
+ * New checks:
+  - thread-with-slots
+  - connect-3arg-lambda
+  - qproperty-without-notify
+  - virtual-signal
+  - overridden-signal
+  - qhash-namespace
+  - const-signal-or-slot
+  - lambda-unique-connection
+
+Notes:
+ * missing-qobject-macro is now a level2 check, instead of level1. Because, people can omit Q_OBJECT intentionally.
+ * Added -only-qt option, which will make clazy bailout early on non-Qt files.
+   For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed,
+   which is usually the case in most build systems.
+ * Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt,
+   which are not many right now but the list will grow.
+
+Version 1.2
+~~~~~~~~~~~
+Released: 2017-07-08
+
+Features:
+ * New checks:
+  - install-event-filter
+  - qcolor-from-literal
+  - strict-iterators
+  - connect-not-normalized
+
+Bugfixes:
+ * clazy-standalone executable. Allows to run clazy against a JSON compilation database
+   instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086)
+   so this is a good workaround.
+ * qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat
+  * returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned
   - returning-data-from-temporary now checks for assignment too, not only return statements
-  - unused-non-trivial-variable now warns for unused QList, QVector and many more types
-  - ASTMatchers based checks are now supported
-  - clang 3.7 was dropped due to ASTMatchers source incompatibilities.
-  - Use clazy v1.1 for clang >= 3.6 support
-  - clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)
+  * unused-non-trivial-variable now warns for unused QList, QVector and many more types
+  * ASTMatchers based checks are now supported
+  * clang 3.7 was dropped due to ASTMatchers source incompatibilities.
+  * Use clazy v1.1 for clang >= 3.6 support
+  * clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)
     gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if
     you're developing tools using clazy's convenience functions, which you're
     probably not.
-  - CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library
+  * CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library
     and headers or nothing at all. By default nothing is installed, except
     the plugin and man pages.
 
+Version 1.1
+~~~~~~~~~~~
+Released: 2017-02-20
 
-* v1.1 (February 20th, 2017)
-
-  - macOS and Windows support
-  - New checks:
-      - child-event-qobject-cast
-      - ctor-missing-parent-argument
-      - returning-data-from-temporary
-      - qt-macros
-      - base-class-event
-      - connect-non-signal
-      - incorrect-emit
-      - tr-non-literal
-  - Fixes against :
-    - clang 4.0
-    - Qt 5.9
-  - 60% performance improvement
-  - Fixed many false positives
-
-
-* v1.0 (September 12th, 2016)
-  - (...)
+Features:
+ * macOS and Windows support
+ * New checks:
+  - child-event-qobject-cast
+  - ctor-missing-parent-argument
+  - returning-data-from-temporary
+  - qt-macros
+  - base-class-event
+  - connect-non-signal
+  - incorrect-emit
+  - tr-non-literal
+ * Fixes against:
+  - clang 4.0
+  - Qt 5.9
+Notes:
+ * 60% performance improvement
+ * Fixed many false positives
 
 
-* v0.0.1 (June 10th, 2015)
-  - (...)
+Version 1.0
+~~~~~~~~~~~
+Released: 2016-09-12
 
+
+Version 0.0.1
+~~~~~~~~~~~~~
+Released: 2015-06-10
+
+Notes:
+ * First release
