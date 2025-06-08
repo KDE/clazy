@@ -120,7 +120,7 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
     }
 
     if (!m_context->parentMap) {
-        if (m_context->astContext.getDiagnostics().hasUnrecoverableErrorOccurred()) {
+        if (m_context->astContext->getDiagnostics().hasUnrecoverableErrorOccurred()) {
             return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
         }
 
@@ -225,8 +225,15 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
-        m_context =
-            new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), headerFilter, ignoreDirs, exportFixesFilename, {}, ClazyContext::ClazyOption_None);
+        m_context = new ClazyContext(&ci.getASTContext(),
+                                     ci.getSourceManager(),
+                                     ci.getASTContext().getLangOpts(),
+                                     ci.getPreprocessor(),
+                                     headerFilter,
+                                     ignoreDirs,
+                                     exportFixesFilename,
+                                     {},
+                                     ClazyContext::ClazyOption_None);
         PrintHelp(llvm::errs());
         return true;
     }
@@ -255,7 +262,15 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         exportFixesFilename = args.at(0);
     }
 
-    m_context = new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), headerFilter, ignoreDirs, exportFixesFilename, {}, m_options);
+    m_context = new ClazyContext(&ci.getASTContext(),
+                                 ci.getSourceManager(),
+                                 ci.getASTContext().getLangOpts(),
+                                 ci.getPreprocessor(),
+                                 headerFilter,
+                                 ignoreDirs,
+                                 exportFixesFilename,
+                                 {},
+                                 m_options);
 
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
@@ -377,8 +392,15 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const std::string &checkList,
 
 std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
-    auto *context =
-        new ClazyContext(ci.getASTContext(), ci.getPreprocessor(), m_headerFilter, m_ignoreDirs, m_exportFixesFilename, m_translationUnitPaths, m_options);
+    auto *context = new ClazyContext(&ci.getASTContext(),
+                                     ci.getSourceManager(),
+                                     ci.getASTContext().getLangOpts(),
+                                     ci.getPreprocessor(),
+                                     m_headerFilter,
+                                     m_ignoreDirs,
+                                     m_exportFixesFilename,
+                                     m_translationUnitPaths,
+                                     m_options);
     auto *astConsumer = new ClazyASTConsumer(context);
 
     auto *cm = CheckManager::instance();

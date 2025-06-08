@@ -54,7 +54,9 @@ public:
     using ClazyOptions = int;
     using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
 
-    explicit ClazyContext(clang::ASTContext &context,
+    explicit ClazyContext(clang::ASTContext *context, // maybe null, in case we lazy initialize it
+                          clang::SourceManager &manager,
+                          const clang::LangOptions &lo,
                           clang::Preprocessor &pp,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
@@ -160,8 +162,9 @@ public:
 
     bool isQt() const;
 
-    clang::ASTContext &astContext;
+    clang::ASTContext *astContext;
     clang::SourceManager &sm;
+    const clang::LangOptions &lo; // Can be deducted from ASTContext, but we might want to lazy initialize the context
     AccessSpecifierManager *accessSpecifierManager = nullptr;
     PreProcessorVisitor *preprocessorVisitor = nullptr;
     SuppressionManager suppressionManager;

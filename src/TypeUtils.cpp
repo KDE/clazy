@@ -33,7 +33,7 @@ bool clazy::classifyQualType(const ClazyContext *context, clang::QualType qualTy
         return false;
     }
 
-    classif.size_of_T = context->astContext.getTypeSize(unrefQualType) / 8;
+    classif.size_of_T = context->astContext->getTypeSize(unrefQualType) / 8;
     classif.isBig = classif.size_of_T > 16;
     CXXRecordDecl *recordDecl = paramType->getAsCXXRecordDecl();
     CXXMethodDecl *copyCtor = recordDecl ? Utils::copyCtor(recordDecl) : nullptr;
@@ -103,7 +103,7 @@ bool clazy::isSmallTrivial(const ClazyContext *context, QualType qualType)
     const bool isTrivial = recordDecl && !recordDecl->hasNonTrivialCopyConstructor() && !recordDecl->hasNonTrivialDestructor() && !hasDeletedCopyCtor;
 
     if (isTrivial) {
-        const auto typeSize = context->astContext.getTypeSize(unrefQualType) / 8;
+        const auto typeSize = context->astContext->getTypeSize(unrefQualType) / 8;
         const bool isSmall = typeSize <= 16;
         return isSmall;
     }

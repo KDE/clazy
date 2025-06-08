@@ -182,12 +182,12 @@ protected:
     }
     const clang::LangOptions &lo() const
     {
-        return m_context->astContext.getLangOpts();
+        return m_context->lo;
     }
 
     clang::ASTContext *astContext() const
     {
-        return &m_context->astContext;
+        return m_context->astContext;
     }
 
     const clang::SourceManager &m_sm;

@@ -276,9 +276,12 @@ void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
     FullSourceLoc full(loc, sm());
-    auto &engine = m_context->astContext.getDiagnostics();
-    auto severity =
-        (m_context->treatAsError(m_name) || (engine.getWarningsAsErrors() && !m_context->userDisabledWError())) ? DiagnosticIDs::Error : DiagnosticIDs::Warning;
+    auto severity = (m_context->treatAsError(m_name)
+                     || (m_context->astContext && m_context->astContext->getDiagnostics().getWarningsAsErrors() && !m_context->userDisabledWError()))
+        ? DiagnosticIDs::Error
+        : DiagnosticIDs::Warning;
+
+    auto &engine = m_context->astContext->getDiagnostics();
     unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
     DiagnosticBuilder B = engine.Report(full, id);
     for (const FixItHint &fixit : fixits) {

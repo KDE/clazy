@@ -20,7 +20,9 @@
 
 using namespace clang;
 
-ClazyContext::ClazyContext(clang::ASTContext &context,
+ClazyContext::ClazyContext(clang::ASTContext *context,
+                           clang::SourceManager &manager,
+                           const clang::LangOptions &lo,
                            clang::Preprocessor &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
@@ -28,7 +30,8 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
                            const std::vector<std::string> &translationUnitPaths,
                            ClazyOptions opts)
     : astContext(context)
-    , sm(context.getSourceManager())
+    , sm(manager)
+    , lo(lo)
     , m_noWerror(getenv("CLAZY_NO_WERROR") != nullptr) // Allows user to make clazy ignore -Werror
     , m_checksPromotedToErrors(CheckManager::instance()->checksAsErrors())
     , options(opts)
@@ -44,7 +47,7 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
         ignoreDirsRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(ignoreDirs));
     }
 
-    if (exportFixesEnabled()) {
+    if (exportFixesEnabled() && context) {
         if (exportFixesFilename.empty()) {
             // Only clazy-standalone sets the filename by argument.
             // clazy plugin sets it automatically here:
@@ -53,7 +56,7 @@ ClazyContext::ClazyContext(clang::ASTContext &context,
         }
 
         const bool isClazyStandalone = !translationUnitPaths.empty();
-        exporter = new FixItExporter(context.getDiagnostics(), sm, astContext.getLangOpts(), exportFixesFilename, isClazyStandalone);
+        exporter = new FixItExporter(context->getDiagnostics(), sm, context->getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
 }
 
@@ -85,7 +88,7 @@ ClazyContext::~ClazyContext()
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(sm, astContext.getLangOpts(), m_pp, exportFixesEnabled());
+        accessSpecifierManager = new AccessSpecifierManager(sm, astContext->getLangOpts(), m_pp, exportFixesEnabled());
     }
 }
 
