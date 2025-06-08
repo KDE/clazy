@@ -188,9 +188,3 @@ void FunctionArgsByRef::VisitStmt(Stmt *stmt)
         }
     }
 }
-
-clang::FixItHint FunctionArgsByRef::fixit(const ParmVarDecl *, clazy::QualTypeClassification)
-{
-    FixItHint fixit;
-    return fixit;
-}

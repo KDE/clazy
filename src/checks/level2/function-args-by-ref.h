@@ -44,7 +44,6 @@ private:
     static bool shouldIgnoreFunction(clang::FunctionDecl *);
     void processFunction(clang::FunctionDecl *);
     void addFixits(std::vector<clang::FixItHint> &fixits, clang::FunctionDecl *, unsigned int parmIndex);
-    clang::FixItHint fixit(const clang::ParmVarDecl *, clazy::QualTypeClassification);
 };
 
 #endif
