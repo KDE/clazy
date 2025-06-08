@@ -128,57 +128,46 @@ CheckBase::~CheckBase()
 
 void CheckBase::VisitStmt(Stmt *)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitDecl(Decl *)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitMacroExpands(const Token &, const SourceRange &, const clang::MacroInfo *)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitMacroDefined(const Token &)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitDefined(const Token &, const SourceRange &)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitIfdef(clang::SourceLocation, const clang::Token &)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitIfndef(SourceLocation, const Token &)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitIf(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitElif(SourceLocation, SourceRange, clang::PPCallbacks::ConditionValueKind, SourceLocation)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitElse(SourceLocation, SourceLocation)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitEndif(SourceLocation, SourceLocation)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::VisitInclusionDirective(clang::SourceLocation,
@@ -193,7 +182,6 @@ void CheckBase::VisitInclusionDirective(clang::SourceLocation,
                                         bool ModuleImported,
                                         clang::SrcMgr::CharacteristicKind)
 {
-    // Overridden in derived classes
 }
 
 void CheckBase::enablePreProcessorCallbacks(clang::Preprocessor &pp)
