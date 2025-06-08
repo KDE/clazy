@@ -88,14 +88,14 @@ ClazyContext::~ClazyContext()
 void ClazyContext::enableAccessSpecifierManager()
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(sm, astContext->getLangOpts(), m_pp, exportFixesEnabled());
+        accessSpecifierManager = new AccessSpecifierManager(m_pp, exportFixesEnabled());
     }
 }
 
 void ClazyContext::enablePreprocessorVisitor()
 {
     if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(sm, m_pp);
+        preprocessorVisitor = new PreProcessorVisitor(m_pp);
     }
 }
 

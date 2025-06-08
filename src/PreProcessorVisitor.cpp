@@ -22,9 +22,8 @@
 
 using namespace clang;
 
-PreProcessorVisitor::PreProcessorVisitor(const SourceManager &manager, Preprocessor &pp)
+PreProcessorVisitor::PreProcessorVisitor(Preprocessor &pp)
     : clang::PPCallbacks()
-    , m_sm(manager)
     , m_pp(pp)
 
 {
@@ -40,11 +39,12 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
         return false;
     }
 
+    const auto &sm = m_pp.getSourceManager();
     if (loc.isMacroID()) {
-        loc = m_sm.getExpansionLoc(loc);
+        loc = sm.getExpansionLoc(loc);
     }
 
-    uint fileId = m_sm.getFileID(loc).getHashValue();
+    uint fileId = sm.getFileID(loc).getHashValue();
 
     std::vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
     for (SourceRange &pair : pairs) {
@@ -53,7 +53,7 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
             continue; // shouldn't happen
         }
 
-        if (m_sm.isBeforeInSLocAddrSpace(pair.getBegin(), loc) && m_sm.isBeforeInSLocAddrSpace(loc, pair.getEnd())) {
+        if (sm.isBeforeInSLocAddrSpace(pair.getBegin(), loc) && sm.isBeforeInSLocAddrSpace(loc, pair.getEnd())) {
             return true;
         }
     }
@@ -108,7 +108,7 @@ void PreProcessorVisitor::updateQtVersion()
 void PreProcessorVisitor::handleQtNamespaceMacro(SourceLocation loc, StringRef name)
 {
     const bool isBegin = name == "QT_BEGIN_NAMESPACE";
-    uint fileId = m_sm.getFileID(loc).getHashValue();
+    uint fileId = m_pp.getSourceManager().getFileID(loc).getHashValue();
     std::vector<SourceRange> &pairs = m_q_namespace_macro_locations[fileId];
 
     if (isBegin) {
