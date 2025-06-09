@@ -519,7 +519,7 @@ except:
 if _verbose:
     print('Found clang version: ' + str(version))
 
-CLANG_VERSION = int(version.replace('.', ''))
+CLANG_VERSION = int(version.replace('git', '').replace('.', ''))
 
 suppress_line_numbers_opt = ""
 if CLANG_VERSION >= 1700: # See https://releases.llvm.org/17.0.1/tools/clang/docs/ReleaseNotes.html
