@@ -90,8 +90,18 @@ void QStringAllocations::VisitStmt(clang::Stmt *stm)
 
 static bool betterTakeQLatin1String(CXXMethodDecl *method, StringLiteral *lt)
 {
-    static const std::vector<StringRef> methods =
-        {"append", "compare", "endsWith", "startsWith", "insert", "lastIndexOf", "prepend", "replace", "contains", "indexOf"};
+    static const std::vector<StringRef> methods = {
+        "append",
+        "compare",
+        "endsWith",
+        "startsWith",
+        "insert",
+        "lastIndexOf",
+        "prepend",
+        "replace",
+        "contains",
+        "indexOf",
+    };
 
     if (!clazy::isOfClass(method, "QString")) {
         return false;

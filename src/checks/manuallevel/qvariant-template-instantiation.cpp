@@ -32,10 +32,11 @@ QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &
 
 static bool isMatchingClass(StringRef name)
 {
-    static const std::vector<StringRef> classes = {"QBitArray",     "QByteArray",  "QChar",      "QDate",   "QDateTime",          "QEasingCurve", "QJsonArray",
-                                                   "QJsonDocument", "QJsonObject", "QJsonValue", "QLocale", "QModelIndex",        "QPoint",       "QPointF",
-                                                   "QRect",         "QRectF",      "QRegExp",    "QString", "QRegularExpression", "QSize",        "QSizeF",
-                                                   "QStringList",   "QTime",       "QUrl",       "QUuid"};
+    static const std::vector<StringRef> classes = {
+        "QBitArray",          "QByteArray", "QChar",       "QDate",       "QDateTime", "QEasingCurve", "QJsonArray", "QJsonDocument", "QJsonObject",
+        "QJsonValue",         "QLocale",    "QModelIndex", "QPoint",      "QPointF",   "QRect",        "QRectF",     "QRegExp",       "QString",
+        "QRegularExpression", "QSize",      "QSizeF",      "QStringList", "QTime",     "QUrl",         "QUuid",
+    };
 
     return clazy::contains(classes, name);
 }
