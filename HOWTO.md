@@ -76,6 +76,7 @@ which will generate the files you need to write, and edit others for you.
 # Creating a release
 
 - Edit ChangeLog with release date/additional info
+- Make sure releases in `org.kde.clazy.metainfo.xml` are up to date. Changelog may be converted to XML format using following command: `appstreamcli news-to-metainfo --format text Changelog -`
 - Create git tag with the new version
 - Edit `CLAZY_VERSION_MINOR` in `CMakeLists.txt`
 
@@ -105,5 +106,6 @@ done
 curl -T "$xzfile" "${ftp_url}${xzfile}"
 curl -T "$sigfile" "${ftp_url}${sigfile}"
 ```
+
 
 <!--- Clone `git@invent.kde.org:sysadmin/repo-metadata` if you haven't yet, open `dependencies/logical-module-structure.json` and update the stable branch (search for clazy in that file). -->
