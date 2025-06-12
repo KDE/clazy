@@ -75,14 +75,35 @@ which will generate the files you need to write, and edit others for you.
 
 # Creating a release
 
-- Clone `git@invent.kde.org:sysadmin/repo-metadata` if you haven't yet, open `dependencies/logical-module-structure.json` and update the stable
-branch (search for clazy in that file).
-
-- cd into `clazy`, from `master` create a new stable branch, called for example `1.12` (use the version you want here)
-
+- Edit ChangeLog with release date/additional info
+- Create git tag with the new version
 - Edit `CLAZY_VERSION_MINOR` in `CMakeLists.txt`
 
-- Edit ChangeLog
+- Sign the files, upload them and create sysadmin ticket for putting them on https://download.kde.org/stable/clazy/.
 
-- Merge to master, and bump `CLAZY_VERSION_MINOR` to the next version.
 
+```bash
+basename="clazy-1.15"
+tarfile="$basename.tar"
+xzfile="$tarfile.xz"
+sigfile="$xzfile.sig"
+ftp_url="ftp://upload.kde.org/incoming/"
+
+xz -zk "$tarfile"  # -k to keep original tar
+
+gpg --output "$sigfile" --detach-sig "$xzfile"
+gpg --verify "$sigfile" "$xzfile"
+
+# For sysadmin ticket
+for file in "$xzfile" "$sigfile"; do
+    echo "File: $file"
+    echo "SHA-1:   $(sha1sum "$file" | awk '{print $1}')"
+    echo "SHA-256: $(sha256sum "$file" | awk '{print $1}')"
+    echo
+done
+
+curl -T "$xzfile" "${ftp_url}${xzfile}"
+curl -T "$sigfile" "${ftp_url}${sigfile}"
+```
+
+<!--- Clone `git@invent.kde.org:sysadmin/repo-metadata` if you haven't yet, open `dependencies/logical-module-structure.json` and update the stable branch (search for clazy in that file). -->
