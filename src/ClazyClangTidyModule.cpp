@@ -1,3 +1,4 @@
+#include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -6,6 +7,7 @@
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
 #include "clang-tidy/ClangTidyModuleRegistry.h"
+#include "clang/AST/ParentMap.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
 
@@ -38,17 +40,36 @@ public:
 
     bool VisitStmt(Stmt *stmt)
     {
-        std::for_each(m_checks.begin(), m_checks.end(), [stmt](CheckBase *check) {
+        if (!m_context.parentMap) {
+            if (m_context.astContext->getDiagnostics().hasUnrecoverableErrorOccurred()) {
+                return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
+            }
+
+            m_context.parentMap = new ParentMap(stmt);
+        }
+
+        for (auto *check : m_checks) {
             check->VisitStmt(stmt);
-        });
+        }
         return true;
     }
     bool VisitDecl(Decl *decl)
     {
+        if (AccessSpecifierManager *a = m_context.accessSpecifierManager) { // Needs to visit system headers too (qobject.h for example)
+            a->VisitDeclaration(decl);
+        }
+
         m_context.lastDecl = decl;
-        std::for_each(m_checks.begin(), m_checks.end(), [decl](CheckBase *check) {
+        if (auto *fdecl = dyn_cast<FunctionDecl>(decl)) {
+            m_context.lastFunctionDecl = fdecl;
+            if (auto *mdecl = dyn_cast<CXXMethodDecl>(fdecl)) {
+                m_context.lastMethodDecl = mdecl;
+            }
+        }
+
+        for (auto *check : m_checks) {
             check->VisitDecl(decl);
-        });
+        }
         return true;
     }
 
@@ -71,19 +92,18 @@ public:
 
     ~ClazyCheck()
     {
-        std::for_each(m_checks.begin(), m_checks.end(), [](CheckBase *check) {
+        for (auto *check : m_checks) {
             delete check;
-        });
+        }
         delete clazyContext;
     }
 
     void registerMatchers(ast_matchers::MatchFinder *Finder) override
     {
-        llvm::errs() << "registermatchers\n";
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
-        std::for_each(m_checks.begin(), m_checks.end(), [Finder](CheckBase *check) {
+        for (auto *check : m_checks) {
             check->registerASTMatchers(*Finder);
-        });
+        }
     }
 
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override
@@ -97,11 +117,9 @@ public:
 
     void registerPPCallbacks(const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) override
     {
-        llvm::errs() << "ppcallbacks\n";
         clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic);
+        clazyContext->registerPreprocessorCallbacks(*PP);
 
-        for (auto c : s_enabledChecks)
-            llvm::errs() << c + "\n";
         const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);
         for (const auto &availCheck : checks) {
             const std::string checkName = "clazy-" + availCheck.name;
