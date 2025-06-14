@@ -85,9 +85,12 @@ class ClazyCheck : public ClangTidyCheck
 public:
     ClazyCheck(StringRef CheckName, ClangTidyContext *Context)
         : ClangTidyCheck(CheckName, Context)
+        , m_shouldRunClazyChecks(s_enabledChecks.empty())
         , clangTidyContext(Context)
         , clazyContext(nullptr)
     {
+        // so that we later know which check was registered
+        s_enabledChecks.emplace_back(CheckName);
     }
 
     ~ClazyCheck()
@@ -100,6 +103,9 @@ public:
 
     void registerMatchers(ast_matchers::MatchFinder *Finder) override
     {
+        if (!m_shouldRunClazyChecks) {
+            return;
+        }
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
         for (auto *check : m_checks) {
             check->registerASTMatchers(*Finder);
@@ -108,6 +114,9 @@ public:
 
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override
     {
+        if (!m_shouldRunClazyChecks) {
+            return;
+        }
         clazyContext->astContext = Result.Context;
 
         FullASTVisitor visitor(*clazyContext, *this, m_checks);
@@ -117,6 +126,9 @@ public:
 
     void registerPPCallbacks(const SourceManager &SM, Preprocessor *PP, Preprocessor *ModuleExpanderPP) override
     {
+        if (!m_shouldRunClazyChecks) {
+            return;
+        }
         clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic);
         clazyContext->registerPreprocessorCallbacks(*PP);
 
@@ -134,6 +146,8 @@ public:
         }
     }
 
+    const bool m_shouldRunClazyChecks;
+
     ClangTidyContext *clangTidyContext;
     ClazyContext *clazyContext;
     std::vector<CheckBase *> m_checks;
@@ -148,25 +162,13 @@ public:
         };
 };
 
-class NoopCheck : public ClangTidyCheck
-{
-public:
-    NoopCheck(StringRef CheckName, ClangTidyContext *Context)
-        : ClangTidyCheck(CheckName, Context)
-    {
-        // Just for sake of registering a check
-        s_enabledChecks.emplace_back(CheckName);
-    }
-};
-
 class ClazyModule : public ClangTidyModule
 {
 public:
     void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override
     {
-        CheckFactories.registerCheck<ClazyCheck>("clazy");
         for (const auto &check : CheckManager::instance()->availableChecks(CheckLevel::ManualCheckLevel)) {
-            CheckFactories.registerCheck<NoopCheck>("clazy-" + check.name);
+            CheckFactories.registerCheck<ClazyCheck>("clazy-" + check.name);
         }
     }
 };
