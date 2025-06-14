@@ -146,7 +146,7 @@ public:
         if (!m_shouldRunClazyChecks) {
             return;
         }
-        clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic);
+        clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic, true);
         clazyContext->registerPreprocessorCallbacks(*PP);
 
         const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);

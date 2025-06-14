@@ -29,7 +29,8 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
                            std::string exportFixesFilename,
                            const std::vector<std::string> &translationUnitPaths,
                            ClazyOptions opts,
-                           std::optional<WarningReporter> warningReporter)
+                           std::optional<WarningReporter> warningReporter,
+                           bool isClangTidy)
     : astContext(context)
     , sm(manager)
     , lo(lo)
@@ -53,6 +54,7 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
             }
         }
     }))
+    , m_isClangTidy(isClangTidy)
 {
     if (!headerFilter.empty()) {
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));

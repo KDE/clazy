@@ -69,7 +69,8 @@ public:
                           std::string exportFixesFilename,
                           const std::vector<std::string> &translationUnitPaths,
                           ClazyOptions opts,
-                          std::optional<WarningReporter> warningReporter = std::nullopt);
+                          std::optional<WarningReporter> warningReporter = std::nullopt,
+                          bool isClangTidy = false);
 
     void registerPreprocessorCallbacks(clang::Preprocessor &pp);
 
@@ -198,6 +199,8 @@ public:
     const std::vector<std::string> m_translationUnitPaths;
     const clang::PreprocessorOptions m_pp;
     const WarningReporter p_warningReporter;
+
+    const bool m_isClangTidy;
 };
 
 #endif

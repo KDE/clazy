@@ -117,7 +117,7 @@ CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Optio
     , m_name(name)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
-    , m_tag(" [-Wclazy-" + m_name + ']')
+    , m_tag(context->m_isClangTidy ? "" : " [-Wclazy-" + m_name + ']')
 {
 }
 
