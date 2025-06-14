@@ -23,7 +23,6 @@ public:
         , m_checks(checks)
 
     {
-        std::for_each(m_checks.begin(), m_checks.end(), [](CheckBase *check) { });
     }
 
     ~FullASTVisitor()
@@ -40,6 +39,10 @@ public:
 
     bool VisitStmt(Stmt *stmt)
     {
+        const SourceLocation locStart = stmt->getBeginLoc();
+        if (locStart.isInvalid() || m_context.sm.isInSystemHeader(locStart)) {
+            return true;
+        }
         if (!m_context.parentMap) {
             if (m_context.astContext->getDiagnostics().hasUnrecoverableErrorOccurred()) {
                 return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
@@ -48,11 +51,15 @@ public:
             m_context.parentMap = new ParentMap(stmt);
         }
 
-        for (auto *check : m_checks) {
-            check->VisitStmt(stmt);
+        const bool isFromIgnorableInclude = m_context.ignoresIncludedFiles() && !Utils::isMainFile(m_context.sm, locStart);
+        for (CheckBase *check : m_checks) {
+            if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
+                check->VisitStmt(stmt);
+            }
         }
         return true;
     }
+
     bool VisitDecl(Decl *decl)
     {
         if (AccessSpecifierManager *a = m_context.accessSpecifierManager) { // Needs to visit system headers too (qobject.h for example)
@@ -67,8 +74,18 @@ public:
             }
         }
 
+        const bool isTypeDefToVisit = m_context.visitsAllTypedefs() && isa<TypedefNameDecl>(decl);
+        const SourceLocation locStart = decl->getBeginLoc();
+        if (locStart.isInvalid() || (m_context.sm.isInSystemHeader(locStart) && !isTypeDefToVisit)) {
+            return true;
+        }
+
+        const bool isFromIgnorableInclude = m_context.ignoresIncludedFiles() && !Utils::isMainFile(m_context.sm, locStart);
+
         for (auto *check : m_checks) {
-            check->VisitDecl(decl);
+            if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
+                check->VisitDecl(decl);
+            }
         }
         return true;
     }
