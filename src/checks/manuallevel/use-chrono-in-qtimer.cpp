@@ -68,7 +68,7 @@ void UseChronoInQTimer::warn(const clang::Stmt *stmt, int value)
     std::vector<FixItHint> fixits;
     fixits.push_back(FixItHint::CreateReplacement(stmt->getSourceRange(), suggestion));
 
-    if (!m_hasInsertedInclude && !m_context->preprocessorVisitor->hasInclude("chrono", true)) {
+    if (!m_hasInsertedInclude && m_context->preprocessorVisitor && !m_context->preprocessorVisitor->hasInclude("chrono", true)) {
         fixits.push_back(clazy::createInsertion(m_context->preprocessorVisitor->endOfIncludeSection(),
                                                 "\n"
                                                 "#include <chrono>\n\n"

@@ -57,7 +57,5 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    stmt->getBeginLoc().dump(sm());
-
-    emitWarning(stmt->getBeginLoc(), "'this' should usually be the filter object, not the monitored one.");
+    emitWarning(stmt, "'this' should usually be the filter object, not the monitored one.");
 }

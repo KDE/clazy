@@ -140,10 +140,7 @@ public:
 
     virtual void VisitStmt(clang::Stmt *stm);
     virtual void VisitDecl(clang::Decl *decl);
-
     void enablePreProcessorCallbacks(clang::Preprocessor &pp);
-    // To be initialized later
-    const ClazyContext *m_context;
 
 protected:
     virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr);
@@ -193,6 +190,7 @@ protected:
 
     const std::string m_name;
     std::vector<std::string> m_filesToIgnore;
+    const ClazyContext *const m_context;
 
 private:
     friend class ClazyPreprocessorCallbacks;

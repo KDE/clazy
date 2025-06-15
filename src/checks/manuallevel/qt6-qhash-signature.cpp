@@ -96,10 +96,13 @@ void Qt6QHashSignature::VisitStmt(clang::Stmt *stmt)
     if (!isInterestingFunction(name)) {
         return;
     }
+    if (!m_context->lastDecl) {
+        return;
+    }
 
-    VarDecl *varDecl = m_context->lastDecl ? dyn_cast<VarDecl>(m_context->lastDecl) : nullptr;
-    FieldDecl *fieldDecl = m_context->lastDecl ? dyn_cast<FieldDecl>(m_context->lastDecl) : nullptr;
-    FunctionDecl *funcDecl = m_context->lastDecl ? dyn_cast<FunctionDecl>(m_context->lastFunctionDecl) : nullptr;
+    VarDecl *varDecl = dyn_cast<VarDecl>(m_context->lastDecl);
+    FieldDecl *fieldDecl = dyn_cast<FieldDecl>(m_context->lastDecl);
+    FunctionDecl *funcDecl = m_context->lastFunctionDecl;
 
     if (!varDecl && !fieldDecl && !funcDecl) {
         return;
