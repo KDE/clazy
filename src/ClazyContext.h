@@ -63,7 +63,7 @@ public:
     explicit ClazyContext(clang::ASTContext *context, // maybe null..
                           clang::SourceManager &manager,
                           const clang::LangOptions &lo,
-                          clang::PreprocessorOptions &pp,
+                          const clang::PreprocessorOptions &pp,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
@@ -72,9 +72,9 @@ public:
                           std::optional<WarningReporter> warningReporter = std::nullopt,
                           bool isClangTidy = false);
 
-    void registerPreprocessorCallbacks(clang::Preprocessor &pp);
-
     ~ClazyContext();
+
+    void registerPreprocessorCallbacks(clang::Preprocessor &pp);
 
     bool usingPreCompiledHeaders() const;
 
@@ -166,13 +166,6 @@ public:
     /**
      * We only enable it if a check needs it, for performance reasons
      */
-    void enableAccessSpecifierManager()
-    {
-    }
-    void enablePreprocessorVisitor()
-    {
-    }
-
     void enableVisitallTypeDefs();
     bool visitsAllTypedefs() const;
 

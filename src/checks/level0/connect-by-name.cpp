@@ -20,7 +20,6 @@ using namespace clang;
 ConnectByName::ConnectByName(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void ConnectByName::VisitDecl(clang::Decl *decl)

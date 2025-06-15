@@ -85,7 +85,6 @@ private:
 
     // Indexed by FileId, has a list of QT_BEGIN_NAMESPACE/QT_END_NAMESPACE location
     std::unordered_map<uint, std::vector<clang::SourceRange>> m_q_namespace_macro_locations;
-    const clang::SourceManager &m_sm;
     const clang::Preprocessor &m_pp;
 
     struct IncludeInfo {

@@ -31,7 +31,6 @@ using namespace clang;
 FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)

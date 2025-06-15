@@ -20,7 +20,6 @@ using namespace clang;
 QEnums::QEnums(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const clang::MacroInfo *)

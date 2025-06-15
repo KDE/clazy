@@ -26,7 +26,6 @@ using namespace clang;
 RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void RangeLoopReference::VisitStmt(clang::Stmt *stmt)

@@ -26,7 +26,6 @@ using namespace clang;
 QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range, const clang::MacroInfo *minfo)

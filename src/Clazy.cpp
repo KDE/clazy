@@ -236,6 +236,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
                                      exportFixesFilename,
                                      {},
                                      ClazyContext::ClazyOption_None);
+        m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
         PrintHelp(llvm::errs());
         return true;
     }

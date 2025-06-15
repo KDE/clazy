@@ -18,7 +18,6 @@ using namespace clang;
 VirtualSignal::VirtualSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void VirtualSignal::VisitDecl(Decl *stmt)

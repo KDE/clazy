@@ -26,7 +26,6 @@ using namespace clang;
 QtKeywordEmit::QtKeywordEmit(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void QtKeywordEmit::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range, const clang::MacroInfo *minfo)

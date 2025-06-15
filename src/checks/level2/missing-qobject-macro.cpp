@@ -25,7 +25,6 @@ using namespace clang;
 MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)

@@ -23,7 +23,7 @@ using namespace clang;
 ClazyContext::ClazyContext(clang::ASTContext *context,
                            clang::SourceManager &manager,
                            const clang::LangOptions &lo,
-                           clang::PreprocessorOptions &pp,
+                           const clang::PreprocessorOptions &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
                            std::string exportFixesFilename,
@@ -106,8 +106,6 @@ void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &pp)
 {
     if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
         accessSpecifierManager = new AccessSpecifierManager(pp, exportFixesEnabled());
-    }
-    if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
         preprocessorVisitor = new PreProcessorVisitor(pp);
     }
 }

@@ -59,7 +59,6 @@ static bool hasPublicCopyInAncestors(const CXXRecordDecl *record)
 CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void CopyablePolymorphic::VisitDecl(clang::Decl *decl)

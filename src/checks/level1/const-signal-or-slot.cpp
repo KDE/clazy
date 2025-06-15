@@ -22,7 +22,6 @@ using namespace clang;
 ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)

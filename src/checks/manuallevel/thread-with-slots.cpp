@@ -41,7 +41,6 @@ static bool hasMutexes(Stmt *body)
 ThreadWithSlots::ThreadWithSlots(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
