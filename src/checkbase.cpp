@@ -259,6 +259,7 @@ void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 {
     llvm::errs() << m_tag << ": internal error: " << error << " at " << loc.printToString(sm()) << "\n";
 }
+
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
     auto severity = (m_context->treatAsError(m_name)

@@ -1,3 +1,8 @@
+/*
+    SPDX-FileCopyrightText: 2025 Alexander Lohnau <alexander.lohnau@gmx.de>
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
 #include "TypeUtils.h"

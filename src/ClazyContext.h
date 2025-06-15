@@ -60,7 +60,7 @@ public:
     using ClazyOptions = int;
     using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
 
-    explicit ClazyContext(clang::ASTContext *context, // maybe null..
+    explicit ClazyContext(clang::ASTContext *context, // maybe null, in case we lazy initialize it
                           clang::SourceManager &manager,
                           const clang::LangOptions &lo,
                           const clang::PreprocessorOptions &pp,

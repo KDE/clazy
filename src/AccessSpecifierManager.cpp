@@ -129,7 +129,7 @@ public:
 
 AccessSpecifierManager::AccessSpecifierManager(Preprocessor &pi, bool exportFixesEnabled)
     : m_sm(pi.getSourceManager())
-    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(pi.getSourceManager(), pi.getLangOpts()))
+    , m_preprocessorCallbacks(new AccessSpecifierPreprocessorCallbacks(m_sm, pi.getLangOpts()))
     , m_fixitsEnabled(exportFixesEnabled)
 {
     pi.addPPCallbacks(std::unique_ptr<PPCallbacks>(m_preprocessorCallbacks));

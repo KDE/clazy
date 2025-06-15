@@ -104,7 +104,7 @@ ClazyContext::~ClazyContext()
 
 void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &pp)
 {
-    if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
+    if (!usingPreCompiledHeaders()) {
         accessSpecifierManager = new AccessSpecifierManager(pp, exportFixesEnabled());
         preprocessorVisitor = new PreProcessorVisitor(pp);
     }
