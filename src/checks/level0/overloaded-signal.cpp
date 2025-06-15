@@ -19,7 +19,6 @@ using namespace clang;
 OverloadedSignal::OverloadedSignal(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void OverloadedSignal::VisitDecl(clang::Decl *decl)

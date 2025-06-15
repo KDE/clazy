@@ -19,7 +19,6 @@ using namespace clang;
 SignalWithReturnValue::SignalWithReturnValue(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enableAccessSpecifierManager();
 }
 
 void SignalWithReturnValue::VisitDecl(clang::Decl *decl)

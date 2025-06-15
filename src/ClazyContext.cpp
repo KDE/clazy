@@ -58,6 +58,13 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
         const bool isClazyStandalone = !translationUnitPaths.empty();
         exporter = new FixItExporter(context->getDiagnostics(), sm, context->getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
+
+    if (!usingPreCompiledHeaders()) {
+        accessSpecifierManager = new AccessSpecifierManager(m_pp, exportFixesEnabled());
+    }
+    if (!usingPreCompiledHeaders()) {
+        preprocessorVisitor = new PreProcessorVisitor(m_pp);
+    }
 }
 
 ClazyContext::~ClazyContext()
@@ -83,20 +90,6 @@ ClazyContext::~ClazyContext()
     preprocessorVisitor = nullptr;
     accessSpecifierManager = nullptr;
     parentMap = nullptr;
-}
-
-void ClazyContext::enableAccessSpecifierManager()
-{
-    if (!accessSpecifierManager && !usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(m_pp, exportFixesEnabled());
-    }
-}
-
-void ClazyContext::enablePreprocessorVisitor()
-{
-    if (!preprocessorVisitor && !usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(m_pp);
-    }
 }
 
 void ClazyContext::enableVisitallTypeDefs()

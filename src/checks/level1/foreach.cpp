@@ -35,7 +35,6 @@ using namespace clang;
 Foreach::Foreach(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void Foreach::VisitStmt(clang::Stmt *stmt)

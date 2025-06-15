@@ -21,9 +21,6 @@ using namespace clang;
 QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    if (context->isQtDeveloper()) {
-        context->enablePreprocessorVisitor();
-    }
 }
 
 void QHashNamespace::VisitDecl(clang::Decl *decl)

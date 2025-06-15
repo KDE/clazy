@@ -81,7 +81,6 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
 RangeLoopDetach::RangeLoopDetach(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void RangeLoopDetach::VisitStmt(clang::Stmt *stmt)

@@ -18,7 +18,6 @@ using namespace clang;
 QtMacros::QtMacros(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void QtMacros::VisitMacroDefined(const Token &MacroNameTok)

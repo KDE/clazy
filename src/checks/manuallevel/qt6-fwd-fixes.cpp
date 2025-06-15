@@ -32,7 +32,6 @@ using namespace clang;
 Qt6FwdFixes::Qt6FwdFixes(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
-    context->enablePreprocessorVisitor();
 }
 
 static std::set<std::string> interestingFwdDecl = {

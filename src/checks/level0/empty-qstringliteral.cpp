@@ -23,7 +23,6 @@ using namespace clang;
 EmptyQStringliteral::EmptyQStringliteral(const std::string &name, ClazyContext *context)
     : CheckBase(name, context)
 {
-    context->enablePreprocessorVisitor();
 }
 
 void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)

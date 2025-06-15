@@ -32,7 +32,6 @@ QStringArg::QStringArg(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = {"qstring.h"};
-    context->enablePreprocessorVisitor();
 }
 
 static std::string variableNameFromArg(Expr *arg)

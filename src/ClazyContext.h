@@ -156,8 +156,6 @@ public:
     /**
      * We only enable it if a check needs it, for performance reasons
      */
-    void enableAccessSpecifierManager();
-    void enablePreprocessorVisitor();
     void enableVisitallTypeDefs();
     bool visitsAllTypedefs() const;
 
