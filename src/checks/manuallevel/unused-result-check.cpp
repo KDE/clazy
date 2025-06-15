@@ -28,7 +28,7 @@ public:
     void run(const MatchFinder::MatchResult &result) override
     {
         if (const auto *callExpr = result.Nodes.getNodeAs<CXXMemberCallExpr>("callExpr")) {
-            if (callExpr->getMethodDecl()->isConst() && !callExpr->getMethodDecl()->getReturnType()->isVoidType()) {
+            if (const auto *methodDecl = callExpr->getMethodDecl(); methodDecl && methodDecl->isConst() && !methodDecl->getReturnType()->isVoidType()) {
                 const auto &parents = result.Context->getParents(*callExpr);
 
                 if (parents[0].get<Stmt>() != nullptr && parents[0].get<Decl>() == nullptr) {
