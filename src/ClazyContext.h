@@ -57,7 +57,7 @@ public:
     explicit ClazyContext(clang::ASTContext *context, // maybe null, in case we lazy initialize it
                           clang::SourceManager &manager,
                           const clang::LangOptions &lo,
-                          clang::Preprocessor &pp,
+                          const clang::PreprocessorOptions &pp,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
@@ -65,6 +65,8 @@ public:
                           ClazyOptions opts);
 
     ~ClazyContext();
+
+    void registerPreprocessorCallbacks(clang::Preprocessor &pp);
 
     bool usingPreCompiledHeaders() const;
 
@@ -180,7 +182,7 @@ public:
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
     const std::vector<std::string> m_translationUnitPaths;
-    clang::Preprocessor &m_pp;
+    const clang::PreprocessorOptions &m_pp;
 };
 
 #endif

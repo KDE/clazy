@@ -231,12 +231,13 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
         m_context = new ClazyContext(&ci.getASTContext(),
                                      ci.getSourceManager(),
                                      ci.getASTContext().getLangOpts(),
-                                     ci.getPreprocessor(),
+                                     ci.getPreprocessor().getPreprocessorOpts(),
                                      headerFilter,
                                      ignoreDirs,
                                      exportFixesFilename,
                                      {},
                                      ClazyContext::ClazyOption_None);
+        m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
         PrintHelp(llvm::errs());
         return true;
     }
@@ -268,12 +269,13 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     m_context = new ClazyContext(&ci.getASTContext(),
                                  ci.getSourceManager(),
                                  ci.getASTContext().getLangOpts(),
-                                 ci.getPreprocessor(),
+                                 ci.getPreprocessor().getPreprocessorOpts(),
                                  headerFilter,
                                  ignoreDirs,
                                  exportFixesFilename,
                                  {},
                                  m_options);
+    m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
 
     // This argument is for debugging purposes
     const bool dbgPrintRequestedChecks = parseArgument("print-requested-checks", args);
@@ -398,12 +400,13 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
     auto *context = new ClazyContext(&ci.getASTContext(),
                                      ci.getSourceManager(),
                                      ci.getASTContext().getLangOpts(),
-                                     ci.getPreprocessor(),
+                                     ci.getPreprocessor().getPreprocessorOpts(),
                                      m_headerFilter,
                                      m_ignoreDirs,
                                      m_exportFixesFilename,
                                      m_translationUnitPaths,
                                      m_options);
+    context->registerPreprocessorCallbacks(ci.getPreprocessor());
     auto *astConsumer = new ClazyASTConsumer(context);
 
     auto *cm = CheckManager::instance();

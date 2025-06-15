@@ -23,7 +23,7 @@ using namespace clang;
 ClazyContext::ClazyContext(clang::ASTContext *context,
                            clang::SourceManager &manager,
                            const clang::LangOptions &lo,
-                           clang::Preprocessor &pp,
+                           const clang::PreprocessorOptions &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
                            std::string exportFixesFilename,
@@ -58,13 +58,6 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
         const bool isClazyStandalone = !translationUnitPaths.empty();
         exporter = new FixItExporter(context->getDiagnostics(), sm, context->getLangOpts(), exportFixesFilename, isClazyStandalone);
     }
-
-    if (!usingPreCompiledHeaders()) {
-        accessSpecifierManager = new AccessSpecifierManager(m_pp, exportFixesEnabled());
-    }
-    if (!usingPreCompiledHeaders()) {
-        preprocessorVisitor = new PreProcessorVisitor(m_pp);
-    }
 }
 
 ClazyContext::~ClazyContext()
@@ -92,6 +85,14 @@ ClazyContext::~ClazyContext()
     parentMap = nullptr;
 }
 
+void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &pp)
+{
+    if (!usingPreCompiledHeaders()) {
+        accessSpecifierManager = new AccessSpecifierManager(pp, exportFixesEnabled());
+        preprocessorVisitor = new PreProcessorVisitor(pp);
+    }
+}
+
 void ClazyContext::enableVisitallTypeDefs()
 {
     // By default we only process decls from the .cpp file we're processing, not stuff included (for performance)
@@ -107,7 +108,7 @@ bool ClazyContext::visitsAllTypedefs() const
 bool ClazyContext::isQt() const
 {
     static const bool s_isQt = [this] {
-        for (const auto &s : m_pp.getPreprocessorOpts().Macros) {
+        for (const auto &s : m_pp.Macros) {
             if (s.first == "QT_CORE_LIB") {
                 return true;
             }
@@ -119,5 +120,5 @@ bool ClazyContext::isQt() const
 }
 bool ClazyContext::usingPreCompiledHeaders() const
 {
-    return !m_pp.getPreprocessorOpts().ImplicitPCHInclude.empty();
+    return !m_pp.ImplicitPCHInclude.empty();
 }
