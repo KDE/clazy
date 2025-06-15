@@ -1,3 +1,13 @@
+Version 1.16
+~~~~~~~~~~~~
+Relased: Not yet
+
+Bugfixes:
+* unused-result-check: Fix crash when method decleration can not be resolved
+* use-chrono-in-qtimer: Fix crash when using precompiled headers
+* qt6-qhash-signature: Adapt check to use more proper logic for casts and fix
+crash in edgecases
+
 Version 1.15
 ~~~~~~~~~~~~
 Released: 2025-06-12
