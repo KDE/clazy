@@ -112,7 +112,6 @@ public:
 
 private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
-    clang::Stmt *lastStm = nullptr;
     ClazyContext *const m_context;
     // CheckBase::List m_createdChecks;
     CheckBase::List m_checksToVisitStmts;

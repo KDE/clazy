@@ -113,8 +113,6 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
         m_context->parentMap = new ParentMap(stm);
     }
 
-    lastStm = stm;
-
     // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
     // So add to parent map each time we go into a different hierarchy
     if (!m_context->parentMap->hasParent(stm)) {
