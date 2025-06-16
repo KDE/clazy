@@ -38,19 +38,6 @@
 using namespace clang;
 using namespace clang::ast_matchers;
 
-static void manuallyPopulateParentMap(ParentMap *map, Stmt *s)
-{
-    if (!s) {
-        return;
-    }
-
-    for (Stmt *child : s->children()) {
-        llvm::errs() << "Patching " << child->getStmtClassName() << "\n";
-        map->setParent(child, s);
-        manuallyPopulateParentMap(map, child);
-    }
-}
-
 ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
     : m_context(context)
 {
@@ -126,20 +113,12 @@ bool ClazyASTConsumer::VisitStmt(Stmt *stm)
         m_context->parentMap = new ParentMap(stm);
     }
 
-    ParentMap *parentMap = m_context->parentMap;
-
-    // Workaround llvm bug: Crashes creating a parent map when encountering Catch Statements.
-    if (lastStm && isa<CXXCatchStmt>(lastStm) && !parentMap->hasParent(stm)) {
-        parentMap->setParent(stm, lastStm);
-        manuallyPopulateParentMap(parentMap, stm);
-    }
-
     lastStm = stm;
 
     // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
     // So add to parent map each time we go into a different hierarchy
-    if (!parentMap->hasParent(stm)) {
-        parentMap->addStmt(stm);
+    if (!m_context->parentMap->hasParent(stm)) {
+        m_context->parentMap->addStmt(stm);
     }
 
     const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);

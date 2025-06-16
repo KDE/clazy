@@ -11,6 +11,7 @@
 #include <clang/Basic/SourceLocation.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Basic/TokenKinds.h>
+#include <clang/Lex/Lexer.h>
 #include <clang/Lex/Token.h>
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
