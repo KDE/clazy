@@ -5,6 +5,7 @@
 
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
+#include "ClazyVisitHelper.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "checkbase.h"
@@ -23,9 +24,13 @@ using namespace clang;
 class FullASTVisitor : public RecursiveASTVisitor<FullASTVisitor>
 {
 public:
-    explicit FullASTVisitor(ClazyContext &context, ClangTidyCheck &Check, const std::vector<CheckBase *> &checks)
+    explicit FullASTVisitor(ClazyContext *context,
+                            ClangTidyCheck &Check,
+                            const std::vector<CheckBase *> &checksToVisitStmt,
+                            const std::vector<CheckBase *> &checksToVisitDecl)
         : m_context(context)
-        , m_checks(checks)
+        , m_checksToVisitStmt(checksToVisitStmt)
+        , m_checksToVisitDecl(checksToVisitDecl)
 
     {
     }
@@ -44,60 +49,18 @@ public:
 
     bool VisitStmt(Stmt *stmt)
     {
-        const SourceLocation locStart = stmt->getBeginLoc();
-        if (locStart.isInvalid() || m_context.sm.isInSystemHeader(locStart)) {
-            return true;
-        }
-        if (!m_context.parentMap) {
-            if (m_context.astContext->getDiagnostics().hasUnrecoverableErrorOccurred()) {
-                return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
-            }
-
-            m_context.parentMap = new ParentMap(stmt);
-        }
-
-        const bool isFromIgnorableInclude = m_context.ignoresIncludedFiles() && !Utils::isMainFile(m_context.sm, locStart);
-        for (CheckBase *check : m_checks) {
-            if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
-                check->VisitStmt(stmt);
-            }
-        }
-        return true;
+        return clazy::VisitHelper::VisitStmt(stmt, m_context, m_checksToVisitStmt);
     }
 
     bool VisitDecl(Decl *decl)
     {
-        if (AccessSpecifierManager *a = m_context.accessSpecifierManager) { // Needs to visit system headers too (qobject.h for example)
-            a->VisitDeclaration(decl);
-        }
-
-        m_context.lastDecl = decl;
-        if (auto *fdecl = dyn_cast<FunctionDecl>(decl)) {
-            m_context.lastFunctionDecl = fdecl;
-            if (auto *mdecl = dyn_cast<CXXMethodDecl>(fdecl)) {
-                m_context.lastMethodDecl = mdecl;
-            }
-        }
-
-        const bool isTypeDefToVisit = m_context.visitsAllTypedefs() && isa<TypedefNameDecl>(decl);
-        const SourceLocation locStart = decl->getBeginLoc();
-        if (locStart.isInvalid() || (m_context.sm.isInSystemHeader(locStart) && !isTypeDefToVisit)) {
-            return true;
-        }
-
-        const bool isFromIgnorableInclude = m_context.ignoresIncludedFiles() && !Utils::isMainFile(m_context.sm, locStart);
-
-        for (auto *check : m_checks) {
-            if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
-                check->VisitDecl(decl);
-            }
-        }
-        return true;
+        return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecl);
     }
 
 private:
-    ClazyContext &m_context;
-    std::vector<CheckBase *> m_checks;
+    ClazyContext *const m_context;
+    const std::vector<CheckBase *> m_checksToVisitStmt;
+    const std::vector<CheckBase *> m_checksToVisitDecl;
 };
 
 std::vector<std::string> s_enabledChecks;
@@ -117,7 +80,7 @@ public:
 
     ~ClazyCheck()
     {
-        for (auto *check : m_checks) {
+        for (auto *check : m_allChecks) {
             delete check;
         }
         delete clazyContext;
@@ -129,7 +92,7 @@ public:
             return;
         }
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
-        for (auto *check : m_checks) {
+        for (auto *check : m_allChecks) {
             check->registerASTMatchers(*Finder);
         }
     }
@@ -141,7 +104,7 @@ public:
         }
         clazyContext->astContext = Result.Context;
 
-        FullASTVisitor visitor(*clazyContext, *this, m_checks);
+        FullASTVisitor visitor(clazyContext, *this, m_checksToVisitStmt, m_checksToVisitDecl);
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
         visitor.TraverseDecl(translationUnit);
     }
@@ -164,7 +127,13 @@ public:
             if (availCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
                 check->enablePreProcessorCallbacks(*PP);
             }
-            m_checks.emplace_back(check);
+            if (availCheck.options & RegisteredCheck::Option_VisitsStmts) {
+                m_checksToVisitStmt.emplace_back(check);
+            }
+            if (availCheck.options & RegisteredCheck::Option_VisitsDecls) {
+                m_checksToVisitDecl.emplace_back(check);
+            }
+            m_allChecks.emplace_back(check);
         }
     }
 
@@ -172,7 +141,9 @@ public:
 
     ClangTidyContext *clangTidyContext;
     ClazyContext *clazyContext;
-    std::vector<CheckBase *> m_checks;
+    std::vector<CheckBase *> m_allChecks;
+    std::vector<CheckBase *> m_checksToVisitStmt;
+    std::vector<CheckBase *> m_checksToVisitDecl;
     // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
     const ClazyContext::WarningReporter emitDiagnostic = //
         [this](const std::string &checkName,
