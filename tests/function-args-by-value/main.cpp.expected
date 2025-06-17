@@ -1,4 +1,3 @@
-function-args-by-value/main.cpp:233:10: warning: 'virtualMethod2' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
 function-args-by-value/main.cpp:150:22: warning: shouldBeByValue: Pass small and trivially-copyable type by value (const Trivial & nt) [-Wclazy-function-args-by-value]
 function-args-by-value/main.cpp:166:11: warning: foo4: Pass small and trivially-copyable type by value (const Trivial & t) [-Wclazy-function-args-by-value]
 function-args-by-value/main.cpp:170:11: warning: foo5: Pass small and trivially-copyable type by value (const Trivial & t) [-Wclazy-function-args-by-value]

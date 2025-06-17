@@ -1,4 +1,3 @@
-function-args-by-ref/main.cpp:245:10: warning: 'virtualMethod2' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
 function-args-by-ref/main.cpp:28:10: warning: foo2: Missing reference on non-trivial type (const NonTrivial nt) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:34:10: warning: foo3: Missing reference on non-trivial type (NonTrivial nt) [-Wclazy-function-args-by-ref]
 function-args-by-ref/main.cpp:39:10: warning: foo4: Missing reference on non-trivial type (NonTrivial nt) [-Wclazy-function-args-by-ref]
