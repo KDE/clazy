@@ -113,11 +113,11 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
 }
 
 CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
-    : m_name(name)
-    , m_context(context)
+    : m_context(context)
+    , m_name(name)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
-    , m_tag(context->m_isClangTidy ? "" : " [-Wclazy-" + m_name + ']')
+    , m_tag(!context || context->m_isClangTidy ? "" : " [-Wclazy-" + m_name + ']')
 {
 }
 

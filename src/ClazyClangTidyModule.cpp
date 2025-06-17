@@ -16,6 +16,7 @@
 #include "clang/AST/ParentMap.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
+#include <utility>
 
 using namespace clang::ast_matchers;
 using namespace clang::tidy;
@@ -80,9 +81,10 @@ public:
 
     ~ClazyCheck()
     {
-        for (auto *check : m_allChecks) {
-            delete check;
+        for (auto &checkPair : m_allChecks) {
+            delete checkPair.first;
         }
+        m_allChecks.clear();
         delete clazyContext;
     }
 
@@ -91,9 +93,25 @@ public:
         if (!m_shouldRunClazyChecks) {
             return;
         }
+
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
-        for (auto *check : m_allChecks) {
+
+        const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);
+        for (const auto &availCheck : checks) {
+            const std::string checkName = "clazy-" + availCheck.name;
+            if (std::find(s_enabledChecks.begin(), s_enabledChecks.end(), checkName) == s_enabledChecks.end()) {
+                continue;
+            }
+            auto *check = availCheck.factory(clazyContext);
+            if (availCheck.options & RegisteredCheck::Option_VisitsStmts) {
+                m_checksToVisitStmt.emplace_back(check);
+            }
+            if (availCheck.options & RegisteredCheck::Option_VisitsDecls) {
+                m_checksToVisitDecl.emplace_back(check);
+            }
+
             check->registerASTMatchers(*Finder);
+            m_allChecks.emplace_back(std::pair{check, availCheck.options});
         }
     }
 
@@ -117,23 +135,11 @@ public:
         clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic, true);
         clazyContext->registerPreprocessorCallbacks(*PP);
 
-        const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);
-        for (const auto &availCheck : checks) {
-            const std::string checkName = "clazy-" + availCheck.name;
-            if (std::find(s_enabledChecks.begin(), s_enabledChecks.end(), checkName) == s_enabledChecks.end()) {
-                continue;
-            }
-            auto *check = availCheck.factory(clazyContext);
-            if (availCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
+        for (const auto [check, options] : m_allChecks) {
+            check->m_context = clazyContext;
+            if (options & RegisteredCheck::Option_PreprocessorCallbacks) {
                 check->enablePreProcessorCallbacks(*PP);
             }
-            if (availCheck.options & RegisteredCheck::Option_VisitsStmts) {
-                m_checksToVisitStmt.emplace_back(check);
-            }
-            if (availCheck.options & RegisteredCheck::Option_VisitsDecls) {
-                m_checksToVisitDecl.emplace_back(check);
-            }
-            m_allChecks.emplace_back(check);
         }
     }
 
@@ -141,7 +147,7 @@ public:
 
     ClangTidyContext *clangTidyContext;
     ClazyContext *clazyContext;
-    std::vector<CheckBase *> m_allChecks;
+    std::vector<std::pair<CheckBase *, RegisteredCheck::Options>> m_allChecks;
     std::vector<CheckBase *> m_checksToVisitStmt;
     std::vector<CheckBase *> m_checksToVisitDecl;
     // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
