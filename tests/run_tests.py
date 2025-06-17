@@ -434,6 +434,17 @@ def clazy_command(test, cppStandard, qt, filename):
 
     return result
 
+def clang_tidy_command(test, cppStandard, qt, filename):
+    command = f"clang-tidy {filename}"
+    # disable all checks, re-enable clazy ones
+    command += f" -checks='-*,{','.join("clazy-" + check for check in test.checks)}' -system-headers -load='/home/user/kde/src/clazy/build/lib/libClazyClangTidy.so'"
+
+    # Add extra compiler flags
+    command += " -- "
+    command += clazy_cpp_args(cppStandard)
+    command += qt.compiler_flags(test.qt_modules_includes)
+    command += suppress_line_numbers_opt
+    return command
 
 def dump_ast_command(test, cppStandard, qt_major_version):
     return "clang -std=" + cppStandard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(qt_major_version).compiler_flags(test.qt_modules_includes) + " " + test.flags + " " + test.filename()
@@ -521,9 +532,7 @@ if _verbose:
 
 CLANG_VERSION = int(version.replace('git', '').replace('.', ''))
 
-suppress_line_numbers_opt = ""
-if CLANG_VERSION >= 1700: # See https://releases.llvm.org/17.0.1/tools/clang/docs/ReleaseNotes.html
-    suppress_line_numbers_opt = " -fno-diagnostics-show-line-numbers"
+suppress_line_numbers_opt = " -fno-diagnostics-show-line-numbers"
 
 def qt_installation(major_version):
     if major_version == 6:
@@ -540,6 +549,11 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbo
     lines = lines.replace("std::__1::__vector_base_common",
                           "std::_Vector_base")  # Hack for macOS
     lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
+
+    # clang-tidy prints the tags slightly different
+    if cmd.startswith("clang-tidy"):
+        lines = lines.replace("[clazy", "[-Wclazy")
+
     if not success and not output_file:
         print(lines)
         return False
@@ -700,7 +714,7 @@ def is32Bit():
     return platform.architecture()[0] == '32bit'
 
 
-def run_unit_test(test, is_standalone, cppStandard, qt_major_version):
+def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
 
@@ -758,6 +772,8 @@ def run_unit_test(test, is_standalone, cppStandard, qt_major_version):
     if is_standalone:
         cmd_to_run = clazy_standalone_binary() + " " + filename + " " + \
             clazy_standalone_command(test, cppStandard, qt)
+    elif is_tidy:
+        cmd_to_run = clang_tidy_command(test, cppStandard, qt, filename)
     else:
         cmd_to_run = clazy_command(test, cppStandard, qt, filename)
 
@@ -794,7 +810,7 @@ def run_unit_test(test, is_standalone, cppStandard, qt_major_version):
 
     return True
 
-def run_unit_test_for_each_configuration(test, is_standalone):
+def run_unit_test_for_each_configuration(test, is_standalone, is_tidy = False):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
     result = True
@@ -804,7 +820,7 @@ def run_unit_test_for_each_configuration(test, is_standalone):
                 continue
             if cppStandard == "c++17" and qt_major_version == 5 and len(test.cppStandards) > 1: # valid combination but let's skip it unless it was the only specified standard
                 continue
-            result = result and run_unit_test(test, is_standalone, cppStandard, qt_major_version)
+            result = result and run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version)
     return result
 
 def run_unit_tests(tests):
@@ -817,6 +833,10 @@ def run_unit_tests(tests):
 
         if not _no_standalone:
             test_result = test_result and run_unit_test_for_each_configuration(test, True)
+            result = result and test_result
+
+        if True:
+            test_result = test_result and run_unit_test_for_each_configuration(test, False, True)
             result = result and test_result
 
         if not test_result:
