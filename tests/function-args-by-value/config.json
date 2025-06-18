@@ -2,6 +2,7 @@
     "tests": [
         {
             "filename": "main.cpp",
+            "flags": "-Wno-inconsistent-missing-override",
             "has_fixits": true
         },
         {
@@ -20,6 +21,7 @@
         {
             "filename": "warn-for-overridden-methods.cpp",
             "has_fixits": true,
+            "flags": "-Wno-inconsistent-missing-override",
             "env": {
                 "CLAZY_EXTRA_OPTIONS": "function-args-by-value-warn-for-overridden-methods"
             }
