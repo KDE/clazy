@@ -1,0 +1,5 @@
+old-style-connect/namespaces.cpp:32:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/namespaces.cpp:33:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/namespaces.cpp:42:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/namespaces.cpp:43:5: warning: Old Style Connect [-Wclazy-old-style-connect]
+old-style-connect/namespaces.h:22:9: warning: Old Style Connect [-Wclazy-old-style-connect]
