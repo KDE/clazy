@@ -447,6 +447,7 @@ def clang_tidy_command(test, cppStandard, qt, filename):
 
     # Add extra compiler flags
     command += " -- "
+    command += f" {test.flags} "
     command += clazy_cpp_args(cppStandard)
     command += qt.compiler_flags(test.qt_modules_includes)
     command += suppress_line_numbers_opt
@@ -769,6 +770,11 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     output_file = filename + ".out"
     result_file = filename + ".result"
     expected_file = filename + ".expected"
+    expected_file_tidy = filename + ".expected.tidy"
+    if is_tidy and os.path.exists(expected_file_tidy):
+        expected_file = expected_file_tidy
+    if not os.path.exists(expected_file):
+        expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
     if not os.path.exists(expected_file):
         expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
 

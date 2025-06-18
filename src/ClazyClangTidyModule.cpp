@@ -87,7 +87,6 @@ public:
         }
 
         Finder->addMatcher(translationUnitDecl().bind("tu"), this);
-
         const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);
         for (const auto &availCheck : checks) {
             const std::string checkName = "clazy-" + availCheck.name;
