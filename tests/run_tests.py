@@ -728,6 +728,10 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     if qt == None:
         return True # silently skip
 
+    if is_tidy and (test.isScript() or test.only_qt or test.qt_developer):
+        print("Options not supported with clang-tidy")
+        return True
+
     if _verbose:
         print("Qt major versions required by the test: " + str(test.qt_major_versions))
         print("Currently considering Qt major version: " + str(qt_major_version))
