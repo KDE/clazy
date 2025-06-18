@@ -297,6 +297,11 @@ endif()
 
 add_clang_plugin(ClazyClangTidy src/ClazyClangTidyModule.cpp)
 target_link_libraries(ClazyClangTidy ClazyPlugin)
+  install(TARGETS ClazyClangTidy
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
 
 function(to_raw_string_literal input_string output_string)
     if (MSVC)

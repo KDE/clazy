@@ -349,6 +349,11 @@ def libraryName():
     else:
         return 'ClazyPlugin.so'
 
+def clangTidyPluginName():
+    if 'CLANGTIDYPLUGIN_CXX' in os.environ: # Running tests uninstalled
+        return os.environ['CLANGTIDYPLUGIN_CXX']
+    return "ClazyClangTidy.so"
+
 
 def link_flags(qt:QtInstallation):
     is_qt6 = qt.int_version > 60000
@@ -437,7 +442,8 @@ def clazy_command(test, cppStandard, qt, filename):
 def clang_tidy_command(test, cppStandard, qt, filename):
     command = f"clang-tidy {filename}"
     # disable all checks, re-enable clazy ones
-    command += f" -checks='-*,{','.join("clazy-" + check for check in test.checks)}' -system-headers -load='/home/user/kde/src/clazy/build/lib/libClazyClangTidy.so'"
+    checks = ','.join("clazy-" + check for check in test.checks)
+    command += f" -checks='-*,{checks}' -system-headers -load='{clangTidyPluginName()}'"
 
     # Add extra compiler flags
     command += " -- "
