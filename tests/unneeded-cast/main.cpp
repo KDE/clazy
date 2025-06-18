@@ -29,14 +29,14 @@ void test()
     A *a = new A();
     B *b = new B();
 
-    dynamic_cast<A*>(b); // warning: Casting to base
-    dynamic_cast<A*>(a); // warning: Casting to itself
+    dynamic_cast<A*>(b); // Warning: Casting to base
+    dynamic_cast<A*>(a); // Warning: Casting to itself
     dynamic_cast<B*>(a); // OK
-    dynamic_cast<B*>(b); // warning: Casting to itself
-    static_cast<A*>(b); // warning: Casting to base
-    static_cast<A*>(a); // warning: Casting to itself
+    dynamic_cast<B*>(b); // Warning: Casting to itself
+    static_cast<A*>(b); // Warning: Casting to base
+    static_cast<A*>(a); // Warning: Casting to itself
     static_cast<B*>(a); // OK
-    static_cast<B*>(b); // warning: Casting to itself
+    static_cast<B*>(b); // Warning: Casting to itself
 }
 
 class MyObj : public QObject
