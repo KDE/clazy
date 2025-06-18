@@ -443,7 +443,7 @@ def clang_tidy_command(test, cppStandard, qt, filename):
     command = f"clang-tidy {filename}"
     # disable all checks, re-enable clazy ones
     checks = ','.join("clazy-" + check for check in test.checks)
-    command += f" -checks='-*,{checks}' -system-headers -load='{clangTidyPluginName()}'"
+    command += f" -checks='-*,{checks}' -header-filter='.*' -system-headers -load='{clangTidyPluginName()}'"
 
     # Add extra compiler flags
     command += " -- "
@@ -814,7 +814,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     if not compare_files(test.expects_failure, expected_file, result_file, printableName):
         return False
 
-    if test.has_fixits:
+    if test.has_fixits and not is_tidy:
         # The normal tests succeeded, we can run the respective fixits then
         test.should_run_fixits_test = True
 
