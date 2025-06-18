@@ -549,8 +549,8 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbo
         print("output_file=" + output_file)
 
     lines = lines.replace('\r\n', '\n')
-    if len(lines) > 0 and lines[-1] == "\n":
-        lines = lines[:-1] # remove trailing empty line, often it's the only output
+    if lines.endswith('\n\n'):
+        lines = lines[:-1]  # remove *only* one extra newline, all testfiles have a newline based on unix convention
     if output_file:
         f = io.open(output_file, 'w', encoding='utf8')
         f.writelines(lines)
