@@ -40,14 +40,6 @@ public:
     {
     }
 
-    bool VisitFunctionDecl(FunctionDecl *FD)
-    {
-        if (FD->hasBody()) {
-            VisitStmt(FD->getBody());
-        }
-        return true;
-    }
-
     bool VisitStmt(Stmt *stmt)
     {
         return clazy::VisitHelper::VisitStmt(stmt, m_context, m_checksToVisitStmt);
