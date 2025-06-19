@@ -471,6 +471,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--verbose", action='store_true')
 parser.add_argument("--no-standalone", action='store_true',
                     help="Don\'t run clazy-standalone")
+parser.add_argument("--no-clang-tidy", action='store_true',
+                    help="Don\'t run clang-tidy")
 parser.add_argument("--no-fixits", action='store_true',
                     help='Don\'t run fixits')
 parser.add_argument("--only-standalone", action='store_true',
@@ -498,6 +500,7 @@ _export_fixes_argument = "-Xclang -plugin-arg-clazy -Xclang export-fixes"
 _dump_ast = args.dump_ast
 _verbose = args.verbose
 _no_standalone = args.no_standalone
+_no_clang_tidy = args.no_clang_tidy
 _no_fixits = args.no_fixits
 _only_standalone = args.only_standalone
 _num_threads = args.jobs
@@ -853,7 +856,7 @@ def run_unit_tests(tests):
             test_result = test_result and run_unit_test_for_each_configuration(test, True)
             result = result and test_result
 
-        if True:
+        if not _no_clang_tidy:
             test_result = test_result and run_unit_test_for_each_configuration(test, False, True)
             result = result and test_result
 
