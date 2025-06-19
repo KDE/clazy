@@ -49,6 +49,12 @@ option(LINK_CLAZY_TO_LLVM "Links the clazy plugin to LLVM. Switch to OFF if your
 option(APPIMAGE_HACK "Links the clazy plugin to the clang tooling libs only. For some reason this is needed when building on our old CentOS 6.8 to create the AppImage." OFF)
 option(CLAZY_MAN_PAGE "Builds the man page." ON)
 option(CLAZY_ENABLE_SANITIZERS "Builds clazy with ASAN/UBSAN. For clazy's own development only." OFF)
+option(CLAZY_BUILD_CLANG_TIDY "Builds clang-tidy plugin" ON)
+
+# not available on opensuse CI, only BSD for now
+if ($ENV{CI_JOB_NAME_SLUG} MATCHES "suse-tumbleweed")
+  set(CLAZY_BUILD_CLANG_TIDY OFF)
+endif()
 
 if (CLAZY_ENABLE_SANITIZERS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
@@ -295,13 +301,23 @@ else()
   install(TARGETS clazy-standalone DESTINATION bin PERMISSIONS OWNER_WRITE OWNER_EXECUTE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 endif()
 
-add_clang_plugin(ClazyClangTidy src/ClazyClangTidyModule.cpp)
-target_link_libraries(ClazyClangTidy ClazyPlugin)
-  install(TARGETS ClazyClangTidy
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+
+if (CLAZY_BUILD_CLANG_TIDY)
+  find_path(CLANG_TIDY_MODULE_REGISTRY_HEADER
+      NAMES clang-tidy/ClangTidyModule.h
+      PATHS ${CLANG_INCLUDE_DIRS}
   )
+  if (NOT CLANG_TIDY_MODULE_REGISTRY_HEADER)
+    message(FATAL_ERROR "Could not find ClangTidyModule.h header")
+  endif()
+  add_clang_plugin(ClazyClangTidy src/ClazyClangTidyModule.cpp)
+  target_link_libraries(ClazyClangTidy ClazyPlugin)
+    install(TARGETS ClazyClangTidy
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
 
 function(to_raw_string_literal input_string output_string)
     if (MSVC)
