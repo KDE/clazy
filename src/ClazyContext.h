@@ -163,12 +163,6 @@ public:
         return clazy::contains(m_checksPromotedToErrors, checkName);
     }
 
-    /**
-     * We only enable it if a check needs it, for performance reasons
-     */
-    void enableVisitallTypeDefs();
-    bool visitsAllTypedefs() const;
-
     bool isQt() const;
 
     clang::ASTContext *astContext;
@@ -179,7 +173,6 @@ public:
     SuppressionManager suppressionManager;
     const bool m_noWerror;
     std::vector<std::string> m_checksPromotedToErrors;
-    bool m_visitsAllTypeDefs = false;
     clang::ParentMap *parentMap = nullptr;
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;

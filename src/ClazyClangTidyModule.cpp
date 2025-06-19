@@ -28,10 +28,12 @@ public:
     explicit FullASTVisitor(ClazyContext *context,
                             ClangTidyCheck &Check,
                             const std::vector<CheckBase *> &checksToVisitStmt,
-                            const std::vector<CheckBase *> &checksToVisitDecl)
+                            const std::vector<CheckBase *> &checksToVisitDecl,
+                            const std::vector<CheckBase *> &checksToVisitAllTypedefDecls)
         : m_context(context)
         , m_checksToVisitStmt(checksToVisitStmt)
         , m_checksToVisitDecl(checksToVisitDecl)
+        , m_checksToVisitAllTypedefDecls(checksToVisitAllTypedefDecls)
 
     {
     }
@@ -47,13 +49,14 @@ public:
 
     bool VisitDecl(Decl *decl)
     {
-        return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecl);
+        return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecl, m_checksToVisitAllTypedefDecls);
     }
 
 private:
     ClazyContext *const m_context;
     const std::vector<CheckBase *> m_checksToVisitStmt;
     const std::vector<CheckBase *> m_checksToVisitDecl;
+    const std::vector<CheckBase *> m_checksToVisitAllTypedefDecls;
 };
 
 std::vector<std::string> s_enabledChecks;
@@ -100,6 +103,9 @@ public:
             if (availCheck.options & RegisteredCheck::Option_VisitsDecls) {
                 m_checksToVisitDecl.emplace_back(check);
             }
+            if (availCheck.options & RegisteredCheck::Option_VisitAllTypeDefs) {
+                m_checksToVisitAllTypedefDecls.push_back(check);
+            }
 
             check->registerASTMatchers(*Finder);
             m_allChecks.emplace_back(std::pair{check, availCheck.options});
@@ -113,7 +119,7 @@ public:
         }
         clazyContext->astContext = Result.Context;
 
-        FullASTVisitor visitor(clazyContext, *this, m_checksToVisitStmt, m_checksToVisitDecl);
+        FullASTVisitor visitor(clazyContext, *this, m_checksToVisitStmt, m_checksToVisitDecl, m_checksToVisitAllTypedefDecls);
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
         visitor.TraverseDecl(translationUnit);
     }
@@ -141,6 +147,7 @@ public:
     std::vector<std::pair<CheckBase *, RegisteredCheck::Options>> m_allChecks;
     std::vector<CheckBase *> m_checksToVisitStmt;
     std::vector<CheckBase *> m_checksToVisitDecl;
+    std::vector<CheckBase *> m_checksToVisitAllTypedefDecls;
     // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
     const ClazyContext::WarningReporter emitDiagnostic = //
         [this](const std::string &checkName,

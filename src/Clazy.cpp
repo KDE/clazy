@@ -59,6 +59,10 @@ void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &c
     if (rcheck.options & RegisteredCheck::Option_VisitsDecls) {
         m_checksToVisitDecls.push_back(checkBase);
     }
+
+    if (rcheck.options & RegisteredCheck::Option_VisitAllTypeDefs) {
+        m_checksToVisitAllTypedefDecls.push_back(checkBase);
+    }
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
@@ -69,7 +73,7 @@ ClazyASTConsumer::~ClazyASTConsumer()
 
 bool ClazyASTConsumer::VisitDecl(Decl *decl)
 {
-    return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecls);
+    return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecls, m_checksToVisitAllTypedefDecls);
 }
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stmt)

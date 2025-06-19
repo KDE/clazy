@@ -9,15 +9,19 @@ namespace clazy::VisitHelper
 
 using namespace clang;
 
-bool VisitDecl(Decl *decl, ClazyContext *context, const std::vector<CheckBase *> &checksToVisit)
+bool VisitDecl(Decl *decl, ClazyContext *context, const std::vector<CheckBase *> &checksToVisit, const std::vector<CheckBase *> &checksToVisitAllTypedefs)
 {
     if (AccessSpecifierManager *a = context->accessSpecifierManager) { // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
     }
 
-    const bool isTypeDefToVisit = context->visitsAllTypedefs() && isa<TypedefNameDecl>(decl);
     const SourceLocation locStart = decl->getBeginLoc();
-    if (locStart.isInvalid() || (context->sm.isInSystemHeader(locStart) && !isTypeDefToVisit)) {
+    if (locStart.isInvalid() || context->sm.isInSystemHeader(locStart)) {
+        if (isa<TypedefNameDecl>(decl)) {
+            for (CheckBase *check : checksToVisitAllTypedefs) {
+                check->VisitDecl(decl);
+            }
+        }
         return true;
     }
 

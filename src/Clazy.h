@@ -116,6 +116,7 @@ private:
     // CheckBase::List m_createdChecks;
     CheckBase::List m_checksToVisitStmts;
     CheckBase::List m_checksToVisitDecls;
+    CheckBase::List m_checksToVisitAllTypedefDecls;
     clang::ast_matchers::MatchFinder *m_matchFinder = nullptr;
 };
 

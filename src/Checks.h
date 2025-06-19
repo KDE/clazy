@@ -135,7 +135,8 @@ void CheckManager::registerChecks()
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch",
                                                ManualCheckLevel,
-                                               RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
+                                               RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks
+                                                   | RegisteredCheck::Option_VisitAllTypeDefs));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringVarargs>("qstring-varargs", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QtKeywordEmit>("qt-keyword-emit", ManualCheckLevel, RegisteredCheck::Option_PreprocessorCallbacks));

@@ -45,7 +45,7 @@ struct RegisteredFixIt {
 using FactoryFunction = std::function<CheckBase *(ClazyContext *context)>;
 
 struct RegisteredCheck {
-    enum Option { Option_None = 0, Option_VisitsStmts = 2, Option_VisitsDecls = 4, Option_PreprocessorCallbacks = 8 };
+    enum Option { Option_None = 0, Option_VisitsStmts = 2, Option_VisitsDecls = 4, Option_PreprocessorCallbacks = 8, Option_VisitAllTypeDefs = 16 };
 
     using List = std::vector<RegisteredCheck>;
     using Options = int;
