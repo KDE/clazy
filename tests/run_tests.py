@@ -451,6 +451,8 @@ def clang_tidy_command(test, cppStandard, qt, filename):
     command += clazy_cpp_args(cppStandard)
     command += qt.compiler_flags(test.qt_modules_includes)
     command += suppress_line_numbers_opt
+    if test.extra_definitions:
+        command += test.extra_definitions
     return command
 
 def dump_ast_command(test, cppStandard, qt_major_version):
