@@ -181,7 +181,7 @@ class Check:
 # utility functions #1
 
 
-def get_command_output(cmd, test_env=os.environ, cwd=None, ignore_verbose=False):
+def get_command_output(cmd: str, test_env=os.environ, cwd=None, ignore_verbose=False):
     success = True
 
     try:
@@ -205,7 +205,7 @@ def get_command_output(cmd, test_env=os.environ, cwd=None, ignore_verbose=False)
     return output, success
 
 
-def load_json(check_name):
+def load_json(check_name: str):
     check = Check(check_name)
     filename = check_name + "/config.json"
     if not os.path.exists(filename):
@@ -349,6 +349,7 @@ def libraryName():
     else:
         return 'ClazyPlugin.so'
 
+
 def clangTidyPluginName():
     if 'CLANGTIDYPLUGIN_CXX' in os.environ: # Running tests uninstalled
         return os.environ['CLANGTIDYPLUGIN_CXX']
@@ -369,17 +370,20 @@ def link_flags(qt:QtInstallation):
 def clazy_cpp_args(cppStandard):
     return ' -Wno-unused-value -Qunused-arguments -std=' + cppStandard + ' '
 
+
 def clazy_standalone_binary():
     if 'CLAZYSTANDALONE_CXX' in os.environ:  # in case we want to use "clazy.AppImage --standalone" instead
         return os.environ['CLAZYSTANDALONE_CXX']
     return 'clazy-standalone'
+
 
 def more_clazy_standalone_args():
     if 'CLANG_BUILTIN_INCLUDE_DIR' in os.environ:
         return ' -I ' + os.environ['CLANG_BUILTIN_INCLUDE_DIR']
     return ''
 
-def clazy_standalone_command(test, cppStandard, qt):
+
+def clazy_standalone_command(test: Test, cppStandard, qt):
     result = " -- " + clazy_cpp_args(cppStandard) + \
         qt.compiler_flags(test.qt_modules_includes) + " " + test.flags + more_clazy_standalone_args()
     result = " -checks=" + ','.join(test.checks) + " " + result + suppress_line_numbers_opt
@@ -405,10 +409,12 @@ def clazy_standalone_command(test, cppStandard, qt):
 
     return result
 
+
 def clang_name():
     return os.getenv('CLANGXX', 'clang')
 
-def clazy_command(test, cppStandard, qt, filename):
+
+def clazy_command(test: Test, cppStandard, qt, filename):
     if test.isScript():
         return "./" + filename
 
@@ -439,7 +445,8 @@ def clazy_command(test, cppStandard, qt, filename):
 
     return result
 
-def clang_tidy_command(test, cppStandard, qt, filename):
+
+def clang_tidy_command(test: Test, cppStandard, qt, filename):
     command = f"clang-tidy {filename}"
     # disable all checks, re-enable clazy ones
     checks = ','.join("clazy-" + check for check in test.checks)
@@ -455,8 +462,10 @@ def clang_tidy_command(test, cppStandard, qt, filename):
         command += test.extra_definitions
     return command
 
-def dump_ast_command(test, cppStandard, qt_major_version):
+
+def dump_ast_command(test: Test, cppStandard, qt_major_version):
     return "clang -std=" + cppStandard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(qt_major_version).compiler_flags(test.qt_modules_includes) + " " + test.flags + " " + test.filename()
+
 
 def compiler_name():
     if 'CLAZY_CXX' in os.environ:
@@ -514,8 +523,8 @@ if 5 in args.qt_versions:
     _qt5_installation = find_qt_installation(5, ["QT_SELECT=5 qmake", "qmake-qt5", "qmake", "qmake5"])
 else:
     _qt5_installation = None
-if (_qt5_installation == None or _qt5_installation.int_version == 0) \
-    and (_qt6_installation == None or _qt6_installation.int_version == 0):
+if (_qt5_installation is None or _qt5_installation.int_version == 0) \
+    and (_qt6_installation is None or _qt6_installation.int_version == 0):
     sys.exit(1)
 _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 
@@ -545,6 +554,7 @@ if _verbose:
 CLANG_VERSION = int(version.replace('git', '').replace('.', ''))
 
 suppress_line_numbers_opt = " -fno-diagnostics-show-line-numbers"
+
 
 def qt_installation(major_version):
     if major_version == 6:
@@ -674,12 +684,14 @@ def run_clang_apply_replacements(check):
                         'clang-apply-replacements')
     return run_command(command + ' ' + check.name)
 
+
 def cleanup_fixit_files(checks):
     for check in checks:
         filestodelete = list(filter(lambda entry: entry.endswith(
             '.fixed') or entry.endswith('.yaml'), os.listdir(check.name)))
         for f in filestodelete:
             os.remove(check.name + '/' + f)
+
 
 def print_differences(file1, file2):
     # Returns true if the the files are equal
@@ -731,8 +743,8 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
         return True
 
     qt = qt_installation(qt_major_version)
-    if qt == None:
-        return True # silently skip
+    if qt is None:
+        return True  # silently skip
 
     if is_tidy and (test.isScript() or test.only_qt or test.qt_developer):
         print("Options not supported with clang-tidy")
@@ -778,7 +790,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     expected_file_tidy = filename + ".expected.tidy"
     if is_tidy and os.path.exists(expected_file_tidy):
         expected_file = expected_file_tidy
-    if not os.path.exists(expected_file):
+    elif not os.path.exists(expected_file):
         expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
     if not os.path.exists(expected_file):
         expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
