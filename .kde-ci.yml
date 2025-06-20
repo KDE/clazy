@@ -7,8 +7,7 @@ Environment:
 Options:
   setup-dbus-session: False
   setup-x-environment: False
-  require-passing-tests-on: [ '@all' ]
-  per-test-timeout: 120 # Increase timeout, because some tests are parallelized in themselves and include really large headers
+  require-passing-tests-on: ["@all"]
+  per-test-timeout: 180 # Increase timeout, because some tests are parallelized in themselves and include really large headers
   tests-run-in-parallel: True
-  cppcheck-arguments: '-i tests/'
-
+  cppcheck-arguments: "-i tests/"
