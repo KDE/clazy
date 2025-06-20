@@ -6,6 +6,7 @@
             "qt_major_versions": [5],
             "minimum_qt_version": 51400,
             "maximum_qt_version": 60000,
+            "flags": "-Wno-writable-strings",
             "has_fixits": true
         }
     ]
