@@ -482,7 +482,6 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                     if (endLoc.isValid()) {
                         fixits.push_back(FixItHint::CreateInsertion(endLoc, ".data()"));
                     } else {
-                        queueManualFixitWarning(s, "Can't fix this QPointer case");
                         return {};
                     }
                 }

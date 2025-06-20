@@ -222,14 +222,11 @@ std::vector<FixItHint> StringRefCandidates::fixit(CXXMemberCallExpr *call)
 {
     auto *memberExpr = clazy::getFirstChildOfType<MemberExpr>(call);
     if (!memberExpr) {
-        queueManualFixitWarning(call->getBeginLoc(), "Internal error 1");
         return {};
     }
 
     auto insertionLoc = Lexer::getLocForEndOfToken(memberExpr->getEndLoc(), 0, sm(), lo());
-    // llvm::errs() << insertionLoc.printToString(sm()) << "\n";
     if (!insertionLoc.isValid()) {
-        queueManualFixitWarning(call->getBeginLoc(), "Internal error 2");
         return {};
     }
 
