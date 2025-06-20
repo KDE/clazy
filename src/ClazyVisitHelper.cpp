@@ -1,5 +1,9 @@
-#include "ClazyVisitHelper.h"
+/*
+    SPDX-FileCopyrightText: 2025 Alexander Lohnau <alexander.lohnau@gmx.de>
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
+#include "ClazyVisitHelper.h"
 #include "AccessSpecifierManager.h"
 #include "Utils.h"
 #include "clang/AST/ParentMap.h"
