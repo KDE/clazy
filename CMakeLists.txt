@@ -354,7 +354,6 @@ file(READ checks.json SUPPORTED_CHECKS_JSON_STR)
 to_raw_string_literal(${SUPPORTED_CHECKS_JSON_STR} SUPPORTED_CHECKS_JSON_STR)
 configure_file(checks.json.h.in checks.json.h)
 
-enable_testing()
-include(ClazyTests.generated.cmake)
+include(ClazyTests.cmake)
 
 install(FILES org.kde.clazy.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
