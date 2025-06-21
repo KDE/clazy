@@ -763,7 +763,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
-            print("Skipping " + printableName + " because required version is not available")
+            print(f"Skipping {printableName}because required version is not available")
         return True
 
     if test.requires_std_filesystem and not _hasStdFileSystem:
@@ -773,14 +773,12 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
 
     if _platform in test.blacklist_platforms:
         if (_verbose):
-            print("Skipping " + printableName +
-                  " because it is blacklisted for this platform")
+            print(f"Skipping {printableName} because it is blacklisted for this platform")
         return True
 
     if not test.should_run_on_32bit and is32Bit():
         if (_verbose):
-            print("Skipping " + printableName +
-                  " because it is blacklisted on 32bit")
+            print(f"Skipping {printableName} because it is blacklisted on 32bit")
         return True
 
     checkname = test.check.name
@@ -793,8 +791,6 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     if is_tidy and os.path.exists(expected_file_tidy):
         expected_file = expected_file_tidy
     elif not os.path.exists(expected_file):
-        expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
-    if not os.path.exists(expected_file):
         expected_file = filename + ".qt" + str(qt_major_version) + ".expected"
 
     # Some tests have different output on 32 bit
@@ -823,10 +819,9 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
         return True
 
     if (not cmd_success and not must_fail) or (cmd_success and must_fail):
-        print("[FAIL] " + printableName +
-              " (Failed to build test. Check " + output_file + " for details)")
+        print(f"[FAIL] {printableName} (Failed to build test. Check {output_file} for details)")
         print("-------------------")
-        print("Contents of %s:" % output_file)
+        print(f"Contents of {output_file}:")
         print_file(output_file)
         print("-------------------")
         return False
@@ -845,7 +840,8 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
 
     return True
 
-def run_unit_test_for_each_configuration(test, is_standalone, is_tidy = False):
+
+def run_unit_test_for_each_configuration(test, is_standalone, is_tidy=False):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
     result = True
@@ -857,6 +853,7 @@ def run_unit_test_for_each_configuration(test, is_standalone, is_tidy = False):
                 continue
             result = result and run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version)
     return result
+
 
 def run_unit_tests(tests):
     result = True
@@ -916,8 +913,7 @@ def compare_fixit_results(test, is_standalone):
     # Some fixed cpp files have an header that was also fixed. Compare it here too.
     possible_headerfile_expected = test.expectedFixedFilename().replace('.cpp', '.h')
     if os.path.exists(possible_headerfile_expected):
-        possible_headerfile = test.fixedFilename(
-            is_standalone).replace('.cpp', '.h')
+        possible_headerfile = test.fixedFilename(is_standalone).replace('.cpp', '.h')
         if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", 0, is_standalone, False, True).replace('.cpp', '.h')):
             return False
 
@@ -935,7 +931,7 @@ def run_fixit_tests(requested_checks):
 
     for check in requested_checks:
 
-        if not any(map(lambda test : test.should_run_fixits_test, check.tests)):
+        if not any(map(lambda test: test.should_run_fixits_test, check.tests)):
             continue
 
         # Call clazy-apply-replacements[.exe]
@@ -967,7 +963,7 @@ def dump_ast(check):
                 run_command(dump_ast_command(test, cppStandard, version) + " > " + ast_filename)
                 print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
 
-# -------------------------------------------------------------------------------
+
 def load_checks(all_check_names):
     checks = []
     for name in all_check_names:
@@ -979,12 +975,11 @@ def load_checks(all_check_names):
             print("Error while loading " + name)
             raise
     return checks
-# -------------------------------------------------------------------------------
+
+
 def try_compile(filename):
     return run_command("%s --std=c++17 -c %s" % (clang_name(), filename))
 
-# -------------------------------------------------------------------------------
-# main
 
 if isLinux():
     # On Windows and macOS we have recent enough toolchains
