@@ -13,7 +13,7 @@ namespace clazy::VisitHelper
 
 using namespace clang;
 
-bool VisitDecl(Decl *decl, ClazyContext *context, const std::vector<CheckBase *> &checksToVisit, const std::vector<CheckBase *> &checksToVisitAllTypedefs)
+bool VisitDecl(Decl *decl, ClazyContext *context, const Visitors &visitors)
 {
     if (AccessSpecifierManager *a = context->accessSpecifierManager) { // Needs to visit system headers too (qobject.h for example)
         a->VisitDeclaration(decl);
@@ -22,7 +22,7 @@ bool VisitDecl(Decl *decl, ClazyContext *context, const std::vector<CheckBase *>
     const SourceLocation locStart = decl->getBeginLoc();
     if (locStart.isInvalid() || context->sm.isInSystemHeader(locStart)) {
         if (isa<TypedefNameDecl>(decl)) {
-            for (CheckBase *check : checksToVisitAllTypedefs) {
+            for (CheckBase *check : visitors.visitAllTypedefDecls) {
                 check->VisitDecl(decl);
             }
         }
@@ -40,7 +40,7 @@ bool VisitDecl(Decl *decl, ClazyContext *context, const std::vector<CheckBase *>
         }
     }
 
-    for (CheckBase *check : checksToVisit) {
+    for (CheckBase *check : visitors.visitDecls) {
         if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
             check->VisitDecl(decl);
         }
@@ -49,7 +49,7 @@ bool VisitDecl(Decl *decl, ClazyContext *context, const std::vector<CheckBase *>
     return true;
 }
 
-bool VisitStmt(Stmt *stmt, ClazyContext *context, const std::vector<CheckBase *> &checksToVisit)
+bool VisitStmt(Stmt *stmt, ClazyContext *context, const Visitors &visitors)
 {
     const SourceLocation locStart = stmt->getBeginLoc();
     if (locStart.isInvalid() || context->sm.isInSystemHeader(locStart)) {
@@ -71,7 +71,7 @@ bool VisitStmt(Stmt *stmt, ClazyContext *context, const std::vector<CheckBase *>
     }
 
     const bool isFromIgnorableInclude = context->ignoresIncludedFiles() && !Utils::isMainFile(context->sm, locStart);
-    for (CheckBase *check : checksToVisit) {
+    for (CheckBase *check : visitors.visitStmts) {
         if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
             check->VisitStmt(stmt);
         }

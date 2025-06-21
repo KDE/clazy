@@ -48,21 +48,8 @@ ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
 void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &check)
 {
     CheckBase *checkBase = check.first;
+    m_visitors.addCheck(check.second.options, checkBase);
     checkBase->registerASTMatchers(*m_matchFinder);
-
-    const RegisteredCheck &rcheck = check.second;
-
-    if (rcheck.options & RegisteredCheck::Option_VisitsStmts) {
-        m_checksToVisitStmts.push_back(checkBase);
-    }
-
-    if (rcheck.options & RegisteredCheck::Option_VisitsDecls) {
-        m_checksToVisitDecls.push_back(checkBase);
-    }
-
-    if (rcheck.options & RegisteredCheck::Option_VisitAllTypeDefs) {
-        m_checksToVisitAllTypedefDecls.push_back(checkBase);
-    }
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
@@ -73,12 +60,12 @@ ClazyASTConsumer::~ClazyASTConsumer()
 
 bool ClazyASTConsumer::VisitDecl(Decl *decl)
 {
-    return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecls, m_checksToVisitAllTypedefDecls);
+    return clazy::VisitHelper::VisitDecl(decl, m_context, m_visitors);
 }
 
 bool ClazyASTConsumer::VisitStmt(Stmt *stmt)
 {
-    return clazy::VisitHelper::VisitStmt(stmt, m_context, m_checksToVisitStmts);
+    return clazy::VisitHelper::VisitStmt(stmt, m_context, m_visitors);
 }
 
 void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)

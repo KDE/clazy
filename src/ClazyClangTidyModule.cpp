@@ -25,38 +25,26 @@ using namespace clang;
 class FullASTVisitor : public RecursiveASTVisitor<FullASTVisitor>
 {
 public:
-    explicit FullASTVisitor(ClazyContext *context,
-                            ClangTidyCheck &Check,
-                            const std::vector<CheckBase *> &checksToVisitStmt,
-                            const std::vector<CheckBase *> &checksToVisitDecl,
-                            const std::vector<CheckBase *> &checksToVisitAllTypedefDecls)
+    explicit FullASTVisitor(ClazyContext *context, ClangTidyCheck &Check, const clazy::VisitHelper::Visitors &visitors)
         : m_context(context)
-        , m_checksToVisitStmt(checksToVisitStmt)
-        , m_checksToVisitDecl(checksToVisitDecl)
-        , m_checksToVisitAllTypedefDecls(checksToVisitAllTypedefDecls)
+        , m_visitors(visitors)
 
-    {
-    }
-
-    ~FullASTVisitor()
     {
     }
 
     bool VisitStmt(Stmt *stmt)
     {
-        return clazy::VisitHelper::VisitStmt(stmt, m_context, m_checksToVisitStmt);
+        return clazy::VisitHelper::VisitStmt(stmt, m_context, m_visitors);
     }
 
     bool VisitDecl(Decl *decl)
     {
-        return clazy::VisitHelper::VisitDecl(decl, m_context, m_checksToVisitDecl, m_checksToVisitAllTypedefDecls);
+        return clazy::VisitHelper::VisitDecl(decl, m_context, m_visitors);
     }
 
 private:
     ClazyContext *const m_context;
-    const std::vector<CheckBase *> m_checksToVisitStmt;
-    const std::vector<CheckBase *> m_checksToVisitDecl;
-    const std::vector<CheckBase *> m_checksToVisitAllTypedefDecls;
+    const clazy::VisitHelper::Visitors &m_visitors;
 };
 
 std::vector<std::string> s_enabledChecks;
@@ -97,15 +85,7 @@ public:
                 continue;
             }
             auto *check = availCheck.factory(clazyContext);
-            if (availCheck.options & RegisteredCheck::Option_VisitsStmts) {
-                m_checksToVisitStmt.emplace_back(check);
-            }
-            if (availCheck.options & RegisteredCheck::Option_VisitsDecls) {
-                m_checksToVisitDecl.emplace_back(check);
-            }
-            if (availCheck.options & RegisteredCheck::Option_VisitAllTypeDefs) {
-                m_checksToVisitAllTypedefDecls.push_back(check);
-            }
+            m_visitors.addCheck(availCheck.options, check);
 
             check->registerASTMatchers(*Finder);
             m_allChecks.emplace_back(std::pair{check, availCheck.options});
@@ -119,7 +99,7 @@ public:
         }
         clazyContext->astContext = Result.Context;
 
-        FullASTVisitor visitor(clazyContext, *this, m_checksToVisitStmt, m_checksToVisitDecl, m_checksToVisitAllTypedefDecls);
+        FullASTVisitor visitor(clazyContext, *this, m_visitors);
         auto translationUnit = const_cast<TranslationUnitDecl *>(Result.Nodes.getNodeAs<TranslationUnitDecl>("tu"));
         visitor.TraverseDecl(translationUnit);
     }
@@ -145,9 +125,7 @@ public:
     ClangTidyContext *clangTidyContext;
     ClazyContext *clazyContext;
     std::vector<std::pair<CheckBase *, RegisteredCheck::Options>> m_allChecks;
-    std::vector<CheckBase *> m_checksToVisitStmt;
-    std::vector<CheckBase *> m_checksToVisitDecl;
-    std::vector<CheckBase *> m_checksToVisitAllTypedefDecls;
+    clazy::VisitHelper::Visitors m_visitors;
     // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end
     const ClazyContext::WarningReporter emitDiagnostic = //
         [this](const std::string &checkName,

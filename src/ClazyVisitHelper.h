@@ -3,11 +3,31 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#pragma once
+
+#include "checkmanager.h"
+
 namespace clazy::VisitHelper
 {
-bool VisitDecl(clang::Decl *decl,
-               ClazyContext *context,
-               const std::vector<CheckBase *> &checksToVisit,
-               const std::vector<CheckBase *> &checksToVisitAllTypedefs);
-bool VisitStmt(clang::Stmt *stmt, ClazyContext *context, const std::vector<CheckBase *> &checksToVisit);
+struct Visitors {
+    CheckBase::List visitStmts;
+    CheckBase::List visitDecls;
+    CheckBase::List visitAllTypedefDecls;
+
+    void addCheck(RegisteredCheck::Options options, CheckBase *check)
+    {
+        if (options & RegisteredCheck::Option_VisitsStmts) {
+            visitStmts.emplace_back(check);
+        }
+        if (options & RegisteredCheck::Option_VisitsDecls) {
+            visitDecls.emplace_back(check);
+        }
+        if (options & RegisteredCheck::Option_VisitAllTypeDefs) {
+            visitAllTypedefDecls.push_back(check);
+        }
+    }
+};
+
+bool VisitDecl(clang::Decl *decl, ClazyContext *context, const Visitors &visitors);
+bool VisitStmt(clang::Stmt *stmt, ClazyContext *context, const Visitors &visitors);
 }
