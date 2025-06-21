@@ -144,7 +144,7 @@ class Test:
 
             self.env[key] = e[key]
 
-    def printableName(self, cppStandard, qt_major_version, is_standalone, is_fixits):
+    def printableName(self, cppStandard, qt_major_version, is_standalone, is_tidy, is_fixits):
         name = self.check.name
         if len(self.check.tests) > 1:
             name += "/" + self.filename()
@@ -156,6 +156,8 @@ class Test:
             name += " (standalone, fixits)"
         elif is_standalone:
             name += " (standalone)"
+        elif is_tidy:
+            name += " (clang-tidy)"
         elif is_fixits:
             name += " (plugin, fixits)"
         else:
@@ -757,7 +759,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
         print("Qt int version: " + str(qt.int_version))
         print("Qt headers: " + qt.qmake_header_path)
 
-    printableName = test.printableName(cppStandard, qt_major_version, is_standalone, False)
+    printableName = test.printableName(cppStandard, qt_major_version, is_standalone, is_tidy, False)
 
     if qt.int_version < test.minimum_qt_version or qt.int_version > test.maximum_qt_version or CLANG_VERSION < test.minimum_clang_version:
         if (_verbose):
