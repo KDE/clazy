@@ -1,13 +1,9 @@
-/*
-    SPDX-FileCopyrightText: 2017 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
-*/
 
 /**
  * New scripts should be added to the check.json file and the files should be regenerated
  * ./dev-scripts/generate.py --generate
+ * SPDX-License-Identifier: CC0-1.0
+ * SPDX-FileCopyrightText: Clazy Developers
  */
 
 #include "checkmanager.h"
