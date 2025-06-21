@@ -18,7 +18,6 @@ import platform
 os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 
 _verbose = False
-_hasStdFileSystem = True
 
 c_headerpath = False
 try:
@@ -87,7 +86,6 @@ class Test:
         self.should_run_fixits_test = False
         self.should_run_on_32bit = True
         self.cppStandards = ["c++14", "c++17"]
-        self.requires_std_filesystem = False
         self.extra_definitions = False
         self.qt_modules_includes = False
         self.fixed_file_base = None
@@ -301,8 +299,6 @@ def load_json(check_name: str):
                 test.ignore_dirs = t['ignore_dirs']
             if 'should_run_on_32bit' in t:
                 test.should_run_on_32bit = t['should_run_on_32bit']
-            if 'requires_std_filesystem' in t:
-                test.requires_std_filesystem = t['requires_std_filesystem']
             if 'qt_modules_includes' in t:
                 test.qt_modules_includes = t['qt_modules_includes']
 
@@ -766,11 +762,6 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
             print(f"Skipping {printableName}because required version is not available")
         return True
 
-    if test.requires_std_filesystem and not _hasStdFileSystem:
-        if (_verbose):
-            print("Skipping " + printableName + " because it requires std::filesystem")
-        return True
-
     if _platform in test.blacklist_platforms:
         if (_verbose):
             print(f"Skipping {printableName} because it is blacklisted for this platform")
@@ -976,14 +967,6 @@ def load_checks(all_check_names):
             raise
     return checks
 
-
-def try_compile(filename):
-    return run_command("%s --std=c++17 -c %s" % (clang_name(), filename))
-
-
-if isLinux():
-    # On Windows and macOS we have recent enough toolchains
-    _hasStdFileSystem = 'CLAZY_HAS_FILESYSTEM' in os.environ or try_compile('../.cmake_has_filesystem_test.cpp')
 
 if 'CLAZY_NO_WERROR' in os.environ:
     del os.environ['CLAZY_NO_WERROR']
