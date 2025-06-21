@@ -8,6 +8,15 @@ Bugfixes:
 * qt6-qhash-signature: Adapt check to use more proper logic for casts and fix
 crash in edgecases
 
+Features:
+* Clazy can finally be integrated into clang-tidy - one command to rule
+them all! All checks can be enabled using "clazy-<checkname>". For example:
+`clazy-qstring-arg,clazy-qfileinfo-exists`, enabling all checks using
+`clazy-*` will also enable manual checks. It is recommended to be more
+granular.
+The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin
+must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.
+
 Version 1.15
 ~~~~~~~~~~~~
 Released: 2025-06-12
