@@ -910,7 +910,7 @@ def compare_fixit_results(test, is_standalone):
         return True
 
     # Check that the rewritten file is identical to the expected one
-    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName("", 0, is_standalone, True)):
+    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName("", 0, is_standalone, False, True)):
         return False
 
     # Some fixed cpp files have an header that was also fixed. Compare it here too.
@@ -918,7 +918,7 @@ def compare_fixit_results(test, is_standalone):
     if os.path.exists(possible_headerfile_expected):
         possible_headerfile = test.fixedFilename(
             is_standalone).replace('.cpp', '.h')
-        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", 0, is_standalone, True).replace('.cpp', '.h')):
+        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", 0, is_standalone, False, True).replace('.cpp', '.h')):
             return False
 
     return True
