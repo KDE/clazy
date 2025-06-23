@@ -165,7 +165,12 @@ public:
 
     bool isQt() const;
 
+    /**
+     * While the preprocessor visitor is running, we might not have initialized this.
+     * Before VisitStmt/VisitDecl/any AST callback in the CheckBase instance is run, this will be set!
+     */
     clang::ASTContext *astContext;
+
     clang::SourceManager &sm;
     const clang::LangOptions &lo; // Can be deducted from ASTContext, but we might want to lazy initialize the context
     AccessSpecifierManager *accessSpecifierManager = nullptr;
