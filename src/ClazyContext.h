@@ -42,6 +42,12 @@ class FixItExporter;
 class ClazyContext
 {
 public:
+    using WarningReporter = std::function<void(std::string checkName,
+                                               const clang::SourceLocation &loc,
+                                               clang::DiagnosticIDs::Level level,
+                                               std::string error,
+                                               const std::vector<clang::FixItHint> &fixits)>;
+
     enum ClazyOption {
         ClazyOption_None = 0,
         ClazyOption_ExportFixes = 1,
@@ -62,7 +68,9 @@ public:
                           const std::string &ignoreDirs,
                           std::string exportFixesFilename,
                           const std::vector<std::string> &translationUnitPaths,
-                          ClazyOptions opts);
+                          ClazyOptions opts,
+                          std::optional<WarningReporter> warningReporter = std::nullopt,
+                          bool isClangTidy = false);
 
     ~ClazyContext();
 
@@ -155,15 +163,14 @@ public:
         return clazy::contains(m_checksPromotedToErrors, checkName);
     }
 
-    /**
-     * We only enable it if a check needs it, for performance reasons
-     */
-    void enableVisitallTypeDefs();
-    bool visitsAllTypedefs() const;
-
     bool isQt() const;
 
+    /**
+     * While the preprocessor visitor is running, we might not have initialized this.
+     * Before VisitStmt/VisitDecl/any AST callback in the CheckBase instance is run, this will be set!
+     */
     clang::ASTContext *astContext;
+
     clang::SourceManager &sm;
     const clang::LangOptions &lo; // Can be deducted from ASTContext, but we might want to lazy initialize the context
     AccessSpecifierManager *accessSpecifierManager = nullptr;
@@ -171,7 +178,6 @@ public:
     SuppressionManager suppressionManager;
     const bool m_noWerror;
     std::vector<std::string> m_checksPromotedToErrors;
-    bool m_visitsAllTypeDefs = false;
     clang::ParentMap *parentMap = nullptr;
     const ClazyOptions options;
     const std::vector<std::string> extraOptions;
@@ -182,7 +188,10 @@ public:
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
     const std::vector<std::string> m_translationUnitPaths;
-    const clang::PreprocessorOptions &m_pp;
+    const clang::PreprocessorOptions m_pp;
+    const WarningReporter p_warningReporter;
+
+    const bool m_isClangTidy;
 };
 
 #endif

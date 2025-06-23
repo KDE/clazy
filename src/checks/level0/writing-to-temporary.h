@@ -24,9 +24,6 @@ class WritingToTemporary : public CheckBase
 public:
     explicit WritingToTemporary(const std::string &name, ClazyContext *context);
     void VisitStmt(clang::Stmt *stmt) override;
-
-private:
-    const bool m_widenCriteria;
 };
 
 #endif

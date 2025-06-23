@@ -71,7 +71,9 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
         }
 
         emitWarning(decl, "Missing Q_DECLARE_TYPEINFO: " + typeName);
-        emitWarning(record, "Type declared here:", false);
+        if (!m_context->m_isClangTidy) { // Diagnostics are sorted and emitted in order based on location/message. Not helpful in this case
+            emitWarning(record, "Type declared here:", false);
+        }
     }
 }
 

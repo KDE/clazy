@@ -25,7 +25,7 @@ using namespace clang;
 
 WritingToTemporary::WritingToTemporary(const std::string &name, ClazyContext *context)
     : CheckBase(name, context, Option_CanIgnoreIncludes)
-    , m_widenCriteria(isOptionSet("widen-criteria"))
+
 {
     m_filesToIgnore = {"qstring.h"};
 }
@@ -114,7 +114,7 @@ void WritingToTemporary::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (!m_widenCriteria && !isKnownType(record->getNameAsString()) && !clazy::startsWith(secondFunc->getNameAsString(), "set")) {
+    if (!isOptionSet("widen-criteria") && !isKnownType(record->getNameAsString()) && !clazy::startsWith(secondFunc->getNameAsString(), "set")) {
         return;
     }
 

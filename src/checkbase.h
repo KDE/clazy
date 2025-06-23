@@ -142,6 +142,9 @@ public:
     virtual void VisitDecl(clang::Decl *decl);
     void enablePreProcessorCallbacks(clang::Preprocessor &pp);
 
+    // Lazy initialized for clang-tidy plugin. Value will be assigned before Visit* methods are called
+    const ClazyContext *m_context;
+
 protected:
     virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr);
     virtual void VisitMacroDefined(const clang::Token &macroNameTok);
@@ -189,7 +192,6 @@ protected:
     }
 
     const std::string m_name;
-    const ClazyContext *const m_context;
     std::vector<std::string> m_filesToIgnore;
 
 private:

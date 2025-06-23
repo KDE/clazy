@@ -28,7 +28,9 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
                            const std::string &ignoreDirs,
                            std::string exportFixesFilename,
                            const std::vector<std::string> &translationUnitPaths,
-                           ClazyOptions opts)
+                           ClazyOptions opts,
+                           std::optional<WarningReporter> warningReporter,
+                           bool isClangTidy)
     : astContext(context)
     , sm(manager)
     , lo(lo)
@@ -38,6 +40,21 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
     , extraOptions(clazy::splitString(getenv("CLAZY_EXTRA_OPTIONS"), ','))
     , m_translationUnitPaths(translationUnitPaths)
     , m_pp(pp)
+    , p_warningReporter(warningReporter.value_or([this](std::string,
+                                                        const clang::SourceLocation &loc,
+                                                        clang::DiagnosticIDs::Level level,
+                                                        std::string error,
+                                                        const std::vector<clang::FixItHint> &fixits) {
+        auto &engine = astContext->getDiagnostics();
+        unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(level, error.c_str());
+        DiagnosticBuilder B = engine.Report(loc, id);
+        for (const FixItHint &fixit : fixits) {
+            if (!fixit.isNull()) {
+                B.AddFixItHint(fixit);
+            }
+        }
+    }))
+    , m_isClangTidy(isClangTidy)
 {
     if (!headerFilter.empty()) {
         headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
@@ -91,18 +108,6 @@ void ClazyContext::registerPreprocessorCallbacks(clang::Preprocessor &pp)
         accessSpecifierManager = new AccessSpecifierManager(pp, exportFixesEnabled());
         preprocessorVisitor = new PreProcessorVisitor(pp);
     }
-}
-
-void ClazyContext::enableVisitallTypeDefs()
-{
-    // By default we only process decls from the .cpp file we're processing, not stuff included (for performance)
-    /// But we might need to process all typedefs, not only the ones in our current .cpp files
-    m_visitsAllTypeDefs = true;
-}
-
-bool ClazyContext::visitsAllTypedefs() const
-{
-    return m_visitsAllTypeDefs;
 }
 
 bool ClazyContext::isQt() const

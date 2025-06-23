@@ -440,7 +440,8 @@
             "level": -1,
             "categories": ["bug"],
             "visits_decls": true,
-            "preprocessor_callbacks": true
+            "preprocessor_callbacks": true,
+            "visit_all_typedefs": true
         },
         {
             "name": "detaching-temporary",

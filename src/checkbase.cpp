@@ -113,11 +113,11 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
 }
 
 CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
-    : m_name(name)
-    , m_context(context)
+    : m_context(context)
+    , m_name(name)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
-    , m_tag(" [-Wclazy-" + m_name + ']')
+    , m_tag(!context || context->m_isClangTidy ? "" : " [-Wclazy-" + m_name + ']')
 {
 }
 
@@ -262,20 +262,12 @@ void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)
 {
-    FullSourceLoc full(loc, sm());
     auto severity = (m_context->treatAsError(m_name)
                      || (m_context->astContext && m_context->astContext->getDiagnostics().getWarningsAsErrors() && !m_context->userDisabledWError()))
         ? DiagnosticIDs::Error
         : DiagnosticIDs::Warning;
 
-    auto &engine = m_context->astContext->getDiagnostics();
-    unsigned id = engine.getDiagnosticIDs()->getCustomDiagID(severity, error.c_str());
-    DiagnosticBuilder B = engine.Report(full, id);
-    for (const FixItHint &fixit : fixits) {
-        if (!fixit.isNull()) {
-            B.AddFixItHint(fixit);
-        }
-    }
+    m_context->p_warningReporter(name(), loc, severity, error, fixits);
 }
 
 void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const std::string &message)

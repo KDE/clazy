@@ -25,6 +25,7 @@ set(CLAZY_SHARED_SRCS # sources shared between clazy-standalone and clazy plugin
   ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/ClazyContext.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/Clazy.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ClazyVisitHelper.cpp
   ${CLAZY_LIB_SRC}
 )
 

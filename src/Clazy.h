@@ -11,6 +11,7 @@
 #define CLAZY_AST_ACTION_H
 
 #include "ClazyContext.h"
+#include "ClazyVisitHelper.h"
 #include "checkbase.h"
 #include "checkmanager.h"
 
@@ -112,11 +113,8 @@ public:
 
 private:
     ClazyASTConsumer(const ClazyASTConsumer &) = delete;
-    clang::Stmt *lastStm = nullptr;
     ClazyContext *const m_context;
-    // CheckBase::List m_createdChecks;
-    CheckBase::List m_checksToVisitStmts;
-    CheckBase::List m_checksToVisitDecls;
+    clazy::VisitHelper::Visitors m_visitors;
     clang::ast_matchers::MatchFinder *m_matchFinder = nullptr;
 };
 

@@ -9,6 +9,7 @@
 
 #include "Clazy.h"
 #include "AccessSpecifierManager.h"
+#include "ClazyVisitHelper.h"
 #include "FixItExporter.h"
 #include "Utils.h"
 #include "checkbase.h"
@@ -47,18 +48,8 @@ ClazyASTConsumer::ClazyASTConsumer(ClazyContext *context)
 void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &check)
 {
     CheckBase *checkBase = check.first;
+    m_visitors.addCheck(check.second.options, checkBase);
     checkBase->registerASTMatchers(*m_matchFinder);
-    // m_createdChecks.push_back(checkBase);
-
-    const RegisteredCheck &rcheck = check.second;
-
-    if (rcheck.options & RegisteredCheck::Option_VisitsStmts) {
-        m_checksToVisitStmts.push_back(checkBase);
-    }
-
-    if (rcheck.options & RegisteredCheck::Option_VisitsDecls) {
-        m_checksToVisitDecls.push_back(checkBase);
-    }
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
@@ -69,67 +60,12 @@ ClazyASTConsumer::~ClazyASTConsumer()
 
 bool ClazyASTConsumer::VisitDecl(Decl *decl)
 {
-    if (AccessSpecifierManager *a = m_context->accessSpecifierManager) { // Needs to visit system headers too (qobject.h for example)
-        a->VisitDeclaration(decl);
-    }
-
-    const bool isTypeDefToVisit = m_context->visitsAllTypedefs() && isa<TypedefNameDecl>(decl);
-    const SourceLocation locStart = decl->getBeginLoc();
-    if (locStart.isInvalid() || (m_context->sm.isInSystemHeader(locStart) && !isTypeDefToVisit)) {
-        return true;
-    }
-
-    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);
-
-    m_context->lastDecl = decl;
-
-    if (auto *fdecl = dyn_cast<FunctionDecl>(decl)) {
-        m_context->lastFunctionDecl = fdecl;
-        if (auto *mdecl = dyn_cast<CXXMethodDecl>(fdecl)) {
-            m_context->lastMethodDecl = mdecl;
-        }
-    }
-
-    for (CheckBase *check : m_checksToVisitDecls) {
-        if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
-            check->VisitDecl(decl);
-        }
-    }
-
-    return true;
+    return clazy::VisitHelper::VisitDecl(decl, m_context, m_visitors);
 }
 
-bool ClazyASTConsumer::VisitStmt(Stmt *stm)
+bool ClazyASTConsumer::VisitStmt(Stmt *stmt)
 {
-    const SourceLocation locStart = stm->getBeginLoc();
-    if (locStart.isInvalid() || m_context->sm.isInSystemHeader(locStart)) {
-        return true;
-    }
-
-    if (!m_context->parentMap) {
-        if (m_context->astContext->getDiagnostics().hasUnrecoverableErrorOccurred()) {
-            return false; // ParentMap sometimes crashes when there were errors. Doesn't like a botched AST.
-        }
-
-        m_context->parentMap = new ParentMap(stm);
-    }
-
-    lastStm = stm;
-
-    // clang::ParentMap takes a root statement, but there's no root statement in the AST, the root is a declaration
-    // So add to parent map each time we go into a different hierarchy
-    if (!m_context->parentMap->hasParent(stm)) {
-        m_context->parentMap->addStmt(stm);
-    }
-
-    const bool isFromIgnorableInclude = m_context->ignoresIncludedFiles() && !Utils::isMainFile(m_context->sm, locStart);
-    for (CheckBase *check : m_checksToVisitStmts) {
-        if (!(isFromIgnorableInclude && check->canIgnoreIncludes())) {
-            check->VisitStmt(stm);
-        }
-    }
-
-    return true;
+    return clazy::VisitHelper::VisitStmt(stmt, m_context, m_visitors);
 }
 
 void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)

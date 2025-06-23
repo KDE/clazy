@@ -1,13 +1,9 @@
-/*
-    SPDX-FileCopyrightText: 2017 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
-*/
 
 /**
  * New scripts should be added to the check.json file and the files should be regenerated
  * ./dev-scripts/generate.py --generate
+ * SPDX-License-Identifier: CC0-1.0
+ * SPDX-FileCopyrightText: Clazy Developers
  */
 
 #include "checkmanager.h"
@@ -135,7 +131,8 @@ void CheckManager::registerChecks()
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch",
                                                ManualCheckLevel,
-                                               RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks));
+                                               RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks
+                                                   | RegisteredCheck::Option_VisitAllTypeDefs));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls));
     registerCheck(check<QStringVarargs>("qstring-varargs", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
     registerCheck(check<QtKeywordEmit>("qt-keyword-emit", ManualCheckLevel, RegisteredCheck::Option_PreprocessorCallbacks));

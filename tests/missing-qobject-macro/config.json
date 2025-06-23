@@ -7,14 +7,12 @@
         {
             "filename": "fixit.cpp",
             "has_fixits": true,
-            "minimum_clang_version": 1100,
-            "requires_std_filesystem": true
+            "minimum_clang_version": 1100
         },
         {
             "filename": "file.hh",
             "has_fixits": true,
-            "minimum_clang_version": 1100,
-            "requires_std_filesystem": true
+            "minimum_clang_version": 1100
         }
     ]
 }
