@@ -18,7 +18,7 @@
 class TrNonLiteral : public CheckBase
 {
 public:
-    explicit TrNonLiteral(const std::string &name, ClazyContext *context);
+    explicit TrNonLiteral(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

@@ -24,7 +24,7 @@ class CXXRecordDecl;
 class FullyQualifiedMocTypes : public CheckBase
 {
 public:
-    explicit FullyQualifiedMocTypes(const std::string &name, ClazyContext *context);
+    explicit FullyQualifiedMocTypes(const std::string &name);
     void VisitDecl(clang::Decl *) override;
 
 private:

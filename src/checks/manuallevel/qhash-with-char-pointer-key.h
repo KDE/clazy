@@ -17,7 +17,7 @@
 class QHashWithCharPointerKey : public CheckBase
 {
 public:
-    explicit QHashWithCharPointerKey(const std::string &name, ClazyContext *context);
+    explicit QHashWithCharPointerKey(const std::string &name);
     void VisitDecl(clang::Decl *) override;
 
 private:

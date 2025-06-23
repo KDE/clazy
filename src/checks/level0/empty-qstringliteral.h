@@ -17,7 +17,7 @@
 class EmptyQStringliteral : public CheckBase
 {
 public:
-    explicit EmptyQStringliteral(const std::string &name, ClazyContext *context);
+    explicit EmptyQStringliteral(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
     void handleQt6StringLiteral(clang::Stmt *);
     void handleQt5StringLiteral(clang::Stmt *);

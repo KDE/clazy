@@ -16,8 +16,8 @@
 
 using namespace clang;
 
-RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name)
+    : CheckBase(name)
 {
 }
 

@@ -23,8 +23,8 @@
 
 using namespace clang;
 
-WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name)
+    : CheckBase(name)
 {
 }
 

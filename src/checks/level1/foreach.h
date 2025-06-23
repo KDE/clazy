@@ -31,7 +31,7 @@ class ValueDecl;
 class Foreach : public CheckBase
 {
 public:
-    Foreach(const std::string &name, ClazyContext *context);
+    Foreach(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

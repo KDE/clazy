@@ -21,8 +21,8 @@
 
 using namespace clang;
 
-BaseClassEvent::BaseClassEvent(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+BaseClassEvent::BaseClassEvent(const std::string &name)
+    : CheckBase(name)
 {
 }
 

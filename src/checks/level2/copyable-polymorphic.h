@@ -19,7 +19,7 @@
 class CopyablePolymorphic : public CheckBase
 {
 public:
-    explicit CopyablePolymorphic(const std::string &name, ClazyContext *context);
+    explicit CopyablePolymorphic(const std::string &name);
     void VisitDecl(clang::Decl *) override;
     std::vector<clang::FixItHint> fixits(clang::CXXRecordDecl *record);
 };

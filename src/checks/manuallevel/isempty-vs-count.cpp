@@ -20,8 +20,8 @@
 
 using namespace clang;
 
-IsEmptyVSCount::IsEmptyVSCount(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+IsEmptyVSCount::IsEmptyVSCount(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

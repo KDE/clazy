@@ -96,8 +96,8 @@ enum QtUnregularlyNamedEventTypes {
     // StatusTip = 112 not irregular, but qtbase casts it to QHelpEvent for some reason, needs investigation
 };
 
-WrongQEventCast::WrongQEventCast(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+WrongQEventCast::WrongQEventCast(const std::string &name)
+    : CheckBase(name)
 {
 }
 

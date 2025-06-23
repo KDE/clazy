@@ -27,7 +27,7 @@ class Token;
 class QtKeywordEmit : public CheckBase
 {
 public:
-    explicit QtKeywordEmit(const std::string &name, ClazyContext *context);
+    explicit QtKeywordEmit(const std::string &name);
 
 protected:
     void VisitMacroExpands(const clang::Token &, const clang::SourceRange &, const clang::MacroInfo *) override;

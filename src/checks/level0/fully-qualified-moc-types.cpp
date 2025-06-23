@@ -28,8 +28,8 @@
 
 using namespace clang;
 
-FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name)
+    : CheckBase(name)
 {
 }
 

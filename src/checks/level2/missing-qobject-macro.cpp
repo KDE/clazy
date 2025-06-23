@@ -22,8 +22,8 @@
 
 using namespace clang;
 
-MissingQObjectMacro::MissingQObjectMacro(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+MissingQObjectMacro::MissingQObjectMacro(const std::string &name)
+    : CheckBase(name)
 {
 }
 

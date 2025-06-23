@@ -19,7 +19,7 @@
 class LambdaInConnect : public CheckBase
 {
 public:
-    explicit LambdaInConnect(const std::string &name, ClazyContext *context);
+    explicit LambdaInConnect(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

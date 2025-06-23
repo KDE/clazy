@@ -19,8 +19,8 @@
 
 using namespace clang;
 
-QMapWithPointerKey::QMapWithPointerKey(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QMapWithPointerKey::QMapWithPointerKey(const std::string &name)
+    : CheckBase(name)
 {
 }
 

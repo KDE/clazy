@@ -17,7 +17,7 @@
 class ReturningVoidExpression : public CheckBase
 {
 public:
-    explicit ReturningVoidExpression(const std::string &name, ClazyContext *context);
+    explicit ReturningVoidExpression(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

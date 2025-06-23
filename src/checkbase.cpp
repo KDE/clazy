@@ -112,12 +112,11 @@ void ClazyPreprocessorCallbacks::InclusionDirective(clang::SourceLocation HashLo
                                    FileType);
 }
 
-CheckBase::CheckBase(const std::string &name, const ClazyContext *context, Options options)
-    : m_context(context)
-    , m_name(name)
+CheckBase::CheckBase(const std::string &name, Options options)
+    : m_name(name)
     , m_preprocessorCallbacks(new ClazyPreprocessorCallbacks(this))
     , m_options(options)
-    , m_tag(!context || context->m_isClangTidy ? "" : " [-Wclazy-" + m_name + ']')
+
 {
 }
 
@@ -220,6 +219,11 @@ void CheckBase::emitWarning(clang::SourceLocation loc, const std::string &error,
     emitWarning(loc, error, {}, printWarningTag);
 }
 
+std::string CheckBase::tag() const
+{
+    return !m_context || m_context->m_isClangTidy ? "" : " [-Wclazy-" + m_name + ']';
+}
+
 void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const std::vector<FixItHint> &fixits, bool printWarningTag)
 {
     if (m_context->suppressionManager.isSuppressed(m_name, loc, sm(), lo())) {
@@ -238,7 +242,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
     }
 
     if (printWarningTag) {
-        error += m_tag;
+        error += tag();
     }
 
     reallyEmitWarning(loc, error, fixits);
@@ -249,7 +253,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
             msg += ' ' + l.second;
         }
 
-        reallyEmitWarning(l.first, msg + m_tag, {});
+        reallyEmitWarning(l.first, msg + tag(), {});
     }
 
     m_queuedManualInterventionWarnings.clear();
@@ -257,7 +261,7 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
 
 void CheckBase::emitInternalError(SourceLocation loc, std::string error)
 {
-    llvm::errs() << m_tag << ": internal error: " << error << " at " << loc.printToString(sm()) << "\n";
+    llvm::errs() << tag() << ": internal error: " << error << " at " << loc.printToString(sm()) << "\n";
 }
 
 void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &error, const std::vector<FixItHint> &fixits)

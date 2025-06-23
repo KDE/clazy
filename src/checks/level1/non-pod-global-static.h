@@ -22,7 +22,7 @@
 class NonPodGlobalStatic : public CheckBase
 {
 public:
-    explicit NonPodGlobalStatic(const std::string &name, ClazyContext *context);
+    explicit NonPodGlobalStatic(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

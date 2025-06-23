@@ -19,8 +19,8 @@
 using namespace std::string_literals;
 using namespace clang;
 
-SanitizeInlineKeyword::SanitizeInlineKeyword(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+SanitizeInlineKeyword::SanitizeInlineKeyword(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

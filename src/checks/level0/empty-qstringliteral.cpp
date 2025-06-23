@@ -20,8 +20,8 @@
 
 using namespace clang;
 
-EmptyQStringliteral::EmptyQStringliteral(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+EmptyQStringliteral::EmptyQStringliteral(const std::string &name)
+    : CheckBase(name)
 {
 }
 

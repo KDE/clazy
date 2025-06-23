@@ -23,7 +23,7 @@ class CXXOperatorCallExpr;
 class StrictIterators : public CheckBase
 {
 public:
-    explicit StrictIterators(const std::string &name, ClazyContext *context);
+    explicit StrictIterators(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

@@ -25,8 +25,8 @@
 
 using namespace clang;
 
-QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

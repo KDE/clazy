@@ -70,8 +70,8 @@ private:
     }
 };
 
-UsedQUnusedVariable::UsedQUnusedVariable(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+UsedQUnusedVariable::UsedQUnusedVariable(const std::string &name)
+    : CheckBase(name)
 {
 }
 

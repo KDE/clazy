@@ -24,7 +24,7 @@ class ReturnStmt;
 class ReturningDataFromTemporary : public CheckBase
 {
 public:
-    explicit ReturningDataFromTemporary(const std::string &name, ClazyContext *context);
+    explicit ReturningDataFromTemporary(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

@@ -45,8 +45,8 @@ static bool isMemberVariable(Expr *expr)
 // This got a bit messy since each Qt container produces a different AST, for example
 // QVector::iterator isn't even a class, it's a typedef.
 
-StrictIterators::StrictIterators(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+StrictIterators::StrictIterators(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

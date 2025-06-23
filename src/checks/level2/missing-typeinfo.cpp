@@ -30,8 +30,8 @@ inline bool checkTooBigForQList(clang::QualType qt, const clang::ASTContext *con
     return (int)context->getTypeSize(qt) <= clazy::sizeOfPointer(context, qt);
 }
 
-MissingTypeInfo::MissingTypeInfo(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+MissingTypeInfo::MissingTypeInfo(const std::string &name)
+    : CheckBase(name)
 {
 }
 

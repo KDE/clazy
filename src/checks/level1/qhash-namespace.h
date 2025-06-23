@@ -17,7 +17,7 @@
 class QHashNamespace : public CheckBase
 {
 public:
-    explicit QHashNamespace(const std::string &name, ClazyContext *context);
+    explicit QHashNamespace(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
 };
 

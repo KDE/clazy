@@ -20,7 +20,7 @@
 class ContainerAntiPattern : public CheckBase
 {
 public:
-    explicit ContainerAntiPattern(const std::string &name, ClazyContext *context);
+    explicit ContainerAntiPattern(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

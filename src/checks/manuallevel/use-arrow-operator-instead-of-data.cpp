@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &name)
+    : CheckBase(name)
 {
 }
 

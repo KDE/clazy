@@ -17,7 +17,7 @@
 class QtKeywords : public CheckBase
 {
 public:
-    explicit QtKeywords(const std::string &name, ClazyContext *context);
+    explicit QtKeywords(const std::string &name);
 
 protected:
     void VisitMacroExpands(const clang::Token &, const clang::SourceRange &, const clang::MacroInfo *) override;

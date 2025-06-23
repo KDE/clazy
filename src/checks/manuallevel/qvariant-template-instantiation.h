@@ -21,7 +21,7 @@
 class QVariantTemplateInstantiation : public CheckBase
 {
 public:
-    QVariantTemplateInstantiation(const std::string &name, ClazyContext *context);
+    QVariantTemplateInstantiation(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

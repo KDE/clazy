@@ -111,8 +111,8 @@
 template<typename T>
 RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options = RegisteredCheck::Option_None)
 {
-    auto factoryFuntion = [name](ClazyContext *context) {
-        return new T(name, context);
+    auto factoryFuntion = [name]() {
+        return new T(name);
     };
     return RegisteredCheck{name, level, factoryFuntion, options};
 }

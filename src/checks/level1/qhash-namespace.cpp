@@ -18,8 +18,8 @@
 
 using namespace clang;
 
-QHashNamespace::QHashNamespace(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QHashNamespace::QHashNamespace(const std::string &name)
+    : CheckBase(name)
 {
 }
 

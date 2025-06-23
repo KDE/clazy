@@ -17,7 +17,7 @@
 class VirtualSignal : public CheckBase
 {
 public:
-    explicit VirtualSignal(const std::string &name, ClazyContext *context);
+    explicit VirtualSignal(const std::string &name);
     void VisitDecl(clang::Decl *stmt) override;
 
 private:

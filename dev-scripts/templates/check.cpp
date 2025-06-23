@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-%2::%2(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+%2::%2(const std::string &name)
+    : CheckBase(name)
 {
 }
 

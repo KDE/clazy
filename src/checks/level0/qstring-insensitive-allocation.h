@@ -19,7 +19,7 @@
 class QStringInsensitiveAllocation : public CheckBase
 {
 public:
-    explicit QStringInsensitiveAllocation(const std::string &name, ClazyContext *context);
+    explicit QStringInsensitiveAllocation(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

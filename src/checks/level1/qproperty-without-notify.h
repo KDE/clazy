@@ -17,7 +17,7 @@
 class QPropertyWithoutNotify : public CheckBase
 {
 public:
-    explicit QPropertyWithoutNotify(const std::string &name, ClazyContext *context);
+    explicit QPropertyWithoutNotify(const std::string &name);
 
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;

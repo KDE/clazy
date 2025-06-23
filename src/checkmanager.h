@@ -42,7 +42,7 @@ struct RegisteredFixIt {
     }
 };
 
-using FactoryFunction = std::function<CheckBase *(ClazyContext *context)>;
+using FactoryFunction = std::function<CheckBase *()>;
 
 struct RegisteredCheck {
     enum Option { Option_None = 0, Option_VisitsStmts = 2, Option_VisitsDecls = 4, Option_PreprocessorCallbacks = 8, Option_VisitAllTypeDefs = 16 };
@@ -115,7 +115,7 @@ private:
     void registerCheck(const RegisteredCheck &check);
     bool checkExists(const std::string &name) const;
     RegisteredCheck::List checksForLevel(int level) const;
-    CheckBase *createCheck(const std::string &name, ClazyContext *context);
+    CheckBase *createCheck(const std::string &name);
     std::string checkNameForFixIt(const std::string &) const;
     RegisteredCheck::List m_registeredChecks;
     std::unordered_map<std::string, std::vector<RegisteredFixIt>> m_fixitsByCheckName;

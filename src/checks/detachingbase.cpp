@@ -20,8 +20,8 @@
 
 using namespace clang;
 
-DetachingBase::DetachingBase(const std::string &name, ClazyContext *context, Options options)
-    : CheckBase(name, context, options)
+DetachingBase::DetachingBase(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
 }
 

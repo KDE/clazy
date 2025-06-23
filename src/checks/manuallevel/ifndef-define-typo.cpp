@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-IfndefDefineTypo::IfndefDefineTypo(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+IfndefDefineTypo::IfndefDefineTypo(const std::string &name)
+    : CheckBase(name)
 {
 }
 

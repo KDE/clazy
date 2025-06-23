@@ -17,7 +17,7 @@
 class ConnectByName : public CheckBase
 {
 public:
-    explicit ConnectByName(const std::string &name, ClazyContext *context);
+    explicit ConnectByName(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
 };
 

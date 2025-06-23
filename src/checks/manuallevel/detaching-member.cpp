@@ -30,8 +30,8 @@
 
 using namespace clang;
 
-DetachingMember::DetachingMember(const std::string &name, ClazyContext *context)
-    : DetachingBase(name, context, Option_CanIgnoreIncludes)
+DetachingMember::DetachingMember(const std::string &name)
+    : DetachingBase(name, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = {"qstring.h"};
 }

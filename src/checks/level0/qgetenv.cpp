@@ -26,8 +26,8 @@
 
 using namespace clang;
 
-QGetEnv::QGetEnv(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QGetEnv::QGetEnv(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

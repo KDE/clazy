@@ -17,7 +17,7 @@
 class UseArrowOperatorInsteadOfData : public CheckBase
 {
 public:
-    explicit UseArrowOperatorInsteadOfData(const std::string &name, ClazyContext *context);
+    explicit UseArrowOperatorInsteadOfData(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
 
 private:

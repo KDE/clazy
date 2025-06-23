@@ -15,7 +15,7 @@
 class %2 : public CheckBase
 {
 public:
-    explicit %2(const std::string &name, ClazyContext *context);
+    explicit %2(const std::string &name);
     void VisitDecl(clang::Decl *) override;
     void VisitStmt(clang::Stmt *) override;
 private:

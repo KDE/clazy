@@ -19,8 +19,8 @@
 
 using namespace clang;
 
-GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+GlobalConstCharPointer::GlobalConstCharPointer(const std::string &name)
+    : CheckBase(name)
 {
     m_filesToIgnore = {"3rdparty", "mysql.h", "qpicture.cpp"};
 }

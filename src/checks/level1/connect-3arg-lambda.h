@@ -22,7 +22,7 @@ class FunctionDecl;
 class Connect3ArgLambda : public CheckBase
 {
 public:
-    explicit Connect3ArgLambda(const std::string &name, ClazyContext *context);
+    explicit Connect3ArgLambda(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

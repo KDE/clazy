@@ -25,7 +25,7 @@ class CXXMethodDecl;
 class DetachingBase : public CheckBase
 {
 public:
-    explicit DetachingBase(const std::string &name, ClazyContext *context, Options = Option_None);
+    explicit DetachingBase(const std::string &name, Options = Option_None);
 
 protected:
     enum DetachingMethodType { DetachingMethod, DetachingMethodWithConstCounterPart };

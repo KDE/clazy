@@ -112,7 +112,8 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
 
     auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
     for (const auto &requestedCheck : m_checks) {
-        auto *check = requestedCheck.factory(m_context);
+        auto *check = requestedCheck.factory();
+        check->m_context = m_context;
         if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
             check->enablePreProcessorCallbacks(ci.getPreprocessor());
         }
@@ -337,7 +338,8 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
     }
 
     for (const auto &requestedCheck : requestedChecks) {
-        auto *check = requestedCheck.factory(context);
+        auto *check = requestedCheck.factory();
+        check->m_context = context;
         if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
             check->enablePreProcessorCallbacks(ci.getPreprocessor());
         }

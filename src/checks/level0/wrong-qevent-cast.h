@@ -17,7 +17,7 @@
 class WrongQEventCast : public CheckBase
 {
 public:
-    explicit WrongQEventCast(const std::string &name, ClazyContext *context);
+    explicit WrongQEventCast(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
 
 private:

@@ -39,7 +39,7 @@ struct PrivateSlot {
 class OldStyleConnect : public CheckBase
 {
 public:
-    OldStyleConnect(const std::string &name, ClazyContext *context);
+    OldStyleConnect(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
     void addPrivateSlot(const PrivateSlot &);
 

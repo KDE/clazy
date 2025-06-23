@@ -56,8 +56,8 @@ static bool hasPublicCopyInAncestors(const CXXRecordDecl *record)
     return false;
 }
 
-CopyablePolymorphic::CopyablePolymorphic(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+CopyablePolymorphic::CopyablePolymorphic(const std::string &name)
+    : CheckBase(name)
 {
 }
 

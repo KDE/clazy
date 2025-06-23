@@ -67,8 +67,8 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
     return false;
 }
 
-UnneededCast::UnneededCast(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+UnneededCast::UnneededCast(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

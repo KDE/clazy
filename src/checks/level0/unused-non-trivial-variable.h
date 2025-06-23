@@ -29,7 +29,7 @@ class QualType;
 class UnusedNonTrivialVariable : public CheckBase
 {
 public:
-    explicit UnusedNonTrivialVariable(const std::string &name, ClazyContext *context);
+    explicit UnusedNonTrivialVariable(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

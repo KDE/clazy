@@ -17,8 +17,8 @@
 
 using namespace clang;
 
-QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name)
+    : CheckBase(name)
 {
 }
 

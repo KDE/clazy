@@ -23,7 +23,7 @@
 class DetachingMember : public DetachingBase
 {
 public:
-    explicit DetachingMember(const std::string &name, ClazyContext *context);
+    explicit DetachingMember(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

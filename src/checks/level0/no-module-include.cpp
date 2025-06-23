@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-NoModuleInclude::NoModuleInclude(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+NoModuleInclude::NoModuleInclude(const std::string &name)
+    : CheckBase(name)
     , m_modulesList{
           "Core",
           "Gui",

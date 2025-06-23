@@ -18,8 +18,8 @@
 
 using namespace clang;
 
-QBytearrayConversionToCStyle::QBytearrayConversionToCStyle(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QBytearrayConversionToCStyle::QBytearrayConversionToCStyle(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

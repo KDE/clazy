@@ -17,7 +17,7 @@
 class OverriddenSignal : public CheckBase
 {
 public:
-    explicit OverriddenSignal(const std::string &name, ClazyContext *context);
+    explicit OverriddenSignal(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
 
 private:

@@ -32,7 +32,7 @@ class SourceLocation;
 class VirtualCallCtor : public CheckBase
 {
 public:
-    VirtualCallCtor(const std::string &name, ClazyContext *context);
+    VirtualCallCtor(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
 
 private:

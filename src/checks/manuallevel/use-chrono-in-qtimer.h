@@ -15,7 +15,7 @@
 class UseChronoInQTimer : public CheckBase
 {
 public:
-    UseChronoInQTimer(const std::string &name, ClazyContext *context);
+    UseChronoInQTimer(const std::string &name);
 
     void VisitStmt(clang::Stmt *) override;
 

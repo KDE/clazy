@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name, ClazyContext *context)
-    : RuleOfBase(name, context)
+RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name)
+    : RuleOfBase(name)
 {
 }
 

@@ -38,8 +38,8 @@ static bool hasMutexes(Stmt *body)
     return false;
 }
 
-ThreadWithSlots::ThreadWithSlots(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+ThreadWithSlots::ThreadWithSlots(const std::string &name)
+    : CheckBase(name)
 {
 }
 

@@ -17,7 +17,7 @@
 class RawEnvironmentFunction : public CheckBase
 {
 public:
-    explicit RawEnvironmentFunction(const std::string &name, ClazyContext *context);
+    explicit RawEnvironmentFunction(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
 
 private:

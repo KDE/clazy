@@ -35,8 +35,8 @@
 
 using namespace clang;
 
-ReserveCandidates::ReserveCandidates(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+ReserveCandidates::ReserveCandidates(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

@@ -16,8 +16,8 @@
 
 using namespace clang;
 
-OverloadedSignal::OverloadedSignal(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+OverloadedSignal::OverloadedSignal(const std::string &name)
+    : CheckBase(name)
 {
 }
 

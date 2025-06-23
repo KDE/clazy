@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-VirtualSignal::VirtualSignal(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+VirtualSignal::VirtualSignal(const std::string &name)
+    : CheckBase(name)
 {
 }
 

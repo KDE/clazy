@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-StaticPmf::StaticPmf(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+StaticPmf::StaticPmf(const std::string &name)
+    : CheckBase(name)
 {
 }
 

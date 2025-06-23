@@ -18,8 +18,8 @@
 
 using namespace clang;
 
-UseStaticQRegularExpression::UseStaticQRegularExpression(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+UseStaticQRegularExpression::UseStaticQRegularExpression(const std::string &name)
+    : CheckBase(name)
 {
 }
 

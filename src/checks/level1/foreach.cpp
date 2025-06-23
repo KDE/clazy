@@ -32,8 +32,8 @@
 
 using namespace clang;
 
-Foreach::Foreach(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+Foreach::Foreach(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

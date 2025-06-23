@@ -19,7 +19,7 @@
 class WrongQGlobalStatic : public CheckBase
 {
 public:
-    explicit WrongQGlobalStatic(const std::string &name, ClazyContext *context);
+    explicit WrongQGlobalStatic(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

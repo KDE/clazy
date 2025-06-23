@@ -17,8 +17,8 @@
 
 using namespace clang;
 
-QEnums::QEnums(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QEnums::QEnums(const std::string &name)
+    : CheckBase(name)
 {
 }
 

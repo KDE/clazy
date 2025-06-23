@@ -21,8 +21,8 @@
 
 using namespace clang;
 
-QDeleteAll::QDeleteAll(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QDeleteAll::QDeleteAll(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

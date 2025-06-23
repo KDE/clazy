@@ -33,8 +33,8 @@ enum Aggressiveness {
     AlsoCheckFunctionCallsAggressiveness = 1 // too many false positives
 };
 
-AssertWithSideEffects::AssertWithSideEffects(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+AssertWithSideEffects::AssertWithSideEffects(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
     , m_aggressiveness(NormalAggressiveness)
 {
 }

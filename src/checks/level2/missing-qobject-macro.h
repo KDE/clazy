@@ -27,7 +27,7 @@ class Token;
 class MissingQObjectMacro : public CheckBase
 {
 public:
-    explicit MissingQObjectMacro(const std::string &name, ClazyContext *context);
+    explicit MissingQObjectMacro(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
 
 private:

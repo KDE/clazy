@@ -78,8 +78,8 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
 }
 }
 
-RangeLoopDetach::RangeLoopDetach(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+RangeLoopDetach::RangeLoopDetach(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

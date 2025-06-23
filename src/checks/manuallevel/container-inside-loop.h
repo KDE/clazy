@@ -20,7 +20,7 @@
 class ContainerInsideLoop : public CheckBase
 {
 public:
-    explicit ContainerInsideLoop(const std::string &name, ClazyContext *context);
+    explicit ContainerInsideLoop(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

@@ -69,8 +69,8 @@ struct Latin1Expr {
     }
 };
 
-QStringAllocations::QStringAllocations(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QStringAllocations::QStringAllocations(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

@@ -18,7 +18,7 @@
 class NoModuleInclude : public CheckBase
 {
 public:
-    explicit NoModuleInclude(const std::string &name, ClazyContext *context);
+    explicit NoModuleInclude(const std::string &name);
     void VisitInclusionDirective(clang::SourceLocation HashLoc,
                                  const clang::Token &IncludeTok,
                                  clang::StringRef FileName,

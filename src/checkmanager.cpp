@@ -69,11 +69,11 @@ void CheckManager::registerFixIt(int id, const std::string &fixitName, const std
     m_fixitByName.insert({fixitName, fixit});
 }
 
-CheckBase *CheckManager::createCheck(const std::string &name, ClazyContext *context)
+CheckBase *CheckManager::createCheck(const std::string &name)
 {
     for (const auto &rc : m_registeredChecks) {
         if (rc.name == name) {
-            return rc.factory(context);
+            return rc.factory();
         }
     }
 
@@ -222,7 +222,7 @@ std::vector<std::pair<CheckBase *, RegisteredCheck>> CheckManager::createChecks(
     std::vector<std::pair<CheckBase *, RegisteredCheck>> checks;
     checks.reserve(requestedChecks.size() + 1);
     for (const auto &check : requestedChecks) {
-        checks.push_back({createCheck(check.name, context), check});
+        checks.push_back({createCheck(check.name), check});
     }
 
     return checks;

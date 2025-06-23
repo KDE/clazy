@@ -23,8 +23,8 @@
 
 using namespace clang;
 
-QtKeywords::QtKeywords(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QtKeywords::QtKeywords(const std::string &name)
+    : CheckBase(name)
 {
 }
 

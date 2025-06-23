@@ -26,7 +26,7 @@ class FixItHint;
 class Qt6QHashSignature : public CheckBase
 {
 public:
-    explicit Qt6QHashSignature(const std::string &name, ClazyContext *context);
+    explicit Qt6QHashSignature(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 

@@ -15,7 +15,7 @@
 class QRequiredResultCandidates : public CheckBase
 {
 public:
-    explicit QRequiredResultCandidates(const std::string &name, ClazyContext *context);
+    explicit QRequiredResultCandidates(const std::string &name);
     void VisitDecl(clang::Decl *) override;
 
 private:

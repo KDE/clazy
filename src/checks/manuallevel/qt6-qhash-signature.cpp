@@ -27,8 +27,8 @@
 
 using namespace clang;
 
-Qt6QHashSignature::Qt6QHashSignature(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+Qt6QHashSignature::Qt6QHashSignature(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

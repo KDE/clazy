@@ -15,7 +15,7 @@
 class ReadlockDetaching : public CheckBase
 {
 public:
-    explicit ReadlockDetaching(const std::string &name, ClazyContext *context);
+    explicit ReadlockDetaching(const std::string &name);
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 
 private:

@@ -147,8 +147,8 @@ public:
     }
 };
 
-QColorFromLiteral::QColorFromLiteral(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QColorFromLiteral::QColorFromLiteral(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
     , m_astMatcherCallBack(new QColorFromLiteral_Callback(this))
 {
 }

@@ -83,8 +83,8 @@ bool FunctionArgsByRef::shouldIgnoreFunction(clang::FunctionDecl *function)
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
-FunctionArgsByRef::FunctionArgsByRef(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+FunctionArgsByRef::FunctionArgsByRef(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

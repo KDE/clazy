@@ -18,8 +18,8 @@
 
 using namespace clang;
 
-QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

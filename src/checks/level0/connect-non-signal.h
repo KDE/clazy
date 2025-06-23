@@ -18,7 +18,7 @@
 class ConnectNonSignal : public CheckBase
 {
 public:
-    explicit ConnectNonSignal(const std::string &name, ClazyContext *context);
+    explicit ConnectNonSignal(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

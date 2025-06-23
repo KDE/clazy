@@ -17,7 +17,7 @@
 class LambdaUniqueConnection : public CheckBase
 {
 public:
-    explicit LambdaUniqueConnection(const std::string &name, ClazyContext *context);
+    explicit LambdaUniqueConnection(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

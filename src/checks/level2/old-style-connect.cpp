@@ -91,8 +91,8 @@ static bool classIsOk(StringRef className)
     return className != "QDBusInterface";
 }
 
-OldStyleConnect::OldStyleConnect(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+OldStyleConnect::OldStyleConnect(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

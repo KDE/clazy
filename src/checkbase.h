@@ -113,7 +113,7 @@ public:
     using Options = int;
 
     using List = std::vector<CheckBase *>;
-    explicit CheckBase(const std::string &name, const ClazyContext *context, Options = Option_None);
+    explicit CheckBase(const std::string &name, Options = Option_None);
     CheckBase(const CheckBase &other) = delete;
 
     virtual ~CheckBase();
@@ -143,7 +143,7 @@ public:
     void enablePreProcessorCallbacks(clang::Preprocessor &pp);
 
     // Lazy initialized for clang-tidy plugin. Value will be assigned before Visit* methods are called
-    const ClazyContext *m_context;
+    const ClazyContext *m_context = nullptr;
 
 protected:
     virtual void VisitMacroExpands(const clang::Token &macroNameTok, const clang::SourceRange &, const clang::MacroInfo *minfo = nullptr);
@@ -195,6 +195,7 @@ protected:
     std::vector<std::string> m_filesToIgnore;
 
 private:
+    std::string tag() const;
     friend class ClazyPreprocessorCallbacks;
     friend class ClazyAstMatcherCallback;
     ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
@@ -202,7 +203,6 @@ private:
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
     const Options m_options;
-    const std::string m_tag;
 };
 
 #endif

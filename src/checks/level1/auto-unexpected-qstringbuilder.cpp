@@ -32,8 +32,8 @@ static bool isQStringBuilder(QualType t)
     return record && clazy::name(record) == "QStringBuilder";
 }
 
-AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

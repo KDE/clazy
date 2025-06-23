@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::string &name)
+    : CheckBase(name)
 {
 }
 

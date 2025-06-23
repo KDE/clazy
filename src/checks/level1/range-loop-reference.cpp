@@ -23,8 +23,8 @@
 
 using namespace clang;
 
-RangeLoopReference::RangeLoopReference(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+RangeLoopReference::RangeLoopReference(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

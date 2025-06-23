@@ -20,7 +20,7 @@
 class RuleOfTwoSoft : public RuleOfBase
 {
 public:
-    explicit RuleOfTwoSoft(const std::string &name, ClazyContext *context);
+    explicit RuleOfTwoSoft(const std::string &name);
     void VisitStmt(clang::Stmt *s) override;
 };
 

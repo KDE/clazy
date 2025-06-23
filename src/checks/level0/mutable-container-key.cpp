@@ -25,8 +25,8 @@ static bool isInterestingContainer(StringRef name)
     return clazy::contains(containers, name);
 }
 
-MutableContainerKey::MutableContainerKey(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+MutableContainerKey::MutableContainerKey(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

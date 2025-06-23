@@ -29,8 +29,8 @@
 
 using namespace clang;
 
-QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name)
+    : CheckBase(name)
 {
 }
 

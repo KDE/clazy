@@ -84,7 +84,7 @@ public:
             if (std::find(s_enabledChecks.begin(), s_enabledChecks.end(), checkName) == s_enabledChecks.end()) {
                 continue;
             }
-            auto *check = availCheck.factory(clazyContext);
+            auto *check = availCheck.factory();
             m_visitors.addCheck(availCheck.options, check);
 
             check->registerASTMatchers(*Finder);

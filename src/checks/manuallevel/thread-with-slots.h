@@ -17,7 +17,7 @@
 class ThreadWithSlots : public CheckBase
 {
 public:
-    explicit ThreadWithSlots(const std::string &name, ClazyContext *context);
+    explicit ThreadWithSlots(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitDecl(clang::Decl *decl) override;
 

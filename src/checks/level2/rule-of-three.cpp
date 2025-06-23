@@ -23,8 +23,8 @@
 
 using namespace clang;
 
-RuleOfThree::RuleOfThree(const std::string &name, ClazyContext *context)
-    : RuleOfBase(name, context)
+RuleOfThree::RuleOfThree(const std::string &name)
+    : RuleOfBase(name)
 {
     m_filesToIgnore = {"qrc_"};
 }

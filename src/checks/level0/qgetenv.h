@@ -22,7 +22,7 @@
 class QGetEnv : public CheckBase
 {
 public:
-    explicit QGetEnv(const std::string &name, ClazyContext *context);
+    explicit QGetEnv(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

@@ -15,7 +15,7 @@
 class LowercaseQMlTypeName : public CheckBase
 {
 public:
-    explicit LowercaseQMlTypeName(const std::string &name, ClazyContext *context);
+    explicit LowercaseQMlTypeName(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
 
 private:

@@ -21,7 +21,7 @@
 class Qt6DeprecatedAPIFixes : public CheckBase
 {
 public:
-    explicit Qt6DeprecatedAPIFixes(const std::string &name, ClazyContext *context);
+    explicit Qt6DeprecatedAPIFixes(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitDecl(clang::Decl *decl) override;
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *) override;

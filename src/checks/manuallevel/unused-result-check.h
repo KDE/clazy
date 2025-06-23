@@ -23,7 +23,7 @@ class MatchFinder;
 class UnusedResultCheck : public CheckBase
 {
 public:
-    explicit UnusedResultCheck(const std::string &name, ClazyContext *context);
+    explicit UnusedResultCheck(const std::string &name);
     ~UnusedResultCheck() override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 

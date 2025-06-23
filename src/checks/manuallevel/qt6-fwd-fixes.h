@@ -20,7 +20,7 @@
 class Qt6FwdFixes : public CheckBase
 {
 public:
-    explicit Qt6FwdFixes(const std::string &name, ClazyContext *context);
+    explicit Qt6FwdFixes(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
     void VisitInclusionDirective(clang::SourceLocation HashLoc,
                                  const clang::Token &IncludeTok,

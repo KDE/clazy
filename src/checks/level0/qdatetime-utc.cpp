@@ -25,8 +25,8 @@
 
 using namespace clang;
 
-QDateTimeUtc::QDateTimeUtc(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QDateTimeUtc::QDateTimeUtc(const std::string &name)
+    : CheckBase(name)
 {
 }
 

@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-QtMacros::QtMacros(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QtMacros::QtMacros(const std::string &name)
+    : CheckBase(name)
 {
 }
 

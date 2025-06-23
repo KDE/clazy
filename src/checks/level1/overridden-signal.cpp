@@ -18,8 +18,8 @@
 
 using namespace clang;
 
-OverriddenSignal::OverriddenSignal(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+OverriddenSignal::OverriddenSignal(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

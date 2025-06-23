@@ -29,8 +29,8 @@
 
 using namespace clang;
 
-Qt6QLatin1StringCharToU::Qt6QLatin1StringCharToU(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+Qt6QLatin1StringCharToU::Qt6QLatin1StringCharToU(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

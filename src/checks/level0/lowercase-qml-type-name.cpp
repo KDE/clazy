@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-LowercaseQMlTypeName::LowercaseQMlTypeName(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+LowercaseQMlTypeName::LowercaseQMlTypeName(const std::string &name)
+    : CheckBase(name)
 {
 }
 

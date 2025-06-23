@@ -34,7 +34,7 @@ class SourceLocation;
 class ReserveCandidates : public CheckBase
 {
 public:
-    ReserveCandidates(const std::string &name, ClazyContext *context);
+    ReserveCandidates(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

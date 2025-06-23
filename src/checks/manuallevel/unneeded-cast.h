@@ -27,7 +27,7 @@ class CXXRecordDecl;
 class UnneededCast : public CheckBase
 {
 public:
-    UnneededCast(const std::string &name, ClazyContext *context);
+    UnneededCast(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

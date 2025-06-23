@@ -22,7 +22,7 @@
 class QMapWithPointerKey : public CheckBase
 {
 public:
-    QMapWithPointerKey(const std::string &name, ClazyContext *context);
+    QMapWithPointerKey(const std::string &name);
     void VisitDecl(clang::Decl *decl) override;
 };
 

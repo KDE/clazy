@@ -26,7 +26,7 @@ class Token;
 class QtMacros : public CheckBase
 {
 public:
-    explicit QtMacros(const std::string &name, ClazyContext *context);
+    explicit QtMacros(const std::string &name);
 
 private:
     void checkIfDef(const clang::Token &MacroNameTok, clang::SourceLocation Loc);

@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-RuleOfBase::RuleOfBase(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+RuleOfBase::RuleOfBase(const std::string &name)
+    : CheckBase(name)
 {
 }
 

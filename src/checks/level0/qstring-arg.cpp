@@ -28,8 +28,8 @@
 
 using namespace clang;
 
-QStringArg::QStringArg(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QStringArg::QStringArg(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
     m_filesToIgnore = {"qstring.h"};
 }

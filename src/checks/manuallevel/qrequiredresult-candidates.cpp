@@ -30,8 +30,8 @@ static bool hasUnusedResultAttr(clang::FunctionDecl *func)
     return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
 }
 
-QRequiredResultCandidates::QRequiredResultCandidates(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+QRequiredResultCandidates::QRequiredResultCandidates(const std::string &name)
+    : CheckBase(name)
 {
 }
 

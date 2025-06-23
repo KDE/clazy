@@ -53,8 +53,8 @@ public:
     }
 };
 
-UnusedResultCheck::UnusedResultCheck(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+UnusedResultCheck::UnusedResultCheck(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
     , m_astMatcherCallBack(std::make_unique<Caller>(this))
 {
 }

@@ -16,7 +16,7 @@
 class UnexpectedFlagEnumeratorValue : public CheckBase
 {
 public:
-    explicit UnexpectedFlagEnumeratorValue(const std::string &name, ClazyContext *context);
+    explicit UnexpectedFlagEnumeratorValue(const std::string &name);
     void VisitDecl(clang::Decl *) override;
 
 private:

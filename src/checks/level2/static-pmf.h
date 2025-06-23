@@ -17,7 +17,7 @@
 class StaticPmf : public CheckBase
 {
 public:
-    explicit StaticPmf(const std::string &name, ClazyContext *context);
+    explicit StaticPmf(const std::string &name);
     void VisitDecl(clang::Decl *) override;
 
 private:

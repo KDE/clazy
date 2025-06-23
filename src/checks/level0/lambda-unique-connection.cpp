@@ -20,8 +20,8 @@
 
 using namespace clang;
 
-LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

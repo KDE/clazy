@@ -16,8 +16,8 @@
 
 using namespace clang;
 
-SignalWithReturnValue::SignalWithReturnValue(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+SignalWithReturnValue::SignalWithReturnValue(const std::string &name)
+    : CheckBase(name)
 {
 }
 

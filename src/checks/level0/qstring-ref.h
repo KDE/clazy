@@ -27,7 +27,7 @@ class CXXMemberCallExpr;
 class StringRefCandidates : public CheckBase
 {
 public:
-    StringRefCandidates(const std::string &name, ClazyContext *context);
+    StringRefCandidates(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

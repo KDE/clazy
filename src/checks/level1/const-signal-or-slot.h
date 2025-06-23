@@ -17,7 +17,7 @@
 class ConstSignalOrSlot : public CheckBase
 {
 public:
-    explicit ConstSignalOrSlot(const std::string &name, ClazyContext *context);
+    explicit ConstSignalOrSlot(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitDecl(clang::Decl *decl) override;
 };

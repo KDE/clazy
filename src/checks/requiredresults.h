@@ -21,7 +21,7 @@
 class RequiredResults : public CheckBase
 {
 public:
-    RequiredResults(const std::string &name, ClazyContext *context);
+    RequiredResults(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

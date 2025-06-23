@@ -25,7 +25,7 @@ class CXXMemberCallExpr;
 class IncorrectEmit : public CheckBase
 {
 public:
-    explicit IncorrectEmit(const std::string &name, ClazyContext *context);
+    explicit IncorrectEmit(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

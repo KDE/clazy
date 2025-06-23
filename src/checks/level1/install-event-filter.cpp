@@ -19,8 +19,8 @@
 
 using namespace clang;
 
-InstallEventFilter::InstallEventFilter(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+InstallEventFilter::InstallEventFilter(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

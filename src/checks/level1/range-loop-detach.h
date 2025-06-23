@@ -25,7 +25,7 @@ class CXXForRangeStmt;
 class RangeLoopDetach : public CheckBase
 {
 public:
-    RangeLoopDetach(const std::string &name, ClazyContext *context);
+    RangeLoopDetach(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

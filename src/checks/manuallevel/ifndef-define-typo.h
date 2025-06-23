@@ -15,7 +15,7 @@
 class IfndefDefineTypo : public CheckBase
 {
 public:
-    explicit IfndefDefineTypo(const std::string &name, ClazyContext *context);
+    explicit IfndefDefineTypo(const std::string &name);
     void VisitMacroDefined(const clang::Token &macroNameTok) override;
     void VisitDefined(const clang::Token &macroNameTok, const clang::SourceRange &) override;
     void VisitIfdef(clang::SourceLocation, const clang::Token &) override;

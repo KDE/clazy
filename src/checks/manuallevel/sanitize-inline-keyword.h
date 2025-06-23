@@ -20,7 +20,7 @@
 class SanitizeInlineKeyword : public CheckBase
 {
 public:
-    explicit SanitizeInlineKeyword(const std::string &name, ClazyContext *context);
+    explicit SanitizeInlineKeyword(const std::string &name);
 
     void VisitDecl(clang::Decl *) override;
 };

@@ -24,7 +24,7 @@ class Expr;
 class ConnectNotNormalized : public CheckBase
 {
 public:
-    explicit ConnectNotNormalized(const std::string &name, ClazyContext *context);
+    explicit ConnectNotNormalized(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

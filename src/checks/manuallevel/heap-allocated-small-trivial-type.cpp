@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name)
+    : CheckBase(name)
 {
 }
 

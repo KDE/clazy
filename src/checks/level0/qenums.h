@@ -19,7 +19,7 @@
 class QEnums : public CheckBase
 {
 public:
-    explicit QEnums(const std::string &name, ClazyContext *context);
+    explicit QEnums(const std::string &name);
 
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo * = nullptr) override;

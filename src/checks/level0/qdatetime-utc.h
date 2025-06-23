@@ -22,7 +22,7 @@
 class QDateTimeUtc : public CheckBase
 {
 public:
-    QDateTimeUtc(const std::string &name, ClazyContext *context);
+    QDateTimeUtc(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

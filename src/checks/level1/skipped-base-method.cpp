@@ -21,8 +21,8 @@
 
 using namespace clang;
 
-SkippedBaseMethod::SkippedBaseMethod(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+SkippedBaseMethod::SkippedBaseMethod(const std::string &name)
+    : CheckBase(name)
 {
 }
 

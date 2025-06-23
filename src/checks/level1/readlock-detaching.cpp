@@ -160,8 +160,8 @@ public:
         }
     }
 };
-ReadlockDetaching::ReadlockDetaching(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+ReadlockDetaching::ReadlockDetaching(const std::string &name)
+    : CheckBase(name)
     , m_astMatcherCallBack(new ReadlockDetaching_Callback(this))
 {
 }

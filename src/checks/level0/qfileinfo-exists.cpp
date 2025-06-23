@@ -17,8 +17,8 @@
 
 using namespace clang;
 
-QFileInfoExists::QFileInfoExists(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+QFileInfoExists::QFileInfoExists(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

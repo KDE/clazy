@@ -16,7 +16,7 @@
 class JniSignatures : public CheckBase
 {
 public:
-    JniSignatures(const std::string &name, ClazyContext *context);
+    JniSignatures(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
 
 private:

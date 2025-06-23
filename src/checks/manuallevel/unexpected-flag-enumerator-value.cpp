@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &name)
+    : CheckBase(name)
 {
 }
 

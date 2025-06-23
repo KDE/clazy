@@ -25,7 +25,7 @@ class CXXForRangeStmt;
 class RangeLoopReference : public CheckBase
 {
 public:
-    RangeLoopReference(const std::string &name, ClazyContext *context);
+    RangeLoopReference(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

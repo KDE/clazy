@@ -46,8 +46,8 @@ void getChildsIgnoreLambda(clang::Stmt *stmt, std::vector<CXXMemberCallExpr *> &
 }
 }
 
-VirtualCallCtor::VirtualCallCtor(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context)
+VirtualCallCtor::VirtualCallCtor(const std::string &name)
+    : CheckBase(name)
 {
 }
 

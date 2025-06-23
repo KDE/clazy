@@ -23,8 +23,8 @@ using namespace clang;
 
 using uint = unsigned;
 
-Connect3ArgLambda::Connect3ArgLambda(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
+Connect3ArgLambda::Connect3ArgLambda(const std::string &name)
+    : CheckBase(name, Option_CanIgnoreIncludes)
 {
 }
 

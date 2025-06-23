@@ -20,7 +20,7 @@
 class RuleOfThree : public RuleOfBase
 {
 public:
-    explicit RuleOfThree(const std::string &name, ClazyContext *context);
+    explicit RuleOfThree(const std::string &name);
     void VisitDecl(clang::Decl *d) override;
 
 private:

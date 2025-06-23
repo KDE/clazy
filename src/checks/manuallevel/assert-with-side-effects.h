@@ -17,7 +17,7 @@
 class AssertWithSideEffects : public CheckBase
 {
 public:
-    AssertWithSideEffects(const std::string &name, ClazyContext *context);
+    AssertWithSideEffects(const std::string &name);
     void VisitStmt(clang::Stmt *) override;
 
 private:

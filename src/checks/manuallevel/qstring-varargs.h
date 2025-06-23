@@ -17,7 +17,7 @@
 class QStringVarargs : public CheckBase
 {
 public:
-    explicit QStringVarargs(const std::string &name, ClazyContext *context);
+    explicit QStringVarargs(const std::string &name);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

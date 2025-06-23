@@ -27,7 +27,7 @@
 class DetachingTemporary : public DetachingBase
 {
 public:
-    DetachingTemporary(const std::string &name, ClazyContext *context);
+    DetachingTemporary(const std::string &name);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:
