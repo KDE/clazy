@@ -15,11 +15,11 @@ void test()
 
     QMap<int, int> map;
     if (map.count()) {} // Warning
-    if (map.count(2)) {} // Warning
+    if (map.contains(2)) {} // Warning
 
     QMultiMap<int, int> multiMap;
     if (multiMap.count()) {} // Warning
-    if (multiMap.count(2)) {} // Warning
+    if (multiMap.contains(2)) {} // Warning
     if (multiMap.count(2, 3)) {} // Warning
 
     if (getList().count()) {} // Warning

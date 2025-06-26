@@ -50,7 +50,10 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
     }
 
     if (clazy::classIsOneOf(method->getParent(), {"QHash", "QMap", "QMultiHash", "QMultiMap"}) && memberCall->getNumArgs() == 1) {
-        emitWarning(stmt->getBeginLoc(), "use contains() instead");
+        memberCall->getCallee()->IgnoreParenBaseCasts()->getSourceRange().dump(sm());
+        if (auto expr = dyn_cast<MemberExpr>(memberCall->getCallee())) {
+            emitWarning(stmt->getBeginLoc(), "use contains() instead", {FixItHint::CreateReplacement(expr->getMemberLoc(), "contains")});
+        }
         return;
     }
 
