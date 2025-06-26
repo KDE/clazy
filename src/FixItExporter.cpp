@@ -137,6 +137,11 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
         Client->HandleDiagnostic(DiagLevel, Info);
     }
 
+    // Do not export file when we can not provide any fixits
+    if (Info.getNumFixItHints() == 0) {
+        return;
+    }
+
     // Convert and record warning diagnostics and their notes
     if (DiagLevel == DiagnosticsEngine::Warning) {
         auto ToolingDiag = ConvertDiagnostic(Info);

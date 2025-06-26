@@ -30,8 +30,7 @@
         {
             "filename": "onlyQt1.cpp",
             "checks": ["old-style-connect"],
-            "only_qt": false,
-            "has_fixits": true
+            "only_qt": false
         },
         {
             "filename": "onlyQt2.cpp",
