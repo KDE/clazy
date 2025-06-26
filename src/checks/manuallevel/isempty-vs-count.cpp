@@ -43,23 +43,25 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
     if (!clazy::classIsOneOf(method->getParent(), clazy::qtContainers())) {
         return;
     }
+    auto *memberExpr = dyn_cast<MemberExpr>(memberCall->getCallee());
+    if (!memberExpr) {
+        return;
+    }
 
+    auto *baseExpr = memberExpr->getBase()->IgnoreParenImpCasts();
     if (clazy::classIsOneOf(method->getParent(), {"QMultiHash", "QMultiMap"}) && memberCall->getNumArgs() == 2) {
-        emitWarning(stmt->getBeginLoc(), "use contains() instead");
+        StringRef baseText = Lexer::getSourceText(CharSourceRange::getTokenRange(baseExpr->getSourceRange()), sm(), lo());
+        StringRef argText = Lexer::getSourceText(CharSourceRange::getTokenRange(memberCall->getArg(0)->getSourceRange()), sm(), lo());
+        const auto fixit = FixItHint::CreateReplacement(stmt->getSourceRange(), (baseText + ".contains(" + argText + ")").str());
+
+        emitWarning(stmt->getBeginLoc(), "use contains() instead", {fixit});
         return;
     }
 
     if (clazy::classIsOneOf(method->getParent(), {"QHash", "QMap", "QMultiHash", "QMultiMap"}) && memberCall->getNumArgs() == 1) {
-        memberCall->getCallee()->IgnoreParenBaseCasts()->getSourceRange().dump(sm());
-        if (auto expr = dyn_cast<MemberExpr>(memberCall->getCallee())) {
-            emitWarning(stmt->getBeginLoc(), "use contains() instead", {FixItHint::CreateReplacement(expr->getMemberLoc(), "contains")});
-        }
+        emitWarning(stmt->getBeginLoc(), "use contains() instead", {FixItHint::CreateReplacement(memberExpr->getMemberLoc(), "contains")});
         return;
     }
-
-    auto *memberExpr = dyn_cast<MemberExpr>(memberCall->getCallee());
-    if (!memberExpr)
-        return;
 
     SourceRange fixitRange = memberCall->getSourceRange();
     std::string operatorPrefix = "!";
@@ -71,9 +73,7 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    const Expr *Base = memberExpr->getBase()->IgnoreParenImpCasts();
-    CharSourceRange BaseRange = CharSourceRange::getTokenRange(Base->getSourceRange());
-    StringRef BaseText = Lexer::getSourceText(BaseRange, sm(), lo());
+    StringRef BaseText = Lexer::getSourceText(CharSourceRange::getTokenRange(baseExpr->getSourceRange()), sm(), lo());
     const auto fixit = FixItHint::CreateReplacement(fixitRange, (operatorPrefix + BaseText + ".isEmpty()").str());
 
     emitWarning(stmt->getBeginLoc(), "use isEmpty() instead", {fixit});

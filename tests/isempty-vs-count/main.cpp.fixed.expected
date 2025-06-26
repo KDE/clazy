@@ -15,12 +15,12 @@ void test()
 
     QMap<int, int> map;
     if (!map.isEmpty()) {} // Warning
-    if (map.count(2)) {} // Warning
+    if (map.contains(2)) {} // Warning
 
     QMultiMap<int, int> multiMap;
     if (!multiMap.isEmpty()) {} // Warning
-    if (multiMap.count(2)) {} // Warning
-    if (multiMap.count(2, 3)) {} // Warning
+    if (multiMap.contains(2)) {} // Warning
+    if (multiMap.contains(2)) {} // Warning
 
     if (!getList().isEmpty()) {} // Warning
 }
