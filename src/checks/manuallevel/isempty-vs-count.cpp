@@ -7,6 +7,7 @@
 #include "isempty-vs-count.h"
 #include "QtUtils.h"
 #include "StringUtils.h"
+#include "clang/AST/ParentMap.h"
 
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -53,5 +54,24 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    emitWarning(stmt->getBeginLoc(), "use isEmpty() instead");
+    auto *memberExpr = dyn_cast<MemberExpr>(memberCall->getCallee());
+    if (!memberExpr)
+        return;
+
+    SourceRange fixitRange = memberCall->getSourceRange();
+    std::string operatorPrefix = "!";
+    auto *parent = m_context->parentMap->getParent(stmt);
+    if (auto unaryOp = dyn_cast<UnaryOperator>(parent)) {
+        if (unaryOp->getOpcode() == UnaryOperator::Opcode::UO_LNot) {
+            operatorPrefix = "";
+            fixitRange = unaryOp->getSourceRange();
+        }
+    }
+
+    const Expr *Base = memberExpr->getBase()->IgnoreParenImpCasts();
+    CharSourceRange BaseRange = CharSourceRange::getTokenRange(Base->getSourceRange());
+    StringRef BaseText = Lexer::getSourceText(BaseRange, sm(), lo());
+    const auto fixit = FixItHint::CreateReplacement(fixitRange, (operatorPrefix + BaseText + ".isEmpty()").str());
+
+    emitWarning(stmt->getBeginLoc(), "use isEmpty() instead", {fixit});
 }
