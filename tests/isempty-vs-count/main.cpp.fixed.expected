@@ -25,3 +25,9 @@ void test()
     if (!getList().isEmpty()) {} // Warning
 }
 
+void testExplicitConversion()
+{
+    if (getList().isEmpty()) {} // Warning
+    if (getList().isEmpty()) {} // Warning
+    if (!getList().isEmpty()) {} // Warning
+}

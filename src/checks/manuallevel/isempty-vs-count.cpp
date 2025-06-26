@@ -5,6 +5,7 @@
 */
 
 #include "isempty-vs-count.h"
+#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "StringUtils.h"
 #include "clang/AST/ParentMap.h"
@@ -28,6 +29,46 @@ IsEmptyVSCount::IsEmptyVSCount(const std::string &name)
 
 void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
 {
+    if (auto op = dyn_cast<ExprWithCleanups>(stmt)) {
+        if (auto binaryOpt = dyn_cast<BinaryOperator>(op->getSubExpr())) {
+            const bool isGreater = binaryOpt->getOpcode() == BinaryOperator::Opcode::BO_GT;
+            const bool isSmaller = binaryOpt->getOpcode() == BinaryOperator::Opcode::BO_LT;
+            const bool isEqual = binaryOpt->getOpcode() == BinaryOperator::Opcode::BO_EQ;
+            if (!isGreater && !isSmaller && !isEqual) {
+                return;
+            }
+            auto *method = dyn_cast<CXXMemberCallExpr>(binaryOpt->getLHS());
+            if (!method || !clazy::functionIsOneOf(method->getMethodDecl(), {"size", "count", "length"})) {
+                return;
+            }
+            if (!clazy::classIsOneOf(method->getRecordDecl(), {"QList", "QHash", "QMap", "QMultiHash", "QMultiMap"}) || method->getNumArgs() != 0) {
+                return;
+            }
+
+            // In qt5, it there is no implicit cast inbetween
+            auto intliteral = isa<ImplicitCastExpr>(binaryOpt->getRHS())
+                ? dyn_cast<IntegerLiteral>(dyn_cast<ImplicitCastExpr>(binaryOpt->getRHS())->getSubExpr())
+                : dyn_cast<IntegerLiteral>(binaryOpt->getRHS());
+
+            if (!intliteral) {
+                return;
+            }
+            auto *baseExpr = dyn_cast<MemberExpr>(method->getCallee())->getBase()->IgnoreParenImpCasts();
+            StringRef baseText = Lexer::getSourceText(CharSourceRange::getTokenRange(baseExpr->getSourceRange()), sm(), lo());
+
+            if ((isEqual && intliteral->getValue().isZero()) || (isSmaller && intliteral->getValue().isOne())) {
+                emitWarning(stmt->getBeginLoc(),
+                            "use isEmpty() instead",
+                            {FixItHint::CreateReplacement(binaryOpt->getSourceRange(), baseText.str() + ".isEmpty()")});
+            }
+
+            if ((isGreater && intliteral->getValue().isZero())) {
+                emitWarning(stmt->getBeginLoc(),
+                            "use isEmpty() instead",
+                            {FixItHint::CreateReplacement(binaryOpt->getSourceRange(), "!" + baseText.str() + ".isEmpty()")});
+            }
+        }
+    }
     auto *cast = dyn_cast<ImplicitCastExpr>(stmt);
     if (!cast || cast->getCastKind() != clang::CK_IntegralToBoolean) {
         return;

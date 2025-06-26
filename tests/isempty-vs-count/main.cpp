@@ -25,3 +25,9 @@ void test()
     if (getList().count()) {} // Warning
 }
 
+void testExplicitConversion()
+{
+    if (getList().count() == 0) {} // Warning
+    if (getList().count() < 1) {} // Warning
+    if (getList().count() > 0) {} // Warning
+}
