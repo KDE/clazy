@@ -120,9 +120,7 @@ CheckBase::CheckBase(const std::string &name, Options options)
 {
 }
 
-CheckBase::~CheckBase()
-{
-}
+CheckBase::~CheckBase() = default;
 
 void CheckBase::VisitStmt(Stmt *)
 {
@@ -277,8 +275,8 @@ void CheckBase::reallyEmitWarning(clang::SourceLocation loc, const std::string &
 void CheckBase::queueManualFixitWarning(clang::SourceLocation loc, const std::string &message)
 {
     if (!manualFixitAlreadyQueued(loc)) {
-        m_queuedManualInterventionWarnings.push_back({loc, message});
-        m_emittedManualFixItsWarningsInMacro.push_back(loc.getRawEncoding());
+        m_queuedManualInterventionWarnings.emplace_back(loc, message);
+        m_emittedManualFixItsWarningsInMacro.emplace_back(loc.getRawEncoding());
     }
 }
 

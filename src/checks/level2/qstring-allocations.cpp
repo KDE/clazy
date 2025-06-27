@@ -32,8 +32,7 @@
 #include <llvm/Support/Casting.h>
 #include <llvm/Support/raw_ostream.h>
 
-#include <assert.h>
-
+#include <cassert>
 #include <utility>
 
 using namespace clang;
@@ -63,7 +62,7 @@ enum Fixit {
 struct Latin1Expr {
     CXXConstructExpr *qlatin1ctorexpr;
     bool enableFixit;
-    bool isValid() const
+    [[nodiscard]] bool isValid() const
     {
         return qlatin1ctorexpr != nullptr;
     }

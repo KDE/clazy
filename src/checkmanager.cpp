@@ -15,10 +15,10 @@
 #include <llvm/Support/raw_ostream.h>
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
 #include <iterator>
-#include <stdlib.h>
-#include <string.h>
 
 using namespace clang;
 
@@ -222,7 +222,7 @@ std::vector<std::pair<CheckBase *, RegisteredCheck>> CheckManager::createChecks(
     std::vector<std::pair<CheckBase *, RegisteredCheck>> checks;
     checks.reserve(requestedChecks.size() + 1);
     for (const auto &check : requestedChecks) {
-        checks.push_back({createCheck(check.name), check});
+        checks.emplace_back(createCheck(check.name), check);
     }
 
     return checks;

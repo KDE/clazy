@@ -21,9 +21,7 @@
 
 using namespace clang;
 
-SuppressionManager::SuppressionManager()
-{
-}
+SuppressionManager::SuppressionManager() = default;
 
 bool SuppressionManager::isSuppressed(const std::string &checkName,
                                       clang::SourceLocation loc,

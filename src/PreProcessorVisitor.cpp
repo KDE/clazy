@@ -17,8 +17,8 @@
 #include <clang/Lex/Token.h>
 #include <llvm/ADT/ArrayRef.h>
 
+#include <cstdlib>
 #include <memory>
-#include <stdlib.h>
 
 using namespace clang;
 

@@ -33,8 +33,8 @@
 #include <llvm/Support/Casting.h>
 #include <llvm/Support/raw_ostream.h>
 
+#include <cstdlib>
 #include <mutex>
-#include <stdlib.h>
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -110,7 +110,7 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
 
     std::lock_guard<std::mutex> lock(CheckManager::lock());
 
-    auto astConsumer = std::unique_ptr<ClazyASTConsumer>(new ClazyASTConsumer(m_context));
+    auto astConsumer = std::make_unique<ClazyASTConsumer>(m_context);
     for (const auto &requestedCheck : m_checks) {
         auto *check = requestedCheck.factory();
         check->m_context = m_context;
@@ -129,7 +129,7 @@ static std::string getEnvVariable(const char *name)
     if (result) {
         return result;
     }
-    return std::string();
+    return "";
 }
 
 bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std::string> &args_)
@@ -313,6 +313,17 @@ ClazyStandaloneASTAction::ClazyStandaloneASTAction(const std::string &checkList,
 
 std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
 {
+    auto *cm = CheckManager::instance();
+
+    std::vector<std::string> checks;
+    checks.push_back(m_checkList);
+    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks);
+
+    if (requestedChecks.empty()) {
+        llvm::errs() << "No checks were requested!\n\n";
+        return nullptr;
+    }
+
     auto *context = new ClazyContext(&ci.getASTContext(),
                                      ci.getSourceManager(),
                                      ci.getASTContext().getLangOpts(),
@@ -324,18 +335,6 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
                                      m_options);
     context->registerPreprocessorCallbacks(ci.getPreprocessor());
     auto *astConsumer = new ClazyASTConsumer(context);
-
-    auto *cm = CheckManager::instance();
-
-    std::vector<std::string> checks;
-    checks.push_back(m_checkList);
-    const RegisteredCheck::List requestedChecks = cm->requestedChecks(checks);
-
-    if (requestedChecks.empty()) {
-        llvm::errs() << "No checks were requested!\n"
-                     << "\n";
-        return nullptr;
-    }
 
     for (const auto &requestedCheck : requestedChecks) {
         auto *check = requestedCheck.factory();

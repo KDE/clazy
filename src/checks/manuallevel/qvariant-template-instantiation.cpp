@@ -20,7 +20,7 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <ctype.h>
+#include <cctype>
 #include <vector>
 
 using namespace clang;

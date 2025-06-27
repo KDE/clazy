@@ -16,7 +16,7 @@
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
 #include <llvm/Support/Regex.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 using namespace clang;
 
@@ -57,11 +57,11 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
     , m_isClangTidy(isClangTidy)
 {
     if (!headerFilter.empty()) {
-        headerFilterRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(headerFilter));
+        headerFilterRegex = std::make_unique<llvm::Regex>(headerFilter);
     }
 
     if (!ignoreDirs.empty()) {
-        ignoreDirsRegex = std::unique_ptr<llvm::Regex>(new llvm::Regex(ignoreDirs));
+        ignoreDirsRegex = std::make_unique<llvm::Regex>(ignoreDirs);
     }
 
     if (exportFixesEnabled() && context) {

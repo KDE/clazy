@@ -74,7 +74,6 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
     }
 
     DeclRefExpr *senderDeclRef = nullptr;
-    const MemberExpr *senderMemberExpr = nullptr;
 
     Stmt *s = callExpr->getArg(0);
     while (s) {
@@ -82,7 +81,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
             break;
         }
 
-        if ((senderMemberExpr = dyn_cast<MemberExpr>(s))) {
+        if (isa<MemberExpr>(s)) {
             break;
         }
 

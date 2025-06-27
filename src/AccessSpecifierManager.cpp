@@ -62,16 +62,16 @@ static void sorted_insert(ClazySpecifierList &v, const ClazyAccessSpecifier &ite
 
 class AccessSpecifierPreprocessorCallbacks : public clang::PPCallbacks
 {
-    AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
-
 public:
-    AccessSpecifierPreprocessorCallbacks(const clang::SourceManager &sm, clang::LangOptions opts)
+    AccessSpecifierPreprocessorCallbacks(const clang::SourceManager &sm, const clang::LangOptions &opts)
         : clang::PPCallbacks()
         , m_sm(sm)
         , m_lo(opts)
     {
         m_qtAccessSpecifiers.reserve(30); // bootstrap it
     }
+
+    AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
 
     void MacroExpands(const Token &MacroNameTok, const MacroDefinition &, SourceRange range, const MacroArgs *) override
     {
@@ -124,7 +124,7 @@ public:
     std::vector<unsigned> m_scriptables; // Q_SCRIPTABLE
     ClazySpecifierList m_qtAccessSpecifiers;
     const SourceManager &m_sm;
-    const LangOptions m_lo;
+    const LangOptions &m_lo;
 };
 
 AccessSpecifierManager::AccessSpecifierManager(Preprocessor &pi, bool exportFixesEnabled)

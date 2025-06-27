@@ -25,7 +25,7 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <assert.h>
+#include <cassert>
 
 using namespace clang;
 

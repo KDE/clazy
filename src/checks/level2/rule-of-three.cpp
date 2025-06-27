@@ -97,21 +97,21 @@ void RuleOfThree::VisitDecl(clang::Decl *decl)
     std::vector<StringRef> hasList;
     std::vector<StringRef> missingList;
     if (hasUserDtor) {
-        hasList.push_back("dtor");
+        hasList.emplace_back("dtor");
     } else {
-        missingList.push_back("dtor");
+        missingList.emplace_back("dtor");
     }
 
     if (hasUserCopyCtor) {
-        hasList.push_back("copy-ctor");
+        hasList.emplace_back("copy-ctor");
     } else {
-        missingList.push_back("copy-ctor");
+        missingList.emplace_back("copy-ctor");
     }
 
     if (hasUserCopyAssign) {
-        hasList.push_back("copy-assignment");
+        hasList.emplace_back("copy-assignment");
     } else {
-        missingList.push_back("copy-assignment");
+        missingList.emplace_back("copy-assignment");
     }
 
     const int numNotImplemented = missingList.size();

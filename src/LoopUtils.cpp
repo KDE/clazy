@@ -101,7 +101,7 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
 
     // foreach with C++17
     if (auto *bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(loop)) {
-        CallExpr *callExpr = dyn_cast<CallExpr>(bindTempExpr->getSubExpr());
+        auto *callExpr = dyn_cast<CallExpr>(bindTempExpr->getSubExpr());
         if (!callExpr)
             return nullptr;
         FunctionDecl *func = callExpr->getDirectCallee();

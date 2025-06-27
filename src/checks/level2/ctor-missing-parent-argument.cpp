@@ -42,7 +42,7 @@ void CtorMissingParentArgument::VisitDecl(Decl *decl)
     auto *record = dyn_cast<CXXRecordDecl>(decl);
     bool ok = false;
 
-    if (!clazy::isQObject(record)) {
+    if (!record || !clazy::isQObject(record)) {
         return;
     }
 

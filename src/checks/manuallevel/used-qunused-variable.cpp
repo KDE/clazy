@@ -42,21 +42,17 @@ private:
     {
         if (!S)
             return false;
-        if (DeclRefExpr *DRE = dyn_cast<DeclRefExpr>(S)) {
-            if (DRE->getDecl() == param) {
-                return true;
-            }
+        if (auto *DRE = dyn_cast<DeclRefExpr>(S); DRE && DRE->getDecl() == param) {
+            return true;
         }
 
-        if (CompoundStmt *cs = dyn_cast<CompoundStmt>(S)) {
+        if (auto *cs = dyn_cast<CompoundStmt>(S)) {
             for (auto *child : cs->children()) {
                 if (auto *castExpr = dyn_cast<CastExpr>(child); castExpr && castExpr->getType().getAsString() == "void") {
                     for (auto *possibleDeclRef : castExpr->children()) {
-                        if (DeclRefExpr *declRef = dyn_cast<DeclRefExpr>(possibleDeclRef)) {
-                            if (declRef->getDecl() == param) {
-                                // We found a void cast
-                                qunusedParamUsage = possibleDeclRef;
-                            }
+                        if (auto *declRef = dyn_cast<DeclRefExpr>(possibleDeclRef); declRef && declRef->getDecl() == param) {
+                            // We found a void cast
+                            qunusedParamUsage = possibleDeclRef;
                         }
                     }
                 }

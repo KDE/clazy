@@ -18,7 +18,7 @@
 #include <llvm/ADT/StringRef.h>
 
 #include <algorithm>
-#include <ctype.h>
+#include <cctype>
 #include <vector>
 
 using namespace clang;

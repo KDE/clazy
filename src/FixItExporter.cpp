@@ -120,11 +120,11 @@ tooling::Replacement FixItExporter::ConvertFixIt(const FixItHint &Hint)
             }
             clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, SourceMgr, LangOpts));
             StringRef Text(SourceMgr.getCharacterData(b), SourceMgr.getCharacterData(e) - SourceMgr.getCharacterData(b));
-            return tooling::Replacement(SourceMgr, Hint.RemoveRange, Text);
+            return {SourceMgr, Hint.RemoveRange, Text};
         }
-        return tooling::Replacement(SourceMgr, Hint.RemoveRange, "");
+        return {SourceMgr, Hint.RemoveRange, ""};
     }
-    return tooling::Replacement(SourceMgr, Hint.RemoveRange, Hint.CodeToInsert);
+    return {SourceMgr, Hint.RemoveRange, Hint.CodeToInsert};
 }
 
 void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const Diagnostic &Info)

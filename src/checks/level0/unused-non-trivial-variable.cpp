@@ -25,7 +25,7 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 #include <vector>
 

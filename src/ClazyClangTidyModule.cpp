@@ -62,7 +62,7 @@ public:
         s_enabledChecks.emplace_back(CheckName);
     }
 
-    ~ClazyCheck()
+    ~ClazyCheck() override
     {
         for (auto &checkPair : m_allChecks) {
             delete checkPair.first;
@@ -88,7 +88,7 @@ public:
             m_visitors.addCheck(availCheck.options, check);
 
             check->registerASTMatchers(*Finder);
-            m_allChecks.emplace_back(std::pair{check, availCheck.options});
+            m_allChecks.emplace_back(check, availCheck.options);
         }
     }
 
@@ -123,7 +123,7 @@ public:
     const bool m_shouldRunClazyChecks;
 
     ClangTidyContext *clangTidyContext;
-    ClazyContext *clazyContext;
+    ClazyContext *clazyContext = nullptr;
     std::vector<std::pair<CheckBase *, RegisteredCheck::Options>> m_allChecks;
     clazy::VisitHelper::Visitors m_visitors;
     // setting the engine fixes a weird crash, but we still run in a codepath where we do not know the check name in the end

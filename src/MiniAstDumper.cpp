@@ -13,9 +13,7 @@
 
 using namespace clang;
 
-MiniAstDumperASTAction::MiniAstDumperASTAction()
-{
-}
+MiniAstDumperASTAction::MiniAstDumperASTAction() = default;
 
 bool MiniAstDumperASTAction::ParseArgs(const CompilerInstance &, const std::vector<std::string> &)
 {
@@ -24,16 +22,12 @@ bool MiniAstDumperASTAction::ParseArgs(const CompilerInstance &, const std::vect
 
 std::unique_ptr<ASTConsumer> MiniAstDumperASTAction::CreateASTConsumer(CompilerInstance &, llvm::StringRef)
 {
-    return std::unique_ptr<MiniASTDumperConsumer>(new MiniASTDumperConsumer());
+    return std::make_unique<MiniASTDumperConsumer>();
 }
 
-MiniASTDumperConsumer::MiniASTDumperConsumer()
-{
-}
+MiniASTDumperConsumer::MiniASTDumperConsumer() = default;
 
-MiniASTDumperConsumer::~MiniASTDumperConsumer()
-{
-}
+MiniASTDumperConsumer::~MiniASTDumperConsumer() = default;
 
 bool MiniASTDumperConsumer::VisitDecl(Decl *decl)
 {
