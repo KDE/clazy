@@ -11,3 +11,4 @@ isempty-vs-count/main.cpp:25:9: warning: use isEmpty() instead [-Wclazy-isempty-
 isempty-vs-count/main.cpp:30:9: warning: use isEmpty() instead [-Wclazy-isempty-vs-count]
 isempty-vs-count/main.cpp:31:9: warning: use isEmpty() instead [-Wclazy-isempty-vs-count]
 isempty-vs-count/main.cpp:32:9: warning: use isEmpty() instead [-Wclazy-isempty-vs-count]
+isempty-vs-count/main.cpp:33:26: warning: use isEmpty() instead [-Wclazy-isempty-vs-count]

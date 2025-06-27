@@ -62,7 +62,7 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
                             {FixItHint::CreateReplacement(binaryOpt->getSourceRange(), baseText.str() + ".isEmpty()")});
             }
 
-            if ((isGreater && intliteral->getValue().isZero())) {
+            if (isGreater && intliteral->getValue().isZero()) {
                 emitWarning(stmt->getBeginLoc(),
                             "use isEmpty() instead",
                             {FixItHint::CreateReplacement(binaryOpt->getSourceRange(), "!" + baseText.str() + ".isEmpty()")});

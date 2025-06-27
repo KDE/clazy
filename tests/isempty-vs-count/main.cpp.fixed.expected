@@ -30,4 +30,5 @@ void testExplicitConversion()
     if (getList().isEmpty()) {} // Warning
     if (getList().isEmpty()) {} // Warning
     if (!getList().isEmpty()) {} // Warning
+    const bool myCheck = !getList().isEmpty();
 }

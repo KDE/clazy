@@ -16,6 +16,9 @@ them all! All checks can be enabled using "clazy-<checkname>". For example:
 granular.
 The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin
 must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.
+* isempty-vs-count now provides fixits for all scenarios. Also, cases where
+the length is compared using "== 0", "< 1", "> 0" are now reported and have
+fixits.
 
 Version 1.15
 ~~~~~~~~~~~~

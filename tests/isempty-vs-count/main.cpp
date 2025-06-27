@@ -30,4 +30,5 @@ void testExplicitConversion()
     if (getList().count() == 0) {} // Warning
     if (getList().count() < 1) {} // Warning
     if (getList().count() > 0) {} // Warning
+    const bool myCheck = getList().count() > 0;
 }
