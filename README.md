@@ -1,35 +1,34 @@
 clazy is a compiler plugin which allows clang to understand Qt semantics. You get more than 50 Qt related compiler warnings, ranging from unneeded memory allocations to misusage of API, including fix-its for automatic refactoring.
 
-Table of contents
-=================
+# Table of contents
 
-   * [Source Code](#source-code)
-   * [Build Instructions](#build-instructions)
-      * [Linux](#linux)
-         * [Install dependencies](#install-dependencies)
-         * [Build and install clang](#build-and-install-clang)
-         * [Build clazy](#build-clazy)
-      * [Windows](#windows)
-         * [Build and install clang](#build-and-install-clang-1)
-         * [Build clazy](#build-clazy-1)
-      * [macOS with MacPorts](#macos-with-macports)
-         * [Install clang](#install-clang)
-         * [Build clazy](#build-clazy-2)
-      * [macOS with Homebrew](#macos-with-homebrew)
-         * [Install clang](#install-clang-1)
-         * [Build clazy](#build-clazy-3)
-   * [Setting up your project to build with clazy](#setting-up-your-project-to-build-with-clazy)
-   * [List of checks](#list-of-checks)
-   * [Selecting which checks to enable](#selecting-which-checks-to-enable)
-      * [Example via env variable](#example-via-env-variable)
-      * [Example via compiler argument](#example-via-compiler-argument)
-   * [clazy-standalone and JSON database support](#clazy-standalone-and-json-database-support)
-   * [Enabling Fixits](#enabling-fixits)
-   * [Troubleshooting](#troubleshooting)
-   * [Reducing warning noise](#reducing-warning-noise)
-   * [Reporting bugs and wishes](#reporting-bugs-and-wishes)
-   * [Authors](#authors)
-   * [Contributing patches](#contributing-patches)
+- [Source Code](#source-code)
+- [Build Instructions](#build-instructions)
+  - [Linux](#linux)
+    - [Install dependencies](#install-dependencies)
+    - [Build and install clang](#build-and-install-clang)
+    - [Build clazy](#build-clazy)
+  - [Windows](#windows)
+    - [Build and install clang](#build-and-install-clang-1)
+    - [Build clazy](#build-clazy-1)
+  - [macOS with MacPorts](#macos-with-macports)
+    - [Install clang](#install-clang)
+    - [Build clazy](#build-clazy-2)
+  - [macOS with Homebrew](#macos-with-homebrew)
+    - [Install clang](#install-clang-1)
+    - [Build clazy](#build-clazy-3)
+- [Setting up your project to build with clazy](#setting-up-your-project-to-build-with-clazy)
+- [List of checks](#list-of-checks)
+- [Selecting which checks to enable](#selecting-which-checks-to-enable)
+  - [Example via env variable](#example-via-env-variable)
+  - [Example via compiler argument](#example-via-compiler-argument)
+- [clazy-standalone and JSON database support](#clazy-standalone-and-json-database-support)
+- [Enabling Fixits](#enabling-fixits)
+- [Troubleshooting](#troubleshooting)
+- [Reducing warning noise](#reducing-warning-noise)
+- [Reporting bugs and wishes](#reporting-bugs-and-wishes)
+- [Authors](#authors)
+- [Contributing patches](#contributing-patches)
 
 # Source Code
 
@@ -38,28 +37,28 @@ You can get clazy from:
 - <https://github.com/KDE/clazy>
 - <https://invent.kde.org/sdk/clazy>
 
-
 # Supported platforms
 
 Clazy has been tested on Linux, macOS and Windows/MSVC.
 Other platforms are not supported but we'll gladly accept patches.
 
-
 # Build Instructions
+
 ## Linux
 
 ### Install dependencies
+
 - OpenSUSE tumbleweed: `zypper install cmake git-core llvm llvm-devel llvm-clang llvm-clang-devel`
 - Ubuntu: `apt install g++ cmake clang llvm-dev git-core libclang-dev`
 - Archlinux: `pacman -S make llvm clang python2 cmake git gcc`
-- Fedora: be sure to *remove* the llvm-static package and only install the one with dynamic libraries
+- Fedora: be sure to _remove_ the llvm-static package and only install the one with dynamic libraries
 - Other distros: Check llvm/clang build docs.
 
 ### Build and install clang
+
 clang and LLVM >= 11.0 are required.
 
 If your distro provides clang then you can skip this step.
-
 
 ```
   $ git clone https://github.com/llvm-mirror/llvm.git <some_directory>
@@ -72,6 +71,7 @@ If your distro provides clang then you can skip this step.
 ```
 
 ### Build clazy
+
 ```
   $ cd clazy/
   $ cmake -DCMAKE_INSTALL_PREFIX=<prefix> -DCMAKE_BUILD_TYPE=Release -G Ninja
@@ -84,6 +84,7 @@ See troubleshooting section if you have problems.
 ## Windows
 
 ### Build and install clang
+
 These instructions assume your terminal is suitable for development.
 Ninja (or equivalent), git, cmake, and cl (msvc2022) should be in your PATH.
 
@@ -118,6 +119,7 @@ Be sure to point CLANG_LIBRARY_IMPORT to clang.lib. It's probably inside your LL
 ## macOS with MacPorts
 
 ### Install clang
+
 ```
 $ sudo port install llvm-11 clang-11 cmake ninja coreutils
 $ sudo ln -sf /opt/local/bin/llvm-config-mp-11 /opt/local/bin/llvm-config
@@ -125,6 +127,7 @@ $ sudo port select --set clang mp-clang-11
 ```
 
 ### Build clazy
+
 ```
   $ export CXX=clang++
   $ cmake -G Ninja
@@ -157,6 +160,7 @@ $ brew install --with-clang llvm
 ```
 
 ### Build clazy
+
 ```
   $ export CXX=clang++
   $ export LLVM_ROOT=/usr/local/opt/llvm
@@ -181,7 +185,7 @@ you can choose which one to use by setting the CLANGXX environment variable, lik
 `export CLANGXX=clang++-11; clazy`
 
 To build a CMake project use:
- `cmake . -DCMAKE_CXX_COMPILER=clazy`
+`cmake . -DCMAKE_CXX_COMPILER=clazy`
 and rebuild.
 
 To make it the compiler for qmake projects, just run qmake like:
@@ -209,6 +213,7 @@ Read on if you want to enable/disable which checks are run.
 # List of checks
 
 There are many checks and they are divided in levels:
+
 - level0: Very stable checks, 99.99% safe, mostly no false-positives, very desirable
 - level1: The default level. Very similar to level 0, slightly more false-positives but very few.
 - level2: Also very few false-positives, but contains noisy checks which not everyone agree should be default.
@@ -332,12 +337,15 @@ To specify a list of checks to run, or to choose a level, you can use the `CLAZY
 You can disable checks by prefixing with `no-`, in case you don't want all checks from a given level.
 
 ## Example via env variable
+
 ```
 export CLAZY_CHECKS="unneeded-cast,qmap-with-pointer-key,virtual-call-ctor" # Enables only these 3 checks
 export CLAZY_CHECKS="level0,no-qenums" # Enables all checks from level0, except for qenums
 export CLAZY_CHECKS="level0,detaching-temporary" # Enables all from level0 and also detaching-temporary
 ```
+
 ## Example via compiler argument
+
 `clazy -Xclang -plugin-arg-clazy -Xclang level0,detaching-temporary`
 Don't forget to re-run cmake/qmake/etc if you altered the c++ flags to specify flags.
 
@@ -351,7 +359,6 @@ Note: If you're using the AppImage, use `Clazy-x86_64.AppImage --standalone` ins
 
 `clazy-standalone` supports the same env variables as the clazy plugin. You can also specify a list of checks via
 the `-checks` argument.
-
 
 Running on one cpp file:
 `clazy-standalone -checks=install-event-filter,qmap-with-pointer-key,level0 -p compile_commands.json my.file.cpp`
@@ -380,7 +387,22 @@ $ ln -sf /opt/local/libexec/llvm-8.0/include/c++/ /myprefix/include/c++ # Requir
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
 
-`clang-tidy` support will be added after <https://github.com/llvm/llvm-project/issues/32086> is fixed.
+# Clang-Tidy
+
+Clazy optionally builds a plugin for integrating its checks into `clang-tidy`. This needs to be explicitly loaded using `-load=ClazyClangTidy.so`.
+In case the plugin is not in a standard location or in the `LD_LIBRARY_PATH` environment variable, an ansolute path should be specified.
+
+Checks need to be enabled explicitly. Due to clang-tidy only reporting warnings from enabled checks, one can not specify levels.
+For example `-checks=clazy-qdatetime-utc,clazy-qgetenv"`
+
+<!-- jq -r '[.checks[] | select(.level == 0) | "clazy-" + .name] | join(" ")' checks.json -->
+
+To enable all checks from level0 use:
+`clazy-overloaded-signal,clazy-connect-by-name,clazy-connect-non-signal,clazy-qstring-comparison-to-implicit-char,clazy-wrong-qevent-cast,clazy-lambda-in-connect,clazy-lambda-unique-connection,clazy-qdatetime-utc,clazy-qgetenv,clazy-qstring-insensitive-allocation,clazy-fully-qualified-moc-types,clazy-unused-non-trivial-variable,clazy-connect-not-normalized,clazy-mutable-container-key,clazy-qenums,clazy-qmap-with-pointer-key,clazy-qstring-ref,clazy-strict-iterators,clazy-writing-to-temporary,clazy-container-anti-pattern,clazy-qcolor-from-literal,clazy-qfileinfo-exists,clazy-qstring-arg,clazy-empty-qstringliteral,clazy-qt-macros,clazy-temporary-iterator,clazy-wrong-qglobalstatic,clazy-lowercase-qml-type-name,clazy-no-module-include,clazy-use-static-qregularexpression`
+To enable all checks from level1 use:
+`clazy-auto-unexpected-qstringbuilder,clazy-connect-3arg-lambda,clazy-const-signal-or-slot,clazy-detaching-temporary,clazy-foreach,clazy-incorrect-emit,clazy-install-event-filter,clazy-non-pod-global-static,clazy-post-event,clazy-qdeleteall,clazy-qlatin1string-non-ascii,clazy-qproperty-without-notify,clazy-qstring-left,clazy-range-loop-detach,clazy-range-loop-reference,clazy-returning-data-from-temporary,clazy-rule-of-two-soft,clazy-child-event-qobject-cast,clazy-virtual-signal,clazy-overridden-signal,clazy-qhash-namespace,clazy-skipped-base-method,clazy-readlock-detaching`
+To enable all checks from level2 use:
+`clazy-ctor-missing-parent-argument,clazy-base-class-event,clazy-copyable-polymorphic,clazy-function-args-by-ref,clazy-function-args-by-value,clazy-global-const-char-pointer,clazy-implicit-casts,clazy-missing-qobject-macro,clazy-missing-typeinfo,clazy-old-style-connect,clazy-qstring-allocations,clazy-returning-void-expression,clazy-rule-of-three,clazy-virtual-call-ctor,clazy-static-pmf`
 
 # Enabling Fixits
 
@@ -413,7 +435,7 @@ with each other modifying the same source lines.
   Alternatively, if you want to use llvm-static, see next item.
 
 - CommandLine Error: `Option 'foo' registered more than once!`
-  Means you're building against a static version of LLVM (*.a files instead of *.so).
+  Means you're building against a static version of LLVM (_.a files instead of _.so).
   Try passing to cmake -DLINK_CLAZY_TO_LLVM=OFF when building clazy, this was tested
   successfully against a static LLVM 7.0, and might work with other versions.
 
@@ -449,16 +471,16 @@ You can also exclude paths using a regexp by setting CLAZY_IGNORE_DIRS, for exam
 You can also suppress individual warnings by file or by line by inserting comments:
 
 - To disable clazy in a specific source file, insert this comment, anywhere in the file:
-`// clazy:skip`
+  `// clazy:skip`
 
 - To disable specific checks in a source file, insert a comment such as
-`// clazy:excludeall=check1,check2`
+  `// clazy:excludeall=check1,check2`
 
 - To disable specific checks in specific source lines, insert a comment in the same line as the warning:
-`(...) // clazy:exclude=check1,check2`
+  `(...) // clazy:exclude=check1,check2`
 
 - To disable specific checks in source files for the following line, insert a comment:
-`// clazy:exclude=check1,check2`
+  `// clazy:exclude=check1,check2`
 
 Don't include the `clazy-` prefix. If, for example, you want to disable qstring-allocations you would write:
 `// clazy:exclude=qstring-allocations` not `clazy-qstring-allocations`.
@@ -469,7 +491,7 @@ Don't include the `clazy-` prefix. If, for example, you want to disable qstring-
 - IRC: #kde-clazy (irc.libera.chat)
 - E-mail: <smartins at kde.org>
 
-When reporting a bug *please* include a minimal compilable testcase. No matter
+When reporting a bug _please_ include a minimal compilable testcase. No matter
 how simple it is, it saves me time from deciphering a bug report. Time spent
 doing triaging is time not spent writing fixes.
 
@@ -477,7 +499,6 @@ A minimal testcase is also something I can copy to the test suite.
 
 Make sure you can reproduce with clazy (outside of QtCreator), otherwise it can be a QtCreator bug instead,
 which you can report at <https://bugreports.qt.io/>.
-
 
 # Authors
 
@@ -502,12 +523,11 @@ with contributions from:
 - Waqar Ahmed
 - Alexander Lohnau
 
-qt6-* porting checks written by Lucie Gerard <lucie.gerard@qt.io>
+qt6-\* porting checks written by Lucie Gerard <lucie.gerard@qt.io>
 
 and thanks to:
 
 - Klarälvdalens Datakonsult AB (<http://www.kdab.com>), for letting me work on clazy as a research project
-
 
 # Contributing patches
 
