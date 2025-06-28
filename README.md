@@ -399,7 +399,7 @@ In case the plugin is not in a standard location or in the `LD_LIBRARY_PATH` env
 Checks need to be enabled explicitly. Due to clang-tidy only reporting warnings from enabled checks, one can not specify levels.
 For example `-checks=clazy-qdatetime-utc,clazy-qgetenv"`
 
-<!-- jq -r '[.checks[] | select(.level == 0) | "clazy-" + .name] | join(" ")' checks.json -->
+<!-- jq -r '[.checks[] | select(.level == 0) | "clazy-" + .name] | join(",")' checks.json -->
 
 To enable all checks from level0 use:
 `clazy-overloaded-signal,clazy-connect-by-name,clazy-connect-non-signal,clazy-qstring-comparison-to-implicit-char,clazy-wrong-qevent-cast,clazy-lambda-in-connect,clazy-lambda-unique-connection,clazy-qdatetime-utc,clazy-qgetenv,clazy-qstring-insensitive-allocation,clazy-fully-qualified-moc-types,clazy-unused-non-trivial-variable,clazy-connect-not-normalized,clazy-mutable-container-key,clazy-qenums,clazy-qmap-with-pointer-key,clazy-qstring-ref,clazy-strict-iterators,clazy-writing-to-temporary,clazy-container-anti-pattern,clazy-qcolor-from-literal,clazy-qfileinfo-exists,clazy-qstring-arg,clazy-empty-qstringliteral,clazy-qt-macros,clazy-temporary-iterator,clazy-wrong-qglobalstatic,clazy-lowercase-qml-type-name,clazy-no-module-include,clazy-use-static-qregularexpression`
@@ -422,14 +422,11 @@ with each other modifying the same source lines.
 
 # Troubleshooting
 
-- CommandLine Error: `Option 'opt-bisect-limit' registered more than once!`
-  Remove the llvm-static package and use the dynamically linked libraries instead.
-  Alternatively, if you want to use llvm-static, see next item.
-
 - CommandLine Error: `Option 'foo' registered more than once!`
   Means you're building against a static version of LLVM (_.a files instead of _.so).
   Try passing to cmake -DLINK_CLAZY_TO_LLVM=OFF when building clazy, this was tested
   successfully against a static LLVM 7.0, and might work with other versions.
+  In case you build LLVM from source, try adding `-DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON` to your CMake options
 
 - Some checks are mysteriously not producing warnings or not applying fixits ?
   Check if you have ccache interfering and turn it off.
