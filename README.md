@@ -418,19 +418,7 @@ with each other modifying the same source lines.
 
 # Troubleshooting
 
-- clang: symbol lookup error: `/usr/lib/x86_64-linux-gnu/ClazyPlugin.so: undefined symbol: _ZNK5clang15DeclarationName11getAsStringEv`.
-  This is due to mixing ABIs. Your clang/llvm was compiled with the [new gcc c++ ABI][1] but you compiled the clazy plugin with clang (which uses [the old ABI][2]).
-
-  The solution is to build the clazy plugin with gcc or use a distro which hasn't migrated to gcc5 ABI yet, such as archlinux.
-
-[1]: https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
-[2]: https://llvm.org/bugs/show_bug.cgi?id=23529
-
-- [Fedora] cmake can't find LLVM ?
-  Try building llvm/clang yourself
-  (There are reports that /usr/share/llvm/cmake/LLVM-Config.cmake is buggy).
-
-- [Fedora] CommandLine Error: `Option 'opt-bisect-limit' registered more than once!`
+- CommandLine Error: `Option 'opt-bisect-limit' registered more than once!`
   Remove the llvm-static package and use the dynamically linked libraries instead.
   Alternatively, if you want to use llvm-static, see next item.
 
@@ -488,8 +476,7 @@ Don't include the `clazy-` prefix. If, for example, you want to disable qstring-
 # Reporting bugs and wishes
 
 - bug tracker: <https://bugs.kde.org/enter_bug.cgi?product=clazy>
-- IRC: #kde-clazy (irc.libera.chat)
-- E-mail: <smartins at kde.org>
+- GitLab issues: https://invent.kde.org/sdk/clazy/-/issues
 
 When reporting a bug _please_ include a minimal compilable testcase. No matter
 how simple it is, it saves me time from deciphering a bug report. Time spent
