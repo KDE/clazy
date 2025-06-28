@@ -438,13 +438,13 @@ def generate_readme(checks):
 
     new_text_to_insert = ""
     for level in ['-1', '0', '1', '2']:
-        new_text_to_insert += "- Checks from %s:" % level_num_to_name(int(level)) + "\n"
+        new_text_to_insert += "- Checks from %s:" % level_num_to_name(int(level)) + "\n\n"
         for c in checks:
             if str(c.level) == level:
                 fixits_text = c.fixits_text()
                 if fixits_text:
-                    fixits_text = "    " + fixits_text
-                new_text_to_insert += "    - [%s](%sREADME-%s.md)%s" % (c.name, docs_relative_path(), c.name, fixits_text) + "\n"
+                    fixits_text = " " + fixits_text
+                new_text_to_insert += "  - [%s](%sREADME-%s.md)%s" % (c.name, docs_relative_path(), c.name, fixits_text) + "\n"
         new_text_to_insert += "\n"
 
 
