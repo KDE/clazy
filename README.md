@@ -88,8 +88,6 @@ See troubleshooting section if you have problems.
 These instructions assume your terminal is suitable for development.
 Ninja (or equivalent), git, cmake, and cl (msvc2022) should be in your PATH.
 
-clang and LLVM >= 11.0 are required.
-
 Be sure to pass -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON to CMake when building LLVM, otherwise clazy won't work.
 
 ```
@@ -394,7 +392,7 @@ If that doesn't work, run `clang -v` and check what's the InstalledDir. Move cla
 # Clang-Tidy
 
 Clazy optionally builds a plugin for integrating its checks into `clang-tidy`. This needs to be explicitly loaded using `-load=ClazyClangTidy.so`.
-In case the plugin is not in a standard location or in the `LD_LIBRARY_PATH` environment variable, an ansolute path should be specified.
+In case the plugin is not in a standard location or in the `LD_LIBRARY_PATH` environment variable, an absolute path should be specified.
 
 Checks need to be enabled explicitly. Due to clang-tidy only reporting warnings from enabled checks, one can not specify levels.
 For example `-checks=clazy-qdatetime-utc,clazy-qgetenv"`
@@ -423,7 +421,7 @@ with each other modifying the same source lines.
 # Troubleshooting
 
 - CommandLine Error: `Option 'foo' registered more than once!`
-  Means you're building against a static version of LLVM (_.a files instead of _.so).
+  Means you're building against a static version of LLVM (\*.a files instead of \*.so).
   Try passing to cmake -DLINK_CLAZY_TO_LLVM=OFF when building clazy, this was tested
   successfully against a static LLVM 7.0, and might work with other versions.
   In case you build LLVM from source, try adding `-DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON` to your CMake options
