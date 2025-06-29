@@ -80,7 +80,7 @@ bool isAllowedChainedMethod(const std::string &methodName)
 
 void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 {
-    auto *callExpr = dyn_cast<CallExpr>(stm);
+    auto *callExpr = dyn_cast<CallExpr>(stm); // Member or operator call
     if (!callExpr) {
         return;
     }
