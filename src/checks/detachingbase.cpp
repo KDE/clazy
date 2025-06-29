@@ -16,7 +16,6 @@
 #include <llvm/ADT/StringRef.h>
 
 #include <unordered_map>
-#include <vector>
 
 using namespace clang;
 
@@ -37,15 +36,25 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
     }
 
     StringRef className = clazy::name(record);
+    StringRef methodName = clazy::name(method);
 
-    const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType =
-        detachingMethodType == DetachingMethod ? clazy::detachingMethods() : clazy::detachingMethodsWithConstCounterParts();
-    auto it = methodsByType.find(static_cast<std::string>(className));
+    if (detachingMethodType == DetachingMethod) {
+        const auto &methodsByType = clazy::detachingMethods();
+        auto it = methodsByType.find(className.str());
+        if (it != methodsByType.cend()) {
+            const auto &methods = it->second;
+            return clazy::contains(methods, methodName);
+        }
+    }
+
+    const auto &methodsByType = clazy::detachingMethodsWithConstCounterParts();
+
+    auto it = methodsByType.find(className.str());
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
-        if (clazy::contains(methods, clazy::name(method))) {
-            return true;
-        }
+        return clazy::any_of(methods, [&methodName](auto pair) {
+            return pair.first == methodName;
+        });
     }
 
     return false;

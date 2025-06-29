@@ -71,7 +71,7 @@ public:
             return true;
         }
 
-        const auto methods = clazy::detachingMethodsWithConstCounterParts();
+        const auto methods = clazy::detachingMethods();
         const auto method = methods.find(className);
         if (method == methods.end()) {
             return true;
@@ -97,7 +97,7 @@ public:
             return true;
         }
 
-        const auto methods = clazy::detachingMethodsWithConstCounterParts();
+        const auto &methods = clazy::detachingMethods();
         const auto methodName = clazy::name(call->getMethodDecl());
         if ((recordName == "QReadLocker" || recordName == "QReadWriteLock") && methodName == "unlock") {
             lockRange.setEnd(call->getEndLoc());

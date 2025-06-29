@@ -119,7 +119,8 @@ std::unordered_map<std::string, std::vector<llvm::StringRef>> detachingMethods()
  * Returns a map with the list of method names that detach each container, but only those methods
  * with const counterparts.
  */
-std::unordered_map<std::string, std::vector<llvm::StringRef>> detachingMethodsWithConstCounterParts();
+using MemberConstcounterpartPair = std::pair<llvm::StringRef, llvm::StringRef>;
+std::unordered_map<std::string, std::vector<MemberConstcounterpartPair>> detachingMethodsWithConstCounterParts();
 
 /**
  * Returns true if a type represents a Qt container class.
