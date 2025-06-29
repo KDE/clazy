@@ -80,33 +80,89 @@ std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethods(
 {
     static std::unordered_map<std::string, std::vector<StringRef>> map;
     if (map.empty()) {
-        map = detachingMethodsWithConstCounterParts();
+        const auto &withConst = detachingMethodsWithConstCounterParts();
+        map.reserve(withConst.size());
+        for (const auto &[qtClassname, methods] : withConst) {
+            auto &dst = map[qtClassname];
+            dst.reserve(methods.size());
+            for (const auto &p : methods)
+                dst.emplace_back(p.first);
+        }
+
         map["QVector"].emplace_back("fill");
     }
 
     return map;
 }
 
-std::unordered_map<std::string, std::vector<StringRef>> clazy::detachingMethodsWithConstCounterParts()
+std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> clazy::detachingMethodsWithConstCounterParts()
 {
-    static std::unordered_map<std::string, std::vector<StringRef>> map;
+    static std::unordered_map<std::string, std::vector<std::pair<StringRef, StringRef>>> map;
+
     if (map.empty()) {
-        map["QList"] = {"first", "last", "begin", "end", "rbegin", "rend", "front", "back", "operator[]"};
-        map["QVector"] = {"first", "last", "begin", "end", "rbegin", "rend", "front", "back", "data", "operator[]"};
-        map["QMap"] = {"begin", "end", "first", "find", "last", "operator[]", "lowerBound", "upperBound", "keyValueBegin", "keyValueEnd"};
-        map["QHash"] = {"begin", "end", "find", "operator[]"};
-        map["QLinkedList"] = {"first", "last", "begin", "end", "rbegin", "rend", "front", "back", "operator[]"};
-        map["QSet"] = {"begin", "end", "find", "operator[]"};
-        map["QStack"] = map["QVector"];
-        map["QStack"].emplace_back("top");
-        map["QQueue"] = map["QVector"];
-        map["QQueue"].emplace_back("head");
-        map["QMultiMap"] = map["QMap"];
-        map["QMultiHash"] = map["QHash"];
-        map["QString"] = {"begin", "end", "rbegin", "rend", "data", "operator[]"};
-        map["QByteArray"] = {"begin", "end", "rbegin", "rend", "data", "operator[]"};
-        map["QImage"] = {"bits", "scanLine"};
-        map["QJsonObject"] = {"begin", "end", "operator[]", "find"};
+        using Vec = std::vector<clazy::MemberConstcounterpartPair>;
+        const Vec seqApi = {
+            {"first", "constFirst"},
+            {"last", "constLast"},
+            {"begin", "cbegin"},
+            {"end", "cend"},
+            {"rbegin", "crbegin"},
+            {"rend", "crend"},
+            {"front", "front"}, // same name, const‑qualified overload
+            {"back", "back"}, // idem
+            {"operator[]", "operator[]"}, // idem
+        };
+
+        Vec vecApi = seqApi;
+        vecApi.emplace_back("data", "constData");
+
+        const Vec mapApi = {
+            {"begin", "cbegin"},
+            {"end", "cend"},
+            {"first", "constFirst"},
+            {"find", "constFind"},
+            {"last", "constLast"},
+            {"operator[]", "operator[]"},
+            {"lowerBound", "lowerBound"}, // const overload exists, same name
+            {"upperBound", "upperBound"},
+            {"keyValueBegin", "constKeyValueBegin"},
+            {"keyValueEnd", "constKeyValueEnd"},
+        };
+
+        map.emplace("QList", seqApi);
+        map.emplace("QVector", vecApi);
+        map.emplace("QLinkedList", seqApi);
+
+        Vec stackApi = vecApi;
+        stackApi.emplace_back("top", "top");
+        map.emplace("QStack", std::move(stackApi));
+
+        Vec queueApi = vecApi;
+        queueApi.emplace_back("head", "head");
+        map.emplace("QQueue", std::move(queueApi));
+
+        map.emplace("QMap", mapApi);
+        map.emplace("QMultiMap", mapApi);
+
+        const Vec hashApi = {{"begin", "cbegin"}, {"end", "cend"}, {"find", "constFind"}, {"operator[]", "operator[]"}};
+        map.emplace("QHash", hashApi);
+        map.emplace("QMultiHash", hashApi);
+        map.emplace("QSet", hashApi);
+
+        const Vec stringApi = {
+            {"begin", "cbegin"},
+            {"end", "cend"},
+            {"rbegin", "crbegin"},
+            {"rend", "crend"},
+            {"data", "constData"},
+            {"operator[]", "operator[]"},
+        };
+        map.emplace("QString", stringApi);
+        map.emplace("QByteArray", stringApi);
+
+        map.emplace("QImage", Vec{{"bits", "constBits"}, {"scanLine", "constScanLine"}});
+
+        map.emplace("QJsonObject", Vec{{"begin", "cbegin"}, {"end", "cend"}, {"operator[]", "operator[]"}, {"find", "constFind"}});
     }
 
     return map;
