@@ -30,6 +30,7 @@ public:
 protected:
     enum DetachingMethodType { DetachingMethod, DetachingMethodWithConstCounterPart };
 
+    std::vector<clang::FixItHint> getFixitHints(llvm::StringRef className, llvm::StringRef functionName, clang::CallExpr *callExpr) const;
     bool isDetachingMethod(clang::CXXMethodDecl *, DetachingMethodType = DetachingMethod) const;
 };
 

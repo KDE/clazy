@@ -138,7 +138,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
     StringRef className = clazy::name(classDecl);
 
     const std::unordered_map<std::string, std::vector<StringRef>> &methodsByType = clazy::detachingMethods();
-    auto it = methodsByType.find(static_cast<std::string>(className));
+    auto it = methodsByType.find(className.str());
     auto it2 = m_writeMethodsByType.find(className);
 
     std::vector<StringRef> allowedFunctions;
@@ -161,8 +161,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
 
     if (isReadFunction || isWriteFunction) {
         bool returnTypeIsIterator = false;
-        const CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl();
-        if (returnRecord) {
+        if (const CXXRecordDecl *returnRecord = detachingMethodReturnType->getAsCXXRecordDecl()) {
             returnTypeIsIterator = clazy::name(returnRecord) == "iterator";
         }
 
@@ -171,10 +170,9 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         } else {
             error = std::string("Don't call ") + clazy::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
         }
-    }
 
-    if (!error.empty()) {
-        emitWarning(stm->getBeginLoc(), error);
+        std::vector<FixItHint> hints = getFixitHints(className, functionName, callExpr);
+        emitWarning(stm->getBeginLoc(), error, hints);
     }
 }
 
@@ -195,10 +193,7 @@ bool DetachingTemporary::isDetachingMethod(CXXMethodDecl *method) const
 
     StringRef className = clazy::name(record);
     if (auto it = m_writeMethodsByType.find(className); it != m_writeMethodsByType.cend()) {
-        const auto &methods = it->second;
-        if (clazy::contains(methods, clazy::name(method))) {
-            return true;
-        }
+        return clazy::contains(it->second, clazy::name(method));
     }
 
     return false;

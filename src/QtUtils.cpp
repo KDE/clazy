@@ -110,7 +110,7 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
             {"rend", "crend"},
             {"front", "front"}, // same name, const‑qualified overload
             {"back", "back"}, // idem
-            {"operator[]", "operator[]"}, // idem
+            {"operator[]", "at"},
         };
 
         Vec vecApi = seqApi;
@@ -122,7 +122,7 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
             {"first", "constFirst"},
             {"find", "constFind"},
             {"last", "constLast"},
-            {"operator[]", "operator[]"},
+            {"operator[]", "at"},
             {"lowerBound", "lowerBound"}, // const overload exists, same name
             {"upperBound", "upperBound"},
             {"keyValueBegin", "constKeyValueBegin"},
@@ -144,7 +144,7 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
         map.emplace("QMap", mapApi);
         map.emplace("QMultiMap", mapApi);
 
-        const Vec hashApi = {{"begin", "cbegin"}, {"end", "cend"}, {"find", "constFind"}, {"operator[]", "operator[]"}};
+        const Vec hashApi = {{"begin", "cbegin"}, {"end", "cend"}, {"find", "constFind"}, {"operator[]", "value"}};
         map.emplace("QHash", hashApi);
         map.emplace("QMultiHash", hashApi);
         map.emplace("QSet", hashApi);
@@ -155,14 +155,14 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
             {"rbegin", "crbegin"},
             {"rend", "crend"},
             {"data", "constData"},
-            {"operator[]", "operator[]"},
+            {"operator[]", "at"},
         };
         map.emplace("QString", stringApi);
         map.emplace("QByteArray", stringApi);
 
         map.emplace("QImage", Vec{{"bits", "constBits"}, {"scanLine", "constScanLine"}});
 
-        map.emplace("QJsonObject", Vec{{"begin", "cbegin"}, {"end", "cend"}, {"operator[]", "operator[]"}, {"find", "constFind"}});
+        map.emplace("QJsonObject", Vec{{"begin", "cbegin"}, {"end", "cend"}, {"operator[]", "value"}, {"find", "constFind"}});
     }
 
     return map;
