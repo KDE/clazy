@@ -13,7 +13,7 @@ QList<int> getList()
 }
 void detach1()
 {
-    getList().first(); // Warning
+    getList().constFirst(); // Warning
 }
 
 void detach2()
@@ -38,12 +38,12 @@ void qstrings()
 {
     QString s;
     s.toLatin1().data(); // OK, list isn't shared
-    test_string().first(); // Warning
+    test_string().constFirst(); // Warning
     test_const_string().first(); // OK
     test_const_string_ref().first(); // OK
     test_const_string_ptr()->first(); // OK
 
-    test_string().first(); // Warning
+    test_string().constFirst(); // Warning
     test_string_ref().first(); // Warning
     test_string_ptr()->first(); // OK
 }
@@ -100,29 +100,29 @@ void testWriteMethod()
 
 void testSubscriptOperator()
 {
-    getList()[0]; // Warning
-    if (test_string()[0].isEmpty()) {} // Warning
-    getMap()[0]; // Warning
+    getList().at(0); // Warning
+    if (test_string().at(0).isEmpty()) {} // Warning
+    getMap().at(0); // Warning
     auto m = getMap();
     m[0];
 
-    getList()  [0]; // Warning, test correct fixit range here
-    getList()[   0  ]; // Warning, test correct fixit range here
+    getList()  .at(0); // Warning, test correct fixit range here
+    getList().at(0); // Warning, test correct fixit range here
 }
 
 typedef QList<int> IntList;
 IntList getIntList() { return {}; }
 void testTypedef()
 {
-    getIntList()[0]; // Warning
+    getIntList().at(0); // Warning
 }
 
 QStringList getStringList() { return {}; }
 
 void testDerivedClass()
 {
-    getStringList().first(); // Warning
-    getStringList()[0]; // Warning
+    getStringList().constFirst(); // Warning
+    getStringList().at(0); // Warning
 }
 
 void testQStringListSpecificMethods()
@@ -133,8 +133,8 @@ void testQStringListSpecificMethods()
 QString getString() { return ""; }
 void testQString()
 {
-    getString().begin(); // Warning
-    getString()[1]; // Warning
+    getString().cbegin(); // Warning
+    getString().at(1); // Warning
 }
 
 extern QHash<QString, int> &initializers();
@@ -155,15 +155,15 @@ void testIntersect()
 
 QJsonObject getObj(){return {};}
 void testJsonDetach() {
-    getObj()[QLatin1String("bla")]; // Warning
-    getObj().find(QLatin1String("bla")); // Warning
+    getObj().value(QLatin1String("bla")); // Warning
+    getObj().constFind(QLatin1String("bla")); // Warning
     getObj().value(QLatin1String("bla")); // OK
 }
 
 void testRIterators()
 {
-    getList().rbegin();
-    getList().rend();
-    getStringList().rbegin();
-    getStringList().rend();
+    getList().crbegin();
+    getList().crend();
+    getStringList().crbegin();
+    getStringList().crend();
 }
