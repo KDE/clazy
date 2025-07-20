@@ -142,5 +142,12 @@ void DetachingMember::VisitStmt(clang::Stmt *stm)
         }
     }
 
-    emitWarning(stm->getBeginLoc(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()");
+    std::vector<FixItHint> fixits;
+    if (memberCall) {
+        fixits = getFixitHints(clazy::name(method->getParent()), clazy::name(method), callExpr);
+    } else if (auto operatorCallee = operatorExpr ? dyn_cast<CXXMethodDecl>(operatorExpr->getDirectCallee()) : nullptr) {
+        fixits = getFixitHints(clazy::name(operatorCallee->getParent()), clazy::name(operatorCallee), callExpr);
+    }
+
+    emitWarning(stm->getBeginLoc(), "Potential detachment due to calling " + method->getQualifiedNameAsString() + "()", fixits);
 }
