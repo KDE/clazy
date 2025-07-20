@@ -21,6 +21,8 @@ the length is compared using "== 0", "< 1", "> 0" are now reported and have
 fixits.
 * qt6-\* Porting checks are considered deprecated now and will be removed in
 the next release of clazy
+* detaching-temporary and detaching-member checks provide fixits for methods
+that have const coutnerparts
 
 Version 1.15
 ~~~~~~~~~~~~
