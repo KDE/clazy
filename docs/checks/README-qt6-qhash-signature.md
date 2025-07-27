@@ -1,5 +1,7 @@
 # qt6-qhash-signature
 
+> Note: This check is deprecated with Clazy 1.16 and will be removed in later versions!
+
 Warns and corrects the signature for `qHash`.
 
 `uint qHash(MyType x, uint seed)` is replaced with `size_t qHash(MyType x, size_t seed)`

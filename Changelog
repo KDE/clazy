@@ -19,6 +19,8 @@ must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.
 * isempty-vs-count now provides fixits for all scenarios. Also, cases where
 the length is compared using "== 0", "< 1", "> 0" are now reported and have
 fixits.
+* qt6-\* Porting checks are considered deprecated now and will be removed in
+the next release of clazy
 
 Version 1.15
 ~~~~~~~~~~~~

@@ -1,5 +1,6 @@
 # qt6-qlatin1stringchar-to-u
 
+> Note: This check is deprecated with Clazy 1.16 and will be removed in later versions!
 
 Warns when using `QLatin1String` and replaces it with `u`.
 
