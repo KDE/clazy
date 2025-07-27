@@ -36,7 +36,7 @@ std::vector<FixItHint> DetachingBase::getFixitHints(StringRef className, StringR
         const auto it = clazy::find_if(functions, [functionName](const auto &pair) {
             return pair.first == functionName;
         });
-        if (it == functions.end()) {
+        if (it == functions.end() || it->first == it->second) {
             // No fixit possible
         } else if (auto *memberCall = dyn_cast<CXXMemberCallExpr>(callExpr)) {
             if (auto *callee = dyn_cast<MemberExpr>(memberCall->getCallee())) {

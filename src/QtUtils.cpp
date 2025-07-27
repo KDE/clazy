@@ -108,8 +108,8 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
             {"end", "cend"},
             {"rbegin", "crbegin"},
             {"rend", "crend"},
-            {"front", "front"}, // same name, const‑qualified overload
-            {"back", "back"}, // idem
+            {"front", "constFirst"},
+            {"back", "constLast"},
             {"operator[]", "at"},
         };
 
