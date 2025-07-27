@@ -1,5 +1,7 @@
 Warn against deprecated API in Qt6
 
+> Note: This check is deprecated with Clazy 1.16 and will be removed in later versions!
+
 The code is fixed when possible.
 
 * `QDate::toString(Qt::DateFormat format, QCalendar cal)` becomes  `QDate::toString(Qt::DateFormat format)`.

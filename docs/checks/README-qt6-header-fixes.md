@@ -1,3 +1,5 @@
+> Note: This check is deprecated with Clazy 1.16 and will be removed in later versions!
+
 Warns against include headers that have changed in Qt6.
 Replaces the code with the correct one.
 
