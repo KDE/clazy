@@ -12,6 +12,10 @@
             "checks": ["qstring-allocations", "foreach", "qdatetime-utc"]
         },
         {
+            "filename": "clang_tidy_suppressions.cpp",
+            "checks": ["qstring-allocations", "foreach", "qdatetime-utc"]
+        },
+        {
             "filename": "suppressionsWholeFile.cpp",
             "checks": ["qstring-allocations", "foreach"]
         },

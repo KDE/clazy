@@ -11,6 +11,10 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+namespace llvm
+{
+class Regex;
+}
 
 namespace clang
 {
@@ -33,6 +37,7 @@ public:
         std::set<unsigned> skipNextLine;
         std::set<CheckName> checksToSkip;
         std::set<LineAndCheckName> checksToSkipByLine;
+        std::unordered_map<LineNumber, llvm::Regex> checkWildcardsToSkipByLine;
     };
 
     SuppressionManager();

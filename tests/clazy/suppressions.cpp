@@ -5,10 +5,10 @@
 // clazy:excludeall=foreach
 // clazy:excludeall=qdatetime-utc comment with junk
 
+
 void suppress_qstring_allocation()
 {   
-    // NOLINTNEXTLINE
-    QString s = "foo";
+    QString s;
     if (s == "foo") {} // clazy:exclude=qstring-allocations
     if (s == "foo") {} // clazy:exclude=qstring-allocations comment with other junk
     if (s == "foo") {}
@@ -35,3 +35,4 @@ void suppressionnextline()
     QString s1 = "foo";
     QString s2 = "foo";
 }
+

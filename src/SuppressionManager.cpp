@@ -21,6 +21,21 @@
 
 using namespace clang;
 
+static llvm::Regex createRegexFromGlob(StringRef &Glob)
+{
+    SmallString<128> RegexText("^");
+    StringRef MetaChars("()^$|*+?.[]\\{}");
+    for (char C : Glob) {
+        if (C == '*')
+            RegexText.push_back('.');
+        else if (MetaChars.contains(C))
+            RegexText.push_back('\\');
+        RegexText.push_back(C);
+    }
+    RegexText.push_back('$');
+    return {RegexText.str()};
+}
+
 SuppressionManager::SuppressionManager() = default;
 
 bool SuppressionManager::isSuppressed(const std::string &checkName,
@@ -69,6 +84,10 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
     if (suppressions.checksToSkipByLine.find(LineAndCheckName(lineNumber, checkName)) != suppressions.checksToSkipByLine.cend())
         return true;
 
+    if (auto it = suppressions.checkWildcardsToSkipByLine.find(lineNumber); it != suppressions.checkWildcardsToSkipByLine.end()) {
+        return it->second.match(checkName);
+    }
+
     return false;
 }
 
@@ -103,8 +122,31 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             continue;
         }
 
-        if (clazy::contains(comment, "NOLINTNEXTLINE")) {
-            suppressions.skipNextLine.insert(lineNumber + 1);
+        const int foundNolint = comment.find("NOLINT");
+        int foundNoLintNextLine = -1;
+        // Reuse starting position of previous match
+        if (foundNolint != -1 && comment.compare(foundNolint + strlen("NOLINT"), strlen("NEXTLINE"), "NEXTLINE") == 0) {
+            foundNoLintNextLine = foundNolint + strlen("NOLINT");
+        }
+
+        if (foundNolint != -1) {
+            const int lineNumberToSuppress = foundNoLintNextLine == -1 ? lineNumber : lineNumber + 1;
+            const size_t parentPosition = foundNoLintNextLine == -1 ? foundNolint : foundNoLintNextLine + strlen("NEXTLINE");
+            if (parentPosition < comment.length() && comment.at(parentPosition) == '(') {
+                const int parentEnd = comment.find(')', parentPosition);
+                if (parentEnd == -1) {
+                    continue; // Malformed
+                }
+                const std::string disableText = comment.substr(parentPosition + 1, parentEnd - parentPosition - 1);
+                for (const auto &split : clazy::splitString(disableText, ',')) {
+                    if (split.find("clazy-") == 0) {
+                        StringRef sanitizedCheckName = llvm::StringRef(split).substr(strlen("clazy-")).rtrim();
+                        suppressions.checkWildcardsToSkipByLine.insert({lineNumberToSuppress, createRegexFromGlob(sanitizedCheckName)});
+                    }
+                }
+            } else {
+                suppressions.skipNextLine.insert(lineNumberToSuppress);
+            }
         }
 
         const auto startIdx = comment.find("clazy:");
