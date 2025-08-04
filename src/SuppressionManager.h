@@ -7,10 +7,13 @@
 #ifndef CLAZY_SUPPRESSION_MANAGER_H
 #define CLAZY_SUPPRESSION_MANAGER_H
 
+#include <llvm/Support/Regex.h>
 #include <set>
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
+
 namespace llvm
 {
 class Regex;
@@ -31,6 +34,11 @@ public:
     using LineNumber = unsigned int;
     using CheckName = std::string;
     using LineAndCheckName = std::pair<LineNumber, CheckName>;
+    struct CheckBeginAndEnd {
+        std::vector<llvm::Regex> checksToSkipWildcard;
+        LineNumber begin;
+        LineNumber end;
+    };
 
     struct Suppressions {
         bool skipEntireFile = false;
@@ -38,6 +46,7 @@ public:
         std::set<CheckName> checksToSkip;
         std::set<LineAndCheckName> checksToSkipByLine;
         std::unordered_map<LineNumber, llvm::Regex> checkWildcardsToSkipByLine;
+        std::vector<CheckBeginAndEnd> checkWildcardsRanges;
     };
 
     SuppressionManager();

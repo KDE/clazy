@@ -1,0 +1,5 @@
+clazy/clang_tidy_suppressions.cpp:8:9: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+clazy/clang_tidy_suppressions.cpp:10:49: warning: Use QDateTime::currentSecsSinceEpoch() instead. It is significantly faster [-Wclazy-qdatetime-utc]
+clazy/clang_tidy_suppressions.cpp:18:9: warning: QString(const char*) being called [-Wclazy-qstring-allocations]
+clazy/clang_tidy_suppressions.cpp:22:49: warning: Use QDateTime::currentSecsSinceEpoch() instead. It is significantly faster [-Wclazy-qdatetime-utc]
+clazy/clang_tidy_suppressions.cpp:34:22: warning: QString(const char*) being called [-Wclazy-qstring-allocations]

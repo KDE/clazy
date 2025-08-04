@@ -21,3 +21,17 @@ void testClangTidySuppressionsNextLine()
     // NOLINTNEXTLINE(clazy-qstring-allocations)
     if (s == "suppressed this check by name" && QDateTime::currentDateTime().toSecsSinceEpoch() < 0) {}
 }
+
+void testRegionSupression()
+{
+    // NOLINTBEGIN
+    QString s = "linting disabled";
+    QString s1 = "linting disabled";
+    QDateTime::currentDateTime().toSecsSinceEpoch();
+    // NOLINTEND
+
+    // NOLINTBEGIN(clazy-qdatetime-utc)
+    QString warnme = "";
+    const int suppressMe = QDateTime::currentDateTime().toSecsSinceEpoch();
+    // NOLINTEND(clazy-qdatetime-utc)
+}
