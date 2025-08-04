@@ -17,23 +17,49 @@
 #include <llvm/Support/raw_ostream.h>
 
 #include <regex>
+#include <stack>
 #include <vector>
 
 using namespace clang;
 
 static llvm::Regex createRegexFromGlob(StringRef &Glob)
 {
-    SmallString<128> RegexText("^");
-    StringRef MetaChars("()^$|*+?.[]\\{}");
+    std::string RegexText("^");
+    StringRef MetaChars("()^$|*+?.[]\\{}"); // Copied from clang-tidy to keep parsing identical
     for (char C : Glob) {
-        if (C == '*')
+        if (C == '*') {
             RegexText.push_back('.');
-        else if (MetaChars.contains(C))
+        } else if (MetaChars.contains(C)) {
             RegexText.push_back('\\');
+        }
         RegexText.push_back(C);
     }
     RegexText.push_back('$');
-    return {RegexText.str()};
+    return {RegexText};
+}
+
+static std::string parseDisabledChecks(const std::string &comment, size_t parentPosition)
+{
+    if (parentPosition < comment.length() && comment.at(parentPosition) == '(') {
+        const int parentEnd = comment.find(')', parentPosition);
+        if (parentEnd == -1) {
+            return ""; // Malformed
+        }
+        return comment.substr(parentPosition + 1, parentEnd - parentPosition - 1);
+    }
+    return "";
+}
+
+static std::vector<llvm::Regex> splitDisabledChecksText(const std::string &disableText)
+{
+    std::vector<llvm::Regex> disabledChecksRegexes;
+    for (const auto &split : clazy::splitString(disableText, ',')) {
+        if (split.find("clazy-") == 0) {
+            StringRef sanitizedCheckName = llvm::StringRef(split).substr(strlen("clazy-")).rtrim();
+            disabledChecksRegexes.push_back(createRegexFromGlob(sanitizedCheckName));
+        }
+    }
+    return disabledChecksRegexes;
 }
 
 SuppressionManager::SuppressionManager() = default;
@@ -76,7 +102,7 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
         return false;
     }
 
-    const int lineNumber = sm.getSpellingLineNumber(loc);
+    const LineNumber lineNumber = sm.getSpellingLineNumber(loc);
     if (suppressions.skipNextLine.count(lineNumber) > 0) {
         suppressions.skipNextLine.erase(lineNumber);
         return true;
@@ -86,6 +112,17 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
 
     if (auto it = suppressions.checkWildcardsToSkipByLine.find(lineNumber); it != suppressions.checkWildcardsToSkipByLine.end()) {
         return it->second.match(checkName);
+    }
+
+    for (const auto &rangeSuppression : suppressions.checkWildcardsRanges) {
+        if (rangeSuppression.begin <= lineNumber && rangeSuppression.end >= lineNumber) {
+            return rangeSuppression.checksToSkipWildcard.empty()
+                || std::any_of(rangeSuppression.checksToSkipWildcard.begin(),
+                               rangeSuppression.checksToSkipWildcard.end(),
+                               [&checkName](const llvm::Regex &regex) {
+                                   return regex.match(checkName);
+                               });
+        }
     }
 
     return false;
@@ -108,6 +145,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
 
     clang::Lexer lexer(id, buffer.value(), sm, lo);
     lexer.SetCommentRetentionState(true);
+    std::stack<std::pair<LineNumber, std::string>> checkRangeStack;
 
     Token token;
     while (!lexer.LexFromRawLexer(token)) {
@@ -115,7 +153,7 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
             continue;
         }
 
-        const int lineNumber = sm.getSpellingLineNumber(token.getLocation());
+        const LineNumber lineNumber = sm.getSpellingLineNumber(token.getLocation());
         const std::string comment = Lexer::getSpelling(token, sm, lo);
         if (lineNumber < 0) {
             llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << lineNumber << "\n";
@@ -124,28 +162,36 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
 
         const int foundNolint = comment.find("NOLINT");
         int foundNoLintNextLine = -1;
-        // Reuse starting position of previous match
-        if (foundNolint != -1 && comment.compare(foundNolint + strlen("NOLINT"), strlen("NEXTLINE"), "NEXTLINE") == 0) {
-            foundNoLintNextLine = foundNolint + strlen("NOLINT");
-        }
-
         if (foundNolint != -1) {
-            const int lineNumberToSuppress = foundNoLintNextLine == -1 ? lineNumber : lineNumber + 1;
-            const size_t parentPosition = foundNoLintNextLine == -1 ? foundNolint : foundNoLintNextLine + strlen("NEXTLINE");
-            if (parentPosition < comment.length() && comment.at(parentPosition) == '(') {
-                const int parentEnd = comment.find(')', parentPosition);
-                if (parentEnd == -1) {
-                    continue; // Malformed
+            // Reuse starting position of previous match
+            if (comment.compare(foundNolint + strlen("NOLINT"), strlen("NEXTLINE"), "NEXTLINE") == 0) {
+                foundNoLintNextLine = foundNolint + strlen("NOLINT");
+            }
+
+            if (const int idx = comment.find("NOLINTBEGIN", foundNolint); idx != -1) {
+                const auto &beginChecks = parseDisabledChecks(comment, idx + strlen("NOLINTBEGIN"));
+                checkRangeStack.push({lineNumber, beginChecks});
+            } else if (const int idx = comment.find("NOLINTEND", foundNolint); idx != -1) {
+                const std::string &endChecks = parseDisabledChecks(comment, idx + strlen("NOLINTEND"));
+                if (checkRangeStack.empty() || checkRangeStack.top().second != endChecks) {
+                    llvm::errs() << "unmatched 'NOLINTEND' comment without a previous 'NOLINTBEGIN' comment\n";
+                } else {
+                    const auto [beginLineNumber, disabledChecks] = checkRangeStack.top();
+                    checkRangeStack.pop();
+                    suppressions.checkWildcardsRanges.push_back(CheckBeginAndEnd{splitDisabledChecksText(disabledChecks), beginLineNumber, lineNumber});
                 }
-                const std::string disableText = comment.substr(parentPosition + 1, parentEnd - parentPosition - 1);
-                for (const auto &split : clazy::splitString(disableText, ',')) {
-                    if (split.find("clazy-") == 0) {
-                        StringRef sanitizedCheckName = llvm::StringRef(split).substr(strlen("clazy-")).rtrim();
-                        suppressions.checkWildcardsToSkipByLine.insert({lineNumberToSuppress, createRegexFromGlob(sanitizedCheckName)});
+
+            } else {
+                // NOLINT or NOLINTNEXTLINE
+                const int lineNumberToSuppress = foundNoLintNextLine == -1 ? lineNumber : lineNumber + 1;
+                auto disableText = parseDisabledChecks(comment, foundNolint + strlen("NOLINT") + (foundNoLintNextLine == -1 ? 0 : strlen("NEXTLINE")));
+                if (disableText.empty()) {
+                    suppressions.skipNextLine.insert(lineNumberToSuppress);
+                } else {
+                    for (llvm::Regex &split : splitDisabledChecksText(disableText)) {
+                        suppressions.checkWildcardsToSkipByLine.insert({lineNumberToSuppress, std::move(split)});
                     }
                 }
-            } else {
-                suppressions.skipNextLine.insert(lineNumberToSuppress);
             }
         }
 
