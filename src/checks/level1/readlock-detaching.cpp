@@ -162,14 +162,14 @@ public:
 };
 ReadlockDetaching::ReadlockDetaching(const std::string &name)
     : CheckBase(name)
-    , m_astMatcherCallBack(new ReadlockDetaching_Callback(this))
 {
 }
 
 void ReadlockDetaching::registerASTMatchers(MatchFinder &finder)
 {
-    finder.addMatcher(cxxConstructExpr(hasType(cxxRecordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack);
+    m_astMatcherCallBack = std::make_unique<ReadlockDetaching_Callback>(this);
+    finder.addMatcher(cxxConstructExpr(hasType(cxxRecordDecl(hasName("QReadLocker")))).bind("qreadlockerCtor"), m_astMatcherCallBack.get());
     finder.addMatcher(
         cxxMemberCallExpr(on(hasType(cxxRecordDecl(hasName("QReadWriteLock")))), callee(cxxMethodDecl(hasName("lockForRead")))).bind("qreadwritelockCall"),
-        m_astMatcherCallBack);
+        m_astMatcherCallBack.get());
 }

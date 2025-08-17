@@ -149,14 +149,10 @@ public:
 
 QColorFromLiteral::QColorFromLiteral(const std::string &name)
     : CheckBase(name, Option_CanIgnoreIncludes)
-    , m_astMatcherCallBack(new QColorFromLiteral_Callback(this))
 {
 }
 
-QColorFromLiteral::~QColorFromLiteral()
-{
-    delete m_astMatcherCallBack;
-}
+QColorFromLiteral::~QColorFromLiteral() = default;
 
 void QColorFromLiteral::VisitStmt(Stmt *stmt)
 {
@@ -178,7 +174,9 @@ void QColorFromLiteral::VisitStmt(Stmt *stmt)
 
 void QColorFromLiteral::registerASTMatchers(MatchFinder &finder)
 {
-    finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))), hasArgument(0, stringLiteral().bind("myLiteral"))), m_astMatcherCallBack);
+    m_astMatcherCallBack = std::make_unique<QColorFromLiteral_Callback>(this);
+    finder.addMatcher(cxxConstructExpr(hasDeclaration(namedDecl(hasName("QColor"))), hasArgument(0, stringLiteral().bind("myLiteral"))),
+                      m_astMatcherCallBack.get());
     finder.addMatcher(callExpr(hasDeclaration(cxxMethodDecl(hasName("fromString"), hasParent(cxxRecordDecl(hasName("QColor")))))).bind("methodCall"),
-                      m_astMatcherCallBack);
+                      m_astMatcherCallBack.get());
 }

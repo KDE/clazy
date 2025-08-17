@@ -55,7 +55,6 @@ public:
 
 UnusedResultCheck::UnusedResultCheck(const std::string &name)
     : CheckBase(name, Option_CanIgnoreIncludes)
-    , m_astMatcherCallBack(std::make_unique<Caller>(this))
 {
 }
 
@@ -63,5 +62,6 @@ UnusedResultCheck::~UnusedResultCheck() = default;
 
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)
 {
+    m_astMatcherCallBack = std::make_unique<Caller>(this);
     finder.addMatcher(cxxMemberCallExpr().bind("callExpr"), m_astMatcherCallBack.get());
 }

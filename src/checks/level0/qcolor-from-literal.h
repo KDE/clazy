@@ -32,7 +32,7 @@ public:
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 
 private:
-    ClazyAstMatcherCallback *const m_astMatcherCallBack;
+    std::unique_ptr<ClazyAstMatcherCallback> m_astMatcherCallBack;
 };
 
 #endif
