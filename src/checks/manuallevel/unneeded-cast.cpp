@@ -67,11 +67,6 @@ inline bool is_qobject_cast(clang::Stmt *s, clang::CXXRecordDecl **castTo = null
     return false;
 }
 
-UnneededCast::UnneededCast(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void UnneededCast::VisitStmt(clang::Stmt *stm)
 {
     if (handleNamedCast(dyn_cast<CXXNamedCastExpr>(stm))) {

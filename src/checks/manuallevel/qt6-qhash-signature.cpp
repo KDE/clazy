@@ -27,11 +27,6 @@
 
 using namespace clang;
 
-Qt6QHashSignature::Qt6QHashSignature(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool isInterestingFunction(const std::string &name)
 {
     return name == "qHash" || name == "qHashBits" || name == "qHashRange" || name == "qHashRangeCommutative";

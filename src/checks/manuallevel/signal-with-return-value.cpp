@@ -7,7 +7,6 @@
 #include "signal-with-return-value.h"
 #include "AccessSpecifierManager.h"
 #include "ClazyContext.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -15,11 +14,6 @@
 #include <clang/AST/AST.h>
 
 using namespace clang;
-
-SignalWithReturnValue::SignalWithReturnValue(const std::string &name)
-    : CheckBase(name)
-{
-}
 
 void SignalWithReturnValue::VisitDecl(clang::Decl *decl)
 {

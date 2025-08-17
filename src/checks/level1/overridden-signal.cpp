@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-OverriddenSignal::OverriddenSignal(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void OverriddenSignal::VisitDecl(clang::Decl *decl)
 {
     const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;

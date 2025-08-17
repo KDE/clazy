@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds inefficient usages of qgetenv
  *
@@ -22,7 +20,7 @@
 class QGetEnv : public CheckBase
 {
 public:
-    explicit QGetEnv(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

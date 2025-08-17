@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-lambda-unique-connection.md for more info.
  */
 class LambdaUniqueConnection : public CheckBase
 {
 public:
-    explicit LambdaUniqueConnection(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

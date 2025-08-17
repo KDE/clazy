@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-empty-qstringliteral.md for more info.
  */
 class EmptyQStringliteral : public CheckBase
 {
 public:
-    explicit EmptyQStringliteral(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
     void handleQt6StringLiteral(clang::Stmt *);
     void handleQt5StringLiteral(clang::Stmt *);

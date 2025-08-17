@@ -26,7 +26,7 @@ class CXXConstructExpr;
 class Qt6QLatin1StringCharToU : public CheckBase
 {
 public:
-    explicit Qt6QLatin1StringCharToU(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
 

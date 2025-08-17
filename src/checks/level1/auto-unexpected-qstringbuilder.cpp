@@ -32,11 +32,6 @@ static bool isQStringBuilder(QualType t)
     return record && clazy::name(record) == "QStringBuilder";
 }
 
-AutoUnexpectedQStringBuilder::AutoUnexpectedQStringBuilder(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void AutoUnexpectedQStringBuilder::VisitDecl(Decl *decl)
 {
     auto *varDecl = dyn_cast<VarDecl>(decl);

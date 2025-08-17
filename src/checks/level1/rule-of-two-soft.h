@@ -9,8 +9,6 @@
 
 #include "checks/ruleofbase.h"
 
-#include <string>
-
 /**
  * Finds classes or structs which violate the rule of two.
  * If a class has a copy-ctor it should have copy-assignment operator too, and vice-versa.
@@ -20,7 +18,7 @@
 class RuleOfTwoSoft : public RuleOfBase
 {
 public:
-    explicit RuleOfTwoSoft(const std::string &name);
+    using RuleOfBase::RuleOfBase;
     void VisitStmt(clang::Stmt *s) override;
 };
 

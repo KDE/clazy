@@ -39,7 +39,7 @@ enum FromFunction { FromLatin1, FromUtf8 };
 class QStringAllocations : public CheckBase
 {
 public:
-    QStringAllocations(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

@@ -16,11 +16,6 @@
 
 using namespace clang;
 
-OverloadedSignal::OverloadedSignal(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void OverloadedSignal::VisitDecl(clang::Decl *decl)
 {
     const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;

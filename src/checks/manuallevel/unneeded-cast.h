@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class CXXNamedCastExpr;
@@ -27,7 +25,7 @@ class CXXRecordDecl;
 class UnneededCast : public CheckBase
 {
 public:
-    UnneededCast(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

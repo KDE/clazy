@@ -19,11 +19,6 @@
 
 using namespace clang;
 
-InstallEventFilter::InstallEventFilter(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
 {
     auto *memberCallExpr = dyn_cast<CXXMemberCallExpr>(stmt);

@@ -25,11 +25,6 @@
 
 using namespace clang;
 
-QDateTimeUtc::QDateTimeUtc(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
 {
     auto *secondCall = dyn_cast<CXXMemberCallExpr>(stmt);

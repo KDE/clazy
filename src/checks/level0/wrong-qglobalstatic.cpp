@@ -23,11 +23,6 @@
 
 using namespace clang;
 
-WrongQGlobalStatic::WrongQGlobalStatic(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void WrongQGlobalStatic::VisitStmt(clang::Stmt *stmt)
 {
     auto *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);

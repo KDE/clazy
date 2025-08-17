@@ -15,7 +15,7 @@
 class OverloadedSignal : public CheckBase
 {
 public:
-    explicit OverloadedSignal(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 };
 

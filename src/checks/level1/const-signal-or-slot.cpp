@@ -19,11 +19,6 @@
 
 using namespace clang;
 
-ConstSignalOrSlot::ConstSignalOrSlot(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)
 {
     auto *call = dyn_cast<CallExpr>(stmt);

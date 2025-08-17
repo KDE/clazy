@@ -21,11 +21,6 @@
 
 using namespace clang;
 
-ContainerInsideLoop::ContainerInsideLoop(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void ContainerInsideLoop::VisitStmt(clang::Stmt *stmt)
 {
     auto *ctorExpr = dyn_cast<CXXConstructExpr>(stmt);

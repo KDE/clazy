@@ -35,11 +35,6 @@
 
 using namespace clang;
 
-ReserveCandidates::ReserveCandidates(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)
 {
     if (!paramType || !classDecl) {

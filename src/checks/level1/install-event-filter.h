@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-install-event-filter.md for more info.
  */
 class InstallEventFilter : public CheckBase
 {
 public:
-    explicit InstallEventFilter(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

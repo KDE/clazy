@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-qproperty-without-notify.md for more info.
  */
 class QPropertyWithoutNotify : public CheckBase
 {
 public:
-    explicit QPropertyWithoutNotify(const std::string &name);
+    using CheckBase::CheckBase;
 
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;

@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-UseStaticQRegularExpression::UseStaticQRegularExpression(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 static MaterializeTemporaryExpr *isArgTemporaryObj(Expr *arg0)
 {
     return dyn_cast_or_null<MaterializeTemporaryExpr>(arg0);

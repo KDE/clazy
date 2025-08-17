@@ -30,7 +30,7 @@ class QualType;
 class MissingTypeInfo : public CheckBase
 {
 public:
-    MissingTypeInfo(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

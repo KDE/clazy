@@ -16,11 +16,6 @@
 
 using namespace clang;
 
-QStringLeft::QStringLeft(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QStringLeft::VisitStmt(clang::Stmt *stmt)
 {
     auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);

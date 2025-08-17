@@ -21,11 +21,6 @@
 
 using namespace clang;
 
-SkippedBaseMethod::SkippedBaseMethod(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void SkippedBaseMethod::VisitStmt(clang::Stmt *stmt)
 {
     auto *memberCall = dyn_cast<CXXMemberCallExpr>(stmt);

@@ -8,7 +8,6 @@
 
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "HierarchyUtils.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -18,11 +17,6 @@
 
 using namespace std::string_literals;
 using namespace clang;
-
-SanitizeInlineKeyword::SanitizeInlineKeyword(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
 
 void SanitizeInlineKeyword::VisitDecl(Decl *decl)
 {

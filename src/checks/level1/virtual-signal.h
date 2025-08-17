@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-virtual-signal.md for more info.
  */
 class VirtualSignal : public CheckBase
 {
 public:
-    explicit VirtualSignal(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *stmt) override;
 
 private:

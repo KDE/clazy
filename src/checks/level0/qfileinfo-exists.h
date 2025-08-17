@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds places using QFileInfo("foo").exists() instead of the faster version QFileInfo::exists("foo")
  *
@@ -19,7 +17,7 @@
 class QFileInfoExists : public CheckBase
 {
 public:
-    explicit QFileInfoExists(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

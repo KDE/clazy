@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-QBytearrayConversionToCStyle::QBytearrayConversionToCStyle(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QBytearrayConversionToCStyle::VisitStmt(clang::Stmt *stmt)
 {
     if (!stmt) {

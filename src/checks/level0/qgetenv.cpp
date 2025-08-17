@@ -26,11 +26,6 @@
 
 using namespace clang;
 
-QGetEnv::QGetEnv(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QGetEnv::VisitStmt(clang::Stmt *stmt)
 {
     // Lets check only in function calls. Otherwise there are too many false positives, it's common

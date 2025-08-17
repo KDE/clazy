@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-ReturningVoidExpression::ReturningVoidExpression(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void ReturningVoidExpression::VisitStmt(clang::Stmt *stmt)
 {
     auto *ret = dyn_cast<ReturnStmt>(stmt);

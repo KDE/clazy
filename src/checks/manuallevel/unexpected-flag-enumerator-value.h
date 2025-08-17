@@ -16,7 +16,7 @@
 class UnexpectedFlagEnumeratorValue : public CheckBase
 {
 public:
-    explicit UnexpectedFlagEnumeratorValue(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 
 private:

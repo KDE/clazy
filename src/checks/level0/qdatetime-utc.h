@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds expensive calls to QDateTime::currentDateTime().
  *
@@ -22,7 +20,7 @@
 class QDateTimeUtc : public CheckBase
 {
 public:
-    QDateTimeUtc(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

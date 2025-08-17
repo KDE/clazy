@@ -13,11 +13,6 @@
 
 using namespace clang;
 
-UseChronoInQTimer::UseChronoInQTimer(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static int unpackValue(clang::Expr *expr)
 {
     auto *value = dyn_cast<IntegerLiteral>(expr);

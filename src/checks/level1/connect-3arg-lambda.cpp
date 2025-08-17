@@ -6,7 +6,6 @@
 */
 
 #include "connect-3arg-lambda.h"
-#include "ClazyContext.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
 
@@ -22,11 +21,6 @@
 using namespace clang;
 
 using uint = unsigned;
-
-Connect3ArgLambda::Connect3ArgLambda(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
 
 void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
 {

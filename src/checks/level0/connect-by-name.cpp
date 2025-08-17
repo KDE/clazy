@@ -17,11 +17,6 @@
 
 using namespace clang;
 
-ConnectByName::ConnectByName(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void ConnectByName::VisitDecl(clang::Decl *decl)
 {
     auto *record = dyn_cast<CXXRecordDecl>(decl);

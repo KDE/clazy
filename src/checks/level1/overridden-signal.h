@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-overridden-signal.md for more info.
  */
 class OverriddenSignal : public CheckBase
 {
 public:
-    explicit OverriddenSignal(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

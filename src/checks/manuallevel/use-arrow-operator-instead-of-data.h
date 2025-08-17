@@ -17,10 +17,8 @@
 class UseArrowOperatorInsteadOfData : public CheckBase
 {
 public:
-    explicit UseArrowOperatorInsteadOfData(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
-
-private:
 };
 
 #endif

@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 
-_license_text = \
-"""/*
+import sys, os, json, argparse, datetime, io, subprocess
+from shutil import copyfile
+
+_license_text = """/*
     SPDX-FileCopyrightText: 2017 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
+    SPDX-FileCopyrightText: 2025 Alexander Lohnau <alexander.lohnau@gmx.de>
     SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 """
 
-import sys, os, json, argparse, datetime, io, subprocess
-from shutil import copyfile
-
 CHECKS_FILENAME = 'checks.json'
 _checks = []
 _specified_check_names = []
 _available_categories = []
 
+
 def checkSortKey(check):
     return str(check.level) + check.name
+
 
 def level_num_to_enum(n):
     if n == -1:
@@ -28,6 +30,7 @@ def level_num_to_enum(n):
 
     return 'CheckLevelUndefined'
 
+
 def level_num_to_name(n):
     if n == -1:
         return 'Manual Level'
@@ -35,6 +38,7 @@ def level_num_to_name(n):
         return 'Level ' + str(n)
 
     return 'undefined'
+
 
 def level_num_to_cmake_readme_variable(n):
     if n == -1:
@@ -44,23 +48,29 @@ def level_num_to_cmake_readme_variable(n):
 
     return 'undefined'
 
+
 def clazy_source_path():
     return os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + "/..") + "/"
+
 
 def templates_path():
     return clazy_source_path() + "dev-scripts/templates/"
 
+
 def docs_relative_path():
     return "docs/checks/"
 
+
 def docs_path():
     return clazy_source_path() + docs_relative_path()
+
 
 def read_file(filename):
     f = io.open(filename, 'r', newline='\n', encoding='utf8')
     contents = f.read()
     f.close()
     return contents
+
 
 def write_file(filename: str, contents):
     f = io.open(filename, 'w', newline='\n', encoding='utf8')
@@ -69,11 +79,13 @@ def write_file(filename: str, contents):
     if filename.endswith('.h') or filename.endswith('.cpp'):
         subprocess.run(['clang-format', '-i', filename])
 
+
 def get_copyright():
     year = datetime.datetime.now().year
     author = os.getenv('GIT_AUTHOR_NAME', 'Author')
     email = os.getenv('GIT_AUTHOR_EMAIL', 'your@email')
     return "Copyright (C) %s %s <%s>" % (year, author, email)
+
 
 class Check:
     def __init__(self):
@@ -87,6 +99,7 @@ class Check:
         self.visits_decls = False
         self.preprocessor_callbacks = False
         self.visit_all_typedefs = False
+        self.can_ignore_includes = False
         self.ifndef = ""
 
     def include(self): # Returns for example: "returning-void-expression.h"
@@ -225,6 +238,9 @@ def load_json(filename):
         if 'visit_all_typedefs' in check:
             c.visit_all_typedefs = check['visit_all_typedefs']
 
+        if 'can_ignore_includes' in check:
+            c.can_ignore_includes = check['can_ignore_includes']
+
         if 'fixits' in check:
             for fixit in check['fixits']:
                 if 'name' not in fixit:
@@ -240,24 +256,33 @@ def load_json(filename):
     _checks = sorted(_checks, key=checkSortKey)
     return True
 
+
 def print_checks(checks):
     for c in checks:
         print(c.name + " " + str(c.level) + " " + str(c.categories))
 
-#-------------------------------------------------------------------------------
+
 def generate_register_checks(checks):
     text = '#include "checkmanager.h"\n'
     for c in checks:
         text += '#include "' + c.qualified_include() + '"\n'
-    text += \
-"""
-template <typename T>
-RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options = RegisteredCheck::Option_None)
+    text += """
+template<typename T>
+RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options, bool canIgnoreIncludes)
 {
-    auto factoryFuntion = [name](){ return new T(name); };
+    auto factoryFuntion = [canIgnoreIncludes, name]() {
+        (void)canIgnoreIncludes;
+        if constexpr (std::is_constructible_v<T, std::string, int>) {
+            // Avoid including checkbase.h for now
+            return new T(name, canIgnoreIncludes ? 1 : 0);
+        } else {
+            return new T(name);
+        }
+    };
     return RegisteredCheck{name, level, factoryFuntion, options};
 }
 
+// clang-format off
 void CheckManager::registerChecks()
 {
 """
@@ -278,8 +303,13 @@ void CheckManager::registerChecks()
         if c.ifndef:
             text += "#ifndef " + c.ifndef + "\n"
 
-        text += '    registerCheck(check<%s>("%s", %s, %s));\n' % (c.get_class_name(), c.name, level_num_to_enum(c.level), qtflags)
-
+        text += '    registerCheck(check<%s>("%s", %s, %s, %s));\n' % (
+            c.get_class_name(),
+            c.name,
+            level_num_to_enum(c.level),
+            qtflags,
+            "true" if c.can_ignore_includes else "false"
+        )
         fixitID = 1
         for fixit in c.fixits:
             text += '    registerFixIt(%d, "%s", "%s");\n' % (fixitID, "fix-" + fixit, c.name)
@@ -290,8 +320,7 @@ void CheckManager::registerChecks()
 
     text += "}\n"
 
-    comment_text = \
-"""
+    comment_text = """
 /**
  * New scripts should be added to the check.json file and the files should be regenerated
  * ./dev-scripts/generate.py --generate
@@ -308,7 +337,8 @@ void CheckManager::registerChecks()
         print("Generated " + filename)
         return True
     return False
-#-------------------------------------------------------------------------------
+
+
 def generate_cmake_file(checks):
     text = "# This file was autogenerated by running: ./dev-scripts/generate.py --generate\n# SPDX-License-Identifier: CC0-1.0\n# SPDX-FileCopyrightText: Clazy Developers\n\nset(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}\n"
     for level in [-1, 0, 1, 2, 3]:
@@ -324,7 +354,8 @@ def generate_cmake_file(checks):
         print("Generated " + filename)
         return True
     return False
-#-------------------------------------------------------------------------------
+
+
 def create_readmes(checks):
     generated = False
     for check in checks:
@@ -342,7 +373,8 @@ def create_readmes(checks):
                 print("Created " + check.readme_path())
             generated = True
     return generated
-#-------------------------------------------------------------------------------
+
+
 def create_unittests(checks):
     generated = False
     for check in checks:
@@ -365,7 +397,7 @@ def create_unittests(checks):
             generated = True
     return generated
 
-#-------------------------------------------------------------------------------
+
 def search_in_all_levels(filename):
     for level in ['manuallevel', 'level0', 'level1', 'level2']:
         complete_filename = clazy_source_path() + 'src/checks/' + level + '/' + filename
@@ -373,7 +405,7 @@ def search_in_all_levels(filename):
             return complete_filename
     return ""
 
-#-------------------------------------------------------------------------------
+
 def create_checks(checks):
     generated = False
 
@@ -429,12 +461,13 @@ def create_checks(checks):
             print('Edited Changelog')
 
     return generated
-#-------------------------------------------------------------------------------
+
+
 def generate_readme(checks):
     filename = clazy_source_path() + "README.md"
     f = io.open(filename, 'r', newline='\n', encoding='utf8')
-    old_contents = f.readlines();
-    f.close();
+    old_contents = f.readlines()
+    f.close()
 
     new_text_to_insert = ""
     for level in ['-1', '0', '1', '2']:
@@ -446,7 +479,6 @@ def generate_readme(checks):
                     fixits_text = " " + fixits_text
                 new_text_to_insert += "  - [%s](%sREADME-%s.md)%s" % (c.name, docs_relative_path(), c.name, fixits_text) + "\n"
         new_text_to_insert += "\n"
-
 
     f = io.open(filename, 'w', newline='\n', encoding='utf8')
 
@@ -467,14 +499,15 @@ def generate_readme(checks):
     f.close()
 
     f = io.open(filename, 'r', newline='\n', encoding='utf8')
-    new_contents = f.readlines();
-    f.close();
+    new_contents = f.readlines()
+    f.close()
 
     if old_contents != new_contents:
         print("Generated " + filename)
         return True
     return False
-#-------------------------------------------------------------------------------
+
+
 def generate_ctest(checks):
     # Generates the ClazyTests.cmake file
     filename = clazy_source_path() + 'ClazyTests.generated.cmake'
@@ -499,8 +532,8 @@ def generate_readmes_cmake_install(checks):
     filename = clazy_source_path() + 'readmes.cmake'
     if os.path.exists(filename):
         f = io.open(filename, 'r', newline='\n', encoding='utf8')
-        old_contents = f.readlines();
-        f.close();
+        old_contents = f.readlines()
+        f.close()
 
     new_text_to_insert = ""
     for level in ['-1', '0', '1', '2']:
@@ -518,15 +551,12 @@ def generate_readmes_cmake_install(checks):
     f.close()
     return True
 
-#-------------------------------------------------------------------------------
 
 complete_json_filename = clazy_source_path() + CHECKS_FILENAME
 
 if not os.path.exists(complete_json_filename):
     print("File doesn't exist: " + complete_json_filename)
     exit(1)
-
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--generate", action='store_true', help="Generate src/Checks.h, CheckSources.cmake and README.md")

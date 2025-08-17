@@ -23,11 +23,6 @@
 
 using namespace clang;
 
-QtKeywords::QtKeywords(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QtKeywords::VisitMacroExpands(const Token &macroNameTok, const SourceRange &range, const clang::MacroInfo *minfo)
 {
     IdentifierInfo *ii = macroNameTok.getIdentifierInfo();

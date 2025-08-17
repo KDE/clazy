@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-RuleOfTwoSoft::RuleOfTwoSoft(const std::string &name)
-    : RuleOfBase(name)
-{
-}
-
 void RuleOfTwoSoft::VisitStmt(Stmt *s)
 {
     if (auto *op = dyn_cast<CXXOperatorCallExpr>(s)) {

@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-HeapAllocatedSmallTrivialType::HeapAllocatedSmallTrivialType(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void HeapAllocatedSmallTrivialType::VisitDecl(clang::Decl *decl)
 {
     auto *varDecl = dyn_cast<VarDecl>(decl);

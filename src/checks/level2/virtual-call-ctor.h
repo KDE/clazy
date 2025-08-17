@@ -12,7 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
 #include <vector>
 
 namespace clang
@@ -32,7 +31,7 @@ class SourceLocation;
 class VirtualCallCtor : public CheckBase
 {
 public:
-    VirtualCallCtor(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

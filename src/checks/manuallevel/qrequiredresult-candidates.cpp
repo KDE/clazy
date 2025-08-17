@@ -30,11 +30,6 @@ static bool hasUnusedResultAttr(clang::FunctionDecl *func)
     return func->getAttr<clang::WarnUnusedResultAttr>() != nullptr;
 }
 
-QRequiredResultCandidates::QRequiredResultCandidates(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QRequiredResultCandidates::VisitDecl(clang::Decl *decl)
 {
     auto *method = dyn_cast<CXXMethodDecl>(decl);

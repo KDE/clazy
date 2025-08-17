@@ -17,10 +17,8 @@
 class UseStaticQRegularExpression : public CheckBase
 {
 public:
-    explicit UseStaticQRegularExpression(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
-
-private:
 };
 
 #endif

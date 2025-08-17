@@ -19,11 +19,6 @@
 
 using namespace clang;
 
-ReturningDataFromTemporary::ReturningDataFromTemporary(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void ReturningDataFromTemporary::VisitStmt(clang::Stmt *stmt)
 {
     if (handleReturn(dyn_cast<ReturnStmt>(stmt))) {

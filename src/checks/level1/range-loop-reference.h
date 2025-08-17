@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class CXXForRangeStmt;
@@ -25,7 +23,7 @@ class CXXForRangeStmt;
 class RangeLoopReference : public CheckBase
 {
 public:
-    RangeLoopReference(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

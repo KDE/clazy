@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-QLatin1StringNonAscii::QLatin1StringNonAscii(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
 {
     auto *constructExpr = dyn_cast<CXXConstructExpr>(stmt);

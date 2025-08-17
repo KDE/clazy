@@ -29,11 +29,6 @@
 
 using namespace clang;
 
-Qt6QLatin1StringCharToU::Qt6QLatin1StringCharToU(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool isQLatin1CharDecl(CXXConstructorDecl *decl)
 {
     return decl && clazy::isOfClass(decl, "QLatin1Char");

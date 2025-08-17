@@ -20,11 +20,6 @@
 
 using namespace clang;
 
-EmptyQStringliteral::EmptyQStringliteral(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
 {
     if (!stmt->getBeginLoc().isMacroID()) {

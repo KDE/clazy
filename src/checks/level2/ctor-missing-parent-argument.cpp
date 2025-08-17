@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-CtorMissingParentArgument::CtorMissingParentArgument(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 static std::string expectedParentTypeFor(CXXRecordDecl *decl)
 {
     if (clazy::derivesFrom(decl, "QWidget")) {

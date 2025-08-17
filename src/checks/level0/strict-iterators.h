@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class ImplicitCastExpr;
@@ -23,7 +21,7 @@ class CXXOperatorCallExpr;
 class StrictIterators : public CheckBase
 {
 public:
-    explicit StrictIterators(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

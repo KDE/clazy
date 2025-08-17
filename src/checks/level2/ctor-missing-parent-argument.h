@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-ctor-missing-parent-argument for more info.
  */
 class CtorMissingParentArgument : public CheckBase
 {
 public:
-    explicit CtorMissingParentArgument(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

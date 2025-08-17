@@ -87,11 +87,6 @@ bool FunctionArgsByValue::shouldIgnoreFunction(clang::FunctionDecl *function)
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
 }
 
-FunctionArgsByValue::FunctionArgsByValue(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void FunctionArgsByValue::VisitDecl(Decl *decl)
 {
     processFunction(dyn_cast<FunctionDecl>(decl));

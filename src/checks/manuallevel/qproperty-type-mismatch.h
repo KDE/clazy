@@ -30,7 +30,7 @@ class TypeAliasDecl;
 class QPropertyTypeMismatch : public CheckBase
 {
 public:
-    explicit QPropertyTypeMismatch(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 
 private:

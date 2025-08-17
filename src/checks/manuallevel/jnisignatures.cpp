@@ -30,11 +30,6 @@ static const std::regex classNameRegex("([a-zA-Z]+\\/)*[a-zA-Z]+");
 
 static const std::regex methodNameRegex("[a-zA-Z]+");
 
-JniSignatures::JniSignatures(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 bool checkSignature(const std::string &signature, const std::regex &expr)
 {
     std::smatch match;

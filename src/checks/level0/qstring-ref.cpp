@@ -28,11 +28,6 @@
 
 using namespace clang;
 
-StringRefCandidates::StringRefCandidates(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool isInterestingFirstMethod(CXXMethodDecl *method)
 {
     if (!method || clazy::name(method->getParent()) != "QString") {

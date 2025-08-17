@@ -13,6 +13,6 @@
 class UsedQUnusedVariable : public CheckBase
 {
 public:
-    explicit UsedQUnusedVariable(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 };

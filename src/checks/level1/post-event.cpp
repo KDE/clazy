@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-PostEvent::PostEvent(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void PostEvent::VisitStmt(clang::Stmt *stmt)
 {
     auto *callexpr = dyn_cast<CallExpr>(stmt);

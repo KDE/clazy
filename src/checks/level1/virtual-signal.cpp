@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-VirtualSignal::VirtualSignal(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void VirtualSignal::VisitDecl(Decl *stmt)
 {
     auto *method = dyn_cast<CXXMethodDecl>(stmt);

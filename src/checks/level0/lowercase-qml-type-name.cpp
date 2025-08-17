@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-LowercaseQMlTypeName::LowercaseQMlTypeName(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void LowercaseQMlTypeName::VisitStmt(clang::Stmt *stmt)
 {
     auto *callExpr = dyn_cast<CallExpr>(stmt);

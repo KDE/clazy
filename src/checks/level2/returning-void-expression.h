@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-returning-void-expression.md for more info.
  */
 class ReturningVoidExpression : public CheckBase
 {
 public:
-    explicit ReturningVoidExpression(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

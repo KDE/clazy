@@ -9,17 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
- * <Description>
- *
  * See README-example-check for more information
  */
 class LambdaInConnect : public CheckBase
 {
 public:
-    explicit LambdaInConnect(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

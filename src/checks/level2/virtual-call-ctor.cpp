@@ -46,11 +46,6 @@ void getChildsIgnoreLambda(clang::Stmt *stmt, std::vector<CXXMemberCallExpr *> &
 }
 }
 
-VirtualCallCtor::VirtualCallCtor(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void VirtualCallCtor::VisitDecl(Decl *decl)
 {
     auto *ctorDecl = dyn_cast<CXXConstructorDecl>(decl);

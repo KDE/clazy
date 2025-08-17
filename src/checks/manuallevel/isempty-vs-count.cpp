@@ -22,11 +22,6 @@
 
 using namespace clang;
 
-IsEmptyVSCount::IsEmptyVSCount(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
 {
     if (auto op = dyn_cast<ExprWithCleanups>(stmt)) {

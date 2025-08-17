@@ -11,8 +11,6 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <string>
-
 class QtMacrosPreprocessorCallbacks;
 
 namespace clang
@@ -26,7 +24,7 @@ class Token;
 class QtMacros : public CheckBase
 {
 public:
-    explicit QtMacros(const std::string &name);
+    using CheckBase::CheckBase;
 
 private:
     void checkIfDef(const clang::Token &MacroNameTok, clang::SourceLocation Loc);

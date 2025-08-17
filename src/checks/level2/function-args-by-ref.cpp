@@ -10,7 +10,6 @@
 #include "function-args-by-ref.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
-#include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -81,11 +80,6 @@ bool FunctionArgsByRef::shouldIgnoreFunction(clang::FunctionDecl *function)
     };
 
     return clazy::contains(qualifiedIgnoreList, function->getQualifiedNameAsString());
-}
-
-FunctionArgsByRef::FunctionArgsByRef(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
 }
 
 static std::string warningMsgForSmallType(int sizeOf, const std::string &typeName)

@@ -29,11 +29,6 @@
 
 using namespace clang;
 
-QPropertyTypeMismatch::QPropertyTypeMismatch(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QPropertyTypeMismatch::VisitDecl(clang::Decl *decl)
 {
     if (auto *method = dyn_cast<CXXMethodDecl>(decl)) {

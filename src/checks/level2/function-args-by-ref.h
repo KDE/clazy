@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class VarDecl;
@@ -34,7 +32,7 @@ struct QualTypeClassification;
 class FunctionArgsByRef : public CheckBase
 {
 public:
-    FunctionArgsByRef(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 

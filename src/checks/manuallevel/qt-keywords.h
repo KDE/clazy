@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-qt-keywords.md for more info.
  */
 class QtKeywords : public CheckBase
 {
 public:
-    explicit QtKeywords(const std::string &name);
+    using CheckBase::CheckBase;
 
 protected:
     void VisitMacroExpands(const clang::Token &, const clang::SourceRange &, const clang::MacroInfo *) override;

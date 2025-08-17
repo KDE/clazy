@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-QStringInsensitiveAllocation::QStringInsensitiveAllocation(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool isInterestingCall1(CallExpr *call)
 {
     FunctionDecl *func = call->getDirectCallee();

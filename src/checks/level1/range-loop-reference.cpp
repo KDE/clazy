@@ -8,7 +8,6 @@
 */
 
 #include "range-loop-reference.h"
-#include "ClazyContext.h"
 #include "FixItUtils.h"
 #include "PreProcessorVisitor.h"
 #include "QtUtils.h"
@@ -22,11 +21,6 @@
 #include <llvm/Support/Casting.h>
 
 using namespace clang;
-
-RangeLoopReference::RangeLoopReference(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
 
 void RangeLoopReference::VisitStmt(clang::Stmt *stmt)
 {

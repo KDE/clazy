@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class CXXMemberCallExpr;
@@ -24,7 +22,7 @@ class ReturnStmt;
 class ReturningDataFromTemporary : public CheckBase
 {
 public:
-    explicit ReturningDataFromTemporary(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

@@ -9,18 +9,14 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-qstring-varargs.md for more info.
  */
 class QStringVarargs : public CheckBase
 {
 public:
-    explicit QStringVarargs(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
-
-private:
 };
 
 #endif

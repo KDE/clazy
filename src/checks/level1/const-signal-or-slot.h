@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-const-signal-or-slot.md for more info.
  */
 class ConstSignalOrSlot : public CheckBase
 {
 public:
-    explicit ConstSignalOrSlot(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitDecl(clang::Decl *decl) override;
 };

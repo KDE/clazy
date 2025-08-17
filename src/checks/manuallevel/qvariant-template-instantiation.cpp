@@ -25,11 +25,6 @@
 
 using namespace clang;
 
-QVariantTemplateInstantiation::QVariantTemplateInstantiation(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool isMatchingClass(StringRef name)
 {
     static const std::vector<StringRef> classes = {

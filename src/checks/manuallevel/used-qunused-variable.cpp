@@ -66,11 +66,6 @@ private:
     }
 };
 
-UsedQUnusedVariable::UsedQUnusedVariable(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void UsedQUnusedVariable::VisitDecl(clang::Decl *decl)
 {
     const auto *fncDecl = dyn_cast<FunctionDecl>(decl);

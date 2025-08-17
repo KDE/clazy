@@ -10,15 +10,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-connect-non-signal.md for more info.
  */
 class ConnectNonSignal : public CheckBase
 {
 public:
-    explicit ConnectNonSignal(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

@@ -12,7 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
 #include <vector>
 
 namespace clang
@@ -34,7 +33,7 @@ class SourceLocation;
 class ReserveCandidates : public CheckBase
 {
 public:
-    ReserveCandidates(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

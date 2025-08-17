@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-static-pmf.md for more info.
  */
 class StaticPmf : public CheckBase
 {
 public:
-    explicit StaticPmf(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 
 private:

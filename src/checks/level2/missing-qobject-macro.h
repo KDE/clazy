@@ -9,7 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
 #include <vector>
 
 namespace clang
@@ -27,7 +26,7 @@ class Token;
 class MissingQObjectMacro : public CheckBase
 {
 public:
-    explicit MissingQObjectMacro(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

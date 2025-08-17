@@ -6,18 +6,12 @@
 
 #include "ifndef-define-typo.h"
 #include "QtUtils.h"
-#include "TypeUtils.h"
 #include "Utils.h"
 #include "levenshteindistance.h"
 
 #include <clang/AST/AST.h>
 
 using namespace clang;
-
-IfndefDefineTypo::IfndefDefineTypo(const std::string &name)
-    : CheckBase(name)
-{
-}
 
 void IfndefDefineTypo::VisitMacroDefined(const Token &macroNameTok)
 {

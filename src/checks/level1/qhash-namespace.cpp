@@ -18,11 +18,6 @@
 
 using namespace clang;
 
-QHashNamespace::QHashNamespace(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QHashNamespace::VisitDecl(clang::Decl *decl)
 {
     auto *func = dyn_cast<FunctionDecl>(decl);

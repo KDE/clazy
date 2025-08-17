@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds Q_QGLOBAL_STATICs being used with trivial classes.
  *
@@ -19,7 +17,7 @@
 class WrongQGlobalStatic : public CheckBase
 {
 public:
-    explicit WrongQGlobalStatic(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

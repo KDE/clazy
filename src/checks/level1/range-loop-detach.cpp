@@ -78,11 +78,6 @@ bool containerNeverDetaches(const clang::VarDecl *valDecl, StmtBodyRange bodyRan
 }
 }
 
-RangeLoopDetach::RangeLoopDetach(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void RangeLoopDetach::VisitStmt(clang::Stmt *stmt)
 {
     if (auto *rangeLoop = dyn_cast<CXXForRangeStmt>(stmt)) {

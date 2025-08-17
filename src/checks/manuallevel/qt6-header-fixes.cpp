@@ -6,7 +6,6 @@
 */
 
 #include "qt6-header-fixes.h"
-#include "ClazyContext.h"
 #include "FixItUtils.h"
 #include "Utils.h"
 

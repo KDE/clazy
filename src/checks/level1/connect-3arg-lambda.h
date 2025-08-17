@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class FunctionDecl;
@@ -22,7 +20,7 @@ class FunctionDecl;
 class Connect3ArgLambda : public CheckBase
 {
 public:
-    explicit Connect3ArgLambda(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

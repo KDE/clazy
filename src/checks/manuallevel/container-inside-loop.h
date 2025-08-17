@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds places defining containers inside loops. Defining them outside and using resize(0) will
  * save allocations.
@@ -20,7 +18,7 @@
 class ContainerInsideLoop : public CheckBase
 {
 public:
-    explicit ContainerInsideLoop(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

@@ -25,11 +25,6 @@ static bool isInterestingContainer(StringRef name)
     return clazy::contains(containers, name);
 }
 
-MutableContainerKey::MutableContainerKey(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void MutableContainerKey::VisitDecl(clang::Decl *decl)
 {
     auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);

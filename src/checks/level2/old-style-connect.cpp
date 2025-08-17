@@ -91,11 +91,6 @@ static bool classIsOk(StringRef className)
     return className != "QDBusInterface";
 }
 
-OldStyleConnect::OldStyleConnect(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 template<typename T>
 int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) const
 {

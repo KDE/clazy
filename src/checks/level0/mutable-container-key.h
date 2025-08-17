@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-mutable-container-key for more info.
  */
 class MutableContainerKey : public CheckBase
 {
 public:
-    explicit MutableContainerKey(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

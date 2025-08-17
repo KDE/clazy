@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-child-event-qobject-cast for more info.
  */
 class ChildEventQObjectCast : public CheckBase
 {
 public:
-    explicit ChildEventQObjectCast(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 
 private:

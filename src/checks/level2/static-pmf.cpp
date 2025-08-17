@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-StaticPmf::StaticPmf(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void StaticPmf::VisitDecl(clang::Decl *decl)
 {
     auto *vardecl = dyn_cast<VarDecl>(decl);

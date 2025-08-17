@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Detects when you're using QVariant::value<Foo>() instead of QVariant::toFoo().
  *
@@ -21,7 +19,7 @@
 class QVariantTemplateInstantiation : public CheckBase
 {
 public:
-    QVariantTemplateInstantiation(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stm) override;
 };
 

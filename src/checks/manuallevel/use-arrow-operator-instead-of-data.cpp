@@ -8,16 +8,12 @@
 */
 
 #include "use-arrow-operator-instead-of-data.h"
+#include "StringUtils.h"
+#include "Utils.h"
 
-#include "HierarchyUtils.h"
 #include <clang/AST/ExprCXX.h>
 
 using namespace clang;
-
-UseArrowOperatorInsteadOfData::UseArrowOperatorInsteadOfData(const std::string &name)
-    : CheckBase(name)
-{
-}
 
 void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 {

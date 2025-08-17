@@ -16,11 +16,6 @@
 
 using namespace clang;
 
-RawEnvironmentFunction::RawEnvironmentFunction(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void RawEnvironmentFunction::VisitStmt(clang::Stmt *stmt)
 {
     auto *callexpr = dyn_cast<CallExpr>(stmt);

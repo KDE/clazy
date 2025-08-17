@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-thread-with-slots.md for more info.
  */
 class ThreadWithSlots : public CheckBase
 {
 public:
-    explicit ThreadWithSlots(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
     void VisitDecl(clang::Decl *decl) override;
 

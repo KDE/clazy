@@ -14,11 +14,6 @@
 
 using namespace clang;
 
-QStringComparisonToImplicitChar::QStringComparisonToImplicitChar(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QStringComparisonToImplicitChar::VisitStmt(clang::Stmt *stmt)
 {
     auto *callExpr = dyn_cast<CXXOperatorCallExpr>(stmt);

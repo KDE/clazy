@@ -16,7 +16,7 @@
 class JniSignatures : public CheckBase
 {
 public:
-    JniSignatures(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 
 private:

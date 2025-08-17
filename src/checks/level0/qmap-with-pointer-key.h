@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds cases where you're using QMap<K,T> and K is a pointer. QHash<K,T> should be used instead.
  *
@@ -22,7 +20,7 @@
 class QMapWithPointerKey : public CheckBase
 {
 public:
-    QMapWithPointerKey(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 };
 

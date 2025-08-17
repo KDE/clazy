@@ -10,7 +10,6 @@
 
 #include "checkbase.h"
 
-#include <string>
 #include <vector>
 
 namespace clang
@@ -26,7 +25,7 @@ class FixItHint;
 class Qt6QHashSignature : public CheckBase
 {
 public:
-    explicit Qt6QHashSignature(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 

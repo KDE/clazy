@@ -19,8 +19,6 @@
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/Casting.h>
 
-#include <vector>
-
 using namespace clang;
 
 static bool hasMutexes(Stmt *body)
@@ -36,11 +34,6 @@ static bool hasMutexes(Stmt *body)
     }
 
     return false;
-}
-
-ThreadWithSlots::ThreadWithSlots(const std::string &name)
-    : CheckBase(name)
-{
 }
 
 void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)

@@ -16,11 +16,6 @@
 
 using namespace clang;
 
-TrNonLiteral::TrNonLiteral(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
 {
     auto *callExpr = dyn_cast<CallExpr>(stmt);

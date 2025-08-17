@@ -30,11 +30,6 @@
 
 using namespace clang;
 
-Qt6DeprecatedAPIFixes::Qt6DeprecatedAPIFixes(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void replacementForQWizard(const std::string &functionName, std::string &message, std::string &replacement)
 {
     message = "call function QProcess::";

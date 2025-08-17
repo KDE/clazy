@@ -20,11 +20,6 @@
 
 using namespace clang;
 
-LambdaUniqueConnection::LambdaUniqueConnection(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
 {
     auto *call = dyn_cast<CallExpr>(stmt);

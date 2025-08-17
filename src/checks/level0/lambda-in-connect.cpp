@@ -24,11 +24,6 @@
 
 using namespace clang;
 
-LambdaInConnect::LambdaInConnect(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void LambdaInConnect::VisitStmt(clang::Stmt *stmt)
 {
     auto *lambda = dyn_cast<LambdaExpr>(stmt);

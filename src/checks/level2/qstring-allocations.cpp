@@ -68,11 +68,6 @@ struct Latin1Expr {
     }
 };
 
-QStringAllocations::QStringAllocations(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QStringAllocations::VisitStmt(clang::Stmt *stm)
 {
     if (m_context->isQtDeveloper() && clazy::isBootstrapping(m_context->m_pp)) {

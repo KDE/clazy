@@ -10,7 +10,6 @@
 #include "checkbase.h"
 
 #include <clang/Basic/Diagnostic.h>
-#include <string>
 #include <vector>
 
 namespace clang
@@ -27,7 +26,7 @@ class CXXMemberCallExpr;
 class StringRefCandidates : public CheckBase
 {
 public:
-    StringRefCandidates(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

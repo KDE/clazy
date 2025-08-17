@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-raw-environment-function.md for more info.
  */
 class RawEnvironmentFunction : public CheckBase
 {
 public:
-    explicit RawEnvironmentFunction(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 
 private:

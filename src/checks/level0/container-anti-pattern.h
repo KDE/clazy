@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Warns when there are unneeded allocations of temporary lists because of using values(), keys()
  * toVector() or toList().
@@ -20,7 +18,7 @@
 class ContainerAntiPattern : public CheckBase
 {
 public:
-    explicit ContainerAntiPattern(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

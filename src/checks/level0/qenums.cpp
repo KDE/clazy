@@ -17,11 +17,6 @@
 
 using namespace clang;
 
-QEnums::QEnums(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QEnums::VisitMacroExpands(const Token &MacroNameTok, const SourceRange &range, const clang::MacroInfo *)
 {
     const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;

@@ -11,15 +11,13 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <string>
-
 /**
  * See README-qenums for more info.
  */
 class QEnums : public CheckBase
 {
 public:
-    explicit QEnums(const std::string &name);
+    using CheckBase::CheckBase;
 
 private:
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo * = nullptr) override;

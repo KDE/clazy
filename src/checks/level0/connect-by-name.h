@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-connect-by-name.md for more info.
  */
 class ConnectByName : public CheckBase
 {
 public:
-    explicit ConnectByName(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 };
 

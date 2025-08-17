@@ -19,11 +19,6 @@
 
 using namespace clang;
 
-QMapWithPointerKey::QMapWithPointerKey(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QMapWithPointerKey::VisitDecl(clang::Decl *decl)
 {
     auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);

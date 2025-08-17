@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * - QDeleteAll:
  *   - Finds places where you call qDeleteAll(set/map/hash.values()/keys())
@@ -20,7 +18,7 @@
 class QDeleteAll : public CheckBase
 {
 public:
-    QDeleteAll(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

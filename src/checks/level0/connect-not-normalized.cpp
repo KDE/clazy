@@ -23,11 +23,6 @@
 
 using namespace clang;
 
-ConnectNotNormalized::ConnectNotNormalized(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void ConnectNotNormalized::VisitStmt(clang::Stmt *stmt)
 {
     handleQ_ARG(stmt) || handleConnect(dyn_cast<CallExpr>(stmt));

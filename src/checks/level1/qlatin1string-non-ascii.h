@@ -10,15 +10,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-qlatin1string-non-ascii.md for more info.
  */
 class QLatin1StringNonAscii : public CheckBase
 {
 public:
-    explicit QLatin1StringNonAscii(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

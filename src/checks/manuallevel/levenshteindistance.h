@@ -24,7 +24,7 @@
 #include <numeric>
 #include <string>
 
-int levenshtein_distance(const std::string &s1, const std::string &s2)
+inline int levenshtein_distance(const std::string &s1, const std::string &s2)
 {
     // To change the type this function manipulates and returns, change
     // the return type and the types of the two variables below.

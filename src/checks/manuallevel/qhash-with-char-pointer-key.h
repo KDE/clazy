@@ -9,18 +9,14 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-qhash-with-char-pointer-key.md for more info.
  */
 class QHashWithCharPointerKey : public CheckBase
 {
 public:
-    explicit QHashWithCharPointerKey(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
-
-private:
 };
 
 #endif

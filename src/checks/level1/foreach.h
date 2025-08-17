@@ -12,8 +12,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class ForStmt;
@@ -31,7 +29,7 @@ class ValueDecl;
 class Foreach : public CheckBase
 {
 public:
-    Foreach(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

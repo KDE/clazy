@@ -9,18 +9,14 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-skipped-base-method.md for more info.
  */
 class SkippedBaseMethod : public CheckBase
 {
 public:
-    explicit SkippedBaseMethod(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
-
-private:
 };
 
 #endif

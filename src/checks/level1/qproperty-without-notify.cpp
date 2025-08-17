@@ -17,11 +17,6 @@
 
 using namespace clang;
 
-QPropertyWithoutNotify::QPropertyWithoutNotify(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QPropertyWithoutNotify::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();

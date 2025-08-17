@@ -12,16 +12,18 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 class AssertWithSideEffects : public CheckBase
 {
 public:
-    AssertWithSideEffects(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 
 private:
-    int m_aggressiveness;
+    enum Aggressiveness {
+        NormalAggressiveness = 0,
+        AlsoCheckFunctionCallsAggressiveness = 1 // too many false positives
+    };
+    Aggressiveness m_aggressiveness = NormalAggressiveness;
 };
 
 #endif

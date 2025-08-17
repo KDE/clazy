@@ -29,11 +29,6 @@
 
 using namespace clang;
 
-Qt6FwdFixes::Qt6FwdFixes(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static std::set<std::string> interestingFwdDecl = {
     "QCache", "QHash",   "QMap",        "QMultiHash",     "QMultiMap", "QPair",    "QQueue",       "QSet",        "QStack",       "QVarLengthArray",
     "QList",  "QVector", "QStringList", "QByteArrayList", "QMetaType", "QVariant", "QVariantList", "QVariantMap", "QVariantHash", "QVariantPair"};

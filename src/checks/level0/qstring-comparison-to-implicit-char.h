@@ -15,7 +15,7 @@
 class QStringComparisonToImplicitChar : public CheckBase
 {
 public:
-    explicit QStringComparisonToImplicitChar(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 
 private:

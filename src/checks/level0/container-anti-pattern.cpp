@@ -23,11 +23,6 @@
 
 using namespace clang;
 
-ContainerAntiPattern::ContainerAntiPattern(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 static bool isInterestingCall(CallExpr *call)
 {
     FunctionDecl *func = call ? call->getDirectCallee() : nullptr;

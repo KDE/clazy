@@ -16,7 +16,7 @@
 class SignalWithReturnValue : public CheckBase
 {
 public:
-    explicit SignalWithReturnValue(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 
 private:

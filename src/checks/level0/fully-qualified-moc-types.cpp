@@ -28,11 +28,6 @@
 
 using namespace clang;
 
-FullyQualifiedMocTypes::FullyQualifiedMocTypes(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
 {
     auto *method = dyn_cast<CXXMethodDecl>(decl);

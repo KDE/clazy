@@ -15,7 +15,7 @@
 class QBytearrayConversionToCStyle : public CheckBase
 {
 public:
-    explicit QBytearrayConversionToCStyle(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 };
 

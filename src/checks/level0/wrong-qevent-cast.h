@@ -9,18 +9,14 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-wrong-qevent-cast.md for more info.
  */
 class WrongQEventCast : public CheckBase
 {
 public:
-    explicit WrongQEventCast(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
-
-private:
 };
 
 #endif

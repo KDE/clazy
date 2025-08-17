@@ -11,8 +11,6 @@
 
 #include <clang/Basic/Diagnostic.h>
 
-#include <string>
-
 namespace clang
 {
 class FunctionDecl;
@@ -32,7 +30,7 @@ struct QualTypeClassification;
 class FunctionArgsByValue : public CheckBase
 {
 public:
-    explicit FunctionArgsByValue(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 

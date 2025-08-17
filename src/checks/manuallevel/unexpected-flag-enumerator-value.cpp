@@ -14,11 +14,6 @@
 
 using namespace clang;
 
-UnexpectedFlagEnumeratorValue::UnexpectedFlagEnumeratorValue(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 static ConstantExpr *getConstantExpr(EnumConstantDecl *enCD)
 {
     auto *cexpr = dyn_cast_or_null<ConstantExpr>(enCD->getInitExpr());

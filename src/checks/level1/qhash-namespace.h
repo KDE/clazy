@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-qhash-namespace.md for more info.
  */
 class QHashNamespace : public CheckBase
 {
 public:
-    explicit QHashNamespace(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
 };
 

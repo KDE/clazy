@@ -21,11 +21,6 @@
 
 using namespace clang;
 
-QDeleteAll::QDeleteAll(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QDeleteAll::VisitStmt(clang::Stmt *stmt)
 {
     // Find a call to QMap/QSet/QHash::values/keys

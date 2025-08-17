@@ -22,11 +22,6 @@
 
 using namespace clang;
 
-MissingQObjectMacro::MissingQObjectMacro(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const MacroInfo *)
 {
     IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();

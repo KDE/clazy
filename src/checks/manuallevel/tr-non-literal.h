@@ -10,15 +10,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-tr-non-literal.md for more info.
  */
 class TrNonLiteral : public CheckBase
 {
 public:
-    explicit TrNonLiteral(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

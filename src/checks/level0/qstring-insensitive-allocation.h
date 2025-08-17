@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds unneeded allocations in the form of str.{toLower, toUpper}().{contains, compare, startsWith, endsWith}().
  *
@@ -19,7 +17,7 @@
 class QStringInsensitiveAllocation : public CheckBase
 {
 public:
-    explicit QStringInsensitiveAllocation(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

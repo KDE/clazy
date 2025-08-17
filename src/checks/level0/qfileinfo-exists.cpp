@@ -17,11 +17,6 @@
 
 using namespace clang;
 
-QFileInfoExists::QFileInfoExists(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
 {
     auto *existsCall = dyn_cast<CXXMemberCallExpr>(stmt);

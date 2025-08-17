@@ -15,11 +15,6 @@
 
 using namespace clang;
 
-QtMacros::QtMacros(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QtMacros::VisitMacroDefined(const Token &MacroNameTok)
 {
     if (m_OSMacroExists) {

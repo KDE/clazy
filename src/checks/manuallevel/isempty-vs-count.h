@@ -19,7 +19,7 @@
 class IsEmptyVSCount : public CheckBase
 {
 public:
-    explicit IsEmptyVSCount(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

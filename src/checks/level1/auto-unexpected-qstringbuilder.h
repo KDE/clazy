@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds places where auto is deduced to be QStringBuilder instead of QString, which introduces crashes.
  *
@@ -19,7 +17,7 @@
 class AutoUnexpectedQStringBuilder : public CheckBase
 {
 public:
-    explicit AutoUnexpectedQStringBuilder(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
     void VisitStmt(clang::Stmt *stmt) override;
 };

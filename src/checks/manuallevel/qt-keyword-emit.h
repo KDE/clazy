@@ -12,8 +12,6 @@
 
 #include <clang/Basic/SourceLocation.h>
 
-#include <string>
-
 /**
  * See README-qt-keyword-emit.md for more info.
  */
@@ -27,7 +25,7 @@ class Token;
 class QtKeywordEmit : public CheckBase
 {
 public:
-    explicit QtKeywordEmit(const std::string &name);
+    using CheckBase::CheckBase;
 
 protected:
     void VisitMacroExpands(const clang::Token &, const clang::SourceRange &, const clang::MacroInfo *) override;

@@ -32,11 +32,6 @@
 
 using namespace clang;
 
-Foreach::Foreach(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void Foreach::VisitStmt(clang::Stmt *stmt)
 {
     const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;

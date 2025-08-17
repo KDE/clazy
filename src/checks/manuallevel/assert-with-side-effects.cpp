@@ -28,17 +28,6 @@
 
 using namespace clang;
 
-enum Aggressiveness {
-    NormalAggressiveness = 0,
-    AlsoCheckFunctionCallsAggressiveness = 1 // too many false positives
-};
-
-AssertWithSideEffects::AssertWithSideEffects(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-    , m_aggressiveness(NormalAggressiveness)
-{
-}
-
 static bool functionIsOk(StringRef name)
 {
     static const std::vector<StringRef> whitelist = {

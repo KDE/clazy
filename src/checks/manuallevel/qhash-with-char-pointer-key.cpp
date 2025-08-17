@@ -17,11 +17,6 @@
 
 using namespace clang;
 
-QHashWithCharPointerKey::QHashWithCharPointerKey(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void QHashWithCharPointerKey::VisitDecl(clang::Decl *decl)
 {
     auto *tsdecl = Utils::templateSpecializationFromVarDecl(decl);

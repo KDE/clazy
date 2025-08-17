@@ -19,11 +19,6 @@
 
 using namespace clang;
 
-QStringVarargs::QStringVarargs(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void QStringVarargs::VisitStmt(clang::Stmt *stmt)
 {
     auto *binop = dyn_cast<BinaryOperator>(stmt);

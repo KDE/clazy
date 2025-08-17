@@ -24,11 +24,6 @@
 
 using namespace clang;
 
-ChildEventQObjectCast::ChildEventQObjectCast(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 void ChildEventQObjectCast::VisitDecl(Decl *decl)
 {
     auto *childEventMethod = dyn_cast<CXXMethodDecl>(decl);

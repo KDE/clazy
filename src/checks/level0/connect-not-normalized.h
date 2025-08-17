@@ -10,8 +10,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 class CallExpr;
@@ -24,7 +22,7 @@ class Expr;
 class ConnectNotNormalized : public CheckBase
 {
 public:
-    explicit ConnectNotNormalized(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:
