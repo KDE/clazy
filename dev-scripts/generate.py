@@ -3,15 +3,6 @@
 import sys, os, json, argparse, datetime, io, subprocess
 from shutil import copyfile
 
-_license_text = """/*
-    SPDX-FileCopyrightText: 2017 Klarälvdalens Datakonsult AB a KDAB Group company info@kdab.com
-    SPDX-FileCopyrightText: 2025 Alexander Lohnau <alexander.lohnau@gmx.de>
-    SPDX-FileContributor: Sérgio Martins <sergio.martins@kdab.com>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
-*/
-"""
-
 CHECKS_FILENAME = 'checks.json'
 _checks = []
 _specified_check_names = []
