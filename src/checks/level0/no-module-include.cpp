@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-NoModuleInclude::NoModuleInclude(const std::string &name)
-    : CheckBase(name)
+NoModuleInclude::NoModuleInclude(const std::string &name, Options options)
+    : CheckBase(name, options)
     , m_modulesList{
           "Core",
           "Gui",

@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * Finds polymorphic classes without Q_DISABLE_COPY
  *
@@ -19,7 +17,7 @@
 class CopyablePolymorphic : public CheckBase
 {
 public:
-    explicit CopyablePolymorphic(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
     std::vector<clang::FixItHint> fixits(clang::CXXRecordDecl *record);
 };

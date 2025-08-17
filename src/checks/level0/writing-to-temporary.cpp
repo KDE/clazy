@@ -23,8 +23,8 @@
 
 using namespace clang;
 
-WritingToTemporary::WritingToTemporary(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
+WritingToTemporary::WritingToTemporary(const std::string &name, Options options)
+    : CheckBase(name, options)
 
 {
     m_filesToIgnore = {"qstring.h"};

@@ -26,7 +26,7 @@
 class TemporaryIterator : public CheckBase
 {
 public:
-    TemporaryIterator(const std::string &name);
+    TemporaryIterator(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

@@ -9,8 +9,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 class QColorFromLiteral_Callback;
 namespace clang
 {
@@ -26,7 +24,7 @@ class MatchFinder;
 class QColorFromLiteral : public CheckBase
 {
 public:
-    explicit QColorFromLiteral(const std::string &name);
+    using CheckBase::CheckBase;
     ~QColorFromLiteral() override;
     void VisitStmt(clang::Stmt *stmt) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;

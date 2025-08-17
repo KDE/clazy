@@ -34,8 +34,8 @@ static bool shouldIgnoreType(StringRef name)
     return clazy::contains(blacklist, name);
 }
 
-NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
+NonPodGlobalStatic::NonPodGlobalStatic(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
     m_filesToIgnore = {"main.cpp", "qrc_", "qdbusxml2cpp"};
 }

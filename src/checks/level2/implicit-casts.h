@@ -28,7 +28,7 @@ class FunctionDecl;
 class ImplicitCasts : public CheckBase
 {
 public:
-    ImplicitCasts(const std::string &name);
+    ImplicitCasts(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:

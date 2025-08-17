@@ -24,7 +24,7 @@ class CallExpr;
 class QStringArg : public CheckBase
 {
 public:
-    explicit QStringArg(const std::string &name);
+    explicit QStringArg(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stmt) override;
     void checkForMultiArgOpportunities(clang::CXXMemberCallExpr *memberCall);
 

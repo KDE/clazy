@@ -9,15 +9,13 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 /**
  * See README-base-class-event.md for more info.
  */
 class BaseClassEvent : public CheckBase
 {
 public:
-    explicit BaseClassEvent(const std::string &name);
+    using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *) override;
 };
 

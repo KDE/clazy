@@ -56,11 +56,6 @@ static bool hasPublicCopyInAncestors(const CXXRecordDecl *record)
     return false;
 }
 
-CopyablePolymorphic::CopyablePolymorphic(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void CopyablePolymorphic::VisitDecl(clang::Decl *decl)
 {
     auto *record = dyn_cast<CXXRecordDecl>(decl);

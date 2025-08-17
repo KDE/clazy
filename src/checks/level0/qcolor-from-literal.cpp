@@ -147,11 +147,6 @@ public:
     }
 };
 
-QColorFromLiteral::QColorFromLiteral(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 QColorFromLiteral::~QColorFromLiteral() = default;
 
 void QColorFromLiteral::VisitStmt(Stmt *stmt)

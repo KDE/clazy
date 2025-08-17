@@ -22,7 +22,7 @@
 class WritingToTemporary : public CheckBase
 {
 public:
-    explicit WritingToTemporary(const std::string &name);
+    explicit WritingToTemporary(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stmt) override;
 };
 

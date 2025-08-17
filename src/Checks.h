@@ -6,6 +6,7 @@
  * SPDX-FileCopyrightText: Clazy Developers
  */
 
+#include "checkbase.h"
 #include "checkmanager.h"
 #include "checks/level0/connect-by-name.h"
 #include "checks/level0/connect-non-signal.h"
@@ -112,13 +113,7 @@ template<typename T>
 RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options, bool canIgnoreIncludes)
 {
     auto factoryFuntion = [canIgnoreIncludes, name]() {
-        (void)canIgnoreIncludes;
-        if constexpr (std::is_constructible_v<T, std::string, int>) {
-            // Avoid including checkbase.h for now
-            return new T(name, canIgnoreIncludes ? 1 : 0);
-        } else {
-            return new T(name);
-        }
+        return new T(name, canIgnoreIncludes ? CheckBase::Option_CanIgnoreIncludes : CheckBase::Option_None);
     };
     return RegisteredCheck{name, level, factoryFuntion, options};
 }
@@ -128,7 +123,7 @@ void CheckManager::registerChecks()
 {
     registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
-    registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<HeapAllocatedSmallTrivialType>("heap-allocated-small-trivial-type", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls, false));
     registerCheck(check<IfndefDefineTypo>("ifndef-define-typo", ManualCheckLevel,  RegisteredCheck::Option_PreprocessorCallbacks, false));
     registerCheck(check<IsEmptyVSCount>("isempty-vs-count", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
@@ -147,7 +142,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-qt6-deprecated-api-fixes", "qt6-deprecated-api-fixes");
     registerCheck(check<Qt6FwdFixes>("qt6-fwd-fixes", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks, true));
     registerFixIt(1, "fix-qt6-fwd-fixes", "qt6-fwd-fixes");
-    registerCheck(check<Qt6HeaderFixes>("qt6-header-fixes", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks, false));
+    registerCheck(check<Qt6HeaderFixes>("qt6-header-fixes", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks, true));
     registerFixIt(1, "fix-qt6-header-fixes", "qt6-header-fixes");
     registerCheck(check<Qt6QHashSignature>("qt6-qhash-signature", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls, true));
     registerFixIt(1, "fix-qt6-qhash-signature", "qt6-qhash-signature");
@@ -163,7 +158,7 @@ void CheckManager::registerChecks()
     registerCheck(check<TrNonLiteral>("tr-non-literal", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<UnexpectedFlagEnumeratorValue>("unexpected-flag-enumerator-value", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls, false));
     registerCheck(check<UnneededCast>("unneeded-cast", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
-    registerCheck(check<UnusedResultCheck>("unused-result-check", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<UnusedResultCheck>("unused-result-check", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<UseArrowOperatorInsteadOfData>("use-arrow-operator-instead-of-data", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<UseChronoInQTimer>("use-chrono-in-qtimer", ManualCheckLevel,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<UsedQUnusedVariable>("used-qunused-variable", ManualCheckLevel,  RegisteredCheck::Option_VisitsDecls, false));
@@ -190,7 +185,7 @@ void CheckManager::registerChecks()
     registerCheck(check<QGetEnv>("qgetenv", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
     registerFixIt(1, "fix-qgetenv", "qgetenv");
     registerCheck(check<QMapWithPointerKey>("qmap-with-pointer-key", CheckLevel0,  RegisteredCheck::Option_VisitsDecls, false));
-    registerCheck(check<QStringArg>("qstring-arg", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<QStringArg>("qstring-arg", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<QStringComparisonToImplicitChar>("qstring-comparison-to-implicit-char", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<QStringInsensitiveAllocation>("qstring-insensitive-allocation", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<StringRefCandidates>("qstring-ref", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
@@ -198,9 +193,9 @@ void CheckManager::registerChecks()
     registerCheck(check<QtMacros>("qt-macros", CheckLevel0,  RegisteredCheck::Option_PreprocessorCallbacks, false));
     registerCheck(check<StrictIterators>("strict-iterators", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<TemporaryIterator>("temporary-iterator", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
-    registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<UnusedNonTrivialVariable>("unused-non-trivial-variable", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<UseStaticQRegularExpression>("use-static-qregularexpression", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
-    registerCheck(check<WritingToTemporary>("writing-to-temporary", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<WritingToTemporary>("writing-to-temporary", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<WrongQEventCast>("wrong-qevent-cast", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<WrongQGlobalStatic>("wrong-qglobalstatic", CheckLevel0,  RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<AutoUnexpectedQStringBuilder>("auto-unexpected-qstringbuilder", CheckLevel1,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls, true));
@@ -208,11 +203,11 @@ void CheckManager::registerChecks()
     registerCheck(check<ChildEventQObjectCast>("child-event-qobject-cast", CheckLevel1,  RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks, true));
     registerCheck(check<Connect3ArgLambda>("connect-3arg-lambda", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<ConstSignalOrSlot>("const-signal-or-slot", CheckLevel1,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls, true));
-    registerCheck(check<DetachingTemporary>("detaching-temporary", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<DetachingTemporary>("detaching-temporary", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<Foreach>("foreach", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
-    registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks, false));
+    registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks, true));
     registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
-    registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1,  RegisteredCheck::Option_VisitsDecls, true));
     registerCheck(check<PostEvent>("post-event", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<QDeleteAll>("qdeleteall", CheckLevel1,  RegisteredCheck::Option_VisitsStmts, true));
@@ -236,7 +231,7 @@ void CheckManager::registerChecks()
     registerFixIt(1, "fix-function-args-by-ref", "function-args-by-ref");
     registerCheck(check<FunctionArgsByValue>("function-args-by-value", CheckLevel2,  RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_VisitsDecls, true));
     registerCheck(check<GlobalConstCharPointer>("global-const-char-pointer", CheckLevel2,  RegisteredCheck::Option_VisitsDecls, false));
-    registerCheck(check<ImplicitCasts>("implicit-casts", CheckLevel2,  RegisteredCheck::Option_VisitsStmts, false));
+    registerCheck(check<ImplicitCasts>("implicit-casts", CheckLevel2,  RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<MissingQObjectMacro>("missing-qobject-macro", CheckLevel2,  RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks, false));
     registerFixIt(1, "fix-missing-qobject-macro", "missing-qobject-macro");
     registerCheck(check<MissingTypeInfo>("missing-typeinfo", CheckLevel2,  RegisteredCheck::Option_VisitsDecls, false));

@@ -10,8 +10,6 @@
 
 #include "checkbase.h"
 
-#include <string>
-
 namespace clang
 {
 namespace ast_matchers
@@ -23,7 +21,7 @@ class MatchFinder;
 class UnusedResultCheck : public CheckBase
 {
 public:
-    explicit UnusedResultCheck(const std::string &name);
+    using CheckBase::CheckBase;
     ~UnusedResultCheck() override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 

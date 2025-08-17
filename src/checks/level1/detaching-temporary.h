@@ -27,7 +27,7 @@
 class DetachingTemporary : public DetachingBase
 {
 public:
-    DetachingTemporary(const std::string &name);
+    DetachingTemporary(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stm) override;
 
 private:

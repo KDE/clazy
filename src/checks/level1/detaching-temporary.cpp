@@ -27,8 +27,8 @@
 
 using namespace clang;
 
-DetachingTemporary::DetachingTemporary(const std::string &name)
-    : DetachingBase(name, Option_CanIgnoreIncludes)
+DetachingTemporary::DetachingTemporary(const std::string &name, Options options)
+    : DetachingBase(name, options)
 {
     // Extra stuff that isn't really related to detachments but doesn't make sense to call on temporaries
     m_writeMethodsByType["QString"] = {"push_back", "push_front", "clear", "chop"};

@@ -263,7 +263,7 @@ def print_checks(checks):
 
 
 def generate_register_checks(checks):
-    text = '#include "checkmanager.h"\n'
+    text = '#include "checkbase.h"\n#include "checkmanager.h"\n'
     for c in checks:
         text += '#include "' + c.qualified_include() + '"\n'
     text += """
@@ -271,13 +271,7 @@ template<typename T>
 RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Options options, bool canIgnoreIncludes)
 {
     auto factoryFuntion = [canIgnoreIncludes, name]() {
-        (void)canIgnoreIncludes;
-        if constexpr (std::is_constructible_v<T, std::string, int>) {
-            // Avoid including checkbase.h for now
-            return new T(name, canIgnoreIncludes ? 1 : 0);
-        } else {
-            return new T(name);
-        }
+        return new T(name, canIgnoreIncludes ? CheckBase::Option_CanIgnoreIncludes : CheckBase::Option_None);
     };
     return RegisteredCheck{name, level, factoryFuntion, options};
 }

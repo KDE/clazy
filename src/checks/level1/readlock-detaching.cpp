@@ -160,10 +160,6 @@ public:
         }
     }
 };
-ReadlockDetaching::ReadlockDetaching(const std::string &name)
-    : CheckBase(name)
-{
-}
 
 void ReadlockDetaching::registerASTMatchers(MatchFinder &finder)
 {

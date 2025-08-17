@@ -205,8 +205,8 @@ static bool newOldHeaderFileMatch(const std::string &FileNameOld, std::string &F
     return true;
 }
 
-Qt6HeaderFixes::Qt6HeaderFixes(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
+Qt6HeaderFixes::Qt6HeaderFixes(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
     m_filesToIgnore = {"qeventtransition.h",
                        "qfinalstate.h",

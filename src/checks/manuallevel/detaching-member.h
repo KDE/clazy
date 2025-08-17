@@ -12,8 +12,6 @@
 
 #include "checks/detachingbase.h"
 
-#include <string>
-
 /**
  * Finds places where you're calling non-const member functions on member containers.
  *
@@ -23,7 +21,7 @@
 class DetachingMember : public DetachingBase
 {
 public:
-    explicit DetachingMember(const std::string &name);
+    explicit DetachingMember(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stm) override;
 };
 

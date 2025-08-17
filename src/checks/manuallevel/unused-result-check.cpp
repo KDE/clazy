@@ -53,11 +53,6 @@ public:
     }
 };
 
-UnusedResultCheck::UnusedResultCheck(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
-{
-}
-
 UnusedResultCheck::~UnusedResultCheck() = default;
 
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)

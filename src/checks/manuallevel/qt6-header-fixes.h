@@ -20,7 +20,7 @@
 class Qt6HeaderFixes : public CheckBase
 {
 public:
-    explicit Qt6HeaderFixes(const std::string &name);
+    explicit Qt6HeaderFixes(const std::string &name, Options options);
     void VisitInclusionDirective(clang::SourceLocation HashLoc,
                                  const clang::Token &IncludeTok,
                                  clang::StringRef FileName,

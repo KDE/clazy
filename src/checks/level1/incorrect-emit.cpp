@@ -23,8 +23,8 @@
 
 using namespace clang;
 
-IncorrectEmit::IncorrectEmit(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
+IncorrectEmit::IncorrectEmit(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
     m_emitLocations.reserve(30); // bootstrap it
     m_filesToIgnore = {"moc_", ".moc"};

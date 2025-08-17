@@ -31,8 +31,8 @@
 
 using namespace clang;
 
-UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name)
-    : CheckBase(name, Option_CanIgnoreIncludes)
+UnusedNonTrivialVariable::UnusedNonTrivialVariable(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
     const char *user_blacklist = getenv("CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_BLACKLIST");
     const char *user_whitelist = getenv("CLAZY_UNUSED_NON_TRIVIAL_VARIABLE_WHITELIST");

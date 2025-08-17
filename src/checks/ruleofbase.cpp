@@ -14,8 +14,8 @@
 
 using namespace clang;
 
-RuleOfBase::RuleOfBase(const std::string &name)
-    : CheckBase(name)
+RuleOfBase::RuleOfBase(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
 }
 

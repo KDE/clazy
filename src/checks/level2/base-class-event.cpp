@@ -21,11 +21,6 @@
 
 using namespace clang;
 
-BaseClassEvent::BaseClassEvent(const std::string &name)
-    : CheckBase(name)
-{
-}
-
 void BaseClassEvent::VisitDecl(Decl *decl)
 {
     auto *method = dyn_cast<CXXMethodDecl>(decl);
