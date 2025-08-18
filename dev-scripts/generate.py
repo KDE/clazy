@@ -283,7 +283,7 @@ void CheckManager::registerChecks()
         if c.visit_all_typedefs:
             qtflags += " | RegisteredCheck::Option_VisitAllTypeDefs"
 
-        qtflags = qtflags.replace("RegisteredCheck::Option_None |", "")
+        qtflags = qtflags.replace("RegisteredCheck::Option_None | ", "")
 
         if c.ifndef:
             text += "#ifndef " + c.ifndef + "\n"
