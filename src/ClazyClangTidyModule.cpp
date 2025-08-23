@@ -112,7 +112,7 @@ public:
         clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic, true);
         clazyContext->registerPreprocessorCallbacks(*PP);
 
-        for (const auto [check, options] : m_allChecks) {
+        for (const auto &[check, options] : m_allChecks) {
             check->m_context = clazyContext;
             if (options & RegisteredCheck::Option_PreprocessorCallbacks) {
                 check->enablePreProcessorCallbacks(*PP);
