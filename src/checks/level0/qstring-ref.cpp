@@ -208,7 +208,7 @@ bool StringRefCandidates::processCase2(CallExpr *call)
 
     const std::vector<FixItHint> fixits = fixit(innerMemberCall);
 
-    emitWarning(call->getBeginLoc(), "Use " + innerMethod->getNameAsString() + "Ref() instead", fixits);
+    emitWarning(call->getSourceRange().getBegin(), "Use " + innerMethod->getNameAsString() + "Ref() instead", fixits);
     return true;
 }
 
