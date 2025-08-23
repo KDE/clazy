@@ -7,6 +7,8 @@ Bugfixes:
 * use-chrono-in-qtimer: Fix crash when using precompiled headers
 * qt6-qhash-signature: Adapt check to use more proper logic for casts and fix
 crash in edgecases
+* Ensure that clang21 works properly with clazy and produces same line/letter
+number as before (mismatches with operator calls)
 
 Features:
 * Clazy can finally be integrated into clang-tidy - one command to rule

@@ -179,7 +179,7 @@ void ReserveCandidates::VisitStmt(clang::Stmt *stm)
 
         ValueDecl *valueDecl = Utils::valueDeclForCallExpr(callExpr);
         if (isReserveCandidate(valueDecl, body, callExpr)) {
-            emitWarning(callExpr->getBeginLoc(), "Reserve candidate");
+            emitWarning(callExpr->getSourceRange().getBegin(), "Reserve candidate");
         }
     }
 }
