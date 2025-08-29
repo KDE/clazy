@@ -1,5 +1,5 @@
 #include <QtCore/QCoreApplication>
-
+#include <QtCore/QtPlugin>
 
 
 
@@ -62,3 +62,6 @@ static HasConstExprCtor p9(1);
 namespace a_name_space{
   static NonPod NonPod8;
 }
+
+
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin) // OK, it's blacklisted

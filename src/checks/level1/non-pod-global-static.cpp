@@ -59,9 +59,20 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
     const SourceLocation declStart = varDecl->getBeginLoc();
 
     if (declStart.isMacroID()) {
-        auto macroName = static_cast<std::string>(Lexer::getImmediateMacroName(declStart, sm(), lo()));
-        if (clazy::startsWithAny(macroName, {"Q_IMPORT_PLUGIN", "Q_CONSTRUCTOR_FUNCTION", "Q_DESTRUCTOR_FUNCTION"})) { // Don't warn on these
-            return;
+        SourceLocation immediateMacroLoc = declStart;
+
+        // Walk up the macro expansion stack
+        while (immediateMacroLoc.isMacroID()) {
+            static const std::vector<std::string> macrosToIgnore{
+                "Q_IMPORT_PLUGIN",
+                "Q_CONSTRUCTOR_FUNCTION",
+                "Q_DESTRUCTOR_FUNCTION",
+            };
+
+            auto macroName = std::string_view(Lexer::getImmediateMacroName(immediateMacroLoc, sm(), lo()));
+            if (clazy::startsWithAny(macroName, macrosToIgnore))
+                return;
+            immediateMacroLoc = sm().getImmediateMacroCallerLoc(immediateMacroLoc);
         }
     }
 
