@@ -1,34 +1,29 @@
 Version 1.16
 ~~~~~~~~~~~~
-Relased: Not yet
+Released: 2025-09-03
 
 Bugfixes:
-* unused-result-check: Fix crash when method decleration can not be resolved
-* use-chrono-in-qtimer: Fix crash when using precompiled headers
-* qt6-qhash-signature: Adapt check to use more proper logic for casts and fix
-crash in edgecases
-* Ensure that clang21 works properly with clazy and produces same line/letter
-number as before (mismatches with operator calls)
-* non-pod-global-static: Fix false positive with Q_IMPORT_PLUGIN in Qt-6.10
+ * unused-result-check: Fix crash when method decleration can not be resolved
+ * use-chrono-in-qtimer: Fix crash when using precompiled headers
+ * qt6-qhash-signature: Adapt check to use more proper logic for casts and fix crash in edgecases
+ * Ensure that clang21 works properly with clazy and produces same line/letter number as before (mismatches with operator calls)
+ * non-pod-global-static: Fix false positive with Q_IMPORT_PLUGIN in Qt-6.10
 
 Features:
-* Clazy can finally be integrated into clang-tidy - one command to rule
-them all! All checks can be enabled using "clazy-<checkname>". For example:
-`clazy-qstring-arg,clazy-qfileinfo-exists`, enabling all checks using
-`clazy-*` will also enable manual checks. It is recommended to be more
-granular.
-The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin
-must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.
-* isempty-vs-count now provides fixits for all scenarios. Also, cases where
-the length is compared using "== 0", "< 1", "> 0" are now reported and have
-fixits.
-* qt6-\* Porting checks are considered deprecated now and will be removed in
-the next release of clazy
-* detaching-temporary and detaching-member checks provide fixits for methods
-that have const coutnerparts
-* NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND all work in clazy now as
-expected. Individual clazy checks can be disabled when using a "clazy-"
-prefix. For example "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"
+ * Clazy can finally be integrated into clang-tidy - one command to rule
+	 them all! All checks can be enabled using "clazy-<checkname>". For example:
+  `clazy-qstring-arg,clazy-qfileinfo-exists`, enabling all checks using
+  `clazy-*` will also enable manual checks. It is recommended to be more granular.
+  The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin
+  must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.
+ * isempty-vs-count now provides fixits for all scenarios. Also, cases where
+  the length is compared using "== 0", "< 1", "> 0" are now reported and have fixits.
+ * qt6-\* Porting checks are considered deprecated now and will be removed in the next release of clazy
+ * detaching-temporary and detaching-member checks provide fixits for methods that have const coutnerparts
+ * NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND all work in clazy now as
+  expected. Individual clazy checks can be disabled when using a "clazy-"
+  prefix. For example "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"
+
 Version 1.15
 ~~~~~~~~~~~~
 Released: 2025-06-12

@@ -138,6 +138,34 @@
   </provides>
   <icon type="stock">clazy</icon>
   <releases>
+   <release type="stable" version="1.16" date="2025-09-03T00:00:00Z">
+      <description>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>unused-result-check: Fix crash when method decleration can not be resolved</li>
+          <li>use-chrono-in-qtimer: Fix crash when using precompiled headers</li>
+          <li>qt6-qhash-signature: Adapt check to use more proper logic for casts and fix crash in edgecases</li>
+          <li>Ensure that clang21 works properly with clazy and produces same line/letter number as before (mismatches with operator calls)</li>
+          <li>non-pod-global-static: Fix false positive with Q_IMPORT_PLUGIN in Qt-6.10</li>
+        </ul>
+        <p>This release adds the following features:</p>
+        <ul>
+          <li>Clazy can finally be integrated into clang-tidy - one command to rule</li>
+          <li>them all! All checks can be enabled using "clazy-&lt;checkname&gt;". For example:</li>
+          <li>`clazy-qstring-arg,clazy-qfileinfo-exists`, enabling all checks using</li>
+          <li>`clazy-*` will also enable manual checks. It is recommended to be more granular.</li>
+          <li>The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin</li>
+          <li>must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.</li>
+          <li>isempty-vs-count now provides fixits for all scenarios. Also, cases where</li>
+          <li>the length is compared using "== 0", "&lt; 1", "&gt; 0" are now reported and have fixits.</li>
+          <li>qt6-\* Porting checks are considered deprecated now and will be removed in the next release of clazy</li>
+          <li>detaching-temporary and detaching-member checks provide fixits for methods that have const coutnerparts</li>
+          <li>NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND all work in clazy now as</li>
+          <li>expected. Individual clazy checks can be disabled when using a "clazy-"</li>
+          <li>prefix. For example "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
+        </ul>
+      </description>
+    </release>
     <release type="stable" version="1.15" date="2025-06-12T00:00:00Z">
       <description>
         <p>This release fixes the following bugs:</p>
