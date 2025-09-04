@@ -138,7 +138,7 @@
   </provides>
   <icon type="stock">clazy</icon>
   <releases>
-   <release type="stable" version="1.16" date="2025-09-03T00:00:00Z">
+    <release type="stable" version="1.16" date="2025-09-03T00:00:00Z">
       <description>
         <p>This release fixes the following bugs:</p>
         <ul>
