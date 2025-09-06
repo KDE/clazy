@@ -70,7 +70,10 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
     std::vector<UsingDirectiveDecl *> usings;
     if (honourUsingDirectives) {
         for (DeclContext *context : visibleContexts) {
-            clazy::append(context->using_directives(), usings);
+            for (UsingDirectiveDecl *directive : context->using_directives()) {
+                directive->dump();
+                usings.push_back(directive);
+            }
         }
     }
 

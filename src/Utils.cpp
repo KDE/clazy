@@ -659,9 +659,11 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
     }
 
     std::vector<CXXMethodDecl *> methods;
-    clazy::append_if(record->methods(), methods, [methodName](CXXMethodDecl *m) {
-        return clazy::name(m) == methodName;
-    });
+    for (CXXMethodDecl *method : record->methods()) {
+        if (clazy::name(method) == methodName) {
+            methods.push_back(method);
+        }
+    }
 
     // Also include the base classes
     for (auto base : record->bases()) {

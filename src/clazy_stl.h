@@ -36,35 +36,23 @@ bool any_of(const Range &r, Pred pred)
     return std::any_of(r.begin(), r.end(), pred);
 }
 
-template<typename Range>
-size_t count(const Range &r)
+template<typename SRC_T, typename DST_T>
+void append(const std::vector<SRC_T> &src, std::vector<DST_T> &dst)
 {
-    return std::distance(r.begin(), r.end());
-}
-
-template<typename SrcContainer, typename DstContainer>
-void append(const SrcContainer &src, DstContainer &dst)
-{
-    dst.reserve(clazy::count(dst) + clazy::count(src));
+    dst.reserve(src.size() + dst.size());
     std::copy(src.begin(), src.end(), std::back_inserter(dst));
 }
 
-template<typename SrcContainer, typename DstContainer, typename Pred>
-void append_if(const SrcContainer &src, DstContainer &dst, Pred pred)
+template<typename SRC_T, typename DST_T, typename Pred>
+void append_if(const std::vector<SRC_T> &src, std::vector<DST_T> &dst, Pred pred)
 {
-    dst.reserve(clazy::count(dst) + clazy::count(src));
+    dst.reserve(src.size() + dst.size());
     std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);
-}
-
-template<typename Range>
-bool isEmpty(const Range &r)
-{
-    return r.begin() == r.end();
 }
 
 inline bool hasChildren(clang::Stmt *s)
 {
-    return s && !clazy::isEmpty(s->children());
+    return s && !s->children().empty();
 }
 
 inline clang::Stmt *childAt(clang::Stmt *s, int index)
