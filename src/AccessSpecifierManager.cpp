@@ -80,7 +80,7 @@ public:
             return;
         }
 
-        auto name = ii->getName();
+        const StringRef name = ii->getName();
         const bool isSlots = name == "slots" || name == "Q_SLOTS";
         const bool isSignals = isSlots ? false : (name == "signals" || name == "Q_SIGNALS");
 
