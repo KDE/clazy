@@ -196,7 +196,7 @@ RegisteredCheck::List CheckManager::requestedChecks(std::vector<std::string> &ar
 
     // #4 Add checks from requested level
     RegisteredCheck::List checksFromRequestedLevel = checksForLevel(requestedLevel);
-    clazy::append(checksFromRequestedLevel, result);
+    std::ranges::copy(checksFromRequestedLevel, std::back_inserter(result));
     clazy::sort_and_remove_dups(result, checkLessThan);
     CheckManager::removeChecksFromList(result, userDisabledChecks);
 
@@ -207,7 +207,7 @@ RegisteredCheck::List CheckManager::checksForLevel(int level) const
 {
     RegisteredCheck::List result;
     if (level > CheckLevelUndefined && level <= MaxCheckLevel) {
-        clazy::append_if(m_registeredChecks, result, [level](const RegisteredCheck &r) {
+        std::ranges::copy_if(m_registeredChecks, std::back_inserter(result), [&](const RegisteredCheck &r) {
             return r.level <= level;
         });
     }
@@ -269,7 +269,7 @@ RegisteredCheck::List CheckManager::checksForCommaSeparatedString(const std::str
                     const int digit = lastChar - '0';
                     if (digit > CheckLevelUndefined && digit <= MaxCheckLevel) {
                         RegisteredCheck::List levelChecks = checksForLevel(digit);
-                        clazy::append(levelChecks, result);
+                        std::ranges::copy(levelChecks, std::back_inserter(result));
                     } else {
                         llvm::errs() << "Invalid level: " << name << "\n";
                     }

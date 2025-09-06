@@ -36,20 +36,6 @@ bool any_of(const Range &r, Pred pred)
     return std::any_of(r.begin(), r.end(), pred);
 }
 
-template<typename SRC_T, typename DST_T>
-void append(const std::vector<SRC_T> &src, std::vector<DST_T> &dst)
-{
-    dst.reserve(src.size() + dst.size());
-    std::copy(src.begin(), src.end(), std::back_inserter(dst));
-}
-
-template<typename SRC_T, typename DST_T, typename Pred>
-void append_if(const std::vector<SRC_T> &src, std::vector<DST_T> &dst, Pred pred)
-{
-    dst.reserve(src.size() + dst.size());
-    std::copy_if(src.begin(), src.end(), std::back_inserter(dst), pred);
-}
-
 inline bool hasChildren(clang::Stmt *s)
 {
     return s && !s->children().empty();

@@ -60,8 +60,6 @@ inline bool isParentOfMemberFunctionCall(clang::Stmt *stm, const std::string &na
     return clazy::any_of(stm->children(), [name](clang::Stmt *child) {
         return isParentOfMemberFunctionCall(child, name);
     });
-
-    return false;
 }
 
 /**
@@ -240,7 +238,7 @@ std::vector<T *> getStatements(clang::Stmt *body,
         }
 
         auto childStatements = getStatements<T>(child, sm, startLocation, depth, false, ignoreOptions);
-        clazy::append(childStatements, statements);
+        std::ranges::copy(childStatements, std::back_inserter(statements));
     }
 
     return statements;

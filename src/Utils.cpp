@@ -153,9 +153,7 @@ bool Utils::childsHaveSideEffects(Stmt *stm)
             return true;
     }*/
 
-    return clazy::any_of(stm->children(), [](Stmt *s) {
-        return childsHaveSideEffects(s);
-    });
+    return clazy::any_of(stm->children(), childsHaveSideEffects);
 }
 
 CXXRecordDecl *Utils::recordFromVarDecl(Decl *decl)
@@ -659,20 +657,15 @@ std::vector<CXXMethodDecl *> Utils::methodsFromString(const CXXRecordDecl *recor
     }
 
     std::vector<CXXMethodDecl *> methods;
-    for (CXXMethodDecl *method : record->methods()) {
-        if (clazy::name(method) == methodName) {
-            methods.push_back(method);
-        }
-    }
+    std::ranges::copy_if(record->methods(), std::back_inserter(methods), [&methodName](CXXMethodDecl *method) {
+        return clazy::name(method) == methodName;
+    });
 
     // Also include the base classes
     for (auto base : record->bases()) {
-        const Type *t = base.getType().getTypePtrOrNull();
-        if (t) {
+        if (const Type *t = base.getType().getTypePtrOrNull()) {
             auto baseMethods = methodsFromString(t->getAsCXXRecordDecl(), methodName);
-            if (!baseMethods.empty()) {
-                clazy::append(baseMethods, methods);
-            }
+            std::ranges::copy(baseMethods, std::back_inserter(methods));
         }
     }
 
