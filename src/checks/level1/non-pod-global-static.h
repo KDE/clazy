@@ -13,6 +13,7 @@
 #include "checkbase.h"
 
 #include <string>
+#include <vector>
 
 /**
  * Finds global static non-POD variables.
@@ -24,6 +25,9 @@ class NonPodGlobalStatic : public CheckBase
 public:
     explicit NonPodGlobalStatic(const std::string &name, Options options);
     void VisitStmt(clang::Stmt *stm) override;
+
+private:
+    std::vector<unsigned int> m_emittedWarnings;
 };
 
 #endif
