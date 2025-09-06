@@ -84,15 +84,6 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
 
-# Compiler might support c++17 but not have std::filesystem in the standard library
-if (NOT FILESYSTEM_RUN_RESULT)
-  try_compile(FILESYSTEM_RUN_RESULT ${CMAKE_CURRENT_BINARY_DIR} SOURCES ${CMAKE_CURRENT_LIST_DIR}/.cmake_has_filesystem_test.cpp OUTPUT_VARIABLE foo CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
-endif()
-
-if (NOT FILESYSTEM_RUN_RESULT)
-  message(FATAL_ERROR "std::filesystem support is mandatory")
-endif()
-
 include(ClazySources.cmake)
 
 include_directories(${CMAKE_BINARY_DIR})
