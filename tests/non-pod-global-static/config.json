@@ -4,6 +4,9 @@
             "filename": "foo.cpp"
         },
         {
+            "filename": "collection.cpp"
+        },
+        {
             "filename": "qml_module.cpp",
             "qt_major_versions": [6]
         }

@@ -108,6 +108,14 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
     if (!shouldIgnoreType(className)) {
         const std::string varName = varDecl->getQualifiedNameAsString();
         const std::string error = std::string("non-POD static (") + className.data() + " " + varName + std::string(")");
+
+        // Do not emit warnings for each entry in collection - this is overkill since we emit it for the declaration
+        // Traversing the ParentMap unfortunately does not work, because it is cut of at the initializer list
+        if (std::find(m_emittedWarnings.begin(), m_emittedWarnings.end(), declStart.getRawEncoding()) != m_emittedWarnings.end()) {
+            return;
+        }
+
+        m_emittedWarnings.push_back(declStart.getRawEncoding());
         emitWarning(declStart, error);
     }
 }
