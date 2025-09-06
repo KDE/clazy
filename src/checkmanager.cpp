@@ -135,7 +135,7 @@ RegisteredCheck::List CheckManager::requestedChecksThroughEnv(std::vector<std::s
 
 RegisteredCheck::List::const_iterator CheckManager::checkForName(const RegisteredCheck::List &checks, const std::string &name) const
 {
-    return clazy::find_if(checks, [name](const RegisteredCheck &r) {
+    return std::ranges::find_if(checks, [name](const RegisteredCheck &r) {
         return r.name == name;
     });
 }
@@ -148,7 +148,7 @@ RegisteredFixIt::List CheckManager::availableFixIts(const std::string &checkName
 
 static bool takeArgument(const std::string &arg, std::vector<std::string> &args)
 {
-    auto it = clazy::find(args, arg);
+    auto it = std::ranges::find(args, arg);
     if (it != args.end()) {
         args.erase(it, it + 1);
         return true;
@@ -309,7 +309,7 @@ std::vector<std::string> CheckManager::checksAsErrors() const
 
         // Check whether all supplied check names are valid
         for (const std::string &name : checkNames) {
-            auto it = clazy::find_if(m_registeredChecks, [&name](const RegisteredCheck &check) {
+            auto it = std::ranges::find_if(m_registeredChecks, [&name](const RegisteredCheck &check) {
                 return check.name == name;
             });
             if (it == m_registeredChecks.end()) {

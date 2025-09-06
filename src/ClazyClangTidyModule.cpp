@@ -81,7 +81,7 @@ public:
         const auto checks = CheckManager::instance()->availableChecks(ManualCheckLevel);
         for (const auto &availCheck : checks) {
             const std::string checkName = "clazy-" + availCheck.name;
-            if (std::find(s_enabledChecks.begin(), s_enabledChecks.end(), checkName) == s_enabledChecks.end()) {
+            if (std::ranges::find(s_enabledChecks, checkName) == s_enabledChecks.end()) {
                 continue;
             }
             auto *check = availCheck.factory();

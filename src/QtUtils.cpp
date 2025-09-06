@@ -294,7 +294,7 @@ bool clazy::isQtContainer(QualType t)
 bool clazy::isQtContainer(const CXXRecordDecl *record)
 {
     const StringRef typeName = clazy::name(record);
-    return clazy::any_of(clazy::qtContainers(), [typeName](StringRef container) {
+    return std::ranges::any_of(clazy::qtContainers(), [typeName](StringRef container) {
         return container == typeName;
     });
 }
@@ -306,7 +306,7 @@ bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
     }
 
     static const std::vector<std::string> classes = {"QVector", "std::vector", "QList", "QSet"};
-    return clazy::any_of(classes, [recordDecl](const std::string &className) {
+    return std::ranges::any_of(classes, [recordDecl](const std::string &className) {
         return clazy::derivesFrom(recordDecl, className);
     });
 }

@@ -33,7 +33,7 @@ std::vector<FixItHint> DetachingBase::getFixitHints(StringRef className, StringR
 
     if (functionsIt != withCounterparts.end()) {
         const auto functions = functionsIt->second;
-        const auto it = clazy::find_if(functions, [functionName](const auto &pair) {
+        const auto it = std::ranges::find_if(functions, [functionName](const auto &pair) {
             return pair.first == functionName;
         });
         if (it == functions.end() || it->first == it->second) {
@@ -90,7 +90,7 @@ bool DetachingBase::isDetachingMethod(CXXMethodDecl *method, DetachingMethodType
     auto it = methodsByType.find(className.str());
     if (it != methodsByType.cend()) {
         const auto &methods = it->second;
-        return clazy::any_of(methods, [&methodName](auto pair) {
+        return std::ranges::any_of(methods, [&methodName](auto pair) {
             return pair.first == methodName;
         });
     }

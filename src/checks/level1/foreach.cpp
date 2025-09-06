@@ -200,7 +200,8 @@ bool Foreach::containsDetachments(Stmt *stm, clang::ValueDecl *containerValueDec
         }
     }
 
-    return clazy::any_of(stm->children(), [this, containerValueDecl](Stmt *child) {
+    const auto children = stm->children();
+    return std::any_of(children.begin(), children.end(), [this, containerValueDecl](Stmt *child) {
         return this->containsDetachments(child, containerValueDecl);
     });
 }

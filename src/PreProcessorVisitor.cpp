@@ -63,10 +63,9 @@ bool PreProcessorVisitor::isBetweenQtNamespaceMacros(SourceLocation loc)
 
 bool PreProcessorVisitor::hasInclude(const std::string &fileName, bool IsAngled) const
 {
-    auto it = std::find_if(m_includeInfo.cbegin(), m_includeInfo.cend(), [&](const IncludeInfo &info) {
+    return std::ranges::any_of(m_includeInfo, [&](const IncludeInfo &info) {
         return info.fileName == fileName && info.IsAngled == IsAngled;
     });
-    return (it != m_includeInfo.cend());
 }
 
 SourceLocation PreProcessorVisitor::endOfIncludeSection() const

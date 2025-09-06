@@ -16,7 +16,6 @@
 #include "QtUtils.h"
 #include "StringUtils.h"
 #include "Utils.h"
-#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
@@ -182,7 +181,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
     std::vector<CXXMemberCallExpr *> memberCalls;
     clazy::getChilds<CXXMemberCallExpr>(expr, memberCalls);
 
-    return std::any_of(memberCalls.begin(), memberCalls.end(), [](CXXMemberCallExpr *callExpr) {
+    return std::ranges::any_of(memberCalls, [](CXXMemberCallExpr *callExpr) {
         auto *callee = callExpr->getDirectCallee();
         return callee && dyn_cast<CXXConversionDecl>(callee);
     });
@@ -190,7 +189,7 @@ bool OldStyleConnect::isQPointer(Expr *expr) const
 
 bool OldStyleConnect::isPrivateSlot(const std::string &name) const
 {
-    return clazy::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
+    return std::ranges::any_of(m_privateSlots, [name](const PrivateSlot &slot) {
         return slot.name == name;
     });
 }

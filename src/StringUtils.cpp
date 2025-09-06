@@ -35,7 +35,7 @@ bool clazy::anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &s
         return false;
     }
 
-    return clazy::any_of(Utils::functionParameters(func), [simpleType, lo](ParmVarDecl *p) {
+    return std::ranges::any_of(Utils::functionParameters(func), [simpleType, lo](ParmVarDecl *p) {
         return simpleTypeName(p, lo) == simpleType;
     });
 }
@@ -46,7 +46,7 @@ bool clazy::anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector
         return false;
     }
 
-    return clazy::any_of(simpleTypes, [func, lo](const std::string &simpleType) {
+    return std::ranges::any_of(simpleTypes, [func, lo](const std::string &simpleType) {
         return clazy::anyArgIsOfSimpleType(func, simpleType, lo);
     });
 }

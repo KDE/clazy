@@ -37,7 +37,7 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 
     static const std::vector<std::string> whiteList{"QScopedPointer::data", "QPointer::data", "QSharedPointer::data", "QSharedDataPointer::data"};
 
-    bool accepted = clazy::any_of(whiteList, [func](const std::string &f) {
+    bool accepted = std::ranges::any_of(whiteList, [func](const std::string &f) {
         return f == func;
     });
     if (!accepted) {

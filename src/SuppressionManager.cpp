@@ -117,11 +117,9 @@ bool SuppressionManager::isSuppressed(const std::string &checkName,
     for (const auto &rangeSuppression : suppressions.checkWildcardsRanges) {
         if (rangeSuppression.begin <= lineNumber && rangeSuppression.end >= lineNumber) {
             return rangeSuppression.checksToSkipWildcard.empty()
-                || std::any_of(rangeSuppression.checksToSkipWildcard.begin(),
-                               rangeSuppression.checksToSkipWildcard.end(),
-                               [&checkName](const llvm::Regex &regex) {
-                                   return regex.match(checkName);
-                               });
+                || std::ranges::any_of(rangeSuppression.checksToSkipWildcard, [&checkName](const llvm::Regex &regex) {
+                       return regex.match(checkName);
+                   });
         }
     }
 

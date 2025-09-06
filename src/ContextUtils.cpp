@@ -86,7 +86,7 @@ std::string clazy::getMostNeededQualifiedName(const SourceManager &sourceManager
 
     for (DeclContext *context : visibleContexts) {
         if (context != method->getParent()) { // Don't remove the most immediate
-            auto it = clazy::find_if(methodContexts, [context](DeclContext *c) {
+            auto it = std::ranges::find_if(methodContexts, [context](DeclContext *c) {
                 if (c == context) {
                     return true;
                 }
