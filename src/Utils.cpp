@@ -45,7 +45,7 @@ using namespace clang;
 
 bool Utils::hasConstexprCtor(CXXRecordDecl *decl)
 {
-    return clazy::any_of(decl->ctors(), [](CXXConstructorDecl *ctor) {
+    return std::ranges::any_of(decl->ctors(), [](CXXConstructorDecl *ctor) {
         return ctor->isConstexpr();
     });
 }
@@ -103,7 +103,8 @@ bool Utils::allChildrenMemberCallsConst(Stmt *stm)
         }
     }
 
-    return clazy::all_of(stm->children(), [](Stmt *child) {
+    const auto children = stm->children();
+    return std::all_of(children.begin(), children.end(), [](Stmt *child) {
         return allChildrenMemberCallsConst(child);
     });
 }
@@ -420,7 +421,7 @@ bool Utils::addressIsTaken(Stmt *body, const clang::ValueDecl *valDecl)
     }
 
     auto unaries = clazy::getStatements<UnaryOperator>(body);
-    return clazy::any_of(unaries, [valDecl](UnaryOperator *op) {
+    return std::ranges::any_of(unaries, [valDecl](UnaryOperator *op) {
         if (op->getOpcode() != clang::UO_AddrOf) {
             return false;
         }
@@ -909,7 +910,7 @@ bool Utils::referencesVarDecl(clang::DeclStmt *declStmt, clang::VarDecl *varDecl
         return true;
     }
 
-    return clazy::any_of(declStmt->getDeclGroup(), [varDecl](Decl *decl) {
+    return std::ranges::any_of(declStmt->getDeclGroup(), [varDecl](Decl *decl) {
         return varDecl == decl;
     });
 }
@@ -979,7 +980,7 @@ bool Utils::ctorInitializerContainsMove(CXXCtorInitializer *init)
 
 bool Utils::ctorInitializerContainsMove(const std::vector<CXXCtorInitializer *> &ctorInits)
 {
-    return clazy::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
+    return std::ranges::any_of(ctorInits, [](CXXCtorInitializer *ctorInit) {
         return Utils::ctorInitializerContainsMove(ctorInit);
     });
 }

@@ -77,7 +77,7 @@ public:
             return true;
         }
         const auto methodName = std::string("operator") + getOperatorSpelling(call->getOperator());
-        if (std::find(method->second.begin(), method->second.end(), methodName) == method->second.end()) {
+        if (std::ranges::find(method->second, methodName) == method->second.end()) {
             return true;
         }
 
@@ -109,7 +109,7 @@ public:
         if (method == methods.end()) {
             return true;
         }
-        if (std::find(method->second.begin(), method->second.end(), methodName) == method->second.end()) {
+        if (std::ranges::find(method->second, methodName) == method->second.end()) {
             return true;
         }
 

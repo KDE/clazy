@@ -197,7 +197,7 @@ bool CheckBase::shouldIgnoreFile(SourceLocation loc) const
 
     std::string filename = static_cast<std::string>(sm().getFilename(loc));
 
-    return clazy::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
+    return std::ranges::any_of(m_filesToIgnore, [filename](const std::string &ignored) {
         return clazy::contains(filename, ignored);
     });
 }

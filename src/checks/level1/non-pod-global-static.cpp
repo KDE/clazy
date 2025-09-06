@@ -111,7 +111,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
 
         // Do not emit warnings for each entry in collection - this is overkill since we emit it for the declaration
         // Traversing the ParentMap unfortunately does not work, because it is cut of at the initializer list
-        if (std::find(m_emittedWarnings.begin(), m_emittedWarnings.end(), declStart.getRawEncoding()) != m_emittedWarnings.end()) {
+        if (std::ranges::find(m_emittedWarnings, declStart.getRawEncoding()) != m_emittedWarnings.end()) {
             return;
         }
 

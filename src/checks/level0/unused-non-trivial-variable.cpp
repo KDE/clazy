@@ -78,7 +78,7 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
 
     // Check some obvious candidates first
     StringRef typeName = clazy::name(record);
-    bool any = clazy::any_of(blacklist, [typeName](StringRef container) {
+    bool any = std::ranges::any_of(blacklist, [typeName](StringRef container) {
         return container == typeName;
     });
 
@@ -100,7 +100,7 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
     }
 
     // Now check the user's blacklist, set by env-variable
-    any = clazy::any_of(m_userBlacklist, [typeName](const std::string &container) {
+    any = std::ranges::any_of(m_userBlacklist, [typeName](const std::string &container) {
         return container == typeName;
     });
 
@@ -184,7 +184,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
     }
 
     StringRef typeName = clazy::name(record);
-    bool any = clazy::any_of(nonTrivialTypes, [typeName](StringRef container) {
+    bool any = std::ranges::any_of(nonTrivialTypes, [typeName](StringRef container) {
         return container == typeName;
     });
 
@@ -192,7 +192,7 @@ bool UnusedNonTrivialVariable::isInterestingType(QualType t) const
         return true;
     }
 
-    return clazy::any_of(m_userWhitelist, [typeName](const std::string &container) {
+    return std::ranges::any_of(m_userWhitelist, [typeName](const std::string &container) {
         return container == typeName;
     });
 }
@@ -217,7 +217,7 @@ void UnusedNonTrivialVariable::handleVarDecl(VarDecl *varDecl)
         return declRef->getDecl() == varDecl;
     };
 
-    if (!clazy::any_of(declRefs, pred)) {
+    if (!std::ranges::any_of(declRefs, pred)) {
         // Check for [[maybe_unused]] attribute
         if (!varDecl->hasAttr<clang::UnusedAttr>()) {
             const std::string varName = varDecl->getQualifiedNameAsString();

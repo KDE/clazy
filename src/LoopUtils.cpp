@@ -9,7 +9,6 @@
 
 #include "LoopUtils.h"
 #include "StringUtils.h"
-#include "clazy_stl.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>

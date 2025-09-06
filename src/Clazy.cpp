@@ -15,6 +15,7 @@
 #include "checkbase.h"
 #include "clazy_stl.h"
 
+#include <algorithm>
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
@@ -88,7 +89,7 @@ void ClazyASTConsumer::HandleTranslationUnit(ASTContext &ctx)
 
 static bool parseArgument(const std::string &arg, std::vector<std::string> &args)
 {
-    auto it = clazy::find(args, arg);
+    auto it = std::ranges::find(args, arg);
     if (it != args.end()) {
         args.erase(it);
         return true;
@@ -246,7 +247,7 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
     std::lock_guard<std::mutex> lock(CheckManager::lock());
     RegisteredCheck::List checks = m_checkManager->availableChecks(MaxCheckLevel);
 
-    clazy::sort(checks, checkLessThanByLevel);
+    std::ranges::sort(checks, checkLessThanByLevel);
 
     ros << "Available checks and FixIts:\n\n";
 

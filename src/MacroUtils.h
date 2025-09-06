@@ -60,7 +60,7 @@ inline bool isInMacro(const clang::ASTContext *context, clang::SourceLocation lo
  */
 inline bool isInAnyMacro(const clang::ASTContext *context, clang::SourceLocation loc, const std::vector<llvm::StringRef> &macroNames)
 {
-    return clazy::any_of(macroNames, [context, loc](const llvm::StringRef &macroName) {
+    return std::ranges::any_of(macroNames, [context, loc](const llvm::StringRef &macroName) {
         return isInMacro(context, loc, macroName);
     });
 }

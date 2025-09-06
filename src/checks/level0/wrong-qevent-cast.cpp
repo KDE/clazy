@@ -10,8 +10,8 @@
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
-#include "clazy_stl.h"
 
+#include <algorithm>
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/Expr.h>
@@ -25,7 +25,6 @@
 #include <llvm/Support/Casting.h>
 
 #include <unordered_map>
-#include <utility>
 #include <vector>
 
 using namespace clang;
@@ -176,7 +175,7 @@ static bool eventTypeMatchesClass(QtUnregularlyNamedEventTypes eventType, const 
     }
 
     const ClassNameList &classes = it->second;
-    const bool found = clazy::find(classes, className) != classes.cend();
+    const bool found = std::ranges::find(classes, className) != classes.cend();
 
     return found;
 }

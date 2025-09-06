@@ -22,7 +22,7 @@ namespace clazy
 template<typename C>
 bool contains(const C &container, const typename C::value_type &value)
 {
-    return std::find(container.begin(), container.end(), value) != container.end();
+    return std::ranges::find(container, value) != container.end();
 }
 
 inline bool contains(const std::string &haystack, const std::string &needle)
@@ -30,40 +30,10 @@ inline bool contains(const std::string &haystack, const std::string &needle)
     return haystack.find(needle) != std::string::npos;
 }
 
-template<typename C>
-typename C::iterator find(C &container, const typename C::value_type &value)
-{
-    return std::find(container.begin(), container.end(), value);
-}
-
-template<typename C>
-typename C::const_iterator find(const C &container, const typename C::value_type &value)
-{
-    return std::find(container.begin(), container.end(), value);
-}
-
-template<typename C, typename Pred>
-typename C::iterator find_if(C &container, Pred pred)
-{
-    return std::find_if(container.begin(), container.end(), pred);
-}
-
-template<typename C, typename Pred>
-typename C::const_iterator find_if(const C &container, Pred pred)
-{
-    return std::find_if(container.begin(), container.end(), pred);
-}
-
 template<typename Range, typename Pred>
 bool any_of(const Range &r, Pred pred)
 {
     return std::any_of(r.begin(), r.end(), pred);
-}
-
-template<typename Range, typename Pred>
-bool all_of(const Range &r, Pred pred)
-{
-    return std::all_of(r.begin(), r.end(), pred);
 }
 
 template<typename Range>
@@ -125,7 +95,7 @@ inline bool startsWith(std::string_view target, std::string_view maybeBeginning)
  */
 inline bool startsWithAny(std::string_view target, const std::vector<std::string> &beginningCandidates)
 {
-    return clazy::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
+    return std::ranges::any_of(beginningCandidates, [target](const std::string &maybeBeginning) {
         return clazy::startsWith(target, maybeBeginning);
     });
 }
@@ -135,7 +105,7 @@ inline bool startsWithAny(std::string_view target, const std::vector<std::string
  */
 inline bool equalsAny(const std::string &target, const std::vector<std::string> &candidates)
 {
-    return clazy::any_of(candidates, [target](const std::string &candidate) {
+    return std::ranges::any_of(candidates, [target](const std::string &candidate) {
         return candidate == target;
     });
 }
@@ -153,7 +123,7 @@ inline bool endsWith(std::string_view target, std::string_view maybeEnding)
  */
 inline bool endsWithAny(const std::string &target, const std::vector<std::string> &endingCandidates)
 {
-    return clazy::any_of(endingCandidates, [target](const std::string &maybeEnding) {
+    return std::ranges::any_of(endingCandidates, [target](const std::string &maybeEnding) {
         return clazy::endsWith(target, maybeEnding);
     });
 }
@@ -212,15 +182,9 @@ inline std::vector<std::string> splitString(const char *str, char separator)
 }
 
 template<typename Container, typename LessThan>
-void sort(Container &c, LessThan lessThan)
-{
-    std::sort(c.begin(), c.end(), lessThan);
-}
-
-template<typename Container, typename LessThan>
 void sort_and_remove_dups(Container &c, LessThan lessThan)
 {
-    std::sort(c.begin(), c.end(), lessThan);
+    std::ranges::sort(c, lessThan);
     c.erase(std::unique(c.begin(), c.end()), c.end());
 }
 
