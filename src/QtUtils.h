@@ -179,7 +179,7 @@ clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl, cons
 /**
  * Returns true if the function declaration is QObject::connect().
  */
-bool isConnect(clang::FunctionDecl *func);
+bool isConnect(clang::FunctionDecl *func, const std::string &qtNamespace);
 /**
  * Returns true if the function declaration represents a QObject::connect() using the new Qt5
  * (pointer to member) syntax.

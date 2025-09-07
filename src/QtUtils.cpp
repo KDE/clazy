@@ -329,9 +329,9 @@ clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDec
     return nullptr;
 }
 
-bool clazy::isConnect(FunctionDecl *func)
+bool clazy::isConnect(FunctionDecl *func, const std::string &qtNamespace)
 {
-    return func && func->getQualifiedNameAsString() == "QObject::connect";
+    return func && func->getQualifiedNameAsString() == (qtNamespace.empty() ? "" : qtNamespace + "::") + "QObject::connect";
 }
 
 bool clazy::connectHasPMFStyle(FunctionDecl *func)
