@@ -215,7 +215,7 @@ void QStringArg::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (clazy::simpleArgTypeName(method, method->getNumParams() - 1, lo()) == "QChar") {
+    if (clazy::simpleArgTypeName(method, method->getNumParams() - 1, lo()) == m_context->qtClassname("QChar")) {
         // The second arg wasn't passed, so this is a safe and unambiguous use, like .arg(1)
         if (isa<CXXDefaultArgExpr>(memberCall->getArg(1))) {
             return;
