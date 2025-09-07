@@ -46,7 +46,7 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
     }
 
     FunctionDecl *connectFunc = callExpr->getDirectCallee();
-    if (!clazy::isConnect(connectFunc)) {
+    if (!clazy::isConnect(connectFunc, m_context->qtNamespace())) {
         return;
     }
 

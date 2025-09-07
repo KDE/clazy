@@ -31,7 +31,8 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
     // connect(const QObject *sender, PointerToMemberFunction signal, const QObject *context, Functor functor, Qt::ConnectionType type)
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !clazy::isConnect(func) || !clazy::connectHasPMFStyle(func)) {
+    if (!func || func->getNumParams() != 5 || !func->isTemplateInstantiation() || !clazy::isConnect(func, m_context->qtNamespace())
+        || !clazy::connectHasPMFStyle(func)) {
         return;
     }
 

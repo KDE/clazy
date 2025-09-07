@@ -54,7 +54,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    if (numParams != 3 || !clazy::isConnect(fdecl)) {
+    if (numParams != 3 || !clazy::isConnect(fdecl, m_context->qtNamespace())) {
         return;
     }
 

@@ -27,7 +27,7 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
     }
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!clazy::isConnect(func) || !clazy::connectHasPMFStyle(func)) {
+    if (!clazy::isConnect(func, m_context->qtNamespace()) || !clazy::connectHasPMFStyle(func)) {
         return;
     }
 
