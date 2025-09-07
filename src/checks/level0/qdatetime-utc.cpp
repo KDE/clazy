@@ -32,10 +32,12 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         return;
     }
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
-    const std::string secondMethodName = secondMethod->getQualifiedNameAsString();
-    const bool isMSecSinceEpoc = secondMethodName == "QDateTime::toMSecsSinceEpoch";
-    const bool isSecSinceEpoc = secondMethodName == "QDateTime::toSecsSinceEpoch" || secondMethodName == "QDateTime::toTime_t";
-    const bool isToUtcConversion = secondMethodName == "QDateTime::toUTC";
+    std::string secondMethodName = secondMethod->getQualifiedNameAsString();
+
+    const bool isMSecSinceEpoc = secondMethodName == m_context->qtClassname("QDateTime::toMSecsSinceEpoch");
+    const bool isSecSinceEpoc =
+        secondMethodName == m_context->qtClassname("QDateTime::toSecsSinceEpoch") || secondMethodName == m_context->qtClassname("QDateTime::toTime_t");
+    const bool isToUtcConversion = secondMethodName == m_context->qtClassname("QDateTime::toUTC");
     if (!isMSecSinceEpoc && !isSecSinceEpoc && !isToUtcConversion) {
         return;
     }
@@ -52,8 +54,8 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
     }
 
     if (auto *firstMethod = dyn_cast<CXXMethodDecl>(firstFunc); !firstMethod
-        || (firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTime"
-            && firstMethod->getQualifiedNameAsString() != "QDateTime::currentDateTimeUtc")) {
+        || (firstMethod->getQualifiedNameAsString() != m_context->qtClassname("QDateTime::currentDateTime")
+            && firstMethod->getQualifiedNameAsString() != m_context->qtClassname("QDateTime::currentDateTimeUtc"))) {
         return;
     }
 
