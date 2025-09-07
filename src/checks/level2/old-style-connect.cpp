@@ -248,7 +248,7 @@ void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceR
     }
 
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
-    const std::string text = static_cast<std::string>(Lexer::getSourceText(charRange, sm(), lo()));
+    const std::string text = Lexer::getSourceText(charRange, sm(), lo()).str();
 
     static std::regex rx(R"(Q_PRIVATE_SLOT\s*\((.*),.*\s(.*)\(.*)");
     std::smatch match;
@@ -269,7 +269,7 @@ std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
     CharSourceRange expansionRange = sm().getImmediateExpansionRange(macroLoc);
     SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
     auto charRange = Lexer::getAsCharRange(range, sm(), lo());
-    const std::string text = static_cast<std::string>(Lexer::getSourceText(charRange, sm(), lo()));
+    const std::string text = Lexer::getSourceText(charRange, sm(), lo()).str();
 
     static std::regex rx(R"(\s*(SIGNAL|SLOT)\s*\(\s*(.+)\s*\(.*)");
 
@@ -292,7 +292,7 @@ bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, std::string &macroName)
         return false;
     }
 
-    macroName = static_cast<std::string>(Lexer::getImmediateMacroName(loc, sm(), lo()));
+    macroName = Lexer::getImmediateMacroName(loc, sm(), lo()).str();
     return macroName == "SIGNAL" || macroName == "SLOT";
 }
 

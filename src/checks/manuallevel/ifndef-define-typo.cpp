@@ -17,7 +17,7 @@ void IfndefDefineTypo::VisitMacroDefined(const Token &macroNameTok)
 {
     if (!m_lastIfndef.empty()) {
         if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
-            maybeWarn(static_cast<std::string>(ii->getName()), macroNameTok.getLocation());
+            maybeWarn(ii->getName().str(), macroNameTok.getLocation());
         }
     }
 }
@@ -26,7 +26,7 @@ void IfndefDefineTypo::VisitDefined(const Token &macroNameTok, const SourceRange
 {
     if (!m_lastIfndef.empty()) {
         if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
-            maybeWarn(static_cast<std::string>(ii->getName()), macroNameTok.getLocation());
+            maybeWarn(ii->getName().str(), macroNameTok.getLocation());
         }
     }
 }
@@ -39,7 +39,7 @@ void IfndefDefineTypo::VisitIfdef(SourceLocation, const Token &)
 void IfndefDefineTypo::VisitIfndef(SourceLocation, const Token &macroNameTok)
 {
     if (IdentifierInfo *ii = macroNameTok.getIdentifierInfo()) {
-        m_lastIfndef = static_cast<std::string>(ii->getName());
+        m_lastIfndef = ii->getName().str();
     }
 }
 

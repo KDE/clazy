@@ -78,7 +78,7 @@ tooling::Diagnostic FixItExporter::ConvertDiagnostic(const Diagnostic &Info)
     // TODO: This returns an empty string: DiagEngine->getDiagnosticIDs()->getWarningOptionForDiag(Info.getID());
     // HACK: capture it at the end of the message: Message text [check-name]
 
-    std::string checkName = static_cast<std::string>(DiagEngine.getDiagnosticIDs()->getWarningOptionForDiag(Info.getID()));
+    std::string checkName = DiagEngine.getDiagnosticIDs()->getWarningOptionForDiag(Info.getID()).str();
     std::string messageText;
 
     if (checkName.empty()) {

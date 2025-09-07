@@ -65,7 +65,7 @@ void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
     const SourceLocation pos = record->getBraceRange().getBegin().getLocWithOffset(1);
     fixits.push_back(clazy::createInsertion(pos, "\n\tQ_OBJECT"));
 
-    const std::string fileName = static_cast<std::string>(sm().getFilename(startLoc));
+    const std::string fileName = sm().getFilename(startLoc).str();
     if (clazy::endsWith(fileName, ".cpp")) {
         const std::string basename = std::filesystem::path(fileName).stem().string();
 

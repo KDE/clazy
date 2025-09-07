@@ -986,7 +986,7 @@ std::string Utils::filenameForLoc(SourceLocation loc, const clang::SourceManager
         loc = sm.getExpansionLoc(loc);
     }
 
-    const std::string filename = static_cast<std::string>(sm.getFilename(loc));
+    const std::string filename = sm.getFilename(loc).str();
     auto splitted = clazy::splitString(filename, '/');
     if (splitted.empty()) {
         return {};

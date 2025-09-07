@@ -60,7 +60,7 @@ void MissingTypeInfo::VisitDecl(clang::Decl *decl)
             return;
         }
 
-        std::string typeName = static_cast<std::string>(clazy::name(record));
+        std::string typeName = clazy::name(record).str();
         if (typeName == "QPair") { // QPair doesn't use Q_DECLARE_TYPEINFO, but rather a explicit QTypeInfo.
             return;
         }

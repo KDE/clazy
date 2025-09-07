@@ -94,7 +94,7 @@ bool UnusedNonTrivialVariable::isUninterestingType(const CXXRecordDecl *record) 
     };
     StringRef className = clazy::name(record);
     for (StringRef templateName : blacklistedTemplates) {
-        if (clazy::startsWith(static_cast<std::string>(className), static_cast<std::string>(templateName))) {
+        if (clazy::startsWith(className, templateName)) {
             return true;
         }
     }

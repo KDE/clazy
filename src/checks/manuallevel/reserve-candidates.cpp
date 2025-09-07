@@ -60,7 +60,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
         return false;
     }
 
-    if (!clazy::equalsAny(static_cast<std::string>(clazy::name(methodDecl)), {"append", "push_back", "push", "operator<<", "operator+="})) {
+    if (!clazy::equalsAny(clazy::name(methodDecl).str(), {"append", "push_back", "push", "operator<<", "operator+="})) {
         return false;
     }
 
