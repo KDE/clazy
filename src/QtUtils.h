@@ -70,24 +70,24 @@ bool isQMetaMethod(clang::CallExpr *call, unsigned int argIndex);
 /**
  * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
  */
-bool isQtCOWIterableClass(clang::CXXRecordDecl *record);
+bool isQtCOWIterableClass(clang::CXXRecordDecl *record, const std::string &qtNamespace);
 
 /**
  * Overload.
  */
-bool isQtCOWIterableClass(const std::string &className);
+bool isQtCOWIterableClass(const std::string &className, const std::string &qtNamespace);
 
 /**
  * Returns if the iterators belongs to a COW container
  */
-inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord)
+inline bool isQtCOWIterator(clang::CXXRecordDecl *itRecord, const std::string &qtNamespace)
 {
     if (!itRecord) {
         return false;
     }
 
     auto *parent = llvm::dyn_cast_or_null<clang::CXXRecordDecl>(itRecord->getParent());
-    return parent && clazy::isQtCOWIterableClass(parent);
+    return parent && clazy::isQtCOWIterableClass(parent, qtNamespace);
 }
 
 /**

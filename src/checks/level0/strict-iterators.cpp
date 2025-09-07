@@ -65,12 +65,13 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 
     const QualType typeTo = implicitCast->getType();
     CXXRecordDecl *recordTo = clazy::parentRecordForTypedef(typeTo);
-    if (recordTo && !clazy::isQtCOWIterableClass(recordTo)) {
+    const std::string qtNamespace = m_context->qtNamespace();
+    if (recordTo && !clazy::isQtCOWIterableClass(recordTo, qtNamespace)) {
         return false;
     }
 
     recordTo = clazy::typeAsRecord(typeTo);
-    if (recordTo && !clazy::isQtCOWIterator(recordTo)) {
+    if (recordTo && !clazy::isQtCOWIterator(recordTo, qtNamespace)) {
         return false;
     }
 
@@ -83,7 +84,7 @@ bool StrictIterators::handleImplicitCast(ImplicitCastExpr *implicitCast)
 
     QualType typeFrom = implicitCast->getSubExpr()->getType();
     CXXRecordDecl *recordFrom = clazy::parentRecordForTypedef(typeFrom);
-    if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom)) {
+    if (recordFrom && !clazy::isQtCOWIterableClass(recordFrom, qtNamespace)) {
         return false;
     }
 
@@ -159,7 +160,7 @@ bool StrictIterators::handleOperator(CXXOperatorCallExpr *op)
     }
 
     CXXRecordDecl *record = method->getParent();
-    if (!clazy::isQtCOWIterator(record)) {
+    if (!clazy::isQtCOWIterator(record, m_context->qtNamespace())) {
         return false;
     }
 

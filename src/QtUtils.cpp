@@ -25,6 +25,16 @@ bool clazy::isQtIterableClass(clang::CXXRecordDecl *record)
     return record && isQtIterableClass(record->getQualifiedNameAsString());
 }
 
+std::string trimQtNamespace(const std::string &name, const std::string qtNamespace)
+{
+    if (!qtNamespace.empty() && name.starts_with(qtNamespace + "::")) {
+        std::string nameCopy = name;
+        nameCopy.erase(0, qtNamespace.size() + 2);
+        return nameCopy;
+    }
+    return name;
+}
+
 const std::vector<StringRef> &clazy::qtContainers()
 {
     static const std::vector<StringRef> classes = {
@@ -184,15 +194,15 @@ bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex)
     return recordDecl->getQualifiedNameAsString() == "QMetaMethod";
 }
 
-bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record)
+bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record, const std::string &qtNamespace)
 {
-    return record && isQtCOWIterableClass(record->getQualifiedNameAsString());
+    return record && isQtCOWIterableClass(record->getQualifiedNameAsString(), qtNamespace);
 }
 
-bool clazy::isQtCOWIterableClass(const std::string &className)
+bool clazy::isQtCOWIterableClass(const std::string &className, const std::string &qtNamespace)
 {
     const auto &classes = qtCOWContainers();
-    return clazy::contains(classes, className);
+    return clazy::contains(classes, trimQtNamespace(className, qtNamespace));
 }
 
 bool clazy::isQtIterableClass(StringRef className)

@@ -128,7 +128,7 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     }
 
     CXXRecordDecl *record = t->getAsCXXRecordDecl();
-    if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record))) {
+    if (!clazy::isQtCOWIterableClass(Utils::rootBaseClass(record), m_context->qtNamespace())) {
         return;
     }
 
