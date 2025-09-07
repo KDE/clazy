@@ -275,9 +275,7 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
                     if (shouldRemoveQString) {
                         // This is the case of QString(QLatin1String("foo")), which we just fixed to be QString(QStringLiteral("foo")), so now remove QString
                         auto removalFixits = clazy::fixItRemoveToken(astContext(), ctorExpr, true);
-                        if (!removalFixits.empty()) {
-                            std::ranges::copy(removalFixits, std::back_inserter(fixits));
-                        }
+                        std::ranges::copy(removalFixits, std::back_inserter(fixits));
                     }
                 } else {
                     fixits = fixItReplaceWordWithWordInTernary(ternary);

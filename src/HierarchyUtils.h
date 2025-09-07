@@ -238,6 +238,7 @@ std::vector<T *> getStatements(clang::Stmt *body,
         }
 
         auto childStatements = getStatements<T>(child, sm, startLocation, depth, false, ignoreOptions);
+        statements.reserve(statements.size() + childStatements.size());
         std::ranges::copy(childStatements, std::back_inserter(statements));
     }
 
