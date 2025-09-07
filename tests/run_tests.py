@@ -53,12 +53,14 @@ class QtInstallation:
         # Also include the modules folders
         qt_modules_includes = []
         if module_includes:
-            qt_modules_includes = ["-isystem " + self.qmake_header_path + "/" + f for f in next(os.walk(self.qmake_header_path))[1]];
-        c_header_option = ""
+            qt_modules_includes = ["-isystem " + self.qmake_header_path + "/" + f for f in next(os.walk(self.qmake_header_path))[1]]
+        additonal_args = ""
         if c_headerpath:
-            c_header_option = "-isystem " + c_headerpath + "/include "
+            additonal_args = "-isystem " + c_headerpath + "/include "
+        if cxx_args:
+            additonal_args += cxx_args + " "
 
-        return c_header_option + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
+        return additonal_args + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
 
 class Test:
@@ -494,6 +496,8 @@ parser.add_argument("-j", "--jobs", type=int, default=multiprocessing.cpu_count(
                     help='Parallel jobs to run (defaults to %(default)s)')
 parser.add_argument("check_names", nargs='*',
                     help="The name of the check whose unit-tests will be run. Defaults to running all checks.")
+parser.add_argument("--cxx-args", type=str, default="",
+                    help="Compiler arguments as a single string")
 args = parser.parse_args()
 
 if args.only_standalone and args.no_standalone:
@@ -513,6 +517,7 @@ _only_standalone = args.only_standalone
 _num_threads = args.jobs
 _lock = threading.Lock()
 _was_successful = True
+cxx_args = args.cxx_args
 if 6 in args.qt_versions:
     _qt6_installation = find_qt_installation(6, ["QT_SELECT=6 qmake", "qmake-qt6", "qmake", "qmake6"])
 else:
