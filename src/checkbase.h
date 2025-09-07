@@ -197,6 +197,14 @@ protected:
         return qtNsp.empty() ? className : qtNsp + "::" + className;
     }
 
+    std::string trimQtNamespace(std::string &&name)
+    {
+        if (!m_context->qtNamespace().empty() && name.starts_with(m_context->qtNamespace() + "::")) {
+            name.erase(0, m_context->qtNamespace().size() + 2);
+        }
+        return name;
+    }
+
     const std::string m_name;
     std::vector<std::string> m_filesToIgnore;
 

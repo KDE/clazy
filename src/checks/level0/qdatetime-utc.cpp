@@ -32,11 +32,11 @@ void QDateTimeUtc::VisitStmt(clang::Stmt *stmt)
         return;
     }
     CXXMethodDecl *secondMethod = secondCall->getMethodDecl();
-    std::string secondMethodName = secondMethod->getQualifiedNameAsString();
+    std::string secondMethodName = trimQtNamespace(secondMethod->getQualifiedNameAsString());
 
-    const bool isMSecSinceEpoc = secondMethodName == qtNamespaced("QDateTime::toMSecsSinceEpoch");
-    const bool isSecSinceEpoc = secondMethodName == qtNamespaced("QDateTime::toSecsSinceEpoch") || secondMethodName == qtNamespaced("QDateTime::toTime_t");
-    const bool isToUtcConversion = secondMethodName == qtNamespaced("QDateTime::toUTC");
+    const bool isMSecSinceEpoc = secondMethodName == "QDateTime::toMSecsSinceEpoch";
+    const bool isSecSinceEpoc = secondMethodName == "QDateTime::toSecsSinceEpoch" || secondMethodName == "QDateTime::toTime_t";
+    const bool isToUtcConversion = secondMethodName == "QDateTime::toUTC";
     if (!isMSecSinceEpoc && !isSecSinceEpoc && !isToUtcConversion) {
         return;
     }
