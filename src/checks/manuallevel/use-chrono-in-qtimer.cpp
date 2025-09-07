@@ -103,7 +103,7 @@ void UseChronoInQTimer::VisitStmt(clang::Stmt *stmt)
         return; // start() doesn't take any arguments.
     }
 
-    const std::string name = functionName(callExpr);
+    std::string name = trimQtNamespace(functionName(callExpr));
     if (name != "QTimer::setInterval" && name != "QTimer::start" && name != "QTimer::singleShot") {
         return;
     }
