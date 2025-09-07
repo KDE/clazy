@@ -41,7 +41,7 @@ void ChildEventQObjectCast::VisitDecl(Decl *decl)
         return;
     }
 
-    if (!clazy::isQObject(childEventMethod->getParent())) {
+    if (!clazy::isQObject(childEventMethod->getParent(), m_context->qtNamespace())) {
         return;
     }
 

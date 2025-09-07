@@ -73,7 +73,18 @@ public:
 
     AccessSpecifierPreprocessorCallbacks(const AccessSpecifierPreprocessorCallbacks &) = delete;
 
-    void MacroExpands(const Token &MacroNameTok, const MacroDefinition &, SourceRange range, const MacroArgs *) override
+    void MacroDefined(const Token &MacroNameTok, const MacroDirective *MD) override
+    {
+        IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
+        if (ii && ii->getName() == "QT_NAMESPACE") {
+            const auto tokens = MD->getDefinition().getMacroInfo()->tokens();
+            if (tokens.size() == 1) {
+                m_qtNamespace = tokens.front().getIdentifierInfo()->getName();
+            }
+        }
+    }
+
+    void MacroExpands(const Token &MacroNameTok, const MacroDefinition &def, SourceRange range, const MacroArgs *) override
     {
         IdentifierInfo *ii = MacroNameTok.getIdentifierInfo();
         if (!ii) {
@@ -122,6 +133,7 @@ public:
     std::vector<unsigned> m_individualSlots; // Q_SLOT
     std::vector<unsigned> m_invokables; // Q_INVOKABLE
     std::vector<unsigned> m_scriptables; // Q_SCRIPTABLE
+    std::string m_qtNamespace;
     ClazySpecifierList m_qtAccessSpecifiers;
     const SourceManager &m_sm;
     const LangOptions &m_lo;
@@ -160,7 +172,7 @@ void AccessSpecifierManager::VisitDeclaration(Decl *decl)
         return;
     }
 
-    const bool isQObject = clazy::isQObject(record);
+    const bool isQObject = clazy::isQObject(record, m_preprocessorCallbacks->m_qtNamespace);
     const bool visits = isQObject || (m_fixitsEnabled && m_visitsNonQObjects);
 
     if (!visits) {
@@ -313,4 +325,9 @@ SourceLocation AccessSpecifierManager::firstLocationOfSection(AccessSpecifier sp
         }
     }
     return {};
+}
+
+std::string AccessSpecifierManager::qtNamespace() const
+{
+    return m_preprocessorCallbacks->m_qtNamespace;
 }

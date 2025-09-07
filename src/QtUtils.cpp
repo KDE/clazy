@@ -212,16 +212,9 @@ bool clazy::isQtAssociativeContainer(StringRef className)
     return clazy::contains(classes, className);
 }
 
-bool clazy::isQObject(const CXXRecordDecl *decl)
+bool clazy::isQObject(const CXXRecordDecl *decl, const std::string &qtNamespace)
 {
-    return clazy::derivesFrom(decl, "QObject");
-}
-
-bool clazy::isQObject(clang::QualType qt)
-{
-    qt = clazy::pointeeQualType(qt);
-    const auto *const t = qt.getTypePtrOrNull();
-    return t ? isQObject(t->getAsCXXRecordDecl()) : false;
+    return clazy::derivesFrom(decl, (qtNamespace.empty() ? "" : qtNamespace + "::") + "QObject");
 }
 
 bool clazy::isConvertibleTo(const Type *source, const Type *target)
@@ -311,14 +304,14 @@ bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
     });
 }
 
-clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDecl)
+clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDecl, const std::string &qtNamespace)
 {
     if (!recordDecl) {
         return nullptr;
     }
 
     for (auto baseClass : recordDecl->bases()) {
-        if (CXXRecordDecl *record = clazy::recordFromBaseSpecifier(baseClass); isQObject(record)) {
+        if (CXXRecordDecl *record = clazy::recordFromBaseSpecifier(baseClass); isQObject(record, qtNamespace)) {
             return record;
         }
     }

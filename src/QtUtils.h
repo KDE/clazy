@@ -137,12 +137,7 @@ bool isBootstrapping(const clang::PreprocessorOptions &ppOpts);
 /**
  * Returns if decl is or derives from QObject
  */
-bool isQObject(const clang::CXXRecordDecl *decl);
-
-/**
- * Overload.
- */
-bool isQObject(clang::QualType);
+bool isQObject(const clang::CXXRecordDecl *decl, const std::string &qtNamespace);
 
 /**
  * Convertible means that a signal with of type source can connect to a signal/slot of type target
@@ -179,7 +174,7 @@ bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
  * Returns the base class that inherits QObject.
  * Useful when the class has more than one base class and we're only interested in the QObject one.
  */
-clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl);
+clang::CXXRecordDecl *getQObjectBaseClass(clang::CXXRecordDecl *recordDecl, const std::string &qtNamespace);
 
 /**
  * Returns true if the function declaration is QObject::connect().

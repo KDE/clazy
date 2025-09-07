@@ -33,7 +33,7 @@ void StaticPmf::VisitDecl(clang::Decl *decl)
     }
 
     auto *record = memberPointerType->getMostRecentCXXRecordDecl();
-    if (!clazy::isQObject(record)) {
+    if (!clazy::isQObject(record, m_context->qtNamespace())) {
         return;
     }
 
