@@ -483,9 +483,13 @@ which you can report at <https://bugreports.qt.io/>.
 
 # Authors
 
-- Sérgio Martins
+- Sérgio Martins, author and long time maintainer
 
-with contributions from:
+## Current maintainer
+
+- Alexander Lohnau
+
+## with contributions from:
 
 - Allen Winter
 - Kevin Funk
@@ -502,11 +506,12 @@ with contributions from:
 - Lucie Gerard
 - Christian Schärf
 - Waqar Ahmed
-- Alexander Lohnau
+- Shivam Kunwar
+- Ivan Čukić
 
-and thanks to:
+## and thanks to:
 
-- Klarälvdalens Datakonsult AB (<http://www.kdab.com>), for letting me work on clazy as a research project
+- Klarälvdalens Datakonsult AB (<http://www.kdab.com>), for letting Sergio work on clazy as a research project
 
 # Contributing patches
 
