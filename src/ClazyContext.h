@@ -165,6 +165,8 @@ public:
 
     bool isQt() const;
 
+    std::string qtNamespace() const;
+
     /**
      * While the preprocessor visitor is running, we might not have initialized this.
      * Before VisitStmt/VisitDecl/any AST callback in the CheckBase instance is run, this will be set!

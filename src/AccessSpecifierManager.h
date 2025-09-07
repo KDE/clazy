@@ -75,6 +75,7 @@ public:
     llvm::StringRef qtAccessSpecifierTypeStr(QtAccessSpecifierType) const;
 
     clang::SourceLocation firstLocationOfSection(clang::AccessSpecifier specifier, clang::CXXRecordDecl *decl) const;
+    std::string qtNamespace() const;
 
 private:
     ClazySpecifierList &entryForClassDefinition(clang::CXXRecordDecl *);

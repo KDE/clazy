@@ -33,7 +33,7 @@ void MissingQObjectMacro::VisitMacroExpands(const clang::Token &MacroNameTok, co
 void MissingQObjectMacro::VisitDecl(clang::Decl *decl)
 {
     auto *record = dyn_cast<CXXRecordDecl>(decl);
-    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record)) {
+    if (!record || !record->hasDefinition() || record->getDefinition() != record || !clazy::isQObject(record, m_context->qtNamespace())) {
         return;
     }
 

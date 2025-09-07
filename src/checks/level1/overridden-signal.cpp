@@ -31,7 +31,7 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
     }
 
     CXXRecordDecl *record = method->getParent();
-    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record);
+    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(record, m_context->qtNamespace());
     if (!baseClass) {
         return;
     }
@@ -64,6 +64,6 @@ void OverriddenSignal::VisitDecl(clang::Decl *decl)
             }
         }
 
-        baseClass = clazy::getQObjectBaseClass(baseClass);
+        baseClass = clazy::getQObjectBaseClass(baseClass, m_context->qtNamespace());
     }
 }

@@ -112,7 +112,7 @@ bool UnneededCast::handleNamedCast(CXXNamedCastExpr *namedCast)
         }
     }
 
-    if (isDynamicCast && !isOptionSet("prefer-dynamic-cast-over-qobject") && clazy::isQObject(castFrom)) {
+    if (isDynamicCast && !isOptionSet("prefer-dynamic-cast-over-qobject") && clazy::isQObject(castFrom, m_context->qtNamespace())) {
         emitWarning(namedCast->getBeginLoc(), "Use qobject_cast rather than dynamic_cast");
     }
 

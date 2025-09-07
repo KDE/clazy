@@ -98,7 +98,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
             continue; // It's the sender, continue.
         }
 
-        if (clazy::isQObject(decl->getType())) {
+        if (clazy::isQObject(decl->getType()->getAsCXXRecordDecl(), m_context->qtNamespace())) {
             found = true;
             break;
         }

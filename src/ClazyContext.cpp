@@ -123,6 +123,10 @@ bool ClazyContext::isQt() const
 
     return s_isQt;
 }
+std::string ClazyContext::qtNamespace() const
+{
+    return accessSpecifierManager ? accessSpecifierManager->qtNamespace() : "";
+}
 bool ClazyContext::usingPreCompiledHeaders() const
 {
     return !m_pp.ImplicitPCHInclude.empty();

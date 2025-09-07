@@ -37,7 +37,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
     }
 
     CXXRecordDecl *classDecl = method->getParent();
-    if (!clazy::isQObject(classDecl)) {
+    if (!clazy::isQObject(classDecl, m_context->qtNamespace())) {
         return;
     }
 
@@ -46,7 +46,7 @@ void BaseClassEvent::VisitDecl(Decl *decl)
         return;
     }
 
-    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl);
+    CXXRecordDecl *baseClass = clazy::getQObjectBaseClass(classDecl, m_context->qtNamespace());
     const std::string baseClassName = baseClass ? baseClass->getQualifiedNameAsString() : std::string("BaseClass");
 
     if (isEventFilter && clazy::contains(std::array<StringRef, 2>({"QObject", "QWidget"}), baseClassName)) {

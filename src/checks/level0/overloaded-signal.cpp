@@ -50,6 +50,6 @@ void OverloadedSignal::VisitDecl(clang::Decl *decl)
             }
         }
 
-        p = clazy::getQObjectBaseClass(p);
+        p = clazy::getQObjectBaseClass(p, m_context->qtNamespace());
     }
 }

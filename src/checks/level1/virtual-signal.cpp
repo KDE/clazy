@@ -31,7 +31,7 @@ void VirtualSignal::VisitDecl(Decl *stmt)
     if (qst == QtAccessSpecifier_Signal) {
         for (const auto *m : method->overridden_methods()) {
             if (const auto *baseClass = m->getParent()) {
-                if (!clazy::isQObject(baseClass)) {
+                if (!clazy::isQObject(baseClass, m_context->qtNamespace())) {
                     // It's possible that the signal is overriding a method from a non-QObject base class
                     // if the derived class inherits both QObject and some other interface.
                     return;
