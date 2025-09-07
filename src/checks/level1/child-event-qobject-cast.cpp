@@ -60,7 +60,7 @@ void ChildEventQObjectCast::VisitDecl(Decl *decl)
             }
 
             auto *childFDecl = childCall->getDirectCallee();
-            if (!childFDecl || childFDecl->getQualifiedNameAsString() != "QChildEvent::child") {
+            if (!childFDecl || childFDecl->getQualifiedNameAsString() != qtNamespaced("QChildEvent::child")) {
                 continue;
             }
 

@@ -167,11 +167,6 @@ public:
 
     std::string qtNamespace() const;
 
-    std::string qtClassname(const std::string &className) const
-    {
-        return qtNamespace().empty() ? className : qtNamespace() + "::" + className;
-    }
-
     /**
      * While the preprocessor visitor is running, we might not have initialized this.
      * Before VisitStmt/VisitDecl/any AST callback in the CheckBase instance is run, this will be set!

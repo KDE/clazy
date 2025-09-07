@@ -191,6 +191,12 @@ protected:
         return m_context->astContext;
     }
 
+    std::string qtNamespaced(const std::string &className) const
+    {
+        const std::string qtNsp = m_context->qtNamespace();
+        return qtNsp.empty() ? className : qtNsp + "::" + className;
+    }
+
     const std::string m_name;
     std::vector<std::string> m_filesToIgnore;
 
