@@ -19,6 +19,9 @@ class UseStaticQRegularExpression : public CheckBase
 public:
     using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
+
+private:
+    bool isTemporaryQRegexObj(clang::Expr *qregexVar, const clang::LangOptions &lo);
 };
 
 #endif
