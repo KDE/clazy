@@ -8,6 +8,7 @@
 #include "connect-3arg-lambda.h"
 #include "HierarchyUtils.h"
 #include "QtUtils.h"
+#include "TypeUtils.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/Expr.h>
@@ -98,7 +99,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
             continue; // It's the sender, continue.
         }
 
-        if (clazy::isQObject(decl->getType()->getAsCXXRecordDecl(), m_context->qtNamespace())) {
+        if (clazy::isQObject((clazy::pointeeQualType(decl->getType()))->getAsCXXRecordDecl(), m_context->qtNamespace())) {
             found = true;
             break;
         }
