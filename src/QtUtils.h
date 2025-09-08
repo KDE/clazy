@@ -168,7 +168,7 @@ bool recordHasCtorWithParam(clang::CXXRecordDecl *record, const std::string &par
  * Returns true if recordDecl is one of the container classes that supports reserve(), such
  * as QList, QVector, etc.
  */
-bool isAReserveClass(clang::CXXRecordDecl *recordDecl);
+bool isAReserveClass(clang::CXXRecordDecl *recordDecl, const std::string &qtNamespace);
 
 /**
  * Returns the base class that inherits QObject.

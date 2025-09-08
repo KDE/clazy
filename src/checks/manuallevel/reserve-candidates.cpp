@@ -49,7 +49,7 @@ static bool paramIsSameTypeAs(const Type *paramType, CXXRecordDecl *classDecl)
     return paramClassDecl && paramClassDecl == classDecl;
 }
 
-static bool isCandidateMethod(CXXMethodDecl *methodDecl)
+bool ReserveCandidates::isCandidateMethod(CXXMethodDecl *methodDecl)
 {
     if (!methodDecl) {
         return false;
@@ -64,7 +64,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
         return false;
     }
 
-    if (!clazy::isAReserveClass(classDecl)) {
+    if (!clazy::isAReserveClass(classDecl, m_context->qtNamespace())) {
         return false;
     }
 
@@ -74,7 +74,7 @@ static bool isCandidateMethod(CXXMethodDecl *methodDecl)
     return !paramIsSameTypeAs(param->getType().getTypePtrOrNull(), classDecl);
 }
 
-static bool isCandidate(CallExpr *oper)
+bool ReserveCandidates::isCandidate(CallExpr *oper)
 {
     if (!oper) {
         return false;
@@ -198,7 +198,7 @@ bool ReserveCandidates::registerReserveStatement(Stmt *stm)
     }
 
     CXXRecordDecl *decl = methodDecl->getParent();
-    if (!clazy::isAReserveClass(decl)) {
+    if (!clazy::isAReserveClass(decl, m_context->qtNamespace())) {
         return false;
     }
 
@@ -233,6 +233,7 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
         }
 
         if (clazy::isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr))) {
+            llvm::errs() << "java style\n";
             continue;
         }
 

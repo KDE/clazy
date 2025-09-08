@@ -302,13 +302,18 @@ bool clazy::isQtContainer(const CXXRecordDecl *record)
     });
 }
 
-bool clazy::isAReserveClass(CXXRecordDecl *recordDecl)
+bool clazy::isAReserveClass(CXXRecordDecl *recordDecl, const std::string &qtNamespace)
 {
     if (!recordDecl) {
         return false;
     }
 
-    static const std::vector<std::string> classes = {"QVector", "std::vector", "QList", "QSet"};
+    static const std::vector<std::string> classes = {
+        clazy::qtNamespaced("QVector", qtNamespace),
+        "std::vector",
+        clazy::qtNamespaced("QList", qtNamespace),
+        clazy::qtNamespaced("QSet", qtNamespace),
+    };
     return std::ranges::any_of(classes, [recordDecl](const std::string &className) {
         return clazy::derivesFrom(recordDecl, className);
     });
