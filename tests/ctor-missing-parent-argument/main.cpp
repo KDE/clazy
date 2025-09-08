@@ -45,7 +45,7 @@ class WTest2 : public QWidget
 public:
     WTest2(QObject *); // Warn
 };
-
+QT_BEGIN_NAMESPACE
 namespace Qt3DCore {
     class QNode : public QObject { QNode(); };
     // This is just a dummy so we don't have to depend on Qt3D
@@ -53,7 +53,7 @@ namespace Qt3DCore {
     {
     };
 }
-
+QT_END_NAMESPACE
 struct MyEntity : Qt3DCore::QEntity // Warn
 {
     MyEntity();
@@ -62,15 +62,15 @@ struct MyEntity : Qt3DCore::QEntity // Warn
 struct MyEntity2 : Qt3DCore::QEntity { // OK
     MyEntity2(Qt3DCore::QNode*);
 };
-
+QT_BEGIN_NAMESPACE
 namespace Qt3DCore
 {
     struct MyEntity3 : QEntity { // OK
     MyEntity3(QNode*);
 };
 }
-
-class Test6 : public QObject // OK
+QT_END_NAMESPACE
+class Test6 : public QT_PREPEND_NAMESPACE(QObject) // OK
 {
 public:
 };
