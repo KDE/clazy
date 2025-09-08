@@ -197,8 +197,8 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
     // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
     // Do it manually.
-    if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")
-        || ctorExpr->getConstructor()->getQualifiedNameAsString() == "QList<QString>::QList") { // In Qt6, QStringList is an alias
+    if (clazy::isOfClass(ctorExpr->getConstructor(), qtNamespaced("QStringList"))
+        || ctorExpr->getConstructor()->getQualifiedNameAsString() == qtNamespaced("QList<QString>::QList")) { // In Qt6, QStringList is an alias
         auto *p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
         while (p) {
             if (clazy::isOfClass(p, "QString")) {
@@ -240,7 +240,8 @@ void QStringAllocations::VisitCtor(CXXConstructExpr *ctorExpr)
     if (hasCharPtrArgument(ctorDecl, 1)) {
         paramType = "const char*";
     } else if (ctorDecl->param_size() == 1
-               && (clazy::hasArgumentOfType(ctorDecl, "QLatin1String", lo()) || clazy::hasArgumentOfType(ctorDecl, "QLatin1StringView", lo()))) {
+               && (clazy::hasArgumentOfType(ctorDecl, qtNamespaced("QLatin1String"), lo())
+                   || clazy::hasArgumentOfType(ctorDecl, qtNamespaced("QLatin1StringView"), lo()))) {
         paramType = "QLatin1String";
         isQLatin1String = true;
     } else {
@@ -691,7 +692,8 @@ void QStringAllocations::VisitAssignOperatorQLatin1String(Stmt *stmt)
     if (!callExpr) {
         return;
     }
-    if (!Utils::isAssignOperator(callExpr, "QString", "QLatin1String", lo()) && !Utils::isAssignOperator(callExpr, "QString", "QLatin1StringView", lo())) {
+    if (!Utils::isAssignOperator(callExpr, "QString", qtNamespaced("QLatin1String"), lo())
+        && !Utils::isAssignOperator(callExpr, "QString", qtNamespaced("QLatin1StringView"), lo())) {
         return;
     }
 
