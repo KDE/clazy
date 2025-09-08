@@ -72,7 +72,6 @@ class Test:
         self.minimum_clang_version = 380
         self.minimum_clang_version_for_fixits = 380
         self.compare_everything = False
-        self.link = False  # If true we also call the linker
         self.check = check
         self.expects_failure = False
         self.qt_major_versions = [5, 6]
@@ -272,8 +271,6 @@ def load_json(check_name: str):
                 test.blacklist_platforms = t['blacklist_platforms']
             if 'compare_everything' in t:
                 test.compare_everything = t['compare_everything']
-            if 'link' in t:
-                test.link = t['link']
             if 'qt_major_versions' in t:
                 test.setQtMajorVersions(t['qt_major_versions'])
             if 'env' in t:
@@ -357,17 +354,6 @@ def clangTidyPluginName():
     return "ClazyClangTidy.so"
 
 
-def link_flags(qt:QtInstallation):
-    is_qt6 = qt.int_version > 60000
-    major_version = "6" if is_qt6 else "5"
-    flags = f"-lQt{major_version}Core -lQt{major_version}Gui -lQt{major_version}Widgets"
-    if _platform.startswith('linux'):
-        flags += " -lstdc++"
-        if is_qt6:
-            flags += " -lQt6StateMachine"
-    return flags
-
-
 def clazy_cpp_args(cppStandard):
     return ' -Wno-unused-value -Qunused-arguments -std=' + cppStandard + ' '
 
@@ -432,11 +418,7 @@ def clazy_command(test: Test, cppStandard, qt, filename):
     if test.extra_definitions:
         result += test.extra_definitions
 
-    # Linking on one platform is enough. Won't waste time on macOS and Windows.
-    if test.link and _platform.startswith('linux'):
-        result = result + " " + link_flags(qt)
-    else:
-        result = result + " -c "
+    result = result + " -c "
 
     result = result + test.flags + \
         " -Xclang -plugin-arg-clazy -Xclang " + ','.join(test.checks) + " "
