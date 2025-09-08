@@ -24,7 +24,7 @@ void TrNonLiteral::VisitStmt(clang::Stmt *stmt)
     }
 
     FunctionDecl *func = callExpr->getDirectCallee();
-    if (!func || func->getQualifiedNameAsString() != "QObject::tr") {
+    if (!func || func->getQualifiedNameAsString() != qtNamespaced("QObject::tr")) {
         return;
     }
 
