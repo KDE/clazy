@@ -35,7 +35,6 @@ Name[sv]=Clazy
 Name[tr]=Clazy
 Name[uk]=Clazy
 Name[vi]=Clazy
-Name[x-test]=xxClazyxx
 Name[zh_CN]=Clazy
 Name[zh_TW]=Clazy
 Exec=clazy
