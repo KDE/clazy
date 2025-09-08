@@ -822,7 +822,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     if not compare_files(test.expects_failure, expected_file, result_file, printableName):
         return False
 
-    if test.has_fixits and not is_tidy:
+    if test.has_fixits and not is_tidy and not _qt_namespaced:
         # The normal tests succeeded, we can run the respective fixits then
         test.should_run_fixits_test = True
 
