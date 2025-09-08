@@ -90,8 +90,7 @@ void QVariantTemplateInstantiation::VisitStmt(clang::Stmt *stm)
     }
 
     if (matches) {
-        std::string typeName = clazy::simpleTypeName(typeList[0], lo());
-
+        std::string typeName = trimQtNamespace(clazy::simpleTypeName(typeList[0], lo()));
         std::string typeName2 = typeName;
         typeName2[0] = toupper(typeName2[0]);
 
