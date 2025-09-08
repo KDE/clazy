@@ -197,7 +197,7 @@ protected:
         return qtNsp.empty() ? className : qtNsp + "::" + className;
     }
 
-    std::string trimQtNamespace(std::string &&name)
+    std::string trimQtNamespace(std::string &&name) const
     {
         if (!m_context->qtNamespace().empty() && name.starts_with(m_context->qtNamespace() + "::")) {
             name.erase(0, m_context->qtNamespace().size() + 2);

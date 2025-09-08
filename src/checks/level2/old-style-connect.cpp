@@ -95,7 +95,7 @@ int OldStyleConnect::classifyConnect(FunctionDecl *connectFunc, T *connectCall) 
 {
     int classification = ConnectFlag_None;
 
-    const std::string methodName = connectFunc->getQualifiedNameAsString();
+    std::string methodName = trimQtNamespace(connectFunc->getQualifiedNameAsString());
     if (methodName == "QObject::connect") {
         classification |= ConnectFlag_Connect;
     } else if (methodName == "QObject::disconnect") {
