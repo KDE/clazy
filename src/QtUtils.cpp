@@ -226,6 +226,11 @@ bool clazy::isQObject(const CXXRecordDecl *decl, const std::string &qtNamespace)
 {
     return clazy::derivesFrom(decl, clazy::qtNamespaced("QObject", qtNamespace));
 }
+bool clazy::isSharedPointer(CXXRecordDecl *record, const std::string &qtNamespace)
+{
+    static const std::vector<std::string> names = {"std::shared_ptr", "QSharedPointer", "boost::shared_ptr"};
+    return record ? clazy::contains(names, trimQtNamespace(record->getQualifiedNameAsString(), qtNamespace)) : false;
+}
 
 bool clazy::isConvertibleTo(const Type *source, const Type *target)
 {

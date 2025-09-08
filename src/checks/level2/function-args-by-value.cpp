@@ -7,6 +7,7 @@
 #include "function-args-by-value.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
+#include "QtUtils.h"
 #include "StringUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -40,7 +41,7 @@ bool FunctionArgsByValue::shouldIgnoreClass(CXXRecordDecl *record)
         return false;
     }
 
-    if (Utils::isSharedPointer(record)) {
+    if (clazy::isSharedPointer(record, m_context->qtNamespace())) {
         return true;
     }
 

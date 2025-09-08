@@ -826,12 +826,6 @@ bool Utils::hasMember(CXXRecordDecl *record, const std::string &memberTypeName)
     return false;
 }
 
-bool Utils::isSharedPointer(CXXRecordDecl *record)
-{
-    static const std::vector<std::string> names = {"std::shared_ptr", "QSharedPointer", "boost::shared_ptr"};
-    return record ? clazy::contains(names, record->getQualifiedNameAsString()) : false;
-}
-
 bool Utils::isInitializedExternally(clang::VarDecl *varDecl)
 {
     if (!varDecl) {

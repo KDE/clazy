@@ -178,11 +178,6 @@ clang::CXXMethodDecl *copyAssign(const clang::CXXRecordDecl *);
 bool hasMember(clang::CXXRecordDecl *record, const std::string &memberTypeName);
 
 /**
- * Returns true if record is a shared pointer (boost, Qt or stl only).
- */
-bool isSharedPointer(clang::CXXRecordDecl *record);
-
-/**
  * Returns true if varDecl is initialized externally.
  * Example:
  *     QList<Foo> list = getList(); // true

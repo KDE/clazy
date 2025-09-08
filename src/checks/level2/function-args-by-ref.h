@@ -37,7 +37,7 @@ public:
     void VisitStmt(clang::Stmt *stmt) override;
 
 private:
-    static bool shouldIgnoreClass(clang::CXXRecordDecl *);
+    bool shouldIgnoreClass(clang::CXXRecordDecl *);
     static bool shouldIgnoreOperator(clang::FunctionDecl *);
     static bool shouldIgnoreFunction(clang::FunctionDecl *);
     void processFunction(clang::FunctionDecl *);
