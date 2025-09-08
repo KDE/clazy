@@ -23,7 +23,7 @@ void QLatin1StringNonAscii::VisitStmt(clang::Stmt *stmt)
     auto *constructExpr = dyn_cast<CXXConstructExpr>(stmt);
     CXXConstructorDecl *ctor = constructExpr ? constructExpr->getConstructor() : nullptr;
 
-    if (!ctor || ctor->getQualifiedNameAsString() != "QLatin1String::QLatin1String") {
+    if (!ctor || ctor->getQualifiedNameAsString() != qtNamespaced("QLatin1String::QLatin1String")) {
         return;
     }
 
