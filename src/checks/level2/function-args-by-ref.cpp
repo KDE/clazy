@@ -10,6 +10,7 @@
 #include "function-args-by-ref.h"
 #include "ClazyContext.h"
 #include "FixItUtils.h"
+#include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -35,7 +36,7 @@ bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
         return false;
     }
 
-    if (Utils::isSharedPointer(record)) {
+    if (clazy::isSharedPointer(record, m_context->qtNamespace())) {
         return true;
     }
 
@@ -54,7 +55,7 @@ bool FunctionArgsByRef::shouldIgnoreClass(CXXRecordDecl *record)
         "QCharRef",
         "QString::Null",
     };
-    return clazy::contains(ignoreList, record->getQualifiedNameAsString());
+    return clazy::contains(ignoreList, trimQtNamespace(record->getQualifiedNameAsString()));
 }
 
 bool FunctionArgsByRef::shouldIgnoreOperator(FunctionDecl *function)
