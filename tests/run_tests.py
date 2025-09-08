@@ -12,6 +12,7 @@ import io
 import shutil
 from threading import Thread
 from sys import platform as _platform
+from pathlib import Path
 import platform
 
 # cd into the folder containing this script
@@ -779,6 +780,8 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
 
     checkname = test.check.name
     filename = checkname + "/" + test.filename()
+    # Easy copying of command to reproduce manually. Saves me a ton of work - Alex
+    abs_filename = str(Path(filename).absolute())
 
     output_file = filename + ".out"
     result_file = filename + ".result"
@@ -797,12 +800,12 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
         return True
 
     if is_standalone:
-        cmd_to_run = clazy_standalone_binary() + " " + filename + " " + \
+        cmd_to_run = clazy_standalone_binary() + " " + abs_filename + " " + \
             clazy_standalone_command(test, cppStandard, qt)
     elif is_tidy:
-        cmd_to_run = clang_tidy_command(test, cppStandard, qt, filename)
+        cmd_to_run = clang_tidy_command(test, cppStandard, qt, abs_filename)
     else:
-        cmd_to_run = clazy_command(test, cppStandard, qt, filename)
+        cmd_to_run = clazy_command(test, cppStandard, qt, abs_filename)
 
     if test.compare_everything:
         result_file = output_file
