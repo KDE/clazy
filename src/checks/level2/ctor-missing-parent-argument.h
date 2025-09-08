@@ -19,6 +19,7 @@ public:
     void VisitDecl(clang::Decl *decl) override;
 
 private:
+    std::string expectedParentTypeFor(clang::CXXRecordDecl *decl);
 };
 
 #endif

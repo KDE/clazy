@@ -18,18 +18,18 @@
 
 using namespace clang;
 
-static std::string expectedParentTypeFor(CXXRecordDecl *decl)
+std::string CtorMissingParentArgument::expectedParentTypeFor(CXXRecordDecl *decl)
 {
-    if (clazy::derivesFrom(decl, "QWidget")) {
-        return "QWidget";
+    if (const auto parent = qtNamespaced("QWidget"); clazy::derivesFrom(decl, parent)) {
+        return parent;
     }
-    if (clazy::derivesFrom(decl, "QQuickItem")) {
-        return "QQuickItem";
-    } else if (clazy::derivesFrom(decl, "Qt3DCore::QEntity")) {
-        return "Qt3DCore::QNode";
+    if (const auto parent = qtNamespaced("QQuickItem"); clazy::derivesFrom(decl, parent)) {
+        return parent;
+    } else if (clazy::derivesFrom(decl, qtNamespaced("Qt3DCore::QEntity"))) {
+        return qtNamespaced("Qt3DCore::QNode");
     }
 
-    return "QObject";
+    return qtNamespaced("QObject");
 }
 
 void CtorMissingParentArgument::VisitDecl(Decl *decl)
