@@ -77,7 +77,7 @@ static bool isQStringFromStringLiteral(Expr *qstring, LangOptions lo)
     return false;
 }
 
-static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
+bool UseStaticQRegularExpression::isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
 {
     // Get the QRegularExpression ctor
     auto *ctor = clazy::getFirstChildOfType<CXXConstructExpr>(qregexVar);
@@ -87,7 +87,7 @@ static bool isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
 
     // Check if its first arg is "QString"
     auto *qstrArg = ctor->getArg(0);
-    if (!qstrArg || clazy::typeName(qstrArg->getType(), lo, true) != "QString") {
+    if (!qstrArg || clazy::typeName(qstrArg->getType(), lo, true) != qtNamespaced("QString")) {
         return false;
     }
 
