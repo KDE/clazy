@@ -74,7 +74,7 @@ bool clazy::loopCanBeInterrupted(clang::Stmt *stmt, const clang::SourceManager &
     });
 }
 
-clang::Expr *clazy::containerExprForLoop(Stmt *loop)
+clang::Expr *clazy::containerExprForLoop(Stmt *loop, const std::string &qtNamespace)
 {
     if (!loop) {
         return nullptr;
@@ -91,7 +91,7 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
         }
 
         const CXXConstructorDecl *constructorDecl = constructExpr->getConstructor();
-        if (!constructorDecl || clazy::name(constructorDecl) != "QForeachContainer") {
+        if (!constructorDecl || constructorDecl->getQualifiedNameAsString() != clazy::qtNamespaced("QForeachContainer", qtNamespace)) {
             return nullptr;
         }
 
@@ -104,7 +104,7 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
         if (!callExpr)
             return nullptr;
         FunctionDecl *func = callExpr->getDirectCallee();
-        if (!func || func->getQualifiedNameAsString() != "QtPrivate::qMakeForeachContainer") {
+        if (!func || func->getQualifiedNameAsString() != clazy::qtNamespaced("QtPrivate::qMakeForeachContainer", qtNamespace)) {
             return nullptr;
         }
         if (callExpr->getNumArgs() < 1) {
@@ -116,9 +116,9 @@ clang::Expr *clazy::containerExprForLoop(Stmt *loop)
     return nullptr;
 }
 
-VarDecl *clazy::containerDeclForLoop(clang::Stmt *loop)
+VarDecl *clazy::containerDeclForLoop(clang::Stmt *loop, const std::string &qtNamespace)
 {
-    Expr *expr = containerExprForLoop(loop);
+    Expr *expr = containerExprForLoop(loop, qtNamespace);
     if (!expr) {
         return nullptr;
     }

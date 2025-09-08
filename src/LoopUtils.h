@@ -51,14 +51,14 @@ inline bool isLoop(clang::Stmt *stmt)
  *
  * Q_FOREACH (auto f, expression) or for (auto i : expression)
  */
-clang::Expr *containerExprForLoop(clang::Stmt *loop);
+clang::Expr *containerExprForLoop(clang::Stmt *loop, const std::string &qtNamespace);
 
 /**
  * Returns the container decl for a range-loop or Q_FOREACH
  *
  * Q_FOREACH (auto f, container) or for (auto i : container)
  */
-clang::VarDecl *containerDeclForLoop(clang::Stmt *loop);
+clang::VarDecl *containerDeclForLoop(clang::Stmt *loop, const std::string &qtNamespace);
 
 /**
  * Returns true of stmt is inside a for, while or do-while loop.

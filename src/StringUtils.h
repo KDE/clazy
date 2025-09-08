@@ -314,6 +314,11 @@ bool anyArgIsOfSimpleType(clang::FunctionDecl *func, const std::string &simpleTy
  */
 bool anyArgIsOfAnySimpleType(clang::FunctionDecl *func, const std::vector<std::string> &simpleTypes, const clang::LangOptions &);
 
+inline std::string qtNamespaced(const std::string &className, const std::string &qtNamespace)
+{
+    return qtNamespace.empty() ? className : qtNamespace + "::" + className;
+}
+
 inline void dump(const clang::SourceManager &sm, clang::Stmt *s)
 {
     if (!s) {
