@@ -405,7 +405,7 @@ def clang_name():
 
 def clazy_command(test: Test, cppStandard, qt, filename):
     if test.isScript():
-        return "./" + filename
+        return filename # is absolte path
 
     if 'CLAZY_CXX' in os.environ:  # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX']
