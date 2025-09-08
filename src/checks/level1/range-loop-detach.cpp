@@ -133,7 +133,7 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     }
 
     StmtBodyRange bodyRange(nullptr, &sm(), rangeLoop->getBeginLoc());
-    if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop), bodyRange)) {
+    if (clazy::containerNeverDetaches(clazy::containerDeclForLoop(rangeLoop, m_context->qtNamespace()), bodyRange)) {
         return;
     }
 

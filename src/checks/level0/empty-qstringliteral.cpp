@@ -46,7 +46,7 @@ void EmptyQStringliteral::VisitStmt(clang::Stmt *stmt)
 void EmptyQStringliteral::handleQt6StringLiteral(clang::Stmt *stmt)
 {
     if (auto c = dyn_cast<CallExpr>(stmt)) {
-        if (clazy::qualifiedMethodName(c->getDirectCallee()) == "QtPrivate::qMakeStringPrivate") {
+        if (clazy::qualifiedMethodName(c->getDirectCallee()) == qtNamespaced("QtPrivate::qMakeStringPrivate")) {
             if (auto lt = clazy::getFirstChildOfType<StringLiteral>(c); lt && lt->getByteLength() == 0) {
                 emitWarning(stmt, "Use QLatin1String(\"\") or QString() instead of an empty QStringLiteral");
             }

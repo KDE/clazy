@@ -106,7 +106,7 @@ bool ContainerAntiPattern::VisitQSet(Stmt *stmt)
 
 bool ContainerAntiPattern::handleLoop(Stmt *stm)
 {
-    Expr *containerExpr = clazy::containerExprForLoop(stm);
+    Expr *containerExpr = clazy::containerExprForLoop(stm, m_context->qtNamespace());
     if (!containerExpr) {
         return false;
     }

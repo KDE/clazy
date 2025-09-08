@@ -224,7 +224,7 @@ bool clazy::isQtAssociativeContainer(StringRef className)
 
 bool clazy::isQObject(const CXXRecordDecl *decl, const std::string &qtNamespace)
 {
-    return clazy::derivesFrom(decl, (qtNamespace.empty() ? "" : qtNamespace + "::") + "QObject");
+    return clazy::derivesFrom(decl, clazy::qtNamespaced("QObject", qtNamespace));
 }
 
 bool clazy::isConvertibleTo(const Type *source, const Type *target)
@@ -331,7 +331,7 @@ clang::CXXRecordDecl *clazy::getQObjectBaseClass(clang::CXXRecordDecl *recordDec
 
 bool clazy::isConnect(FunctionDecl *func, const std::string &qtNamespace)
 {
-    return func && func->getQualifiedNameAsString() == (qtNamespace.empty() ? "" : qtNamespace + "::") + "QObject::connect";
+    return func && func->getQualifiedNameAsString() == clazy::qtNamespaced("QObject::connect", qtNamespace);
 }
 
 bool clazy::connectHasPMFStyle(FunctionDecl *func)
