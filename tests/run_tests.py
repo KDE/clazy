@@ -58,8 +58,10 @@ class QtInstallation:
         additonal_args = ""
         if c_headerpath:
             additonal_args = "-isystem " + c_headerpath + "/include "
-        if cxx_args:
-            additonal_args += cxx_args + " "
+        if _cxx_args:
+            additonal_args += _cxx_args + " "
+        if _qt_namespaced:
+            additonal_args += " -DQT_NAMESPACE=MyQt "
 
         return additonal_args + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
@@ -481,6 +483,8 @@ parser.add_argument("check_names", nargs='*',
                     help="The name of the check whose unit-tests will be run. Defaults to running all checks.")
 parser.add_argument("--cxx-args", type=str, default="",
                     help="Compiler arguments as a single string")
+parser.add_argument("--qt-namespaced", action="store_true",
+                    help="Compile tests pretending Qt is namespaced using QT_NAMESPACE")
 args = parser.parse_args()
 
 if args.only_standalone and args.no_standalone:
@@ -500,7 +504,8 @@ _only_standalone = args.only_standalone
 _num_threads = args.jobs
 _lock = threading.Lock()
 _was_successful = True
-cxx_args = args.cxx_args
+_cxx_args = args.cxx_args
+_qt_namespaced = args.qt_namespaced
 if 6 in args.qt_versions:
     _qt6_installation = find_qt_installation(6, ["QT_SELECT=6 qmake", "qmake-qt6", "qmake", "qmake6"])
 else:
@@ -561,6 +566,8 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbo
     # clang-tidy prints the tags slightly different
     if cmd.startswith("clang-tidy"):
         lines = lines.replace("[clazy", "[-Wclazy")
+    if _qt_namespaced:
+        lines = lines.replace("MyQt::", "")
 
     if not success and not output_file:
         print(lines)
