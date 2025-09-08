@@ -38,6 +38,7 @@ static bool hasMutexes(Stmt *body)
 
 void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
 {
+    const std::string qThreadClass = qtNamespaced("QThread");
     // Here we catch slots not marked as slots, we warn when the connect is made
 
     auto *callExpr = dyn_cast<CallExpr>(stmt);
@@ -51,11 +52,11 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
     }
 
     CXXMethodDecl *slot = clazy::receiverMethodForConnect(callExpr);
-    if (!slot || !clazy::derivesFrom(slot->getParent(), "QThread")) {
+    if (!slot || !clazy::derivesFrom(slot->getParent(), qThreadClass)) {
         return;
     }
 
-    if (clazy::name(slot->getParent()) == "QThread") { // The slots in QThread are thread safe, we're only worried about derived classes
+    if (slot->getParent()->getQualifiedNameAsString() == qThreadClass) { // The slots in QThread are thread safe, we're only worried about derived classes
         return;
     }
 
@@ -69,16 +70,16 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
 
 void ThreadWithSlots::VisitDecl(Decl *decl)
 {
+    const std::string qThreadClass = qtNamespaced("QThread");
     // Here we catch slots marked as such, and warn when they are declared
-
     auto *method = dyn_cast<CXXMethodDecl>(decl);
     if (!method || !m_context->accessSpecifierManager || !method->isThisDeclarationADefinition() || !method->hasBody()
-        || !clazy::derivesFrom(method->getParent(), "QThread")) {
+        || !clazy::derivesFrom(method->getParent(), qThreadClass)) {
         return;
     }
 
     // The slots in QThread are thread safe, we're only worried about derived classes:
-    if (clazy::name(method->getParent()) == "QThread") {
+    if (method->getParent()->getQualifiedNameAsString() == qThreadClass) {
         return;
     }
 
