@@ -2,7 +2,7 @@
 #include <QtCore/QScopedPointer>
 #include <QtCore/QPointer>
 #include <QtCore/QSharedPointer>
-
+class MyObj : public QObject {public: void doStuff();};
 void test()
 {
     QScopedPointer<QObject> ptr(new QObject);
@@ -16,5 +16,7 @@ void test()
 
     QScopedPointer<QObject> okPtr(new QObject);
     okPtr->deleteLater();
+
+    static_cast<MyObj*>(qsptr.data())->doStuff();
 }
 

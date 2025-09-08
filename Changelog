@@ -4,6 +4,7 @@ Released: not yet
 
 Bugfixes:
  * Fix non-pod-static check emitting warning for each entry of a container
+ * Fix use-arrow-operator-instead-of-data emitting false positive when value is casted
 
 Notes:
  * C++20 is now required for compilation
