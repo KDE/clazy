@@ -106,6 +106,7 @@ inline clang::QualType pointeeQualType(const clang::QualType qualType)
 /**
  * Returns if @p arg is stack or heap allocated.
  * true means it is. false means it either isn't or the situation was too complex to judge.
+ * type is the qualified type
  */
 void heapOrStackAllocated(clang::Expr *arg, const std::string &type, const clang::LangOptions &lo, bool &isStack, bool &isHeap);
 
