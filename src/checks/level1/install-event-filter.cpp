@@ -27,7 +27,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     }
 
     FunctionDecl *func = memberCallExpr->getDirectCallee();
-    if (!func || func->getQualifiedNameAsString() != "QObject::installEventFilter") {
+    if (!func || func->getQualifiedNameAsString() != qtNamespaced("QObject::installEventFilter")) {
         return;
     }
 
@@ -47,7 +47,7 @@ void InstallEventFilter::VisitStmt(clang::Stmt *stmt)
     auto methods = Utils::methodsFromString(record, "eventFilter");
 
     for (auto *method : methods) {
-        if (method->getQualifiedNameAsString() != "QObject::eventFilter") { // It overrides it, probably on purpose then, don't warn.
+        if (method->getQualifiedNameAsString() != qtNamespaced("QObject::eventFilter")) { // It overrides it, probably on purpose then, don't warn.
             return;
         }
     }

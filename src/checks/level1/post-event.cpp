@@ -22,7 +22,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    auto name = clazy::qualifiedMethodName(callexpr);
+    auto name = trimQtNamespace(clazy::qualifiedMethodName(callexpr));
 
     const bool isPostEvent = name == "QCoreApplication::postEvent";
     const bool isSendEvent = name == "QCoreApplication::sendEvent";
@@ -40,7 +40,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
 
     bool isStack = false;
     bool isHeap = false;
-    clazy::heapOrStackAllocated(event, "QEvent", lo(), isStack, isHeap);
+    clazy::heapOrStackAllocated(event, qtNamespaced("QEvent"), lo(), isStack, isHeap);
 
     if (isStack || isHeap) {
         if (isSendEvent && isHeap) {
