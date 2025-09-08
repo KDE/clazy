@@ -3,23 +3,19 @@
     "tests": [
         {
             "filename": "main.cpp",
-            "link": true,
             "has_fixits": true
         },
         {
             "filename": "usingnamespace.cpp",
-            "link": true,
             "has_fixits": true,
             "blacklist_platforms": ["darwin", "win32"]
         },
         {
             "filename": "namespaces.cpp",
-            "link": true,
             "has_fixits": true
         },
         {
-            "filename": "q_private_slot.cpp",
-            "link": true
+            "filename": "q_private_slot.cpp"
         },
         {
             "filename": "port_qsignalspy.cpp"
