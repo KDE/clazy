@@ -10,6 +10,7 @@
 #include "use-arrow-operator-instead-of-data.h"
 #include "StringUtils.h"
 #include "Utils.h"
+#include "clazy_stl.h"
 
 #include <clang/AST/ExprCXX.h>
 
@@ -34,14 +35,17 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
         return;
     }
     const std::string func = clazy::qualifiedMethodName(funcDecl);
-
     static const std::vector<std::string> whiteList{"QScopedPointer::data", "QPointer::data", "QSharedPointer::data", "QSharedDataPointer::data"};
-
-    bool accepted = std::ranges::any_of(whiteList, [func](const std::string &f) {
-        return f == func;
-    });
-    if (!accepted) {
+    if (!clazy::contains(whiteList, func)) {
         return;
+    }
+
+    for (const auto &chain : vec) {
+        if (auto a = dyn_cast<CXXMemberCallExpr>(chain)) {
+            if (auto callee = dyn_cast<MemberExpr>(a->getCallee()); callee && dyn_cast<CXXStaticCastExpr>(callee->getBase()->IgnoreImpCasts())) {
+                return; // We have some kind of cast going on here. This means we can not use the arrow operator directly
+            }
+        }
     }
 
     std::vector<FixItHint> fixits;
@@ -61,9 +65,7 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
     }
     begin = begin.getLocWithOffset(dotOffset);
 
-    const SourceRange sourceRange{begin, end};
-    FixItHint removal = FixItHint::CreateRemoval(sourceRange);
-    fixits.push_back(std::move(removal));
+    fixits.push_back(FixItHint::CreateRemoval(SourceRange{begin, end}));
 
     emitWarning(callExpr->getBeginLoc(), "Use operator -> directly instead of " + ClassName + "::data()->", fixits);
 }
