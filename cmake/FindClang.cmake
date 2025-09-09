@@ -76,6 +76,8 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangToolingSyntax)
   FIND_AND_ADD_CLANG_LIB(clangDependencyScanning)
   FIND_AND_ADD_CLANG_LIB(clangTidy)
+
+  FIND_AND_ADD_CLANG_LIB(craft_clang_plugins)
 endif()
 
 if(CLANG_LIBS OR CLANG_LIBCLANG_LIB OR CLANG_CLANG-CPP_LIB)

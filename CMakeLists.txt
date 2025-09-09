@@ -63,7 +63,7 @@ if (CLAZY_ENABLE_SANITIZERS)
     endif()
 endif()
 
-if(NOT CLAZY_BUILD_WITH_CLANG AND MSVC AND NOT CLANG_LIBRARY_IMPORT)
+if(NOT CLAZY_BUILD_WITH_CLANG AND MSVC AND NOT CLANG_LIBRARY_IMPORT AND NOT craft_clang_plugins IN_LIST CLANG_LIBS)
   message(FATAL_ERROR "\nOn MSVC you need to pass -DCLANG_LIBRARY_IMPORT=C:/path/to/llvm-build/lib/clang.lib to cmake when building Clazy.\nAlso make sure you've built LLVM with -DLLVM_EXPORT_SYMBOLS_FOR_PLUGINS=ON")
 endif()
 
