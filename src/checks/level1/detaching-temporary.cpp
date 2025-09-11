@@ -48,6 +48,7 @@ DetachingTemporary::DetachingTemporary(const std::string &name, Options options)
 
 bool isAllowedChainedClass(const std::string &className)
 {
+    // TODO Check if this really makes sense
     static const std::vector<std::string> allowed = {"QString", "QByteArray", "QVariant"};
     return clazy::contains(allowed, className);
 }
@@ -91,7 +92,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    CallExpr *firstCallToBeEvaluated = callExprs.at(callExprs.size() - 1); // This is the call to getList()
+    CallExpr *firstCallToBeEvaluated = callExprs.at(1); // This is the call to getList()
     FunctionDecl *firstFunc = firstCallToBeEvaluated->getDirectCallee();
     if (!firstFunc) {
         return;
@@ -125,7 +126,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
         return;
     }
 
-    CallExpr *secondCallToBeEvaluated = callExprs.at(callExprs.size() - 2); // This is the call to first()
+    CallExpr *secondCallToBeEvaluated = callExprs.at(0); // This is the call to first(), this might be the detaching call
     FunctionDecl *detachingFunc = secondCallToBeEvaluated->getDirectCallee();
     auto *detachingMethod = detachingFunc ? dyn_cast<CXXMethodDecl>(detachingFunc) : nullptr;
     const Type *detachingMethodReturnType = detachingMethod ? detachingMethod->getReturnType().getTypePtrOrNull() : nullptr;
@@ -171,7 +172,7 @@ void DetachingTemporary::VisitStmt(clang::Stmt *stm)
             error = std::string("Don't call ") + clazy::qualifiedMethodName(detachingMethod) + std::string("() on temporary");
         }
 
-        std::vector<FixItHint> hints = getFixitHints(className, functionName, callExpr);
+        std::vector<FixItHint> hints = getFixitHints(className, functionName, secondCallToBeEvaluated);
         emitWarning(stm->getBeginLoc(), error, hints);
     }
 }

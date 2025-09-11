@@ -20,3 +20,4 @@ detaching-temporary/main.cpp:165:5: warning: Don't call QList::rbegin() on tempo
 detaching-temporary/main.cpp:166:5: warning: Don't call QList::rend() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/main.cpp:167:5: warning: Don't call QList::rbegin() on temporary [-Wclazy-detaching-temporary]
 detaching-temporary/main.cpp:168:5: warning: Don't call QList::rend() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/main.cpp:178:5: warning: Don't call QList::first() on temporary [-Wclazy-detaching-temporary]

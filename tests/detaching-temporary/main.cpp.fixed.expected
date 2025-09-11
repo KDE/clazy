@@ -167,3 +167,15 @@ void testRIterators()
     getStringList().crbegin();
     getStringList().crend();
 }
+
+QVariantList getVariantList()
+{
+    return {};
+}
+QString getQString(){return "";}
+void chainedCalls()
+{
+    getVariantList().constFirst().toStringList().first();
+    getQString().mid(0,5)[0];
+
+}
