@@ -194,7 +194,7 @@ if (NOT CLAZY_BUILD_WITH_CLANG)
       # for historic reasons we prefer greadlink
       find_program(GREADLINK_CMD greadlink)
       if (GREADLINK_CMD)
-        set(READLINK_CMD ${READLINK_CMD})
+        set(READLINK_CMD ${GREADLINK_CMD})
       endif()
     endif()
     file(RELATIVE_PATH BIN_RELATIVE_LIBDIR "${CMAKE_INSTALL_FULL_BINDIR}" "${CMAKE_INSTALL_FULL_LIBDIR}")
