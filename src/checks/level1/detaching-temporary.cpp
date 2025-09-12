@@ -48,8 +48,8 @@ DetachingTemporary::DetachingTemporary(const std::string &name, Options options)
 
 bool isAllowedChainedClass(const std::string &className)
 {
-    // TODO Check if this really makes sense
-    static const std::vector<std::string> allowed = {"QString", "QByteArray", "QVariant"};
+    // Members of those classes return values that have refCount of 1, so no detaching actually happens
+    static const std::vector<std::string> allowed = {"QString", "QByteArray"};
     return clazy::contains(allowed, className);
 }
 

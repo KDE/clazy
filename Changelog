@@ -5,6 +5,9 @@ Released: not yet
 Bugfixes:
  * Fix non-pod-static check emitting warning for each entry of a container
  * Fix use-arrow-operator-instead-of-data emitting false positive when value is casted
+ * Do not whitelist QVariant for detaching-temporary. QVariant::toString will provide a QString that is not detached
+ * detaching-temporary properly checks conditions when more than two method calls are chained
+ * Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls
 
 Notes:
  * C++20 is now required for compilation

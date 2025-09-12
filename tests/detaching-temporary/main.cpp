@@ -168,14 +168,12 @@ void testRIterators()
     getStringList().rend();
 }
 
-QVariantList getVariantList()
-{
-    return {};
-}
-QString getQString(){return "";}
+QVariantList getVariantList(){return {};}
 void chainedCalls()
 {
-    getVariantList().first().toStringList().first();
-    getQString().mid(0,5)[0];
-
+    getVariantList().last().toStringList().first()[0]; // Warn, twice
+    getStringList()[0][0]; // Warn, but only once due to whitelisting
+    getStringList().at(0)[0]; // OK, .at gives us a const value
+    getVariantList().constFirst().toString()[0]; // Warn, detach
+    getVariantList()[0].toString()[0]; // Warn, detach twice
 }
