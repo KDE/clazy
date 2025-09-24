@@ -153,10 +153,6 @@ void SuppressionManager::parseFile(FileID id, const SourceManager &sm, const cla
 
         const LineNumber lineNumber = sm.getSpellingLineNumber(token.getLocation());
         const std::string comment = Lexer::getSpelling(token, sm, lo);
-        if (lineNumber < 0) {
-            llvm::errs() << "SuppressionManager::parseFile: Invalid line number " << lineNumber << "\n";
-            continue;
-        }
 
         const int foundNolint = comment.find("NOLINT");
         int foundNoLintNextLine = -1;
