@@ -118,7 +118,7 @@ RegisteredCheck check(const char *name, CheckLevel level, RegisteredCheck::Optio
 void CheckManager::registerChecks()
 {
     registerCheck(check<AssertWithSideEffects>("assert-with-side-effects", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
-    registerCheck(check<CompareMemberCheck>("compare-member-check", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts));
+    registerCheck(check<CompareMemberCheck>("compare-member-check", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<ContainerInsideLoop>("container-inside-loop", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<DetachingMember>("detaching-member", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<HeapAllocatedSmallTrivialType>("heap-allocated-small-trivial-type", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls, false));
