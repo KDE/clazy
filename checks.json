@@ -787,7 +787,9 @@
             "name"  : "compare-member-check",
             "level" : -1,
             "categories" : ["bug"],
-            "visits_stmts" : true
+            "visits_stmts" : true,
+            "can_ignore_includes": true
+
         },
         {
             "name": "readlock-detaching",
