@@ -46,7 +46,7 @@ class QualType;
 class CompareMemberCheck : public CheckBase
 {
 public:
-    explicit CompareMemberCheck(const std::string &name, ClazyContext *context);
+    using CheckBase::CheckBase;
     ~CompareMemberCheck();
     void VisitStmt(clang::Stmt *stmt) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;

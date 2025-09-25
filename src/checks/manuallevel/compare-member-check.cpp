@@ -122,12 +122,6 @@ public:
     }
 };
 
-CompareMemberCheck::CompareMemberCheck(const std::string &name, ClazyContext *context)
-    : CheckBase(name, context, Option_CanIgnoreIncludes)
-    , m_astMatcherCallBack(std::make_unique<Caller>(this))
-{
-}
-
 CompareMemberCheck::~CompareMemberCheck() = default;
 
 void CompareMemberCheck::VisitStmt(Stmt *stmt)
