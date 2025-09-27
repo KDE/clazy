@@ -10,8 +10,7 @@
 
 #include "checkbase.h"
 
-#include <string>
-#include <vector>
+#include <memory>
 
 class Caller;
 class ClazyContext;
