@@ -67,6 +67,7 @@ void NonPodGlobalStatic::VisitStmt(clang::Stmt *stm)
                 "Q_IMPORT_PLUGIN",
                 "Q_CONSTRUCTOR_FUNCTION",
                 "Q_DESTRUCTOR_FUNCTION",
+                "Q_COREAPP_STARTUP_FUNCTION",
             };
 
             auto macroName = std::string_view(Lexer::getImmediateMacroName(immediateMacroLoc, sm(), lo()));
