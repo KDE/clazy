@@ -117,5 +117,6 @@ void CompareMemberCheck::VisitStmt(Stmt *stmt)
 
 void CompareMemberCheck::registerASTMatchers(MatchFinder &finder)
 {
+    m_astMatcherCallBack = std::make_unique<Caller>(this);
     finder.addMatcher(cxxOperatorCallExpr().bind("callExpr"), m_astMatcherCallBack.get());
 }
