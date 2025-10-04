@@ -40,7 +40,7 @@ void Connect3ArgLambda::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    std::string qualifiedName = fdecl->getQualifiedNameAsString();
+    const std::string qualifiedName = trimQtNamespace(fdecl->getQualifiedNameAsString());
     if (qualifiedName == "QTimer::singleShot") {
         processQTimer(fdecl, stmt);
         return;
