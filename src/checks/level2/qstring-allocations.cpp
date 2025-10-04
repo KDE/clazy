@@ -120,14 +120,14 @@ Latin1Expr QStringAllocations::qlatin1CtorExpr(Stmt *stm, ConditionalOperator *&
                 return {constructExpr, /*enableFixits=*/numArgs == 1};
             }
 
-            if (Utils::userDefinedLiteral(constructExpr, "QLatin1String", lo())) {
+            if (Utils::userDefinedLiteral(constructExpr, qtNamespaced("QLatin1String"), lo())) {
                 return {constructExpr, /*enableFixits=*/false};
             }
         }
     }
 
     // C++17 elides the QLatin1String constructor
-    if (Utils::userDefinedLiteral(stm, "QLatin1String", lo())) {
+    if (Utils::userDefinedLiteral(stm, qtNamespaced("QLatin1String"), lo())) {
         return {constructExpr, /*enableFixits=*/false};
     }
 
