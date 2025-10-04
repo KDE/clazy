@@ -65,7 +65,7 @@ void LambdaUniqueConnection::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    const CXXMethodDecl *method = clazy::pmfFromConnect(call, 3);
+    const CXXMethodDecl *method = clazy::pmfFromConnect(call, 3, m_context->qtNamespace());
     if (method) {
         // How else to detect if it's the right overload ? It's all templated stuff with the same
         // names for all the template arguments

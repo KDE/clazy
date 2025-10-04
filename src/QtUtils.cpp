@@ -178,7 +178,7 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
     return map;
 }
 
-bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex)
+bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex, const std::string &qtNamespace)
 {
     Expr *arg = Call->getArg(argIndex);
     QualType type = arg->getType();
@@ -191,7 +191,7 @@ bool clazy::isQMetaMethod(CallExpr *Call, unsigned int argIndex)
         return false;
     }
 
-    return recordDecl->getQualifiedNameAsString() == "QMetaMethod";
+    return recordDecl->getQualifiedNameAsString() == clazy::qtNamespaced("QMetaMethod", qtNamespace);
 }
 
 bool clazy::isQtCOWIterableClass(clang::CXXRecordDecl *record, const std::string &qtNamespace)
@@ -363,7 +363,7 @@ bool clazy::connectHasPMFStyle(FunctionDecl *func)
     return true;
 }
 
-CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex)
+CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex, const std::string &qtNamespace)
 {
     if (!funcCall) {
         return nullptr;
@@ -393,10 +393,10 @@ CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex)
             }
         }
     }
-    return pmfFromExpr(expr);
+    return pmfFromExpr(expr, qtNamespace);
 }
 
-CXXMethodDecl *clazy::pmfFromExpr(Expr *expr)
+CXXMethodDecl *clazy::pmfFromExpr(Expr *expr, const std::string &qtNamespace)
 {
     if (auto *uo = dyn_cast<UnaryOperator>(expr)) {
         return pmfFromUnary(uo);
@@ -422,23 +422,23 @@ CXXMethodDecl *clazy::pmfFromExpr(Expr *expr)
         }
 
         const std::string className = record->getQualifiedNameAsString();
-        if (className != "QNonConstOverload" && className != "QConstOverload") {
+        if (className != clazy::qtNamespaced("QNonConstOverload", qtNamespace) && className != clazy::qtNamespaced("QConstOverload", qtNamespace)) {
             return nullptr;
         }
 
         return pmfFromUnary(dyn_cast<UnaryOperator>(call->getArg(1)));
     } else if (auto *staticCast = dyn_cast<CXXStaticCastExpr>(expr)) {
-        return pmfFromExpr(staticCast->getSubExpr());
+        return pmfFromExpr(staticCast->getSubExpr(), qtNamespace);
     } else if (auto *callexpr = dyn_cast<CallExpr>(expr)) {
         // QOverload case, go deeper one level to get to the UnaryOperator
         if (callexpr->getNumArgs() == 1) {
-            return pmfFromExpr(callexpr->getArg(0));
+            return pmfFromExpr(callexpr->getArg(0), qtNamespace);
         }
     } else if (auto *matTempExpr = dyn_cast<MaterializeTemporaryExpr>(expr)) {
         // Qt6 PMF, go deeper one level to get to the UnaryOperator
-        return pmfFromExpr(matTempExpr->getSubExpr());
+        return pmfFromExpr(matTempExpr->getSubExpr(), qtNamespace);
     } else if (auto *impl = dyn_cast<ImplicitCastExpr>(expr)) {
-        return pmfFromExpr(impl->getSubExpr());
+        return pmfFromExpr(impl->getSubExpr(), qtNamespace);
     }
 
     return nullptr;

@@ -32,7 +32,7 @@ void ConstSignalOrSlot::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    CXXMethodDecl *slot = clazy::receiverMethodForConnect(call);
+    CXXMethodDecl *slot = clazy::receiverMethodForConnect(call, m_context->qtNamespace());
     if (!slot || !slot->isConst() || slot->getReturnType()->isVoidType()) { // const and returning void must do something, so not a getter
         return;
     }

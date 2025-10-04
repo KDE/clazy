@@ -66,7 +66,7 @@ bool isQtIterableClass(llvm::StringRef className);
 /**
  * Returns true if the method is of QMetaMethod type
  */
-bool isQMetaMethod(clang::CallExpr *call, unsigned int argIndex);
+bool isQMetaMethod(clang::CallExpr *call, unsigned int argIndex, const std::string &qtNamespace);
 /**
  * Returns true if the class is a Qt class which can be iterated with foreach and also implicitly shared.
  */
@@ -196,9 +196,9 @@ bool connectHasPMFStyle(clang::FunctionDecl *func);
 /**
  * Returns the method referenced by a PMF-style connect for the specified connect() call.
  */
-clang::CXXMethodDecl *pmfFromConnect(clang::CallExpr *funcCall, int argIndex);
+clang::CXXMethodDecl *pmfFromConnect(clang::CallExpr *funcCall, int argIndex, const std::string &qtNamespace);
 
-clang::CXXMethodDecl *pmfFromExpr(clang::Expr *e);
+clang::CXXMethodDecl *pmfFromExpr(clang::Expr *e, const std::string &qtNamespace);
 clang::CXXMethodDecl *pmfFromUnary(clang::UnaryOperator *uo);
 
 /**
@@ -216,15 +216,15 @@ clang::ValueDecl *signalReceiverForConnect(clang::CallExpr *call);
  * Returns the receiver method, in a PMF connect statement.
  * The method can be a slot or a signal. If it's a lambda or functor nullptr is returned
  */
-inline clang::CXXMethodDecl *receiverMethodForConnect(clang::CallExpr *call)
+inline clang::CXXMethodDecl *receiverMethodForConnect(clang::CallExpr *call, const std::string &qtNamespace)
 {
-    clang::CXXMethodDecl *receiverMethod = clazy::pmfFromConnect(call, 2);
+    clang::CXXMethodDecl *receiverMethod = clazy::pmfFromConnect(call, 2, qtNamespace);
     if (receiverMethod) {
         return receiverMethod;
     }
 
     // It's either third or fourth argument
-    return clazy::pmfFromConnect(call, 3);
+    return clazy::pmfFromConnect(call, 3, qtNamespace);
 }
 
 inline bool isUIFile(clang::SourceLocation loc, const clang::SourceManager &sm)

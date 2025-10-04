@@ -51,7 +51,7 @@ void ThreadWithSlots::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    CXXMethodDecl *slot = clazy::receiverMethodForConnect(callExpr);
+    CXXMethodDecl *slot = clazy::receiverMethodForConnect(callExpr, m_context->qtNamespace());
     if (!slot || !clazy::derivesFrom(slot->getParent(), qThreadClass)) {
         return;
     }

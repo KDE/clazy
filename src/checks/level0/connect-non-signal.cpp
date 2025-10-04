@@ -31,9 +31,9 @@ void ConnectNonSignal::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/1);
+    CXXMethodDecl *method = clazy::pmfFromConnect(call, /*argIndex=*/1, m_context->qtNamespace());
     if (!method) {
-        if (clazy::isQMetaMethod(call, 1)) {
+        if (clazy::isQMetaMethod(call, 1, m_context->qtNamespace())) {
             return;
         }
         emitWarning(call->getBeginLoc(), "couldn't find method from pmf connect, please report a bug");
