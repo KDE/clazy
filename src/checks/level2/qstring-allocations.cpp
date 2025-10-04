@@ -197,8 +197,9 @@ void QStringAllocations::VisitCtor(Stmt *stm)
 
     // With llvm 10, for some reason, the child CXXConstructExpr of QStringList foo = {"foo}; aren't visited :(.
     // Do it manually.
-    if (clazy::isOfClass(ctorExpr->getConstructor(), qtNamespaced("QStringList"))
-        || ctorExpr->getConstructor()->getQualifiedNameAsString() == qtNamespaced("QList<QString>::QList")) { // In Qt6, QStringList is an alias
+    if (clazy::isOfClass(ctorExpr->getConstructor(), "QStringList")
+        || ctorExpr->getConstructor()->getQualifiedNameAsString()
+            == qtNamespaced("QList<" + qtNamespaced("QString") + ">::QList")) { // In Qt6, QStringList is an alias
         auto *p = clazy::getFirstChildOfType2<CXXConstructExpr>(ctorExpr);
         while (p) {
             if (clazy::isOfClass(p, "QString")) {
