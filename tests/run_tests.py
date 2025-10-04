@@ -555,7 +555,7 @@ def qt_installation(major_version):
     return None
 
 
-def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbose_command=False):
+def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbose_command=False, qt_namespaced=False, qt_replace_namespace=True):
     lines, success = get_command_output(cmd, test_env, cwd=cwd, ignore_verbose=ignore_verbose_command)
     # Hack for Windows, we have std::_Vector_base in the expected data
     lines = lines.replace("std::_Container_base0", "std::_Vector_base")
@@ -566,7 +566,7 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbo
     # clang-tidy prints the tags slightly different
     if cmd.startswith("clang-tidy"):
         lines = lines.replace("[clazy", "[-Wclazy")
-    if _qt_namespaced:
+    if qt_namespaced and qt_replace_namespace:
         lines = lines.replace("MyQt::", "")
 
     if not success and not output_file:
@@ -731,7 +731,7 @@ def is32Bit():
     return platform.architecture()[0] == '32bit'
 
 
-def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
+def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version, qt_namespaced):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
 
@@ -776,6 +776,11 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     result_file = filename + ".result"
     expected_file = filename + ".expected"
     expected_file_tidy = filename + ".expected.tidy"
+    expected_file_namespaced = filename + ".expected.qtnamespaced"
+    qt_namespaced_separate_file = False
+    if qt_namespaced and os.path.exists(expected_file_namespaced):
+        expected_file = expected_file_namespaced
+        qt_namespaced_separate_file = True
     if is_tidy and os.path.exists(expected_file_tidy):
         expected_file = expected_file_tidy
     elif not os.path.exists(expected_file):
@@ -801,7 +806,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
 
     must_fail = test.must_fail
 
-    cmd_success = run_command(cmd_to_run, output_file, test.env, ignore_verbose_command=True)
+    cmd_success = run_command(cmd_to_run, output_file, test.env, ignore_verbose_command=True, qt_namespaced=qt_namespaced, qt_replace_namespace=not qt_namespaced_separate_file)
 
     if file_contains(output_file, 'Invalid check: '):
         return True
@@ -829,7 +834,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version):
     return True
 
 
-def run_unit_test_for_each_configuration(test, is_standalone, is_tidy=False):
+def run_unit_test_for_each_configuration(test, is_standalone, is_tidy, qt_namespaced):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
     result = True
@@ -839,7 +844,7 @@ def run_unit_test_for_each_configuration(test, is_standalone, is_tidy=False):
                 continue
             if cppStandard == "c++17" and qt_major_version == 5 and len(test.cppStandards) > 1: # valid combination but let's skip it unless it was the only specified standard
                 continue
-            result = result and run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version)
+            result = result and run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version, qt_namespaced)
     return result
 
 
@@ -848,15 +853,15 @@ def run_unit_tests(tests):
     for test in tests:
         test_result = True
         if not _only_standalone:
-            test_result = run_unit_test_for_each_configuration(test, False)
+            test_result = run_unit_test_for_each_configuration(test, False, False, _qt_namespaced)
             result = result and test_result
 
         if not _no_standalone:
-            test_result = test_result and run_unit_test_for_each_configuration(test, True)
+            test_result = test_result and run_unit_test_for_each_configuration(test, True, False, _qt_namespaced)
             result = result and test_result
 
         if not _no_clang_tidy:
-            test_result = test_result and run_unit_test_for_each_configuration(test, False, True)
+            test_result = test_result and run_unit_test_for_each_configuration(test, False, True, _qt_namespaced)
             result = result and test_result
 
         if not test_result:

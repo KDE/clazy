@@ -1,0 +1,7 @@
+qhash-namespace/main.cpp:15:5: warning: Move qHash(MyQt::NS::NS2::C) to MyQt::NS::NS2 namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:16:5: warning: Move qHash(MyQt::A) to MyQt namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:24:1: warning: Move qHash(MyQt::NS::B) to MyQt::NS namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:25:1: warning: Move qHash(NS::B *) to MyQt::NS namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:26:1: warning: Move qHash(MyQt::NS::B::B3) to MyQt::NS namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:30:1: warning: Move qHash(MyQt::E) into MyQt namespace for ADL lookup [-Wclazy-qhash-namespace]
+qhash-namespace/main.cpp:30:1: warning: qHash(MyQt::E) must be declared before QT_END_NAMESPACE [-Wclazy-qhash-namespace]
