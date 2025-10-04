@@ -76,7 +76,7 @@ void ReturningDataFromTemporary::handleMemberCall(CXXMemberCallExpr *memberCall,
     if (!method) {
         return;
     }
-    const auto methodName = method->getQualifiedNameAsString();
+    const std::string methodName = trimQtNamespace(method->getQualifiedNameAsString());
 
     if (methodName != "QByteArray::data" && methodName != "QByteArray::operator const char *" && methodName != "QByteArray::constData") {
         return;
