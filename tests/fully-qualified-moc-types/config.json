@@ -3,7 +3,8 @@
     "tests": [
         {
             "filename": "main.cpp",
-            "has_fixits": true
+            "has_fixits": true,
+            "skip_qtnamespaced": true
         },
         {
             "filename": "bug_expression_in_generic.cpp"

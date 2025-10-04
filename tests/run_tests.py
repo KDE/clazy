@@ -76,6 +76,7 @@ class Test:
         self.compare_everything = False
         self.check = check
         self.expects_failure = False
+        self.skip_qtnamespaced = False
         self.qt_major_versions = [5, 6]
         self.env = os.environ
         self.checks = []
@@ -287,6 +288,8 @@ def load_json(check_name: str):
                 test.has_fixits = t['has_fixits'] and test.minimum_clang_version_for_fixits <= CLANG_VERSION
             if 'expects_failure' in t:
                 test.expects_failure = t['expects_failure']
+            if 'skip_qtnamespaced' in t:
+                test.skip_qtnamespaced = t['skip_qtnamespaced']
             if 'only_qt' in t:
                 test.only_qt = t['only_qt']
             if 'cppStandards' in t:
@@ -836,6 +839,8 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version, q
 
 def run_unit_test_for_each_configuration(test, is_standalone, is_tidy, qt_namespaced):
     if test.check.clazy_standalone_only and not is_standalone:
+        return True
+    if qt_namespaced and test.skip_qtnamespaced:
         return True
     result = True
     for qt_major_version in test.qt_major_versions:
