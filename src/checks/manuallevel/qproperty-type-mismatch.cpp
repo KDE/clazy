@@ -76,6 +76,9 @@ void QPropertyTypeMismatch::VisitTypedef(const clang::TypedefNameDecl *td)
     // to the Qualtypes, so catch any typedefs here
     QualType underlyingType = td->getUnderlyingType();
     m_typedefMap[td->getQualifiedNameAsString()] = underlyingType;
+    if (!m_context->qtNamespace().empty()) {
+        m_typedefMap[trimQtNamespace(td->getQualifiedNameAsString())] = underlyingType;
+    }
     m_typedefMap[td->getNameAsString()] = underlyingType; // It might be written unqualified in the Q_PROPERTY
 
     // FIXME: All the above is a bit flaky, as we don't know the actual namespace when the type is written without namespace in Q_PROPERTY
