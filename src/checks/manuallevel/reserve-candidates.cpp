@@ -233,7 +233,6 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
         }
 
         if (clazy::isJavaIterator(dyn_cast<CXXMemberCallExpr>(callExpr))) {
-            llvm::errs() << "java style\n";
             continue;
         }
 

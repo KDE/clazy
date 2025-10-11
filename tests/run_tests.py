@@ -55,15 +55,15 @@ class QtInstallation:
         qt_modules_includes = []
         if module_includes:
             qt_modules_includes = ["-isystem " + self.qmake_header_path + "/" + f for f in next(os.walk(self.qmake_header_path))[1]]
-        additonal_args = ""
+        additional_args = ""
         if c_headerpath:
-            additonal_args = "-isystem " + c_headerpath + "/include "
+            additional_args = "-isystem " + c_headerpath + "/include "
         if _cxx_args:
-            additonal_args += _cxx_args + " "
+            additional_args += _cxx_args + " "
         if _qt_namespaced:
-            additonal_args += " -DQT_NAMESPACE=MyQt "
+            additional_args += " -DQT_NAMESPACE=MyQt "
 
-        return additonal_args + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
+        return additional_args + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
 
 class Test:
@@ -408,7 +408,7 @@ def clang_name():
 
 def clazy_command(test: Test, cppStandard, qt, filename):
     if test.isScript():
-        return filename # is absolte path
+        return filename  # is absolte path
 
     if 'CLAZY_CXX' in os.environ:  # In case we want to use clazy.bat
         result = os.environ['CLAZY_CXX']
