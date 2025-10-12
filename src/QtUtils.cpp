@@ -132,7 +132,7 @@ std::unordered_map<std::string, std::vector<clazy::MemberConstcounterpartPair>> 
             {"first", "constFirst"},
             {"find", "constFind"},
             {"last", "constLast"},
-            {"operator[]", "at"},
+            {"operator[]", "value"},
             {"lowerBound", "lowerBound"}, // const overload exists, same name
             {"upperBound", "upperBound"},
             {"keyValueBegin", "constKeyValueBegin"},

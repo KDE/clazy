@@ -102,7 +102,7 @@ void testSubscriptOperator()
 {
     getList().at(0); // Warning
     if (test_string().at(0).isEmpty()) {} // Warning
-    getMap().at(0); // Warning
+    getMap().value(0); // Warning
     auto m = getMap();
     m[0];
 
