@@ -272,7 +272,6 @@ clazy runs all checks from level1 by default.
   - [qstring-arg](docs/checks/README-qstring-arg.md)
   - [qstring-comparison-to-implicit-char](docs/checks/README-qstring-comparison-to-implicit-char.md)
   - [qstring-insensitive-allocation](docs/checks/README-qstring-insensitive-allocation.md)
-  - [qstring-ref](docs/checks/README-qstring-ref.md) (fix-missing-qstringref)
   - [qt-macros](docs/checks/README-qt-macros.md)
   - [strict-iterators](docs/checks/README-strict-iterators.md)
   - [temporary-iterator](docs/checks/README-temporary-iterator.md)
@@ -395,7 +394,7 @@ For example `-checks=clazy-qdatetime-utc,clazy-qgetenv"`
 <!-- jq -r '[.checks[] | select(.level == 0) | "clazy-" + .name] | join(",")' checks.json -->
 
 To enable all checks from level0 use:
-`clazy-overloaded-signal,clazy-connect-by-name,clazy-connect-non-signal,clazy-qstring-comparison-to-implicit-char,clazy-wrong-qevent-cast,clazy-lambda-in-connect,clazy-lambda-unique-connection,clazy-qdatetime-utc,clazy-qgetenv,clazy-qstring-insensitive-allocation,clazy-fully-qualified-moc-types,clazy-unused-non-trivial-variable,clazy-connect-not-normalized,clazy-mutable-container-key,clazy-qenums,clazy-qmap-with-pointer-key,clazy-qstring-ref,clazy-strict-iterators,clazy-writing-to-temporary,clazy-container-anti-pattern,clazy-qcolor-from-literal,clazy-qfileinfo-exists,clazy-qstring-arg,clazy-empty-qstringliteral,clazy-qt-macros,clazy-temporary-iterator,clazy-wrong-qglobalstatic,clazy-lowercase-qml-type-name,clazy-no-module-include,clazy-use-static-qregularexpression`
+`clazy-overloaded-signal,clazy-connect-by-name,clazy-connect-non-signal,clazy-qstring-comparison-to-implicit-char,clazy-wrong-qevent-cast,clazy-lambda-in-connect,clazy-lambda-unique-connection,clazy-qdatetime-utc,clazy-qgetenv,clazy-qstring-insensitive-allocation,clazy-fully-qualified-moc-types,clazy-unused-non-trivial-variable,clazy-connect-not-normalized,clazy-mutable-container-key,clazy-qenums,clazy-qmap-with-pointer-key,clazy-strict-iterators,clazy-writing-to-temporary,clazy-container-anti-pattern,clazy-qcolor-from-literal,clazy-qfileinfo-exists,clazy-qstring-arg,clazy-empty-qstringliteral,clazy-qt-macros,clazy-temporary-iterator,clazy-wrong-qglobalstatic,clazy-lowercase-qml-type-name,clazy-no-module-include,clazy-use-static-qregularexpression`
 To enable all checks from level1 use:
 `clazy-auto-unexpected-qstringbuilder,clazy-connect-3arg-lambda,clazy-const-signal-or-slot,clazy-detaching-temporary,clazy-foreach,clazy-incorrect-emit,clazy-install-event-filter,clazy-non-pod-global-static,clazy-post-event,clazy-qdeleteall,clazy-qlatin1string-non-ascii,clazy-qproperty-without-notify,clazy-qstring-left,clazy-range-loop-detach,clazy-range-loop-reference,clazy-returning-data-from-temporary,clazy-rule-of-two-soft,clazy-child-event-qobject-cast,clazy-virtual-signal,clazy-overridden-signal,clazy-qhash-namespace,clazy-skipped-base-method,clazy-readlock-detaching`
 To enable all checks from level2 use:

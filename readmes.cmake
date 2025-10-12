@@ -50,7 +50,6 @@ SET(README_LEVEL0_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-arg.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-comparison-to-implicit-char.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-insensitive-allocation.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-ref.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-macros.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-strict-iterators.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-temporary-iterator.md

@@ -251,19 +251,6 @@
             "visits_decls": true
         },
         {
-            "name": "qstring-ref",
-            "class_name": "StringRefCandidates",
-            "level": 0,
-            "categories": ["performance", "qstring"],
-            "fixits": [
-                {
-                    "name": "missing-qstringref"
-                }
-            ],
-            "visits_stmts": true,
-            "can_ignore_includes": true
-        },
-        {
             "name": "strict-iterators",
             "level": 0,
             "categories": ["containers", "performance", "bug"],

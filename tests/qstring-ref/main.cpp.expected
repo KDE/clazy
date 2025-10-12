@@ -1,5 +1,0 @@
-qstring-ref/main.cpp:8:15: warning: Use midRef() instead [-Wclazy-qstring-ref]
-qstring-ref/main.cpp:19:5: warning: Use midRef() instead [-Wclazy-qstring-ref]
-qstring-ref/main.cpp:20:5: warning: Use leftRef() instead [-Wclazy-qstring-ref]
-qstring-ref/main.cpp:23:5: warning: Use midRef() instead [-Wclazy-qstring-ref]
-qstring-ref/main.cpp:25:45: warning: Use midRef() instead [-Wclazy-qstring-ref]
