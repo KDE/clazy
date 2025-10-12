@@ -64,7 +64,6 @@ which will generate the files you need to write, and edit others for you.
     qgetenv.cpp
     functionargsbyref.cpp
     autounexpectedqstringbuilder.cpp
-    qstringref.cpp
 ```
 
 # Running tests

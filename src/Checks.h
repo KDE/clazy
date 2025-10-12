@@ -29,7 +29,6 @@
 #include "checks/level0/qstring-arg.h"
 #include "checks/level0/qstring-comparison-to-implicit-char.h"
 #include "checks/level0/qstring-insensitive-allocation.h"
-#include "checks/level0/qstring-ref.h"
 #include "checks/level0/qt-macros.h"
 #include "checks/level0/strict-iterators.h"
 #include "checks/level0/temporary-iterator.h"
@@ -173,8 +172,6 @@ void CheckManager::registerChecks()
     registerCheck(check<QStringArg>("qstring-arg", CheckLevel0, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<QStringComparisonToImplicitChar>("qstring-comparison-to-implicit-char", CheckLevel0, RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<QStringInsensitiveAllocation>("qstring-insensitive-allocation", CheckLevel0, RegisteredCheck::Option_VisitsStmts, true));
-    registerCheck(check<StringRefCandidates>("qstring-ref", CheckLevel0, RegisteredCheck::Option_VisitsStmts, true));
-    registerFixIt(1, "fix-missing-qstringref", "qstring-ref");
     registerCheck(check<QtMacros>("qt-macros", CheckLevel0, RegisteredCheck::Option_PreprocessorCallbacks, false));
     registerCheck(check<StrictIterators>("strict-iterators", CheckLevel0, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<TemporaryIterator>("temporary-iterator", CheckLevel0, RegisteredCheck::Option_VisitsStmts, false));

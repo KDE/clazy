@@ -1,4 +1,4 @@
-Version 1.16
+Version 1.17
 ~~~~~~~~~~~~
 Released: not yet
 
@@ -9,6 +9,7 @@ Bugfixes:
  * detaching-temporary properly checks conditions when more than two method calls are chained
  * Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls
  * When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace
+ * Remove check qstring-ref as Qt 6 dropped QStringRef.
 
 Notes:
  * C++20 is now required for compilation
