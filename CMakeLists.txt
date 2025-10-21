@@ -51,11 +51,6 @@ option(CLAZY_MAN_PAGE "Builds the man page." ON)
 option(CLAZY_ENABLE_SANITIZERS "Builds clazy with ASAN/UBSAN. For clazy's own development only." OFF)
 option(CLAZY_BUILD_CLANG_TIDY "Builds clang-tidy plugin" ON)
 
-# not available on opensuse CI, only BSD for now
-if ($ENV{CI_JOB_NAME_SLUG} MATCHES "suse-tumbleweed")
-  set(CLAZY_BUILD_CLANG_TIDY OFF)
-endif()
-
 if (CLAZY_ENABLE_SANITIZERS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
     if (NOT MSVC)
