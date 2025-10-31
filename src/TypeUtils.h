@@ -211,9 +211,11 @@ inline clang::CXXRecordDecl *parentRecordForTypedef(const clang::QualType qt)
 {
     auto *t = qt.getTypePtrOrNull();
 
+#if LLVM_VERSION_MAJOR < 22
     if (const auto *elab = llvm::dyn_cast<clang::ElaboratedType>(t)) {
         t = elab->desugar().getTypePtrOrNull();
     }
+#endif
 
     if (const auto *tdt = llvm::dyn_cast<clang::TypedefType>(t)) {
         clang::TypedefNameDecl *tdnd = tdt->getDecl();

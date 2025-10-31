@@ -93,9 +93,11 @@ inline std::string classNameFor(clang::QualType qt)
         return {};
     }
 
+#if LLVM_VERSION_MAJOR < 22
     if (clang::ElaboratedType::classof(t)) {
         return classNameFor(static_cast<const clang::ElaboratedType *>(t)->getNamedType());
     }
+#endif
 
     const clang::CXXRecordDecl *record = t->isRecordType() ? t->getAsCXXRecordDecl() : t->getPointeeCXXRecordDecl();
     return classNameFor(record);
@@ -256,9 +258,11 @@ inline std::string simpleTypeName(clang::QualType qt, const clang::LangOptions &
         return {};
     }
 
+#if LLVM_VERSION_MAJOR < 22
     if (clang::ElaboratedType::classof(t)) {
         qt = static_cast<const clang::ElaboratedType *>(t)->getNamedType();
     }
+#endif
 
     return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
 }

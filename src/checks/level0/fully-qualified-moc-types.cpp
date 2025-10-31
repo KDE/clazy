@@ -86,6 +86,7 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
 
 std::string FullyQualifiedMocTypes::getQualifiedNameOfType(const Type *ptr, bool checkElabType) const
 {
+#if LLVM_VERSION_MAJOR < 22
     if (auto *elabType = dyn_cast<ElaboratedType>(ptr); elabType && checkElabType) {
         if (auto *specType = dyn_cast<TemplateSpecializationType>(elabType->getNamedType().getTypePtrOrNull()); specType && !ptr->getAs<TypedefType>()) {
             return resolveTemplateType(specType, false);
@@ -94,6 +95,7 @@ std::string FullyQualifiedMocTypes::getQualifiedNameOfType(const Type *ptr, bool
             return elabType->getAs<EnumType>()->getDecl()->getQualifiedNameAsString();
         }
     }
+#endif
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
         return typedefDecl->getDecl()->getQualifiedNameAsString();
     } else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>()) {
