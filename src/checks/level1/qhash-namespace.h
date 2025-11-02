@@ -17,6 +17,9 @@ class QHashNamespace : public CheckBase
 public:
     using CheckBase::CheckBase;
     void VisitDecl(clang::Decl *decl) override;
+
+private:
+    std::string fullyQualifiedParamName(clang::ParmVarDecl *firstArg);
 };
 
 #endif

@@ -18,6 +18,15 @@
 
 using namespace clang;
 
+std::string QHashNamespace::fullyQualifiedParamName(clang::ParmVarDecl *firstArg)
+{
+    if (auto *typePtr = firstArg->getType().getTypePtr()->getAsTagDecl()) {
+        return typePtr->getQualifiedNameAsString();
+    }
+    // Fallback, should not happen
+    return firstArg->getType().getAsString();
+}
+
 void QHashNamespace::VisitDecl(clang::Decl *decl)
 {
     auto *func = dyn_cast<FunctionDecl>(decl);
@@ -34,13 +43,12 @@ void QHashNamespace::VisitDecl(clang::Decl *decl)
         const std::string argumentNSstr = argumentNS->getQualifiedNameAsString();
         const std::string qhashNSstr = qHashNS->getQualifiedNameAsString();
         if (argumentNSstr != qhashNSstr) {
-            msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") to " + argumentNSstr + " namespace for ADL lookup";
+            msg = "Move qHash(" + fullyQualifiedParamName(firstArg) + ") to " + argumentNSstr + " namespace for ADL lookup";
         }
     } else if (qHashNS && !argumentNS) {
-        msg = "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
+        msg = "Move qHash(" + fullyQualifiedParamName(firstArg) + ") out of namespace " + qHashNS->getQualifiedNameAsString();
     } else if (!qHashNS && argumentNS) {
-        msg =
-            "Move qHash(" + clazy::simpleTypeName(firstArg->getType(), lo()) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
+        msg = "Move qHash(" + fullyQualifiedParamName(firstArg) + ") into " + argumentNS->getQualifiedNameAsString() + " namespace for ADL lookup";
     }
 
     if (!msg.empty()) {
