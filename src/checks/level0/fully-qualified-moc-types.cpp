@@ -28,6 +28,73 @@
 
 using namespace clang;
 
+/*
+ * When we get the raw string from the lexer, ensure we remove unneeded whitespaces to get a proper representation of the expression
+ */
+static std::string normalizeType(const std::string &type)
+{
+    std::string out;
+    bool lastWasSpace = false;
+
+    for (size_t i = 0; i < type.size(); ++i) {
+        const char c = type[i];
+
+        if (isspace(static_cast<unsigned char>(c))) {
+            lastWasSpace = true;
+            continue; // skip now, decide later
+        }
+
+        // Remove space before certain punctuation that is relevant here
+        if ((c == '<' || c == '>' || c == ',') && !out.empty() && out.back() == ' ') {
+            out.pop_back();
+        }
+
+        // Add a space if needed (mandatory space between keywords/identifiers)
+        if (lastWasSpace) {
+            if (!out.empty()) {
+                const char prev = out.back();
+                // insert a space if previous and current chars are alphanumeric or underscores
+                if ((isalnum(prev) || prev == '_') && (isalnum(c) || c == '_')) {
+                    out += ' ';
+                }
+            }
+        }
+
+        out += c;
+
+        // Add exactly one space after comma
+        if (c == ',') {
+            out += ' ';
+        }
+
+        lastWasSpace = false;
+    }
+
+    return out;
+}
+
+std::string FullyQualifiedMocTypes::writtenType(const ParmVarDecl *param) const
+{
+    TypeSourceInfo *TSI = param->getTypeSourceInfo();
+    if (!TSI)
+        return {};
+
+    TypeLoc TL = TSI->getTypeLoc();
+    while (true) {
+        if (auto PtrLoc = TL.getAs<PointerTypeLoc>()) {
+            TL = PtrLoc.getPointeeLoc();
+        } else if (auto RefLoc = TL.getAs<ReferenceTypeLoc>()) {
+            TL = RefLoc.getPointeeLoc();
+        } else {
+            break; // reached underlying type
+        }
+    }
+
+    CharSourceRange CSR = CharSourceRange::getTokenRange(TL.getSourceRange());
+    StringRef text = Lexer::getSourceText(CSR, sm(), lo());
+    return normalizeType(text.str());
+}
+
 void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
 {
     auto *method = dyn_cast<CXXMethodDecl>(decl);
@@ -54,10 +121,10 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 
     std::string qualifiedTypeName;
-    std::string typeName;
     for (auto *param : method->parameters()) {
         QualType t = clazy::pointeeQualType(param->getType());
-        if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
+        const std::string typeName = writtenType(param);
+        if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, typeName)) {
             SourceRange fixitRange = param->getTypeSourceInfo()->getTypeLoc().getSourceRange();
             // We don't want to include the & or * characters for the fixit range
             if (param->getType()->isReferenceType() || param->getType()->isPointerType()) {
@@ -70,8 +137,18 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
+        std::string typeName;
         QualType returnT = clazy::pointeeQualType(method->getReturnType());
-        if (!typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, /*by-ref*/ typeName)) {
+        if (auto *TSI = method->getTypeSourceInfo()) {
+            FunctionTypeLoc FTL = TSI->getTypeLoc().castAs<FunctionTypeLoc>();
+            SourceRange SR = FTL.getReturnLoc().getSourceRange();
+            if (SR.isValid()) {
+                StringRef returnText = Lexer::getSourceText(CharSourceRange::getTokenRange(SR), sm(), lo());
+                typeName = normalizeType(returnText.str());
+            }
+        }
+
+        if (!typeName.empty() && !typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, typeName)) {
             SourceRange returnTypeSourceRange = method->getReturnTypeSourceRange();
             // We don't want to include the & or * characters for the fixit range
             if (method->getReturnType()->isReferenceType() || method->getReturnType()->isPointerType()) {
@@ -84,25 +161,23 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 }
 
-std::string FullyQualifiedMocTypes::getQualifiedNameOfType(const Type *ptr, bool checkElabType) const
+std::string FullyQualifiedMocTypes::getQualifiedNameOfType(const Type *ptr, bool resolveTemplateArgs) const
 {
-#if LLVM_VERSION_MAJOR < 22
-    if (auto *elabType = dyn_cast<ElaboratedType>(ptr); elabType && checkElabType) {
-        if (auto *specType = dyn_cast<TemplateSpecializationType>(elabType->getNamedType().getTypePtrOrNull()); specType && !ptr->getAs<TypedefType>()) {
-            return resolveTemplateType(specType, false);
-        }
-        if (elabType->isEnumeralType() && elabType->getAs<EnumType>()) {
-            return elabType->getAs<EnumType>()->getDecl()->getQualifiedNameAsString();
-        }
+    if (ptr->isEnumeralType() && ptr->getAs<EnumType>()) {
+        return ptr->getAs<EnumType>()->getDecl()->getQualifiedNameAsString();
     }
-#endif
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
         return typedefDecl->getDecl()->getQualifiedNameAsString();
+    }
+
+    else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>(); templateSpec && resolveTemplateArgs) {
+        return resolveTemplateType(templateSpec, false);
     } else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>()) {
         // In case one uses a typedef with generics, like QVector<QString> in Qt6
         // The docs indicate getAsTemplateDecl might be null - so be prepared for that
         if (auto *decl = templateSpec->getTemplateName().getAsTemplateDecl()) {
             return decl->getQualifiedNameAsString();
+        } else {
         }
     } else if (auto recordDecl = ptr->getAsRecordDecl()) {
         return recordDecl->getQualifiedNameAsString();
@@ -132,30 +207,27 @@ std::string FullyQualifiedMocTypes::resolveTemplateType(const clang::TemplateSpe
             if (argType.isConstQualified()) {
                 str += "const ";
             }
-            str += getQualifiedNameOfType(argType.getTypePtr());
+            str += getQualifiedNameOfType(argType.getTypePtr(), true);
         }
     }
     str += ">";
     return str;
 }
 
-bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, std::string &typeName) const
+bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, const std::string &typeName) const
 {
     qualifiedTypeName.clear();
-    typeName.clear();
-
     if (auto *ptr = t.getTypePtrOrNull(); ptr && (ptr->isRecordType() || ptr->isEnumeralType())) {
-        typeName = clazy::name(t.getUnqualifiedType(), lo(), /*asWritten=*/true); // Ignore qualifiers like const here
         if (typeName == "QPrivateSignal") {
             return true;
         }
 
         if (auto specType = ptr->getAs<TemplateSpecializationType>(); specType && !ptr->getAs<TypedefType>()) {
-            qualifiedTypeName = resolveTemplateType(specType);
+            qualifiedTypeName = resolveTemplateType(specType, false);
         } else if (auto recordDecl = ptr->getAsRecordDecl(); recordDecl && recordDecl->isInAnonymousNamespace()) {
             return true;
         } else {
-            qualifiedTypeName = getQualifiedNameOfType(ptr);
+            qualifiedTypeName = getQualifiedNameOfType(ptr, true);
         }
         return qualifiedTypeName.empty() || typeName == qualifiedTypeName;
     }
@@ -212,8 +284,10 @@ bool FullyQualifiedMocTypes::handleQ_PROPERTY(CXXMethodDecl *method)
                             continue;
                         }
 
-                        std::string nameAsWritten;
+                        QualType castType = clazy::pointeeQualType(reinterpret->getTypeAsWritten()).getUnqualifiedType();
+                        std::string nameAsWritten = castType.getUnqualifiedType().getAsString();
                         std::string qualifiedName;
+
                         if (!typeIsFullyQualified(qt, qualifiedName, nameAsWritten)) {
                             // warn in the cxxrecorddecl, since we don't want to warn in the .moc files.
                             // Ideally we would do some cross checking with the Q_PROPERTIES, but that's not in the AST
