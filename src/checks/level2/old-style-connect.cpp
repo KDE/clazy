@@ -350,7 +350,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
                 }
             }
 
-            if (!lastRecordDecl) {
+            if (!lastRecordDecl || !lastRecordDecl->hasDefinition()) {
                 std::string msg = "Failed to get class name for explicit receiver";
                 queueManualFixitWarning(s, msg);
                 return {};
@@ -358,7 +358,8 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
 
             const std::string methodName = signalOrSlotNameFromMacro(s);
 
-            auto methods = Utils::methodsFromString(lastRecordDecl, methodName);
+            // With LLVM22, we need to explicitly ask for the definition
+            auto methods = Utils::methodsFromString(lastRecordDecl->getDefinition(), methodName);
             if (methods.empty()) {
                 std::string msg;
                 if (isPrivateSlot(methodName)) {
