@@ -18,5 +18,11 @@ void test()
     okPtr->deleteLater();
 
     static_cast<MyObj*>(qsptr.data())->doStuff();
+
+    QPointer<MyObj> obj(new MyObj());
+    QObject::connect(obj, &QObject::objectNameChanged, obj, &MyObj::doStuff);
+    QObject::connect(obj, &QObject::objectNameChanged, obj.data(), &MyObj::doStuff); // WARN
+    QObject::connect(obj.data(), &QObject::objectNameChanged, obj, &MyObj::doStuff); // WARN
+    QObject::connect(ptr.data(), &QObject::objectNameChanged, obj.data(), &MyObj::doStuff); // OK, no overload for QScopedPointer
 }
 
