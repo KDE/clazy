@@ -544,7 +544,6 @@ if not os.path.exists(complete_json_filename):
     exit(1)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--generate", action='store_true', help="Generate src/Checks.h, CheckSources.cmake and README.md")
 parser.add_argument("checks", nargs='*', help="Optional check names to build. Useful to speedup builds during development, by building only the specified checks. Default is to build all checks.")
 args = parser.parse_args()
 
@@ -553,17 +552,11 @@ _specified_check_names = args.checks
 if not load_json(complete_json_filename):
     exit(1)
 
-if args.generate:
-    generated = False
-    generated = generate_register_checks(_checks) or generated
-    generated = generate_cmake_file(_checks) or generated
-    generated = generate_readme(_checks) or generated
-    generated = create_readmes(_checks) or generated
-    generated = create_unittests(_checks) or generated
-    generated = create_checks(_checks) or generated
-    generated = generate_readmes_cmake_install(_checks) or generated
-    generated = generate_ctest(_checks) or generated
-    if not generated:
-        print("Nothing to do, everything is OK")
-else:
-    parser.print_help(sys.stderr)
+generate_register_checks(_checks)
+generate_cmake_file(_checks)
+generate_readme(_checks)
+create_readmes(_checks)
+create_unittests(_checks)
+create_checks(_checks)
+generate_readmes_cmake_install(_checks)
+generate_ctest(_checks)

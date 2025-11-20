@@ -21,7 +21,7 @@ formatting-and-codegen:
     - Linux
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - ./dev-scripts/generate.py --generate
+    - ./dev-scripts/generate.py
     - git diff --exit-code
     - find . \( -name "*.cpp" -or -name "*.h"  -or -name "*.c"  -or -name "*.cc" \) | xargs clang-format -i
     - git diff --exit-code
