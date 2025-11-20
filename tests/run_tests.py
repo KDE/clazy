@@ -333,8 +333,7 @@ def find_qt_installation(major_version, qmakes):
                 installation.int_version = int(
                     ver[0]) * 10000 + int(ver[1]) * 100 + int(ver[2])
                 if _verbose:
-                    print("Found Qt " + str(installation.int_version) +
-                          " using qmake " + qmake)
+                    print("Found Qt " + str(installation.int_version) + " using qmake " + qmake)
             break
 
     if installation.int_version == 0:
