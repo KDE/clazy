@@ -19,6 +19,9 @@ class UseArrowOperatorInsteadOfData : public CheckBase
 public:
     using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
+
+private:
+    void checkConnectArgQPointer(clang::Expr *arg);
 };
 
 #endif

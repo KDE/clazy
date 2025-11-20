@@ -1,3 +1,7 @@
 use-arrow-operator-instead-of-data/main.cpp:9:5: warning: Use operator -> directly instead of QScopedPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]
 use-arrow-operator-instead-of-data/main.cpp:12:5: warning: Use operator -> directly instead of QPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]
 use-arrow-operator-instead-of-data/main.cpp:15:5: warning: Use operator -> directly instead of QSharedPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]
+use-arrow-operator-instead-of-data/main.cpp:24:56: warning: Use implicit conversion instead of QPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]
+use-arrow-operator-instead-of-data/main.cpp:25:22: warning: Use implicit conversion instead of QPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]
+use-arrow-operator-instead-of-data/main.cpp:26:22: warning: Use implicit conversion instead of QPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]
+use-arrow-operator-instead-of-data/main.cpp:26:63: warning: Use implicit conversion instead of QPointer::data()-> [-Wclazy-use-arrow-operator-instead-of-data]

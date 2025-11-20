@@ -8,6 +8,7 @@
 */
 
 #include "use-arrow-operator-instead-of-data.h"
+#include "QtUtils.h"
 #include "StringUtils.h"
 #include "Utils.h"
 #include "clazy_stl.h"
@@ -16,8 +17,43 @@
 
 using namespace clang;
 
+void UseArrowOperatorInsteadOfData::checkConnectArgQPointer(clang::Expr *arg)
+{
+    if (auto castExpr = dyn_cast<CXXMemberCallExpr>(arg->IgnoreCasts())) {
+        if (clazy::name(castExpr->getRecordDecl()) == "QPointer") {
+            const std::string name = castExpr->getMethodDecl()->getNameAsString();
+            if (name == "data") {
+                auto begin = arg->getBeginLoc();
+                const auto end = arg->getEndLoc();
+
+                SourceRange{begin, end}.dump(sm());
+
+                // find '.' in ptr.data()
+                int dotOffset = 0;
+                const char *d = sm().getCharacterData(begin);
+                while (*d != '.') {
+                    dotOffset++;
+                    d++;
+                }
+                begin = begin.getLocWithOffset(dotOffset);
+
+                std::vector<FixItHint> fixits{FixItHint::CreateRemoval(SourceRange{begin, end})};
+                emitWarning(arg->getBeginLoc(), "Use implicit conversion instead of QPointer::data()->", fixits);
+            }
+        }
+    }
+}
 void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
 {
+    if (auto *callExpr = dyn_cast<CallExpr>(stmt)) {
+        auto *func = callExpr->getDirectCallee();
+        if (clazy::isConnect(func, m_context->qtNamespace()) && clazy::connectHasPMFStyle(func)) {
+            checkConnectArgQPointer(callExpr->getArg(0));
+            if (callExpr->getNumArgs() >= 4) {
+                checkConnectArgQPointer(callExpr->getArg(2));
+            }
+        }
+    }
     auto *ce = dyn_cast<CXXMemberCallExpr>(stmt);
     if (!ce) {
         return;
@@ -48,8 +84,6 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    std::vector<FixItHint> fixits;
-
     constexpr int MinPossibleColonPos = sizeof("QPointer") - 1;
     const std::string ClassName = func.substr(0, func.find(':', MinPossibleColonPos));
 
@@ -65,7 +99,6 @@ void UseArrowOperatorInsteadOfData::VisitStmt(clang::Stmt *stmt)
     }
     begin = begin.getLocWithOffset(dotOffset);
 
-    fixits.push_back(FixItHint::CreateRemoval(SourceRange{begin, end}));
-
+    std::vector<FixItHint> fixits{FixItHint::CreateRemoval(SourceRange{begin, end})};
     emitWarning(callExpr->getBeginLoc(), "Use operator -> directly instead of " + ClassName + "::data()->", fixits);
 }

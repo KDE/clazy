@@ -23,6 +23,7 @@ void test()
     QObject::connect(obj, &QObject::objectNameChanged, obj, &MyObj::doStuff);
     QObject::connect(obj, &QObject::objectNameChanged, obj.data(), &MyObj::doStuff); // WARN
     QObject::connect(obj.data(), &QObject::objectNameChanged, obj, &MyObj::doStuff); // WARN
-    QObject::connect(ptr.data(), &QObject::objectNameChanged, obj.data(), &MyObj::doStuff); // OK, no overload for QScopedPointer
+    QObject::connect(obj.data(), &QObject::objectNameChanged, obj.data(), &MyObj::doStuff); // WARN, check fixit works for two warnings
+    QObject::connect(ptr.data(), &QObject::objectNameChanged, ptr.data(), &MyObj::deleteLater); // OK, no overload for QScopedPointer
 }
 
