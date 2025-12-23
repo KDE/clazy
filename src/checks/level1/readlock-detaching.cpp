@@ -93,13 +93,14 @@ public:
     {
         const auto recordName = call->getRecordDecl()->getNameAsString();
         // We only care about members for now
-        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument()) && recordName != "QReadLocker" && recordName != "QReadWriteLock") {
+        const bool isLocker = recordName == "QReadLocker" || recordName == "QReadWriteLock" || recordName == "QBasicReadWriteLock";
+        if (!llvm::isa<MemberExpr>(call->getImplicitObjectArgument()) && !isLocker) {
             return true;
         }
 
         const auto &methods = clazy::detachingMethods();
         const auto methodName = clazy::name(call->getMethodDecl());
-        if ((recordName == "QReadLocker" || recordName == "QReadWriteLock") && methodName == "unlock") {
+        if (isLocker && methodName == "unlock") {
             lockRange.setEnd(call->getEndLoc());
             return true;
         }
