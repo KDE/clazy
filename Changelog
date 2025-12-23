@@ -11,6 +11,7 @@ Bugfixes:
  * When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace
  * Fix wrong replacement method for QMap::operator[]
  * Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types tests are fixed. old-style-connect still TODO. 
+ * Adjust readlock-detaching check to work properly with Qt 6.11 changes
 
 Notes:
  * C++20 is now required for compilation
