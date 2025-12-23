@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+
+"""
+Generates tests/compile_commands.json file. This file is specific to the respective setup and
+allows a LSP to provide proper autocompletion for the testfiles.
+
+The generated file should NOT be versioned!
+"""
+
 import os
 import glob
 import json
