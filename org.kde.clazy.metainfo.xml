@@ -73,6 +73,7 @@
   <summary xml:lang="pt">Um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt</summary>
   <summary xml:lang="pt-BR">Um plugin do compilador Clang que emite avisos relacionados às melhores práticas do Qt</summary>
   <summary xml:lang="ro">Extensie de compilator Clang ce emite avertizări legate de practicile recomandate Qt</summary>
+  <summary xml:lang="ru">Подключаемый модуль для компилятора Clang, выводящий предупреждения, связанные с лучшими практиками Qt</summary>
   <summary xml:lang="sk">Plugin prekladač Clang, ktorý generuje upozornenia súvisiace s najlepšími praktikami Qt</summary>
   <summary xml:lang="sl">Vtičnik za prevajalnik Clang, ki oddaja opozorila, povezana z najboljšimi praksami Qt</summary>
   <summary xml:lang="sv">Ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt</summary>
@@ -110,6 +111,7 @@
     <p xml:lang="pt">O Clazy é um 'plugin' do compilador Clang que emite avisos relacionados com as boas práticas do Qt.</p>
     <p xml:lang="pt-BR">O Clazy é um plugin do compilador Clang que emite avisos relacionados às melhores práticas do Qt</p>
     <p xml:lang="ro">Clazy e o extensie de compilator Clang ce emite avertizări legate de practicile recomandate Qt.</p>
+    <p xml:lang="ru">Clazy — подключаемый модуль для компилятора Clang, выводящий предупреждения, связанные с лучшими практиками Qt.</p>
     <p xml:lang="sk">Clazy je plugin prekladača Clang, ktorý generuje upozornenia súvisiace s najlepšími praktikami Qt.</p>
     <p xml:lang="sl">Clazy je vtičnik prevajalnika clang, ki oddaja opozorila povezana z najboljšimi praksami Qt.</p>
     <p xml:lang="sv">Clazy är ett insticksprogram för Clang-kompilatorn som producerar varningar relaterade till bästa praxis för Qt.</p>
