@@ -12,15 +12,10 @@
 
 #include <memory>
 
-class Caller;
 class ClazyContext;
 
 namespace clang
 {
-namespace ast_matchers
-{
-class MatchFinder;
-} // namespace ast_matchers
 class Stmt;
 class VarDecl;
 class CXXRecordDecl;
