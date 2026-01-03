@@ -47,13 +47,14 @@ void checkBinaryOperator(const BinaryOperator *binOp, const CXXRecordDecl *recor
     }
 }
 
-class Caller : public ClazyAstMatcherCallback
+class MemberCaller : public ClazyAstMatcherCallback
 {
 public:
-    Caller(CheckBase *check)
+    MemberCaller(CheckBase *check)
         : ClazyAstMatcherCallback(check)
     {
     }
+
     virtual void run(const MatchFinder::MatchResult &result)
     {
         if (const auto *callExpr = result.Nodes.getNodeAs<CXXOperatorCallExpr>("callExpr")) {
@@ -110,6 +111,6 @@ CompareMemberCheck::~CompareMemberCheck() = default;
 
 void CompareMemberCheck::registerASTMatchers(MatchFinder &finder)
 {
-    m_astMatcherCallBack = std::make_unique<Caller>(this);
+    m_astMatcherCallBack = std::make_unique<MemberCaller>(this);
     finder.addMatcher(cxxOperatorCallExpr().bind("callExpr"), m_astMatcherCallBack.get());
 }
