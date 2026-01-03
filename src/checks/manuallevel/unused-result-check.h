@@ -10,14 +10,6 @@
 
 #include "checkbase.h"
 
-namespace clang
-{
-namespace ast_matchers
-{
-class MatchFinder;
-} // namespace ast_matchers
-} // namespace clang
-
 class UnusedResultCheck : public CheckBase
 {
 public:

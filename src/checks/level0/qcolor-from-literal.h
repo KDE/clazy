@@ -9,15 +9,6 @@
 
 #include "checkbase.h"
 
-class QColorFromLiteral_Callback;
-namespace clang
-{
-namespace ast_matchers
-{
-class MatchFinder;
-} // namespace ast_matchers
-} // namespace clang
-
 /**
  * See README-qcolor-from-literal.md for more info.
  */

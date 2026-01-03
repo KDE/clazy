@@ -41,9 +41,7 @@ public:
                         && clazy::qualifiedMethodName(callExpr->getMethodDecl()) != "QMetaType::registerHelper") {
                         m_check->emitWarning(callExpr->getExprLoc(), "Result of const member function is not used.");
                     }
-                }
-
-                else if (parents[0].get<Decl>() != nullptr && parents[0].get<Stmt>() == nullptr) {
+                } else if (parents[0].get<Decl>() != nullptr && parents[0].get<Stmt>() == nullptr) {
                     if (!llvm::dyn_cast<VarDecl>(parents[0].get<Decl>()) && !llvm::dyn_cast<CXXConstructorDecl>(parents[0].get<Decl>())) {
                         m_check->emitWarning(callExpr->getExprLoc(), "Result of const member function is not used.");
                     }
