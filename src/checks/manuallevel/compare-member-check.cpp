@@ -20,11 +20,11 @@ using namespace clang;
 
 void checkBinaryOperator(const BinaryOperator *binOp, const CXXRecordDecl *record, std::vector<const FieldDecl *> &classFields)
 {
-    if (const BinaryOperator *leftBO = llvm::dyn_cast<BinaryOperator>(binOp->getLHS())) {
+    if (const BinaryOperator *leftBO = dyn_cast<BinaryOperator>(binOp->getLHS())) {
         checkBinaryOperator(leftBO, record, classFields);
     }
 
-    if (const BinaryOperator *rightBO = llvm::dyn_cast<BinaryOperator>(binOp->getRHS())) {
+    if (const BinaryOperator *rightBO = dyn_cast<BinaryOperator>(binOp->getRHS())) {
         checkBinaryOperator(rightBO, record, classFields);
     }
 
@@ -56,8 +56,8 @@ public:
     }
     virtual void run(const MatchFinder::MatchResult &result)
     {
-        if (const CXXOperatorCallExpr *callExpr = result.Nodes.getNodeAs<CXXOperatorCallExpr>("callExpr")) {
-            const clang::Decl *calleeDecl = callExpr->getCalleeDecl();
+        if (const auto *callExpr = result.Nodes.getNodeAs<CXXOperatorCallExpr>("callExpr")) {
+            const Decl *calleeDecl = callExpr->getCalleeDecl();
             if (!calleeDecl)
                 return;
 
@@ -73,19 +73,19 @@ public:
                 classFields.push_back(field);
             }
             for (const auto *stmt : methodDecl->getBody()->children()) {
-                const ReturnStmt *returnStmt = dyn_cast<ReturnStmt>(stmt);
+                const auto *returnStmt = dyn_cast<ReturnStmt>(stmt);
                 if (!returnStmt)
                     return;
                 const Expr *returnExpr = returnStmt->getRetValue();
-                if (const clang::ExprWithCleanups *exprWithCleanups = dyn_cast<ExprWithCleanups>(returnExpr)) {
-                    if (auto opCallExpr = llvm::dyn_cast<clang::CXXOperatorCallExpr>(exprWithCleanups->getSubExpr())) {
-                        const clang::Expr *lhs = opCallExpr->getArg(0);
-                        if (auto *materializeExpr = llvm::dyn_cast<MaterializeTemporaryExpr>(lhs)) {
-                            if (auto *implicitCastExpr = llvm::dyn_cast<ImplicitCastExpr>(materializeExpr->getSubExpr())) {
+                if (const auto *exprWithCleanups = dyn_cast<ExprWithCleanups>(returnExpr)) {
+                    if (auto opCallExpr = dyn_cast<CXXOperatorCallExpr>(exprWithCleanups->getSubExpr())) {
+                        const Expr *lhs = opCallExpr->getArg(0);
+                        if (auto *materializeExpr = dyn_cast<MaterializeTemporaryExpr>(lhs)) {
+                            if (auto *implicitCastExpr = dyn_cast<ImplicitCastExpr>(materializeExpr->getSubExpr())) {
                                 if (auto *lhsCall = dyn_cast<CallExpr>(implicitCastExpr->getSubExpr())) {
                                     const auto &lhsArgs = lhsCall->arguments();
-
                                     size_t numLhsArgs = std::distance(lhsArgs.begin(), lhsArgs.end());
+
                                     if (classFields.size() != numLhsArgs) {
                                         m_check->emitWarning(callExpr->getExprLoc(), "Comparison operator does not use all member variables");
                                     }
@@ -95,7 +95,7 @@ public:
                     }
                 }
 
-                if (const BinaryOperator *binOp = dyn_cast<BinaryOperator>(returnExpr)) {
+                if (const auto *binOp = dyn_cast<BinaryOperator>(returnExpr)) {
                     checkBinaryOperator(binOp, classDecl, classFields);
                     if (!classFields.empty()) {
                         m_check->emitWarning(callExpr->getExprLoc(), "Comparison operator does not use all member variables");
