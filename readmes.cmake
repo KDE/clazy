@@ -10,6 +10,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qrequiredresult-candidates.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-ref.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-varargs.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keyword-emit.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-keywords.md
@@ -50,7 +51,6 @@ SET(README_LEVEL0_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-arg.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-comparison-to-implicit-char.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-insensitive-allocation.md
-    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qstring-ref.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qt-macros.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-strict-iterators.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-temporary-iterator.md

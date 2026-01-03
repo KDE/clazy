@@ -14,6 +14,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qhash-with-char-pointer-key.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qproperty-type-mismatch.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qrequiredresult-candidates.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qstring-varargs.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keyword-emit.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/manuallevel/qt-keywords.cpp
@@ -51,7 +52,6 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-arg.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-comparison-to-implicit-char.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-insensitive-allocation.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qstring-ref.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/qt-macros.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/strict-iterators.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level0/temporary-iterator.cpp

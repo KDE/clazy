@@ -253,7 +253,7 @@
         {
             "name": "qstring-ref",
             "class_name": "StringRefCandidates",
-            "level": 0,
+            "level": -1,
             "categories": ["performance", "qstring"],
             "fixits": [
                 {
