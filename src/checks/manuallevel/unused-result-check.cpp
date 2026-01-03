@@ -27,7 +27,7 @@ public:
     }
     void run(const MatchFinder::MatchResult &result) override
     {
-        if (const auto *callExpr = result.Nodes.getNodeAs<CXXMemberCallExpr>("callExpr")) {
+        if (const auto *callExpr = result.Nodes.getNodeAs<CXXMemberCallExpr>("opCallExpr")) {
             if (const auto *methodDecl = callExpr->getMethodDecl(); methodDecl && methodDecl->isConst() && !methodDecl->getReturnType()->isVoidType()) {
                 const auto &parents = result.Context->getParents(*callExpr);
 
@@ -58,5 +58,5 @@ UnusedResultCheck::~UnusedResultCheck() = default;
 void UnusedResultCheck::registerASTMatchers(MatchFinder &finder)
 {
     m_astMatcherCallBack = std::make_unique<Caller>(this);
-    finder.addMatcher(cxxMemberCallExpr().bind("callExpr"), m_astMatcherCallBack.get());
+    finder.addMatcher(cxxMemberCallExpr().bind("opCallExpr"), m_astMatcherCallBack.get());
 }
