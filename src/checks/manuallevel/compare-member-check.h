@@ -32,7 +32,6 @@ class CompareMemberCheck : public CheckBase
 public:
     using CheckBase::CheckBase;
     ~CompareMemberCheck();
-    void VisitStmt(clang::Stmt *stmt) override;
     void registerASTMatchers(clang::ast_matchers::MatchFinder &) override;
 
 private:

@@ -108,13 +108,6 @@ public:
 
 CompareMemberCheck::~CompareMemberCheck() = default;
 
-void CompareMemberCheck::VisitStmt(Stmt *stmt)
-{
-    auto call = dyn_cast<CXXOperatorCallExpr>(stmt);
-    if (!call || call->getNumArgs() != 1)
-        return;
-}
-
 void CompareMemberCheck::registerASTMatchers(MatchFinder &finder)
 {
     m_astMatcherCallBack = std::make_unique<Caller>(this);

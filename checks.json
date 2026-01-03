@@ -784,12 +784,10 @@
             "visits_decls": true
         },
         {
-            "name"  : "compare-member-check",
-            "level" : -1,
-            "categories" : ["bug"],
-            "visits_stmts" : true,
+            "name": "compare-member-check",
+            "level": -1,
+            "categories": ["bug"],
             "can_ignore_includes": true
-
         },
         {
             "name": "readlock-detaching",
