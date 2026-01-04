@@ -11,4 +11,5 @@ fully-qualified-moc-types/main.cpp:90:12: warning: slot return types need to be 
 fully-qualified-moc-types/main.cpp:92:48: warning: slot arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:93:18: warning: slot return types need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:97:12: warning: slot return types need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/main.cpp:115:17: warning: invokable return types need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
 fully-qualified-moc-types/main.cpp:18:5: warning: Q_PROPERTY of type NamespacedGadget should use full qualification (NS::NamespacedGadget) [-Wclazy-fully-qualified-moc-types]

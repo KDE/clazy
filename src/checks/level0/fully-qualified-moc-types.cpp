@@ -120,10 +120,10 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
         return;
     }
 
-    std::string qualifiedTypeName;
     for (auto *param : method->parameters()) {
         QualType t = clazy::pointeeQualType(param->getType());
         const std::string typeName = writtenType(param);
+        std::string qualifiedTypeName;
         if (!typeIsFullyQualified(t, /*by-ref*/ qualifiedTypeName, typeName)) {
             SourceRange fixitRange = param->getTypeSourceInfo()->getTypeLoc().getSourceRange();
             // We don't want to include the & or * characters for the fixit range
@@ -137,21 +137,17 @@ void FullyQualifiedMocTypes::VisitDecl(clang::Decl *decl)
     }
 
     if (qst == QtAccessSpecifier_Slot || qst == QtAccessSpecifier_Invokable) {
-        std::string typeName;
-        QualType returnT = clazy::pointeeQualType(method->getReturnType());
-        if (auto *TSI = method->getTypeSourceInfo()) {
-            FunctionTypeLoc FTL = TSI->getTypeLoc().castAs<FunctionTypeLoc>();
-            SourceRange SR = FTL.getReturnLoc().getSourceRange();
-            if (SR.isValid()) {
-                StringRef returnText = Lexer::getSourceText(CharSourceRange::getTokenRange(SR), sm(), lo());
-                typeName = normalizeType(returnText.str());
-            }
+        QualType returnT = method->getReturnType();
+        SourceRange returnTypeSourceRange = method->getReturnTypeSourceRange();
+        if (returnT->isReferenceType() || returnT->isPointerType()) {
+            returnTypeSourceRange = SourceRange(returnTypeSourceRange.getBegin(), returnTypeSourceRange.getEnd().getLocWithOffset(-1));
         }
-
-        if (!typeName.empty() && !typeIsFullyQualified(returnT, /*by-ref*/ qualifiedTypeName, typeName)) {
-            SourceRange returnTypeSourceRange = method->getReturnTypeSourceRange();
-            // We don't want to include the & or * characters for the fixit range
+        StringRef returnText = Lexer::getSourceText(CharSourceRange::getTokenRange(returnTypeSourceRange), sm(), lo());
+        const std::string typeName = normalizeType(returnText.str());
+        std::string qualifiedTypeName;
+        if (!typeName.empty() && !typeIsFullyQualified(clazy::pointeeQualType(returnT), /*by-ref*/ qualifiedTypeName, typeName)) {
             if (method->getReturnType()->isReferenceType() || method->getReturnType()->isPointerType()) {
+                // We don't want to include the & or * characters for the fixit range
                 returnTypeSourceRange = SourceRange(returnTypeSourceRange.getBegin(), returnTypeSourceRange.getEnd().getLocWithOffset(-1));
             }
             std::string warning = accessSpecifierManager->qtAccessSpecifierTypeStr(qst).str() + " return types need to be fully-qualified";

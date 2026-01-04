@@ -10,7 +10,7 @@ Bugfixes:
  * Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls
  * When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace
  * Fix wrong replacement method for QMap::operator[]
- * Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types tests are fixed. old-style-connect still TODO. 
+ * Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed
  * Adjust readlock-detaching check to work properly with Qt 6.11 changes
 
 Notes:

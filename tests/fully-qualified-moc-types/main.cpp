@@ -5,7 +5,7 @@ struct A {};
 struct NonNamespacedGadget {
     Q_GADGET
 };
-
+namespace TestMe { class Dummy {};}
 namespace NS {
     struct MyType {};
 
@@ -110,10 +110,12 @@ public Q_SLOTS:
     {
         return QualMe();
     }
+    Q_INVOKABLE TestMe::Dummy *qual1() const;
+    Q_INVOKABLE TestMe::Dummy* qual2() const;
+    Q_INVOKABLE QualMe * unqualifiedPtr() const;
 private:
     MyList lst;
 };
-
 Q_DECLARE_METATYPE(MyObj2::QualMe);
 Q_DECLARE_METATYPE(std::shared_ptr<MyObj2::MyList>);
 
