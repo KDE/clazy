@@ -8,12 +8,13 @@ import threading
 import multiprocessing
 import argparse
 import io
-import shutil
 from threading import Thread
 from sys import platform as _platform
 from pathlib import Path
 import platform
 
+from testutils.run_fixit import run_fixit_tests
+from testutils.file import compare_files, get_command_output, run_command
 from testutils.checks import load_checks
 from testutils.qtinstallation import QtInstallation
 from testutils.test import Test
@@ -41,39 +42,14 @@ def isLinux():
 # utility functions #1
 
 
-def get_command_output(cmd: str, test_env=os.environ, cwd=None, ignore_verbose=False):
-    success = True
-
-    try:
-        if _verbose and not ignore_verbose:
-            print(cmd)
-
-        # Polish up the env to fix "TypeError: environment can only contain strings" exception
-        str_env = {}
-        for key in test_env.keys():
-            str_env[str(key)] = str(test_env[key])
-
-        output = subprocess.check_output(
-            cmd, stderr=subprocess.STDOUT, shell=True, env=str_env, cwd=cwd)
-    except subprocess.CalledProcessError as e:
-        output = e.output
-        success = False
-
-    if type(output) is bytes:
-        output = output.decode('utf-8')
-
-    return output, success
-
 def find_qt_installation(major_version, qmakes):
     installation = QtInstallation()
 
     for qmake in qmakes:
-        qmake_version_str, success = get_command_output(qmake + " -query QT_VERSION")
+        qmake_version_str, success = get_command_output(qmake + " -query QT_VERSION", _verbose)
         if success and qmake_version_str.startswith(str(major_version) + "."):
-            qmake_header_path = get_command_output(
-                qmake + " -query QT_INSTALL_HEADERS")[0].strip()
-            qmake_lib_path = get_command_output(
-                qmake + " -query QT_INSTALL_LIBS")[0].strip()
+            qmake_header_path = get_command_output(qmake + " -query QT_INSTALL_HEADERS", _verbose)[0].strip()
+            qmake_lib_path = get_command_output(qmake + " -query QT_INSTALL_LIBS", _verbose)[0].strip()
             if qmake_header_path:
                 installation.qmake_header_path = qmake_header_path
                 if qmake_lib_path:
@@ -273,7 +249,7 @@ _excluded_checks = args.exclude.split(',') if args.exclude is not None else []
 # -------------------------------------------------------------------------------
 # utility functions #2
 
-version, success = get_command_output(compiler_name() + ' --version')
+version, success = get_command_output(compiler_name() + ' --version', _verbose)
 match = re.search('clang version ([^\\s-]+)', version)
 try:
     version = match.group(1)
@@ -306,128 +282,8 @@ def qt_installation(major_version):
     return None
 
 
-def run_command(cmd, output_file="", test_env=os.environ, cwd=None, ignore_verbose_command=False, qt_namespaced=False, qt_replace_namespace=True):
-    lines, success = get_command_output(cmd, test_env, cwd=cwd, ignore_verbose=ignore_verbose_command)
-    # Hack for Windows, we have std::_Vector_base in the expected data
-    lines = lines.replace("std::_Container_base0", "std::_Vector_base")
-    lines = lines.replace("std::__1::__vector_base_common",
-                          "std::_Vector_base")  # Hack for macOS
-    lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
-
-    # clang-tidy prints the tags slightly different
-    if cmd.startswith("clang-tidy"):
-        lines = lines.replace("[clazy", "[-Wclazy")
-    if qt_namespaced and qt_replace_namespace:
-        lines = lines.replace("MyQt::", "")
-
-    if not success and not output_file:
-        print(lines)
-        return False
-
-    if _verbose:
-        print("Running: " + cmd)
-        print("output_file=" + output_file)
-
-    lines = lines.replace('\r\n', '\n')
-    if lines.endswith('\n\n'):
-        lines = lines[:-1]  # remove *only* one extra newline, all testfiles have a newline based on unix convention
-    if output_file:
-        f = io.open(output_file, 'w', encoding='utf8')
-        f.writelines(lines)
-        f.close()
-    elif len(lines) > 0:
-        print(lines)
-
-    return success
-
-
-def files_are_equal(file1, file2):
-    try:
-        f = io.open(file1, 'r', encoding='utf-8')
-        lines1 = f.readlines()
-        f.close()
-
-        f = io.open(file2, 'r', encoding='utf-8')
-        lines2 = f.readlines()
-        f.close()
-
-        return lines1 == lines2
-    except Exception as ex:
-        print("Error comparing files:" + str(ex))
-        return False
-
-
-def compare_files(expects_failure, expected_file, result_file, message):
-    success = files_are_equal(expected_file, result_file)
-
-    if expects_failure:
-        if success:
-            print("[XOK]   " + message)
-            return False
-        else:
-            print("[XFAIL] " + message)
-            print_differences(expected_file, result_file)
-            return True
-    else:
-        if success:
-            print("[OK]   " + message)
-            return True
-        else:
-            print("[FAIL] " + message)
-            print_differences(expected_file, result_file)
-            return False
-
-
 def get_check_names():
     return list(filter(lambda entry: os.path.isdir(entry), os.listdir(".")))
-
-# The yaml file references the test file in our git repo, but we don't want
-# to rewrite that one, as we would need to discard git changes afterwards,
-# so patch the yaml file and add a ".fixed" suffix to those files
-
-
-def patch_fixit_yaml_file(test, is_standalone):
-
-    yamlfilename = test.yamlFilename(is_standalone)
-    fixedfilename = test.fixedFilename(is_standalone)
-
-    f = open(yamlfilename, 'r')
-    lines = f.readlines()
-    f.close()
-    f = open(yamlfilename, 'w')
-
-    possible_headerfile = test.relativeFilename().replace(".cpp", ".h")
-
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith('MainSourceFile') or stripped.startswith("FilePath") or stripped.startswith("- FilePath"):
-            line = line.replace(test.relativeFilename(), fixedfilename)
-
-            # For Windows:
-            line = line.replace(test.relativeFilename().replace(
-                '/', '\\'), fixedfilename.replace('/', '\\'))
-
-            # Some tests also apply fix their to their headers:
-            if not test.relativeFilename().endswith(".hh"):
-                line = line.replace(possible_headerfile,
-                                    fixedfilename.replace(".cpp", ".h"))
-        f.write(line)
-    f.close()
-
-    shutil.copyfile(test.relativeFilename(), fixedfilename)
-
-    if os.path.exists(possible_headerfile):
-        shutil.copyfile(possible_headerfile,
-                        fixedfilename.replace(".cpp", ".h"))
-
-    return True
-
-
-def run_clang_apply_replacements(check):
-    command = os.getenv('CLAZY_CLANG_APPLY_REPLACEMENTS',
-                        'clang-apply-replacements')
-    return run_command(command + ' ' + check.name)
-
 
 def cleanup_fixit_files(checks):
     for check in checks:
@@ -435,12 +291,6 @@ def cleanup_fixit_files(checks):
             '.fixed') or entry.endswith('.yaml'), os.listdir(check.name)))
         for f in filestodelete:
             os.remove(check.name + '/' + f)
-
-
-def print_differences(file1, file2):
-    # Returns true if the the files are equal
-    return run_command("diff -Naur --strip-trailing-cr {} {}".format(file1, file2))
-
 
 def normalizedCwd():
     if _platform.startswith('linux'):
@@ -575,7 +425,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version, q
         extract_word(word_to_grep, output_file, result_file)
 
     # Check that it printed the expected warnings
-    if not compare_files(test.expects_failure, expected_file, result_file, printableName):
+    if not compare_files(test.expects_failure, expected_file, result_file, printableName, verbose=_verbose):
         return False
 
     if test.has_fixits and not is_tidy and not _qt_namespaced:
@@ -623,80 +473,6 @@ def run_unit_tests(tests):
     global _was_successful, _lock
     with _lock:
         _was_successful = _was_successful and result
-
-
-def patch_yaml_files(requested_checks, is_standalone):
-    if (is_standalone and _no_standalone) or (not is_standalone and _only_standalone):
-        # Nothing to do
-        return True
-
-    success = True
-    for check in requested_checks:
-        for test in check.tests:
-            if test.should_run_fixits_test:
-                yamlfilename = test.yamlFilename(is_standalone)
-                if not os.path.exists(yamlfilename):
-                    print("[FAIL] " + yamlfilename + " is missing!!")
-                    success = False
-                    continue
-                if not patch_fixit_yaml_file(test, is_standalone):
-                    print("[FAIL] Could not patch " + yamlfilename)
-                    success = False
-                    continue
-    return success
-
-
-def compare_fixit_results(test, is_standalone):
-
-    if (is_standalone and _no_standalone) or (not is_standalone and _only_standalone):
-        # Nothing to do
-        return True
-
-    # Check that the rewritten file is identical to the expected one
-    if not compare_files(False, test.expectedFixedFilename(), test.fixedFilename(is_standalone), test.printableName("", 0, is_standalone, False, True)):
-        return False
-
-    # Some fixed cpp files have an header that was also fixed. Compare it here too.
-    possible_headerfile_expected = test.expectedFixedFilename().replace('.cpp', '.h')
-    if os.path.exists(possible_headerfile_expected):
-        possible_headerfile = test.fixedFilename(is_standalone).replace('.cpp', '.h')
-        if not compare_files(False, possible_headerfile_expected, possible_headerfile, test.printableName("", 0, is_standalone, False, True).replace('.cpp', '.h')):
-            return False
-
-    return True
-
-# This is run sequentially, due to races. As clang-apply-replacements just applies all .yaml files it can find.
-# We run a single clang-apply-replacements invocation, which changes all files in the tests/ directory.
-
-
-def run_fixit_tests(requested_checks):
-
-    success = patch_yaml_files(requested_checks, is_standalone=False)
-    success = patch_yaml_files(
-        requested_checks, is_standalone=True) and success
-
-    for check in requested_checks:
-
-        if not any(map(lambda test: test.should_run_fixits_test, check.tests)):
-            continue
-
-        # Call clazy-apply-replacements[.exe]
-        if not run_clang_apply_replacements(check):
-            return False
-
-        # Now compare all the *.fixed files with the *.fixed.expected counterparts
-        for test in check.tests:
-            if test.should_run_fixits_test:
-                # Check that the rewritten file is identical to the expected one
-                if not compare_fixit_results(test, is_standalone=False):
-                    success = False
-                    continue
-
-                if not compare_fixit_results(test, is_standalone=True):
-                    success = False
-                    continue
-
-    return success
 
 
 def dump_ast(check):
@@ -762,7 +538,7 @@ else:
 for thread in threads:
     thread.join()
 
-if not _no_fixits and not run_fixit_tests(requested_checks):
+if not _no_fixits and not run_fixit_tests(requested_checks, no_standalone=_no_standalone, only_standalone=_only_standalone, verbose=_verbose):
     _was_successful = False
 
 if _was_successful:
