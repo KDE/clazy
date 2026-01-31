@@ -48,3 +48,4 @@ Testing
 *.pch
 # compile flags to help LSP getting headers for test files
 /compile_flags.txt
+__pycache__

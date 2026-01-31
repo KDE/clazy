@@ -4,7 +4,6 @@ import sys
 import os
 import subprocess
 import re
-import json
 import threading
 import multiprocessing
 import argparse
@@ -15,19 +14,14 @@ from sys import platform as _platform
 from pathlib import Path
 import platform
 
+from testutils.checks import load_checks
+from testutils.qtinstallation import QtInstallation
+from testutils.test import Test
+
 # cd into the folder containing this script
 os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 
 _verbose = False
-
-c_headerpath = False
-try:
-    result = subprocess.run(['clang', '-v'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
-    match = re.search(r'Selected .* installation: (.*)', result.stderr)
-    if match:
-        c_headerpath = match.group(1).strip()
-except:
-    pass
 
 
 def isWindows():
@@ -39,149 +33,10 @@ def isMacOS():
 def isLinux():
     return _platform.startswith('linux')
 
-class QtInstallation:
-    def __init__(self):
-        self.int_version = 000
-        self.qmake_header_path = "/usr/include/qt/"
-        self.qmake_lib_path = "/usr/lib"
-
-    def compiler_flags(self, module_includes = False):
-        extra_includes = ''
-        if isMacOS():
-            extra_includes = " -I%s/QtCore.framework/Headers" % self.qmake_lib_path
-            extra_includes += " -iframework %s" % self.qmake_lib_path
-
-        # Also include the modules folders
-        qt_modules_includes = []
-        if module_includes:
-            qt_modules_includes = ["-isystem " + self.qmake_header_path + "/" + f for f in next(os.walk(self.qmake_header_path))[1]]
-        additional_args = ""
-        if c_headerpath:
-            additional_args = "-isystem " + c_headerpath + "/include "
-        if _cxx_args:
-            additional_args += _cxx_args + " "
-        if _qt_namespaced:
-            additional_args += " -DQT_NAMESPACE=MyQt "
-
-        return additional_args + "-isystem " + self.qmake_header_path + ("" if isWindows() else " -fPIC") + " -L " + self.qmake_lib_path + ' ' + extra_includes + ' '.join(qt_modules_includes)
 
 
-class Test:
-    def __init__(self, check):
-        self.filenames = []
-        self.minimum_qt_version = 500
-        self.maximum_qt_version = 69999
-        self.minimum_clang_version = 380
-        self.minimum_clang_version_for_fixits = 380
-        self.compare_everything = False
-        self.check = check
-        self.expects_failure = False
-        self.skip_qtnamespaced = False
-        self.qt_major_versions = [5, 6]
-        self.env = os.environ
-        self.checks = []
-        self.flags = ""
-        self.must_fail = False
-        self.blacklist_platforms = []
-        self.only_qt = False
-        self.qt_developer = False
-        self.header_filter = ""
-        self.ignore_dirs = ""
-        self.has_fixits = False
-        self.should_run_fixits_test = False
-        self.should_run_on_32bit = True
-        self.cppStandards = ["c++14", "c++17"]
-        self.extra_definitions = False
-        self.qt_modules_includes = False
-        self.fixed_file_base = None
-
-    def filename(self):
-        if len(self.filenames) == 1:
-            return self.filenames[0]
-        return ""
-
-    def relativeFilename(self):
-        # example: "auto-unexpected-qstringbuilder/main.cpp"
-        return self.check.name + "/" + self.filename()
-
-    def yamlFilename(self, is_standalone):
-        # The name of the yaml file with fixits
-        # example: "auto-unexpected-qstringbuilder/main.cpp.clazy.yaml"
-        if is_standalone:
-            return self.relativeFilename() + ".clazy-standalone.yaml"
-        else:
-            return self.relativeFilename() + ".clazy.yaml"
-
-    def fixedFilename(self, is_standalone):
-        if is_standalone:
-            return self.relativeFilename() + ".clazy-standalone.fixed"
-        else:
-            return self.relativeFilename() + ".clazy.fixed"
-
-    def expectedFixedFilename(self):
-        return self.relativeFilename() + ".fixed.expected"
-
-    def isScript(self):
-        return self.filename().endswith(".sh")
-
-    def dir(self):
-        return self.check.name
-
-    def setQtMajorVersions(self, major_versions):
-        self.qt_major_versions = major_versions
-        if 4 in major_versions:
-            if self.minimum_qt_version >= 500:
-                self.minimum_qt_version = 400
-
-    def envString(self):
-        result = ""
-        for key in self.env:
-            result += key + '="' + self.env[key] + '" '
-        return result
-
-    def setEnv(self, e):
-        self.env = os.environ.copy()
-        for key in e:
-            if type(key) is bytes:
-                key = key.decode('utf-8')
-
-            self.env[key] = e[key]
-
-    def printableName(self, cppStandard, qt_major_version, is_standalone, is_tidy, is_fixits):
-        name = self.check.name
-        if len(self.check.tests) > 1:
-            name += "/" + self.filename()
-        if len(cppStandard) > 0:
-            name += " (" + cppStandard + ")"
-        if qt_major_version > 0:
-            name += " (Qt " + str(qt_major_version) + ")"
-        if is_fixits and is_standalone:
-            name += " (standalone, fixits)"
-        elif is_standalone:
-            name += " (standalone)"
-        elif is_tidy:
-            name += " (clang-tidy)"
-        elif is_fixits:
-            name += " (plugin, fixits)"
-        else:
-            name += " (plugin)"
-        return name
-
-    def removeYamlFiles(self):
-        for f in [self.yamlFilename(False), self.yamlFilename(True)]:
-            if os.path.exists(f):
-                os.remove(f)
 
 
-class Check:
-    def __init__(self, name):
-        self.name = name
-        self.minimum_clang_version = 380  # clang 3.8.0
-        self.minimum_qt_version = 500
-        self.maximum_qt_version = 69999
-        self.enabled = True
-        self.clazy_standalone_only = False
-        self.tests = []
 # -------------------------------------------------------------------------------
 # utility functions #1
 
@@ -208,112 +63,6 @@ def get_command_output(cmd: str, test_env=os.environ, cwd=None, ignore_verbose=F
         output = output.decode('utf-8')
 
     return output, success
-
-
-def load_json(check_name: str):
-    check = Check(check_name)
-    filename = check_name + "/config.json"
-    if not os.path.exists(filename):
-        # Ignore this directory
-        return check
-
-    f = open(filename, 'r')
-    contents = f.read()
-    f.close()
-    decoded = json.loads(contents)
-    check_blacklist_platforms = []
-
-    if 'minimum_clang_version' in decoded:
-        check.minimum_clang_version = decoded['minimum_clang_version']
-
-    if 'minimum_qt_version' in decoded:
-        check.minimum_qt_version = decoded['minimum_qt_version']
-
-    if 'maximum_qt_version' in decoded:
-        check.maximum_qt_version = decoded['maximum_qt_version']
-
-    if 'enabled' in decoded:
-        check.enabled = decoded['enabled']
-
-    if 'clazy_standalone_only' in decoded:
-        check.clazy_standalone_only = decoded['clazy_standalone_only']
-
-    if 'blacklist_platforms' in decoded:
-        check_blacklist_platforms = decoded['blacklist_platforms']
-
-    if 'tests' in decoded:
-        for t in decoded['tests']:
-            test = Test(check)
-            test.blacklist_platforms = check_blacklist_platforms
-
-            if 'filename' in t:
-                test.filenames.append(t['filename'])
-
-            if 'filenames' in t:
-                test.filenames += t['filenames']
-
-            if 'minimum_qt_version' in t:
-                test.minimum_qt_version = t['minimum_qt_version']
-            else:
-                test.minimum_qt_version = check.minimum_qt_version
-
-            if 'maximum_qt_version' in t:
-                test.maximum_qt_version = t['maximum_qt_version']
-            else:
-                test.maximum_qt_version = check.maximum_qt_version
-
-            if 'minimum_clang_version' in t:
-                test.minimum_clang_version = t['minimum_clang_version']
-            else:
-                test.minimum_clang_version = check.minimum_clang_version
-
-            if 'minimum_clang_version_for_fixits' in t:
-                test.minimum_clang_version_for_fixits = t['minimum_clang_version_for_fixits']
-
-            if 'blacklist_platforms' in t:
-                test.blacklist_platforms = t['blacklist_platforms']
-            if 'compare_everything' in t:
-                test.compare_everything = t['compare_everything']
-            if 'qt_major_versions' in t:
-                test.setQtMajorVersions(t['qt_major_versions'])
-            if 'env' in t:
-                test.setEnv(t['env'])
-            if 'checks' in t:
-                test.checks = t['checks']
-            if 'flags' in t:
-                test.flags = t['flags']
-            if 'must_fail' in t:
-                test.must_fail = t['must_fail']
-            if 'has_fixits' in t:
-                test.has_fixits = t['has_fixits'] and test.minimum_clang_version_for_fixits <= CLANG_VERSION
-            if 'expects_failure' in t:
-                test.expects_failure = t['expects_failure']
-            if 'skip_qtnamespaced' in t:
-                test.skip_qtnamespaced = t['skip_qtnamespaced']
-            if 'only_qt' in t:
-                test.only_qt = t['only_qt']
-            if 'cppStandards' in t:
-                test.cppStandards = t['cppStandards']
-            if 'qt_developer' in t:
-                test.qt_developer = t['qt_developer']
-            if 'extra_definitions' in t:
-                test.extra_definitions = " " + t['extra_definitions'] + " "
-            if 'header_filter' in t:
-                test.header_filter = t['header_filter']
-            if 'ignore_dirs' in t:
-                test.ignore_dirs = t['ignore_dirs']
-            if 'should_run_on_32bit' in t:
-                test.should_run_on_32bit = t['should_run_on_32bit']
-            if 'qt_modules_includes' in t:
-                test.qt_modules_includes = t['qt_modules_includes']
-
-            if not test.checks:
-                test.checks.append(test.check.name)
-
-            check.tests.append(test)
-
-    return check
-
 
 def find_qt_installation(major_version, qmakes):
     installation = QtInstallation()
@@ -374,9 +123,9 @@ def more_clazy_standalone_args():
     return ''
 
 
-def clazy_standalone_command(test: Test, cppStandard, qt):
+def clazy_standalone_command(test: Test, cppStandard, qt: QtInstallation):
     result = " -- " + clazy_cpp_args(cppStandard) + \
-        qt.compiler_flags(test.qt_modules_includes) + " " + test.flags + more_clazy_standalone_args()
+        qt.compiler_flags(_cxx_args, _qt_namespaced, test.qt_modules_includes) + " " + test.flags + more_clazy_standalone_args()
     result = " -checks=" + ','.join(test.checks) + " " + result + suppress_line_numbers_opt
 
     if test.has_fixits:
@@ -413,7 +162,7 @@ def clazy_command(test: Test, cppStandard, qt, filename):
         result = os.environ['CLAZY_CXX']
     else:
         result = clang_name() + " -Xclang -load -Xclang " + libraryName() + " -Xclang -add-plugin -Xclang clazy " 
-    result += clazy_cpp_args(cppStandard) + qt.compiler_flags(test.qt_modules_includes) + suppress_line_numbers_opt 
+    result += clazy_cpp_args(cppStandard) + qt.compiler_flags(_cxx_args, _qt_namespaced, test.qt_modules_includes) + suppress_line_numbers_opt
 
     if test.only_qt:
         result = result + " -Xclang -plugin-arg-clazy -Xclang only-qt "
@@ -443,7 +192,7 @@ def clang_tidy_command(test: Test, cppStandard, qt, filename):
     command += " -- "
     command += f" {test.flags} "
     command += clazy_cpp_args(cppStandard)
-    command += qt.compiler_flags(test.qt_modules_includes)
+    command += qt.compiler_flags(_cxx_args, _qt_namespaced, test.qt_modules_includes)
     command += suppress_line_numbers_opt
     if test.extra_definitions:
         command += test.extra_definitions
@@ -961,26 +710,13 @@ def dump_ast(check):
                 print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
 
 
-def load_checks(all_check_names):
-    checks = []
-    for name in all_check_names:
-        try:
-            check = load_json(name)
-            if check.enabled:
-                checks.append(check)
-        except:
-            print("Error while loading " + name)
-            raise
-    return checks
-
-
 if 'CLAZY_NO_WERROR' in os.environ:
     del os.environ['CLAZY_NO_WERROR']
 
 os.environ['CLAZY_CHECKS'] = ''
 
 all_check_names = get_check_names()
-all_checks = load_checks(all_check_names)
+all_checks = load_checks(all_check_names, CLANG_VERSION)
 requested_check_names = args.check_names
 requested_check_names = list(
     map(lambda x: x.strip("/\\"), requested_check_names))
