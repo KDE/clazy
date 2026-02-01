@@ -56,7 +56,7 @@ def clazy_command(test: Test, cpp_standard: str, qt: QtInstallation, filename: s
     if test.qt_developer:
         result = result + " -Xclang -plugin-arg-clazy -Xclang qt-developer "
     if test.extra_definitions:
-        result += test.extra_definitions
+        result += " " + test.extra_definitions
 
     result = result + " -c "
 
@@ -82,7 +82,7 @@ def clang_tidy_command(test: Test, cpp_standard, qt, filename, config: Args):
     command += qt.compiler_flags(config.cxx_args, config.qt_namespaced, test.qt_modules_includes)
     command += _suppress_line_numbers_opt
     if test.extra_definitions:
-        command += test.extra_definitions
+        command += " " + test.extra_definitions
     return command
 
 
@@ -112,6 +112,6 @@ def clazy_standalone_command(test: Test, cpp_standard: str, qt: QtInstallation, 
         result = " -ignore-dirs " + test.ignore_dirs + " " + result
 
     if test.extra_definitions:
-        result += test.extra_definitions
+        result += " " + test.extra_definitions
 
     return result
