@@ -17,6 +17,7 @@ from testutils.os_utils import get_command_output, run_command
 from testutils.checks import load_checks
 from testutils.qtinstallation import qt_installation
 
+
 # cd into the folder containing this script
 os.chdir(os.path.realpath(os.path.dirname(sys.argv[0])))
 

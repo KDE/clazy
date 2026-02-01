@@ -132,7 +132,7 @@ def run_unit_test(test: Test, is_standalone, is_tidy, cppStandard, qt_major_vers
 
     must_fail = test.must_fail
 
-    cmd_success = run_command(cmd_to_run, output_file, test.env, ignore_verbose_command=True, qt_namespaced=config.qt_namespaced, qt_replace_namespace=not qt_namespaced_separate_file)
+    cmd_success = run_command(cmd_to_run, output_file, test.env, ignore_verbose_command=True, qt_namespaced=config.qt_namespaced, qt_replace_namespace=not qt_namespaced_separate_file, verbose=config.verbose)
 
     if file_contains(output_file, 'Invalid check: '):
         return True

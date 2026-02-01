@@ -54,20 +54,11 @@ class Test:
     def isScript(self):
         return self.filename.endswith(".sh")
 
-    def dir(self):
-        return self.check.name
-
     def setQtMajorVersions(self, major_versions):
         self.qt_major_versions = major_versions
         if 4 in major_versions:
             if self.minimum_qt_version >= 500:
                 self.minimum_qt_version = 400
-
-    def envString(self):
-        result = ""
-        for key in self.env:
-            result += key + '="' + self.env[key] + '" '
-        return result
 
     def setEnv(self, e):
         self.env = os.environ.copy()

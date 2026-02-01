@@ -40,6 +40,10 @@ def load_check_from_json(check_name: str, clang_version: int) -> Check:
         test.minimum_clang_version = check.minimum_clang_version
         test.maximum_qt_version = check.maximum_qt_version
 
+        if 'env' in t:
+            test.setEnv(t['env'])
+            del t['env']
+
         for key, value in t.items():
             if hasattr(test, key):
                 setattr(test, key, value)
@@ -53,7 +57,7 @@ def load_check_from_json(check_name: str, clang_version: int) -> Check:
     return check
 
 
-def load_checks(all_check_names, clang_version: int):
+def load_checks(all_check_names, clang_version: int) -> list[Check]:
     checks = []
     for name in all_check_names:
         try:

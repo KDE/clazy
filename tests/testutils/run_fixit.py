@@ -4,10 +4,11 @@ import os
 import shutil
 
 from . import Args
+from .checks import Check
 from .os_utils import run_command, compare_files
 
 
-def run_fixit_tests(requested_checks, config: Args):
+def run_fixit_tests(requested_checks: list[Check], config: Args):
 
     success = patch_yaml_files(requested_checks, is_standalone=False, no_standalone=config.no_standalone, only_standalone=config.only_standalone)
     success = patch_yaml_files(requested_checks, is_standalone=True, no_standalone=config.no_standalone, only_standalone=config.only_standalone) and success
