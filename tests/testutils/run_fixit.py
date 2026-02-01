@@ -3,13 +3,14 @@
 import os
 import shutil
 
-from .file import run_command, compare_files
+from . import Args
+from .os_utils import run_command, compare_files
 
 
-def run_fixit_tests(requested_checks, no_standalone: bool, only_standalone: bool, verbose: bool):
+def run_fixit_tests(requested_checks, config: Args):
 
-    success = patch_yaml_files(requested_checks, is_standalone=False, no_standalone=no_standalone, only_standalone=only_standalone)
-    success = patch_yaml_files(requested_checks, is_standalone=True, no_standalone=no_standalone, only_standalone=only_standalone) and success
+    success = patch_yaml_files(requested_checks, is_standalone=False, no_standalone=config.no_standalone, only_standalone=config.only_standalone)
+    success = patch_yaml_files(requested_checks, is_standalone=True, no_standalone=config.no_standalone, only_standalone=config.only_standalone) and success
 
     for check in requested_checks:
 
@@ -24,11 +25,11 @@ def run_fixit_tests(requested_checks, no_standalone: bool, only_standalone: bool
         for test in check.tests:
             if test.should_run_fixits_test:
                 # Check that the rewritten file is identical to the expected one
-                if not compare_fixit_results(test, is_standalone=False, no_standalone=no_standalone, only_standalone=only_standalone, verbose=verbose):
+                if not compare_fixit_results(test, is_standalone=False, no_standalone=config.no_standalone, only_standalone=config.only_standalone, verbose=config.verbose):
                     success = False
                     continue
 
-                if not compare_fixit_results(test, is_standalone=True, no_standalone=no_standalone, only_standalone=only_standalone, verbose=verbose):
+                if not compare_fixit_results(test, is_standalone=True, no_standalone=config.no_standalone, only_standalone=config.only_standalone, verbose=config.verbose):
                     success = False
                     continue
 
