@@ -10,6 +10,7 @@ from . import Args
 from .commands import clang_tidy_command, clazy_standalone_command, clazy_command
 from .os_utils import run_command, compare_files
 from .qtinstallation import qt_installation
+from .test import Test
 
 
 def clazy_standalone_binary():
@@ -56,7 +57,7 @@ def extract_word(word, in_file, out_file):
     out_f.close()
 
 
-def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version, config: Args):
+def run_unit_test(test: Test, is_standalone, is_tidy, cppStandard, qt_major_version, config: Args):
     if test.check.clazy_standalone_only and not is_standalone:
         return True
 
@@ -93,7 +94,7 @@ def run_unit_test(test, is_standalone, is_tidy, cppStandard, qt_major_version, c
         return True
 
     checkname = test.check.name
-    filename = checkname + "/" + test.filename()
+    filename = checkname + "/" + test.filename
     # Easy copying of command to reproduce manually. Saves me a ton of work - Alex
     abs_filename = str(Path(filename).absolute())
 

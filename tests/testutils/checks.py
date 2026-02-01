@@ -40,10 +40,6 @@ def load_check_from_json(check_name: str, clang_version: int) -> Check:
         test.minimum_clang_version = check.minimum_clang_version
         test.maximum_qt_version = check.maximum_qt_version
 
-        if 'filename' in t:
-            t['filenames'] = [t['filename']]
-            del t['filename']
-
         for key, value in t.items():
             if hasattr(test, key):
                 setattr(test, key, value)

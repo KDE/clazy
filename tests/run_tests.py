@@ -8,6 +8,7 @@ import multiprocessing
 import argparse
 from threading import Thread
 
+from testutils.checks import Check
 from testutils import Args
 from testutils.commands import dump_ast_command
 from testutils.run_unittest import run_unit_tests
@@ -105,13 +106,13 @@ def cleanup_fixit_files(checks):
         for f in filestodelete:
             os.remove(check.name + '/' + f)
 
-def dump_ast(check):
+def dump_ast(check: Check):
     for test in check.tests:
         for cppStandard in test.cppStandards:
             for version in test.qt_major_versions:
                 if version == 6 and cppStandard == "c++14":
                     continue # Qt6 requires C++17
-                ast_filename = test.filename() + f"_{cppStandard}_{version}.ast"
+                ast_filename = test.filename + f"_{cppStandard}_{version}.ast"
                 run_command(dump_ast_command(test, cppStandard, version) + " > " + ast_filename)
                 print("Dumped AST to " + os.getcwd() + "/" + ast_filename)
 

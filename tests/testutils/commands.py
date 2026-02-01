@@ -87,7 +87,7 @@ def clang_tidy_command(test: Test, cpp_standard, qt, filename, config: Args):
 
 
 def dump_ast_command(test: Test, cpp_standard, qt_major_version):
-    return "clang -std=" + cpp_standard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(qt_major_version).compiler_flags(test.qt_modules_includes) + " " + test.flags + " " + test.filename()
+    return "clang -std=" + cpp_standard + " -fsyntax-only -Xclang -ast-dump -fno-color-diagnostics -c " + qt_installation(qt_major_version).compiler_flags(test.qt_modules_includes) + " " + test.flags + " " + test.filename
 
 
 def clazy_standalone_command(test: Test, cpp_standard: str, qt: QtInstallation, config: Args):

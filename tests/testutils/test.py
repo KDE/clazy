@@ -2,7 +2,7 @@ import os
 
 class Test:
     def __init__(self, check):
-        self.filenames = []
+        self.filename = ""
         self.minimum_qt_version = 500
         self.maximum_qt_version = 69999
         self.minimum_clang_version = 380
@@ -29,14 +29,10 @@ class Test:
         self.qt_modules_includes = False
         self.fixed_file_base = None
 
-    def filename(self):
-        if len(self.filenames) == 1:
-            return self.filenames[0]
-        return ""
 
     def relativeFilename(self):
         # example: "auto-unexpected-qstringbuilder/main.cpp"
-        return self.check.name + "/" + self.filename()
+        return self.check.name + "/" + self.filename
 
     def yamlFilename(self, is_standalone):
         # The name of the yaml file with fixits
@@ -56,7 +52,7 @@ class Test:
         return self.relativeFilename() + ".fixed.expected"
 
     def isScript(self):
-        return self.filename().endswith(".sh")
+        return self.filename.endswith(".sh")
 
     def dir(self):
         return self.check.name
@@ -84,7 +80,7 @@ class Test:
     def printableName(self, cppStandard, qt_major_version, is_standalone, is_tidy, is_fixits):
         name = self.check.name
         if len(self.check.tests) > 1:
-            name += "/" + self.filename()
+            name += "/" + self.filename
         if len(cppStandard) > 0:
             name += " (" + cppStandard + ")"
         if qt_major_version > 0:
