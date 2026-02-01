@@ -25,20 +25,9 @@ def load_check_from_json(check_name: str, clang_version: int) -> Check:
     decoded = json.loads(contents)
     check_blacklist_platforms = []
 
-    if 'minimum_clang_version' in decoded:
-        check.minimum_clang_version = decoded['minimum_clang_version']
-
-    if 'minimum_qt_version' in decoded:
-        check.minimum_qt_version = decoded['minimum_qt_version']
-
-    if 'maximum_qt_version' in decoded:
-        check.maximum_qt_version = decoded['maximum_qt_version']
-
-    if 'enabled' in decoded:
-        check.enabled = decoded['enabled']
-
-    if 'clazy_standalone_only' in decoded:
-        check.clazy_standalone_only = decoded['clazy_standalone_only']
+    for key, value in decoded.items():
+        if hasattr(check, key) and key != "tests":
+            setattr(check, key, value)
 
     if 'blacklist_platforms' in decoded:
         check_blacklist_platforms = decoded['blacklist_platforms']
