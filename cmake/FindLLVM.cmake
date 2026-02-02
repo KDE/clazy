@@ -122,9 +122,13 @@ if (LLVM_FOUND)
   set(CLANG_EXECUTABLE_PATH "${LLVM_BIN_DIR}/clang")
   if(EXISTS ${CLANG_EXECUTABLE_PATH})
     message(STATUS "Clang found: ${CLANG_EXECUTABLE_PATH}")
-    set(CLANG_EXECUTABLE ${CLANG_EXECUTABLE_PATH})
   else()
     message(WARNING "Clang not found in LLVM bin directory: ${LLVM_BIN_DIR}")
+  endif()
+
+  set(CLANG_TIDY_EXECUTABLE_PATH "${LLVM_BIN_DIR}/clang-tidy")
+  if(EXISTS ${CLANG_TIDY_EXECUTABLE_PATH})
+    message(STATUS "Clang-Tidy found: ${CLANG_EXECUTABLE_PATH}")
   endif()
 
   # potentially add include dir from binary dir for non-installed LLVM

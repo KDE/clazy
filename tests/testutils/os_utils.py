@@ -34,7 +34,7 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, verbose = Fa
     lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
 
     # clang-tidy prints the tags slightly different
-    if cmd.startswith("clang-tidy"):
+    if cmd.split(" ")[0].endswith("clang-tidy"):
         lines = lines.replace("[clazy", "[-Wclazy")
     if qt_namespaced and qt_replace_namespace:
         lines = lines.replace("MyQt::", "")

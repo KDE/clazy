@@ -70,7 +70,11 @@ def clazy_command(test: Test, cpp_standard: str, qt: QtInstallation, filename: s
 
 
 def clang_tidy_command(test: Test, cpp_standard, qt, filename, config: Args):
-    command = f"clang-tidy {filename}"
+    if 'CLANGTIDY' in os.environ:
+        command = os.environ['CLANGTIDY']
+    else:
+        command = "clang-tidy"
+    command += f" {filename}"
     # disable all checks, re-enable clazy ones
     checks = ','.join("clazy-" + check for check in test.checks)
     command += f" -checks='-*,{checks}' -header-filter='.*' -system-headers -load='{clang_tidy_plugin_name()}'"
