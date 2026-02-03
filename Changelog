@@ -1,4 +1,4 @@
-Version 1.16
+Version 1.17
 ~~~~~~~~~~~~
 Released: not yet
 
@@ -13,6 +13,10 @@ Bugfixes:
  * Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed
  * Adjust readlock-detaching check to work properly with Qt 6.11 changes
  * Move qstring-ref to manuallevel since it is not compatible with Qt6
+
+Features:
+ * New checks:
+   - compare-member-check: Checks whether comparison operators do not use all member variables of a class.
 
 Notes:
  * C++20 is now required for compilation
