@@ -12,11 +12,14 @@
 #include "checkmanager.h"
 #include "clang-tidy/ClangTidyCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
-#include "clang-tidy/ClangTidyModuleRegistry.h"
 #include "clang/AST/ParentMap.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include <utility>
+
+#if LLVM_VERSION_MAJOR < 22
+#include "clang-tidy/ClangTidyModuleRegistry.h"
+#endif
 
 using namespace clang::ast_matchers;
 using namespace clang::tidy;
