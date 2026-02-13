@@ -32,6 +32,8 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, verbose = Fa
     lines = lines.replace("std::__1::__vector_base_common",
                           "std::_Vector_base")  # Hack for macOS
     lines = lines.replace("std::_Vector_alloc", "std::_Vector_base")
+    #  Hack for the time being to adapt to LLVM22 having different output for lambda
+    lines = lines.replace("(lambda)", "(anonymous class)")
 
     # clang-tidy prints the tags slightly different
     if cmd.split(" ")[0].endswith("clang-tidy"):
