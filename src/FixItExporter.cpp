@@ -127,6 +127,7 @@ tooling::Replacement FixItExporter::ConvertFixIt(const FixItHint &Hint)
     return {SourceMgr, Hint.RemoveRange, Hint.CodeToInsert};
 }
 
+// This function should export diagnostics, even if they are not fixits! Needed for Qtcreator integration
 void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const Diagnostic &Info)
 {
     // Default implementation (Warnings/errors count).
@@ -135,11 +136,6 @@ void FixItExporter::HandleDiagnostic(DiagnosticsEngine::Level DiagLevel, const D
     // Let original client do it's handling
     if (Client) {
         Client->HandleDiagnostic(DiagLevel, Info);
-    }
-
-    // Do not export file when we can not provide any fixits
-    if (Info.getNumFixItHints() == 0) {
-        return;
     }
 
     // Convert and record warning diagnostics and their notes
