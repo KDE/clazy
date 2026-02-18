@@ -1,8 +1,7 @@
-
 This is dumping ground with tips for developers interested in writing their own checks.
 
-
 # Create a new check or fixit
+
 Files to create or modify:
 
 ```
@@ -45,9 +44,7 @@ which will generate the files you need to write, and edit others for you.
 
 - If you try to run the tests from the build dir directly without installation, you may get error
   messages about not finding `ClazyPlugin.so` and/or `clazy-standalone` when you call
-  `run_tests.py`. This can be resolved by exporting the following environment variables:
-
-  `export CLAZYPLUGIN_CXX=<path-to-builddir>/lib/ClazyPlugin.so && export CLAZYSTANDALONE_CXX=<path-to-builddir>/bin/clazy-standalone`
+  `run_tests.py`. This can be resolved by applying the generated `text.prefix.sh` script from the build dir.
 
 ## Using ASTMatchers
 
@@ -60,6 +57,7 @@ which will generate the files you need to write, and edit others for you.
   see `FixItUtils.cpp`.
 
 - Learn from existing fixits:
+
 ```
     qgetenv.cpp
     functionargsbyref.cpp
@@ -68,6 +66,7 @@ which will generate the files you need to write, and edit others for you.
 ```
 
 # Running tests
+
     ./run_tests.py # This runs all tests
     ./run_tests.py my-check # This runs one tests
     ./run_tests.py my-check --verbose # Prints the compiler invocation command
@@ -82,9 +81,8 @@ which will generate the files you need to write, and edit others for you.
 
 - Sign the files, upload them and create sysadmin ticket for putting them on https://download.kde.org/stable/clazy/.
 
-
 ```bash
-basename="clazy-1.15"
+basename="clazy-v1.18"
 tarfile="$basename.tar"
 xzfile="$tarfile.xz"
 sigfile="$xzfile.sig"
@@ -106,6 +104,5 @@ done
 curl -T "$xzfile" "${ftp_url}${xzfile}"
 curl -T "$sigfile" "${ftp_url}${sigfile}"
 ```
-
 
 <!--- Clone `git@invent.kde.org:sysadmin/repo-metadata` if you haven't yet, open `dependencies/logical-module-structure.json` and update the stable branch (search for clazy in that file). -->
