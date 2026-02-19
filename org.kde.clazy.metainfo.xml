@@ -226,6 +226,7 @@
           <li xml:lang="ar">تعد فحوصات النقل qt6-\* مهجورة الآن وستزال في الإصدار القادم من كلازي</li>
           <li xml:lang="ka">qt6-\* პორტირების შემოწმებები ახლა უკვე მოძველებულად ითვლება და clazy-ს შემდეგ ვერსიაში ამოღებული იქნება</li>
           <li xml:lang="pt-BR">As verificações de portabilidade do qt6-\* agora são consideradas obsoletas e serão removidas na próxima versão do clazy</li>
+          <li xml:lang="sl">qt6-\* Prenosi preverjanj veljajo za zastarela in bodo odstranjena v naslednji izdaji clazy</li>
           <li>detaching-temporary and detaching-member checks provide fixits for methods that have const coutnerparts</li>
           <li xml:lang="ar">توفر فحوصات detaching-temporary و detaching-member إصلاحات للدوال التي لها نظائر ثابتة (const)</li>
           <li xml:lang="ka">detaching-temporary და detaching-member შემოწმებები უზრუნველყოფს Fixit-ებს იმ მეთოდებისთვის რომლებსაც მუდმივი ანალოგები გააჩნიათ</li>
