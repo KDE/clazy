@@ -1,6 +1,6 @@
 Version 1.17
 ~~~~~~~~~~~~
-Released: 2025-02-15
+Released: 2026-02-15
 
 Bugfixes:
  * Fix non-pod-static check emitting warning for each entry of a container
