@@ -152,6 +152,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>unused-result-check: Fix crash when method decleration can not be resolved</li>
           <li xml:lang="ar">unused-result-check: إصلاح انهيار عندما لا يمكن حل تصريح الدالة</li>
@@ -162,6 +163,7 @@
           <li xml:lang="ru">unused-result-check: исправлено аварийное завершение при невозможности разрешения объявления метода;</li>
           <li xml:lang="sl">unused-result-check: Popravi sesutje, ko ni mogoče razrešiti deklaracije metode</li>
           <li xml:lang="tr">unused-result-check: Fix crash when method decleration can not be resolved</li>
+          <li xml:lang="uk">unused-result-check: усунено аварійне завершення роботи, якщо не вдасться визначити оголошення методу</li>
           <li>use-chrono-in-qtimer: Fix crash when using precompiled headers</li>
           <li xml:lang="ar">use-chrono-in-qtimer: إصلاح انهيار عند استخدام الترويسات المجمعة مسبقًا</li>
           <li xml:lang="ca">use-chrono-in-qtimer: corregeix una fallada en usar capçaleres precompilades</li>
@@ -171,6 +173,7 @@
           <li xml:lang="ru">use-chrono-in-qtimer: исправлено аварийное завершение при использовании предварительно скомпилированных заголовков;</li>
           <li xml:lang="sl">use-chrono-in-qtimer: popravi sesutje pri uporabi vnaprej prevedenih glav</li>
           <li xml:lang="tr">use-chrono-in-qtimer: Fix crash when using precompiled headers</li>
+          <li xml:lang="uk">use-chrono-in-qtimer: усунено аварійне завершення роботи при використанні попередньо зібраних заголовків</li>
           <li>qt6-qhash-signature: Adapt check to use more proper logic for casts and fix crash in edgecases</li>
           <li xml:lang="ar">qt6-qhash-signature: تطويع الفحص لاستخدام منطق أنسب لعمليات القسر وإصلاح الانهيار في الحالات الحدية</li>
           <li xml:lang="ca">qt6-qhash-signature: adapta la comprovació per a utilitzar una lògica més adequada per a les conversions i corregeix una fallada en casos extrems</li>
@@ -180,6 +183,7 @@
           <li xml:lang="ru">qt6-qhash-signature: адаптирована проверка для использования более корректной логики преобразований типов и исправлено аварийное завершение в крайних случаях;</li>
           <li xml:lang="sl">qt6-qhash-signature: Prilagodi preverjanje za uporabo ustreznejše logike za ulitke in popravi sesutje v robnih primerih</li>
           <li xml:lang="tr">qt6-qhash-signature: Adapt check to use more proper logic for casts and fix crash in edgecases</li>
+          <li xml:lang="uk">qt6-qhash-signature: адаптовано перевірку для використання належнішої логіки для викликів і усунено аварійне завершення роботи у крайніх випадках</li>
           <li>Ensure that clang21 works properly with clazy and produces same line/letter number as before (mismatches with operator calls)</li>
           <li xml:lang="ar">ضمان عمل clang21 بشكل سليم مع كلازي وإنتاجه لنفس أرقام الأسطر/الحروف كما في السابق (عدم التطابق مع استدعاءات المعاملات)</li>
           <li xml:lang="ca">Assegura que clang21 funciona correctament amb clazy i produeix el mateix número de línia/lletra que abans (no coincideix amb crides d'operador)</li>
@@ -209,6 +213,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>Clazy can finally be integrated into clang-tidy - one command to rule</li>
           <li xml:lang="ar">أصبح بالإمكان دمج كلازي في clang-tidy - أمر واحد ليحكمهم جميعًا!</li>
@@ -237,6 +242,7 @@
           <li xml:lang="ru">`clazy-qstring-arg,clazy-qfileinfo-exists`; включение всех проверок с помощью</li>
           <li xml:lang="sl">`clazy-qstring-arg,clazy-qfileinfo-exists`, omogoča vsa preverjanja z</li>
           <li xml:lang="tr">`clazy-qstring-arg,clazy-qfileinfo-exists`, enabling all checks using</li>
+          <li xml:lang="uk">`clazy-qstring-arg,clazy-qfileinfo-exists`, вмикання усіх використаних перевірок</li>
           <li>`clazy-*` will also enable manual checks. It is recommended to be more granular.</li>
           <li xml:lang="ar">`clazy-*` سيفعل أيضًا الفحوصات اليدوية. ينصح بأن يكون التحديد أكثر دقة.</li>
           <li xml:lang="ca">`clazy-*` també habilitarà les comprovacions manuals. Es recomana ser més granular.</li>
@@ -342,6 +348,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>install-event-filter: Fix crash when there is no child at the given depth. BUG: 464372</li>
           <li xml:lang="ar">install-event-filter: إصلاح انهيار عند عدم وجود ابن في العمق المحدد. علة: 464372</li>
@@ -399,6 +406,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -505,6 +513,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -539,6 +548,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -569,6 +579,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>qstring-arg check provides a fix-it</li>
           <li xml:lang="ar">يوفر فحص qstring-arg إصلاحًا آليًا</li>
@@ -657,6 +668,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -700,6 +712,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -761,6 +774,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>Requires C++17</li>
           <li xml:lang="ar">يتطلب C++17</li>
@@ -816,6 +830,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>Fixed clazy slowdown introduced in 1.8. I can be up to 4x faster now.</li>
           <li xml:lang="ar">إصلاح تباطؤ كلازي الذي ظهر في 1.8. يمكن أن يصبح أسرع بـ 4 مرات الآن.</li>
@@ -859,6 +874,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -929,6 +945,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -995,6 +1012,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>connect-non-signal: Fix case where it didn't find the pmf</li>
           <li xml:lang="ar">connect-non-signal: إصلاح حالة لم يجد فيها pmf</li>
@@ -1038,6 +1056,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -1176,6 +1195,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>Fixed regressions with LLVM 9.0</li>
           <li xml:lang="ar">إصلاح التراجعات مع LLVM 9.0</li>
@@ -1210,6 +1230,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -1354,6 +1375,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New Checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -1586,6 +1608,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -1710,6 +1733,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>New checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
@@ -1767,6 +1791,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>clazy-standalone executable. Allows to run clazy against a JSON compilation database instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086) so this is a good workaround.</li>
           <li xml:lang="ar">ملف clazy-standalone التنفيذي. يسمح بتشغيل كلازي مقابل قاعدة بيانات تجميع JSON بدلًا من كونه ملحقًا. لا يدعم clang-tidy تحميل وحدات خارجية (https://github.com/llvm/llvm-project/issues/32086) لذا يعد هذا حلًا جيدًا.</li>
@@ -1876,6 +1901,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
+        <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
           <li>macOS and Windows support</li>
           <li xml:lang="ar">دعم macOS و ويندوز</li>
