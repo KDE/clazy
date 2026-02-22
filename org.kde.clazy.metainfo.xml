@@ -140,6 +140,29 @@
   </provides>
   <icon type="stock">clazy</icon>
   <releases>
+    <release type="stable" version="1.17" date="2026-02-15T00:00:00Z">
+      <description>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Fix non-pod-static check emitting warning for each entry of a container</li>
+          <li>Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
+          <li>Do not whitelist QVariant for detaching-temporary. QVariant::toString will provide a QString that is not detached</li>
+          <li>detaching-temporary properly checks conditions when more than two method calls are chained</li>
+          <li>Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls</li>
+          <li>When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace</li>
+          <li>Fix wrong replacement method for QMap::operator[]</li>
+          <li>Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed</li>
+          <li>Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
+          <li>Move qstring-ref to manuallevel since it is not compatible with Qt6</li>
+        </ul>
+        <p>This release adds the following feature:</p>
+        <ul>
+          <li>New checks: - compare-member-check: Checks whether comparison operators do not use all member variables of a class.</li>
+        </ul>
+        <p>C++20 is now required for compilation</p>
+        <p>qt6-\* porting checks are removed</p>
+      </description>
+    </release>
     <release type="stable" version="1.16" date="2025-09-03T00:00:00Z">
       <description>
         <p>This release fixes the following bugs:</p>
