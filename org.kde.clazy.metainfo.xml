@@ -143,6 +143,16 @@
     <release type="stable" version="1.17" date="2026-02-15T00:00:00Z">
       <description>
         <p>This release fixes the following bugs:</p>
+        <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
+        <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
+        <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
+        <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
+        <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>Fix non-pod-static check emitting warning for each entry of a container</li>
           <li>Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
