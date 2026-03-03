@@ -160,6 +160,7 @@
           <li xml:lang="ar">إصلاح فحص non-pod-static الذي يرسل تحذيرًا لكل إدخال في حاوية</li>
           <li xml:lang="ca">Corregeix la comprovació «non-pod-static» que emet un avís per a cada entrada d'un contenidor</li>
           <li xml:lang="ca-valencia">Corregix la comprovació «non-pod-static» que emet un avís per a cada entrada d'un contenidor</li>
+          <li xml:lang="it">Corregge il controllo non-pod-static che emette un avviso per ogni voce di un container</li>
           <li xml:lang="ka">გასწორდა non-pod-static შემოწმება, რომელსაც კონტეინერის თითოეული ჩანაწერისთვის გაფრთხილება გამოჰქონდა</li>
           <li xml:lang="nl">Los het probleem op dat de controle die niet-pod-statisch is, een waarschuwing geeft voor elke vermelding in een container.</li>
           <li xml:lang="pt-BR">Corrigido o aviso de verificação não estática de pod para cada entrada de um contêiner</li>
@@ -169,6 +170,7 @@
           <li xml:lang="ar">إصلاح إرسال فحص use-arrow-operator-instead-of-data لنتائج إيجابية خاطئة عند تحويل القيمة</li>
           <li xml:lang="ca">Corregeix «use-arrow-operator-instead-of-data» que emet un fals positiu quan el valor es converteix</li>
           <li xml:lang="ca-valencia">Corregix «use-arrow-operator-instead-of-data» que emet un fals positiu quan el valor es convertix</li>
+          <li xml:lang="it">Corregge l'emissione di falsi positivi da parte di use-arrow-operator-instead-of-data quando il valore viene convertito</li>
           <li xml:lang="ka">გასწორდა შემთხვევა, როცა use-arrow-operator-instead-of-data ცრუ დადებით მნიშვნელობებს იძლეოდა, როცა ხდებოდა მნიშვნელობის გადაყვანა</li>
           <li xml:lang="nl">Correctie voor het gebruik van de pijloperator in plaats van de gegevens, die een vals positief resultaat geeft wanneer de waarde hoofdletters wordt.</li>
           <li xml:lang="pt-BR">Corrigido o problema que gerava falsos positivos ao converter um valor para outro usando o operador de seta em vez de dados</li>
@@ -178,6 +180,7 @@
           <li xml:lang="ar">لا تضع QVariant في القائمة البيضاء لـ detaching-temporary. توفر QVariant::toString سلسلة QString غير منفصلة</li>
           <li xml:lang="ca">No posa a la llista blanca QVariant per a «detaching-temporary». QVariant::toString proporcionarà una QString que no està deslligada</li>
           <li xml:lang="ca-valencia">No posa a la llista blanca QVariant per a «detaching-temporary». QVariant::toString proporcionarà una QString que no està deslligada</li>
+          <li xml:lang="it">Non aggiunge QVariant alla lista bianca per detaching-temporary. QVariant::toString fornirà una QString che non è distaccata</li>
           <li xml:lang="ka">detaching-temporary-ისთვის QVariant თეთრ სიაში არ იქნება. QVariant::toString მოგაწვდით QString-ს, რომელიც მოხსნილი არაა</li>
           <li xml:lang="nl">Voeg QVariant niet toe aan de whitelist voor tijdelijk loskoppelen. QVariant::toString zal een QString leveren die niet is losgekoppeld.</li>
           <li xml:lang="pt-BR">Não adiciona QVariant à lista de permissões para desanexar temporariamente. QVariant::toString fornecerá uma QString que não está desanexada</li>
@@ -187,7 +190,9 @@
           <li xml:lang="ar">يفحص detaching-temporary الشروط بدقة عند تسلسل أكثر من استدعاءين للدوال</li>
           <li xml:lang="ca">«detaching-temporary» comprova adequadament les condicions quan estan encadenades més de dues crides a mètodes</li>
           <li xml:lang="ca-valencia">«detaching-temporary» comprova adequadament les condicions quan estan encadenades més de dues crides a mètodes</li>
+          <li xml:lang="it">detaching-temporary controlla correttamente le condizioni quando sono concatenate più di due chiamate di metodo</li>
           <li xml:lang="ka">დროებით მოხსნის თვისების შემოწმების პირობები, როცა ჯაჭვში ორზე მეტი მეთოდის გამოძახებაა</li>
+          <li xml:lang="nl">Tijdelijk losmaken controleert de voorwaarden correct wanneer meer dan twee methodeaanroepen aan elkaar gekoppeld zijn</li>
           <li xml:lang="pt-BR">O método `destaching-temporary` verifica corretamente as condições quando mais de duas chamadas de método são encadeadas</li>
           <li xml:lang="sl">!detaching-temporary! pravilno preveri pogoje, ko sta verižno povezana več kot dva klica metod</li>
           <li xml:lang="tr">detaching-temporary properly checks conditions when more than two method calls are chained</li>
@@ -195,6 +200,7 @@
           <li xml:lang="ar">إصلاحات detaching-temporary/detaching-member أكثر موثوقية مع نطاقات الإصلاح لاستدعاءات المعاملات</li>
           <li xml:lang="ca">Les correccions «detaching-temporary»/«detaching-member» són més fiables amb els intervals de correccions per a crides d'operador</li>
           <li xml:lang="ca-valencia">Les correccions «detaching-temporary»/«detaching-member» són més fiables amb els intervals de correccions per a crides d'operador</li>
+          <li xml:lang="it">I fixit per detaching-temporary/detaching-member sono più affidabili con intervalli di fixit per le chiamate dell'operatore</li>
           <li xml:lang="ka">გასწორდა დროებით მოხსნის/წევრის მოხსნის საიმედოობა ოპერატორის გამოძახებების შუალედებისთვის</li>
           <li xml:lang="pt-BR">As correções para desanexar temporário/membro são mais confiáveis ​​com intervalos de correções para chamadas de operador</li>
           <li xml:lang="sl">Popravi člana za odklop začasnega/odklop člana so zanesljivejši z razponi popravkov za klice operaterja</li>
@@ -203,7 +209,9 @@
           <li xml:lang="ar">عند استخدام QT_NAMESPACE، يعالج clazy فئات كيدي (Qt) الموجودة في هذا النطاق بدقة</li>
           <li xml:lang="ca">Quan s'utilitza QT_NAMESPACE, el clazy gestiona adequadament les classes de les Qt que es troben en aquest espai de noms específic</li>
           <li xml:lang="ca-valencia">Quan s'utilitza QT_NAMESPACE, clazy gestiona adequadament les classes de les Qt que es troben en este espai de noms específic</li>
+          <li xml:lang="it">Quando si utilizza QT_NAMESPACE, clazy gestisce correttamente le classi Qt che si trovano in questo specifico spazio dei nomi</li>
           <li xml:lang="ka">QT_NAMESPACE-ის გამოყენებისას clazy სწორად ამუშავებს Qt-ის კლასებს, რომლებიც მითითებული სახელების სივრცეშია</li>
+          <li xml:lang="nl">Bij gebruik van QT_NAMESPACE verwerkt Clazy Qt-klassen die zich in deze specifieke naamruimte bevinden op de juiste manier.</li>
           <li xml:lang="pt-BR">Ao usar QT_NAMESPACE, o clazy lida corretamente com as classes Qt que estão nesse namespace específico</li>
           <li xml:lang="sl">Pri uporabi QT_NAMESPACE clazy pravilno obravnava razrede Qt, ki so v tem specifičnem imenskem prostoru</li>
           <li xml:lang="tr">When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace</li>
@@ -211,7 +219,9 @@
           <li xml:lang="ar">إصلاح طريقة الاستبدال الخاطئة لـ QMap::operator[]</li>
           <li xml:lang="ca">Corregeix un mètode de reemplaçament incorrecte per a QMap::operator[]</li>
           <li xml:lang="ca-valencia">Corregix un mètode de reemplaçament incorrecte per a QMap::operator[]</li>
+          <li xml:lang="it">Corregge il metodo di sostituzione errato per QMap::operator[]</li>
           <li xml:lang="ka">გასწორდა მეთოდის არასწორი ჩანაცვლება ფუნქციისთვის QMap::operator[]</li>
+          <li xml:lang="nl">Corrigeer de onjuiste vervangingsmethode voor QMap::operator[]</li>
           <li xml:lang="pt-BR">Corrigido o método de substituição incorreto para QMap::operator[]</li>
           <li xml:lang="sl">Popravi napačno metodo zamenjave za QMap::operator[]</li>
           <li xml:lang="tr">Fix wrong replacement method for QMap::operator[]</li>
@@ -219,7 +229,9 @@
           <li xml:lang="ar">جعل المشروع يترجم باستخدام LLVM22. إصلاح اختبارات qhash-namespace و fully-qualified-moc-types و old-style-connect</li>
           <li xml:lang="ca">Fa que el projecte compili amb LLVM22. S'han corregit les proves «qhash-namespace», «fully-qualified-moc-types», «old-style-connect»</li>
           <li xml:lang="ca-valencia">Fa que el projecte compile amb LLVM22. S'han corregit les proves «qhash-namespace», «fully-qualified-moc-types», «old-style-connect»</li>
+          <li xml:lang="it">Rende il progetto compilabile con LLVM22. I test qhash-namespace, fully-qualified-moc-types e old-style-connect sono stati corretti</li>
           <li xml:lang="ka">პროექტი ახლა LLVM22-ით კომპილირდება. ასევე გასწორდა შემოწმებები qhash-namespace, fully-qualified-moc-types და old-style-connect</li>
+          <li xml:lang="nl">Zorg ervoor dat het project compileert met LLVM22. qhash-namespace, fully-qualified-moc-types en old-style-connect tests zijn gecorrigeerd</li>
           <li xml:lang="pt-BR">Faz o projeto compilar com LLVM22. Os namespaces qhash, os tipos moc totalmente qualificados e os testes de conexão no estilo antigo foram corrigidos</li>
           <li xml:lang="sl">Projekt prevedi z LLVM22. Popravljeni so testi qhash-namespace, fully-qualified-moc-types in old-style-connect</li>
           <li xml:lang="tr">Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed</li>
@@ -227,7 +239,9 @@
           <li xml:lang="ar">ضبط فحص readlock-detaching ليعمل بدقة مع تغييرات كيدي (Qt) 6.11</li>
           <li xml:lang="ca">Ajusta la comprovació «readlock-detaching» per a funcionar correctament amb els canvis de les Qt 6.11</li>
           <li xml:lang="ca-valencia">Ajusta la comprovació «readlock-detaching» per a funcionar correctament amb els canvis de les Qt 6.11</li>
+          <li xml:lang="it">Regola il controllo readlock-detaching per funzionare correttamente con le modifiche di Qt 6.11</li>
           <li xml:lang="ka">გასწორდა შემოწმება readlock-detaching Qt 6.11-ის ცვლილებებთან სწორად სამუშაოდ</li>
+          <li xml:lang="nl">De controle op het loskoppelen van de leesvergrendeling moet worden aangepast zodat deze correct werkt met de wijzigingen in Qt 6.11.</li>
           <li xml:lang="pt-BR">Ajusta a verificação de desanexação do bloqueio de leitura para funcionar corretamente com as alterações do Qt 6.11</li>
           <li xml:lang="sl">Prilagojeno preverjanje odklopa za branje readlock-detaching, da bo pravilno delovalo s spremembami Qt 6.11</li>
           <li xml:lang="tr">Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
@@ -235,7 +249,9 @@
           <li xml:lang="ar">نقل qstring-ref إلى المستوى اليدوي لعدم توافقه مع كيدي (Qt) 6</li>
           <li xml:lang="ca">Mou «qstring-ref» a «manuallevel», ja que no és compatible amb les Qt6</li>
           <li xml:lang="ca-valencia">Mou «qstring-ref» a «manuallevel», ja que no és compatible amb les Qt6</li>
+          <li xml:lang="it">Sposta qstring-ref su manuallevel poiché non è compatibile con Qt6</li>
           <li xml:lang="ka">qstring-ref გადატანილია manuallevel-ში, რადგან ის Qt6-თან თავსებადი არაა</li>
+          <li xml:lang="nl">Verplaats qstring-ref naar handleidingniveau, aangezien het niet compatibel is met Qt6.</li>
           <li xml:lang="pt-BR">Move qstring-ref para o nível manual, pois não é compatível com o Qt6</li>
           <li xml:lang="sl">Premakne qstring-ref na manuallevel, ker ni združljiv s Qt6</li>
           <li xml:lang="tr">Move qstring-ref to manuallevel since it is not compatible with Qt6</li>
@@ -246,6 +262,7 @@
         <p xml:lang="ca">Aquesta versió afegeix la característica següent:</p>
         <p xml:lang="ca-valencia">Esta versió afig la característica següent:</p>
         <p xml:lang="es">Esta versión añade la siguiente funcionalidad:</p>
+        <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციას:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
         <p xml:lang="pt-BR">Esta versão adiciona a seguinte funcionalidade:</p>
@@ -257,6 +274,7 @@
           <li xml:lang="ar">فحوصات جديدة: - compare-member-check: يفحص ما إذا كانت معاملات المقارنة لا تستخدم كافة متغيرات الأعضاء في الفئة.</li>
           <li xml:lang="ca">Comprovacions noves: «compare-member-check»: comprova si els operadors de comparació no utilitzen totes les variables de membres d'una classe.</li>
           <li xml:lang="ca-valencia">Comprovacions noves: «compare-member-check»: comprova si els operadors de comparació no utilitzen totes les variables de membres d'una classe.</li>
+          <li xml:lang="it">Nuovi controlli: - compare-member-check: verifica se gli operatori di confronto non utilizzano tutte le variabili membro di una classe.</li>
           <li xml:lang="ka">ახალი შემოწმებები: - compare-member-check: ამოწმებს, იყენებენ შემოწმების ოპერატორები კლასის ყველა წევრ ცვლადს, თუ არა.</li>
           <li xml:lang="pt-BR">Novas verificações: - compare-member-check: Verifica se os operadores de comparação não utilizam todas as variáveis ​​membro de uma classe.</li>
           <li xml:lang="sl">Nova preverjanja: - compare-member-check: Preveri, ali operatorji primerjave ne uporabljajo vseh spremenljivk članov razreda</li>
@@ -268,6 +286,7 @@
         <p xml:lang="ca">Ara és necessari el C++20 per a la compilació</p>
         <p xml:lang="ca-valencia">Ara és necessari C++20 per a la compilació</p>
         <p xml:lang="es">C++20 es necesario ahora para la compilación</p>
+        <p xml:lang="it">C++20 è ora richiesto per la compilazione</p>
         <p xml:lang="ka">კომპილაციისთვის ახლა აუცილებელია C++20</p>
         <p xml:lang="pt-BR">Agora é necessário o C++20 para compilação</p>
         <p xml:lang="sl">Za prevajanje je zdaj potreben C++20</p>
@@ -276,6 +295,7 @@
         <p xml:lang="ar">حذف فحوصات النقل qt6-*</p>
         <p xml:lang="ca">S'han eliminat les comprovacions d'adaptació de les qt6-\*</p>
         <p xml:lang="ca-valencia">S'han eliminat les comprovacions d'adaptació de les qt6-\*</p>
+        <p xml:lang="it">I controlli di conversione qt6-\* sono stati rimossi</p>
         <p xml:lang="ka">qt6-\*-ის გადატანის შემოწმებები მოცილებულია</p>
         <p xml:lang="pt-BR">As verificações de portabilidade qt6-\* foram removidas</p>
         <p xml:lang="sl">Preverjanja prenosljivosti qt6-\* so odstranjena</p>
@@ -2280,6 +2300,7 @@
           <li xml:lang="ca-valencia">S'ha eliminat l'opció CLAZY_INSTALL_NO_HEADERS. Instal·leu la biblioteca d'utilitats i les capçaleres o res en absolut. De manera predeterminada no hi ha res instal·lat, excepte les pàgines del connector i man.</li>
           <li xml:lang="it">L'opzione CLAZY_INSTALL_NO_HEADERS è stata rimossa. Installa la libreria utils e gli header oppure non installare nulla. Per impostazione predefinita, non viene installato nulla, tranne l'estensione e le pagine man.</li>
           <li xml:lang="ka">მოცილებულია პარამეტრი CLAZY_INSTALL_NO_HEADERS. ან მოხდება ბიბლიოთეკის utils და თავსართების დაყენება, ან არაფრის. ნაგულისხმევად არაფრის დაყენება ხდება, დამატებისა და სახელმძღვანელოს გვერდების გარდა.</li>
+          <li xml:lang="nl">Optie CLAZY_INSTALL_NO_HEADERS is verwijderd. Ofwel installeer de hulpprogrammabibliotheek en headers of helemaal niets. Standaard wordt niets geïnstalleerd, behalve de plug-in en manpagima's.</li>
           <li xml:lang="pt-BR">A opção CLAZY_INSTALL_NO_HEADERS foi removida. Ou você instala a biblioteca de utilitários e os cabeçalhos, ou nada. Por padrão, nada é instalado, exceto o plugin e as páginas de manual.</li>
           <li xml:lang="ru">Параметр CLAZY_INSTALL_NO_HEADERS удалён. Теперь библиотека утилит и заголовочные файлы устанавливаются либо полностью, либо не устанавливаются вовсе. По умолчанию устанавливаются только плагин и страницы руководства;</li>
           <li xml:lang="sl">Možnost CLAZY_INSTALL_NO_HEADERS je bila odstranjena. Ali namestite knjižnico pripomočkov in glave ali pa sploh nič. Privzeto ni nameščeno nič, razen strani vtičnika in priročnika.</li>
@@ -2480,6 +2501,7 @@
           <li xml:lang="es">Mejora el rendimiento un 60 %</li>
           <li xml:lang="it">Miglioramento delle prestazioni del 60%</li>
           <li xml:lang="ka">60% წარმადობის გაუმჯობესება</li>
+          <li xml:lang="nl">60% verbetering in prestatie</li>
           <li xml:lang="pt-BR">Melhoria de desempenho de 60%</li>
           <li xml:lang="ru">Производительность увеличена на 60%.</li>
           <li xml:lang="sl">60% izboljšanje zmogljivosti</li>
@@ -2491,6 +2513,7 @@
           <li xml:lang="es">Se han corregido muchos falsos positivos</li>
           <li xml:lang="it">Risolti molti falsi positivi</li>
           <li xml:lang="ka">გასწორდა ბევრი ცდრუდადებითი</li>
+          <li xml:lang="nl">Veel valse positieven opgelost</li>
           <li xml:lang="pt-BR">Corrigido um grande número de falsos positivos</li>
           <li xml:lang="ru">Исправлено множество ложных срабатываний;</li>
           <li xml:lang="sl">Popravljenih veliko lažnih pozitivnih rezultatov</li>
@@ -2509,6 +2532,7 @@
         <p xml:lang="es">Primera versión</p>
         <p xml:lang="it">Primo rilascio</p>
         <p xml:lang="ka">პირველი რელიზი</p>
+        <p xml:lang="nl">Eerste uitgave</p>
         <p xml:lang="pt-BR">Primeiro lançamento</p>
         <p xml:lang="ru">Первый выпуск</p>
         <p xml:lang="sl">Prva izdaja</p>
