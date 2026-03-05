@@ -164,6 +164,7 @@
           <li xml:lang="ka">გასწორდა non-pod-static შემოწმება, რომელსაც კონტეინერის თითოეული ჩანაწერისთვის გაფრთხილება გამოჰქონდა</li>
           <li xml:lang="nl">Los het probleem op dat de controle die niet-pod-statisch is, een waarschuwing geeft voor elke vermelding in een container.</li>
           <li xml:lang="pt-BR">Corrigido o aviso de verificação não estática de pod para cada entrada de um contêiner</li>
+          <li xml:lang="ru">Исправлена проверка «non-pod-static», которая генерировала предупреждение для каждого элемента контейнера;</li>
           <li xml:lang="sl">Popravljeno je opozorilo, ki ga je povzročilo preverjanje nestatične tablice za vsak vnos v vsebnik.</li>
           <li xml:lang="tr">Fix non-pod-static check emitting warning for each entry of a container</li>
           <li>Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
@@ -174,6 +175,7 @@
           <li xml:lang="ka">გასწორდა შემთხვევა, როცა use-arrow-operator-instead-of-data ცრუ დადებით მნიშვნელობებს იძლეოდა, როცა ხდებოდა მნიშვნელობის გადაყვანა</li>
           <li xml:lang="nl">Correctie voor het gebruik van de pijloperator in plaats van de gegevens, die een vals positief resultaat geeft wanneer de waarde hoofdletters wordt.</li>
           <li xml:lang="pt-BR">Corrigido o problema que gerava falsos positivos ao converter um valor para outro usando o operador de seta em vez de dados</li>
+          <li xml:lang="ru">Исправлено ложное срабатывание проверки use-arrow-operator-instead-of-data при приведении значения типа;</li>
           <li xml:lang="sl">Odpravljena je napaka "use-arrow-operator-instead-of-data", ki je pri pretvorbi vrednosti oddajala lažno pozitiven rezultat</li>
           <li xml:lang="tr">Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
           <li>Do not whitelist QVariant for detaching-temporary. QVariant::toString will provide a QString that is not detached</li>
@@ -184,6 +186,7 @@
           <li xml:lang="ka">detaching-temporary-ისთვის QVariant თეთრ სიაში არ იქნება. QVariant::toString მოგაწვდით QString-ს, რომელიც მოხსნილი არაა</li>
           <li xml:lang="nl">Voeg QVariant niet toe aan de whitelist voor tijdelijk loskoppelen. QVariant::toString zal een QString leveren die niet is losgekoppeld.</li>
           <li xml:lang="pt-BR">Não adiciona QVariant à lista de permissões para desanexar temporariamente. QVariant::toString fornecerá uma QString que não está desanexada</li>
+          <li xml:lang="ru">Не добавлять QVariant в исключения для обнаружения отсоединения временных объектов; QVariant::toString предоставит QString, который не будет отсоединён;</li>
           <li xml:lang="sl">Ne dodajaj QVariant na beli seznam za začasni odklop. QVariant::toString bo zagotovil QString, ki ni odklopljen</li>
           <li xml:lang="tr">Do not whitelist QVariant for detaching-temporary. QVariant::toString will provide a QString that is not detached</li>
           <li>detaching-temporary properly checks conditions when more than two method calls are chained</li>
@@ -194,6 +197,7 @@
           <li xml:lang="ka">დროებით მოხსნის თვისების შემოწმების პირობები, როცა ჯაჭვში ორზე მეტი მეთოდის გამოძახებაა</li>
           <li xml:lang="nl">Tijdelijk losmaken controleert de voorwaarden correct wanneer meer dan twee methodeaanroepen aan elkaar gekoppeld zijn</li>
           <li xml:lang="pt-BR">O método `destaching-temporary` verifica corretamente as condições quando mais de duas chamadas de método são encadeadas</li>
+          <li xml:lang="ru">Правильная проверка условий при отсоединении временных объектов при наличии в цепочке более двух вызовов методов;</li>
           <li xml:lang="sl">!detaching-temporary! pravilno preveri pogoje, ko sta verižno povezana več kot dva klica metod</li>
           <li xml:lang="tr">detaching-temporary properly checks conditions when more than two method calls are chained</li>
           <li>Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls</li>
@@ -203,6 +207,7 @@
           <li xml:lang="it">I fixit per detaching-temporary/detaching-member sono più affidabili con intervalli di fixit per le chiamate dell'operatore</li>
           <li xml:lang="ka">გასწორდა დროებით მოხსნის/წევრის მოხსნის საიმედოობა ოპერატორის გამოძახებების შუალედებისთვის</li>
           <li xml:lang="pt-BR">As correções para desanexar temporário/membro são mais confiáveis ​​com intervalos de correções para chamadas de operador</li>
+          <li xml:lang="ru">Повышена надёжность автоматических исправлений для detaching-temporary/detaching-member благодаря использованию диапазонов исправлений для вызовов операторов;</li>
           <li xml:lang="sl">Popravi člana za odklop začasnega/odklop člana so zanesljivejši z razponi popravkov za klice operaterja</li>
           <li xml:lang="tr">Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls</li>
           <li>When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace</li>
@@ -213,6 +218,7 @@
           <li xml:lang="ka">QT_NAMESPACE-ის გამოყენებისას clazy სწორად ამუშავებს Qt-ის კლასებს, რომლებიც მითითებული სახელების სივრცეშია</li>
           <li xml:lang="nl">Bij gebruik van QT_NAMESPACE verwerkt Clazy Qt-klassen die zich in deze specifieke naamruimte bevinden op de juiste manier.</li>
           <li xml:lang="pt-BR">Ao usar QT_NAMESPACE, o clazy lida corretamente com as classes Qt que estão nesse namespace específico</li>
+          <li xml:lang="ru">При использовании QT_NAMESPACE clazy корректно обрабатывает классы Qt в этом пространстве имён;</li>
           <li xml:lang="sl">Pri uporabi QT_NAMESPACE clazy pravilno obravnava razrede Qt, ki so v tem specifičnem imenskem prostoru</li>
           <li xml:lang="tr">When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace</li>
           <li>Fix wrong replacement method for QMap::operator[]</li>
@@ -223,6 +229,7 @@
           <li xml:lang="ka">გასწორდა მეთოდის არასწორი ჩანაცვლება ფუნქციისთვის QMap::operator[]</li>
           <li xml:lang="nl">Corrigeer de onjuiste vervangingsmethode voor QMap::operator[]</li>
           <li xml:lang="pt-BR">Corrigido o método de substituição incorreto para QMap::operator[]</li>
+          <li xml:lang="ru">Исправлена неправильная замена метода для QMap::operator[];</li>
           <li xml:lang="sl">Popravi napačno metodo zamenjave za QMap::operator[]</li>
           <li xml:lang="tr">Fix wrong replacement method for QMap::operator[]</li>
           <li>Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed</li>
@@ -233,6 +240,7 @@
           <li xml:lang="ka">პროექტი ახლა LLVM22-ით კომპილირდება. ასევე გასწორდა შემოწმებები qhash-namespace, fully-qualified-moc-types და old-style-connect</li>
           <li xml:lang="nl">Zorg ervoor dat het project compileert met LLVM22. qhash-namespace, fully-qualified-moc-types en old-style-connect tests zijn gecorrigeerd</li>
           <li xml:lang="pt-BR">Faz o projeto compilar com LLVM22. Os namespaces qhash, os tipos moc totalmente qualificados e os testes de conexão no estilo antigo foram corrigidos</li>
+          <li xml:lang="ru">Сделан проект компилируемым с LLVM22; исправлены тесты qhash-namespace, fully-qualified-moc-types и old-style-connect;</li>
           <li xml:lang="sl">Projekt prevedi z LLVM22. Popravljeni so testi qhash-namespace, fully-qualified-moc-types in old-style-connect</li>
           <li xml:lang="tr">Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed</li>
           <li>Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
@@ -243,6 +251,7 @@
           <li xml:lang="ka">გასწორდა შემოწმება readlock-detaching Qt 6.11-ის ცვლილებებთან სწორად სამუშაოდ</li>
           <li xml:lang="nl">De controle op het loskoppelen van de leesvergrendeling moet worden aangepast zodat deze correct werkt met de wijzigingen in Qt 6.11.</li>
           <li xml:lang="pt-BR">Ajusta a verificação de desanexação do bloqueio de leitura para funcionar corretamente com as alterações do Qt 6.11</li>
+          <li xml:lang="ru">Адаптирована проверка отсоединения блокировки чтения для корректной работы с изменениями Qt 6.11;</li>
           <li xml:lang="sl">Prilagojeno preverjanje odklopa za branje readlock-detaching, da bo pravilno delovalo s spremembami Qt 6.11</li>
           <li xml:lang="tr">Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
           <li>Move qstring-ref to manuallevel since it is not compatible with Qt6</li>
@@ -253,6 +262,7 @@
           <li xml:lang="ka">qstring-ref გადატანილია manuallevel-ში, რადგან ის Qt6-თან თავსებადი არაა</li>
           <li xml:lang="nl">Verplaats qstring-ref naar handleidingniveau, aangezien het niet compatibel is met Qt6.</li>
           <li xml:lang="pt-BR">Move qstring-ref para o nível manual, pois não é compatível com o Qt6</li>
+          <li xml:lang="ru">Перемещена проверка qstring-ref на ручной уровень, так как она несовместима с Qt6;</li>
           <li xml:lang="sl">Premakne qstring-ref na manuallevel, ker ni združljiv s Qt6</li>
           <li xml:lang="tr">Move qstring-ref to manuallevel since it is not compatible with Qt6</li>
           <li xml:lang="uk">qstring-ref пересунуто до manuallevel, оскільки вона не сумісна з Qt6</li>
@@ -266,6 +276,7 @@
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციას:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
         <p xml:lang="pt-BR">Esta versão adiciona a seguinte funcionalidade:</p>
+        <p xml:lang="ru">В этом выпуске добавлена следующая возможность:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednjo zmožnost:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано таку можливість:</p>
@@ -277,6 +288,7 @@
           <li xml:lang="it">Nuovi controlli: - compare-member-check: verifica se gli operatori di confronto non utilizzano tutte le variabili membro di una classe.</li>
           <li xml:lang="ka">ახალი შემოწმებები: - compare-member-check: ამოწმებს, იყენებენ შემოწმების ოპერატორები კლასის ყველა წევრ ცვლადს, თუ არა.</li>
           <li xml:lang="pt-BR">Novas verificações: - compare-member-check: Verifica se os operadores de comparação não utilizam todas as variáveis ​​membro de uma classe.</li>
+          <li xml:lang="ru">Новые проверки: — compare-member-check: проверяет, используются ли все переменные-члены класса в операторах сравнения;</li>
           <li xml:lang="sl">Nova preverjanja: - compare-member-check: Preveri, ali operatorji primerjave ne uporabljajo vseh spremenljivk članov razreda</li>
           <li xml:lang="tr">New checks: - compare-member-check: Checks whether comparison operators do not use all member variables of a class.</li>
           <li xml:lang="uk">Нові перевірки: - compare-member-check: перевіряє, чи використовують оператори порівняння усі змінні-учасники класу.</li>
@@ -289,6 +301,7 @@
         <p xml:lang="it">C++20 è ora richiesto per la compilazione</p>
         <p xml:lang="ka">კომპილაციისთვის ახლა აუცილებელია C++20</p>
         <p xml:lang="pt-BR">Agora é necessário o C++20 para compilação</p>
+        <p xml:lang="ru">Для компиляции теперь требуется C++20.</p>
         <p xml:lang="sl">Za prevajanje je zdaj potreben C++20</p>
         <p xml:lang="tr">C++20 is now required for compilation</p>
         <p>qt6-\* porting checks are removed</p>
@@ -298,6 +311,7 @@
         <p xml:lang="it">I controlli di conversione qt6-\* sono stati rimossi</p>
         <p xml:lang="ka">qt6-\*-ის გადატანის შემოწმებები მოცილებულია</p>
         <p xml:lang="pt-BR">As verificações de portabilidade qt6-\* foram removidas</p>
+        <p xml:lang="ru">Проверки переноса qt6-\* удалены.</p>
         <p xml:lang="sl">Preverjanja prenosljivosti qt6-\* so odstranjena</p>
         <p xml:lang="tr">qt6-\* porting checks are removed</p>
       </description>
