@@ -1,0 +1,2 @@
+fully-qualified-moc-types/pointers_refs.cpp:14:28: warning: signal arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]
+fully-qualified-moc-types/pointers_refs.cpp:15:28: warning: signal arguments need to be fully-qualified [-Wclazy-fully-qualified-moc-types]

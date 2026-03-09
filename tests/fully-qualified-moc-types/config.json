@@ -12,6 +12,10 @@
         {
             "filename": "enums.cpp",
             "has_fixits": true
+        },
+        {
+            "filename": "pointers_refs.cpp",
+            "skip_qtnamespaced": true
         }
     ]
 }

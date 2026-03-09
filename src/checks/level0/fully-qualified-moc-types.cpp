@@ -164,19 +164,23 @@ std::string FullyQualifiedMocTypes::getQualifiedNameOfType(const Type *ptr, bool
     }
     if (auto *typedefDecl = ptr->getAs<TypedefType>(); typedefDecl && typedefDecl->getDecl()) {
         return typedefDecl->getDecl()->getQualifiedNameAsString();
-    }
-
-    else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>(); templateSpec && resolveTemplateArgs) {
+    } else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>(); templateSpec && resolveTemplateArgs) {
         return resolveTemplateType(templateSpec, false);
     } else if (auto templateSpec = ptr->getAs<TemplateSpecializationType>()) {
         // In case one uses a typedef with generics, like QVector<QString> in Qt6
         // The docs indicate getAsTemplateDecl might be null - so be prepared for that
         if (auto *decl = templateSpec->getTemplateName().getAsTemplateDecl()) {
             return decl->getQualifiedNameAsString();
-        } else {
         }
     } else if (auto recordDecl = ptr->getAsRecordDecl()) {
         return recordDecl->getQualifiedNameAsString();
+    }
+    // The lexer logic we use to collect the comparison string from the source code has no spaces between the type and * or &
+    if (ptr->isPointerType()) {
+        return getQualifiedNameOfType(ptr->getPointeeType().getTypePtr(), true) + "*";
+    }
+    if (ptr->isReferenceType()) {
+        return getQualifiedNameOfType(ptr->getPointeeType().getTypePtr(), true) + "&";
     }
     return QualType::getFromOpaquePtr(ptr).getAsString(lo());
 }
