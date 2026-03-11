@@ -487,6 +487,7 @@
           <li xml:lang="ar">يقارن فيها الطول باستخدام "== 0"، "&lt; 1"، "&gt; 0" يُبلغ عنها الآن ولها إصلاحات.</li>
           <li xml:lang="ca">la longitud es compara utilitzant "== 0", "&lt; 1", "&gt; 0" ara s'informen i tenen correccions.</li>
           <li xml:lang="ca-valencia">la llargària es compara utilitzant "== 0", "&lt; 1", "&gt; 0" ara s'informen i tenen correccions.</li>
+          <li xml:lang="fr">la longueur est comparée en utilisant « == 0 », « &lt; 1 », « &gt; 0 ». Elles sont maintenant signalées et disposent FixIt.</li>
           <li xml:lang="it">la lunghezza viene confrontata utilizzando "== 0", "&lt; 1", "&gt; 0" ora vengono segnalati e hanno fixit.</li>
           <li xml:lang="ka">სიგრძე შედარებულია "== 0" "&lt; 1" "&gt; 0" გამოყენებით ახლა უკვე აღირიცხება და გააჩნია Fixit-ები.</li>
           <li xml:lang="pt-BR">o comprimento é comparado usando "== 0", "&lt; 1", "&gt; 0" agora são relatados e possuem correções.</li>
