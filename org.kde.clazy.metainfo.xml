@@ -169,6 +169,7 @@
           <li xml:lang="ru">Исправлена проверка «non-pod-static», которая генерировала предупреждение для каждого элемента контейнера;</li>
           <li xml:lang="sl">Popravljeno je opozorilo, ki ga je povzročilo preverjanje nestatične tablice za vsak vnos v vsebnik.</li>
           <li xml:lang="tr">Fix non-pod-static check emitting warning for each entry of a container</li>
+          <li xml:lang="uk">Виправлено попередження, яке пов'язане з перевіркою non-pod-static, для кожного запису контейнера</li>
           <li>Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
           <li xml:lang="ar">إصلاح إرسال فحص use-arrow-operator-instead-of-data لنتائج إيجابية خاطئة عند تحويل القيمة</li>
           <li xml:lang="ca">Corregeix «use-arrow-operator-instead-of-data» que emet un fals positiu quan el valor es converteix</li>
@@ -180,6 +181,7 @@
           <li xml:lang="ru">Исправлено ложное срабатывание проверки use-arrow-operator-instead-of-data при приведении значения типа;</li>
           <li xml:lang="sl">Odpravljena je napaka "use-arrow-operator-instead-of-data", ki je pri pretvorbi vrednosti oddajala lažno pozitiven rezultat</li>
           <li xml:lang="tr">Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
+          <li xml:lang="uk">Виправлено помилкове спрацьовування use-arrow-operator-instead-of-data під час приведення значення</li>
           <li>Do not whitelist QVariant for detaching-temporary. QVariant::toString will provide a QString that is not detached</li>
           <li xml:lang="ar">لا تضع QVariant في القائمة البيضاء لـ detaching-temporary. توفر QVariant::toString سلسلة QString غير منفصلة</li>
           <li xml:lang="ca">No posa a la llista blanca QVariant per a «detaching-temporary». QVariant::toString proporcionarà una QString que no està deslligada</li>
@@ -191,6 +193,7 @@
           <li xml:lang="ru">Не добавлять QVariant в исключения для обнаружения отсоединения временных объектов; QVariant::toString предоставит QString, который не будет отсоединён;</li>
           <li xml:lang="sl">Ne dodajaj QVariant na beli seznam za začasni odklop. QVariant::toString bo zagotovil QString, ki ni odklopljen</li>
           <li xml:lang="tr">Do not whitelist QVariant for detaching-temporary. QVariant::toString will provide a QString that is not detached</li>
+          <li xml:lang="uk">Усунено додавання QVariant до білого списку для detaching-temporary. QVariant::toString надасть QString, який не є від'єднаним.</li>
           <li>detaching-temporary properly checks conditions when more than two method calls are chained</li>
           <li xml:lang="ar">يفحص detaching-temporary الشروط بدقة عند تسلسل أكثر من استدعاءين للدوال</li>
           <li xml:lang="ca">«detaching-temporary» comprova adequadament les condicions quan estan encadenades més de dues crides a mètodes</li>
