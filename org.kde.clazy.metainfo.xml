@@ -985,6 +985,7 @@
           <li xml:lang="ca-valencia">qt-keyword-emit</li>
           <li xml:lang="es">qt-keyword-emit</li>
           <li xml:lang="fr">qt-keyword-emit</li>
+          <li xml:lang="he">qt-keyword-emit</li>
           <li xml:lang="it">qt-keyword-emit</li>
           <li xml:lang="ka">qt-keyword-emit</li>
           <li xml:lang="pt-BR">qt-keyword-emit</li>
@@ -997,6 +998,7 @@
           <li xml:lang="ca-valencia">sanitize-inline-keyword</li>
           <li xml:lang="es">sanitize-inline-keyword</li>
           <li xml:lang="fr">sanitize-inline-keyword</li>
+          <li xml:lang="he">sanitize-inline-keyword</li>
           <li xml:lang="it">sanitize-inline-keyword</li>
           <li xml:lang="ka">sanitize-inline-keyword</li>
           <li xml:lang="pt-BR">sanitize-inline-keyword</li>
@@ -1042,6 +1044,7 @@
           <li xml:lang="ca-valencia">use-arrow-operator-instead-of-data</li>
           <li xml:lang="es">use-arrow-operator-instead-of-data</li>
           <li xml:lang="fr">use-arrow-operator-instead-of-data</li>
+          <li xml:lang="he">use-arrow-operator-instead-of-data</li>
           <li xml:lang="it">use-arrow-operator-instead-of-data</li>
           <li xml:lang="ka">use-arrow-operator-instead-of-data</li>
           <li xml:lang="pt-BR">use-arrow-operator-instead-of-data</li>
@@ -1054,6 +1057,7 @@
           <li xml:lang="ca-valencia">use-static-qregularexpression</li>
           <li xml:lang="es">use-static-qregularexpression</li>
           <li xml:lang="fr">use-static-qregularexpression</li>
+          <li xml:lang="he">use-static-qregularexpression</li>
           <li xml:lang="it">use-static-qregularexpression</li>
           <li xml:lang="ka">use-static-qregularexpression</li>
           <li xml:lang="pt-BR">use-static-qregularexpression</li>
@@ -1066,6 +1070,7 @@
           <li xml:lang="ca-valencia">unexpected-flag-enumerator-value</li>
           <li xml:lang="es">unexpected-flag-enumerator-value</li>
           <li xml:lang="fr">unexpected-flag-enumerator-value</li>
+          <li xml:lang="he">unexpected-flag-enumerator-value</li>
           <li xml:lang="it">unexpected-flag-enumerator-value</li>
           <li xml:lang="ka">unexpected-flag-enumerator-value</li>
           <li xml:lang="pt-BR">unexpected-flag-enumerator-value</li>
@@ -1077,6 +1082,7 @@
           <li xml:lang="ca">S'ha eliminat la comprovació inefficient-qlist (corregida a les Qt6)</li>
           <li xml:lang="ca-valencia">S'ha eliminat la comprovació inefficient-qlist (corregida a les Qt6)</li>
           <li xml:lang="fr">Suppression de la vérification inefficient-qlist (Corrigée dans Qt6)</li>
+          <li xml:lang="he">הבדיקה inefficient-qlist הוסרה (תוקן ב־Qt6)</li>
           <li xml:lang="it">Rimosso il controllo inefficient-qlist (corretto in Qt6)</li>
           <li xml:lang="ka">წაიშალა შემოწმება inefficient-qlist (გასწორდა Qt6-ში)</li>
           <li xml:lang="pt-BR">Removida a verificação de lista de consultas ineficiente (corrigido no Qt6)</li>
@@ -1138,6 +1144,7 @@
           <li xml:lang="ca">S'ha corregit un fals positiu -Wclazy-lambda-in-connect</li>
           <li xml:lang="ca-valencia">S'ha corregit un fals positiu -Wclazy-lambda-in-connect</li>
           <li xml:lang="fr">Correction d'un faux positif dans -Wclazy-lambda-in-connect</li>
+          <li xml:lang="he">תוקן חיובי כוזב עם ‎-Wclazy-lambda-in-connect</li>
           <li xml:lang="it">Corretto un falso positivo -Wclazy-lambda-in-connect</li>
           <li xml:lang="ka">გასწორდა -Wclazy-lambda-in-connect ცრუ-დადებითი</li>
           <li xml:lang="pt-BR">Corrigido um falso positivo -Wclazy-lambda-in-connect</li>
@@ -2426,6 +2433,7 @@
           <li xml:lang="ar">وضع qt-compat. يسمح بتعطيل الفحوصات الخاصة بـ Qt5 عبر تمرير -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ca">Mode «qt-compat». Permet desactivar les comprovacions específiques de les Qt5 passant -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ca-valencia">Mode «qt-compat». Permet desactivar les comprovacions específiques de les Qt5 passant -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
+          <li xml:lang="he">מצב qt-compat. מאפשר להשבית בדיקות נקודתיות ל־Qt5 על ידי העברת ‎-Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="it">Modalità qt-compat. Consente di disabilitare i controlli specifici di Qt5 passando -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ka">qt-compat რეჟიმი. საშუალებას იძლევა Qt5-ის სპეციფიკური შემოწმებები გაითიშოს -Xclang -plugin-arg-clazy -Xclang qt4-compat პარამეტრების გადაცემით</li>
           <li xml:lang="pt-BR">Modo qt-compat. Permite desativar as verificações específicas do Qt5 passando -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
