@@ -66,6 +66,9 @@ public:
             if (!methodDecl)
                 return;
 
+						if (methodDecl->getBody() == nullptr)
+ 							return;
+
             // Get the class declaration
             const CXXRecordDecl *classDecl = methodDecl->getParent();
 
