@@ -212,6 +212,7 @@
           <li xml:lang="fr">Les correctifs pour detaching-temporary / detaching-member sont plus fiables avec des plages de correctifs pour les appels d'opérateur</li>
           <li xml:lang="it">I fixit per detaching-temporary/detaching-member sono più affidabili con intervalli di fixit per le chiamate dell'operatore</li>
           <li xml:lang="ka">გასწორდა დროებით მოხსნის/წევრის მოხსნის საიმედოობა ოპერატორის გამოძახებების შუალედებისთვის</li>
+          <li xml:lang="nl">Fixits voor het losmaken van tijdelijke onderdelen/onderdelen zijn betrouwbaarder met fixit-bereiken voor operatoroproepen</li>
           <li xml:lang="pt-BR">As correções para desanexar temporário/membro são mais confiáveis ​​com intervalos de correções para chamadas de operador</li>
           <li xml:lang="ru">Повышена надёжность автоматических исправлений для detaching-temporary/detaching-member благодаря использованию диапазонов исправлений для вызовов операторов;</li>
           <li xml:lang="sl">Popravi člana za odklop začasnega/odklop člana so zanesljivejši z razponi popravkov za klice operaterja</li>
@@ -295,6 +296,7 @@
           <li xml:lang="ca-valencia">Comprovacions noves: «compare-member-check»: comprova si els operadors de comparació no utilitzen totes les variables de membres d'una classe.</li>
           <li xml:lang="it">Nuovi controlli: - compare-member-check: verifica se gli operatori di confronto non utilizzano tutte le variabili membro di una classe.</li>
           <li xml:lang="ka">ახალი შემოწმებები: - compare-member-check: ამოწმებს, იყენებენ შემოწმების ოპერატორები კლასის ყველა წევრ ცვლადს, თუ არა.</li>
+          <li xml:lang="nl">Nieuwe controles: - compare-member-check: controleert of vergelijkingsoperatoren niet alle lidvariabelen van een klasse gebruiken.</li>
           <li xml:lang="pt-BR">Novas verificações: - compare-member-check: Verifica se os operadores de comparação não utilizam todas as variáveis ​​membro de uma classe.</li>
           <li xml:lang="ru">Новые проверки: — compare-member-check: проверяет, используются ли все переменные-члены класса в операторах сравнения;</li>
           <li xml:lang="sl">Nova preverjanja: - compare-member-check: Preveri, ali operatorji primerjave ne uporabljajo vseh spremenljivk članov razreda</li>
@@ -310,6 +312,7 @@
         <p xml:lang="he">מעתה נדרשת תאימות לתקינת C++ 20 לצורך הידור</p>
         <p xml:lang="it">C++20 è ora richiesto per la compilazione</p>
         <p xml:lang="ka">კომპილაციისთვის ახლა აუცილებელია C++20</p>
+        <p xml:lang="nl">Voor compilatie is nu C++20 vereist</p>
         <p xml:lang="pt-BR">Agora é necessário o C++20 para compilação</p>
         <p xml:lang="ru">Для компиляции теперь требуется C++20.</p>
         <p xml:lang="sl">Za prevajanje je zdaj potreben C++20</p>
@@ -321,6 +324,7 @@
         <p xml:lang="fr">Les vérifications de portage « qt6-* » sont supprimées</p>
         <p xml:lang="it">I controlli di conversione qt6-\* sono stati rimossi</p>
         <p xml:lang="ka">qt6-\*-ის გადატანის შემოწმებები მოცილებულია</p>
+        <p xml:lang="nl">qt6-\* porting controles zijn verwijderd</p>
         <p xml:lang="pt-BR">As verificações de portabilidade qt6-\* foram removidas</p>
         <p xml:lang="ru">Проверки переноса qt6-\* удалены.</p>
         <p xml:lang="sl">Preverjanja prenosljivosti qt6-\* so odstranjena</p>
@@ -351,6 +355,7 @@
           <li xml:lang="ca-valencia">unused-result-check: corregix una fallada quan no es pot resoldre la declaració del mètode</li>
           <li xml:lang="it">unused-result-check: corregge l'arresto anomalo quando la dichiarazione del metodo non può essere risolta</li>
           <li xml:lang="ka">unused-result-check: გასწორდა ავარიული დასრულება, როცა მეთოდის აღწერის ამოხსნა შეუძლებელია</li>
+          <li xml:lang="nl">unused-result-check: verhelpt een crash wanneer de methodedeclaratie niet kan worden opgelost</li>
           <li xml:lang="pt-BR">unused-result-check: Corrigida a falha que ocorre quando a declaração do método não pode ser resolvida</li>
           <li xml:lang="ru">unused-result-check: исправлено аварийное завершение при невозможности разрешения объявления метода;</li>
           <li xml:lang="sl">unused-result-check: Popravi sesutje, ko ni mogoče razrešiti deklaracije metode</li>
@@ -362,6 +367,7 @@
           <li xml:lang="ca-valencia">use-chrono-in-qtimer: corregix una fallada en utilitzar capçaleres precompilades</li>
           <li xml:lang="it">use-chrono-in-qtimer: corregge l'arresto anomalo quando si utilizzano intestazioni precompilate</li>
           <li xml:lang="ka">use-chrono-in-qtimer: გასწორდა ავარიული დასრულება წინასწარ დაკომპილებული თავსართების გამოყენებისას</li>
+          <li xml:lang="nl">use-chrono-in-qtimer: verhelpt een crash bij gebruik van vooraf gecompileerde headers</li>
           <li xml:lang="pt-BR">use-chrono-in-qtimer: Corrigido o problema que causava o fechamento inesperado ao usar cabeçalhos pré-compilados</li>
           <li xml:lang="ru">use-chrono-in-qtimer: исправлено аварийное завершение при использовании предварительно скомпилированных заголовков;</li>
           <li xml:lang="sl">use-chrono-in-qtimer: popravi sesutje pri uporabi vnaprej prevedenih glav</li>
@@ -373,6 +379,7 @@
           <li xml:lang="ca-valencia">qt6-qhash-signature: adapta la comprovació per a utilitzar una lògica més adequada per a les conversions i corregix una fallada en casos extrems</li>
           <li xml:lang="it">qt6-qhash-signature: adatta il controllo per utilizzare una logica più appropriata per i cast e corregge l'arresto anomalo nei casi limite</li>
           <li xml:lang="ka">qt6-qhash-signature: შემოწმება გარდაქმნებისთვის უფრო მართებული ლოგიკის გამოსაყენებლად შეიცვალა და გასწორდა ავარია გამონაკლის შემთხვევებში</li>
+          <li xml:lang="nl">qt6-qhash-signature: pas de controle aan om een ​​betere logica voor typeconversies te gebruiken en verhelp de crash in uitzonderlijke gevallen</li>
           <li xml:lang="pt-BR">qt6-qhash-signature: Adapta a verificação para usar uma lógica mais adequada para conversões de tipo e corrige o travamento em casos extremos</li>
           <li xml:lang="ru">qt6-qhash-signature: адаптирована проверка для использования более корректной логики преобразований типов и исправлено аварийное завершение в крайних случаях;</li>
           <li xml:lang="sl">qt6-qhash-signature: Prilagodi preverjanje za uporabo ustreznejše logike za ulitke in popravi sesutje v robnih primerih</li>
@@ -384,6 +391,7 @@
           <li xml:lang="ca-valencia">Assegura que clang21 funciona correctament amb clazy i produïx el mateix número de línia/lletra que abans (no coincidix amb crides d'operador)</li>
           <li xml:lang="it">Assicura che clang21 funzioni correttamente con clazy e produca lo stesso numero di riga/lettera di prima (non corrisponde alle chiamate dell'operatore)</li>
           <li xml:lang="ka">დარწმუნდით, რომ clang21 clazy-სთან გამართულად მუშაობს და ისეთივე ხაზის/ასოს ნომერს აბრუნებს, როგორსაც ადრე (შეუსაბამობები ოპერატორის გამოძახებებთან)</li>
+          <li xml:lang="nl">Zorg ervoor dat clang21 correct werkt met clazy en hetzelfde regel/letternummer produceert als voorheen (dit komt niet overeen met oproepen van de operator)</li>
           <li xml:lang="pt-BR">Certifica-se de que o clang21 funcione corretamente com o clazy e produza o mesmo número de linha/letra de antes (incompatibilidades com chamadas da operadora).</li>
           <li xml:lang="ru">Обеспечена корректная работа clang21 с clazy и вывод тех же номеров строк и символов, что и ранее (при несоответствиях в вызовах операторов);</li>
           <li xml:lang="sl">Prepriča se, da clang21 pravilno deluje s clazy in ustvari isto številko vrstice/črke kot prej (neujemanje s klici operatorja)</li>
@@ -394,6 +402,7 @@
           <li xml:lang="ca-valencia">non-pod-global-static: corregix un fals positiu amb Q_IMPORT_PLUGIN a les Qt-6.10</li>
           <li xml:lang="it">non-pod-global-static: corregge il falso positivo con Q_IMPORT_PLUGIN in Qt-6.10</li>
           <li xml:lang="ka">non-pod-global-static: გასწორდა ცრუ დადებითი ალამთან Q_IMPORT_PLUGIN Qt-6.10-ში</li>
+          <li xml:lang="nl">non-pod-global-static: foutpositief bij Q_IMPORT_PLUGIN in Qt-6.10 verholpen</li>
           <li xml:lang="pt-BR">non-pod-global-static: Corrigido falso positivo com Q_IMPORT_PLUGIN no Qt-6.10</li>
           <li xml:lang="ru">non-pod-global-static: устранён ложный срабатывание с Q_IMPORT_PLUGIN в Qt-6.10;</li>
           <li xml:lang="sl">non-pod-global-static: Popravi lažno pozitivno vrednost z Q_IMPORT_PLUGIN v Qt-6.10</li>
@@ -420,6 +429,7 @@
           <li xml:lang="ca-valencia">clazy finalment es pot integrar a clang-tidy, una ordre per a governar</li>
           <li xml:lang="it">Clazy può finalmente essere integrato in clang-tidy: un comando per governare tutto</li>
           <li xml:lang="ka">Clazy-ს ინტეგრაცია clang-tidy-ში საბოლოოდ შესაძლებელია — ერთი ბრძანება სამართავად</li>
+          <li xml:lang="nl">Clazy kan eindelijk in clang-tidy worden geïntegreerd - één commando om te besturen</li>
           <li xml:lang="pt-BR">O Clazy finalmente pode ser integrado ao clang-tidy - um comando para governar</li>
           <li xml:lang="ru">Clazy теперь можно интегрировать в clang-tidy — одна команда для управления всеми проверками;</li>
           <li xml:lang="sl">Clazy je končno mogoče vključiti v clang-tidy - en ukaz za vladanje</li>
