@@ -2040,6 +2040,7 @@
         <p xml:lang="ca-valencia">optimitzacions de rendiment</p>
         <p xml:lang="es">Optimizaciones de rendimiento.</p>
         <p xml:lang="fr">Optimisations des performances</p>
+        <p xml:lang="he">מיטובי ביצועים</p>
         <p xml:lang="it">ottimizzazioni delle prestazioni</p>
         <p xml:lang="ka">წარმადობის ოპტიმიზაციები</p>
         <p xml:lang="pt-BR">otimizações de performance</p>
@@ -2090,6 +2091,7 @@
         <p xml:lang="ar">حصل unused-non-trivial-variable على خيار unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="ca">unused-non-trivial-variable s'ha incorporat a l'opció unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="ca-valencia">unused-non-trivial-variable s'ha incorporat a l'opció unused-non-trivial-variable-no-whitelist</p>
+        <p xml:lang="he">unused-non-trivial-variable קיבלה את האפשרות unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="it">opzione unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="ka">unused-non-trivial-variable-მა მიიღო პარამეტრი unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="pt-BR">unused-non-trivial-variable obtém a opção unused-non-trivial-variable-no-whitelist</p>
@@ -2100,6 +2102,7 @@
         <p xml:lang="ar">حصل unused-non-trivial-variable على دعم القائمة السوداء والبيضاء للمستخدم</p>
         <p xml:lang="ca">unused-non-trivial-variable s'ha incorporat a la implementació d'user-blacklist i user-whitelist</p>
         <p xml:lang="ca-valencia">unused-non-trivial-variable s'ha incorporat a la implementació d'user-blacklist i user-whitelist</p>
+        <p xml:lang="he">unused-non-trivial-variable קיבלה תמיכה ברשימות חסימה והיתר של משתמשים</p>
         <p xml:lang="it">unused-non-trivial-variable ha ottenuto il supporto per user-blacklist e user-whitelist</p>
         <p xml:lang="ka">unused-non-trivial-variable-მა მიიღო user-blacklist-ის და user-whitelist-ის მხარდაჭერა</p>
         <p xml:lang="pt-BR">unused-non-trivial-variable obtém suporte para user-blacklist e user-whitelist</p>
@@ -2110,6 +2113,7 @@
         <p xml:lang="ar">أصبح container-inside-loop فحصًا يدويًا بدلًا من المستوى 2</p>
         <p xml:lang="ca">container-inside-loop és ara una comprovació manual en lloc de level2</p>
         <p xml:lang="ca-valencia">container-inside-loop és ara una comprovació manual en lloc de level2</p>
+        <p xml:lang="he">container-inside-loop היא מעתה בדיקה ידנית במקום רמה2</p>
         <p xml:lang="it">container-inside-loop è ora un controllo manuale invece di level2</p>
         <p xml:lang="ka">container-inside-loop ახლა ხელით შემოწმებაა level2-ის მაგიერ</p>
         <p xml:lang="pt-BR">container-inside-loop agora é uma verificação manual, em vez de nível 2</p>
@@ -2155,6 +2159,7 @@
         <p xml:lang="ar">يحذر old-style-connect من QMenu::addAction() و QMessageBox::open() أيضًا الآن</p>
         <p xml:lang="ca">old-style-connect ara també avisa de QMenu::addAction() i QMessageBox::open()</p>
         <p xml:lang="ca-valencia">old-style-connect ara també avisa de QMenu::addAction() i QMessageBox::open()</p>
+        <p xml:lang="he">old-style-connect מזהיר מפני QMenu::addAction()‎ וגם QMessageBox::open()‎ מעתה</p>
         <p xml:lang="it">old-style-connect ora avvisa anche per QMenu::addAction() e QMessageBox::open()</p>
         <p xml:lang="ka">old-style-connect გაგაფრთხილებთ, თუ QMenu::addAction() და QMessageBox::open() მეტისმეტად დაბალია</p>
         <p xml:lang="pt-BR">old-style-connect agora avisa para QMenu::addAction() e QMessageBox::open() também</p>
@@ -2464,6 +2469,7 @@
           <li xml:lang="ar">يفحص returning-data-from-temporary الآن الإسناد أيضًا، وليس فقط جمل الإرجاع</li>
           <li xml:lang="ca">return-data-from-temporary ara també comprova les assignacions, no només retorna les sentències</li>
           <li xml:lang="ca-valencia">return-data-from-temporary ara també comprova les assignacions, no només retorna les sentències</li>
+          <li xml:lang="he">returning-data-from-temporary בודק מעתה גם הקצאות, לא רק הצהרות החזרה (return statements)</li>
           <li xml:lang="it">returning-data-from-temporary ora controlla anche l'assegnazione, non solo le istruzioni return</li>
           <li xml:lang="ka">returning-data-from-temporary ახლა ამოწმებს მინიჭებებსაც, არა, მხოლოდ, დაბრუნებულ ოპერატორებს</li>
           <li xml:lang="pt-BR">returning-data-from-temporary agora também verifica a atribuição, e não apenas as instruções de retorno</li>
@@ -2474,6 +2480,7 @@
           <li xml:lang="ar">يحذر unused-non-trivial-variable الآن من QList و QVector غير المستخدمة وأنواع كثيرة أخرى</li>
           <li xml:lang="ca">unused-non-trivial-variable ara avisa de QList, QVector i molts més tipus no utilitzats</li>
           <li xml:lang="ca-valencia">unused-non-trivial-variable ara avisa de QList, QVector i molts més tipus no utilitzats</li>
+          <li xml:lang="he">unused-non-trivial-variable מזהיר מעתה על QList,‏ QVector ומגוון סוגים נוספים כשאינם בשימוש</li>
           <li xml:lang="it">unused-non-trivial-variable ora avvisa per QList, QVector e molti altri tipi non utilizzati</li>
           <li xml:lang="ka">unused-non-trivial-variable ახლა გაგაფრთხილებთ გამოუყენებელი QList, QVector და კიდევ ბევრი სხვა ტიპისთვის</li>
           <li xml:lang="pt-BR">unused-non-trivial-variable agora emite um aviso para variáveis ​​não utilizadas dos tipos QList, QVector e muitos outros</li>
@@ -2497,6 +2504,7 @@
           <li xml:lang="ar">أُسقط دعم clang 3.7 بسبب عدم توافق سورس ASTMatchers.</li>
           <li xml:lang="ca">El clang 3.7 s'ha eliminat per les incompatibilitats del codi font d'ASTMatchers.</li>
           <li xml:lang="ca-valencia">clang 3.7 s'ha eliminat per les incompatibilitats del codi font d'ASTMatchers.</li>
+          <li xml:lang="he">clang 3.7 הושמט עקב חוסר תאימות עם מקור ASTMatchers.</li>
           <li xml:lang="it">clang 3.7 è stato abbandonato a causa di incompatibilità con il codice sorgente di ASTMatcher.</li>
           <li xml:lang="ka">clang 3.7-ის მხარდაჭერა შეწყდა ASTMatchers-თან წყაროს შეუთავსებლობის გამო.</li>
           <li xml:lang="nl">clang 3.7 is verlaten vanwege incompatibiliteiten in broncode van ASTMatchers.</li>
@@ -2531,6 +2539,7 @@
           <li xml:lang="ar">أزيل الخيار CLAZY_INSTALL_NO_HEADERS. إما أن تثبت مكتبة الأدوات والترويسات أو لا شيء على الإطلاق. افتراضيًا لا يُثبت شيء، باستثناء الملحق وصفحات الدليل.</li>
           <li xml:lang="ca">S'ha eliminat l'opció CLAZY_INSTALL_NO_HEADERS. Instal·leu la biblioteca d'utilitats i les capçaleres o res en absolut. De manera predeterminada no hi ha res instal·lat, excepte les pàgines del connector i man.</li>
           <li xml:lang="ca-valencia">S'ha eliminat l'opció CLAZY_INSTALL_NO_HEADERS. Instal·leu la biblioteca d'utilitats i les capçaleres o res en absolut. De manera predeterminada no hi ha res instal·lat, excepte les pàgines del connector i man.</li>
+          <li xml:lang="he">האפשרות CLAZY_INSTALL_NO_HEADERS הוסרה. יש להתקין את ספריית וכותרות utils או שום דבר כלל. כברירת מחדל, שום דבר לא מותקן, למעט התוסף ועמודי ההדרכה (man).</li>
           <li xml:lang="it">L'opzione CLAZY_INSTALL_NO_HEADERS è stata rimossa. Installa la libreria utils e gli header oppure non installare nulla. Per impostazione predefinita, non viene installato nulla, tranne l'estensione e le pagine man.</li>
           <li xml:lang="ka">მოცილებულია პარამეტრი CLAZY_INSTALL_NO_HEADERS. ან მოხდება ბიბლიოთეკის utils და თავსართების დაყენება, ან არაფრის. ნაგულისხმევად არაფრის დაყენება ხდება, დამატებისა და სახელმძღვანელოს გვერდების გარდა.</li>
           <li xml:lang="nl">Optie CLAZY_INSTALL_NO_HEADERS is verwijderd. Ofwel installeer de hulpprogrammabibliotheek en headers of helemaal niets. Standaard wordt niets geïnstalleerd, behalve de plug-in en manpagima's.</li>
@@ -2702,6 +2711,7 @@
           <li xml:lang="ca-valencia">Correccions a:</li>
           <li xml:lang="es">Correcciones de fallos:</li>
           <li xml:lang="fr">Correctifs pour :</li>
+          <li xml:lang="he">תיקונים כנגד:</li>
           <li xml:lang="it">Correzioni per:</li>
           <li xml:lang="ka">გასწორებები ვერსიასთან:</li>
           <li xml:lang="nl">Oplossingen tegen:</li>
