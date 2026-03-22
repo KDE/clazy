@@ -140,6 +140,14 @@
   </provides>
   <icon type="stock">clazy</icon>
   <releases>
+    <release type="stable" version="1.17.1" date="2026-03-22T00:00:00Z">
+      <description>
+        <p>This release fixes the following bug:</p>
+        <ul>
+          <li>fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
+        </ul>
+      </description>
+    </release>
     <release type="stable" version="1.16.1" date="2026-03-22T00:00:00Z">
       <description>
         <p>This is a patch release to fix QtCreator integration issues and</p>

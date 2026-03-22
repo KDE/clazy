@@ -1,9 +1,9 @@
 Version 1.17.1
 ~~~~~~~~~~~~
-Released: TBD
+Released: 2026-03-22
 
 Bugfixes:
- * fully-qualified-moc-types: Fix false positive for pointer/reference types in generics
+ * fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.
 
 Version 1.17
 ~~~~~~~~~~~~
