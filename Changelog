@@ -1,3 +1,12 @@
+Version 1.16.1
+~~~~~~~~~~~~
+Released: 2026-03-26
+
+Bugfixes:
+ * Diagnostics are always emitted even if they contain no fixit. This is used
+ for integration in IDEs where the clazy process writes a YAML file containing
+ the messages, ranges and optionally fixits
+
 Version 1.16
 ~~~~~~~~~~~~
 Released: 2025-09-03
