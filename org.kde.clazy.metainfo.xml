@@ -140,7 +140,21 @@
   </provides>
   <icon type="stock">clazy</icon>
   <releases>
-    <release type="stable" version="1.17" date="2026-02-15T00:00:00Z">
+    <release type="stable" version="1.16.1" date="2026-03-22T00:00:00Z">
+      <description>
+        <p>This is a patch release to fix QtCreator integration issues and</p>
+        <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
+        <p>This release fixes the following bugs:</p>
+        <ul>
+          <li>Diagnostics are always emitted even if they contain no fixit. This is used</li>
+          <li>for integration in IDEs where the clazy process writes a YAML file containing</li>
+          <li>the messages, ranges and optionally fixits</li>
+          <li>Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
+        </ul>
+      </description>
+    </release>
+   <release type="stable" version="1.17" date="2026-02-15T00:00:00Z">
+   <release type="stable" version="1.16" date="2025-09-03T00:00:00Z">
       <description>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
