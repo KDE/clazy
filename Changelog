@@ -2,6 +2,10 @@ Version 1.16.1
 ~~~~~~~~~~~~
 Released: 2026-03-26
 
+Note:
+	* This is a patch release to fix QtCreator integration issues and
+	compatibility with new Qt versions. This release supports LLVM versions 19 to 21.
+
 Bugfixes:
  * Diagnostics are always emitted even if they contain no fixit. This is used
  for integration in IDEs where the clazy process writes a YAML file containing
