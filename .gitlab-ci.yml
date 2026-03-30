@@ -6,6 +6,7 @@ include:
     file:
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/freebsd-qt6.yml
+      - /gitlab-templates/xml-lint.yml
 
 build-with-qt-namespace:
   extends: suse_tumbleweed_qt610

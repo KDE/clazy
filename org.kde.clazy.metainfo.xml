@@ -161,8 +161,7 @@
         </ul>
       </description>
     </release>
-   <release type="stable" version="1.17" date="2026-02-15T00:00:00Z">
-   <release type="stable" version="1.16" date="2025-09-03T00:00:00Z">
+    <release type="stable" version="1.17" date="2026-02-15T00:00:00Z">
       <description>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
