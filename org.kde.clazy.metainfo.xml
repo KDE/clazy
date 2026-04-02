@@ -151,19 +151,41 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge il seguente bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nl">Deze uitgave lost de volgende fout op:</p>
         <p xml:lang="pt-BR">Esta versão corrige o seguinte erro:</p>
         <p xml:lang="ru">В этом выпуске исправлена следующая ошибка:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednjo napako:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <ul>
           <li>fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
+          <li xml:lang="ca">fully-qualified-moc-types: corregeix una regressió de falsos positius de punters/tipus de referència en genèrics.</li>
+          <li xml:lang="ca-valencia">fully-qualified-moc-types: corregix una regressió de falsos positius de punters/tipus de referència en genèrics.</li>
+          <li xml:lang="ka">fully-qualified-moc-types: გასწორდა ცრუ დადებითი რეგრესია მაჩვენებლის/მიმმართველის ტიპებისთვის ზოგადებში.</li>
+          <li xml:lang="nl">fully-qualified-moc-types: vals positieve regressie voor aanwijzer/referentie typen in generieke argumenten is verholpen.</li>
+          <li xml:lang="pt-BR">fully-qualified-moc-types: Corrige regressão de falso positivo para tipos ponteiro/referência em genéricos.</li>
+          <li xml:lang="sl">popolnoma kvalificirani tipi moc: Odpravljena lažno pozitivna regresija za tipe kazalcev/referenc v generičnih kodah.</li>
+          <li xml:lang="tr">fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
         </ul>
       </description>
     </release>
     <release type="stable" version="1.16.1" date="2026-03-22T00:00:00Z">
       <description>
         <p>This is a patch release to fix QtCreator integration issues and</p>
+        <p xml:lang="ca">Aquesta és una versió de pedaços per a corregir problemes d'integració del QtCreator i</p>
+        <p xml:lang="ca-valencia">Esta és una versió de pedaços per a corregir problemes d'integració de QtCreator i</p>
+        <p xml:lang="ka">ეს შეცდომების გასწორების ვერსიაა QtCreator-თან ინტეგრაციისა და</p>
+        <p xml:lang="nl">Dit is een patch-uitgave om integratieproblemen met QtCreator op te lossen en</p>
+        <p xml:lang="pt-BR">Esta é uma versão de correção para solucionar problemas de integração com o Qt Creator e</p>
+        <p xml:lang="sl">To je izdaja popravka za odpravo težav z integracijo QtCreatorja in</p>
+        <p xml:lang="tr">Bu, QtCreater tümleşim sorunlarını ve</p>
         <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
+        <p xml:lang="ca">la compatibilitat amb les versiones noves de les Qt. Aquesta versió permet les versions 19 a 21 del LLVM.</p>
+        <p xml:lang="ca-valencia">la compatibilitat amb les versiones noves de les Qt. Esta versió permet les versions 19 a 21 de LLVM.</p>
+        <p xml:lang="ka">ახალ Qt-ის ვერსიებთან თავსებადობის პრობლემების აღმოსაფხვრელად. ამ ვერსიას აქვს LLVM-ის ვერსიების მხარდაჭერა 19-დან 21-მდე.</p>
+        <p xml:lang="nl">compatibiliteit met nieuwe Qt-versies. Deze uitgave ondersteunt LLVM-versies 19 tot en met 21.</p>
+        <p xml:lang="pt-BR">a compatibilidade com novas versões do Qt. Esta versão suporta as versões LLVM 19 a 21.</p>
+        <p xml:lang="sl">združljivost z novimi različicami Qt. Ta izdaja podpira LLVM različice 19 do 21.</p>
+        <p xml:lang="tr">yeni Qt sürümleriyle uyumluluk için bir hata yayımıdır. Bu yayım LLVM’nin 19–21 sürümleriyle uyumludur.</p>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
@@ -181,8 +203,29 @@
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>Diagnostics are always emitted even if they contain no fixit. This is used</li>
+          <li xml:lang="ca">Sempre s'emeten els diagnòstics encara que no continguin cap correcció. Això s'utilitza</li>
+          <li xml:lang="ca-valencia">Sempre s'emeten els diagnòstics encara que no continguen cap correcció. Açò s'utilitza</li>
+          <li xml:lang="ka">დიაგნოსტიკა ყოველთვის ეშვება. მაშინაც კი, თუ ის შეცდომებს არ ასწორებს. ეს გამოიყენება</li>
+          <li xml:lang="nl">Diagnostische meldingen worden altijd gegenereerd, zelfs als ze geen oplossing bevatten. Dit wordt gebruikt</li>
+          <li xml:lang="pt-BR">Os diagnósticos são sempre emitidos, mesmo que não contenham nenhuma correção. Isso é usado</li>
+          <li xml:lang="sl">Diagnostika se vedno oddaja, tudi če ne vsebuje popravka. To se uporablja</li>
+          <li xml:lang="tr">Bir düzeltme içermeseler bile tanılar her zaman gösterilir. Bu, clazy süreçlerinin</li>
           <li>for integration in IDEs where the clazy process writes a YAML file containing</li>
+          <li xml:lang="ca">per a la integració en els IDE a on el procés clazy escriu un fitxer YAML que conté</li>
+          <li xml:lang="ca-valencia">per a la integració en els IDE a on el procés clazy escriu un fitxer YAML que conté</li>
+          <li xml:lang="ka">იმ IDE-ებთან ინტეგრაციისთვის, სადაც clazy-ის პროცესი წერს YAML ფაილს, რომელიც შეიცავს</li>
+          <li xml:lang="nl">voor integratie in IDE's waar het Clazy-proces een YAML-bestand schrijft dat de volgende inhoud bevat</li>
+          <li xml:lang="pt-BR">para integração em IDEs onde o processo clazy escreve um arquivo YAML contendo</li>
+          <li xml:lang="sl">za integracijo v IDE, kjer proces clazy zapiše datoteko YAML, ki vsebuje</li>
+          <li xml:lang="tr">iletiler, erimler ve isteğe bağlı düzeltmeler içerdiği bir YAML dosyaları yazdığı</li>
           <li>the messages, ranges and optionally fixits</li>
+          <li xml:lang="ca">els missatges, intervals i, opcionalment, correccions</li>
+          <li xml:lang="ca-valencia">els missatges, intervals i, de manera opcional, correccions</li>
+          <li xml:lang="ka">შეტყობინებებს, შუალედებს და, არასავალდებულოდ, შეცდომების გასწორებებს</li>
+          <li xml:lang="nl">de berichten, reeksen en optionele oplossingen</li>
+          <li xml:lang="pt-BR">as mensagens, intervalos e, opcionalmente, correções</li>
+          <li xml:lang="sl">sporočila, obsege in po izbiri popravke</li>
+          <li xml:lang="tr">IDE tümleşimi için gereklidir.</li>
           <li>Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
           <li xml:lang="ar">ضبط فحص readlock-detaching ليعمل بدقة مع تغييرات كيدي (Qt) 6.11</li>
           <li xml:lang="ca">Ajusta la comprovació «readlock-detaching» per a funcionar correctament amb els canvis de les Qt 6.11</li>
@@ -226,7 +269,7 @@
           <li xml:lang="nl">Los het probleem op dat de controle die niet-pod-statisch is, een waarschuwing geeft voor elke vermelding in een container.</li>
           <li xml:lang="pt-BR">Corrigido o aviso de verificação não estática de pod para cada entrada de um contêiner</li>
           <li xml:lang="ru">Исправлена проверка «non-pod-static», которая генерировала предупреждение для каждого элемента контейнера;</li>
-          <li xml:lang="sl">Popravljeno je opozorilo, ki ga je povzročilo preverjanje nestatične tablice za vsak vnos v vsebnik.</li>
+          <li xml:lang="sl">Popravljeno je opozorilo, ki ga je povzročilo preverjanje nestatične tablice za vsak vnos v vsebnik</li>
           <li xml:lang="tr">Fix non-pod-static check emitting warning for each entry of a container</li>
           <li xml:lang="uk">Виправлено попередження, яке пов'язане з перевіркою non-pod-static, для кожного запису контейнера</li>
           <li>Fix use-arrow-operator-instead-of-data emitting false positive when value is casted</li>
@@ -365,7 +408,7 @@
           <li xml:lang="nl">Nieuwe controles: - compare-member-check: controleert of vergelijkingsoperatoren niet alle lidvariabelen van een klasse gebruiken.</li>
           <li xml:lang="pt-BR">Novas verificações: - compare-member-check: Verifica se os operadores de comparação não utilizam todas as variáveis ​​membro de uma classe.</li>
           <li xml:lang="ru">Новые проверки: — compare-member-check: проверяет, используются ли все переменные-члены класса в операторах сравнения;</li>
-          <li xml:lang="sl">Nova preverjanja: - compare-member-check: Preveri, ali operatorji primerjave ne uporabljajo vseh spremenljivk članov razreda</li>
+          <li xml:lang="sl">Nova preverjanja: - compare-member-check: Preveri, ali operatorji primerjave ne uporabljajo vseh spremenljivk članov razreda.</li>
           <li xml:lang="tr">New checks: - compare-member-check: Checks whether comparison operators do not use all member variables of a class.</li>
           <li xml:lang="uk">Нові перевірки: - compare-member-check: перевіряє, чи використовують оператори порівняння усі змінні-учасники класу.</li>
         </ul>
@@ -641,7 +684,7 @@
           <li xml:lang="nl">Bijvoorbeeld "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="pt-BR">prefixo. Por exemplo "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="ru">Например, «NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)»;</li>
-          <li xml:lang="sl">Na primer "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
+          <li xml:lang="sl">predpona. Na primer "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="tr">prefix. For example "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
         </ul>
       </description>
@@ -1041,6 +1084,7 @@
           <li xml:lang="ca-valencia">Corregix el fals positiu de function-args-by-value que provocaria un error de compilació</li>
           <li xml:lang="it">Corregge il falso positivo function-args-by-value che causava un errore di compilazione</li>
           <li xml:lang="ka">გასწორდა ფუნქციის function-args-by-value ცრუ დადებითი რაც კომპილაციის შეცდომას გამოიწვევდა</li>
+          <li xml:lang="nl">Corrigeer de foutieve melding 'function-args-by-value' die een compilatiefout veroorzaakte</li>
           <li xml:lang="pt-BR">Correção de falso positivo em argumentos de função por valor que causava erro de compilação</li>
           <li xml:lang="ru">Исправлена ложная срабатываемость функции «function-args-by-value», которая вызывала ошибку компиляции;</li>
           <li xml:lang="sl">Popravi napačno pozitiven argument funkcije po vrednosti, ki bi povzročil napako pri prevajanju</li>
@@ -1052,6 +1096,7 @@
           <li xml:lang="fr">dans les constructeurs de copie, les opérateurs d’affectation et les vérifications d’égalité</li>
           <li xml:lang="it">nei costruttori di copia, negli operatori di assegnazione e nei controlli di uguaglianza</li>
           <li xml:lang="ka">ასლის კონსტრუქტორებში მინიჭების ოპერატორებსა და ტოლობის შემოწმებებში</li>
+          <li xml:lang="nl">in kopieerconstructors, toewijzingsoperatoren en gelijkheidscontroles</li>
           <li xml:lang="pt-BR">em construtores de cópia, operadores de atribuição e verificações de igualdade</li>
           <li xml:lang="ru">в конструкторах копирования, операторах присваивания и проверках на равенство;</li>
           <li xml:lang="sl">v konstruktorjih kopiranja, operatorjih dodeljevanja in preverjanjih enakosti</li>
@@ -1064,6 +1109,7 @@
           <li xml:lang="fr">Les faux positifs pour « Q_EMIT(someSignal()) » sont maintenant corrigés</li>
           <li xml:lang="it">I falsi positivi per `Q_EMIT(someSignal())` sono stati ora corretti</li>
           <li xml:lang="ka">გასწორდა ცრუ დადებითები `Q_EMIT(someSignal())`-ისთვის</li>
+          <li xml:lang="nl">De foutieve meldingen voor `Q_EMIT(someSignal())` zijn nu verholpen</li>
           <li xml:lang="pt-BR">Os falsos positivos para `Q_EMIT(someSignal())` foram corrigidos</li>
           <li xml:lang="ru">Исправлены ложные срабатывания для `Q_EMIT(someSignal())`;</li>
           <li xml:lang="sl">Lažni pozitivni rezultati za `Q_EMIT(someSignal())` so zdaj popravljeni</li>
@@ -1111,6 +1157,7 @@
           <li xml:lang="he">qt-keyword-emit</li>
           <li xml:lang="it">qt-keyword-emit</li>
           <li xml:lang="ka">qt-keyword-emit</li>
+          <li xml:lang="nl">qt-keyword-emit</li>
           <li xml:lang="pt-BR">qt-keyword-emit</li>
           <li xml:lang="ru">Ключевое слово «emit» в Qt;</li>
           <li xml:lang="sl">qt-keyword-emit</li>
@@ -1678,7 +1725,7 @@
         <p>Minimum LLVM was bumped to 5.0</p>
         <p xml:lang="ar">رُفع الحد الأدنى لـ LLVM إلى 5.0</p>
         <p xml:lang="ca">El LLVM mínim s'ha pujat a 5.0</p>
-        <p xml:lang="ca-valencia">El LLVM mínim s'ha pujat a 5.0</p>
+        <p xml:lang="ca-valencia">LLVM mínim s'ha pujat a 5.0</p>
         <p xml:lang="fr">La version minimale de LLVM a été portée vers la version 5.0</p>
         <p xml:lang="it">La versione minima di LLVM è stata portata a 5.0</p>
         <p xml:lang="ka">LLVM-ის მინიმალური ვერსია აწეულია 5.0-ზე</p>
@@ -1971,6 +2018,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge il seguente bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nl">Deze uitgave lost de volgende fout op:</p>
         <p xml:lang="pt-BR">Esta versão corrige o seguinte erro:</p>
         <p xml:lang="ru">В этом выпуске исправлена следующая ошибка:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednjo napako:</p>
