@@ -158,6 +158,7 @@
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <ul>
           <li>fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
+          <li xml:lang="ar">أنواع MOC المؤهلة بالكامل: إصلاح مشكلة النتائج الإيجابية الخاطئة في اختبار التراجع لأنواع المؤشرات/المراجع في العناصر العامة.</li>
           <li xml:lang="ca">fully-qualified-moc-types: corregeix una regressió de falsos positius de punters/tipus de referència en genèrics.</li>
           <li xml:lang="ca-valencia">fully-qualified-moc-types: corregix una regressió de falsos positius de punters/tipus de referència en genèrics.</li>
           <li xml:lang="ka">fully-qualified-moc-types: გასწორდა ცრუ დადებითი რეგრესია მაჩვენებლის/მიმმართველის ტიპებისთვის ზოგადებში.</li>
@@ -171,6 +172,7 @@
     <release type="stable" version="1.16.1" date="2026-03-22T00:00:00Z">
       <description>
         <p>This is a patch release to fix QtCreator integration issues and</p>
+        <p xml:lang="ar">هذا إصدار تصحيحي يهدف إلى إصلاح مشكلات التكامل مع QtCreator و</p>
         <p xml:lang="ca">Aquesta és una versió de pedaços per a corregir problemes d'integració del QtCreator i</p>
         <p xml:lang="ca-valencia">Esta és una versió de pedaços per a corregir problemes d'integració de QtCreator i</p>
         <p xml:lang="ka">ეს შეცდომების გასწორების ვერსიაა QtCreator-თან ინტეგრაციისა და</p>
@@ -179,6 +181,7 @@
         <p xml:lang="sl">To je izdaja popravka za odpravo težav z integracijo QtCreatorja in</p>
         <p xml:lang="tr">Bu, QtCreater tümleşim sorunlarını ve</p>
         <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
+        <p xml:lang="ar">التوافق مع الإصدارات الجديدة من Qt. يدعم هذا الإصدار إصدارات LLVM من 19 إلى 21.</p>
         <p xml:lang="ca">la compatibilitat amb les versiones noves de les Qt. Aquesta versió permet les versions 19 a 21 del LLVM.</p>
         <p xml:lang="ca-valencia">la compatibilitat amb les versiones noves de les Qt. Esta versió permet les versions 19 a 21 de LLVM.</p>
         <p xml:lang="ka">ახალ Qt-ის ვერსიებთან თავსებადობის პრობლემების აღმოსაფხვრელად. ამ ვერსიას აქვს LLVM-ის ვერსიების მხარდაჭერა 19-დან 21-მდე.</p>
@@ -203,6 +206,7 @@
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
           <li>Diagnostics are always emitted even if they contain no fixit. This is used</li>
+          <li xml:lang="ar">تُصدر التشخيصات دائمًا حتى لو لم تتضمن أي حلول. ويُستخدم هذا</li>
           <li xml:lang="ca">Sempre s'emeten els diagnòstics encara que no continguin cap correcció. Això s'utilitza</li>
           <li xml:lang="ca-valencia">Sempre s'emeten els diagnòstics encara que no continguen cap correcció. Açò s'utilitza</li>
           <li xml:lang="ka">დიაგნოსტიკა ყოველთვის ეშვება. მაშინაც კი, თუ ის შეცდომებს არ ასწორებს. ეს გამოიყენება</li>
@@ -211,6 +215,7 @@
           <li xml:lang="sl">Diagnostika se vedno oddaja, tudi če ne vsebuje popravka. To se uporablja</li>
           <li xml:lang="tr">Bir düzeltme içermeseler bile tanılar her zaman gösterilir. Bu, clazy süreçlerinin</li>
           <li>for integration in IDEs where the clazy process writes a YAML file containing</li>
+          <li xml:lang="ar">لتكاملها في بيئات تطوير التطبيقات (IDE) حيث تقوم عملية clazy بكتابة ملف YAML يحتوي على</li>
           <li xml:lang="ca">per a la integració en els IDE a on el procés clazy escriu un fitxer YAML que conté</li>
           <li xml:lang="ca-valencia">per a la integració en els IDE a on el procés clazy escriu un fitxer YAML que conté</li>
           <li xml:lang="ka">იმ IDE-ებთან ინტეგრაციისთვის, სადაც clazy-ის პროცესი წერს YAML ფაილს, რომელიც შეიცავს</li>
@@ -219,6 +224,7 @@
           <li xml:lang="sl">za integracijo v IDE, kjer proces clazy zapiše datoteko YAML, ki vsebuje</li>
           <li xml:lang="tr">iletiler, erimler ve isteğe bağlı düzeltmeler içerdiği bir YAML dosyaları yazdığı</li>
           <li>the messages, ranges and optionally fixits</li>
+          <li xml:lang="ar">الرسائل، والنطاقات، واختياريًا الإصلاحات</li>
           <li xml:lang="ca">els missatges, intervals i, opcionalment, correccions</li>
           <li xml:lang="ca-valencia">els missatges, intervals i, de manera opcional, correccions</li>
           <li xml:lang="ka">შეტყობინებებს, შუალედებს და, არასავალდებულოდ, შეცდომების გასწორებებს</li>
@@ -1171,6 +1177,7 @@
           <li xml:lang="he">sanitize-inline-keyword</li>
           <li xml:lang="it">sanitize-inline-keyword</li>
           <li xml:lang="ka">sanitize-inline-keyword</li>
+          <li xml:lang="nl">sanitize-inline-keyword</li>
           <li xml:lang="pt-BR">sanitize-inline-keyword</li>
           <li xml:lang="ru">очистка ключевого слова inline;</li>
           <li xml:lang="sl">sanitize-inline-keyword</li>
@@ -1218,6 +1225,7 @@
           <li xml:lang="he">use-arrow-operator-instead-of-data</li>
           <li xml:lang="it">use-arrow-operator-instead-of-data</li>
           <li xml:lang="ka">use-arrow-operator-instead-of-data</li>
+          <li xml:lang="nl">use-arrow-operator-instead-of-data</li>
           <li xml:lang="pt-BR">use-arrow-operator-instead-of-data</li>
           <li xml:lang="ru">использование оператора «-&gt;» вместо метода «data»;</li>
           <li xml:lang="sl">use-arrow-operator-instead-of-data</li>
@@ -1231,6 +1239,7 @@
           <li xml:lang="he">use-static-qregularexpression</li>
           <li xml:lang="it">use-static-qregularexpression</li>
           <li xml:lang="ka">use-static-qregularexpression</li>
+          <li xml:lang="nl">use-static-qregularexpression</li>
           <li xml:lang="pt-BR">use-static-qregularexpression</li>
           <li xml:lang="ru">использовать статические объекты QRegularExpression;</li>
           <li xml:lang="sl">use-static-qregularexpression</li>
@@ -1244,6 +1253,7 @@
           <li xml:lang="he">unexpected-flag-enumerator-value</li>
           <li xml:lang="it">unexpected-flag-enumerator-value</li>
           <li xml:lang="ka">unexpected-flag-enumerator-value</li>
+          <li xml:lang="nl">unexpected-flag-enumerator-value</li>
           <li xml:lang="pt-BR">unexpected-flag-enumerator-value</li>
           <li xml:lang="ru">неожиданное значение перечислителя флага;</li>
           <li xml:lang="sl">unexpected-flag-enumerator-value</li>
@@ -1257,6 +1267,7 @@
           <li xml:lang="he">הבדיקה inefficient-qlist הוסרה (תוקן ב־Qt6)</li>
           <li xml:lang="it">Rimosso il controllo inefficient-qlist (corretto in Qt6)</li>
           <li xml:lang="ka">წაიშალა შემოწმება inefficient-qlist (გასწორდა Qt6-ში)</li>
+          <li xml:lang="nl">Verwijderd inefficient-qlist controle (gerepareerd in Qt6)</li>
           <li xml:lang="pt-BR">Removida a verificação de lista de consultas ineficiente (corrigido no Qt6)</li>
           <li xml:lang="ru">Удалена проверка inefficient-qlist (исправлено в Qt6);</li>
           <li xml:lang="sl">Odstranjeno preverjanje neučinkovitega qlist (popravljeno v Qt6)</li>
@@ -1291,6 +1302,7 @@
           <li xml:lang="he">דורש C++ 17</li>
           <li xml:lang="it">Richiede C++17</li>
           <li xml:lang="ka">მოითხოვს: C++17</li>
+          <li xml:lang="nl">Vereist C++17</li>
           <li xml:lang="pt-BR">Requer C++17</li>
           <li xml:lang="ru">Требуется C++17;</li>
           <li xml:lang="sl">Zahteva C++17</li>
@@ -1320,6 +1332,7 @@
           <li xml:lang="he">תוקן חיובי כוזב עם ‎-Wclazy-lambda-in-connect</li>
           <li xml:lang="it">Corretto un falso positivo -Wclazy-lambda-in-connect</li>
           <li xml:lang="ka">გასწორდა -Wclazy-lambda-in-connect ცრუ-დადებითი</li>
+          <li xml:lang="nl">opgelost een -Wclazy-lambda-in-connect false-positive</li>
           <li xml:lang="pt-BR">Corrigido um falso positivo -Wclazy-lambda-in-connect</li>
           <li xml:lang="ru">Исправлено ложное срабатывание диагностики -Wclazy-lambda-in-connect.</li>
           <li xml:lang="sl">Popravljen lažno pozitiven -Wclazy-lambda-in-connect</li>
@@ -1331,6 +1344,7 @@
           <li xml:lang="fr">Correction d'un plantage dans copyable-polymorphic lorsque PCH était activé</li>
           <li xml:lang="it">Corretto l'arresto anomalo in copyable-polymorphic quando PCH è abilitato</li>
           <li xml:lang="ka">გასწორდა ავარიული დასრულება copyable-polymorphic-ში, როცა PCH ჩართული იყო</li>
+          <li xml:lang="nl">opgelost crash in copyable-polymorphic wanneer PCH was ingeschakeld</li>
           <li xml:lang="pt-BR">Corrigido o problema que causava o erro em copyable-polymorphic quando o PCH estava ativado</li>
           <li xml:lang="ru">Исправлено аварийное завершение в copyable-polymorphic при включённом PCH;</li>
           <li xml:lang="sl">Odpravljeno sesutje v copyable-polymorphic, ko je bil omogočen PCH</li>
@@ -1362,6 +1376,7 @@
           <li xml:lang="ca-valencia">S'ha corregit un alentiment de clazy introduït a la 1.8. Ara pot ser fins a 4x més ràpid.</li>
           <li xml:lang="it">Corretto il problema del rallentamento introdotto nella versione 1.8. Ora è fino a 4 volte più veloce.</li>
           <li xml:lang="ka">გასწორდა 1.8 ვერსიაში გაჩენილი clazy-ს შენელება და ახლა 4-ჯერ უფრო სწრაფია.</li>
+          <li xml:lang="nl">opgelost clazy vertraging geïntroduceerd in 1.8. Het kan nu tot 4x sneller.</li>
           <li xml:lang="pt-BR">Corrigido o problema de lentidão extrema introduzido na versão 1.8. Agora é até 4 vezes mais rápido.</li>
           <li xml:lang="ru">Исправлено замедление clazy, появившееся в версии 1.8; теперь он может работать до 4 раз быстрее.</li>
           <li xml:lang="sl">Popravljena clazy upočasnitev, uvedena v 1.8. Zdaj sem lahko do 4x hitrejša.</li>
@@ -1372,6 +1387,7 @@
           <li xml:lang="ca-valencia">range-loop s'ha dividit entre range-loop-detach i range-loop-reference</li>
           <li xml:lang="it">range-loop è stato diviso in range-loop-detach e range-loop-reference</li>
           <li xml:lang="ka">range-loop გაიყო ორად: range-loop-detach და range-loop-reference</li>
+          <li xml:lang="nl">range-loop was gesplitst in range-loop-detach en range-loop-reference</li>
           <li xml:lang="pt-BR">range-loop foi dividido em range-loop-detach e range-loop-reference</li>
           <li xml:lang="ru">Диагностика range-loop разделена на range-loop-detach и range-loop-reference;</li>
           <li xml:lang="sl">range-loop je bil razdeljen na range-loop-detach in range-loop-reference</li>
@@ -1384,6 +1400,7 @@
           <li xml:lang="fr">Correction des faux positifs de -Wclazy-connect-non-signal</li>
           <li xml:lang="it">Corretti i falsi positivi -Wclazy-connect-non-signal</li>
           <li xml:lang="ka">გასწორდა -Wclazy-connect-non-signal ცრუ დადებითები</li>
+          <li xml:lang="nl">opgelost -Wclazy-connect-non-signal false-positives</li>
           <li xml:lang="pt-BR">Corrigido falsos positivos do -Wclazy-connect-non-signal</li>
           <li xml:lang="ru">Исправлены ложные срабатывания диагностики -Wclazy-connect-non-signal;</li>
           <li xml:lang="sl">Popravljeni lažni pozitivni učinki -Wclazy-connect-non-signal</li>
@@ -1431,6 +1448,7 @@
           <li xml:lang="he">qt6-qhash-signature</li>
           <li xml:lang="it">qt6-qhash-signature</li>
           <li xml:lang="ka">qt6-qhash-signature</li>
+          <li xml:lang="nl">qt6-qhash-signature</li>
           <li xml:lang="pt-BR">qt6-qhash-signature</li>
           <li xml:lang="ru">Сигнатура qHash для Qt6;</li>
           <li xml:lang="sl">qt6-qhash-signature</li>
@@ -1444,6 +1462,7 @@
           <li xml:lang="he">qt6-header-fixes</li>
           <li xml:lang="it">qt6-header-fixes</li>
           <li xml:lang="ka">qt6-header-fixes</li>
+          <li xml:lang="nl">qt6-header-fixes</li>
           <li xml:lang="pt-BR">qt6-header-fixes</li>
           <li xml:lang="ru">Исправления заголовков Qt6;</li>
           <li xml:lang="sl">qt6-header-fixes</li>
@@ -1457,6 +1476,7 @@
           <li xml:lang="he">qt6-deprecated-api-fixes</li>
           <li xml:lang="it">qt6-deprecated-api-fixes</li>
           <li xml:lang="ka">qt6-deprecated-api-fixes</li>
+          <li xml:lang="nl">qt6-deprecated-api-fixes</li>
           <li xml:lang="pt-BR">qt6-deprecated-api-fixes</li>
           <li xml:lang="ru">Исправления устаревшего API Qt6;</li>
           <li xml:lang="sl">qt6-deprecated-api-fixes</li>
@@ -1470,6 +1490,7 @@
           <li xml:lang="he">use-chrono-in-qtimer</li>
           <li xml:lang="it">use-chrono-in-qtimer</li>
           <li xml:lang="ka">use-chrono-in-qtimer</li>
+          <li xml:lang="nl">use-chrono-in-qtimer</li>
           <li xml:lang="pt-BR">use-chrono-in-qtimer</li>
           <li xml:lang="ru">использование chrono в QTimer;</li>
           <li xml:lang="sl">use-chrono-in-qtimer</li>
@@ -1481,6 +1502,7 @@
           <li xml:lang="fr">FixIt pour missing-qobject-macro</li>
           <li xml:lang="it">fixit per missing-qobject-macro</li>
           <li xml:lang="ka">გასწორება missing-qobject-macro-ისთვის</li>
+          <li xml:lang="nl">reparatie voor missing-qobject-macro</li>
           <li xml:lang="pt-BR">correção para missing-qobject-macro</li>
           <li xml:lang="ru">Исправление для отсутствующего макроса Q_OBJECT;</li>
           <li xml:lang="sl">popravek za manjkajoči-qobject-macro</li>
@@ -1526,6 +1548,7 @@
           <li xml:lang="fr">signal surchargé</li>
           <li xml:lang="it">segnale sovraccarico</li>
           <li xml:lang="ka">გადატვირთული სიგნალი</li>
+          <li xml:lang="nl">overladen signaal</li>
           <li xml:lang="pt-BR">sinal sobrecarregado</li>
           <li xml:lang="ru">перегруженный сигнал;</li>
           <li xml:lang="sl">preobremenjen signal</li>
@@ -1538,6 +1561,7 @@
           <li xml:lang="he">חתימות JNI שגויות</li>
           <li xml:lang="it">firme JNI non valide</li>
           <li xml:lang="ka">არასწორი JNI ხელმოწერები</li>
+          <li xml:lang="nl">ongeldige JNI-ondertekeningen</li>
           <li xml:lang="pt-BR">assinaturas JNI inválidas</li>
           <li xml:lang="ru">некорректные подписи JNI;</li>
           <li xml:lang="sl">neveljavni podpisi JNI</li>
@@ -1551,6 +1575,7 @@
           <li xml:lang="he">qstring-comparison-to-implicit-char</li>
           <li xml:lang="it">qstring-comparison-to-implicit-char</li>
           <li xml:lang="ka">qstring-comparison-to-implicit-char</li>
+          <li xml:lang="nl">qstring-comparison-to-implicit-char</li>
           <li xml:lang="pt-BR">qstring-comparison-to-implicit-char</li>
           <li xml:lang="ru">сравнение строки с неявным символом;</li>
           <li xml:lang="sl">qstring-comparison-to-implicit-char</li>
@@ -1564,6 +1589,7 @@
           <li xml:lang="he">qt6-qlatin1string-to-u</li>
           <li xml:lang="it">qt6-qlatin1string-to-u</li>
           <li xml:lang="ka">qt6-qlatin1string-to-u</li>
+          <li xml:lang="nl">qt6-qlatin1string-to-u</li>
           <li xml:lang="pt-BR">qt6-qlatin1string-to-u</li>
           <li xml:lang="ru">Замена `QLatin1String` на `QString` в Qt6;</li>
           <li xml:lang="sl">qt6-qlatin1string-to-u</li>
@@ -1575,6 +1601,7 @@
           <li xml:lang="fr">heap-allocated-small-trivial-type : moins de faux positifs</li>
           <li xml:lang="it">heap-allocated-small-trivial-type: meno falsi positivi</li>
           <li xml:lang="ka">heap-allocated-small-trivial-type: ნაკლები ცრუ დადებითი</li>
+          <li xml:lang="nl">heap-allocated-small-trivial-type: minder false-positives</li>
           <li xml:lang="pt-BR">heap-allocated-small-trivial-type: menos falsos positivos</li>
           <li xml:lang="ru">heap-allocated-small-trivial-type: уменьшено число ложных срабатываний;</li>
           <li xml:lang="sl">heap-allocated-small-trivial-type: manj lažno pozitivnih</li>
@@ -1603,6 +1630,7 @@
           <li xml:lang="fr">connect-non-signal : correction du cas où il ne trouvait pas aucun pmf</li>
           <li xml:lang="it">connect-non-signal: corretto il caso in cui non veniva trovato il pmf</li>
           <li xml:lang="ka">connect-non-signal: გასწორდა შემთხვევა, როცა მან pmf ვერ იპოვა</li>
+          <li xml:lang="nl">connect-non-signal: opgelost geval waar het de pmf niet vond</li>
           <li xml:lang="pt-BR">connect-non-signal: Corrigido o caso em que o arquivo pmf não era encontrado</li>
           <li xml:lang="ru">connect-non-signal: исправлен случай, когда pmf не находился;</li>
           <li xml:lang="sl">connect-non-signal: Popravi primer, ko ni našel pmf</li>
@@ -1613,6 +1641,7 @@
           <li xml:lang="ca-valencia">qstring-arg avisa quan s'utilitza QLatin1String::arg(int), ja que es convertix a QChar</li>
           <li xml:lang="it">qstring-arg avvisa quando si utilizza QLatin1String::arg(int), poiché esegue il cast in QChar</li>
           <li xml:lang="ka">qstring-arg გაგაფრთხილებთ QLatin1String::arg(int)-ის გამოყენებისას, რადგან ის მას QChar-ში გადაჰყავს</li>
+          <li xml:lang="nl">qstring-arg waarschuwt wanneer QLatin1String::arg(int) wordt gebruikt, zoals het omvormt naar QChar</li>
           <li xml:lang="pt-BR">qstring-arg emite um aviso ao usar QLatin1String::arg(int), pois ele realiza um cast para QChar</li>
           <li xml:lang="ru">Предупреждение при использовании QLatin1String::arg(int) из-за приведения к QChar;</li>
           <li xml:lang="sl">qstring-arg opozori pri uporabi QLatin1String::arg(int), saj predvaja v QChar</li>
@@ -1626,6 +1655,7 @@
         <p xml:lang="he">הבנייה של clazy עצמו מהירה ב־30%</p>
         <p xml:lang="it">La compilazione di Clazy è più veloce del 30%</p>
         <p xml:lang="ka">clazy-ის აგება ახლა 30%-ით უფრო სწრაფია</p>
+        <p xml:lang="nl">Clazy zelf bouwen is 30% sneller</p>
         <p xml:lang="pt-BR">Compilar o próprio clazy é 30% mais rápido</p>
         <p xml:lang="ru">Сборка самого clazy ускорилась на 30 %</p>
         <p xml:lang="sl">Sama gradnja clazy je 30% hitrejša</p>
@@ -1672,6 +1702,7 @@
           <li xml:lang="he">heap-allocated-small-trivial-type</li>
           <li xml:lang="it">heap-allocated-small-trivial-type</li>
           <li xml:lang="ka">heap-allocated-small-trivial-type</li>
+          <li xml:lang="nl">heap-allocated-small-trivial-type</li>
           <li xml:lang="pt-BR">heap-allocated-small-trivial-type</li>
           <li xml:lang="ru">выделение в куче малых тривиальных типов;</li>
           <li xml:lang="sl">heap-allocated-small-trivial-type</li>
