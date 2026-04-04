@@ -6,6 +6,8 @@ Bugfixes:
  *
 Features:
  *
+Notes:
+ * CMake 3.16 is the minimum version for configuring clazy
 
 Version 1.17.1
 ~~~~~~~~~~~~
