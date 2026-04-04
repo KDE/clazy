@@ -1716,6 +1716,7 @@
           <li xml:lang="he">signal-with-return-value</li>
           <li xml:lang="it">signal-with-return-value</li>
           <li xml:lang="ka">signal-with-return-value</li>
+          <li xml:lang="nl">signal-with-return-value</li>
           <li xml:lang="pt-BR">signal-with-return-value</li>
           <li xml:lang="ru">сигнал с возвращаемым значением;</li>
           <li xml:lang="sl">signal-with-return-value</li>
@@ -1727,6 +1728,7 @@
           <li xml:lang="he">qproperty-type-mismatch, נתרם על ידי ז׳אן מישאל סלרייה</li>
           <li xml:lang="it">qproperty-type-mismatch, contributo di Jean-Michaël Celerier</li>
           <li xml:lang="ka">qproperty-type-mismatch, შემოგვწირა Jean-Michaël Celerier-მა</li>
+          <li xml:lang="nl">qproperty-type-mismatch, bijgedragen door Jean-Michaël Celerier</li>
           <li xml:lang="pt-BR">qproperty-type-mismatch, contribuição de Jean-Michaël Celerier</li>
           <li xml:lang="ru">qproperty-type-mismatch, реализовано Jean-Michaël Celerier.</li>
           <li xml:lang="sl">qproperty-type-mismatch, prispeval Jean-Michaël Celerier</li>
@@ -1738,6 +1740,7 @@
         <p xml:lang="ca-valencia">S'ha eliminat level3. S'han mogut totes les comprovacions del level3 al nivell manual. No té sentit habilitar-les totes.</p>
         <p xml:lang="it">Rimosso il livello 3. Spostati tutti i controlli del livello 3 al livello manuale. Non ha senso abilitarli tutti.</p>
         <p xml:lang="ka">წაიშალა level3: level3-ის ყველა შემოწმება manual დონეზე გადავიდა რადგან ყველას ჩართვას აზრი არ აქვს.</p>
+        <p xml:lang="nl">Niveau 3 verwijderd. Alle niveau 3-controles verplaatst naar handmatig niveau. Het heeft geen zin om ze allemaal in te schakelen.</p>
         <p xml:lang="pt-BR">Nível 3 removido. Todas as verificações de nível 3 foram movidas para o nível manual. Não faz sentido habilitá-las todas.</p>
         <p xml:lang="ru">Удалён уровень 3. Все проверки этого уровня перенесены в ручной режим. Их одновременное включение не имеет смысла.</p>
         <p xml:lang="sl">Odstranjena raven 3. Vsa preverjanja stopnje 3 premaknjena na ročno raven. Nima smisla omogočiti vseh.</p>
@@ -1749,6 +1752,7 @@
         <p xml:lang="fr">Chacun doit être soigneusement pris en considération.</p>
         <p xml:lang="it">Ciascuno di essi deve essere attentamente considerato.</p>
         <p xml:lang="ka">თითოეული დაწვრილებით უნდა განიხილოთ.</p>
+        <p xml:lang="nl">Elk aspect moet zorgvuldig worden overwogen.</p>
         <p xml:lang="pt-BR">Cada uma delas deve ser cuidadosamente analisada.</p>
         <p xml:lang="ru">Каждый из них должен быть тщательно проанализирован.</p>
         <p xml:lang="sl">Vsakega je treba natančno preučiti.</p>
@@ -1760,6 +1764,7 @@
         <p xml:lang="fr">La version minimale de LLVM a été portée vers la version 5.0</p>
         <p xml:lang="it">La versione minima di LLVM è stata portata a 5.0</p>
         <p xml:lang="ka">LLVM-ის მინიმალური ვერსია აწეულია 5.0-ზე</p>
+        <p xml:lang="nl">De minimale LLVM-waarde is verhoogd naar 5.0</p>
         <p xml:lang="pt-BR">A versão mínima do LLVM foi aumentada para 5.0</p>
         <p xml:lang="ru">Минимальная версия LLVM увеличена до 5.0</p>
         <p xml:lang="sl">Najmanjši LLVM je bil dvignjen na 5,0</p>
@@ -1770,6 +1775,7 @@
         <p xml:lang="ca-valencia">Clazy ja no reescriu fitxers directament, per a evitar competicions quan les invocacions paral·leles canvien la mateixa capçalera.</p>
         <p xml:lang="it">Clazy non riscrive più i file direttamente, per evitare conflitti quando le invocazioni parallele modificano la stessa intestazione.</p>
         <p xml:lang="ka">Clazy აღარ გადააწერს ფაილებს ზედ პირდაპირ, რომ თავიდან აიცილოს იშვიათი შემთხვევა, როცა პარალელური გაშვება იგივე თავსართს ცვლის.</p>
+        <p xml:lang="nl">Clazy herschrijft bestanden niet langer rechtstreeks om raceomstandigheden te voorkomen wanneer parallelle aanroepen dezelfde header wijzigen.</p>
         <p xml:lang="pt-BR">O clazy não reescreve mais arquivos diretamente, para evitar condições de corrida quando invocações paralelas alteram o mesmo cabeçalho.</p>
         <p xml:lang="ru">В Clazy больше не выполняется прямая перезапись файлов, чтобы избежать конфликтов при одновременном изменении одного и того же заголовка.</p>
         <p xml:lang="sl">Clazy ne prepisuje več datotek neposredno, da se izogne dirkam, ko vzporedni klici spremenijo isto glavo.</p>
@@ -1780,6 +1786,7 @@
         <p xml:lang="ca-valencia">EL Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
         <p xml:lang="it">Clazy ora esporta un file yaml con le sostituzioni, da applicare con clang-apply-replacements.</p>
         <p xml:lang="ka">Clazy ახლა yaml ფაილს ჩანაცვლებებით გაიტანს, რომ გადაატაროთ ბრძანებით clang-apply-replacements.</p>
+        <p xml:lang="nl">Clazy exporteert nu een YAML-bestand met de vervangingen, dat kan worden toegepast met clang-apply-replacements.</p>
         <p xml:lang="pt-BR">O clazy agora exporta um arquivo YAML com as substituições, que devem ser aplicadas com o clang-apply-replacements.</p>
         <p xml:lang="ru">Теперь Clazy экспортирует файл YAML с заменой, который можно применить с помощью clang-apply-replacements.</p>
         <p xml:lang="sl">Clazy zdaj izvozi datoteko yaml z zamenjavami, ki se uporabijo s clang-apply-replacements.</p>
@@ -1791,6 +1798,7 @@
         <p xml:lang="fr">De la même manière que le font les autres outils comme Clang.</p>
         <p xml:lang="it">Nello stesso modo in cui lo fanno gli altri strumenti clang.</p>
         <p xml:lang="ka">იგივენაირად, როგორც ამას clang აკეთებს.</p>
+        <p xml:lang="nl">Op dezelfde manier als andere clang-hulpmiddelen dat doen.</p>
         <p xml:lang="pt-BR">Da mesma forma que outras ferramentas do clang fazem.</p>
         <p xml:lang="ru">Так же, как это делает любой другой инструментарий clang.</p>
         <p xml:lang="sl">Na enak način kot to počnejo druga orodja clang.</p>
@@ -1801,6 +1809,7 @@
         <p xml:lang="ca-valencia">La manera d'habilitar la reescriptura de codi és ara: -Xclang -plugin-arg-clazy -Xclang export-fixes per a clang</p>
         <p xml:lang="it">Il modo per abilitare la riscrittura del codice è ora: -Xclang -plugin-arg-clazy -Xclang export-fixes per clang</p>
         <p xml:lang="ka">ახლა გზა, რომლითაც კოდის გადაწერა შეგიძლიათ, ჩართოთ, არის: -Xclang -plugin-arg-clazy -Xclang export-fixes clang-ისთვის</p>
+        <p xml:lang="nl">De manier om codeherschrijving in te schakelen is nu: -Xclang -plugin-arg-clazy -Xclang export-fixes voor clang</p>
         <p xml:lang="pt-BR">A forma de habilitar a reescrita de código agora é: -Xclang -plugin-arg-clazy -Xclang export-fixes para clang</p>
         <p xml:lang="ru">Теперь для включения перезаписи кода используется параметр: -Xclang -plugin-arg-clazy -Xclang export-fixes для clang</p>
         <p xml:lang="sl">Način za omogočanje prepisovanja kode je zdaj: -Xclang -plugin-arg-clazy -Xclang izvozni popravki za clang</p>
@@ -1812,6 +1821,7 @@
         <p xml:lang="fr">ou -export-fixes=somefile.yaml pour clazy-standalone</p>
         <p xml:lang="it">o -export-fixes=somefile.yaml per clazy-standalone</p>
         <p xml:lang="ka">ან -export-fixes=somefile.yaml clazy-standalone-ისთვის</p>
+        <p xml:lang="nl">of -export-fixes=somefile.yaml voor clazy-standalone</p>
         <p xml:lang="pt-BR">ou -export-fixes=somefile.yaml para clazy-standalone</p>
         <p xml:lang="ru">или -export-fixes=somefile.yaml для clazy-standalone</p>
         <p xml:lang="sl">ali -export-fixes=somefile.yaml za clazy-standalone</p>
@@ -1823,6 +1833,7 @@
         <p xml:lang="fr">Tous les autres arguments de FixIt et variables d'environnement de FixIt ont été supprimés.</p>
         <p xml:lang="it">Tutti gli altri argomenti fixit e le variabili di ambiente fixit sono stati rimossi</p>
         <p xml:lang="ka">წაიშალა ყველა სხვა fixit არგუმენტი და fixit გარემოს ცვლადი</p>
+        <p xml:lang="nl">Alle overige Fixit-argumenten en Fixit-omgevingsvariabelen zijn verwijderd.</p>
         <p xml:lang="pt-BR">Todos os outros argumentos do fixit e variáveis ​​de ambiente do fixit foram removidos</p>
         <p xml:lang="ru">Удалены все остальные аргументы и переменные окружения fixit.</p>
         <p xml:lang="sl">Vsi drugi argumenti fixit in spremenljivke fixit env so bili odstranjeni</p>
@@ -1835,6 +1846,7 @@
         <p xml:lang="he">תודה לכריסטיאן גגנרוד על תרומת מייצא ה־yaml ל־fixit!</p>
         <p xml:lang="it">Grazie a Christian Gagneraud per aver contribuito con l'esportatore yaml fixit!</p>
         <p xml:lang="ka">მადლობა Christian Gagneraud-ს fixit yaml გამტანისთვის!</p>
+        <p xml:lang="nl">Met dank aan Christian Gagneraud voor zijn bijdrage aan de fixit YAML-exporteur!</p>
         <p xml:lang="pt-BR">Agradecemos a Christian Gagneraud por sua contribuição com o exportador fixit yaml!</p>
         <p xml:lang="ru">Благодарим Christian Gagneraud за вклад в создание экспорта yaml для исправлений!</p>
         <p xml:lang="sl">Hvala Christianu Gagneraudu za prispevek k izvozniku fixit yaml!</p>
@@ -1863,6 +1875,7 @@
           <li xml:lang="he">תוקנו תקלות חוזרות מול LLVM 9.0</li>
           <li xml:lang="it">Regressioni corrette con LLVM 9.0</li>
           <li xml:lang="ka">გასწორდა რეგრესიები LLVM 9.0-ისთან</li>
+          <li xml:lang="nl">Opgeloste regressies met LLVM 9.0</li>
           <li xml:lang="pt-BR">Corrigidas regressões com o LLVM 9.0</li>
           <li xml:lang="ru">Исправлены регрессии в LLVM 9.0;</li>
           <li xml:lang="sl">Popravljene regresije z LLVM 9.0</li>
@@ -1875,6 +1888,7 @@
           <li xml:lang="he">תשתית Fixit שוכתבה</li>
           <li xml:lang="it">L'infrastruttura Fixit è stata revisionata</li>
           <li xml:lang="ka">Fixit-ის ინფრასტრუქტურა სრულად განახლდა</li>
+          <li xml:lang="nl">De infrastructuur van Fixit is vernieuwd</li>
           <li xml:lang="pt-BR">A infraestrutura do fixit foi reformulada</li>
           <li xml:lang="ru">Инфраструктура быстрого исправления была полностью переработана;</li>
           <li xml:lang="sl">Infrastruktura Fixit je bila prenovljena</li>
@@ -1922,6 +1936,7 @@
           <li xml:lang="he">ifndef-define-typo</li>
           <li xml:lang="it">ifndef-define-typo</li>
           <li xml:lang="ka">ifndef-define-typo</li>
+          <li xml:lang="nl">ifndef-define-typo</li>
           <li xml:lang="pt-BR">ifndef-define-typo</li>
           <li xml:lang="ru">Ошибка в директиве препроцессора #ifndef/#define.</li>
           <li xml:lang="sl">ifndef-define-typo</li>
@@ -1935,6 +1950,7 @@
           <li xml:lang="he">lowercase-qml-type-name</li>
           <li xml:lang="it">lowercase-qml-type-name</li>
           <li xml:lang="ka">lowercase-qml-type-name</li>
+          <li xml:lang="nl">lowercase-qml-type-name</li>
           <li xml:lang="pt-BR">lowercase-qml-type-name</li>
           <li xml:lang="ru">нижний регистр в имени типа QML;</li>
           <li xml:lang="sl">lowercase-qml-type-name</li>
@@ -1948,6 +1964,7 @@
           <li xml:lang="he">qrequiredresult-candidates</li>
           <li xml:lang="it">qrequiredresult-candidates</li>
           <li xml:lang="ka">qrequiredresult-candidates</li>
+          <li xml:lang="nl">qrequiredresult-candidates</li>
           <li xml:lang="pt-BR">qrequiredresult-candidates</li>
           <li xml:lang="ru">qrequiredresult-candidates</li>
           <li xml:lang="sl">qrequiredresult-candidates</li>
@@ -1961,6 +1978,7 @@
           <li xml:lang="he">Fixitים חדשים:</li>
           <li xml:lang="it">Nuovi fixit:</li>
           <li xml:lang="ka">ახალი Fixit-ები:</li>
+          <li xml:lang="nl">Nieuwe Fixits:</li>
           <li xml:lang="pt-BR">Novos Fixits:</li>
           <li xml:lang="ru">Новые автоматические исправления;</li>
           <li xml:lang="sl">Novi popravki:</li>
@@ -1972,6 +1990,7 @@
           <li xml:lang="fr">range-loop prend maintenant en charge l'ajout de références manquantes ou de const-ref</li>
           <li xml:lang="it">range-loop ora supporta l'aggiunta di riferimenti mancanti o const-ref</li>
           <li xml:lang="ka">range-loop-ს ახლა აქვს ნაკლული refs-ების, ან const-ref-ების დამატების მხარდაჭერა</li>
+          <li xml:lang="nl">range-loop ondersteunt nu het toevoegen van ontbrekende refs of const-ref.</li>
           <li xml:lang="pt-BR">range-loop agora suporta a adição de referências ausentes ou const-ref</li>
           <li xml:lang="ru">В анализаторе range-loop реализована поддержка добавления отсутствующих ссылок или константных ссылок;</li>
           <li xml:lang="sl">range-loop zdaj podpira dodajanje manjkajočih ref ali const-ref</li>
@@ -1983,6 +2002,7 @@
           <li xml:lang="fr">la boucle range prend désormais en charge l'ajout de qAsConst()</li>
           <li xml:lang="it">range-loop ora supporta l'aggiunta di qAsConst()</li>
           <li xml:lang="ka">range-loop-ს ახლა qAsConst()-ის დამატების მხარდაჭერა აქვს</li>
+          <li xml:lang="nl">range-loop ondersteunt nu toevoegen van qAsConst()</li>
           <li xml:lang="pt-BR">range-loop agora suporta adicionar qAsConst()</li>
           <li xml:lang="ru">Цикл range-loop теперь поддерживает добавление qAsConst();</li>
           <li xml:lang="sl">range-loop zdaj podpira dodajanje qAsConst()</li>
@@ -1993,6 +2013,7 @@
           <li xml:lang="ca-valencia">function-args-by-ref ara afig refs o const-ref que falten (experimental)</li>
           <li xml:lang="it">function-args-by-ref ora aggiunge i riferimenti mancanti o const-ref (sperimentale)</li>
           <li xml:lang="ka">function-args-by-ref ახლა ამატებს ნაკლულ refs-ებს, ან const-ref-ებს (ექსპერიმენტული)</li>
+          <li xml:lang="nl">function-args-by-ref voegt nu ontbrekende refs of const-ref toe (experimenteel)</li>
           <li xml:lang="pt-BR">function-args-by-ref agora adiciona referências ausentes ou const-ref (experimental)</li>
           <li xml:lang="ru">проверка «function-args-by-ref» теперь добавляет отсутствующие ссылки или константные ссылки (экспериментально);</li>
           <li xml:lang="sl">funkcija-args-by-ref zdaj dodaja manjkajoče ref ali const-ref (eksperimentalno)</li>
@@ -2004,6 +2025,7 @@
           <li xml:lang="fr">Introduction de la variable d'environnement « CLAZY_FIXIT_SUFFIX »</li>
           <li xml:lang="it">Introdotta la variabile di ambiente CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="ka">გამოჩნდა CLAZY_FIXIT_SUFFIX გარემოს ცვლადი</li>
+          <li xml:lang="nl">CLAZY_FIXIT_SUFFIX omgevingsvariabele geïntroduceerd</li>
           <li xml:lang="pt-BR">Introduzida a variável de ambiente CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="ru">Добавлена переменная окружения CLAZY_FIXIT_SUFFIX;</li>
           <li xml:lang="sl">Predstavljena spremenljivka env CLAZY_FIXIT_SUFFIX</li>
@@ -2015,6 +2037,7 @@
         <p xml:lang="ca-valencia">S'ha eliminat el suport per a l'obscur -DCLAZY_BUILD_UTILS_LIB per a simplificar els CMakeLists.txt</p>
         <p xml:lang="it">Rimosso il supporto per l'oscuro -DCLAZY_BUILD_UTILS_LIB per semplificare CMakeLists.txt</p>
         <p xml:lang="ka">წაიშალა ნაკლებად ცნობილი -DCLAZY_BUILD_UTILS_LIB-ის მხარდაჭერა CMakeLists.txt-ის გასამარტივებლად</p>
+        <p xml:lang="nl">Ondersteuning voor de obscure -DCLAZY_BUILD_UTILS_LIB is verwijderd om het bestand CMakeLists.txt te vereenvoudigen.</p>
         <p xml:lang="pt-BR">Removemos o suporte para a obscura opção -DCLAZY_BUILD_UTILS_LIB para simplificar o arquivo CMakeLists.txt</p>
         <p xml:lang="ru">Удалена поддержка малоиспользуемого параметра «-DCLAZY_BUILD_UTILS_LIB» для упрощения файла CMakeLists.txt.</p>
         <p xml:lang="sl">Odstranjena podpora za nejasen -DCLAZY_BUILD_UTILS_LIB za poenostavitev CMakeLists.txt</p>
@@ -2026,6 +2049,7 @@
         <p xml:lang="fr">Le module externe de Clazy a été renommé de ClangLazy.so à ClazyPlugin.so</p>
         <p xml:lang="it">Rinominata l'estensione Clazy da ClangLazy.so a ClazyPlugin.so</p>
         <p xml:lang="ka">clazy დამატების სახელი შეიცვალა ClangLazy.so-დან ClazyPlugin.so-ზე</p>
+        <p xml:lang="nl">De Clazy-plug-in is hernoemd van ClangLazy.so naar ClazyPlugin.so</p>
         <p xml:lang="pt-BR">Renomeado o plugin clazy de ClangLazy.so para ClazyPlugin.so</p>
         <p xml:lang="ru">Переименован плагин clazy с «ClangLazy.so» на «ClazyPlugin.so».</p>
         <p xml:lang="sl">Vtičnik clazy je bil preimenovan iz ClangLazy.so v ClazyPlugin.so</p>
@@ -2036,6 +2060,7 @@
         <p xml:lang="ca-valencia">fully-qualified-moc-types ara també avisa dels valors de retorn «slot/invokable». Han d'estar plenament qualificats per a QML.</p>
         <p xml:lang="it">fully-qualified-moc-types ora avvisa anche per i valori di ritorno slot/invokable. Devono essere completamente qualificati per QML.</p>
         <p xml:lang="ka">fully-qualified-moc-types ახლა სლოტის/ჩაწოდებად დაბრუნებულ მნიშვნელობებზეც იძლევა გაფრთხილებას, რადგან QML-ისთვის სრული კვალიფიკაციაა საჭირო.</p>
+        <p xml:lang="nl">De functie fully-qualified-moc-types geeft nu ook een waarschuwing voor slot/invokable retourwaarden. Deze moeten volledig gekwalificeerd zijn voor QML.</p>
         <p xml:lang="pt-BR">full-qualified-moc-types agora também emite avisos para valores de retorno de slots/invocáveis. Eles precisam ser totalmente qualificados para o QML.</p>
         <p xml:lang="ru">fully-qualified-moc-types теперь предупреждает о возвращаемых значениях слотов и вызываемых методов. Для QML они должны быть полностью квалифицированы.</p>
         <p xml:lang="sl">fully-qualified-moc-types zdaj opozarja tudi za vrnjene vrednosti reže/priklica. Biti morajo popolnoma usposobljeni za QML.</p>
@@ -2062,6 +2087,7 @@
           <li xml:lang="fr">Correction d'un plantage (Assertion clang) dans raw-environment-function</li>
           <li xml:lang="it">Risolto un arresto anomalo (clang assert) in raw-environment-function</li>
           <li xml:lang="ka">გასწორდა ავარიული დასრულება (clang assert) ფუნქციაში raw-environment-function</li>
+          <li xml:lang="nl">Een crash (clang assert) in raw-environment-function is verholpen</li>
           <li xml:lang="pt-BR">Corrigido um erro (clang assert) em raw-environment-function</li>
           <li xml:lang="ru">Исправлено аварийное завершение (утверждение clang) в функции raw-environment-function;</li>
           <li xml:lang="sl">Popravljeno sesutje (clang assert) v raw-environment-function</li>
@@ -2109,6 +2135,7 @@
           <li xml:lang="he">connect-by-name</li>
           <li xml:lang="it">connect-by-name</li>
           <li xml:lang="ka">connect-by-name</li>
+          <li xml:lang="nl">connect-by-name</li>
           <li xml:lang="pt-BR">connect-by-name</li>
           <li xml:lang="ru">подключение по названию;</li>
           <li xml:lang="sl">connect-by-name</li>
@@ -2122,6 +2149,7 @@
           <li xml:lang="he">skipped-base-method</li>
           <li xml:lang="it">skipped-base-method</li>
           <li xml:lang="ka">skipped-base-method</li>
+          <li xml:lang="nl">skipped-base-method</li>
           <li xml:lang="pt-BR">skipped-base-method</li>
           <li xml:lang="ru">пропущенный базовый метод;</li>
           <li xml:lang="sl">skipped-base-method</li>
@@ -2135,6 +2163,7 @@
           <li xml:lang="he">qstring-varargs</li>
           <li xml:lang="it">qstring-varargs</li>
           <li xml:lang="ka">qstring-varargs</li>
+          <li xml:lang="nl">qstring-varargs</li>
           <li xml:lang="pt-BR">qstring-varargs</li>
           <li xml:lang="ru">qstring-varargs;</li>
           <li xml:lang="sl">qstring-varargs</li>
@@ -2148,6 +2177,7 @@
           <li xml:lang="he">fully-qualified-moc-types</li>
           <li xml:lang="it">fully-qualified-moc-types</li>
           <li xml:lang="ka">fully-qualified-moc-types</li>
+          <li xml:lang="nl">fully-qualified-moc-types</li>
           <li xml:lang="pt-BR">fully-qualified-moc-types</li>
           <li xml:lang="ru">полная квалификация типов MOC.</li>
           <li xml:lang="sl">fully-qualified-moc-types</li>
@@ -2159,6 +2189,7 @@
           <li xml:lang="fr">qt-keywords, avec FixIt inclus</li>
           <li xml:lang="it">qt-keywords, con fixit incluso</li>
           <li xml:lang="ka">qt-keywords, Fixit-ის ჩათვლით</li>
+          <li xml:lang="nl">qt-keywords, met fixit ingesloten</li>
           <li xml:lang="pt-BR">qt-keywords, com fixit incluído</li>
           <li xml:lang="ru">Ключевые слова Qt, с включённой функцией автоматического исправления;</li>
           <li xml:lang="sl">qt-keywords, with fixit included</li>
@@ -2172,6 +2203,7 @@
           <li xml:lang="he">qhash-with-char-pointer-key</li>
           <li xml:lang="it">qhash-with-char-pointer-key</li>
           <li xml:lang="ka">qhash-with-char-pointer-key</li>
+          <li xml:lang="nl">qhash-with-char-pointer-key</li>
           <li xml:lang="pt-BR">qhash-with-char-pointer-key</li>
           <li xml:lang="ru">qhash с ключом-указателем на символ;</li>
           <li xml:lang="sl">qhash-with-char-pointer-key</li>
@@ -2185,6 +2217,7 @@
           <li xml:lang="he">wrong-qevent-cast</li>
           <li xml:lang="it">wrong-qevent-cast</li>
           <li xml:lang="ka">wrong-qevent-cast</li>
+          <li xml:lang="nl">wrong-qevent-cast</li>
           <li xml:lang="pt-BR">wrong-qevent-cast</li>
           <li xml:lang="ru">неправильное приведение типа qevent;</li>
           <li xml:lang="sl">wrong-qevent-cast</li>
@@ -2198,6 +2231,7 @@
           <li xml:lang="he">static-pmf</li>
           <li xml:lang="it">static-pmf</li>
           <li xml:lang="ka">static-pmf</li>
+          <li xml:lang="nl">static-pmf</li>
           <li xml:lang="pt-BR">static-pmf</li>
           <li xml:lang="ru">статический указатель на функцию-член;</li>
           <li xml:lang="sl">static-pmf</li>
@@ -2211,6 +2245,7 @@
           <li xml:lang="he">raw-environment-function</li>
           <li xml:lang="it">raw-environment-function</li>
           <li xml:lang="ka">raw-environment-function</li>
+          <li xml:lang="nl">raw-environment-function</li>
           <li xml:lang="pt-BR">raw-environment-function</li>
           <li xml:lang="ru">функция необработанного окружения;</li>
           <li xml:lang="sl">raw-environment-function</li>
@@ -2224,6 +2259,7 @@
           <li xml:lang="he">empty-qstringliteral</li>
           <li xml:lang="it">empty-qstringliteral</li>
           <li xml:lang="ka">empty-qstringliteral</li>
+          <li xml:lang="nl">empty-qstringliteral</li>
           <li xml:lang="pt-BR">empty-qstringliteral</li>
           <li xml:lang="ru">пустая строка QStringLiteral;</li>
           <li xml:lang="sl">empty-qstringliteral</li>
@@ -2234,6 +2270,7 @@
           <li xml:lang="ca-valencia">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
           <li xml:lang="it">auto-unexpected-qstringbuilder ora avvisa anche in caso di restituzione di lambda QStringBuilder</li>
           <li xml:lang="ka">auto-unexpected-qstringbuilder ახლა ასევე გაგაფრთხილებთ ლამბდებზე, რომლებიც QStringBuilder-ს აბრუნებენ</li>
+          <li xml:lang="nl">auto-unexpected-qstringbuilder geeft nu ook een waarschuwing voor lambda-functies die een QStringBuilder retourneren</li>
           <li xml:lang="pt-BR">auto-unexpected-qstringbuilder agora também emite avisos para lambdas que retornam QStringBuilder</li>
           <li xml:lang="ru">В auto-unexpected-qstringbuilder добавлена проверка лямбда-выражений, возвращающих QStringBuilder;</li>
           <li xml:lang="sl">auto-unexpected-qstringbuilder zdaj opozarja tudi na lambde, ki vračajo QStringBuilder</li>
@@ -2248,6 +2285,7 @@
         <p xml:lang="he">מיטובי ביצועים</p>
         <p xml:lang="it">ottimizzazioni delle prestazioni</p>
         <p xml:lang="ka">წარმადობის ოპტიმიზაციები</p>
+        <p xml:lang="nl">prestatie optimalisaties</p>
         <p xml:lang="pt-BR">otimizações de performance</p>
         <p xml:lang="ru">Оптимизация производительности</p>
         <p xml:lang="sl">optimizacije delovanja</p>
@@ -2258,6 +2296,7 @@
         <p xml:lang="ca-valencia">S'ha afegit l'opció -header-filter=&lt;regex&gt; a clazy-standalone. Només ha faran les capçaleres que coincidisquen amb l'expressió regular</p>
         <p xml:lang="it">Aggiunta l'opzione -header-filter=&lt;regex&gt; a clazy-standalone. Solo le intestazioni corrispondenti all'espressione regolare</p>
         <p xml:lang="ka">დაემატა -header-filter=&lt;regex&gt; პარამეტრი clazy-standalone-ისთვის. მხოლოდ თავსართებს, რომლებიც რეგგამოსს დაემთხვევა</p>
+        <p xml:lang="nl">De optie -header-filter=&lt;regex&gt; is toegevoegd aan clazy-standalone. Alleen headers die overeenkomen met de reguliere expressie zullen</p>
         <p xml:lang="pt-BR">Adicionada a opção -header-filter=&lt;regex&gt; ao clazy-standalone. Somente os cabeçalhos que correspondem à expressão regular</p>
         <p xml:lang="ru">Добавлен параметр -header-filter=&lt;regex&gt; для clazy-standalone. Проверяться будут только заголовки, соответствующие регулярному выражению.</p>
         <p xml:lang="sl">Dodana možnost -header-filter=&lt;regex&gt; v clazy-standalone. Samo glave, ki se ujemajo z regularnim izrazom, bodo</p>
@@ -2268,6 +2307,7 @@
         <p xml:lang="ca-valencia">tindran avisos, a banda del fitxer .cpp de la unitat de traducció, que no es filtra mai.</p>
         <p xml:lang="it">conterranno avvisi, oltre al file .cpp dell'unità di traduzione, che non viene mai filtrato.</p>
         <p xml:lang="ka">ექნებათ გაფრთხილებები, .cpp ფაილების გარდა თარგმნის ერთეულიდან, რომელიც არასდროს გაიფილტრება.</p>
+        <p xml:lang="nl">waarschuwingen bevatten, naast het .cpp-bestand van de vertaaleenheid, dat nooit wordt gefilterd.</p>
         <p xml:lang="pt-BR">possuirão avisos, além do arquivo .cpp da unidade de tradução, que nunca é filtrado.</p>
         <p xml:lang="ru">имеют предупреждения, кроме файла .cpp из единицы трансляции, который никогда не исключается.</p>
         <p xml:lang="sl">imele opozorila, poleg datoteke .cpp iz prevajalske enote, ki ni nikoli filtrirana.</p>
