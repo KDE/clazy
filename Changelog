@@ -3,7 +3,7 @@ Version 1.18.0
 Released: TBD
 
 Bugfixes:
- *
+ * fully-qualified-moc-types no longer provides false positive for const pointers
 Features:
  *
 Notes:

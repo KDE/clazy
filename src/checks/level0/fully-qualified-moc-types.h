@@ -32,7 +32,7 @@ private:
     bool handleQ_PROPERTY(clang::CXXMethodDecl *);
     void VisitMacroExpands(const clang::Token &MacroNameTok, const clang::SourceRange &range, const clang::MacroInfo *minfo = nullptr) override;
     void registerQ_GADGET(clang::SourceLocation);
-    bool typeIsFullyQualified(clang::QualType t, std::string &qualifiedTypeName, const std::string &typeName) const;
+    bool typeIsFullyQualified(clang::QualType t, std::string &qualifiedTypeName, const std::string &nameAsWritten) const;
     std::string getQualifiedNameOfType(const clang::Type *ptr, bool resolveTemplateArgs) const;
     std::string resolveTemplateType(const clang::TemplateSpecializationType *ptr, bool resolveTemplateArgs) const;
 

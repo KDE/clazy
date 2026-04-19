@@ -70,6 +70,11 @@ static std::string normalizeType(const std::string &type)
         lastWasSpace = false;
     }
 
+    // * is not part of the resolved moc type that we compare agains => only needed when inside template expression
+    if (out.ends_with("*")) {
+        out.pop_back();
+    }
+
     return out;
 }
 
@@ -214,11 +219,11 @@ std::string FullyQualifiedMocTypes::resolveTemplateType(const clang::TemplateSpe
     return str;
 }
 
-bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, const std::string &typeName) const
+bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &qualifiedTypeName, const std::string &nameAsWritten) const
 {
     qualifiedTypeName.clear();
     if (auto *ptr = t.getTypePtrOrNull(); ptr && (ptr->isRecordType() || ptr->isEnumeralType())) {
-        if (typeName == "QPrivateSignal") {
+        if (nameAsWritten == "QPrivateSignal") {
             return true;
         }
 
@@ -229,7 +234,8 @@ bool FullyQualifiedMocTypes::typeIsFullyQualified(QualType t, std::string &quali
         } else {
             qualifiedTypeName = getQualifiedNameOfType(ptr, true);
         }
-        return qualifiedTypeName.empty() || typeName == qualifiedTypeName;
+
+        return qualifiedTypeName.empty() || nameAsWritten == qualifiedTypeName;
     }
     return true;
 }
