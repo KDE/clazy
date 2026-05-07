@@ -226,9 +226,13 @@ bool ReserveCandidates::expressionIsComplex(clang::Expr *expr) const
     for (CallExpr *callExpr : callExprs) {
         // In Qt5, this would have been a BinaryOperator. Ignore iterator unequality checks here
         if (auto operatorCall = dyn_cast<CXXOperatorCallExpr>(callExpr)) {
-            std::string name = operatorCall->getDirectCallee()->getAsFunction()->getQualifiedNameAsString();
-            if (clazy::contains(name, "iterator::operator")) {
-                continue;
+            auto directCallee = operatorCall->getDirectCallee();
+            if (directCallee) {
+                const auto function = directCallee->getAsFunction();
+                std::string name = function ? function->getQualifiedNameAsString() : std::string{};
+                if (clazy::contains(name, "iterator::operator")) {
+                    continue;
+                }
             }
         }
 
