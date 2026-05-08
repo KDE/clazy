@@ -380,6 +380,7 @@
           <li xml:lang="ca">Quan s'utilitza QT_NAMESPACE, el clazy gestiona adequadament les classes de les Qt que es troben en aquest espai de noms específic</li>
           <li xml:lang="ca-valencia">Quan s'utilitza QT_NAMESPACE, clazy gestiona adequadament les classes de les Qt que es troben en este espai de noms específic</li>
           <li xml:lang="es">Cuando se usa QT_NAMESPACE, clazy maneja correctamente las clases de Qt que estén en dicho espacio de nombres.</li>
+          <li xml:lang="he">בעת שימוש ב־QT_NAMESPACE,‏ clazy מטפל במחלקות Qt כראוי במרחב השם המסוים הזה</li>
           <li xml:lang="it">Quando si utilizza QT_NAMESPACE, clazy gestisce correttamente le classi Qt che si trovano in questo specifico spazio dei nomi</li>
           <li xml:lang="ka">QT_NAMESPACE-ის გამოყენებისას clazy სწორად ამუშავებს Qt-ის კლასებს, რომლებიც მითითებული სახელების სივრცეშია</li>
           <li xml:lang="nl">Bij gebruik van QT_NAMESPACE verwerkt Clazy Qt-klassen die zich in deze specifieke naamruimte bevinden op de juiste manier.</li>
@@ -438,6 +439,7 @@
           <li xml:lang="ca-valencia">Mou «qstring-ref» a «manuallevel», ja que no és compatible amb les Qt6</li>
           <li xml:lang="es">Se ha movido qstring-ref al nivel manual porque no es compatible con Qt6.</li>
           <li xml:lang="fr">Déplacement de qstring-ref vers manuallevel puisque incompatible avec Qt6</li>
+          <li xml:lang="he">qstring-ref הועבר ל־manuallevel (רמה ידנית) מאחר שאינו נתמך ב־Qt6</li>
           <li xml:lang="it">Sposta qstring-ref su manuallevel poiché non è compatibile con Qt6</li>
           <li xml:lang="ka">qstring-ref გადატანილია manuallevel-ში, რადგან ის Qt6-თან თავსებადი არაა</li>
           <li xml:lang="nl">Verplaats qstring-ref naar handleidingniveau, aangezien het niet compatibel is met Qt6.</li>
@@ -597,6 +599,7 @@
           <li xml:lang="ca-valencia">non-pod-global-static: corregix un fals positiu amb Q_IMPORT_PLUGIN a les Qt-6.10</li>
           <li xml:lang="es">non-pod-global-static: Se ha corregido un falso positivo con Q_IMPORT_PLUGIN en Qt-6.10.</li>
           <li xml:lang="fr">non-pod-global-static : correction d'un faux positif avec Q_IMPORT_PLUGIN dans Qt-6.10</li>
+          <li xml:lang="he">non-pod-global-static: תוקן שלילי כוזב עם Q_IMPORT_PLUGIN ב־Qt-6.10</li>
           <li xml:lang="it">non-pod-global-static: corregge il falso positivo con Q_IMPORT_PLUGIN in Qt-6.10</li>
           <li xml:lang="ka">non-pod-global-static: გასწორდა ცრუ დადებითი ალამთან Q_IMPORT_PLUGIN Qt-6.10-ში</li>
           <li xml:lang="nl">non-pod-global-static: foutpositief bij Q_IMPORT_PLUGIN in Qt-6.10 verholpen</li>
@@ -1205,6 +1208,7 @@
           <li xml:lang="ca-valencia">S'ha corregit qstring-arg per a les properes Qt 6.9</li>
           <li xml:lang="es">Se ha corregido qstring-arg para el próximo Qt 6.9.</li>
           <li xml:lang="fr">Correction de « qstring-arg » pour la prochaine version 6.9 de Qt</li>
+          <li xml:lang="he">תוקן qstring-arg ל־Qt 6.9 שקרב ובא.</li>
           <li xml:lang="it">Corretto qstring-arg per il prossimo rilascio di Qt 6.9</li>
           <li xml:lang="ka">გასწორდა qstring-arg Qt 6.9-ისთვის, რომელიც მალე გამოვა</li>
           <li xml:lang="nl">qstring-arg gerepareerd voor komende Qt 6.9</li>
@@ -1957,6 +1961,7 @@
         <p xml:lang="ar">أزيل المستوى 3. نُقلت كافة فحوصات المستوى 3 إلى المستوى اليدوي. ليس من المنطقي تفعيلها جميعًا.</p>
         <p xml:lang="ca">S'ha eliminat level3. S'han mogut totes les comprovacions del level3 al nivell manual. No té sentit habilitar-les totes.</p>
         <p xml:lang="ca-valencia">S'ha eliminat level3. S'han mogut totes les comprovacions del level3 al nivell manual. No té sentit habilitar-les totes.</p>
+        <p xml:lang="he">level3 (רמה 3) הוסרה. כל הבדיקות ברמה 3 הועברו לרמה הידנית. לא הגיוני להפעיל את כולן.</p>
         <p xml:lang="it">Rimosso il livello 3. Spostati tutti i controlli del livello 3 al livello manuale. Non ha senso abilitarli tutti.</p>
         <p xml:lang="ka">წაიშალა level3: level3-ის ყველა შემოწმება manual დონეზე გადავიდა რადგან ყველას ჩართვას აზრი არ აქვს.</p>
         <p xml:lang="nl">Niveau 3 verwijderd. Alle niveau 3-controles verplaatst naar handmatig niveau. Het heeft geen zin om ze allemaal in te schakelen.</p>
@@ -1970,6 +1975,7 @@
         <p xml:lang="ca">Cal tenir en compte a cadascuna.</p>
         <p xml:lang="ca-valencia">Cal tindre en compte a cadascuna.</p>
         <p xml:lang="fr">Chacun doit être soigneusement pris en considération.</p>
+        <p xml:lang="he">יש לבחור כל אחת מהן בקפידה.</p>
         <p xml:lang="it">Ciascuno di essi deve essere attentamente considerato.</p>
         <p xml:lang="ka">თითოეული დაწვრილებით უნდა განიხილოთ.</p>
         <p xml:lang="nl">Elk aspect moet zorgvuldig worden overwogen.</p>
@@ -1996,6 +2002,7 @@
         <p xml:lang="ar">لم يعد كلازي يعيد كتابة الملفات مباشرة، لتجنب السباق عند قيام استدعاءات متوازية بتغيير نفس الترويسة.</p>
         <p xml:lang="ca">El Clazy ja no reescriu fitxers directament, per a evitar competicions quan les invocacions paral·leles canvien la mateixa capçalera.</p>
         <p xml:lang="ca-valencia">Clazy ja no reescriu fitxers directament, per a evitar competicions quan les invocacions paral·leles canvien la mateixa capçalera.</p>
+        <p xml:lang="he">Clazy לא כותב יותר לקבצים ישירות כדי להימנע מתחרות כשהזנקות מקבילות משנות את אותה הכותרת.</p>
         <p xml:lang="it">Clazy non riscrive più i file direttamente, per evitare conflitti quando le invocazioni parallele modificano la stessa intestazione.</p>
         <p xml:lang="ka">Clazy აღარ გადააწერს ფაილებს ზედ პირდაპირ, რომ თავიდან აიცილოს იშვიათი შემთხვევა, როცა პარალელური გაშვება იგივე თავსართს ცვლის.</p>
         <p xml:lang="nl">Clazy herschrijft bestanden niet langer rechtstreeks om raceomstandigheden te voorkomen wanneer parallelle aanroepen dezelfde header wijzigen.</p>
