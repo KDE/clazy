@@ -250,6 +250,7 @@ inline std::string accessString(clang::AccessSpecifier s)
 /**
  * Returns the type of qt without CV qualifiers or references.
  * "const QString &" -> "QString"
+ * The return type still includes namespaced
  */
 inline std::string simpleTypeName(clang::QualType qt, const clang::LangOptions &lo)
 {
@@ -274,30 +275,23 @@ inline std::string simpleTypeName(clang::ParmVarDecl *p, const clang::LangOption
     return p ? simpleTypeName(p->getType(), lo) : std::string();
 }
 
-inline std::string typeName(clang::QualType qt, const clang::LangOptions &lo, bool simpleName)
-{
-    return simpleName ? simpleTypeName(qt, lo) : qt.getAsString(lo);
-}
-
 /**
  * Returns the type name of the return type.
- * If \a simpleName is true, any cv qualifications, ref or pointer are not taken into account, so
- * const Foo & would be equal to Foo.
  */
-inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOptions &lo, bool simpleName = true)
+inline std::string returnTypeName(clang::CallExpr *call, const clang::LangOptions &lo)
 {
     if (!call) {
         return {};
     }
 
     clang::FunctionDecl *func = call->getDirectCallee();
-    return func ? clazy::typeName(func->getReturnType(), lo, simpleName) : std::string();
+    return func ? clazy::simpleTypeName(func->getReturnType(), lo) : std::string();
 }
 
-inline bool hasArgumentOfType(clang::FunctionDecl *func, llvm::StringRef typeName, const clang::LangOptions &lo, bool simpleName = true)
+inline bool hasArgumentOfType(clang::FunctionDecl *func, llvm::StringRef typeName, const clang::LangOptions &lo)
 {
-    return std::ranges::any_of(Utils::functionParameters(func), [simpleName, lo, typeName](clang::ParmVarDecl *param) {
-        return clazy::typeName(param->getType(), lo, simpleName) == typeName;
+    return std::ranges::any_of(Utils::functionParameters(func), [lo, typeName](clang::ParmVarDecl *param) {
+        return clazy::simpleTypeName(param->getType(), lo) == typeName;
     });
 }
 
