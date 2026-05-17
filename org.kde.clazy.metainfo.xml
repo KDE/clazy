@@ -157,6 +157,7 @@
         <p xml:lang="sk">Toto vydanie opravuje nasledujúcu chybu:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednjo napako:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено таку ваду:</p>
         <ul>
           <li>fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
           <li xml:lang="ar">أنواع MOC المؤهلة بالكامل: إصلاح مشكلة النتائج الإيجابية الخاطئة في اختبار التراجع لأنواع المؤشرات/المراجع في العناصر العامة.</li>
@@ -172,6 +173,7 @@
           <li xml:lang="sk">fully-qualified-moc-types: Oprava falošne pozitívnej regresie pre typy ukazovateľov/referencií v generikách.</li>
           <li xml:lang="sl">popolnoma kvalificirani tipi moc: Odpravljena lažno pozitivna regresija za tipe kazalcev/referenc v generičnih kodah.</li>
           <li xml:lang="tr">fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
+          <li xml:lang="uk">fully-qualified-moc-types: виправлено регресію з помилковим спрацьовуванням для типів вказівників/посилань у загальних змінних.</li>
         </ul>
       </description>
     </release>
@@ -192,6 +194,7 @@
         <p xml:lang="sk">Toto je opravné vydanie na riešenie problémov s integráciou QtCreator a</p>
         <p xml:lang="sl">To je izdaja popravka za odpravo težav z integracijo QtCreatorja in</p>
         <p xml:lang="tr">Bu, QtCreater tümleşim sorunlarını ve</p>
+        <p xml:lang="uk">Це проміжних випуск для виправлення проблем з інтеграцією QtCreator і</p>
         <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
         <p xml:lang="ar">التوافق مع الإصدارات الجديدة من Qt. يدعم هذا الإصدار إصدارات LLVM من 19 إلى 21.</p>
         <p xml:lang="ca">la compatibilitat amb les versiones noves de les Qt. Aquesta versió permet les versions 19 a 21 del LLVM.</p>
@@ -206,6 +209,7 @@
         <p xml:lang="sk">kompatibility s novými verziami Qt. Toto vydanie podporuje verzie LLVM 19 až 21.</p>
         <p xml:lang="sl">združljivost z novimi različicami Qt. Ta izdaja podpira LLVM različice 19 do 21.</p>
         <p xml:lang="tr">yeni Qt sürümleriyle uyumluluk için bir hata yayımıdır. Bu yayım LLVM’nin 19–21 sürümleriyle uyumludur.</p>
+        <p xml:lang="uk">сумісністю з новими версіями Qt. У цьому випуску реалізовано підтримку версій LLVM 19 і 21.</p>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
@@ -2348,6 +2352,7 @@
         <p xml:lang="sk">Toto vydanie opravuje nasledujúcu chybu:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednjo napako:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
+        <p xml:lang="uk">У цьому випуску виправлено таку ваду:</p>
         <ul>
           <li>Fixed a crash (clang assert) in raw-environment-function</li>
           <li xml:lang="ar">إصلاح انهيار (clang assert) في raw-environment-function</li>
