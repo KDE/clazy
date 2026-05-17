@@ -21,7 +21,8 @@ public:
     void VisitStmt(clang::Stmt *) override;
 
 private:
-    bool isTemporaryQRegexObj(clang::Expr *qregexVar, const clang::LangOptions &lo);
+    bool isTemporaryQRegexObj(clang::Expr *qregexVar);
+    bool firstArgIsQRegularExpression(clang::CXXMethodDecl *methodDecl);
 };
 
 #endif

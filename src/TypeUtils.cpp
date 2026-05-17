@@ -132,7 +132,6 @@ void clazy::heapOrStackAllocated(Expr *arg, const std::string &type, const clang
 
         // Remove the '*' if it's a pointer
         QualType qt = t->isPointerType() ? t->getPointeeType() : declref->getType();
-
         if (type == clazy::simpleTypeName(qt, lo)) {
             interestingDeclRefs.push_back(declref);
         }

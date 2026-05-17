@@ -26,7 +26,7 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
     }
 
     auto *ctorExpr = clazy::getFirstChildOfType<CXXConstructExpr>(existsCall);
-    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != "QString") {
+    if (!ctorExpr || clazy::simpleArgTypeName(ctorExpr->getConstructor(), 0, lo()) != qtNamespaced("QString")) {
         return;
     }
 

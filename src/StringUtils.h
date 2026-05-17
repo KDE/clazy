@@ -264,7 +264,9 @@ inline std::string simpleTypeName(clang::QualType qt, const clang::LangOptions &
     }
 #endif
 
-    return qt.getNonReferenceType().getUnqualifiedType().getAsString(clang::PrintingPolicy(lo));
+    clang::PrintingPolicy pp(lo);
+    pp.FullyQualifiedName = true; // namespaces!
+    return qt.getNonReferenceType().getUnqualifiedType().getAsString(pp);
 }
 
 inline std::string simpleTypeName(clang::ParmVarDecl *p, const clang::LangOptions &lo)

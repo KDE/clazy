@@ -34,7 +34,7 @@ void PostEvent::VisitStmt(clang::Stmt *stmt)
     }
 
     Expr *event = callexpr->getNumArgs() > 1 ? callexpr->getArg(1) : nullptr;
-    if (!event || clazy::simpleTypeName(event->getType(), lo()) != "QEvent *") {
+    if (!event || clazy::simpleTypeName(event->getType(), lo()) != qtNamespaced("QEvent *")) {
         return;
     }
 

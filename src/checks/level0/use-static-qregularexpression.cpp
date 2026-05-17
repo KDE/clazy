@@ -77,7 +77,7 @@ static bool isQStringFromStringLiteral(Expr *qstring, LangOptions lo)
     return false;
 }
 
-bool UseStaticQRegularExpression::isTemporaryQRegexObj(Expr *qregexVar, const LangOptions &lo)
+bool UseStaticQRegularExpression::isTemporaryQRegexObj(Expr *qregexVar)
 {
     // Get the QRegularExpression ctor
     auto *ctor = clazy::getFirstChildOfType<CXXConstructExpr>(qregexVar);
@@ -87,11 +87,11 @@ bool UseStaticQRegularExpression::isTemporaryQRegexObj(Expr *qregexVar, const La
 
     // Check if its first arg is "QString"
     auto *qstrArg = ctor->getArg(0);
-    if (!qstrArg || clazy::typeName(qstrArg->getType(), lo, true) != qtNamespaced("QString")) {
+    if (!qstrArg || clazy::simpleTypeName(qstrArg->getType(), lo()) != qtNamespaced("QString")) {
         return false;
     }
 
-    return isQStringFromStringLiteral(qstrArg, lo) && !isQStringModifiedAfterCreation(qstrArg, lo);
+    return isQStringFromStringLiteral(qstrArg, lo()) && !isQStringModifiedAfterCreation(qstrArg, lo());
 }
 
 static bool isQRegexpFromStringLiteral(VarDecl *qregexVarDecl, LangOptions lo)
@@ -149,9 +149,9 @@ static bool isOfAcceptableType(CXXMethodDecl *methodDecl)
     return type == "QString" || type == "QStringList" || type == "QRegularExpression" || type == "QListSpecialMethods" /* for QStringList in Qt6 */;
 }
 
-static bool firstArgIsQRegularExpression(CXXMethodDecl *methodDecl, const LangOptions &lo)
+bool UseStaticQRegularExpression::firstArgIsQRegularExpression(CXXMethodDecl *methodDecl)
 {
-    return clazy::simpleArgTypeName(methodDecl, 0, lo) == "QRegularExpression";
+    return clazy::simpleArgTypeName(methodDecl, 0, lo()) == qtNamespaced("QRegularExpression");
 }
 
 void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
@@ -193,7 +193,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
             }
 
             // In clang20, "auto m2 = QRegularExpression("[123]").globalMatch(selectedText);" is apparently an l-value
-            if (auto *temp = dyn_cast<MaterializeTemporaryExpr>(obj); temp && isTemporaryQRegexObj(temp, lo())) {
+            if (auto *temp = dyn_cast<MaterializeTemporaryExpr>(obj); temp && isTemporaryQRegexObj(temp)) {
                 emitWarning(temp->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
             }
 
@@ -203,14 +203,14 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
             if (!temp) {
                 return;
             }
-            if (isTemporaryQRegexObj(temp, lo())) {
+            if (isTemporaryQRegexObj(temp)) {
                 emitWarning(temp->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
             }
         }
         return;
     }
 
-    if (!firstArgIsQRegularExpression(methodDecl, lo())) {
+    if (!firstArgIsQRegularExpression(methodDecl)) {
         return;
     }
 
@@ -221,7 +221,7 @@ void UseStaticQRegularExpression::VisitStmt(clang::Stmt *stmt)
 
     // Its a QString*().method(QRegularExpression(arg)) ?
     if (auto *temp = isArgTemporaryObj(qregexArg)) {
-        if (isTemporaryQRegexObj(temp, lo())) {
+        if (isTemporaryQRegexObj(temp)) {
             emitWarning(qregexArg->getBeginLoc(), "Don't create temporary QRegularExpression objects. Use a static QRegularExpression object instead");
         }
     }

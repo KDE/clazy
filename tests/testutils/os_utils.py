@@ -24,8 +24,7 @@ def compare_files(expects_failure, expected_file, result_file, message, verbose:
             return False
 
 
-
-def run_command(cmd, output_file="", test_env=os.environ, cwd=None, verbose = False, ignore_verbose_command=False, qt_namespaced=False, qt_replace_namespace=True):
+def run_command(cmd, output_file="", test_env=os.environ, cwd=None, verbose=False, ignore_verbose_command=False, qt_namespaced=False, qt_replace_namespace=True):
     lines, success = get_command_output(cmd, test_env=test_env, verbose=verbose, cwd=cwd, ignore_verbose=ignore_verbose_command)
     # Hack for Windows, we have std::_Vector_base in the expected data
     lines = lines.replace("std::_Container_base0", "std::_Vector_base")
@@ -60,6 +59,7 @@ def run_command(cmd, output_file="", test_env=os.environ, cwd=None, verbose = Fa
         print(lines)
 
     return success
+
 
 def get_command_output(cmd: str, verbose: bool, test_env=os.environ, cwd=None, ignore_verbose=False):
     success = True
@@ -99,6 +99,7 @@ def files_are_equal(file1, file2):
     except Exception as ex:
         print("Error comparing files:" + str(ex))
         return False
+
 
 def print_differences(file1, file2, verbose):
     # Returns true if the the files are equal
