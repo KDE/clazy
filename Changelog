@@ -8,6 +8,7 @@ Features:
  *
 Notes:
  * CMake 3.16 is the minimum version for configuring clazy
+ * Fix false positives/missing warnings with namespaced Qt and later LLVM 22.x versions
 
 Version 1.17.1
 ~~~~~~~~~~~~
