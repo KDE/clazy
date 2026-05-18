@@ -15,7 +15,7 @@
 class ModernizeOverloadedSignals : public CheckBase
 {
 public:
-    explicit ModernizeOverloadedSignals(const std::string &name);
+    explicit ModernizeOverloadedSignals(const std::string &name, Options options);
     void VisitDecl(clang::Decl *) override;
     void VisitStmt(clang::Stmt *) override;
 
