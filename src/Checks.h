@@ -45,6 +45,7 @@
 #include "checks/level1/foreach.h"
 #include "checks/level1/incorrect-emit.h"
 #include "checks/level1/install-event-filter.h"
+#include "checks/level1/modernize-overloaded-signals.h"
 #include "checks/level1/non-pod-global-static.h"
 #include "checks/level1/overridden-signal.h"
 #include "checks/level1/post-event.h"
@@ -194,6 +195,7 @@ void CheckManager::registerChecks()
     registerCheck(check<Foreach>("foreach", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<IncorrectEmit>("incorrect-emit", CheckLevel1, RegisteredCheck::Option_VisitsStmts | RegisteredCheck::Option_PreprocessorCallbacks, true));
     registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));
+    registerCheck(check<ModernizeOverloadedSignals>("modernize-overloaded-signals", CheckLevel1, RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1, RegisteredCheck::Option_VisitsDecls, true));
     registerCheck(check<PostEvent>("post-event", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));

@@ -6,7 +6,7 @@ Bugfixes:
  * fully-qualified-moc-types no longer provides false positive for const pointers
  * detaching-temporary/detaching-member fixits no longer provide false source ranges when used within macros
 Features:
- *
+ * <dont forget changelog entry for modernize-overloaded-signals>
 Notes:
  * CMake 3.16 is the minimum version for configuring clazy
  * Fix false positives/missing warnings with namespaced Qt and later LLVM 22.x versions

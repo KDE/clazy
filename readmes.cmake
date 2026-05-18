@@ -71,6 +71,7 @@ SET(README_LEVEL1_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-foreach.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-incorrect-emit.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-install-event-filter.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-modernize-overloaded-signals.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-non-pod-global-static.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-overridden-signal.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-post-event.md

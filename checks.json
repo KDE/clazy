@@ -793,6 +793,12 @@
             "name": "readlock-detaching",
             "level": 1,
             "categories": ["bug"]
+        },
+        {
+            "name": "modernize-overloaded-signals",
+            "level": 1,
+            "visits_stmts": true,
+            "categories": ["readability"]
         }
     ]
 }
