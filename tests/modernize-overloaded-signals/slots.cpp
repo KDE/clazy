@@ -37,3 +37,11 @@ void testSlotParameter()
     QObject::connect(obj, &MyClass::dummySignal, obj, static_cast<void (MyClass::*)(const QString &)>(&MyClass::overloadedSlot)); // WARN
 
 }
+
+void testSlotParameter3ArgConnect()
+{
+    auto obj = new MyClass();
+    QObject::connect(obj, &MyClass::dummySignal, &MyClass::noOverloadedSlot); // OK
+    QObject::connect(obj, &MyClass::dummySignal, qOverload<const QString&>(&MyClass::overloadedSlot)); // OK
+    QObject::connect(obj, &MyClass::dummySignal, static_cast<void (MyClass::*)(const QString &)>(&MyClass::noOverloadedSlotWithArgs)); // WARN
+}
