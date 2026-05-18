@@ -75,7 +75,7 @@ def get_copyright():
     year = datetime.datetime.now().year
     author = os.getenv('GIT_AUTHOR_NAME', 'Author')
     email = os.getenv('GIT_AUTHOR_EMAIL', 'your@email')
-    return "Copyright (C) %s %s <%s>" % (year, author, email)
+    return "%s %s <%s>" % (year, author, email)
 
 
 class Check:

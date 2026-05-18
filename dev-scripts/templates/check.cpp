@@ -1,6 +1,5 @@
 /*
-    %3
-
+    SPDX-FileCopyrightText: %3
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -14,8 +13,8 @@
 
 using namespace clang;
 
-%2::%2(const std::string &name)
-    : CheckBase(name)
+%2::%2(const std::string &name, Options options)
+    : CheckBase(name, options)
 {
 }
 
