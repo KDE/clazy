@@ -1,6 +1,5 @@
 /*
-    %4
-
+    SPDX-FileCopyrightText: %4
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -15,7 +14,7 @@
 class %2 : public CheckBase
 {
 public:
-    explicit %2(const std::string &name);
+    explicit %2(const std::string &name, Options options);
     void VisitDecl(clang::Decl *) override;
     void VisitStmt(clang::Stmt *) override;
 private:
