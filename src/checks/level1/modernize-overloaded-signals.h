@@ -1,6 +1,5 @@
 /*
-    Copyright (C) 2026 Author <your@email>
-
+    SPDX-FileCopyrightText: 2026 Alexander Lohnau <alexander.lohnau@kde.org>
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -15,11 +14,11 @@
 class ModernizeOverloadedSignals : public CheckBase
 {
 public:
-    explicit ModernizeOverloadedSignals(const std::string &name, Options options);
-    void VisitDecl(clang::Decl *) override;
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 
 private:
+    void checkConnectArg(clang::CallExpr *call, clang::CXXMethodDecl *pmfFromConnect, int numArgToCheck);
 };
 
 #endif

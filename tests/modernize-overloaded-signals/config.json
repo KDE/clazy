@@ -1,7 +1,11 @@
 {
     "tests": [
         {
-            "filename": "main.cpp",
+            "filename": "signals.cpp",
+            "has_fixits": true
+        },
+        {
+            "filename": "slots.cpp",
             "has_fixits": true
         }
     ]
