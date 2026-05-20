@@ -242,6 +242,7 @@
           <li xml:lang="sk">Diagnostiky sa vždy generujú, aj keď neobsahujú opravu. Toto sa používa</li>
           <li xml:lang="sl">Diagnostika se vedno oddaja, tudi če ne vsebuje popravka. To se uporablja</li>
           <li xml:lang="tr">Bir düzeltme içermeseler bile tanılar her zaman gösterilir. Bu, clazy süreçlerinin</li>
+          <li xml:lang="uk">Безумовне надсилання діагностичних повідомлень, навіть якщо у них не міститься fixit. Використовується</li>
           <li>for integration in IDEs where the clazy process writes a YAML file containing</li>
           <li xml:lang="ar">لتكاملها في بيئات تطوير التطبيقات (IDE) حيث تقوم عملية clazy بكتابة ملف YAML يحتوي على</li>
           <li xml:lang="ca">per a la integració en els IDE a on el procés clazy escriu un fitxer YAML que conté</li>
@@ -256,6 +257,7 @@
           <li xml:lang="sk">na integráciu do IDE, kde proces clazy zapisuje súbor YAML obsahujúci</li>
           <li xml:lang="sl">za integracijo v IDE, kjer proces clazy zapiše datoteko YAML, ki vsebuje</li>
           <li xml:lang="tr">iletiler, erimler ve isteğe bağlı düzeltmeler içerdiği bir YAML dosyaları yazdığı</li>
+          <li xml:lang="uk">для інтеграції з комплексними середовищами розробки, де процес clazy записує файл YAML, у якому містяться</li>
           <li>the messages, ranges and optionally fixits</li>
           <li xml:lang="ar">الرسائل، والنطاقات، واختياريًا الإصلاحات</li>
           <li xml:lang="ca">els missatges, intervals i, opcionalment, correccions</li>
@@ -271,6 +273,7 @@
           <li xml:lang="sk">správy, rozsahy a voliteľne opravy</li>
           <li xml:lang="sl">sporočila, obsege in po izbiri popravke</li>
           <li xml:lang="tr">IDE tümleşimi için gereklidir.</li>
+          <li xml:lang="uk">повідомлення, діапазони та необов'язкові повідомлення щодо виправлення</li>
           <li>Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
           <li xml:lang="ar">ضبط فحص readlock-detaching ليعمل بدقة مع تغييرات كيدي (Qt) 6.11</li>
           <li xml:lang="ca">Ajusta la comprovació «readlock-detaching» per a funcionar correctament amb els canvis de les Qt 6.11</li>
@@ -286,6 +289,7 @@
           <li xml:lang="sk">Prispôsobenie kontroly readlock-detaching pre správnu funkčnosť so zmenami Qt 6.11</li>
           <li xml:lang="sl">Prilagojeno preverjanje odklopa za branje readlock-detaching, da bo pravilno delovalo s spremembami Qt 6.11</li>
           <li xml:lang="tr">Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
+          <li xml:lang="uk">Скориговано перевірку readlock-detaching так, щоб вона належно працювала зі змінами у Qt 6.11</li>
         </ul>
       </description>
     </release>
@@ -365,6 +369,7 @@
           <li xml:lang="sk">detaching-temporary správne kontroluje podmienky pri reťazení viac ako dvoch volaní metód</li>
           <li xml:lang="sl">!detaching-temporary! pravilno preveri pogoje, ko sta verižno povezana več kot dva klica metod</li>
           <li xml:lang="tr">detaching-temporary properly checks conditions when more than two method calls are chained</li>
+          <li xml:lang="uk">У новій версії detaching-temporary належно перевіряє умови, якщо у ланцюжку понад два виклики методів</li>
           <li>Fixits for detaching-temporary/detaching-member are more reliable with fixit ranges for operator calls</li>
           <li xml:lang="ar">إصلاحات detaching-temporary/detaching-member أكثر موثوقية مع نطاقات الإصلاح لاستدعاءات المعاملات</li>
           <li xml:lang="ca">Les correccions «detaching-temporary»/«detaching-member» són més fiables amb els intervals de correccions per a crides d'operador</li>
@@ -393,6 +398,7 @@
           <li xml:lang="sk">Pri použití QT_NAMESPACE clazy správne spracováva triedy Qt v tomto špecifickom mennom priestore</li>
           <li xml:lang="sl">Pri uporabi QT_NAMESPACE clazy pravilno obravnava razrede Qt, ki so v tem specifičnem imenskem prostoru</li>
           <li xml:lang="tr">When using QT_NAMESPACE, clazy properly handles Qt classes being in this specific namespace</li>
+          <li xml:lang="uk">Якщо використано QT_NAMESPACE, clazy належним чином оброблятиме класи Qt, що перебувають у цьому просторі назв</li>
           <li>Fix wrong replacement method for QMap::operator[]</li>
           <li xml:lang="ar">إصلاح طريقة الاستبدال الخاطئة لـ QMap::operator[]</li>
           <li xml:lang="ca">Corregeix un mètode de reemplaçament incorrecte per a QMap::operator[]</li>
@@ -408,6 +414,7 @@
           <li xml:lang="sk">Oprava nesprávnej náhradnej metódy pre QMap::operator[]</li>
           <li xml:lang="sl">Popravi napačno metodo zamenjave za QMap::operator[]</li>
           <li xml:lang="tr">Fix wrong replacement method for QMap::operator[]</li>
+          <li xml:lang="uk">Виправлено помилковий метод-замінник для QMap::operator[]</li>
           <li>Make project compile with LLVM22. qhash-namespace, fully-qualified-moc-types, old-style-connect tests are fixed</li>
           <li xml:lang="ar">جعل المشروع يترجم باستخدام LLVM22. إصلاح اختبارات qhash-namespace و fully-qualified-moc-types و old-style-connect</li>
           <li xml:lang="ca">Fa que el projecte compili amb LLVM22. S'han corregit les proves «qhash-namespace», «fully-qualified-moc-types», «old-style-connect»</li>
@@ -437,6 +444,7 @@
           <li xml:lang="sk">Prispôsobenie kontroly readlock-detaching pre správnu funkčnosť so zmenami Qt 6.11</li>
           <li xml:lang="sl">Prilagojeno preverjanje odklopa za branje readlock-detaching, da bo pravilno delovalo s spremembami Qt 6.11</li>
           <li xml:lang="tr">Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
+          <li xml:lang="uk">Скориговано перевірку readlock-detaching так, щоб вона належно працювала зі змінами у Qt 6.11</li>
           <li>Move qstring-ref to manuallevel since it is not compatible with Qt6</li>
           <li xml:lang="ar">نقل qstring-ref إلى المستوى اليدوي لعدم توافقه مع كيدي (Qt) 6</li>
           <li xml:lang="ca">Mou «qstring-ref» a «manuallevel», ja que no és compatible amb les Qt6</li>
