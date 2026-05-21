@@ -3080,6 +3080,7 @@
           <li xml:lang="ca">return-data-from-temporary ara comprova si hi ha conversions QByteArrays temporals a char* quan retornen</li>
           <li xml:lang="ca-valencia">return-data-from-temporary ara comprova si hi ha conversions QByteArrays temporals a char* quan retornen</li>
           <li xml:lang="es">returning-data-from-temporary comprueba ahora el moldeado de QByteArrays a char* cuando se devuelve.</li>
+          <li xml:lang="he">returning-data-from-temporary בודק מעתה הסבה זמנית של QByteArrays ל־char*‎ כשהוא מוחזר</li>
           <li xml:lang="it">returning-data-from-temporary ora controlla il cast temporaneo di QByteArrays in char* quando restituito</li>
           <li xml:lang="ka">returning-data-from-temporary ახლა დაბრუნებისას ამოწმებს დროებითი QByteArray-ების char*-ში გარდაქმნას</li>
           <li xml:lang="nl">De functie `returning-data-from-temporary` controleert nu of tijdelijke QByteArrays worden gecast naar char* wanneer ze worden geretourneerd</li>
