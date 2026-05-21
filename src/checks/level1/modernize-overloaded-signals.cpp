@@ -16,8 +16,7 @@ using namespace clang;
 void ModernizeOverloadedSignals::VisitStmt(clang::Stmt *stmt)
 {
     auto *call = dyn_cast<CallExpr>(stmt);
-    const AccessSpecifierManager *accessSpecifierManager = m_context->accessSpecifierManager;
-    if (!call || !accessSpecifierManager) {
+    if (!call) {
         return;
     }
 
