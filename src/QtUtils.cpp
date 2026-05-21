@@ -370,11 +370,6 @@ CXXMethodDecl *clazy::pmfFromConnect(CallExpr *funcCall, int argIndex, const std
     }
 
     const int numArgs = funcCall->getNumArgs();
-    if (numArgs < 3) {
-        llvm::errs() << "error, connect call has less than 3 arguments\n";
-        return nullptr;
-    }
-
     if (argIndex >= numArgs) {
         return nullptr;
     }

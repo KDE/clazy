@@ -1,0 +1,2 @@
+modernize-overloaded-signals/qtclasses_with_connect.cpp:22:5: warning: Unneeded QOverload::of [-Wclazy-modernize-overloaded-signals]
+modernize-overloaded-signals/qtclasses_with_connect.cpp:30:5: warning: Unneeded qOverload [-Wclazy-modernize-overloaded-signals]
