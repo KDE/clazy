@@ -1,0 +1,6 @@
+modernize-list-initialization/main.cpp:6:23: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:7:24: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:8:23: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:18:17: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:22:23: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:25:24: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]

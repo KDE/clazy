@@ -143,10 +143,9 @@ void RangeLoopDetach::processForRangeLoop(CXXForRangeStmt *rangeLoop)
     if (islvalue(containerExpr, /*by-ref*/ end)) {
         const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
         if (!preProcessorVisitor || preProcessorVisitor->qtVersion() >= 50700) { // qAsConst() was added to 5.7
-            clang::SourceRange exprRange = containerExpr->getSourceRange();
-            llvm::StringRef exprText = Lexer::getSourceText(CharSourceRange::getTokenRange(exprRange.getBegin(), exprRange.getEnd()), sm(), lo());
+            llvm::StringRef exprText = getSourceText(containerExpr);
             std::string insertion = (lo().CPlusPlus17 ? "std::as_const(" : "qAsConst(") + exprText.str() + ")";
-            fixits.push_back(clazy::createReplacement(exprRange, insertion));
+            fixits.push_back(clazy::createReplacement(containerExpr->getSourceRange(), insertion));
         }
     }
 

@@ -1,0 +1,11 @@
+{
+    "tests": [
+        {
+            "filename": "main.cpp",
+            "has_fixits": true
+        },
+        {
+            "filename": "listproducer.cpp"
+        }
+    ]
+}

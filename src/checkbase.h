@@ -205,6 +205,9 @@ protected:
         return name;
     }
 
+    llvm::StringRef getSourceText(clang::Stmt *) const;
+    llvm::StringRef getSourceText(clang::CharSourceRange sourceRange) const;
+
     const std::string m_name;
     std::vector<std::string> m_filesToIgnore;
 

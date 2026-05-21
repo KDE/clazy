@@ -1,0 +1,26 @@
+#include <QtCore/QObject>
+#include <QtCore/QString>
+
+void testVarInitialization()
+{
+    QStringList myList{ "abc", "xyz", "123",};
+    QStringList myList2{ "abc", "xyz",};
+    QList<int> myList3{ 1, 2,};
+}
+
+void consumeList(QStringList args)
+{
+    Q_UNUSED(args)
+}
+
+void testFunctionArgs()
+{
+    consumeList({ "comsume", "meeee",});
+}
+void testWithComment()
+{
+    QStringList myList{ "abc", // BLA
+"xyz", // BLUB
+};
+    QStringList myList2{ "abc" /*data1*/, "xyz" /*data2*/,};
+}

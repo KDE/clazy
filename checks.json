@@ -799,6 +799,12 @@
             "level": 1,
             "visits_stmts": true,
             "categories": ["readability"]
+        },
+        {
+            "name": "modernize-list-initialization",
+            "level": -1,
+            "visits_stmts": true,
+            "categories": ["readability"]
         }
     ]
 }
