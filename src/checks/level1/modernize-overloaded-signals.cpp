@@ -4,6 +4,7 @@
 */
 
 #include "modernize-overloaded-signals.h"
+#include "PreProcessorVisitor.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
@@ -21,21 +22,30 @@ void ModernizeOverloadedSignals::VisitStmt(clang::Stmt *stmt)
     }
 
     FunctionDecl *func = call->getDirectCallee();
-    if (!clazy::isConnect(func, m_context->qtNamespace()) || !clazy::connectHasPMFStyle(func)) {
+    if (!func || !clazy::connectHasPMFStyle(func)) {
         return;
     }
-    if (CXXMethodDecl *signalMethod = clazy::pmfFromConnect(call, 1, m_context->qtNamespace())) {
-        checkConnectArg(call, signalMethod, 1);
-    }
-
-    const int numArgToCheck = call->getNumArgs() > 3 ? 3 : 2;
-    if (CXXMethodDecl *slotMethod = clazy::pmfFromConnect(call, numArgToCheck, m_context->qtNamespace())) {
-        checkConnectArg(call, slotMethod, numArgToCheck);
+    const std::string funcName = trimQtNamespace(func->getQualifiedNameAsString());
+    const int numArgs = call->getNumArgs();
+    if (funcName == "QObject::connect") {
+        checkConnectArg(call, 1);
+        checkConnectArg(call, numArgs > 3 ? 3 : 2);
+    } else if (funcName == "QTimer::singleShot") {
+        checkConnectArg(call, numArgs - 1);
+    } else if (funcName == "QMenu::addAction" || funcName == "QWidget::addAction") {
+        const PreProcessorVisitor *preProcessorVisitor = m_context->preprocessorVisitor;
+        const int numArgToCheck = !preProcessorVisitor || preProcessorVisitor->qtVersion() >= 60000 ? numArgs - 1 : numArgs - 2;
+        checkConnectArg(call, numArgToCheck);
     }
 }
 
-void ModernizeOverloadedSignals::checkConnectArg(CallExpr *call, CXXMethodDecl *pmfFromConnect, int numArgToCheck)
+void ModernizeOverloadedSignals::checkConnectArg(CallExpr *call, int numArgToCheck)
 {
+    CXXMethodDecl *pmfFromConnect = clazy::pmfFromConnect(call, numArgToCheck, m_context->qtNamespace());
+    if (!pmfFromConnect) {
+        return;
+    }
+
     const std::string pmfMethodName = pmfFromConnect->getNameAsString();
     bool isMethodOverloaded = false;
     for (CXXMethodDecl *method : pmfFromConnect->getParent()->methods()) {
@@ -54,7 +64,7 @@ void ModernizeOverloadedSignals::checkConnectArg(CallExpr *call, CXXMethodDecl *
     Expr *argToCheck = call->getArg(numArgToCheck)->IgnoreImplicit();
     if (auto operatorCall = dyn_cast<CXXOperatorCallExpr>(argToCheck); operatorCall && operatorCall->getNumArgs() > 1 && !isMethodOverloaded) {
         if (auto expr = dyn_cast<DeclRefExpr>(operatorCall->getArg(0)->IgnoreImplicit())) {
-            if (expr->getType().getUnqualifiedType().getAsString().starts_with(qtNamespaced("QOverload"))) {
+            if (expr->getType().getUnqualifiedType().getAsString().starts_with("QOverload")) {
                 std::vector<FixItHint> fixits{
                     FixItHint::CreateRemoval(SourceRange(operatorCall->getBeginLoc(), operatorCall->getArg(1)->getBeginLoc().getLocWithOffset(-1))),
                     FixItHint::CreateRemoval(SourceRange(operatorCall->getEndLoc(), operatorCall->getEndLoc())),

@@ -18,7 +18,7 @@ public:
     void VisitStmt(clang::Stmt *) override;
 
 private:
-    void checkConnectArg(clang::CallExpr *call, clang::CXXMethodDecl *pmfFromConnect, int numArgToCheck);
+    void checkConnectArg(clang::CallExpr *call, int numArgToCheck);
 };
 
 #endif
