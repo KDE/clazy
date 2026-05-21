@@ -21,7 +21,7 @@ class QtInstallation:
         self.qmake_header_path = "/usr/include/qt/"
         self.qmake_lib_path = "/usr/lib"
 
-    def compiler_flags(self, cxx_args: str, qt_namespaced: bool, module_includes = False):
+    def compiler_flags(self, cxx_args: str, qt_namespaced=False, module_includes=False):
         extra_includes = ''
         if isMacOS():
             extra_includes = " -I%s/QtCore.framework/Headers" % self.qmake_lib_path
@@ -67,7 +67,8 @@ def find_qt_installation(major_version, qmakes, verbose: bool) -> QtInstallation
 _qt5_installation = None
 _qt6_installation = None
 
-def qt_installation(major_version, verbose: bool):
+
+def qt_installation(major_version, verbose=False):
     global _qt6_installation
     global _qt5_installation
     if major_version == 6:
