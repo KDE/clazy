@@ -13,6 +13,9 @@
         },
         {
             "filename": "qtclasses_with_connect.cpp"
+        },
+        {
+            "filename": "class_inheritance.cpp"
         }
     ]
 }
