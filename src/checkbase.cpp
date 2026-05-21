@@ -313,6 +313,16 @@ bool CheckBase::isOptionSet(const std::string &optionName) const
     return m_context->isOptionSet(qualifiedName);
 }
 
+llvm::StringRef CheckBase::getSourceText(clang::Stmt *stmt) const
+{
+    return getSourceText(CharSourceRange::getTokenRange(stmt->getSourceRange()));
+}
+
+llvm::StringRef CheckBase::getSourceText(clang::CharSourceRange sourceRange) const
+{
+    return Lexer::getSourceText(sourceRange, sm(), lo());
+}
+
 ClazyAstMatcherCallback::ClazyAstMatcherCallback(CheckBase *check)
     : MatchFinder::MatchCallback()
     , m_check(check)

@@ -49,7 +49,7 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
                 return;
             }
             auto *baseExpr = dyn_cast<MemberExpr>(method->getCallee())->getBase()->IgnoreParenImpCasts();
-            StringRef baseText = Lexer::getSourceText(CharSourceRange::getTokenRange(baseExpr->getSourceRange()), sm(), lo());
+            StringRef baseText = getSourceText(baseExpr);
 
             if ((isEqual && intliteral->getValue().isZero()) || (isSmaller && intliteral->getValue().isOne())) {
                 emitWarning(stmt->getBeginLoc(),
@@ -86,8 +86,8 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
 
     auto *baseExpr = memberExpr->getBase()->IgnoreParenImpCasts();
     if (clazy::classIsOneOf(method->getParent(), {"QMultiHash", "QMultiMap"}) && memberCall->getNumArgs() == 2) {
-        StringRef baseText = Lexer::getSourceText(CharSourceRange::getTokenRange(baseExpr->getSourceRange()), sm(), lo());
-        StringRef argText = Lexer::getSourceText(CharSourceRange::getTokenRange(memberCall->getArg(0)->getSourceRange()), sm(), lo());
+        StringRef baseText = getSourceText(baseExpr);
+        StringRef argText = getSourceText(memberCall->getArg(0));
         const auto fixit = FixItHint::CreateReplacement(stmt->getSourceRange(), (baseText + ".contains(" + argText + ")").str());
 
         emitWarning(stmt->getBeginLoc(), "use contains() instead", {fixit});
@@ -109,7 +109,7 @@ void IsEmptyVSCount::VisitStmt(clang::Stmt *stmt)
         }
     }
 
-    StringRef BaseText = Lexer::getSourceText(CharSourceRange::getTokenRange(baseExpr->getSourceRange()), sm(), lo());
+    StringRef BaseText = getSourceText(baseExpr);
     const auto fixit = FixItHint::CreateReplacement(fixitRange, (operatorPrefix + BaseText + ".isEmpty()").str());
 
     emitWarning(stmt->getBeginLoc(), "use isEmpty() instead", {fixit});

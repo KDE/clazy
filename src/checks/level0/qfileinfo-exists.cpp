@@ -30,7 +30,7 @@ void QFileInfoExists::VisitStmt(clang::Stmt *stmt)
         return;
     }
 
-    std::string userArgText = Lexer::getSourceText(CharSourceRange::getTokenRange(ctorExpr->getArg(0)->getSourceRange()), sm(), lo()).str();
+    std::string userArgText = getSourceText(ctorExpr->getArg(0)).str();
     emitWarning(stmt->getBeginLoc(),
                 "Use the static QFileInfo::exists() instead. It's documented to be faster.",
                 {clang::FixItHint::CreateReplacement(stmt->getSourceRange(), "QFileInfo::exists(" + userArgText + ")")});
