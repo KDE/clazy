@@ -11,7 +11,7 @@
 /**
  * See README-modernize-overloaded-signals.md for more info.
  */
-class ModernizeOverloadedSignals : public CheckBase
+class ModernizeOverloadedConnects : public CheckBase
 {
 public:
     using CheckBase::CheckBase;

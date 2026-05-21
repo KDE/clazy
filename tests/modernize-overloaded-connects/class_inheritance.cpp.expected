@@ -1,0 +1,2 @@
+modernize-overloaded-connects/class_inheritance.cpp:22:5: warning: Unneeded qOverload [-Wclazy-modernize-overloaded-connects]
+modernize-overloaded-connects/class_inheritance.cpp:23:5: warning: Unneeded qOverload [-Wclazy-modernize-overloaded-connects]

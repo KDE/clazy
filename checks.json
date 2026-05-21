@@ -795,7 +795,7 @@
             "categories": ["bug"]
         },
         {
-            "name": "modernize-overloaded-signals",
+            "name": "modernize-overloaded-connects",
             "level": 1,
             "visits_stmts": true,
             "categories": ["readability"]

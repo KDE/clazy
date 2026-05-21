@@ -3,7 +3,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "modernize-overloaded-signals.h"
+#include "modernize-overloaded-connects.h"
 #include "PreProcessorVisitor.h"
 #include "QtUtils.h"
 #include "TypeUtils.h"
@@ -13,7 +13,7 @@
 
 using namespace clang;
 
-void ModernizeOverloadedSignals::VisitStmt(clang::Stmt *stmt)
+void ModernizeOverloadedConnects::VisitStmt(clang::Stmt *stmt)
 {
     auto *call = dyn_cast<CallExpr>(stmt);
     if (!call) {
@@ -38,7 +38,7 @@ void ModernizeOverloadedSignals::VisitStmt(clang::Stmt *stmt)
     }
 }
 
-void ModernizeOverloadedSignals::checkConnectArg(CallExpr *call, int numArgToCheck)
+void ModernizeOverloadedConnects::checkConnectArg(CallExpr *call, int numArgToCheck)
 {
     CXXMethodDecl *pmfFromConnect = clazy::pmfFromConnect(call, numArgToCheck, m_context->qtNamespace());
     if (!pmfFromConnect) {

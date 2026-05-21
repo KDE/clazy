@@ -5,8 +5,7 @@ Especially with removed overloads in Qt API, lots of places were not cleaned up.
 
 In case a `static_cast` or `QOverload<>::of` is used, this check suggests utilizing the newer `qOverload` function.
 
-Note: This check does not warn about overloaded signals existing. It merely suggests to use the most concise connect syntax. See the ["overloaded-signal"](./README-overloaded-signal.md) Clazy check
-
+Note: This check does not warn about overloaded signals existing. It merely suggests to use the most concise connect syntax. See the ["overloaded-signal"](./README-overloaded-signal.md) Clazy check.
 Example of code where warnings/fixits are emitted:
 
 ```cpp
