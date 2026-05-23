@@ -658,6 +658,7 @@
           <li xml:lang="sk">Clazy sa konečne môže integrovať do clang-tidy - jeden príkaz na ovládanie</li>
           <li xml:lang="sl">Clazy je končno mogoče vključiti v clang-tidy - en ukaz za vladanje</li>
           <li xml:lang="tr">Clazy can finally be integrated into clang-tidy - one command to rule</li>
+          <li xml:lang="uk">Нарешті clazy може бути інтегровано до clang-tidy — одна команда для керування</li>
           <li>them all! All checks can be enabled using "clazy-&lt;checkname&gt;". For example:</li>
           <li xml:lang="ar">يمكن تفعيل كافة الفحوصات باستخدام "clazy-&lt;checkname&gt;". على سبيل المثال:</li>
           <li xml:lang="ca">a tots ells! Totes les comprovacions es poden habilitar utilitzant «clazy-&lt;checkname&gt;». Per exemple:</li>
@@ -672,6 +673,7 @@
           <li xml:lang="sk">všetkého! Všetky kontroly možno povoliť pomocou "clazy-&lt;checkname&gt;". Napríklad:</li>
           <li xml:lang="sl">vsa! Vsa preverjanja je mogoče omogočiti z uporabo "clazy-&lt;checkname&gt;". Na primer:</li>
           <li xml:lang="tr">them all! All checks can be enabled using "clazy-&lt;checkname&gt;". For example:</li>
+          <li xml:lang="uk">усіма ними! Усі перевірки може бути увімкнено за допомогою "clazy-&lt;назва_перевірки&gt;". Приклад:</li>
           <li>`clazy-qstring-arg,clazy-qfileinfo-exists`, enabling all checks using</li>
           <li xml:lang="ar">`clazy-qstring-arg,clazy-qfileinfo-exists` ، تفعيل كافة الفحوصات باستخدام</li>
           <li xml:lang="ca">`clazy-qstring-arg,clazy-qfileinfo-exists`, habilita totes les comprovacions usant</li>
@@ -702,6 +704,7 @@
           <li xml:lang="sk">`clazy-*` povolí aj manuálne kontroly. Odporúča sa väčšia granularita.</li>
           <li xml:lang="sl">`clazy-*` bo omogočil tudi ročna preverjanja. Priporočljivo je, da je bolj zrnat.</li>
           <li xml:lang="tr">`clazy-*` will also enable manual checks. It is recommended to be more granular.</li>
+          <li xml:lang="uk">`clazy-*` також увімкне перевірки вручну. Рекомендуємо точне налаштовування.</li>
           <li>The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin</li>
           <li xml:lang="ar">يمكن تحميل الملحق باستخدام `-load=ClazyClangTidy.so` ، ولهذا يجب أن يكون الملحق</li>
           <li xml:lang="ca">El connector es pot carregar utilitzant `-load=ClazyClangTidy.so`, per a això, el connector</li>
@@ -716,6 +719,7 @@
           <li xml:lang="sk">Modul je možné načítať pomocou `-load=ClazyClangTidy.so`, modul</li>
           <li xml:lang="sl">Vtičnik lahko naložite z `-load=ClazyClangTidy.so`, za to vtičnik</li>
           <li xml:lang="tr">The plugin can be loaded using `-load=ClazyClangTidy.so`, for this, the plugin</li>
+          <li xml:lang="uk">Додаток може бути завантажено за допомогою `-load=ClazyClangTidy.so`, для цього, додаток</li>
           <li>must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.</li>
           <li xml:lang="ar">في LD_LIBRARY_PATH. وإلا، فيمكن تحديد مسار مطلق.</li>
           <li xml:lang="ca">ha d'estar en el LD_LIBRARY_PATH. En cas contrari, es pot especificar un camí absolut.</li>
@@ -730,6 +734,7 @@
           <li xml:lang="sk">musí byť v LD_LIBRARY_PATH. Inak je možné zadať absolútnu cestu.</li>
           <li xml:lang="sl">mora biti v LD_LIBRARY_PATH. V nasprotnem primeru je lahko določena absolutna pot.</li>
           <li xml:lang="tr">must be in the LD_LIBRARY_PATH. Otherwise, an absolute path may be specified.</li>
+          <li xml:lang="uk">має бути у LD_LIBRARY_PATH. Інакше слід вказувати абсолютний шлях.</li>
           <li>isempty-vs-count now provides fixits for all scenarios. Also, cases where</li>
           <li xml:lang="ar">يوفر isempty-vs-count الآن إصلاحات لكافة السيناريوهات. كما أن الحالات التي</li>
           <li xml:lang="ca">isempty-vs-count ara proporciona correccions per a tots els escenaris. A més, casos on</li>
@@ -744,6 +749,7 @@
           <li xml:lang="sk">isempty-vs-count teraz poskytuje opravy pre všetky scenáre. Tiež prípady, kde</li>
           <li xml:lang="sl">isempty-vs-count zdaj ponuja popravke za vse scenarije. Tudi primeri, ko</li>
           <li xml:lang="tr">isempty-vs-count now provides fixits for all scenarios. Also, cases where</li>
+          <li xml:lang="uk">У новій версії isempty-vs-count надаються підказки щодо виправлення для усіх сценаріїв. Також програма повідомлятиме про випадки,</li>
           <li>the length is compared using "== 0", "&lt; 1", "&gt; 0" are now reported and have fixits.</li>
           <li xml:lang="ar">يقارن فيها الطول باستخدام "== 0"، "&lt; 1"، "&gt; 0" يُبلغ عنها الآن ولها إصلاحات.</li>
           <li xml:lang="ca">la longitud es compara utilitzant "== 0", "&lt; 1", "&gt; 0" ara s'informen i tenen correccions.</li>
@@ -758,6 +764,7 @@
           <li xml:lang="sk">sa dĺžka porovnáva pomocou "== 0", "&lt; 1", "&gt; 0" sú teraz nahlasované a majú opravy.</li>
           <li xml:lang="sl">se dolžina primerja z uporabo "== 0", "&lt; 1", "&gt; 0" se zdaj poroča in ima popravke.</li>
           <li xml:lang="tr">the length is compared using "== 0", "&lt; 1", "&gt; 0" are now reported and have fixits.</li>
+          <li xml:lang="uk">де довжина порівнюється за допомогою "== 0", "&lt; 1", "&gt; 0" і додає підказки щодо виправлення.</li>
           <li>qt6-\* Porting checks are considered deprecated now and will be removed in the next release of clazy</li>
           <li xml:lang="ar">تعد فحوصات النقل qt6-\* مهجورة الآن وستزال في الإصدار القادم من كلازي</li>
           <li xml:lang="ca">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la propera versió de clazy</li>
@@ -801,6 +808,7 @@
           <li xml:lang="sk">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND v clazy teraz fungujú</li>
           <li xml:lang="sl">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND zdaj vsi delujejo v clazy kot</li>
           <li xml:lang="tr">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND all work in clazy now as</li>
+          <li xml:lang="uk">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND усі працюють у clazy, як</li>
           <li>expected. Individual clazy checks can be disabled when using a "clazy-"</li>
           <li xml:lang="ar">هو متوقع. يمكن تعطيل فحوصات كلازي الفردية عند استخدام البادئة "clazy-".</li>
           <li xml:lang="ca">s'esperava. Les comprovacions individuals del clazy es poden desactivar quan s'utilitza un prefix</li>
@@ -815,6 +823,7 @@
           <li xml:lang="sk">podľa očakávania. Jednotlivé kontroly clazy je možné zakázať pri použití predpony</li>
           <li xml:lang="sl">pričakovano. Posamezna preverjanja clazy je mogoče onemogočiti, če uporabljate predlogo "clazy-"</li>
           <li xml:lang="tr">expected. Individual clazy checks can be disabled when using a "clazy-"</li>
+          <li xml:lang="uk">належить. Окремі перевірки clazy можна вимкнути за допомогою префікса "clazy-".</li>
           <li>prefix. For example "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="ar">على سبيل المثال "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="ca">«clazy-». Per exemple «NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)»</li>
@@ -829,6 +838,7 @@
           <li xml:lang="sk">"clazy-". Napríklad "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="sl">predpona. Na primer "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="tr">prefix. For example "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
+          <li xml:lang="uk">Приклад: "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
         </ul>
       </description>
     </release>
