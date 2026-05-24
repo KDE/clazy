@@ -609,6 +609,7 @@
           <li xml:lang="sk">Zabezpečiť správnu funkčnosť clang21 s clazy a rovnaké čísla riadkov/znakov ako predtým (nezhody s volaniami operátorov)</li>
           <li xml:lang="sl">Prepriča se, da clang21 pravilno deluje s clazy in ustvari isto številko vrstice/črke kot prej (neujemanje s klici operatorja)</li>
           <li xml:lang="tr">Ensure that clang21 works properly with clazy and produces same line/letter number as before (mismatches with operator calls)</li>
+          <li xml:lang="uk">Забезпечено належну роботу clang21 з clazy та видачу того самого номера рядка/літери, що й раніше (невідповідність з викликами операторів)</li>
           <li>non-pod-global-static: Fix false positive with Q_IMPORT_PLUGIN in Qt-6.10</li>
           <li xml:lang="ar">non-pod-global-static: إصلاح الإيجابيات الزائفة مع Q_IMPORT_PLUGIN في Qt-6.10</li>
           <li xml:lang="ca">non-pod-global-static: corregeix un fals positiu amb Q_IMPORT_PLUGIN a les Qt-6.10</li>
@@ -779,6 +780,7 @@
           <li xml:lang="sk">Kontroly portovania qt6-\* sa teraz považujú za zastarané a budú odstránené v nasledujúcom vydaní clazy</li>
           <li xml:lang="sl">qt6-\* Prenosi preverjanj veljajo za zastarela in bodo odstranjena v naslednji izdaji clazy</li>
           <li xml:lang="tr">qt6-\* Porting checks are considered deprecated now and will be removed in the next release of clazy</li>
+          <li xml:lang="uk">Перевірки портування qt6-\* тепер вважаються застарілими; їх буде вилучено у наступному випуску clazy</li>
           <li>detaching-temporary and detaching-member checks provide fixits for methods that have const coutnerparts</li>
           <li xml:lang="ar">توفر فحوصات detaching-temporary و detaching-member إصلاحات للدوال التي لها نظائر ثابتة (const)</li>
           <li xml:lang="ca">les comprovacions «detaching-temporary» i «detaching-member» proporcionen correccions per als mètodes que tenen contraparts «const»</li>
@@ -793,6 +795,7 @@
           <li xml:lang="sk">Kontroly detaching-temporary a detaching-member poskytujú opravy pre metódy, ktoré majú konštantné náprotivky</li>
           <li xml:lang="sl">detaching-temporary in detaching-member nudijo popravke za metode, ki imajo const coutnerparts</li>
           <li xml:lang="tr">detaching-temporary and detaching-member checks provide fixits for methods that have const coutnerparts</li>
+          <li xml:lang="uk">detaching-temporary і detaching-member надають підказки щодо виправлення для методів, у яких є сталі відповідники</li>
           <li>NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND all work in clazy now as</li>
           <li xml:lang="ar">تعمل كافة الكلمات NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND في كلازي الآن كما</li>
           <li xml:lang="ca">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND ara funcionen totes com</li>
@@ -875,6 +878,7 @@
           <li xml:lang="sk">install-event-filter: Oprava pádu, keď na danej hĺbke nie je žiadny potomok. BUG: 464372</li>
           <li xml:lang="sl">install-event-filter: Popravi sesutje, ko na dani globini ni otroka. NAPAKA: 464372</li>
           <li xml:lang="tr">install-event-filter: Fix crash when there is no child at the given depth. BUG: 464372</li>
+          <li xml:lang="uk">install-event-filter: усунено аварійне завершення роботи, якщо немає дочірнього методу вказаної глибини. BUG: 464372</li>
           <li>fully-qualified-moc-types: Fix enum/enum class not being evaluated. BUG: 423780</li>
           <li xml:lang="ar">fully-qualified-moc-types: إصلاح عدم تقييم enum/enum class. علة: 423780</li>
           <li xml:lang="ca">fully-qualified-moc-types: corregeix la classe enum/enum que no s'avaluava. ERROR: 423780</li>
@@ -889,6 +893,7 @@
           <li xml:lang="sk">fully-qualified-moc-types: Oprava nevyhodnocovania enum/enum class. BUG: 423780</li>
           <li xml:lang="sl">fully-qualified-moc-types: popravljen razred enum/enum, ki ni bil ocenjen. NAPAKA: 423780</li>
           <li xml:lang="tr">fully-qualified-moc-types: Fix enum/enum class not being evaluated. BUG: 423780</li>
+          <li xml:lang="uk">fully-qualified-moc-types: виправлено неможливість обробки enum/класу enum. BUG: 423780</li>
           <li>Fixed crash in qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li xml:lang="ar">إصلاح انهيار في qstring-comparison-to-implicit-char. علة: 502458</li>
           <li xml:lang="ca">S'ha corregit una fallada a qstring-comparison-to-implicit-char. ERROR: 502458</li>
@@ -1795,6 +1800,7 @@
           <li xml:lang="ca-valencia">senyal de sobrecarregat</li>
           <li xml:lang="es">señal sobrecargada</li>
           <li xml:lang="fr">signal surchargé</li>
+          <li xml:lang="he">אות עמוס</li>
           <li xml:lang="it">segnale sovraccarico</li>
           <li xml:lang="ka">გადატვირთული სიგნალი</li>
           <li xml:lang="nl">overladen signaal</li>
@@ -1887,6 +1893,7 @@
           <li xml:lang="ca-valencia">connect-non-signal: corregix el cas en què no s'ha trobat el pmf</li>
           <li xml:lang="es">connect-non-signal: Se ha corregido el caso donde no se encuentra el pmf.</li>
           <li xml:lang="fr">connect-non-signal : correction du cas où il ne trouvait pas aucun pmf</li>
+          <li xml:lang="he">connect-non-signal: תוקן מצב שבו הוא לא מצא את ה־pmf</li>
           <li xml:lang="it">connect-non-signal: corretto il caso in cui non veniva trovato il pmf</li>
           <li xml:lang="ka">connect-non-signal: გასწორდა შემთხვევა, როცა მან pmf ვერ იპოვა</li>
           <li xml:lang="nl">connect-non-signal: opgelost geval waar het de pmf niet vond</li>
@@ -1901,6 +1908,7 @@
           <li xml:lang="ca-valencia">qstring-arg avisa quan s'utilitza QLatin1String::arg(int), ja que es convertix a QChar</li>
           <li xml:lang="es">qstring-arg advierte cuando se usa QLatin1String::arg(int), ya que se moldea a QChar.</li>
           <li xml:lang="fr">qstring-arg avertit lors de l'utilisation de QLatin1String::arg(int) suite à une conversion en QChar</li>
+          <li xml:lang="he">qstring-arg מזהיר בעת שימוש ב־QLatin1String::arg(int), כיוון שהוא ממיר ל־QChar</li>
           <li xml:lang="it">qstring-arg avvisa quando si utilizza QLatin1String::arg(int), poiché esegue il cast in QChar</li>
           <li xml:lang="ka">qstring-arg გაგაფრთხილებთ QLatin1String::arg(int)-ის გამოყენებისას, რადგან ის მას QChar-ში გადაჰყავს</li>
           <li xml:lang="nl">qstring-arg waarschuwt wanneer QLatin1String::arg(int) wordt gebruikt, zoals het omvormt naar QChar</li>
@@ -2332,6 +2340,7 @@
           <li xml:lang="ca-valencia">function-args-by-ref ara afig refs o const-ref que falten (experimental)</li>
           <li xml:lang="es">function-args-by-ref añade ahora las referencias o referencias constantes ausentes (experimental).</li>
           <li xml:lang="fr">function-args-by-ref ajoute maintenant les références manquantes ou const-ref (Expérimental)</li>
+          <li xml:lang="he">function-args-by-ref מוסיף מעתה refs או const-ref חסרים (ניסיוני)</li>
           <li xml:lang="it">function-args-by-ref ora aggiunge i riferimenti mancanti o const-ref (sperimentale)</li>
           <li xml:lang="ka">function-args-by-ref ახლა ამატებს ნაკლულ refs-ებს, ან const-ref-ებს (ექსპერიმენტული)</li>
           <li xml:lang="nl">function-args-by-ref voegt nu ontbrekende refs of const-ref toe (experimenteel)</li>
@@ -2621,6 +2630,7 @@
           <li xml:lang="ca">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
           <li xml:lang="ca-valencia">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
           <li xml:lang="es">auto-unexpected-qstringbuilder también muestra ahora advertencias para las lambdas que devuelven un QStringBuilder.</li>
+          <li xml:lang="he">auto-unexpected-qstringbuilder מזהיר מעתה גם על למדות שמחזירות QStringBuilder</li>
           <li xml:lang="it">auto-unexpected-qstringbuilder ora avvisa anche in caso di restituzione di lambda QStringBuilder</li>
           <li xml:lang="ka">auto-unexpected-qstringbuilder ახლა ასევე გაგაფრთხილებთ ლამბდებზე, რომლებიც QStringBuilder-ს აბრუნებენ</li>
           <li xml:lang="nl">auto-unexpected-qstringbuilder geeft nu ook een waarschuwing voor lambda-functies die een QStringBuilder retourneren</li>
