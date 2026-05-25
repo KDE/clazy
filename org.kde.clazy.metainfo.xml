@@ -909,6 +909,7 @@
           <li xml:lang="sk">Opravený pád v qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li xml:lang="sl">Popravljeno sesutje v qstring-comparison-to-implicit-char. NAPAKA: 502458</li>
           <li xml:lang="tr">Fixed crash in qstring-comparison-to-implicit-char. BUG: 502458</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи у qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li>Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="ar">إصلاح انهيار عندما يواجه fully-qualified-moc-types إشارات بتعبيرات مثل "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="ca">S'ha corregit una fallada quan fully-qualified-moc-types troba senyals amb expressions com «std::bitset&lt;int(8)&gt;»</li>
@@ -922,6 +923,7 @@
           <li xml:lang="sk">Opravený pád, keď fully-qualified-moc-types narazí na signály s výrazmi ako "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="sl">Popravljeno sesutje, ko fully-qualified-moc-types naleti na signale z izrazi, kot je "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="tr">Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset&lt;int(8)&gt;"</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи при виявленні у fully-qualified-moc-types сигналів за допомогою виразів подібних до «std::bitset&lt;int(8)&gt;»</li>
           <li>Fixed crash in qvariant-template-instantiation</li>
           <li xml:lang="ar">إصلاح انهيار في qvariant-template-instantiation</li>
           <li xml:lang="ca">S'ha corregit una fallada a qvariant-template-instantiation</li>
@@ -936,6 +938,7 @@
           <li xml:lang="sk">Opravený pád v qvariant-template-instantiation</li>
           <li xml:lang="sl">Popravljeno sesutje v primeru qvariant-template-instanciation</li>
           <li xml:lang="tr">Fixed crash in qvariant-template-instantiation</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи у qvariant-template-instantiation</li>
         </ul>
         <p>This release adds the following features:</p>
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
@@ -969,6 +972,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>readlock-detaching</li>
           <li xml:lang="ar">readlock-detaching</li>
           <li xml:lang="ca">readlock-detaching</li>
@@ -984,6 +988,7 @@
           <li xml:lang="sk">readlock-detaching</li>
           <li xml:lang="sl">readlock-detaching</li>
           <li xml:lang="tr">readlock-detaching</li>
+          <li xml:lang="uk">readlock-detaching</li>
           <li>Update minimum Clang/LLVM to 19</li>
           <li xml:lang="ar">تحديث الحد الأدنى لـ Clang/LLVM إلى 19</li>
           <li xml:lang="ca">Actualitza el Clang/LLVM mínim a 19</li>
@@ -999,6 +1004,7 @@
           <li xml:lang="sk">Aktualizácia minimálnej verzie Clang/LLVM na 19</li>
           <li xml:lang="sl">Posodobite minimalnega Clang/LLVM na 19</li>
           <li xml:lang="tr">Update minimum Clang/LLVM to 19</li>
+          <li xml:lang="uk">Оновлено мінімальні вимоги до Clang/LLVM до 19</li>
           <li>`clazy-standalone --version` contains git version ( output of `git describe`) if it is not a tagged commit</li>
           <li xml:lang="ar">يحتوي `clazy-standalone --version` على إصدارة جيت (مخرجات `git describe`) إذا لم يكن إيداعًا موسومًا</li>
           <li xml:lang="ca">`clazy-standalone --version` conté la versió git (sortida de `git describe`) si no és una comissió etiquetada</li>
@@ -1027,6 +1033,7 @@
           <li xml:lang="sk">Pridané chýbajúce metódy do kontrol pre odpájanie dočasných/členských zoznamov alebo máp</li>
           <li xml:lang="sl">Dodane manjkajoče metode preverjanja za odklop začasnih/članskih seznamov ali mape</li>
           <li xml:lang="tr">Added missing methods to checks for detaching temporary/member lists or maps</li>
+          <li xml:lang="uk">Додано пропущені методи до перевірок для від'єднання тимчасових списків або карт або списків чи карт учасників</li>
         </ul>
       </description>
     </release>
@@ -1061,6 +1068,7 @@
         <p xml:lang="sk">Podpora kompilácie proti Clang 20</p>
         <p xml:lang="sl">Podpora za prevajanje proti Clang 20</p>
         <p xml:lang="tr">Support for compilation against Clang 20</p>
+        <p xml:lang="uk">Підтримка компіляції з Clang 20</p>
         <p>increase verbosity of some warning messages</p>
         <p xml:lang="ar">زيادة إسهاب بعض رسائل التحذير</p>
         <p xml:lang="ca">augmenta el nivell de detall d'alguns missatges d'avís</p>
@@ -1076,6 +1084,7 @@
         <p xml:lang="sk">zvýšenie podrobnosti niektorých varovných správ</p>
         <p xml:lang="sl">povečati komunikativnost nekaterih opozorilnih sporočil</p>
         <p xml:lang="tr">increase verbosity of some warning messages</p>
+        <p xml:lang="uk">збільшення докладності деяких попереджень</p>
         <p>checks `function-args-by-value` and `function-args-by-ref`: add function name and parameter name to warning message</p>
         <p xml:lang="ar">فحصا `function-args-by-value` و `function-args-by-ref`: إضافة اسم الدالة واسم المعامل إلى رسالة التحذير</p>
         <p xml:lang="ca">comprovacions `function-args-by-value` i `function-args-by-ref`: afegeix el nom de la funció i el nom del paràmetre al missatge d'avís</p>
@@ -1134,6 +1143,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>qbytearray-conversion-to-c-style</li>
           <li xml:lang="ar">qbytearray-conversion-to-c-style</li>
           <li xml:lang="ca">qbytearray-conversion-to-c-style</li>
@@ -1149,6 +1159,7 @@
           <li xml:lang="sk">qbytearray-conversion-to-c-style</li>
           <li xml:lang="sl">qbytearray-conversion-to-c-style</li>
           <li xml:lang="tr">qbytearray-conversion-to-c-style</li>
+          <li xml:lang="uk">qbytearray-conversion-to-c-style</li>
         </ul>
       </description>
     </release>
@@ -1186,6 +1197,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>used-qunused-variable</li>
           <li xml:lang="ar">used-qunused-variable</li>
           <li xml:lang="ca">used-qunused-variable</li>
@@ -1368,6 +1380,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>qt-keyword-emit</li>
           <li xml:lang="ar">qt-keyword-emit</li>
           <li xml:lang="ca">qt-keyword-emit</li>
@@ -1435,6 +1448,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>use-arrow-operator-instead-of-data</li>
           <li xml:lang="ar">use-arrow-operator-instead-of-data</li>
           <li xml:lang="ca">use-arrow-operator-instead-of-data</li>
@@ -1683,6 +1697,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>qt6-qhash-signature</li>
           <li xml:lang="ar">qt6-qhash-signature</li>
           <li xml:lang="ca">qt6-qhash-signature</li>
@@ -1794,6 +1809,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>overloaded signal</li>
           <li xml:lang="ar">إشارة محملة بشكل زائد (overloaded)</li>
           <li xml:lang="ca">senyal de sobrecarregat</li>
@@ -1969,6 +1985,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>heap-allocated-small-trivial-type</li>
           <li xml:lang="ar">heap-allocated-small-trivial-type</li>
           <li xml:lang="ca">heap-allocated-small-trivial-type</li>
@@ -2244,6 +2261,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>ifndef-define-typo</li>
           <li xml:lang="ar">ifndef-define-typo</li>
           <li xml:lang="ca">ifndef-define-typo</li>
@@ -2476,6 +2494,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>connect-by-name</li>
           <li xml:lang="ar">connect-by-name</li>
           <li xml:lang="ca">connect-by-name</li>
@@ -2849,6 +2868,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>thread-with-slots</li>
           <li xml:lang="ar">thread-with-slots</li>
           <li xml:lang="ca">thread-with-slots</li>
@@ -3047,6 +3067,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>install-event-filter</li>
           <li xml:lang="ar">install-event-filter</li>
           <li xml:lang="ca">install-event-filter</li>
@@ -3319,6 +3340,7 @@
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
+          <li xml:lang="uk">Нові перевірки:</li>
           <li>child-event-qobject-cast</li>
           <li xml:lang="ar">child-event-qobject-cast</li>
           <li xml:lang="ca">child-event-qobject-cast</li>
