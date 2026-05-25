@@ -14,11 +14,12 @@
 class ModernizeListInitialization : public CheckBase
 {
 public:
-    explicit ModernizeListInitialization(const std::string &name, Options options);
-    void VisitDecl(clang::Decl *) override;
+    using CheckBase::CheckBase;
     void VisitStmt(clang::Stmt *) override;
 
 private:
+    void checkOperatorCallListInitialization(clang::SourceRange fixitSourceRange, clang::CXXOperatorCallExpr *operatorCall);
+    std::vector<clang::CallExpr *> m_alreadyCheckedOperatorCalls;
 };
 
 #endif
