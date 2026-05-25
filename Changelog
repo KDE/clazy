@@ -4,6 +4,7 @@ Released: TBD
 
 Bugfixes:
  * fully-qualified-moc-types no longer provides false positive for const pointers
+ * detaching-temporary/detaching-member fixits no longer provide false source ranges when used within macros
 Features:
  *
 Notes:

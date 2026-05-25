@@ -1,0 +1,15 @@
+#include <QtTest/QTest>
+
+QStringList produceTemporary()
+{
+    return QStringList("abc");
+}
+
+void test()
+{
+    QString value = produceTemporary().at(0);
+    QVERIFY(produceTemporary().at(0) == "abc");
+    QCOMPARE(produceTemporary().at(0), "abc");
+    QCOMPARE(produceTemporary().at(0), "operator with spaces ");
+    QCOMPARE(produceTemporary().at(1 + 1), "expression within braces");
+}

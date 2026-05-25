@@ -106,7 +106,7 @@ void testSubscriptOperator()
     auto m = getMap();
     m[0];
 
-    getList()  .at(0); // Warning, test correct fixit range here
+    getList().at(0); // Warning, test correct fixit range here
     getList().at(0); // Warning, test correct fixit range here
 }
 

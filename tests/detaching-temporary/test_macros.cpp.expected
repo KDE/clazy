@@ -1,0 +1,5 @@
+detaching-temporary/test_macros.cpp:10:21: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/test_macros.cpp:11:13: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/test_macros.cpp:12:14: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/test_macros.cpp:13:14: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]
+detaching-temporary/test_macros.cpp:14:14: warning: Don't call QList::operator[]() on temporary [-Wclazy-detaching-temporary]

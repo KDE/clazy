@@ -44,19 +44,15 @@ std::vector<FixItHint> DetachingBase::getFixitHints(StringRef className, StringR
             }
         } else if (auto *operatorCall = dyn_cast<CXXOperatorCallExpr>(callExpr); operatorCall && it->first == "operator[]") {
             StringRef argText = Lexer::getSourceText(CharSourceRange::getTokenRange(operatorCall->getArg(1)->getSourceRange()), sm(), lo());
-            SourceLocation right = operatorCall->getEndLoc();
-
-            // Clang SourcRanges are very confusing. Operator calls from a chain yielded the same beginLoc, causing the replacement fixit to be broken
-            // The end position is reliable - use it and go backwards till finding the correct token
-            SourceLocation left = Lexer::GetBeginningOfToken(right, sm(), lo());
-            while (left.isValid() && left != operatorCall->getBeginLoc()) {
-                if (Token tok; !Lexer::getRawToken(left, tok, sm(), lo(), true) && tok.is(tok::l_square)) {
-                    break;
-                }
-                left = left.getLocWithOffset(-1);
-            }
-
             std::string operatorRepleacement = ("." + it->second + "(" + argText + ")").str();
+            SourceLocation left;
+            if (isa<MemberExpr>(operatorCall->getArg(0))) {
+                left = operatorCall->getArg(1)->getBeginLoc().getLocWithOffset(-1);
+            } else {
+                // Clang SourcRanges are very confusing. Get the location of the argument to the call and go one to the left. Works in macros too!
+                left = operatorCall->getArg(0)->getEndLoc().getLocWithOffset(1);
+            }
+            SourceLocation right = operatorCall->getEndLoc();
             hints.emplace_back(FixItHint::CreateReplacement(SourceRange(left, right), operatorRepleacement));
         }
     }
