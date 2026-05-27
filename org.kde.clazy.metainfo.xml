@@ -1213,6 +1213,7 @@
           <li xml:lang="sk">used-qunused-variable</li>
           <li xml:lang="sl">used-qunused-variable</li>
           <li xml:lang="tr">used-qunused-variable</li>
+          <li xml:lang="uk">used-qunused-variable</li>
         </ul>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
@@ -1245,6 +1246,7 @@
           <li xml:lang="sk">Kontrola qstring-arg poskytuje opravu</li>
           <li xml:lang="sl">qstring-arg check zagotavlja popravek</li>
           <li xml:lang="tr">qstring-arg check provides a fix-it</li>
+          <li xml:lang="uk">У новій версії перевірка qstring-arg додає повідомлення щодо виправлення</li>
           <li>Fixed unused-non-trivial-variable to not warn when [[maybe_unused]] set</li>
           <li xml:lang="ar">إصلاح unused-non-trivial-variable لكي لا يحذر عند ضبط [[maybe_unused]]</li>
           <li xml:lang="ca">S'ha corregit unused-non-trivial-variable per no avisar quan s'ha establert [[maybe_unused]]</li>
@@ -1259,6 +1261,7 @@
           <li xml:lang="sk">Opravená unused-non-trivial-variable, aby nevarovala pri nastavení [[maybe_unused]]</li>
           <li xml:lang="sl">Popravljena unused-non-trivial-variable, ki ne opozarja, ko je nastavljen [[maybe_unused]]</li>
           <li xml:lang="tr">Fixed unused-non-trivial-variable to not warn when [[maybe_unused]] set</li>
+          <li xml:lang="uk">Виправлено unused-non-trivial-variable так, щоб перевірка не попереджала, якщо встановлено [[maybe_unused]]</li>
           <li>Fixed qstring-arg for upcoming Qt 6.9</li>
           <li xml:lang="ar">إصلاح qstring-arg لنسخة Qt 6.9 القادمة</li>
           <li xml:lang="ca">S'ha corregit qstring-arg per a les properes Qt 6.9</li>
@@ -1274,6 +1277,7 @@
           <li xml:lang="sk">Opravená qstring-arg pre nadchádzajúce Qt 6.9</li>
           <li xml:lang="sl">Popravljen qstring-arg za prihajajoči Qt 6.9</li>
           <li xml:lang="tr">Fixed qstring-arg for upcoming Qt 6.9</li>
+          <li xml:lang="uk">Виправлено qstring-arg для сумісності з Qt 6.9</li>
           <li>Fixed fully-qualified-moc-types false positive for const modifiers of generic arguments</li>
           <li xml:lang="ar">إصلاح الإيجابيات الزائفة في fully-qualified-moc-types لمغيرات const في المعاملات العامة</li>
           <li xml:lang="ca">S'han corregit els tipus falsos positius de fully-qualified-moc-types per als modificadors «const» d'arguments genèrics</li>
@@ -1287,6 +1291,7 @@
           <li xml:lang="sk">Opravený falošne pozitívny výsledok fully-qualified-moc-types pre konštantné modifikátory generických argumentov</li>
           <li xml:lang="sl">Popravljen lažno pozitiven fully-qualified-moc-types za modifikatorje const generičnih argumentov</li>
           <li xml:lang="tr">Fixed fully-qualified-moc-types false positive for const modifiers of generic arguments</li>
+          <li xml:lang="uk">Виправлено фіктивне спрацювання fully-qualified-moc-types для модифікаторів const загальних аргументів</li>
           <li>Silence false positive non-pod-global-static warning for QML module initialization</li>
           <li xml:lang="ar">إسكات تحذير الإيجابيات الزائفة في non-pod-global-static لتهيئة وحدات QML</li>
           <li xml:lang="ca">Silencia l'avís fals positiu non-pod-global-static per a la inicialització del mòdul QML</li>
@@ -1300,6 +1305,7 @@
           <li xml:lang="sk">Potlačenie falošne pozitívneho varovania non-pod-global-static pre inicializáciu modulu QML</li>
           <li xml:lang="sl">Utišaj lažno pozitivno non-pod-global-static opozorilo za inicializacijo modula QML</li>
           <li xml:lang="tr">Silence false positive non-pod-global-static warning for QML module initialization</li>
+          <li xml:lang="uk">Притлумлено фіктивні спрацювання попередження non-pod-global-static для ініціалізації модуля QML</li>
           <li>Fix function-args-by-value false positive that would cause compile error</li>
           <li xml:lang="ar">إصلاح إيجابية زائفة في function-args-by-value كانت لتتسبب في خطأ تجميع</li>
           <li xml:lang="ca">Corregeix el fals positiu de function-args-by-value que provocaria un error de compilació</li>
@@ -1314,6 +1320,7 @@
           <li xml:lang="sk">Oprava falošne pozitívneho výsledku function-args-by-value, ktorý by spôsobil chybu kompilácie</li>
           <li xml:lang="sl">Popravi napačno pozitiven argument funkcije po vrednosti, ki bi povzročil napako pri prevajanju</li>
           <li xml:lang="tr">Fix function-args-by-value false positive that would cause compile error</li>
+          <li xml:lang="uk">Виправлено фіктивне спрацювання function-args-by-value, яке може спричинити помилку компіляції</li>
           <li>in copy constructors, assignment operators and equal checks</li>
           <li xml:lang="ar">في منشئات النسخ، ومعاملات الإسناد وفحوصات المساواة</li>
           <li xml:lang="ca">als constructors de còpies, operadors d'assignació i comprovacions d'igualtat</li>
@@ -1328,6 +1335,7 @@
           <li xml:lang="sk">v kopírovacích konštruktoroch, operátoroch priradenia a kontrolách rovnosti</li>
           <li xml:lang="sl">v konstruktorjih kopiranja, operatorjih dodeljevanja in preverjanjih enakosti</li>
           <li xml:lang="tr">in copy constructors, assignment operators and equal checks</li>
+          <li xml:lang="uk">у конструкторах копіювання, операторах призначення та перевірках рівності</li>
           <li>False positives for `Q_EMIT(someSignal())` are now fixed</li>
           <li xml:lang="ar">أُصلحت الإيجابيات الزائفة لـ `Q_EMIT(someSignal())` الآن</li>
           <li xml:lang="ca">S'han corregit els falsos positius de `Q_EMIT(someSignal())`</li>
@@ -1343,6 +1351,7 @@
           <li xml:lang="sk">Falošne pozitívne výsledky pre `Q_EMIT(someSignal())` sú teraz opravené</li>
           <li xml:lang="sl">Lažni pozitivni rezultati za `Q_EMIT(someSignal())` so zdaj popravljeni</li>
           <li xml:lang="tr">False positives for `Q_EMIT(someSignal())` are now fixed</li>
+          <li xml:lang="uk">Виправлено фіктивне спрацювання для `Q_EMIT(someSignal())`</li>
         </ul>
       </description>
     </release>
@@ -1396,6 +1405,7 @@
           <li xml:lang="sk">qt-keyword-emit</li>
           <li xml:lang="sl">qt-keyword-emit</li>
           <li xml:lang="tr">qt-keyword-emit</li>
+          <li xml:lang="uk">qt-keyword-emit</li>
           <li>sanitize-inline-keyword</li>
           <li xml:lang="ar">sanitize-inline-keyword</li>
           <li xml:lang="ca">sanitize-inline-keyword</li>
@@ -1411,6 +1421,7 @@
           <li xml:lang="sk">sanitize-inline-keyword</li>
           <li xml:lang="sl">sanitize-inline-keyword</li>
           <li xml:lang="tr">sanitize-inline-keyword</li>
+          <li xml:lang="uk">sanitize-inline-keyword</li>
         </ul>
       </description>
     </release>
@@ -1464,6 +1475,7 @@
           <li xml:lang="sk">use-arrow-operator-instead-of-data</li>
           <li xml:lang="sl">use-arrow-operator-instead-of-data</li>
           <li xml:lang="tr">use-arrow-operator-instead-of-data</li>
+          <li xml:lang="uk">use-arrow-operator-instead-of-data</li>
           <li>use-static-qregularexpression</li>
           <li xml:lang="ar">use-static-qregularexpression</li>
           <li xml:lang="ca">use-static-qregularexpression</li>
@@ -1479,6 +1491,7 @@
           <li xml:lang="sk">use-static-qregularexpression</li>
           <li xml:lang="sl">use-static-qregularexpression</li>
           <li xml:lang="tr">use-static-qregularexpression</li>
+          <li xml:lang="uk">use-static-qregularexpression</li>
           <li>unexpected-flag-enumerator-value</li>
           <li xml:lang="ar">unexpected-flag-enumerator-value</li>
           <li xml:lang="ca">unexpected-flag-enumerator-value</li>
@@ -1494,6 +1507,7 @@
           <li xml:lang="sk">unexpected-flag-enumerator-value</li>
           <li xml:lang="sl">unexpected-flag-enumerator-value</li>
           <li xml:lang="tr">unexpected-flag-enumerator-value</li>
+          <li xml:lang="uk">unexpected-flag-enumerator-value</li>
           <li>Removed inefficient-qlist check (Fixed in Qt6)</li>
           <li xml:lang="ar">إزالة فحص inefficient-qlist (أُصلح في Qt6)</li>
           <li xml:lang="ca">S'ha eliminat la comprovació inefficient-qlist (corregida a les Qt6)</li>
@@ -1546,6 +1560,7 @@
           <li xml:lang="sk">Vyžaduje C++17</li>
           <li xml:lang="sl">Zahteva C++17</li>
           <li xml:lang="tr">Requires C++17</li>
+          <li xml:lang="uk">Потребує C++17</li>
           <li>Bugfixes:</li>
           <li xml:lang="ar">إصلاح علل:</li>
           <li xml:lang="ca">Correcció d'errors:</li>
@@ -1713,6 +1728,7 @@
           <li xml:lang="sk">qt6-qhash-signature</li>
           <li xml:lang="sl">qt6-qhash-signature</li>
           <li xml:lang="tr">qt6-qhash-signature</li>
+          <li xml:lang="uk">qt6-qhash-signature</li>
           <li>qt6-header-fixes</li>
           <li xml:lang="ar">qt6-header-fixes</li>
           <li xml:lang="ca">qt6-header-fixes</li>
@@ -1728,6 +1744,7 @@
           <li xml:lang="sk">qt6-header-fixes</li>
           <li xml:lang="sl">qt6-header-fixes</li>
           <li xml:lang="tr">qt6-header-fixes</li>
+          <li xml:lang="uk">qt6-header-fixes</li>
           <li>qt6-deprecated-api-fixes</li>
           <li xml:lang="ar">qt6-deprecated-api-fixes</li>
           <li xml:lang="ca">qt6-deprecated-api-fixes</li>
@@ -1743,6 +1760,7 @@
           <li xml:lang="sk">qt6-deprecated-api-fixes</li>
           <li xml:lang="sl">qt6-deprecated-api-fixes</li>
           <li xml:lang="tr">qt6-deprecated-api-fixes</li>
+          <li xml:lang="uk">qt6-deprecated-api-fixes</li>
           <li>use-chrono-in-qtimer</li>
           <li xml:lang="ar">use-chrono-in-qtimer</li>
           <li xml:lang="ca">use-chrono-in-qtimer</li>
@@ -1758,6 +1776,7 @@
           <li xml:lang="sk">use-chrono-in-qtimer</li>
           <li xml:lang="sl">use-chrono-in-qtimer</li>
           <li xml:lang="tr">use-chrono-in-qtimer</li>
+          <li xml:lang="uk">use-chrono-in-qtimer</li>
           <li>fixit for missing-qobject-macro</li>
           <li xml:lang="ar">إصلاح آلي لـ missing-qobject-macro</li>
           <li xml:lang="ca">correcció de missing-qobject-macro</li>
@@ -1825,6 +1844,7 @@
           <li xml:lang="sk">preťažený signál</li>
           <li xml:lang="sl">preobremenjen signal</li>
           <li xml:lang="tr">overloaded signal</li>
+          <li xml:lang="uk">перевантажений сигнал</li>
           <li>invalid JNI signatures</li>
           <li xml:lang="ar">تواقيع JNI غير صالحة</li>
           <li xml:lang="ca">signatures JNI no vàlides</li>
@@ -1840,6 +1860,7 @@
           <li xml:lang="sk">neplatné podpisy JNI</li>
           <li xml:lang="sl">neveljavni podpisi JNI</li>
           <li xml:lang="tr">invalid JNI signatures</li>
+          <li xml:lang="uk">некоректні підписи JNI</li>
           <li>qstring-comparison-to-implicit-char</li>
           <li xml:lang="ar">qstring-comparison-to-implicit-char</li>
           <li xml:lang="ca">qstring-comparison-to-implicit-char</li>
@@ -1855,6 +1876,7 @@
           <li xml:lang="sk">qstring-comparison-to-implicit-char</li>
           <li xml:lang="sl">qstring-comparison-to-implicit-char</li>
           <li xml:lang="tr">qstring-comparison-to-implicit-char</li>
+          <li xml:lang="uk">qstring-comparison-to-implicit-char</li>
           <li>qt6-qlatin1string-to-u</li>
           <li xml:lang="ar">qt6-qlatin1string-to-u</li>
           <li xml:lang="ca">qt6-qlatin1string-to-u</li>
@@ -1870,6 +1892,7 @@
           <li xml:lang="sk">qt6-qlatin1string-to-u</li>
           <li xml:lang="sl">qt6-qlatin1string-to-u</li>
           <li xml:lang="tr">qt6-qlatin1string-to-u</li>
+          <li xml:lang="uk">qt6-qlatin1string-to-u</li>
           <li>heap-allocated-small-trivial-type: less false-positives</li>
           <li xml:lang="ar">heap-allocated-small-trivial-type: إيجابيات زائفة أقل</li>
           <li xml:lang="ca">heap-allocated-small-trivial-type: menys falsos positius</li>
@@ -2001,6 +2024,7 @@
           <li xml:lang="sk">heap-allocated-small-trivial-type</li>
           <li xml:lang="sl">heap-allocated-small-trivial-type</li>
           <li xml:lang="tr">heap-allocated-small-trivial-type</li>
+          <li xml:lang="uk">heap-allocated-small-trivial-type</li>
           <li>signal-with-return-value</li>
           <li xml:lang="ar">signal-with-return-value</li>
           <li xml:lang="ca">signal-with-return-value</li>
@@ -2016,6 +2040,7 @@
           <li xml:lang="sk">signal-with-return-value</li>
           <li xml:lang="sl">signal-with-return-value</li>
           <li xml:lang="tr">signal-with-return-value</li>
+          <li xml:lang="uk">signal-with-return-value</li>
           <li>qproperty-type-mismatch, contributed by Jean-Michaël Celerier</li>
           <li xml:lang="ar">qproperty-type-mismatch، ساهم به Jean-Michaël Celerier</li>
           <li xml:lang="ca">qproperty-type-mismatch, aportat per Jean-Michaël Celerier</li>
@@ -2209,6 +2234,7 @@
           <li xml:lang="sk">Opravené regresie s LLVM 9.0</li>
           <li xml:lang="sl">Popravljene regresije z LLVM 9.0</li>
           <li xml:lang="tr">Fixed regressions with LLVM 9.0</li>
+          <li xml:lang="uk">Виправлено регресію з LLVM 9.0</li>
           <li>Fixit infrastructure was overhauled</li>
           <li xml:lang="ar">جُددت بنية الإصلاح الآلي بالكامل</li>
           <li xml:lang="ca">S'ha revisat la infraestructura de correccions</li>
@@ -2277,6 +2303,7 @@
           <li xml:lang="sk">ifndef-define-typo</li>
           <li xml:lang="sl">ifndef-define-typo</li>
           <li xml:lang="tr">ifndef-define-typo</li>
+          <li xml:lang="uk">ifndef-define-typo</li>
           <li>lowercase-qml-type-name</li>
           <li xml:lang="ar">lowercase-qml-type-name</li>
           <li xml:lang="ca">lowercase-qml-type-name</li>
@@ -2292,6 +2319,7 @@
           <li xml:lang="sk">lowercase-qml-type-name</li>
           <li xml:lang="sl">lowercase-qml-type-name</li>
           <li xml:lang="tr">lowercase-qml-type-name</li>
+          <li xml:lang="uk">lowercase-qml-type-name</li>
           <li>qrequiredresult-candidates</li>
           <li xml:lang="ar">qrequiredresult-candidates</li>
           <li xml:lang="ca">qrequiredresult-candidates</li>
@@ -2307,6 +2335,7 @@
           <li xml:lang="sk">qrequiredresult-candidates</li>
           <li xml:lang="sl">qrequiredresult-candidates</li>
           <li xml:lang="tr">qrequiredresult-candidates</li>
+          <li xml:lang="uk">qrequiredresult-candidates</li>
           <li>New Fixits:</li>
           <li xml:lang="ar">إصلاحات آلية جديدة:</li>
           <li xml:lang="ca">Correccions noves:</li>
@@ -2322,6 +2351,7 @@
           <li xml:lang="sk">Nové opravy:</li>
           <li xml:lang="sl">Novi popravki:</li>
           <li xml:lang="tr">Yeni onarımlar:</li>
+          <li xml:lang="uk">Нові повідомлення про виправлення:</li>
           <li>range-loop now supports adding missing refs or const-ref</li>
           <li xml:lang="ar">يدعم range-loop الآن إضافة المراجع الناقصة أو مراجع الثوابت (const-ref)</li>
           <li xml:lang="ca">range-loop ara permet afegir refs o const-ref que manquen</li>
@@ -2510,6 +2540,7 @@
           <li xml:lang="sk">connect-by-name</li>
           <li xml:lang="sl">connect-by-name</li>
           <li xml:lang="tr">connect-by-name</li>
+          <li xml:lang="uk">connect-by-name</li>
           <li>skipped-base-method</li>
           <li xml:lang="ar">skipped-base-method</li>
           <li xml:lang="ca">skipped-base-method</li>
@@ -2525,6 +2556,7 @@
           <li xml:lang="sk">skipped-base-method</li>
           <li xml:lang="sl">skipped-base-method</li>
           <li xml:lang="tr">skipped-base-method</li>
+          <li xml:lang="uk">skipped-base-method</li>
           <li>qstring-varargs</li>
           <li xml:lang="ar">qstring-varargs</li>
           <li xml:lang="ca">qstring-varargs</li>
@@ -2540,6 +2572,7 @@
           <li xml:lang="sk">qstring-varargs</li>
           <li xml:lang="sl">qstring-varargs</li>
           <li xml:lang="tr">qstring-varargs</li>
+          <li xml:lang="uk">qstring-varargs</li>
           <li>fully-qualified-moc-types</li>
           <li xml:lang="ar">fully-qualified-moc-types</li>
           <li xml:lang="ca">fully-qualified-moc-types</li>
@@ -2555,6 +2588,7 @@
           <li xml:lang="sk">fully-qualified-moc-types</li>
           <li xml:lang="sl">fully-qualified-moc-types</li>
           <li xml:lang="tr">fully-qualified-moc-types</li>
+          <li xml:lang="uk">fully-qualified-moc-types</li>
           <li>qt-keywords, with fixit included</li>
           <li xml:lang="ar">qt-keywords، مع تضمين الإصلاح الآلي</li>
           <li xml:lang="ca">qt-keywords, amb correcció inclosa</li>
@@ -2584,6 +2618,7 @@
           <li xml:lang="sk">qhash-with-char-pointer-key</li>
           <li xml:lang="sl">qhash-with-char-pointer-key</li>
           <li xml:lang="tr">qhash-with-char-pointer-key</li>
+          <li xml:lang="uk">qhash-with-char-pointer-key</li>
           <li>wrong-qevent-cast</li>
           <li xml:lang="ar">wrong-qevent-cast</li>
           <li xml:lang="ca">wrong-qevent-cast</li>
@@ -2599,6 +2634,7 @@
           <li xml:lang="sk">wrong-qevent-cast</li>
           <li xml:lang="sl">wrong-qevent-cast</li>
           <li xml:lang="tr">wrong-qevent-cast</li>
+          <li xml:lang="uk">wrong-qevent-cast</li>
           <li>static-pmf</li>
           <li xml:lang="ar">static-pmf</li>
           <li xml:lang="ca">static-pmf</li>
@@ -2614,6 +2650,7 @@
           <li xml:lang="sk">static-pmf</li>
           <li xml:lang="sl">static-pmf</li>
           <li xml:lang="tr">static-pmf</li>
+          <li xml:lang="uk">static-pmf</li>
           <li>raw-environment-function</li>
           <li xml:lang="ar">raw-environment-function</li>
           <li xml:lang="ca">raw-environment-function</li>
@@ -2629,6 +2666,7 @@
           <li xml:lang="sk">raw-environment-function</li>
           <li xml:lang="sl">raw-environment-function</li>
           <li xml:lang="tr">raw-environment-function</li>
+          <li xml:lang="uk">raw-environment-function</li>
           <li>empty-qstringliteral</li>
           <li xml:lang="ar">empty-qstringliteral</li>
           <li xml:lang="ca">empty-qstringliteral</li>
@@ -2644,6 +2682,7 @@
           <li xml:lang="sk">empty-qstringliteral</li>
           <li xml:lang="sl">empty-qstringliteral</li>
           <li xml:lang="tr">empty-qstringliteral</li>
+          <li xml:lang="uk">empty-qstringliteral</li>
           <li>auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder</li>
           <li xml:lang="ar">يحذر auto-unexpected-qstringbuilder الآن أيضًا من دوال لامبدا التي تعيد QStringBuilder</li>
           <li xml:lang="ca">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
@@ -2674,6 +2713,7 @@
         <p xml:lang="sk">optimalizácie výkonu</p>
         <p xml:lang="sl">optimizacije delovanja</p>
         <p xml:lang="tr">performance optimizations</p>
+        <p xml:lang="uk">оптимізації швидкодії</p>
         <p>Added -header-filter=&lt;regex&gt; option to clazy-standalone. Only headers matching the regexp will</p>
         <p xml:lang="ar">إضافة الخيار -header-filter=&lt;regex&gt; إلى clazy-standalone. فقط الترويسات التي تطابق التعبير النمطي هي التي</p>
         <p xml:lang="ca">S'ha afegit l'opció -header-filter=&lt;regex&gt; al clazy-standalone. Només ha faran les capçaleres que coincideixin amb l'expressió regular</p>
@@ -2789,6 +2829,7 @@
         <p xml:lang="sk">HiddenLevel bola premenovaná na ManualLevel</p>
         <p xml:lang="sl">HiddenLevel je bil preimenovan v ManualLevel</p>
         <p xml:lang="tr">HiddenLevel was renamed to ManualLevel</p>
+        <p xml:lang="uk">HiddenLevel було перейменовано на ManualLevel</p>
         <p>connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction()</p>
         <p xml:lang="ar">يحذر connect-3arg-lambda الآن عند تمرير لامبدا إلى QTimer::singleShot() أو QMenu::addAction()</p>
         <p xml:lang="ca">connect-3arg-lambda ara avisa quan passa una lambda a QTimer::singleShot() o QMenu::addAction()</p>
@@ -2818,6 +2859,7 @@
         <p xml:lang="sk">bez kontextového objektu</p>
         <p xml:lang="sl">brez kontekstnega predmeta</p>
         <p xml:lang="tr">without a context object</p>
+        <p xml:lang="uk">без об'єкта контексту</p>
         <p>old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now</p>
         <p xml:lang="ar">يحذر old-style-connect من QMenu::addAction() و QMessageBox::open() أيضًا الآن</p>
         <p xml:lang="ca">old-style-connect ara també avisa de QMenu::addAction() i QMessageBox::open()</p>
@@ -2884,6 +2926,7 @@
           <li xml:lang="sk">thread-with-slots</li>
           <li xml:lang="sl">thread-with-slots</li>
           <li xml:lang="tr">thread-with-slots</li>
+          <li xml:lang="uk">thread-with-slots</li>
           <li>connect-3arg-lambda</li>
           <li xml:lang="ar">connect-3arg-lambda</li>
           <li xml:lang="ca">connect-3arg-lambda</li>
@@ -2899,6 +2942,7 @@
           <li xml:lang="sk">connect-3arg-lambda</li>
           <li xml:lang="sl">connect-3arg-lambda</li>
           <li xml:lang="tr">connect-3arg-lambda</li>
+          <li xml:lang="uk">connect-3arg-lambda</li>
           <li>qproperty-without-notify</li>
           <li xml:lang="ar">qproperty-without-notify</li>
           <li xml:lang="ca">qproperty-without-notify</li>
@@ -2914,6 +2958,7 @@
           <li xml:lang="sk">qproperty-without-notify</li>
           <li xml:lang="sl">qproperty-without-notify</li>
           <li xml:lang="tr">qproperty-without-notify</li>
+          <li xml:lang="uk">qproperty-without-notify</li>
           <li>virtual-signal</li>
           <li xml:lang="ar">virtual-signal</li>
           <li xml:lang="ca">virtual-signal</li>
@@ -2929,6 +2974,7 @@
           <li xml:lang="sk">virtual-signal</li>
           <li xml:lang="sl">virtual-signal</li>
           <li xml:lang="tr">virtual-signal</li>
+          <li xml:lang="uk">virtual-signal</li>
           <li>overridden-signal</li>
           <li xml:lang="ar">overridden-signal</li>
           <li xml:lang="ca">overridden-signal</li>
@@ -2944,6 +2990,7 @@
           <li xml:lang="sk">overridden-signal</li>
           <li xml:lang="sl">overridden-signal</li>
           <li xml:lang="tr">overridden-signal</li>
+          <li xml:lang="uk">overridden-signal</li>
           <li>qhash-namespace</li>
           <li xml:lang="ar">qhash-namespace</li>
           <li xml:lang="ca">qhash-namespace</li>
@@ -2959,6 +3006,7 @@
           <li xml:lang="sk">qhash-namespace</li>
           <li xml:lang="sl">qhash-namespace</li>
           <li xml:lang="tr">qhash-namespace</li>
+          <li xml:lang="uk">qhash-namespace</li>
           <li>const-signal-or-slot</li>
           <li xml:lang="ar">const-signal-or-slot</li>
           <li xml:lang="ca">const-signal-or-slot</li>
@@ -2974,6 +3022,7 @@
           <li xml:lang="sk">const-signal-or-slot</li>
           <li xml:lang="sl">const-signal-or-slot</li>
           <li xml:lang="tr">const-signal-or-slot</li>
+          <li xml:lang="uk">const-signal-or-slot</li>
           <li>lambda-unique-connection</li>
           <li xml:lang="ar">lambda-unique-connection</li>
           <li xml:lang="ca">lambda-unique-connection</li>
@@ -2989,6 +3038,7 @@
           <li xml:lang="sk">lambda-unique-connection</li>
           <li xml:lang="sl">lambda-unique-connection</li>
           <li xml:lang="tr">lambda-unique-connection</li>
+          <li xml:lang="uk">lambda-unique-connection</li>
         </ul>
         <p>missing-qobject-macro is now a level2 check, instead of level1. Because, people can omit Q_OBJECT intentionally.</p>
         <p xml:lang="ar">أصبح missing-qobject-macro فحصًا من المستوى 2 بدلًا من المستوى 1. لأن المطورين قد يحذفون Q_OBJECT عمدًا.</p>
@@ -3083,6 +3133,7 @@
           <li xml:lang="sk">install-event-filter</li>
           <li xml:lang="sl">install-event-filter</li>
           <li xml:lang="tr">install-event-filter</li>
+          <li xml:lang="uk">install-event-filter</li>
           <li>qcolor-from-literal</li>
           <li xml:lang="ar">qcolor-from-literal</li>
           <li xml:lang="ca">qcolor-from-literal</li>
@@ -3098,6 +3149,7 @@
           <li xml:lang="sk">qcolor-from-literal</li>
           <li xml:lang="sl">qcolor-from-literal</li>
           <li xml:lang="tr">qcolor-from-literal</li>
+          <li xml:lang="uk">qcolor-from-literal</li>
           <li>strict-iterators</li>
           <li xml:lang="ar">strict-iterators</li>
           <li xml:lang="ca">strict-iterators</li>
@@ -3113,6 +3165,7 @@
           <li xml:lang="sk">strict-iterators</li>
           <li xml:lang="sl">strict-iterators</li>
           <li xml:lang="tr">strict-iterators</li>
+          <li xml:lang="uk">strict-iterators</li>
           <li>connect-not-normalized</li>
           <li xml:lang="ar">connect-not-normalized</li>
           <li xml:lang="ca">connect-not-normalized</li>
@@ -3128,6 +3181,7 @@
           <li xml:lang="sk">connect-not-normalized</li>
           <li xml:lang="sl">connect-not-normalized</li>
           <li xml:lang="tr">connect-not-normalized</li>
+          <li xml:lang="uk">connect-not-normalized</li>
         </ul>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
@@ -3325,6 +3379,7 @@
           <li xml:lang="sk">Podpora macOS a Windows</li>
           <li xml:lang="sl">podpora za macOS in Windows</li>
           <li xml:lang="tr">macOS and Windows support</li>
+          <li xml:lang="uk">Підтримка macOS і Windows</li>
           <li>New checks:</li>
           <li xml:lang="ar">فحوصات جديدة:</li>
           <li xml:lang="ca">Comprovacions noves:</li>
@@ -3356,6 +3411,7 @@
           <li xml:lang="sk">child-event-qobject-cast</li>
           <li xml:lang="sl">child-event-qobject-cast</li>
           <li xml:lang="tr">child-event-qobject-cast</li>
+          <li xml:lang="uk">child-event-qobject-cast</li>
           <li>ctor-missing-parent-argument</li>
           <li xml:lang="ar">ctor-missing-parent-argument</li>
           <li xml:lang="ca">ctor-missing-parent-argument</li>
@@ -3371,6 +3427,7 @@
           <li xml:lang="sk">ctor-missing-parent-argument</li>
           <li xml:lang="sl">ctor-missing-parent-argument</li>
           <li xml:lang="tr">ctor-missing-parent-argument</li>
+          <li xml:lang="uk">ctor-missing-parent-argument</li>
           <li>returning-data-from-temporary</li>
           <li xml:lang="ar">returning-data-from-temporary</li>
           <li xml:lang="ca">returning-data-from-temporary</li>
@@ -3386,6 +3443,7 @@
           <li xml:lang="sk">returning-data-from-temporary</li>
           <li xml:lang="sl">returning-data-from-temporary</li>
           <li xml:lang="tr">returning-data-from-temporary</li>
+          <li xml:lang="uk">returning-data-from-temporary</li>
           <li>qt-macros</li>
           <li xml:lang="ar">qt-macros</li>
           <li xml:lang="ca">qt-macros</li>
@@ -3401,6 +3459,7 @@
           <li xml:lang="sk">qt-macros</li>
           <li xml:lang="sl">qt-macros</li>
           <li xml:lang="tr">qt-macros</li>
+          <li xml:lang="uk">qt-macros</li>
           <li>base-class-event</li>
           <li xml:lang="ar">base-class-event</li>
           <li xml:lang="ca">base-class-event</li>
@@ -3416,6 +3475,7 @@
           <li xml:lang="sk">base-class-event</li>
           <li xml:lang="sl">base-class-event</li>
           <li xml:lang="tr">base-class-event</li>
+          <li xml:lang="uk">base-class-event</li>
           <li>connect-non-signal</li>
           <li xml:lang="ar">connect-non-signal</li>
           <li xml:lang="ca">connect-non-signal</li>
@@ -3431,6 +3491,7 @@
           <li xml:lang="sk">connect-non-signal</li>
           <li xml:lang="sl">connect-non-signal</li>
           <li xml:lang="tr">connect-non-signal</li>
+          <li xml:lang="uk">connect-non-signal</li>
           <li>incorrect-emit</li>
           <li xml:lang="ar">incorrect-emit</li>
           <li xml:lang="ca">incorrect-emit</li>
@@ -3446,6 +3507,7 @@
           <li xml:lang="sk">incorrect-emit</li>
           <li xml:lang="sl">incorrect-emit</li>
           <li xml:lang="tr">incorrect-emit</li>
+          <li xml:lang="uk">incorrect-emit</li>
           <li>tr-non-literal</li>
           <li xml:lang="ar">tr-non-literal</li>
           <li xml:lang="ca">tr-non-literal</li>
@@ -3461,6 +3523,7 @@
           <li xml:lang="sk">tr-non-literal</li>
           <li xml:lang="sl">tr-non-literal</li>
           <li xml:lang="tr">tr-non-literal</li>
+          <li xml:lang="uk">tr-non-literal</li>
           <li>Fixes against:</li>
           <li xml:lang="ar">إصلاحات ضد:</li>
           <li xml:lang="ca">Correccions a:</li>
@@ -3476,6 +3539,7 @@
           <li xml:lang="sk">Opravy pre:</li>
           <li xml:lang="sl">Popravki proti:</li>
           <li xml:lang="tr">Fixes against:</li>
+          <li xml:lang="uk">Виправлення для такого:</li>
           <li>clang 4.0</li>
           <li xml:lang="ar">clang 4.0</li>
           <li xml:lang="ca">clang 4.0</li>
@@ -3540,6 +3604,7 @@
           <li xml:lang="sk">60 % zlepšenie výkonu</li>
           <li xml:lang="sl">60% izboljšanje zmogljivosti</li>
           <li xml:lang="tr">60% performance improvement</li>
+          <li xml:lang="uk">Пришвидшено на 60%</li>
           <li>Fixed many false positives</li>
           <li xml:lang="ar">إصلاح العديد من الإيجابيات الزائفة</li>
           <li xml:lang="ca">S'han corregit molts falsos positius</li>
