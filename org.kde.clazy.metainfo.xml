@@ -333,6 +333,7 @@
           <li xml:lang="ca">Corregeix «use-arrow-operator-instead-of-data» que emet un fals positiu quan el valor es converteix</li>
           <li xml:lang="ca-valencia">Corregix «use-arrow-operator-instead-of-data» que emet un fals positiu quan el valor es convertix</li>
           <li xml:lang="es">Se ha corregido que use-arrow-operator-instead-of-data emitiera un falso positivo cuando el valor está moldeado.</li>
+          <li xml:lang="he">תוקן מצב ש־use-arrow-operator-instead-of-data פולט חיובי כוזב כשהערך מומר</li>
           <li xml:lang="it">Corregge l'emissione di falsi positivi da parte di use-arrow-operator-instead-of-data quando il valore viene convertito</li>
           <li xml:lang="ka">გასწორდა შემთხვევა, როცა use-arrow-operator-instead-of-data ცრუ დადებით მნიშვნელობებს იძლეოდა, როცა ხდებოდა მნიშვნელობის გადაყვანა</li>
           <li xml:lang="nl">Correctie voor het gebruik van de pijloperator in plaats van de gegevens, die een vals positief resultaat geeft wanneer de waarde hoofdletters wordt.</li>
@@ -742,6 +743,7 @@
           <li xml:lang="ca-valencia">isempty-vs-count ara proporciona correccions per a tots els escenaris. A més, casos on</li>
           <li xml:lang="es">isempty-vs-count proporciona ahora correcciones para todos los escenarios. Además, ahora</li>
           <li xml:lang="fr">isempty-vs-count fournit désormais FixIt pour tous les scénarios. De plus, les cas où</li>
+          <li xml:lang="he">isempty-vs-count מספק מעתה הצעות לתיקון לכל התרחישים. כמו כן, במקרים</li>
           <li xml:lang="it">isempty-vs-count ora fornisce fixit per tutti gli scenari. Inoltre, i casi in cui</li>
           <li xml:lang="ka">isempty-vs-count ახლა უკვე ყველა სცენარისთვის უზრუნველყოფს Fixit-ებს. ასევე, შემთხვევებშიც, სადაც</li>
           <li xml:lang="nl">isempty-vs-count levert nu reparaties voor alle scenario's. Ook, gevallen waar</li>
@@ -757,6 +759,7 @@
           <li xml:lang="ca-valencia">la llargària es compara utilitzant "== 0", "&lt; 1", "&gt; 0" ara s'informen i tenen correccions.</li>
           <li xml:lang="es">se informa de los casos cuya longitud se compara con «== 0», «&lt; 1», «&gt; 0» y se proponen soluciones.</li>
           <li xml:lang="fr">la longueur est comparée en utilisant « == 0 », « &lt; 1 », « &gt; 0 ». Elles sont maintenant signalées et disposent FixIt.</li>
+          <li xml:lang="he">שבהם האורך מושווה באמצעות „‎==0”,‏ „‎&lt; 1”,‏ „‎&gt; 0” מדווחים מעתה כבעלי הצעות לתיקון.</li>
           <li xml:lang="it">la lunghezza viene confrontata utilizzando "== 0", "&lt; 1", "&gt; 0" ora vengono segnalati e hanno fixit.</li>
           <li xml:lang="ka">სიგრძე შედარებულია "== 0" "&lt; 1" "&gt; 0" გამოყენებით ახლა უკვე აღირიცხება და გააჩნია Fixit-ები.</li>
           <li xml:lang="nl">de lengte wordt vergeleken met "== 0", "&lt; 1", "&gt; 0" worden nu gerapporteerd en hebben reparaties.</li>
@@ -1018,6 +1021,7 @@
           <li xml:lang="sk">`clazy-standalone --version` obsahuje verziu git (výstup `git describe`), ak nejde o označený commit</li>
           <li xml:lang="sl">`clazy-standalone --version` vsebuje različico git (izhod `git describe`), če ni označena potrditev</li>
           <li xml:lang="tr">`clazy-standalone --version` contains git version ( output of `git describe`) if it is not a tagged commit</li>
+          <li xml:lang="uk">`clazy-standalone --version` містить версію git (результат виконання `git describe`), якщо це внесок без мітки</li>
           <li>Added missing methods to checks for detaching temporary/member lists or maps</li>
           <li xml:lang="ar">إضافة دوال ناقصة لفحوصات فصل القوائم أو الخرائط المؤقتة/الأعضاء</li>
           <li xml:lang="ca">S'han afegit mètodes que manquen per a comprovar si es deslliguen llistes temporals/membres o mapes</li>
@@ -1053,6 +1057,7 @@
         <p xml:lang="sk">Varovania clazy pre nasledujúci riadok je možné zakázať, napríklad: clazy:exclude-next-line=check1,check2</p>
         <p xml:lang="sl">Clazy opozorila za naslednjo vrstico lahko onemogočite, na primer: clazy:exclude-next-line=check1,check2</p>
         <p xml:lang="tr">Clazy warnings for the following line can be disabled, for example: clazy:exclude-next-line=check1,check2</p>
+        <p xml:lang="uk">Можна вимкнути попередження clazy для наступного рядка, приклад: clazy:exclude-next-line=check1,check2</p>
         <p>Support for compilation against Clang 20</p>
         <p xml:lang="ar">دعم التجميع مقابل Clang 20</p>
         <p xml:lang="ca">Suport per a la compilació amb el Clang 20</p>
@@ -1098,6 +1103,7 @@
         <p xml:lang="sk">kontroly `function-args-by-value` a `function-args-by-ref`: pridanie názvu funkcie a parametra do varovnej správy</p>
         <p xml:lang="sl">preveri `function-args-by-value` in `function-args-by-ref`: doda ime funkcije in ime parametra opozorilnemu sporočilu</p>
         <p xml:lang="tr">checks `function-args-by-value` and `function-args-by-ref`: add function name and parameter name to warning message</p>
+        <p xml:lang="uk">перевірки `function-args-by-value` і `function-args-by-ref`: до повідомлення попередження додано назву функції і назву параметра</p>
         <p>checks `unused-non-trivial-variable` and `non-pod-global-static`: add variable name to warning message</p>
         <p xml:lang="ar">فحصا `unused-non-trivial-variable` و `non-pod-global-static`: إضافة اسم المتغير إلى رسالة التحذير</p>
         <p xml:lang="ca">comprovacions `unused-non-trivial-variable` i `non-pod-global-static`: afegeix un nom de variable al missatge d'avís</p>
@@ -1111,6 +1117,7 @@
         <p xml:lang="sk">kontroly `unused-non-trivial-variable` a `non-pod-global-static`: pridanie názvu premennej do varovnej správy</p>
         <p xml:lang="sl">preveri `unused-non-trivial-variable` in `non-pod-global-static`: dodajte ime spremenljivke v opozorilno sporočilo</p>
         <p xml:lang="tr">checks `unused-non-trivial-variable` and `non-pod-global-static`: add variable name to warning message</p>
+        <p xml:lang="uk">перевірки `unused-non-trivial-variable` і `non-pod-global-static`: до повідомлення попередження додано назву змінної</p>
         <p>This release adds the following features:</p>
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
@@ -1283,6 +1290,7 @@
           <li xml:lang="ca">S'han corregit els tipus falsos positius de fully-qualified-moc-types per als modificadors «const» d'arguments genèrics</li>
           <li xml:lang="ca-valencia">S'han corregit els tipus falsos positius de fully-qualified-moc-types per als modificadors «const» d'arguments genèrics</li>
           <li xml:lang="es">Se ha corregido el falso positivo de fully-qualified-moc-types false para modificadores «const» de los argumentos genéricos.</li>
+          <li xml:lang="he">תוקן חיובי כוזב מול fully-qualified-moc-types עבור מחליפי קבועים של ארגומנטים כלליים</li>
           <li xml:lang="it">Corretto il falso positivo fully-qualified-moc-types per i modificatori const degli argomenti generici</li>
           <li xml:lang="ka">გასწორდა fully-qualified-moc-types-ის ცრუ დადებითი ზოგადი არგუმენტების const მოდიფიკატორისთვის</li>
           <li xml:lang="nl">De foutieve melding 'fully-qualified-moc-types' voor 'const'-modifiers van generieke argumenten is verholpen</li>
@@ -1297,6 +1305,7 @@
           <li xml:lang="ca">Silencia l'avís fals positiu non-pod-global-static per a la inicialització del mòdul QML</li>
           <li xml:lang="ca-valencia">Silencia l'avís fals positiu non-pod-global-static per a la inicialització del mòdul QML</li>
           <li xml:lang="es">Se ha silenciado el falso positivo de la advertencia non-pod-global-static para la inicialización del módulo QML.</li>
+          <li xml:lang="he">השתקת אזהרה חיובית כוזבת non-pod-global-static עבור אתחול מודול QML</li>
           <li xml:lang="it">Disattiva l'avviso di falso positivo non-pod-global-static per l'inizializzazione del modulo QML</li>
           <li xml:lang="ka">ცრუ დადებითი non-pod-global-static-ის გაფრთხილების გაჩუმება QML მოდულის ინიციალიზაციისთვის</li>
           <li xml:lang="nl">Onderdruk de valse positieve waarschuwing 'non-pod-global-static' voor de initialisatie van de QML-module</li>
@@ -1312,6 +1321,7 @@
           <li xml:lang="ca-valencia">Corregix el fals positiu de function-args-by-value que provocaria un error de compilació</li>
           <li xml:lang="es">Se ha corregido el falso positivo de function-args-by-value que causaría un error de compilación</li>
           <li xml:lang="fr">Correction d'un faux positif de function-args-by-value provoquant une erreur de compilation</li>
+          <li xml:lang="he">תוקן חיובי כוזב מול function-args-by-value שגרם לשגיאת הידור</li>
           <li xml:lang="it">Corregge il falso positivo function-args-by-value che causava un errore di compilazione</li>
           <li xml:lang="ka">გასწორდა ფუნქციის function-args-by-value ცრუ დადებითი რაც კომპილაციის შეცდომას გამოიწვევდა</li>
           <li xml:lang="nl">Corrigeer de foutieve melding 'function-args-by-value' die een compilatiefout veroorzaakte</li>
@@ -1783,6 +1793,7 @@
           <li xml:lang="ca-valencia">correcció de missing-qobject-macro</li>
           <li xml:lang="es">Solución para missing-qobject-macro</li>
           <li xml:lang="fr">FixIt pour missing-qobject-macro</li>
+          <li xml:lang="he">הצעה לתיקון עבור missing-qobject-macro</li>
           <li xml:lang="it">fixit per missing-qobject-macro</li>
           <li xml:lang="ka">გასწორება missing-qobject-macro-ისთვის</li>
           <li xml:lang="nl">reparatie voor missing-qobject-macro</li>
@@ -2179,6 +2190,7 @@
         <p xml:lang="ca-valencia">S'han eliminat tots els altres arguments de correccions i variables env de correccions</p>
         <p xml:lang="es">El resto de arreglos de argumentos y de variables de entorno se han eliminado.</p>
         <p xml:lang="fr">Tous les autres arguments de FixIt et variables d'environnement de FixIt ont été supprimés.</p>
+        <p xml:lang="he">כל שאר הארגומנטים להצעות לתירון ומשתני הסביבה להצעות לתיקון הוסרו</p>
         <p xml:lang="it">Tutti gli altri argomenti fixit e le variabili di ambiente fixit sono stati rimossi</p>
         <p xml:lang="ka">წაიშალა ყველა სხვა fixit არგუმენტი და fixit გარემოს ცვლადი</p>
         <p xml:lang="nl">Alle overige Fixit-argumenten en Fixit-omgevingsvariabelen zijn verwijderd.</p>
@@ -2193,7 +2205,7 @@
         <p xml:lang="ca-valencia">Gràcies a Christian Gagneraud per col·laborar amb l'exportador yaml de correccions!</p>
         <p xml:lang="es">Gracias a Christian Gagneraud por introducir el exportador yaml de correcciones.</p>
         <p xml:lang="fr">Merci à Christian Gagneraud pour sa contribution à l'exportateur YAML de FixIt !</p>
-        <p xml:lang="he">תודה לכריסטיאן גגנרוד על תרומת מייצא ה־yaml ל־fixit!</p>
+        <p xml:lang="he">תודה לכריסטיאן גגנרוד על תרומת מייצא ה־yaml להצעות לתיקון!</p>
         <p xml:lang="it">Grazie a Christian Gagneraud per aver contribuito con l'esportatore yaml fixit!</p>
         <p xml:lang="ka">მადლობა Christian Gagneraud-ს fixit yaml გამტანისთვის!</p>
         <p xml:lang="nl">Met dank aan Christian Gagneraud voor zijn bijdrage aan de fixit YAML-exporteur!</p>
@@ -2241,7 +2253,7 @@
           <li xml:lang="ca-valencia">S'ha revisat la infraestructura de correccions</li>
           <li xml:lang="es">La infraestructura de correcciones se ha renovado.</li>
           <li xml:lang="fr">L'infrastructure de Fixit a été entièrement révisée.</li>
-          <li xml:lang="he">תשתית Fixit שוכתבה</li>
+          <li xml:lang="he">תשתית הצעות לתיקון שוכתבה</li>
           <li xml:lang="it">L'infrastruttura Fixit è stata revisionata</li>
           <li xml:lang="ka">Fixit-ის ინფრასტრუქტურა სრულად განახლდა</li>
           <li xml:lang="nl">De infrastructuur van Fixit is vernieuwd</li>
@@ -2342,7 +2354,7 @@
           <li xml:lang="ca-valencia">Correccions noves:</li>
           <li xml:lang="es">Nuevas soluciones:</li>
           <li xml:lang="fr">Nouvelles corrections :</li>
-          <li xml:lang="he">Fixitים חדשים:</li>
+          <li xml:lang="he">הצעות חדשות לתיקון:</li>
           <li xml:lang="it">Nuovi fixit:</li>
           <li xml:lang="ka">ახალი Fixit-ები:</li>
           <li xml:lang="nl">Nieuwe Fixits:</li>
@@ -2595,6 +2607,7 @@
           <li xml:lang="ca-valencia">qt-keywords, amb correcció inclosa</li>
           <li xml:lang="es">qt-keywords, con solución incluida</li>
           <li xml:lang="fr">qt-keywords, avec FixIt inclus</li>
+          <li xml:lang="he">qt-keywords, כולל הצעות לתיקון</li>
           <li xml:lang="it">qt-keywords, con fixit incluso</li>
           <li xml:lang="ka">qt-keywords, Fixit-ის ჩათვლით</li>
           <li xml:lang="nl">qt-keywords, met fixit ingesloten</li>
