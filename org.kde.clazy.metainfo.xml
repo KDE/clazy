@@ -1533,6 +1533,7 @@
           <li xml:lang="sk">Odstránená kontrola inefficient-qlist (opravené v Qt6)</li>
           <li xml:lang="sl">Odstranjeno preverjanje neučinkovitega qlist (popravljeno v Qt6)</li>
           <li xml:lang="tr">Removed inefficient-qlist check (Fixed in Qt6)</li>
+          <li xml:lang="uk">Вилучено перевірку inefficient-qlist (виправлено у Qt6)</li>
         </ul>
       </description>
     </release>
@@ -1603,6 +1604,7 @@
           <li xml:lang="sk">Opravený falošne pozitívny výsledok -Wclazy-lambda-in-connect</li>
           <li xml:lang="sl">Popravljen lažno pozitiven -Wclazy-lambda-in-connect</li>
           <li xml:lang="tr">Fixed a -Wclazy-lambda-in-connect false-positive</li>
+          <li xml:lang="uk">Виправлено -Wclazy-lambda-in-connect false-positive</li>
           <li>Fixed crash in copyable-polymorphic when PCH was enabled</li>
           <li xml:lang="ar">إصلاح انهيار في copyable-polymorphic عند تفعيل PCH</li>
           <li xml:lang="ca">S'ha corregit una fallada a copyable-polymorphic quan s'ha activat el PCH</li>
@@ -1618,6 +1620,7 @@
           <li xml:lang="sk">Opravený pád v copyable-polymorphic pri povolení PCH</li>
           <li xml:lang="sl">Odpravljeno sesutje v copyable-polymorphic, ko je bil omogočen PCH</li>
           <li xml:lang="tr">Fixed crash in copyable-polymorphic when PCH was enabled</li>
+          <li xml:lang="uk">Виправлено аварійне завершення роботи у copyable-polymorphic, якщо було увімкнено PCH</li>
         </ul>
       </description>
     </release>
@@ -1655,6 +1658,7 @@
           <li xml:lang="sk">Opravené spomalenie clazy zavedené vo verzii 1.8. Teraz môže byť až 4x rýchlejšie.</li>
           <li xml:lang="sl">Popravljena clazy upočasnitev, uvedena v 1.8. Zdaj sem lahko do 4x hitrejša.</li>
           <li xml:lang="tr">Fixed clazy slowdown introduced in 1.8. I can be up to 4x faster now.</li>
+          <li xml:lang="uk">Виправлено уповільнення clazy у версії 1.8. Пришвидшення може сягати чотирьох разів.</li>
           <li>range-loop was split in range-loop-detach and range-loop-reference</li>
           <li xml:lang="ar">فُصل range-loop إلى range-loop-detach و range-loop-reference</li>
           <li xml:lang="ca">range-loop s'ha dividit entre range-loop-detach i range-loop-reference</li>
@@ -1670,6 +1674,7 @@
           <li xml:lang="sk">range-loop bola rozdelená na range-loop-detach a range-loop-reference</li>
           <li xml:lang="sl">range-loop je bil razdeljen na range-loop-detach in range-loop-reference</li>
           <li xml:lang="tr">range-loop was split in range-loop-detach and range-loop-reference</li>
+          <li xml:lang="uk">range-loop було розділено на range-loop-detach і range-loop-reference</li>
           <li>Fixed -Wclazy-connect-non-signal false positives</li>
           <li xml:lang="ar">إصلاح إيجابيات زائفة في -Wclazy-connect-non-signal</li>
           <li xml:lang="ca">S'han corregit els falsos positius de -Wclazy-connect-non-signal</li>
