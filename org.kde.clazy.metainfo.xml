@@ -42,6 +42,7 @@
   <name xml:lang="sl">Clazy</name>
   <name xml:lang="sv">Clazy</name>
   <name xml:lang="tr">Clazy</name>
+  <name xml:lang="ug">Clazy</name>
   <name xml:lang="uk">Clazy</name>
   <name xml:lang="vi">Clazy</name>
   <name xml:lang="zh-CN">Clazy</name>
@@ -3589,6 +3590,7 @@
           <li xml:lang="sk">Qt 5.9</li>
           <li xml:lang="sl">Qt 5.9</li>
           <li xml:lang="tr">Qt 5.9</li>
+          <li xml:lang="ug">Qt 5.9</li>
           <li xml:lang="uk">Qt 5.9</li>
           <li>Notes:</li>
           <li xml:lang="ar">ملاحظات:</li>
@@ -3606,6 +3608,7 @@
           <li xml:lang="sk">Poznámky:</li>
           <li xml:lang="sl">Opombe:</li>
           <li xml:lang="tr">Notlar:</li>
+          <li xml:lang="ug">ئىزاھ:</li>
           <li xml:lang="uk">Нотатки:</li>
           <li>60% performance improvement</li>
           <li xml:lang="ar">تحسين في الأداء بنسبة 60%</li>
