@@ -1691,6 +1691,7 @@
           <li xml:lang="sk">Opravené falošne pozitívne výsledky -Wclazy-connect-non-signal</li>
           <li xml:lang="sl">Popravljeni lažni pozitivni učinki -Wclazy-connect-non-signal</li>
           <li xml:lang="tr">Fixed -Wclazy-connect-non-signal false positives</li>
+          <li xml:lang="uk">Виправлено фіктивні спрацювання -Wclazy-connect-non-signal</li>
         </ul>
       </description>
     </release>
@@ -1808,6 +1809,7 @@
           <li xml:lang="sk">oprava pre missing-qobject-macro</li>
           <li xml:lang="sl">popravek za manjkajoči-qobject-macro</li>
           <li xml:lang="tr">fixit for missing-qobject-macro</li>
+          <li xml:lang="uk">порада щодо виправлення для missing-qobject-macro</li>
         </ul>
       </description>
     </release>
@@ -1925,6 +1927,7 @@
           <li xml:lang="sk">heap-allocated-small-trivial-type: menej falošne pozitívnych výsledkov</li>
           <li xml:lang="sl">heap-allocated-small-trivial-type: manj lažno pozitivnih</li>
           <li xml:lang="tr">heap-allocated-small-trivial-type: less false-positives</li>
+          <li xml:lang="uk">heap-allocated-small-trivial-type: менше фіктивних спрацювань</li>
         </ul>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
@@ -1958,6 +1961,7 @@
           <li xml:lang="sk">connect-non-signal: Oprava prípadu, keď nenašiel pmf</li>
           <li xml:lang="sl">connect-non-signal: Popravi primer, ko ni našel pmf</li>
           <li xml:lang="tr">connect-non-signal: Fix case where it didn't find the pmf</li>
+          <li xml:lang="uk">connect-non-signal: виправлено випадок, коли не знайдено pmf</li>
           <li>qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar</li>
           <li xml:lang="ar">يُحذر qstring-arg عند استخدام QLatin1String::arg(int)، لأنه يقسر إلى QChar</li>
           <li xml:lang="ca">qstring-arg avisa quan s'utilitza QLatin1String::arg(int), ja que es converteix a QChar</li>
@@ -1973,6 +1977,7 @@
           <li xml:lang="sk">qstring-arg varuje pri použití QLatin1String::arg(int), pretože sa pretypuje na QChar</li>
           <li xml:lang="sl">qstring-arg opozori pri uporabi QLatin1String::arg(int), saj predvaja v QChar</li>
           <li xml:lang="tr">qstring-arg warns when using QLatin1String::arg(int), as it casts to QChar</li>
+          <li xml:lang="uk">qstring-arg попереджає про використання QLatin1String::arg(int), оскільки там викликається QChar</li>
         </ul>
         <p>Building clazy itself is 30% faster</p>
         <p xml:lang="ar">بناء كلازي نفسه أسرع بنسبة 30%</p>
@@ -1989,6 +1994,7 @@
         <p xml:lang="sk">Zostavenie samotného clazy je o 30 % rýchlejšie</p>
         <p xml:lang="sl">Sama gradnja clazy je 30% hitrejša</p>
         <p xml:lang="tr">Building clazy itself is 30% faster</p>
+        <p xml:lang="uk">Збирання самого clazy пришвидшено на 30%</p>
       </description>
     </release>
     <release type="stable" version="1.6" date="2019-10-12T00:00:00Z">
@@ -2073,6 +2079,7 @@
           <li xml:lang="sk">qproperty-type-mismatch, prispel Jean-Michaël Celerier</li>
           <li xml:lang="sl">qproperty-type-mismatch, prispeval Jean-Michaël Celerier</li>
           <li xml:lang="tr">qproperty-type-mismatch, contributed by Jean-Michaël Celerier</li>
+          <li xml:lang="uk">qproperty-type-mismatch, внесок Jean-Michaël Celerier</li>
         </ul>
         <p>Removed level3. Moved all level3 checks to manual level. Doesn't make sense to enable all of them.</p>
         <p xml:lang="ar">أزيل المستوى 3. نُقلت كافة فحوصات المستوى 3 إلى المستوى اليدوي. ليس من المنطقي تفعيلها جميعًا.</p>
@@ -2088,6 +2095,7 @@
         <p xml:lang="sk">Odstránená úroveň 3. Všetky kontroly úrovne 3 presunuté na manuálnu úroveň. Nemá zmysel povoliť ich všetky.</p>
         <p xml:lang="sl">Odstranjena raven 3. Vsa preverjanja stopnje 3 premaknjena na ročno raven. Nima smisla omogočiti vseh.</p>
         <p xml:lang="tr">Removed level3. Moved all level3 checks to manual level. Doesn't make sense to enable all of them.</p>
+        <p xml:lang="uk">Вилучено level3. Усі перевірки level3 перенесено на ручний рівень. Немає сенсу вмикати їх усі.</p>
         <p>Each one must be carefully considered.</p>
         <p xml:lang="ar">يجب النظر في كل منها بعناية.</p>
         <p xml:lang="ca">Cal tenir en compte a cadascuna.</p>
@@ -2103,6 +2111,7 @@
         <p xml:lang="sk">Každá musí byť starostlivo zvážená.</p>
         <p xml:lang="sl">Vsakega je treba natančno preučiti.</p>
         <p xml:lang="tr">Each one must be carefully considered.</p>
+        <p xml:lang="uk">Рішення про кожну з них слід приймати зважено.</p>
         <p>Minimum LLVM was bumped to 5.0</p>
         <p xml:lang="ar">رُفع الحد الأدنى لـ LLVM إلى 5.0</p>
         <p xml:lang="ca">El LLVM mínim s'ha pujat a 5.0</p>
@@ -2118,6 +2127,7 @@
         <p xml:lang="sk">Minimálna verzia LLVM bola zvýšená na 5.0</p>
         <p xml:lang="sl">Najmanjši LLVM je bil dvignjen na 5,0</p>
         <p xml:lang="tr">Minimum LLVM was bumped to 5.0</p>
+        <p xml:lang="uk">Збільшено мінімальну версію LLVM до 5.0</p>
         <p>Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.</p>
         <p xml:lang="ar">لم يعد كلازي يعيد كتابة الملفات مباشرة، لتجنب السباق عند قيام استدعاءات متوازية بتغيير نفس الترويسة.</p>
         <p xml:lang="ca">El Clazy ja no reescriu fitxers directament, per a evitar competicions quan les invocacions paral·leles canvien la mateixa capçalera.</p>
@@ -2132,6 +2142,7 @@
         <p xml:lang="sk">Clazy už priamo neprepisuje súbory, aby sa predišlo kolíziám pri paralelných volaniach meniacich rovnakú hlavičku.</p>
         <p xml:lang="sl">Clazy ne prepisuje več datotek neposredno, da se izogne dirkam, ko vzporedni klici spremenijo isto glavo.</p>
         <p xml:lang="tr">Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.</p>
+        <p xml:lang="uk">Нова версія Clazy не переписує файли безпосередньо, щоб уникнути конфліктів з паралельними викликами змін того самого заголовка.</p>
         <p>Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements.</p>
         <p xml:lang="ar">يصدر كلازي الآن ملف yaml بالاستبدالات، ليُطبق باستخدام clang-apply-replacements.</p>
         <p xml:lang="ca">EL Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
@@ -2146,6 +2157,7 @@
         <p xml:lang="sk">Clazy teraz exportuje súbor yaml s náhradami, na aplikovanie pomocou clang-apply-replacements.</p>
         <p xml:lang="sl">Clazy zdaj izvozi datoteko yaml z zamenjavami, ki se uporabijo s clang-apply-replacements.</p>
         <p xml:lang="tr">Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements.</p>
+        <p xml:lang="uk">Нова версія Clazy експортує дані до файла yaml з замінами, які буде застосовано з clang-apply-replacements.</p>
         <p>The same way other clang tooling does it.</p>
         <p xml:lang="ar">بنفس الطريقة التي تتبعها أدوات clang الأخرى.</p>
         <p xml:lang="ca">De la mateixa manera que ho fan altres eines del clang.</p>
@@ -2161,6 +2173,7 @@
         <p xml:lang="sk">Rovnakým spôsobom ako iné nástroje clang.</p>
         <p xml:lang="sl">Na enak način kot to počnejo druga orodja clang.</p>
         <p xml:lang="tr">The same way other clang tooling does it.</p>
+        <p xml:lang="uk">Так само поводяться інші інструменти clang.</p>
         <p>The way to enable code rewrite is now: -Xclang -plugin-arg-clazy -Xclang export-fixes for clang</p>
         <p xml:lang="ar">طريقة تفعيل إعادة كتابة الكود الآن هي: -Xclang -plugin-arg-clazy -Xclang export-fixes لـ clang</p>
         <p xml:lang="ca">La manera d'habilitar la reescriptura de codi és ara: -Xclang -plugin-arg-clazy -Xclang export-fixes per al clang</p>
@@ -2175,6 +2188,7 @@
         <p xml:lang="sk">Spôsob povolenia prepisu kódu je teraz: -Xclang -plugin-arg-clazy -Xclang export-fixes pre clang</p>
         <p xml:lang="sl">Način za omogočanje prepisovanja kode je zdaj: -Xclang -plugin-arg-clazy -Xclang izvozni popravki za clang</p>
         <p xml:lang="tr">The way to enable code rewrite is now: -Xclang -plugin-arg-clazy -Xclang export-fixes for clang</p>
+        <p xml:lang="uk">З нової версії способом вмикання перезапису коду є: -Xclang -plugin-arg-clazy -Xclang export-fixes для clang</p>
         <p>or -export-fixes=somefile.yaml for clazy-standalone</p>
         <p xml:lang="ar">أو -export-fixes=somefile.yaml لـ clazy-standalone</p>
         <p xml:lang="ca">o -export-fixes=somefile.yaml per al clazy-standalone</p>
@@ -2190,6 +2204,7 @@
         <p xml:lang="sk">alebo -export-fixes=somefile.yaml pre clazy-standalone</p>
         <p xml:lang="sl">ali -export-fixes=somefile.yaml za clazy-standalone</p>
         <p xml:lang="tr">or -export-fixes=somefile.yaml for clazy-standalone</p>
+        <p xml:lang="uk">або -export-fixes=somefile.yaml для clazy-standalone</p>
         <p>All other fixit arguments and fixit env variables were removed</p>
         <p xml:lang="ar">أزيلت كافة معاملات الإصلاح الآلي ومتغيرات البيئة الخاصة بها</p>
         <p xml:lang="ca">S'han eliminat tots els altres arguments de correccions i variables env de correccions</p>
@@ -2205,6 +2220,7 @@
         <p xml:lang="sk">Všetky ostatné argumenty opráv a premenné prostredia pre opravy boli odstránené</p>
         <p xml:lang="sl">Vsi drugi argumenti fixit in spremenljivke fixit env so bili odstranjeni</p>
         <p xml:lang="tr">All other fixit arguments and fixit env variables were removed</p>
+        <p xml:lang="uk">Усі інші аргументи підказок щодо виправлення аргументів та змінних середовища було вимкнено</p>
         <p>Thanks to Christian Gagneraud for contributing the fixit yaml exporter!</p>
         <p xml:lang="ar">شكرًا لـ Christian Gagneraud لمساهمته بمصدر ملفات yaml للإصلاح الآلي!</p>
         <p xml:lang="ca">Gràcies a Christian Gagneraud per col·laborar amb l'exportador yaml de correccions!</p>
@@ -2220,6 +2236,7 @@
         <p xml:lang="sk">Vďaka Christianovi Gagneraudovi za príspevok exportéra opráv yaml!</p>
         <p xml:lang="sl">Hvala Christianu Gagneraudu za prispevek k izvozniku fixit yaml!</p>
         <p xml:lang="tr">Thanks to Christian Gagneraud for contributing the fixit yaml exporter!</p>
+        <p xml:lang="uk">Дякуємо Christian Gagneraud за внесок із засобом експортування fixit до yaml!</p>
         <p>This release fixes the following bugs:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
@@ -2268,6 +2285,7 @@
           <li xml:lang="sk">Infraštruktúra opráv bola prepracovaná</li>
           <li xml:lang="sl">Infrastruktura Fixit je bila prenovljena</li>
           <li xml:lang="tr">Fixit infrastructure was overhauled</li>
+          <li xml:lang="uk">Переписано інфраструктуру підказок щодо виправлення</li>
         </ul>
       </description>
     </release>
@@ -2385,6 +2403,7 @@
           <li xml:lang="sk">range-loop teraz podporuje pridanie chýbajúcich referencií alebo const-ref</li>
           <li xml:lang="sl">range-loop zdaj podpira dodajanje manjkajočih ref ali const-ref</li>
           <li xml:lang="tr">range-loop now supports adding missing refs or const-ref</li>
+          <li xml:lang="uk">У новій версії range-loop передбачено підтримку додавання пропущених ref та const-ref</li>
           <li>range-loop now supports adding qAsConst()</li>
           <li xml:lang="ar">يدعم range-loop الآن إضافة qAsConst()</li>
           <li xml:lang="ca">range-loop ara permet afegir qAsConst()</li>
@@ -2400,6 +2419,7 @@
           <li xml:lang="sk">range-loop teraz podporuje pridanie qAsConst()</li>
           <li xml:lang="sl">range-loop zdaj podpira dodajanje qAsConst()</li>
           <li xml:lang="tr">range-loop now supports adding qAsConst()</li>
+          <li xml:lang="uk">У новій версії range-loop передбачено підтримку додавання qAsConst()</li>
           <li>function-args-by-ref now adding missing refs or const-ref (experimental)</li>
           <li xml:lang="ar">يضيف function-args-by-ref الآن المراجع الناقصة أو مراجع الثوابت (const-ref) (تجريبي)</li>
           <li xml:lang="ca">function-args-by-ref ara afegeix refs o const-ref que manquen (experimental)</li>
@@ -2415,6 +2435,7 @@
           <li xml:lang="sk">function-args-by-ref teraz pridáva chýbajúce referencie alebo const-ref (experimentálne)</li>
           <li xml:lang="sl">funkcija-args-by-ref zdaj dodaja manjkajoče ref ali const-ref (eksperimentalno)</li>
           <li xml:lang="tr">function-args-by-ref now adding missing refs or const-ref (experimental)</li>
+          <li xml:lang="uk">У новій версії function-args-by-ref передбачено підтримку додавання пропущених ref і const-ref (експеримент)</li>
           <li>Introduced CLAZY_FIXIT_SUFFIX env variable</li>
           <li xml:lang="ar">تقديم متغير البيئة CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="ca">S'ha introduït la variable «env» de CLAZY_FIXIT_SUFFIX</li>
@@ -2430,6 +2451,7 @@
           <li xml:lang="sk">Zavedená premenná prostredia CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="sl">Predstavljena spremenljivka env CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="tr">Introduced CLAZY_FIXIT_SUFFIX env variable</li>
+          <li xml:lang="uk">Впроваджено змінну середовища CLAZY_FIXIT_SUFFIX</li>
         </ul>
         <p>Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt</p>
         <p xml:lang="ar">أزيل دعم الخيار الغامض -DCLAZY_BUILD_UTILS_LIB لتبسيط ملف CMakeLists.txt</p>
@@ -2445,6 +2467,7 @@
         <p xml:lang="sk">Odstránená podpora pre málo známy -DCLAZY_BUILD_UTILS_LIB na zjednodušenie CMakeLists.txt</p>
         <p xml:lang="sl">Odstranjena podpora za nejasen -DCLAZY_BUILD_UTILS_LIB za poenostavitev CMakeLists.txt</p>
         <p xml:lang="tr">Removed support for the obscure -DCLAZY_BUILD_UTILS_LIB to simplify the CMakeLists.txt</p>
+        <p xml:lang="uk">Вилучено підтримку незрозумілого -DCLAZY_BUILD_UTILS_LIB для спрощення CMakeLists.txt</p>
         <p>Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so</p>
         <p xml:lang="ar">تغير اسم ملحق كلازي من ClangLazy.so إلى ClazyPlugin.so</p>
         <p xml:lang="ca">S'ha canviat el nom del connector clazy de ClangLazy.so a ClazyPlugin.so</p>
@@ -2460,6 +2483,7 @@
         <p xml:lang="sk">Premenovaný modul clazy z ClangLazy.so na ClazyPlugin.so</p>
         <p xml:lang="sl">Vtičnik clazy je bil preimenovan iz ClangLazy.so v ClazyPlugin.so</p>
         <p xml:lang="tr">Renamed the clazy plugin from ClangLazy.so to ClazyPlugin.so</p>
+        <p xml:lang="uk">Додаток clazy перейменовано з ClangLazy.so на ClazyPlugin.so</p>
         <p>fully-qualified-moc-types now warns for slot/invokable return values too.  They need to be fully qualified for QML.</p>
         <p xml:lang="ar">يحذر fully-qualified-moc-types الآن من قيم الإرجاع في slot/invokable أيضًا. يجب أن تكون مؤهلة بالكامل من أجل QML.</p>
         <p xml:lang="ca">fully-qualified-moc-types ara també avisa dels valors de retorn «slot/invokable». Han d'estar plenament qualificats per al QML.</p>
@@ -2505,6 +2529,7 @@
           <li xml:lang="sk">Opravený pád (assert clang) v raw-environment-function</li>
           <li xml:lang="sl">Popravljeno sesutje (clang assert) v raw-environment-function</li>
           <li xml:lang="tr">Fixed a crash (clang assert) in raw-environment-function</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи (оцінка clang) у raw-environment-function</li>
         </ul>
       </description>
     </release>
@@ -2622,6 +2647,7 @@
           <li xml:lang="sk">qt-keywords, vrátane opravy</li>
           <li xml:lang="sl">qt-keywords, with fixit included</li>
           <li xml:lang="tr">qt-keywords, with fixit included</li>
+          <li xml:lang="uk">qt-keywords з включеними підказками щодо виправлення</li>
           <li>qhash-with-char-pointer-key</li>
           <li xml:lang="ar">qhash-with-char-pointer-key</li>
           <li xml:lang="ca">qhash-with-char-pointer-key</li>
