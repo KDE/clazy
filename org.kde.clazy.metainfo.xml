@@ -349,6 +349,7 @@
           <li xml:lang="ca">No posa a la llista blanca QVariant per a «detaching-temporary». QVariant::toString proporcionarà una QString que no està deslligada</li>
           <li xml:lang="ca-valencia">No posa a la llista blanca QVariant per a «detaching-temporary». QVariant::toString proporcionarà una QString que no està deslligada</li>
           <li xml:lang="es">No incluir QVariant en la lista blanca para detaching-temporary. QVariant::toString proporcionará un QString que no está desvinculado.</li>
+          <li xml:lang="he">לא להתיר QVariant עבור detaching-temporary.‏ QVariant::toString תספק QString שאינו מנותק</li>
           <li xml:lang="it">Non aggiunge QVariant alla lista bianca per detaching-temporary. QVariant::toString fornirà una QString che non è distaccata</li>
           <li xml:lang="ka">detaching-temporary-ისთვის QVariant თეთრ სიაში არ იქნება. QVariant::toString მოგაწვდით QString-ს, რომელიც მოხსნილი არაა</li>
           <li xml:lang="nl">Voeg QVariant niet toe aan de whitelist voor tijdelijk loskoppelen. QVariant::toString zal een QString leveren die niet is losgekoppeld.</li>
@@ -363,6 +364,7 @@
           <li xml:lang="ca">«detaching-temporary» comprova adequadament les condicions quan estan encadenades més de dues crides a mètodes</li>
           <li xml:lang="ca-valencia">«detaching-temporary» comprova adequadament les condicions quan estan encadenades més de dues crides a mètodes</li>
           <li xml:lang="es">Hacer que detaching-temporary compruebe las condiciones correctamente cuando se encadenan más de dos llamadas a métodos.</li>
+          <li xml:lang="he">detaching-temporary בודק תנאים כראוי כשיותר משתי קריאות למתודות משורשרות</li>
           <li xml:lang="it">detaching-temporary controlla correttamente le condizioni quando sono concatenate più di due chiamate di metodo</li>
           <li xml:lang="ka">დროებით მოხსნის თვისების შემოწმების პირობები, როცა ჯაჭვში ორზე მეტი მეთოდის გამოძახებაა</li>
           <li xml:lang="nl">Tijdelijk losmaken controleert de voorwaarden correct wanneer meer dan twee methodeaanroepen aan elkaar gekoppeld zijn</li>
@@ -378,6 +380,7 @@
           <li xml:lang="ca-valencia">Les correccions «detaching-temporary»/«detaching-member» són més fiables amb els intervals de correccions per a crides d'operador</li>
           <li xml:lang="es">Las correcciones para detaching-temporary/detaching-member son más fiables con intervalos de correcciones para llamadas de operador.</li>
           <li xml:lang="fr">Les correctifs pour detaching-temporary / detaching-member sont plus fiables avec des plages de correctifs pour les appels d'opérateur</li>
+          <li xml:lang="he">הצעות לתיקון עבור detaching-temporary/detaching-member אמינות יותר עם טווחי הצעות לתיקון לקריאות לפעולות</li>
           <li xml:lang="it">I fixit per detaching-temporary/detaching-member sono più affidabili con intervalli di fixit per le chiamate dell'operatore</li>
           <li xml:lang="ka">გასწორდა დროებით მოხსნის/წევრის მოხსნის საიმედოობა ოპერატორის გამოძახებების შუალედებისთვის</li>
           <li xml:lang="nl">Fixits voor het losmaken van tijdelijke onderdelen/onderdelen zijn betrouwbaarder met fixit-bereiken voor operatoroproepen</li>
@@ -573,7 +576,7 @@
           <li xml:lang="ca">use-chrono-in-qtimer: corregeix una fallada en usar capçaleres precompilades</li>
           <li xml:lang="ca-valencia">use-chrono-in-qtimer: corregix una fallada en utilitzar capçaleres precompilades</li>
           <li xml:lang="es">use-chrono-in-qtimer: Se ha corregido un fallo cuando se usan cabeceras precompiladas.</li>
-          <li xml:lang="fr">use-chrono-in-qtimer : correction d'un plantage lors de l'utilisation des en-têtes précompilés</li>
+          <li xml:lang="fr">use-chrono-in-qtimer : correction d'un plantage lors de l'utilisation des en-têtes pré-compilés</li>
           <li xml:lang="he">use-chrono-in-qtimer: תוקנה קריסה בעת שימוש בכותרות שהודרו מראש</li>
           <li xml:lang="it">use-chrono-in-qtimer: corregge l'arresto anomalo quando si utilizzano intestazioni precompilate</li>
           <li xml:lang="ka">use-chrono-in-qtimer: გასწორდა ავარიული დასრულება წინასწარ დაკომპილებული თავსართების გამოყენებისას</li>
@@ -589,6 +592,7 @@
           <li xml:lang="ca">qt6-qhash-signature: adapta la comprovació per a utilitzar una lògica més adequada per a les conversions i corregeix una fallada en casos extrems</li>
           <li xml:lang="ca-valencia">qt6-qhash-signature: adapta la comprovació per a utilitzar una lògica més adequada per a les conversions i corregix una fallada en casos extrems</li>
           <li xml:lang="es">qt6-qhash-signature: Se ha adaptado la comprobación para que use una lógica más adecuada para moldeado y se ha corregido un fallo en casos extremos.</li>
+          <li xml:lang="he">qt6-qhash-signature: התאמת הבדיקות כך שתשתמשנה בלוגיקה יותר הולמת להמרות ותוקנה קריסה במקרי קצה</li>
           <li xml:lang="it">qt6-qhash-signature: adatta il controllo per utilizzare una logica più appropriata per i cast e corregge l'arresto anomalo nei casi limite</li>
           <li xml:lang="ka">qt6-qhash-signature: შემოწმება გარდაქმნებისთვის უფრო მართებული ლოგიკის გამოსაყენებლად შეიცვალა და გასწორდა ავარია გამონაკლის შემთხვევებში</li>
           <li xml:lang="nl">qt6-qhash-signature: pas de controle aan om een ​​betere logica voor typeconversies te gebruiken en verhelp de crash in uitzonderlijke gevallen</li>
@@ -603,6 +607,7 @@
           <li xml:lang="ca">Assegura que clang21 funciona correctament amb clazy i produeix el mateix número de línia/lletra que abans (no coincideix amb crides d'operador)</li>
           <li xml:lang="ca-valencia">Assegura que clang21 funciona correctament amb clazy i produïx el mateix número de línia/lletra que abans (no coincidix amb crides d'operador)</li>
           <li xml:lang="es">Asegurar que clang21 funciona correctamente con clazy y produce el mismo número de línea/letra que antes (no concuerda con las llamadas al operador).</li>
+          <li xml:lang="he">מתבצע וידוא ש־clang21 עובד היטב עם clazy ומייצר אות אותו מספר שורה/אות ביחס למצב לפני כן (חוסר התאמה עם קריאות של פעולות)</li>
           <li xml:lang="it">Assicura che clang21 funzioni correttamente con clazy e produca lo stesso numero di riga/lettera di prima (non corrisponde alle chiamate dell'operatore)</li>
           <li xml:lang="ka">დარწმუნდით, რომ clang21 clazy-სთან გამართულად მუშაობს და ისეთივე ხაზის/ასოს ნომერს აბრუნებს, როგორსაც ადრე (შეუსაბამობები ოპერატორის გამოძახებებთან)</li>
           <li xml:lang="nl">Zorg ervoor dat clang21 correct werkt met clazy en hetzelfde regel/letternummer produceert als voorheen (dit komt niet overeen met oproepen van de operator)</li>
@@ -791,6 +796,7 @@
           <li xml:lang="ca-valencia">les comprovacions «detaching-temporary» i «detaching-member» proporcionen correccions per als mètodes que tenen contraparts «const»</li>
           <li xml:lang="es">Las comprobaciones detaching-temporary y detaching-member proporcionan correcciones para métodos que tienen contrapartidas «const».</li>
           <li xml:lang="fr">Les vérifications « detaching-temporary » et « detaching-member » fournissent des correctifs pour les méthodes qui ont des équivalents « const ».</li>
+          <li xml:lang="he">הבדיקות detaching-temporary ו־detaching-member מספקות הצעות לתיקון למתודות שיש להן משלים בצורת קבוע (const)</li>
           <li xml:lang="it">i controlli detaching-temporary e detaching-member forniscono fixit per i metodi che hanno controparti costanti</li>
           <li xml:lang="ka">detaching-temporary და detaching-member შემოწმებები უზრუნველყოფს Fixit-ებს იმ მეთოდებისთვის რომლებსაც მუდმივი ანალოგები გააჩნიათ</li>
           <li xml:lang="nl">De controles 'detaching-temporary' en 'detaching-member' bieden oplossingen voor methoden met constante tegenhangers.</li>
@@ -806,7 +812,7 @@
           <li xml:lang="ca-valencia">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND ara funcionen totes com</li>
           <li xml:lang="es">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND funcionan en clazy ahora</li>
           <li xml:lang="fr">NOLINT / NOLINTNEXTLINE / NOLINTBEGIN / NOLINTEND fonctionnent tous maintenant dans Clazy comme</li>
-          <li xml:lang="he">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND כולם עובדים ב־clazy בתור</li>
+          <li xml:lang="he">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND כולם עובדים ב־clazy כפי</li>
           <li xml:lang="it">NOLINT/NOLINTNEXTLINE/NOLINBEGIN/NOLINTEND ora funzionano tutti in Clazy come</li>
           <li xml:lang="ka">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND ყველა მათგანი ახლა უკვე მუშაობს clazy-ში როგორც</li>
           <li xml:lang="nl">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND werken allemaal nu in clazy zoals</li>
@@ -822,6 +828,7 @@
           <li xml:lang="ca-valencia">s'esperava. Les comprovacions individuals de clazy es poden desactivar quan s'utilitza un prefix</li>
           <li xml:lang="es">como era de esperar. Las comprobaciones individuales de clazy se pueden desactivar cuando se usa el prefijo</li>
           <li xml:lang="fr">Attendu. Les vérifications individuelles de Clazy peuvent être désactivées lors de l'utilisation d'un « clazy- »</li>
+          <li xml:lang="he">שאמור להיות. ניתן לכבות בדיקות clazy עצמאיות באמצעות „clazy-‎”</li>
           <li xml:lang="it">previsto. I controlli individuali di Clazy possono essere disabilitati quando si utilizza un prefisso</li>
           <li xml:lang="ka">მოსალოდნელია. ინდივიდუალური clazy შემოწმებების გამორთვა შესაძლებელია "clazy-" გამოყენებისას</li>
           <li xml:lang="nl">verwacht. Individuele clazy controles kunnen uitgeschakeld worden bij gebruik van voorvoegsel "clazy-".</li>
@@ -919,6 +926,7 @@
           <li xml:lang="ca">S'ha corregit una fallada quan fully-qualified-moc-types troba senyals amb expressions com «std::bitset&lt;int(8)&gt;»</li>
           <li xml:lang="ca-valencia">S'ha corregit una fallada quan fully-qualified-moc-types troba senyals amb expressions com «std::bitset&lt;int(8)&gt;»</li>
           <li xml:lang="es">Se ha corregido un fallo cuando fully-qualified-moc-types encuentra señales con expresiones semejantes a «std::bitset&lt;int(8)&gt;».</li>
+          <li xml:lang="he">תוקנה קריסה כאשר fully-qualified-moc-types נתקלת באותו עם ביטויים כגון „std::bitset&lt;int(8)&gt;”</li>
           <li xml:lang="it">Corretto l'arresto anomalo quando fully-qualified-moc-types incontra segnali con espressioni come "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="ka">fully-qualified-moc-types: გასწორდა ავარია, როცა "std::bitset&lt;int(8)&gt;" მსგავსი გამოსახულებების მქონე სიგნალები გვხვდება</li>
           <li xml:lang="nl">Een crash is verholpen die optrad wanneer fully-qualified-moc-types signalen tegenkwamen met expressies zoals "std::bitset&lt;int(8)&gt;"</li>
@@ -934,6 +942,7 @@
           <li xml:lang="ca-valencia">S'ha corregit una fallada a qvariant-template-instantiation</li>
           <li xml:lang="es">Se ha corregido un fallo en qvariant-template-instantiation</li>
           <li xml:lang="fr">Correction du plantage dans qvariant-template-instantiation</li>
+          <li xml:lang="he">תוקנה קריסה ב־qvariant-template-instantiation</li>
           <li xml:lang="it">Corretto l'arresto anomalo in qvariant-template-instantiation</li>
           <li xml:lang="ka">გასწორდა შეცდომა qvariant-template-instantiation-შ</li>
           <li xml:lang="nl">Een crash in qvariant-template-instantiation is verholpen</li>
@@ -1014,6 +1023,7 @@
           <li xml:lang="ca">`clazy-standalone --version` conté la versió git (sortida de `git describe`) si no és una comissió etiquetada</li>
           <li xml:lang="ca-valencia">`clazy-standalone --version` conté la versió git (eixida de `git describe`) si no és una comissió etiquetada</li>
           <li xml:lang="es">`clazy-standalone --version` contiene la versión de git (salida de `git describe`) si no se trata de un commit etiquetado.</li>
+          <li xml:lang="he">`clazy-standalone --version` מכיל גרסת git ( הפלט של `git describe`) אם זה לא קיבוע מתויג</li>
           <li xml:lang="it">`clazy-standalone --version` contiene la versione git (output di `gitdescribe`) se non è un commit con tag</li>
           <li xml:lang="ka">clazy-standalone --version git-ის ვერსიას შეიცავს (git describe ბრძანების შედეგს), თუ ის მონიშნული კომიტი არაა</li>
           <li xml:lang="nl">`clazy-standalone --version` bevat de git-versie (uitvoer van `git describe`) als het geen getagde commit is.</li>
@@ -1096,6 +1106,7 @@
         <p xml:lang="ca">comprovacions `function-args-by-value` i `function-args-by-ref`: afegeix el nom de la funció i el nom del paràmetre al missatge d'avís</p>
         <p xml:lang="ca-valencia">comprovacions `function-args-by-value` i `function-args-by-ref`: afig el nom de la funció i el nom del paràmetre al missatge d'avís</p>
         <p xml:lang="es">Comprobaciones `function-args-by-value` y `function-args-by-ref`: se han añadido los nombres de la función y de los parámetros al mensaje de advertencia.</p>
+        <p xml:lang="he">הבדיקות `function-args-by-value` ו־`function-args-by-ref`: נוסף שם פונקציה ושם משתנה להודעת האזהרה</p>
         <p xml:lang="it">Controlla `function-args-by-value` e `function-args-by-ref`: aggiunge il nome della funzione e il nome del parametro al messaggio di avviso</p>
         <p xml:lang="ka">ამოწმებს 'function-args-by-value'-ს და 'function-args-by-ref'-ს: გაფრთხილების შეტყობინებისთვის ფუნქციის სახელის და პარამეტრის სახელის დამატება</p>
         <p xml:lang="nl">controleert `function-args-by-value` en `function-args-by-ref`: voeg de functienaam en parameternaam toe aan het waarschuwingsbericht</p>
@@ -1110,6 +1121,7 @@
         <p xml:lang="ca">comprovacions `unused-non-trivial-variable` i `non-pod-global-static`: afegeix un nom de variable al missatge d'avís</p>
         <p xml:lang="ca-valencia">comprovacions `unused-non-trivial-variable` i `non-pod-global-static`: afig un nom de variable al missatge d'avís</p>
         <p xml:lang="es">Comprobaciones `unused-non-trivial-variable` y `non-pod-global-static`: se ha añadido el nombre de la variable al mensaje de advertencia.</p>
+        <p xml:lang="he">הבדיקות `unused-non-trivial-variable` ו־`non-pod-global-static`: נוסף שם משתנה להודעת האזהרה</p>
         <p xml:lang="it">controlla `unused-non-trivial-variable` e `non-pod-global-static`: aggiunge il nome della variabile al messaggio di avviso</p>
         <p xml:lang="ka">ამოწმებს 'unused-non-trivial-variable'-ს და 'non-pod-global-static'-ს: გაფრთხილების შეტყობინებისთვის ცვლადის სახელის დამატება</p>
         <p xml:lang="nl">controleert `unused-non-triviale-variabele` en `non-pod-global-static`: voeg de variabelenaam toe aan het waarschuwingsbericht</p>
@@ -1246,6 +1258,7 @@
           <li xml:lang="ca-valencia">la comprovació qstring-arg proporciona una correcció</li>
           <li xml:lang="es">La comprobación qstring-arg proporciona una solución.</li>
           <li xml:lang="fr">qstring-arg check provides a fix-it</li>
+          <li xml:lang="he">הבדיקה qstring-arg מספקת הצעה לתיקון</li>
           <li xml:lang="it">Il controllo qstring-arg fornisce un fixit</li>
           <li xml:lang="ka">qstring-arg შემოწმება მოგაწვდით გასწორებას</li>
           <li xml:lang="nl">qstring-arg controle levert een repareer-het</li>
@@ -1261,6 +1274,7 @@
           <li xml:lang="ca-valencia">S'ha corregit unused-non-trivial-variable per no avisar quan s'ha establit [[maybe_unused]]</li>
           <li xml:lang="es">Se ha corregido que unused-non-trivial-variable no generara una advertencia cuando se usaba [[maybe_unused]].</li>
           <li xml:lang="fr">Correction de unused-non-trivial-variable pour ne pas avertir lorsque [[maybe_unused]] est défini</li>
+          <li xml:lang="he">תוקן unused-non-trivial-variable כך שלא יזהיר כאשר [[maybe_unused]] מוגדר.</li>
           <li xml:lang="it">Corretto unused-non-trivial-variable che non avvisa quando è impostato [[maybe_unused]]</li>
           <li xml:lang="ka">გასწორდა unused-non-trivial-variable რომ არ გამოაგდოს გაფრთხილება, როცა [[maybe_unused]] დაყენებულია</li>
           <li xml:lang="nl">De ongebruikte niet-triviale variabele is aangepast zodat er geen waarschuwing meer wordt gegeven wanneer [[maybe_unused]] is ingesteld.</li>
@@ -1338,6 +1352,7 @@
           <li xml:lang="ca-valencia">als constructors de còpies, operadors d'assignació i comprovacions d'igualtat</li>
           <li xml:lang="es">en constructores de copia, operadores de asignación y comprobaciones de igualdad.</li>
           <li xml:lang="fr">dans les constructeurs de copie, les opérateurs d’affectation et les vérifications d’égalité</li>
+          <li xml:lang="he">בבנאי העתקה, פעולות השמה ובדיקות השוואה</li>
           <li xml:lang="it">nei costruttori di copia, negli operatori di assegnazione e nei controlli di uguaglianza</li>
           <li xml:lang="ka">ასლის კონსტრუქტორებში მინიჭების ოპერატორებსა და ტოლობის შემოწმებებში</li>
           <li xml:lang="nl">in kopieerconstructors, toewijzingsoperatoren en gelijkheidscontroles</li>
@@ -2489,6 +2504,7 @@
         <p xml:lang="ca">fully-qualified-moc-types ara també avisa dels valors de retorn «slot/invokable». Han d'estar plenament qualificats per al QML.</p>
         <p xml:lang="ca-valencia">fully-qualified-moc-types ara també avisa dels valors de retorn «slot/invokable». Han d'estar plenament qualificats per a QML.</p>
         <p xml:lang="es">fully-qualified-moc-types también muestra una advertencia ahora de los valores de retorno de slot/invokable. Deben estar totalmente cualificados para QML.</p>
+        <p xml:lang="he">fully-qualified-moc-types מזהיר מעתה גם מפני ערכי החזרת חלון/להזנקה. הם צריכים להיות תואמים לגמרי ל־QML.</p>
         <p xml:lang="it">fully-qualified-moc-types ora avvisa anche per i valori di ritorno slot/invokable. Devono essere completamente qualificati per QML.</p>
         <p xml:lang="ka">fully-qualified-moc-types ახლა სლოტის/ჩაწოდებად დაბრუნებულ მნიშვნელობებზეც იძლევა გაფრთხილებას, რადგან QML-ისთვის სრული კვალიფიკაციაა საჭირო.</p>
         <p xml:lang="nl">De functie fully-qualified-moc-types geeft nu ook een waarschuwing voor slot/invokable retourwaarden. Deze moeten volledig gekwalificeerd zijn voor QML.</p>
@@ -2497,6 +2513,7 @@
         <p xml:lang="sk">fully-qualified-moc-types teraz varuje aj pre návratové hodnoty slotov/invokable. Pre QML musia byť plne kvalifikované.</p>
         <p xml:lang="sl">fully-qualified-moc-types zdaj opozarja tudi za vrnjene vrednosti reže/priklica. Biti morajo popolnoma usposobljeni za QML.</p>
         <p xml:lang="tr">fully-qualified-moc-types now warns for slot/invokable return values too. They need to be fully qualified for QML.</p>
+        <p xml:lang="uk">У новій версії fully-qualified-moc-types попереджає і про повернуті значення слота/викликаної функції. Ці значення мають бути повноцінними для QML.</p>
         <p>This release fixes the following bug:</p>
         <p xml:lang="ar">يصلح هذا الإصدار العلة التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix l'error següent:</p>
@@ -2742,6 +2759,7 @@
           <li xml:lang="sk">auto-unexpected-qstringbuilder teraz varuje aj pre lambdy vracajúce QStringBuilder</li>
           <li xml:lang="sl">auto-unexpected-qstringbuilder zdaj opozarja tudi na lambde, ki vračajo QStringBuilder</li>
           <li xml:lang="tr">auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder</li>
+          <li xml:lang="uk">У новій версії auto-unexpected-qstringbuilder попереджає і про лямбди, що повертають QStringBuilder</li>
         </ul>
         <p>performance optimizations</p>
         <p xml:lang="ar">تحسينات في الأداء</p>
@@ -2773,6 +2791,7 @@
         <p xml:lang="sk">Pridaná možnosť -header-filter=&lt;regex&gt; do clazy-standalone. Iba hlavičky zodpovedajúce regulárnemu výrazu budú</p>
         <p xml:lang="sl">Dodana možnost -header-filter=&lt;regex&gt; v clazy-standalone. Samo glave, ki se ujemajo z regularnim izrazom, bodo</p>
         <p xml:lang="tr">Added -header-filter=&lt;regex&gt; option to clazy-standalone. Only headers matching the regexp will</p>
+        <p xml:lang="uk">До clazy-standalone додано параметр -header-filter=&lt;формальний_вираз&gt;. Попередження буде показано лише для заголовків, що відповідають формальному виразу,</p>
         <p>have warnings, besides the .cpp file from the translation unit, which is never filtered out.</p>
         <p xml:lang="ar">سيصدر لها تحذيرات، بالإضافة إلى ملف .cpp من وحدة الترجمة، والذي لا يُصفى أبدًا.</p>
         <p xml:lang="ca">tindran avisos, a banda del fitxer .cpp de la unitat de traducció, que no es filtra mai.</p>
@@ -2787,6 +2806,7 @@
         <p xml:lang="sk">mať varovania, okrem súboru .cpp z prekladovej jednotky, ktorý sa nikdy nefiltruje.</p>
         <p xml:lang="sl">imele opozorila, poleg datoteke .cpp iz prevajalske enote, ki ni nikoli filtrirana.</p>
         <p xml:lang="tr">have warnings, besides the .cpp file from the translation unit, which is never filtered out.</p>
+        <p xml:lang="uk">окрім файла .cpp з модуля перекладу, фільтрування якого ніколи не виконуватиметься.</p>
         <p>Added -ignore-dirs=&lt;regex&gt; option to clazy-standalone, and its CLAZY_IGNORE_DIRS env variable equivalent.</p>
         <p xml:lang="ar">إضافة الخيار -ignore-dirs=&lt;regex&gt; إلى clazy-standalone، وما يعادله من متغير البيئة CLAZY_IGNORE_DIRS.</p>
         <p xml:lang="ca">S'ha afegit l'opció -ignore-dirs=&lt;regex&gt; al clazy-standalone, i la seva variable d'entorn equivalent CLAZY_IGNORE_DIRS.</p>
@@ -2801,6 +2821,7 @@
         <p xml:lang="sk">Pridaná možnosť -ignore-dirs=&lt;regex&gt; do clazy-standalone a jej ekvivalent v premennej prostredia CLAZY_IGNORE_DIRS.</p>
         <p xml:lang="sl">Dodana možnost -ignore-dirs=&lt;regex&gt; v clazy-standalone in njen ekvivalent spremenljivke env CLAZY_IGNORE_DIRS.</p>
         <p xml:lang="tr">Added -ignore-dirs=&lt;regex&gt; option to clazy-standalone, and its CLAZY_IGNORE_DIRS env variable equivalent.</p>
+        <p xml:lang="uk">До clazy-standalone додано параметр -ignore-dirs=&lt;формальний_вираз&gt; та його еквівалент — змінну середовища CLAZY_IGNORE_DIRS.</p>
         <p>Added CLAZY_HEADER_FILTER env variable which adds above functionality to both clazy and clazy-standalone</p>
         <p xml:lang="ar">إضافة متغير البيئة CLAZY_HEADER_FILTER الذي يضيف الوظيفة المذكورة أعلاه لكل من كلازي و clazy-standalone</p>
         <p xml:lang="ca">S'ha afegit la variable «env» de CLAZY_HEADER_FILTER que afegeix la funcionalitat anterior tant al clazy com al clazy-standalone</p>
@@ -2815,6 +2836,7 @@
         <p xml:lang="sk">Pridaná premenná prostredia CLAZY_HEADER_FILTER, ktorá pridáva vyššie uvedenú funkčnosť do clazy aj clazy-standalone</p>
         <p xml:lang="sl">Dodana spremenljivka env CLAZY_HEADER_FILTER, ki doda zgornjo funkcionalnost v clazy in cv lazy-standalone</p>
         <p xml:lang="tr">Added CLAZY_HEADER_FILTER env variable which adds above functionality to both clazy and clazy-standalone</p>
+        <p xml:lang="uk">Додано змінну середовища CLAZY_HEADER_FILTER, яка додає наведені вище функціональні можливості до clazy і clazy-standalone</p>
         <p>unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist option</p>
         <p xml:lang="ar">حصل unused-non-trivial-variable على خيار unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="ca">unused-non-trivial-variable s'ha incorporat a l'opció unused-non-trivial-variable-no-whitelist</p>
@@ -2829,6 +2851,7 @@
         <p xml:lang="sk">unused-non-trivial-variable získala možnosť unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="sl">unused-non-trivial-variable je pridobila možnost unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="tr">unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist option</p>
+        <p xml:lang="uk">До unused-non-trivial-variable додано параметр unused-non-trivial-variable-no-whitelist</p>
         <p>unused-non-trivial-variable got user-blacklist and user-whitelist support</p>
         <p xml:lang="ar">حصل unused-non-trivial-variable على دعم القائمة السوداء والبيضاء للمستخدم</p>
         <p xml:lang="ca">unused-non-trivial-variable s'ha incorporat a la implementació d'user-blacklist i user-whitelist</p>
@@ -2844,6 +2867,7 @@
         <p xml:lang="sk">unused-non-trivial-variable získala podporu user-blacklist a user-whitelist</p>
         <p xml:lang="sl">unused-non-trivial-variable je dobila podporo za črni in beli seznam uporabnikov</p>
         <p xml:lang="tr">unused-non-trivial-variable got user-blacklist and user-whitelist support</p>
+        <p xml:lang="uk">У unused-non-trivial-variable реалізовано підтримку user-blacklist і user-whitelist</p>
         <p>container-inside-loop is now a manual check instead of level2</p>
         <p xml:lang="ar">أصبح container-inside-loop فحصًا يدويًا بدلًا من المستوى 2</p>
         <p xml:lang="ca">container-inside-loop és ara una comprovació manual en lloc de level2</p>
@@ -2859,6 +2883,7 @@
         <p xml:lang="sk">container-inside-loop je teraz manuálna kontrola namiesto úrovne 2</p>
         <p xml:lang="sl">container-inside-loop je zdaj ročno preverjanje namesto level2</p>
         <p xml:lang="tr">container-inside-loop is now a manual check instead of level2</p>
+        <p xml:lang="uk">У новій версії container-inside-loop передбачено перевірку вручну замість level2</p>
         <p>HiddenLevel was renamed to ManualLevel</p>
         <p xml:lang="ar">تغير اسم HiddenLevel إلى ManualLevel</p>
         <p xml:lang="ca">HiddenLevel s'ha canviat de nom a ManualLevel</p>
@@ -2889,6 +2914,7 @@
         <p xml:lang="sk">connect-3arg-lambda teraz varuje pri odovzdávaní lambdy do QTimer::singleShot() alebo QMenu::addAction()</p>
         <p xml:lang="sl">connect-3arg-lambda zdaj opozori pri posredovanju lambda v QTimer::singleShot() ali QMenu::addAction()</p>
         <p xml:lang="tr">connect-3arg-lambda now warns when passing a lambda to QTimer::singleShot() or QMenu::addAction()</p>
+        <p xml:lang="uk">У новій версії connect-3arg-lambda попереджає про передавання лямбди до QTimer::singleShot() або QMenu::addAction()</p>
         <p>without a context object</p>
         <p xml:lang="ar">بدون كائن سياق</p>
         <p xml:lang="ca">sense un objecte de context</p>
@@ -2919,6 +2945,7 @@
         <p xml:lang="sk">old-style-connect teraz varuje aj pre QMenu::addAction() a QMessageBox::open()</p>
         <p xml:lang="sl">old-style-connect opozarja tudi za QMenu::addAction() in QMessageBox::open() na zdaj</p>
         <p xml:lang="tr">old-style-connect warns for QMenu::addAction() and QMessageBox::open() too now</p>
+        <p xml:lang="uk">У новій версії old-style-connect попереджає про QMenu::addAction() і QMessageBox::open()</p>
       </description>
     </release>
     <release type="stable" version="1.3" date="2017-11-26T00:00:00Z">
@@ -3099,11 +3126,13 @@
         <p xml:lang="sk">missing-qobject-macro je teraz kontrola úrovne 2 namiesto úrovne 1. Pretože ľudia môžu Q_OBJECT vynechať zámerne.</p>
         <p xml:lang="sl">missing-qobject-macro je zdaj preverjanje level2 namesto level1. Ker lahko ljudje namerno izpustijo Q_OBJECT.</p>
         <p xml:lang="tr">missing-qobject-macro is now a level2 check, instead of level1. Because, people can omit Q_OBJECT intentionally.</p>
+        <p xml:lang="uk">У новій версії missing-qobject-macro є перевіркою level2, а не level1. Через це можна навмисно пропускати Q_OBJECT.</p>
         <p>Added -only-qt option, which will make clazy bailout early on non-Qt files. For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed, which is usually the case in most build systems.</p>
         <p xml:lang="ar">إضافة الخيار -only-qt، والذي سيجعل كلازي يخرج مبكرًا في الملفات التي لا تتبع Qt. لهذا الغرض، يُعرف ملف Qt بأنه الملف الذي يُمرر له -DQT_CORE_LIB، وهذا هو المعتاد في معظم أنظمة البناء.</p>
         <p xml:lang="ca">S'ha afegit l'opció -only-qt, que sortirà del clazy abans d'hora en fitxers que no siguin Qt. Per a aquest propòsit, la definició d'un fitxer Qt és sempre que es passa -DQT_CORE_LIB, que sol ser el cas en la majoria dels sistemes de construcció.</p>
         <p xml:lang="ca-valencia">S'ha afegit l'opció -only-qt, que eixirà de clazy abans prompte en fitxers que no siguen Qt. Per a este propòsit, la definició d'un fitxer Qt és sempre que es passa -DQT_CORE_LIB, que sol ser el cas en la majoria dels sistemes de construcció.</p>
         <p xml:lang="es">Se ha añadido la opción -only-qt, que provocará un rescate temprano de clazy en archivos que no sean de Qt. Para ello, la definición de un archivo Qt es cuando se pasa -DQT_CORE_LIB, que suele ser el caso en muchos sistemas de compilación.</p>
+        <p xml:lang="he">נוספה האפשרות ‎-only-qt, שתגרום ל־clazy לסגת מוקדם בקבצים שאינם Qt. למטרה הזאת, ההגדרה של קובץ Qt היא כאשר מועבר ‎-DQT_CORE_LIB, מה שבדרך כלל קורה ברוב מערכות בניית הקוד.</p>
         <p xml:lang="it">Aggiunta l'opzione -only-qt, che renderà più rapido il bailout di Clazy sui file non-Qt. A questo scopo, la definizione di un file Qt è ogni volta che viene passato -DQT_CORE_LIB, il che è solitamente il caso nella maggior parte dei sistemi di compilazione.</p>
         <p xml:lang="ka">დაემატა პარამეტრი -only-qt, რომელიც clazy-ს აიძულებს, ადრეულ ეტაპზევე გამოეთიშოს არა-Qt ფაილებს. ამ მიზნით Qt-ის ფაილად მიიჩნევა ნებისმიერი ფაილი, რომლისთვისაც -DQT_CORE_LIB ფუნქციაა გადაცემული, რაც ჩვეულებრივ აგების სისტემების უმრავლესობაში ხდება.</p>
         <p xml:lang="nl">De optie -only-qt is toegevoegd, waardoor er vroegtijdig een clazy-bailout plaatsvindt bij niet-Qt-bestanden. Voor dit doel wordt een Qt-bestand gedefinieerd als het bestand dat wordt aangeleverd met -DQT_CORE_LIB, wat in de meeste bouwsystemen het geval is.</p>
@@ -3112,6 +3141,7 @@
         <p xml:lang="sk">Added -only-qt option, which will make clazy bailout early on non-Qt files. For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed, which is usually the case in most build systems.</p>
         <p xml:lang="sl">Dodana možnost -only-qt, ki bo omogočila zgodnjo reševanje datotek, ki niso Qt. V ta namen je definicija datoteke Qt vsakič, ko je posredovan -DQT_CORE_LIB, kar je običajno v večini gradbenih sistemov.</p>
         <p xml:lang="tr">Added -only-qt option, which will make clazy bailout early on non-Qt files. For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed, which is usually the case in most build systems.</p>
+        <p xml:lang="uk">Додано параметр -only-qt, яка забезпечить раннє clazy-вимикання для файлів, відмінних від Qt. Для цього Qt-файл визначено щоразу, коли передається -DQT_CORE_LIB, що зазвичай буває в більшості систем збирання.</p>
         <p>Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the list will grow.</p>
         <p xml:lang="ar">إضافة الخيار -qt-developer، فعند بناء Qt باستخدام كلازي سيلتزم بإرشادات محددة لـ Qt، وهي ليست كثيرة حاليًا ولكن القائمة ستكبر.</p>
         <p xml:lang="ca">S'ha afegit l'opció -qt-developer, que quan es construeixin les Qt amb clazy complirà les directrius específiques per a les Qt, que ara mateix no són moltes, però la llista creixerà.</p>
@@ -3126,6 +3156,7 @@
         <p xml:lang="sk">Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the list will grow.</p>
         <p xml:lang="sl">Dodana možnost -qt-developer, pri izdelavi Qt s programom clazy bo upošteval posebne smernice za Qt, ki jih trenutno ni veliko, vendar se bo seznam povečal.</p>
         <p xml:lang="tr">Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the list will grow.</p>
+        <p xml:lang="uk">Додано параметр -qt-developer, під час збирання Qt за допомогою clazy будуть враховані певні рекомендації для Qt, яких зараз небагато, але список розширюватиметься.</p>
       </description>
     </release>
     <release type="stable" version="1.2" date="2017-07-08T00:00:00Z">
@@ -3259,6 +3290,7 @@
           <li xml:lang="sk">clazy-standalone executable. Allows to run clazy against a JSON compilation database instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086) so this is a good workaround.</li>
           <li xml:lang="sl">samostojna izvršljiva datoteka. Omogoča zagon Crazy proti zbirki podatkov JSON namesto kot vtičnik. clang-tidy ne podpira nalaganja zunanjih modulov (https://github.com/llvm/llvm-project/issues/32086), zato je to dobra rešitev.</li>
           <li xml:lang="tr">clazy-standalone executable. Allows to run clazy against a JSON compilation database instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086) so this is a good workaround.</li>
+          <li xml:lang="uk">Виконуваний файл clazy-standalone. Надає змогу запускати clazy на основі бази даних компіляції JSON, замість додатка. У clang-tidy не передбачено підтримки завантаження зовнішніх модулів (https://github.com/llvm/llvm-project/issues/32086), тому це гарне рішення.</li>
           <li>qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ar">وضع qt-compat. يسمح بتعطيل الفحوصات الخاصة بـ Qt5 عبر تمرير -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ca">Mode «qt-compat». Permet desactivar les comprovacions específiques de les Qt5 passant -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
@@ -3273,6 +3305,7 @@
           <li xml:lang="sk">qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="sl">način qt-compat. Omogoča onemogočanje posebnih preverjanj Qt5 s posredovanjem -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="tr">qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
+          <li xml:lang="uk">Режим qt-compat. Надає змогу вимкнути специфічні для Qt5 перевірки шляхом передавання параметрів -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li>returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned</li>
           <li xml:lang="ar">يفحص returning-data-from-temporary الآن مصفوفات QByteArrays المؤقتة التي تُقسر إلى *char عند إرجاعها</li>
           <li xml:lang="ca">return-data-from-temporary ara comprova si hi ha conversions QByteArrays temporals a char* quan retornen</li>
@@ -3287,6 +3320,7 @@
           <li xml:lang="sk">returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned</li>
           <li xml:lang="sl">returning-data-from-temporary zdaj preverja začasne QByteArrays, ki se ob vrnitvi pretvorijo v char*</li>
           <li xml:lang="tr">returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned</li>
+          <li xml:lang="uk">У новій версії returning-data-from-temporary перевіряє на тимчасові приведення QByteArrays до char* при поверненні даних</li>
           <li>returning-data-from-temporary now checks for assignment too, not only return statements</li>
           <li xml:lang="ar">يفحص returning-data-from-temporary الآن الإسناد أيضًا، وليس فقط جمل الإرجاع</li>
           <li xml:lang="ca">return-data-from-temporary ara també comprova les assignacions, no només retorna les sentències</li>
@@ -3301,6 +3335,7 @@
           <li xml:lang="sk">returning-data-from-temporary now checks for assignment too, not only return statements</li>
           <li xml:lang="sl">returning-data-from-temporary zdaj preverja tudi dodelitev, ne samo povratnih ukazov</li>
           <li xml:lang="tr">returning-data-from-temporary now checks for assignment too, not only return statements</li>
+          <li xml:lang="uk">У новій версії returning-data-from-temporary перевіряє надання значень, а не лише інструкції повернення даних</li>
           <li>unused-non-trivial-variable now warns for unused QList, QVector and many more types</li>
           <li xml:lang="ar">يحذر unused-non-trivial-variable الآن من QList و QVector غير المستخدمة وأنواع كثيرة أخرى</li>
           <li xml:lang="ca">unused-non-trivial-variable ara avisa de QList, QVector i molts més tipus no utilitzats</li>
@@ -3315,6 +3350,7 @@
           <li xml:lang="sk">unused-non-trivial-variable now warns for unused QList, QVector and many more types</li>
           <li xml:lang="sl">unused-non-trivial-variable zdaj opozarja na neuporabljene QList, QVector in številne druge vrste</li>
           <li xml:lang="tr">unused-non-trivial-variable now warns for unused QList, QVector and many more types</li>
+          <li xml:lang="uk">У новій версії unused-non-trivial-variable попереджає про невикористані QList, QVector і багато інших типів</li>
           <li>ASTMatchers based checks are now supported</li>
           <li xml:lang="ar">أصبحت الفحوصات المبنية على ASTMatchers مدعومة الآن</li>
           <li xml:lang="ca">ara s'admeten comprovacions basades en ASTMatchers</li>
@@ -3330,6 +3366,7 @@
           <li xml:lang="sk">Kontroly založené na ASTMatchers sú teraz podporované</li>
           <li xml:lang="sl">Preverjanja na podlagi ASTMatchers so zdaj podprta</li>
           <li xml:lang="tr">ASTMatchers based checks are now supported</li>
+          <li xml:lang="uk">У новій версії передбачено підтримку перевірок на основі ASTMatchers</li>
           <li>clang 3.7 was dropped due to ASTMatchers source incompatibilities.</li>
           <li xml:lang="ar">أُسقط دعم clang 3.7 بسبب عدم توافق سورس ASTMatchers.</li>
           <li xml:lang="ca">El clang 3.7 s'ha eliminat per les incompatibilitats del codi font d'ASTMatchers.</li>
@@ -3345,6 +3382,7 @@
           <li xml:lang="sk">clang 3.7 bol vyradený kvôli nekompatibilite zdrojového kódu ASTMatchers.</li>
           <li xml:lang="sl">clang 3.7 je bil opuščen zaradi nezdružljivosti vira ASTMatchers.</li>
           <li xml:lang="tr">clang 3.7 was dropped due to ASTMatchers source incompatibilities.</li>
+          <li xml:lang="uk">Відкинуто підтримку clang 3.7 через несумісності з початковим кодом ASTMatchers.</li>
           <li>Use clazy v1.1 for clang &gt;= 3.6 support</li>
           <li xml:lang="ar">استخدم clazy v1.1 لدعم clang &gt;= 3.6</li>
           <li xml:lang="ca">Usa el clazy v1.1 per a la implementació de clang &gt;= 3.6</li>
@@ -3360,11 +3398,13 @@
           <li xml:lang="sk">Použite clazy v1.1 pre podporu clang &gt;= 3.6</li>
           <li xml:lang="sl">Uporabi clazy v1.1 za podporo za clang &gt;= 3.6</li>
           <li xml:lang="tr">Use clazy v1.1 for clang &gt;= 3.6 support</li>
+          <li xml:lang="uk">Скористайтеся clazy v1.1 для отримання підтримки clang &gt;= 3.6</li>
           <li>clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)  gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if  you're developing tools using clazy's convenience functions, which you're  probably not.</li>
           <li xml:lang="ar">لم يعد clazylib.so يُبنى افتراضيًا، يُبنى الملحق (ClangLazy.so) فقط. مرر -DCLAZY_BUILD_UTILS_LIB=ON لتفعيل مكتبة الأدوات إذا كنت تطور أدوات تستخدم دوال كلازي المساعدة، وهو ما لا تفعله على الأرجح.</li>
           <li xml:lang="ca">clazylib.so ja no es construeix de manera predeterminada, només es construeix el connector (ClangLazy.so). Passeu -DCLAZY_BUILD_UTILS_LIB=ON per a activar la biblioteca d'utilitats si esteu desenvolupant eines que fan servir les funcions d'utilitat del clazy, que probablement no.</li>
           <li xml:lang="ca-valencia">clazylib.so ja no es construïx de manera predeterminada, només es construïx el connector (ClangLazy.so). Passeu -DCLAZY_BUILD_UTILS_LIB=ON per a activar la biblioteca d'utilitats si esteu desenvolupant eines que fan servir les funcions d'utilitat de clazy, que probablement no.</li>
           <li xml:lang="es">clazylib.so ya no se compila de forma predeterminada. Solo se compila el complemento (ClangLazy.so). Se puede pasar -DCLAZY_BUILD_UTILS_LIB=ON para activar la biblioteca de utilidades si se están desarrollando herramientas que usen las funciones de conveniencia de clazy, lo que probablemente no esté haciendo.</li>
+          <li xml:lang="he">clazylib.so לא נבנה עוד כברירת מחדל, רק התוסף (ClangLazy.so) נבנה. יש לצרף ‎-DCLAZY_BUILD_UTILS_LIB=ON כדי להפעיל את תיקיית utils אם בחרת לפתח כלים שמשתמשים בפונקציות הנוחות של clazy, מה שסביר להניח שלא עשית.</li>
           <li xml:lang="it">clazylib.so non viene più compilato in modo predefinito, viene compilata solo l'estensione (ClangLazy.so). Passa -DCLAZY_BUILD_UTILS_LIB=ON per abilitare la libreria utils se stai sviluppando strumenti utilizzando le funzioni di utilità di clazy, cosa che probabilmente non stai facendo.</li>
           <li xml:lang="ka">სტანდარტულად clazylib.so-ის აგება აღარ ხდება და ხდება, მხოლოდ, ClangLazy.so-ის აგება. გამოიყენეთ -DCLAZY_BUILD_UTILS_LIB=ON დამხმარე ბიბლიოთეკის ჩასართავად თუ ხელსაწყოების შესაქმნელად იყენებთ ფუნქციის clazy-ს მოხერხებულობას რაც სავარაუდოდ ასე არ არის.</li>
           <li xml:lang="nl">clazylib.so wordt niet langer standaard gecompileerd, alleen de plug-in (ClangLazy.so) wordt gecompileerd. Geef -DCLAZY_BUILD_UTILS_LIB=ON door om de bibliotheek van hulpprogramma's in te schakelen als u hulpmiddelen ontwikkelt die gebruikmaken van de handige functies van clazy, wat u waarschijnlijk niet doet.</li>
@@ -3373,6 +3413,7 @@
           <li xml:lang="sk">clazylib.so no longer gets built by default, only the plugin (ClangLazy.so) gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if you're developing tools using clazy's convenience functions, which you're probably not.</li>
           <li xml:lang="sl">clazylib.so se ne gradi več privzeto, ampak samo vtičnik (ClangLazy.so). Podajte -DCLAZY_BUILD_UTILS_LIB=ON, da omogočite knjižnico pripomočkov, če razvijate orodja z uporabo priročnih funkcij clazy, kar verjetno niste.</li>
           <li xml:lang="tr">clazylib.so no longer gets built by default, only the plugin (ClangLazy.so) gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if you're developing tools using clazy's convenience functions, which you're probably not.</li>
+          <li xml:lang="uk">У новій версії типово не збирається clazylib.so, збирається лише додаток (ClangLazy.so). Передайте -DCLAZY_BUILD_UTILS_LIB=ON, щоб увімкнути бібліотеку utils, якщо ви розробляєте інструменти за допомогою зручних функцій clazy, чого ви, ймовірно, не робите.</li>
           <li>CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library  and headers or nothing at all. By default nothing is installed, except  the plugin and man pages.</li>
           <li xml:lang="ar">أزيل الخيار CLAZY_INSTALL_NO_HEADERS. إما أن تثبت مكتبة الأدوات والترويسات أو لا شيء على الإطلاق. افتراضيًا لا يُثبت شيء، باستثناء الملحق وصفحات الدليل.</li>
           <li xml:lang="ca">S'ha eliminat l'opció CLAZY_INSTALL_NO_HEADERS. Instal·leu la biblioteca d'utilitats i les capçaleres o res en absolut. De manera predeterminada no hi ha res instal·lat, excepte les pàgines del connector i man.</li>
@@ -3387,6 +3428,7 @@
           <li xml:lang="sk">CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library and headers or nothing at all. By default nothing is installed, except the plugin and man pages.</li>
           <li xml:lang="sl">Možnost CLAZY_INSTALL_NO_HEADERS je bila odstranjena. Ali namestite knjižnico pripomočkov in glave ali pa sploh nič. Privzeto ni nameščeno nič, razen strani vtičnika in priročnika.</li>
           <li xml:lang="tr">CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library and headers or nothing at all. By default nothing is installed, except the plugin and man pages.</li>
+          <li xml:lang="uk">Було вилучено параметр CLAZY_INSTALL_NO_HEADERS. Встановіть або бібліотеку utils та заголовки, або нічого. Типово не буде встановлено нічого, окрім додатка та сторінок довідки (man).</li>
         </ul>
       </description>
     </release>
