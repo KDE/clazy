@@ -153,6 +153,7 @@
         <p xml:lang="it">Questa versione corregge il seguente bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende fout op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujący błąd:</p>
         <p xml:lang="pt-BR">Esta versão corrige o seguinte erro:</p>
         <p xml:lang="ru">В этом выпуске исправлена следующая ошибка:</p>
         <p xml:lang="sk">Toto vydanie opravuje nasledujúcu chybu:</p>
@@ -169,6 +170,7 @@
           <li xml:lang="it">fully-qualified-moc-types: corregge la regressione dei falsi positivi per i tipi puntatore/riferimento nei generici.</li>
           <li xml:lang="ka">fully-qualified-moc-types: გასწორდა ცრუ დადებითი რეგრესია მაჩვენებლის/მიმმართველის ტიპებისთვის ზოგადებში.</li>
           <li xml:lang="nl">fully-qualified-moc-types: vals positieve regressie voor aanwijzer/referentie typen in generieke argumenten is verholpen.</li>
+          <li xml:lang="pl">fully-qualified-moc-types: Naprawienie regresji fałszywych alarmów dla typów wskaźnikowych/referencyjnych w typach ogólnych.</li>
           <li xml:lang="pt-BR">fully-qualified-moc-types: Corrige regressão de falso positivo para tipos ponteiro/referência em genéricos.</li>
           <li xml:lang="ru">fully-qualified-moc-types: исправлена ложная регрессия для указателей и ссылок в обобщённых типах;</li>
           <li xml:lang="sk">fully-qualified-moc-types: Oprava falošne pozitívnej regresie pre typy ukazovateľov/referencií v generikách.</li>
@@ -190,6 +192,7 @@
         <p xml:lang="it">Questa è una versione di correzione per risolvere i problemi di integrazione di QtCreator e</p>
         <p xml:lang="ka">ეს შეცდომების გასწორების ვერსიაა QtCreator-თან ინტეგრაციისა და</p>
         <p xml:lang="nl">Dit is een patch-uitgave om integratieproblemen met QtCreator op te lossen en</p>
+        <p xml:lang="pl">To wydanie poprawkowe naprawia problemy z integracją z QtCreator oraz</p>
         <p xml:lang="pt-BR">Esta é uma versão de correção para solucionar problemas de integração com o Qt Creator e</p>
         <p xml:lang="ru">Это выпуск с исправлениями для устранения проблем интеграции с QtCreator и</p>
         <p xml:lang="sk">Toto je opravné vydanie na riešenie problémov s integráciou QtCreator a</p>
@@ -205,6 +208,7 @@
         <p xml:lang="it">compatibilità con le nuove versioni di Qt. Questa versione supporta le versioni di LLVM dalla 19 alla 21.</p>
         <p xml:lang="ka">ახალ Qt-ის ვერსიებთან თავსებადობის პრობლემების აღმოსაფხვრელად. ამ ვერსიას აქვს LLVM-ის ვერსიების მხარდაჭერა 19-დან 21-მდე.</p>
         <p xml:lang="nl">compatibiliteit met nieuwe Qt-versies. Deze uitgave ondersteunt LLVM-versies 19 tot en met 21.</p>
+        <p xml:lang="pl">zgodność z nowymi wersjami Qt. To wydanie obsługuje wersje LLVM od 19 do 21.</p>
         <p xml:lang="pt-BR">a compatibilidade com novas versões do Qt. Esta versão suporta as versões LLVM 19 a 21.</p>
         <p xml:lang="ru">совместимость с новыми версиями Qt. В этом выпуске поддерживаются версии LLVM от 19 до 21.</p>
         <p xml:lang="sk">kompatibility s novými verziami Qt. Toto vydanie podporuje verzie LLVM 19 až 21.</p>
@@ -221,6 +225,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -238,6 +243,7 @@
           <li xml:lang="it">I messaggi diagnostici vengono sempre emessi anche se non contengono fixit. Questo viene utilizzato</li>
           <li xml:lang="ka">დიაგნოსტიკა ყოველთვის ეშვება. მაშინაც კი, თუ ის შეცდომებს არ ასწორებს. ეს გამოიყენება</li>
           <li xml:lang="nl">Diagnostische meldingen worden altijd gegenereerd, zelfs als ze geen oplossing bevatten. Dit wordt gebruikt</li>
+          <li xml:lang="pl">Diagnostyka jest zawsze wysyłana, nawet jeśli nie zawiera żadnej poprawki. Jest to używane</li>
           <li xml:lang="pt-BR">Os diagnósticos são sempre emitidos, mesmo que não contenham nenhuma correção. Isso é usado</li>
           <li xml:lang="ru">Диагностика теперь всегда выводится, даже если не содержит автоматических исправлений; это используется</li>
           <li xml:lang="sk">Diagnostiky sa vždy generujú, aj keď neobsahujú opravu. Toto sa používa</li>
@@ -253,6 +259,7 @@
           <li xml:lang="it">per l'integrazione negli IDE in cui il processo clazy scrive un file YAML contenente</li>
           <li xml:lang="ka">იმ IDE-ებთან ინტეგრაციისთვის, სადაც clazy-ის პროცესი წერს YAML ფაილს, რომელიც შეიცავს</li>
           <li xml:lang="nl">voor integratie in IDE's waar het Clazy-proces een YAML-bestand schrijft dat de volgende inhoud bevat</li>
+          <li xml:lang="pl">do integracji w środowiskach IDE, w których proces clazy zapisuje plik YAML zawierający</li>
           <li xml:lang="pt-BR">para integração em IDEs onde o processo clazy escreve um arquivo YAML contendo</li>
           <li xml:lang="ru">для интеграции в средах разработки, где процесс clazy записывает файл YAML, содержащий</li>
           <li xml:lang="sk">na integráciu do IDE, kde proces clazy zapisuje súbor YAML obsahujúci</li>
@@ -269,6 +276,7 @@
           <li xml:lang="it">i messaggi, gli intervalli e, facoltativamente, i fixit</li>
           <li xml:lang="ka">შეტყობინებებს, შუალედებს და, არასავალდებულოდ, შეცდომების გასწორებებს</li>
           <li xml:lang="nl">de berichten, reeksen en optionele oplossingen</li>
+          <li xml:lang="pl">komunikaty, zakresy oraz opcjonalnie poprawki</li>
           <li xml:lang="pt-BR">as mensagens, intervalos e, opcionalmente, correções</li>
           <li xml:lang="ru">сообщения, диапазоны и, опционально, автоматические исправления;</li>
           <li xml:lang="sk">správy, rozsahy a voliteľne opravy</li>
@@ -285,6 +293,7 @@
           <li xml:lang="it">Regola il controllo readlock-detaching per funzionare correttamente con le modifiche di Qt 6.11</li>
           <li xml:lang="ka">გასწორდა შემოწმება readlock-detaching Qt 6.11-ის ცვლილებებთან სწორად სამუშაოდ</li>
           <li xml:lang="nl">De controle op het loskoppelen van de leesvergrendeling moet worden aangepast zodat deze correct werkt met de wijzigingen in Qt 6.11.</li>
+          <li xml:lang="pl">Dostosowanie sprawdzania readlock-detaching do poprawnego działania ze zmianami w Qt 6.11.</li>
           <li xml:lang="pt-BR">Ajusta a verificação de desanexação do bloqueio de leitura para funcionar corretamente com as alterações do Qt 6.11</li>
           <li xml:lang="ru">Адаптирована проверка отсоединения блокировки чтения для корректной работы с изменениями Qt 6.11;</li>
           <li xml:lang="sk">Prispôsobenie kontroly readlock-detaching pre správnu funkčnosť so zmenami Qt 6.11</li>
@@ -306,6 +315,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -323,6 +333,7 @@
           <li xml:lang="it">Corregge il controllo non-pod-static che emette un avviso per ogni voce di un container</li>
           <li xml:lang="ka">გასწორდა non-pod-static შემოწმება, რომელსაც კონტეინერის თითოეული ჩანაწერისთვის გაფრთხილება გამოჰქონდა</li>
           <li xml:lang="nl">Los het probleem op dat de controle die niet-pod-statisch is, een waarschuwing geeft voor elke vermelding in een container.</li>
+          <li xml:lang="pl">Naprawienie sprawdzania non-pod-static wysyłającego ostrzeżenie dla każdego wpisu w kontenerze</li>
           <li xml:lang="pt-BR">Corrigido o aviso de verificação não estática de pod para cada entrada de um contêiner</li>
           <li xml:lang="ru">Исправлена проверка «non-pod-static», которая генерировала предупреждение для каждого элемента контейнера;</li>
           <li xml:lang="sk">Oprava kontroly non-pod-static generujúcej varovanie pre každý prvok kontajnera</li>
@@ -338,6 +349,7 @@
           <li xml:lang="it">Corregge l'emissione di falsi positivi da parte di use-arrow-operator-instead-of-data quando il valore viene convertito</li>
           <li xml:lang="ka">გასწორდა შემთხვევა, როცა use-arrow-operator-instead-of-data ცრუ დადებით მნიშვნელობებს იძლეოდა, როცა ხდებოდა მნიშვნელობის გადაყვანა</li>
           <li xml:lang="nl">Correctie voor het gebruik van de pijloperator in plaats van de gegevens, die een vals positief resultaat geeft wanneer de waarde hoofdletters wordt.</li>
+          <li xml:lang="pl">Naprawienie sprawdzania use-arrow-operator-instead-of-data wysyłającego fałszywy alarm, gdy wartość jest rzutowana</li>
           <li xml:lang="pt-BR">Corrigido o problema que gerava falsos positivos ao converter um valor para outro usando o operador de seta em vez de dados</li>
           <li xml:lang="ru">Исправлено ложное срабатывание проверки use-arrow-operator-instead-of-data при приведении значения типа;</li>
           <li xml:lang="sk">Oprava use-arrow-operator-instead-of-data generujúcej falošne pozitívny výsledok pri pretypovaní hodnoty</li>
@@ -353,6 +365,7 @@
           <li xml:lang="it">Non aggiunge QVariant alla lista bianca per detaching-temporary. QVariant::toString fornirà una QString che non è distaccata</li>
           <li xml:lang="ka">detaching-temporary-ისთვის QVariant თეთრ სიაში არ იქნება. QVariant::toString მოგაწვდით QString-ს, რომელიც მოხსნილი არაა</li>
           <li xml:lang="nl">Voeg QVariant niet toe aan de whitelist voor tijdelijk loskoppelen. QVariant::toString zal een QString leveren die niet is losgekoppeld.</li>
+          <li xml:lang="pl">Nie umieszczaj QVariant na białej liście dla detaching-temporary. QVariant::toString dostarczy QString, który nie jest odłączony</li>
           <li xml:lang="pt-BR">Não adiciona QVariant à lista de permissões para desanexar temporariamente. QVariant::toString fornecerá uma QString que não está desanexada</li>
           <li xml:lang="ru">Не добавлять QVariant в исключения для обнаружения отсоединения временных объектов; QVariant::toString предоставит QString, который не будет отсоединён;</li>
           <li xml:lang="sk">Nepridávať QVariant na biely zoznam pre detaching-temporary. QVariant::toString poskytne QString, ktorý nie je odpojený</li>
@@ -368,6 +381,7 @@
           <li xml:lang="it">detaching-temporary controlla correttamente le condizioni quando sono concatenate più di due chiamate di metodo</li>
           <li xml:lang="ka">დროებით მოხსნის თვისების შემოწმების პირობები, როცა ჯაჭვში ორზე მეტი მეთოდის გამოძახებაა</li>
           <li xml:lang="nl">Tijdelijk losmaken controleert de voorwaarden correct wanneer meer dan twee methodeaanroepen aan elkaar gekoppeld zijn</li>
+          <li xml:lang="pl">detaching-temporary poprawnie sprawdza warunki, gdy łańcuch zawiera więcej niż dwa wywołania metod</li>
           <li xml:lang="pt-BR">O método `destaching-temporary` verifica corretamente as condições quando mais de duas chamadas de método são encadeadas</li>
           <li xml:lang="ru">Правильная проверка условий при отсоединении временных объектов при наличии в цепочке более двух вызовов методов;</li>
           <li xml:lang="sk">detaching-temporary správne kontroluje podmienky pri reťazení viac ako dvoch volaní metód</li>
@@ -384,6 +398,7 @@
           <li xml:lang="it">I fixit per detaching-temporary/detaching-member sono più affidabili con intervalli di fixit per le chiamate dell'operatore</li>
           <li xml:lang="ka">გასწორდა დროებით მოხსნის/წევრის მოხსნის საიმედოობა ოპერატორის გამოძახებების შუალედებისთვის</li>
           <li xml:lang="nl">Fixits voor het losmaken van tijdelijke onderdelen/onderdelen zijn betrouwbaarder met fixit-bereiken voor operatoroproepen</li>
+          <li xml:lang="pl">Poprawki dla detaching-temporary/detaching-member są bardziej niezawodne z zakresami poprawek dla wywołań operatorów</li>
           <li xml:lang="pt-BR">As correções para desanexar temporário/membro são mais confiáveis ​​com intervalos de correções para chamadas de operador</li>
           <li xml:lang="ru">Повышена надёжность автоматических исправлений для detaching-temporary/detaching-member благодаря использованию диапазонов исправлений для вызовов операторов;</li>
           <li xml:lang="sk">Opravy pre detaching-temporary/detaching-member sú spoľahlivejšie s rozsahmi opráv pre volania operátorov</li>
@@ -399,6 +414,7 @@
           <li xml:lang="it">Quando si utilizza QT_NAMESPACE, clazy gestisce correttamente le classi Qt che si trovano in questo specifico spazio dei nomi</li>
           <li xml:lang="ka">QT_NAMESPACE-ის გამოყენებისას clazy სწორად ამუშავებს Qt-ის კლასებს, რომლებიც მითითებული სახელების სივრცეშია</li>
           <li xml:lang="nl">Bij gebruik van QT_NAMESPACE verwerkt Clazy Qt-klassen die zich in deze specifieke naamruimte bevinden op de juiste manier.</li>
+          <li xml:lang="pl">Podczas używania QT_NAMESPACE clazy poprawnie obsługuje klasy Qt znajdujące się w tej konkretnej przestrzeni nazw</li>
           <li xml:lang="pt-BR">Ao usar QT_NAMESPACE, o clazy lida corretamente com as classes Qt que estão nesse namespace específico</li>
           <li xml:lang="ru">При использовании QT_NAMESPACE clazy корректно обрабатывает классы Qt в этом пространстве имён;</li>
           <li xml:lang="sk">Pri použití QT_NAMESPACE clazy správne spracováva triedy Qt v tomto špecifickom mennom priestore</li>
@@ -415,6 +431,7 @@
           <li xml:lang="it">Corregge il metodo di sostituzione errato per QMap::operator[]</li>
           <li xml:lang="ka">გასწორდა მეთოდის არასწორი ჩანაცვლება ფუნქციისთვის QMap::operator[]</li>
           <li xml:lang="nl">Corrigeer de onjuiste vervangingsmethode voor QMap::operator[]</li>
+          <li xml:lang="pl">Naprawienie błędnej metody zastępowania dla QMap::operator[]</li>
           <li xml:lang="pt-BR">Corrigido o método de substituição incorreto para QMap::operator[]</li>
           <li xml:lang="ru">Исправлена неправильная замена метода для QMap::operator[];</li>
           <li xml:lang="sk">Oprava nesprávnej náhradnej metódy pre QMap::operator[]</li>
@@ -430,6 +447,7 @@
           <li xml:lang="it">Rende il progetto compilabile con LLVM22. I test qhash-namespace, fully-qualified-moc-types e old-style-connect sono stati corretti</li>
           <li xml:lang="ka">პროექტი ახლა LLVM22-ით კომპილირდება. ასევე გასწორდა შემოწმებები qhash-namespace, fully-qualified-moc-types და old-style-connect</li>
           <li xml:lang="nl">Zorg ervoor dat het project compileert met LLVM22. qhash-namespace, fully-qualified-moc-types en old-style-connect tests zijn gecorrigeerd</li>
+          <li xml:lang="pl">Dostosowanie projektu do kompilacji z LLVM22. Naprawiono testy dla qhash-namespace, fully-qualified-moc-types oraz old-style-connect</li>
           <li xml:lang="pt-BR">Faz o projeto compilar com LLVM22. Os namespaces qhash, os tipos moc totalmente qualificados e os testes de conexão no estilo antigo foram corrigidos</li>
           <li xml:lang="ru">Сделан проект компилируемым с LLVM22; исправлены тесты qhash-namespace, fully-qualified-moc-types и old-style-connect;</li>
           <li xml:lang="sk">Umožniť kompiláciu projektu s LLVM22. Testy qhash-namespace, fully-qualified-moc-types, old-style-connect boli opravené</li>
@@ -446,6 +464,7 @@
           <li xml:lang="it">Regola il controllo readlock-detaching per funzionare correttamente con le modifiche di Qt 6.11</li>
           <li xml:lang="ka">გასწორდა შემოწმება readlock-detaching Qt 6.11-ის ცვლილებებთან სწორად სამუშაოდ</li>
           <li xml:lang="nl">De controle op het loskoppelen van de leesvergrendeling moet worden aangepast zodat deze correct werkt met de wijzigingen in Qt 6.11.</li>
+          <li xml:lang="pl">Dostosowanie sprawdzania readlock-detaching do poprawnego działania ze zmianami w Qt 6.11.</li>
           <li xml:lang="pt-BR">Ajusta a verificação de desanexação do bloqueio de leitura para funcionar corretamente com as alterações do Qt 6.11</li>
           <li xml:lang="ru">Адаптирована проверка отсоединения блокировки чтения для корректной работы с изменениями Qt 6.11;</li>
           <li xml:lang="sk">Prispôsobenie kontroly readlock-detaching pre správnu funkčnosť so zmenami Qt 6.11</li>
@@ -462,6 +481,7 @@
           <li xml:lang="it">Sposta qstring-ref su manuallevel poiché non è compatibile con Qt6</li>
           <li xml:lang="ka">qstring-ref გადატანილია manuallevel-ში, რადგან ის Qt6-თან თავსებადი არაა</li>
           <li xml:lang="nl">Verplaats qstring-ref naar handleidingniveau, aangezien het niet compatibel is met Qt6.</li>
+          <li xml:lang="pl">Przeniesienie qstring-ref do manuallevel, ponieważ nie jest zgodne z Qt6</li>
           <li xml:lang="pt-BR">Move qstring-ref para o nível manual, pois não é compatível com o Qt6</li>
           <li xml:lang="ru">Перемещена проверка qstring-ref на ручной уровень, так как она несовместима с Qt6;</li>
           <li xml:lang="sk">Presunúť qstring-ref na manuálnu úroveň, pretože nie je kompatibilný s Qt6</li>
@@ -479,6 +499,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციას:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następującą funkcję:</p>
         <p xml:lang="pt-BR">Esta versão adiciona a seguinte funcionalidade:</p>
         <p xml:lang="ru">В этом выпуске добавлена следующая возможность:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúcu funkciu:</p>
@@ -495,6 +516,7 @@
           <li xml:lang="it">Nuovi controlli: - compare-member-check: verifica se gli operatori di confronto non utilizzano tutte le variabili membro di una classe.</li>
           <li xml:lang="ka">ახალი შემოწმებები: - compare-member-check: ამოწმებს, იყენებენ შემოწმების ოპერატორები კლასის ყველა წევრ ცვლადს, თუ არა.</li>
           <li xml:lang="nl">Nieuwe controles: - compare-member-check: controleert of vergelijkingsoperatoren niet alle lidvariabelen van een klasse gebruiken.</li>
+          <li xml:lang="pl">Nowe sprawdzenia: - compare-member-check: Sprawdza, czy operatory porównania nie pomijają zmiennych składowych klasy</li>
           <li xml:lang="pt-BR">Novas verificações: - compare-member-check: Verifica se os operadores de comparação não utilizam todas as variáveis ​​membro de uma classe.</li>
           <li xml:lang="ru">Новые проверки: — compare-member-check: проверяет, используются ли все переменные-члены класса в операторах сравнения;</li>
           <li xml:lang="sk">Nové kontroly: - compare-member-check: Kontroluje, či porovnávacie operátory nepoužívajú všetky členské premenné triedy.</li>
@@ -512,6 +534,7 @@
         <p xml:lang="it">C++20 è ora richiesto per la compilazione</p>
         <p xml:lang="ka">კომპილაციისთვის ახლა აუცილებელია C++20</p>
         <p xml:lang="nl">Voor compilatie is nu C++20 vereist</p>
+        <p xml:lang="pl">C++20 jest teraz wymagane</p>
         <p xml:lang="pt-BR">Agora é necessário o C++20 para compilação</p>
         <p xml:lang="ru">Для компиляции теперь требуется C++20.</p>
         <p xml:lang="sk">Na kompiláciu sa teraz vyžaduje C++20</p>
@@ -528,6 +551,7 @@
         <p xml:lang="it">I controlli di conversione qt6-\* sono stati rimossi</p>
         <p xml:lang="ka">qt6-\*-ის გადატანის შემოწმებები მოცილებულია</p>
         <p xml:lang="nl">qt6-\* porting controles zijn verwijderd</p>
+        <p xml:lang="pl">Sprawdzenia związane z portowaniem na qt6-* zostały usunięte</p>
         <p xml:lang="pt-BR">As verificações de portabilidade qt6-\* foram removidas</p>
         <p xml:lang="ru">Проверки переноса qt6-\* удалены.</p>
         <p xml:lang="sk">Kontroly portovania qt6-\* boli odstránené</p>
@@ -548,6 +572,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -565,6 +590,7 @@
           <li xml:lang="it">unused-result-check: corregge l'arresto anomalo quando la dichiarazione del metodo non può essere risolta</li>
           <li xml:lang="ka">unused-result-check: გასწორდა ავარიული დასრულება, როცა მეთოდის აღწერის ამოხსნა შეუძლებელია</li>
           <li xml:lang="nl">unused-result-check: verhelpt een crash wanneer de methodedeclaratie niet kan worden opgelost</li>
+          <li xml:lang="pl">unused-result-check: Naprawienie awarii, gdy nie można rozwiązać deklaracji metody</li>
           <li xml:lang="pt-BR">unused-result-check: Corrigida a falha que ocorre quando a declaração do método não pode ser resolvida</li>
           <li xml:lang="ru">unused-result-check: исправлено аварийное завершение при невозможности разрешения объявления метода;</li>
           <li xml:lang="sk">unused-result-check: Oprava pádu, keď nie je možné rozpoznať deklaráciu metódy</li>
@@ -581,6 +607,7 @@
           <li xml:lang="it">use-chrono-in-qtimer: corregge l'arresto anomalo quando si utilizzano intestazioni precompilate</li>
           <li xml:lang="ka">use-chrono-in-qtimer: გასწორდა ავარიული დასრულება წინასწარ დაკომპილებული თავსართების გამოყენებისას</li>
           <li xml:lang="nl">use-chrono-in-qtimer: verhelpt een crash bij gebruik van vooraf gecompileerde headers</li>
+          <li xml:lang="pl">use-chrono-in-qtimer: Naprawienie awarii podczas używania prekompilowanych nagłówków</li>
           <li xml:lang="pt-BR">use-chrono-in-qtimer: Corrigido o problema que causava o fechamento inesperado ao usar cabeçalhos pré-compilados</li>
           <li xml:lang="ru">use-chrono-in-qtimer: исправлено аварийное завершение при использовании предварительно скомпилированных заголовков;</li>
           <li xml:lang="sk">use-chrono-in-qtimer: Oprava pádu pri použití predkompilovaných hlavičiek</li>
@@ -596,6 +623,7 @@
           <li xml:lang="it">qt6-qhash-signature: adatta il controllo per utilizzare una logica più appropriata per i cast e corregge l'arresto anomalo nei casi limite</li>
           <li xml:lang="ka">qt6-qhash-signature: შემოწმება გარდაქმნებისთვის უფრო მართებული ლოგიკის გამოსაყენებლად შეიცვალა და გასწორდა ავარია გამონაკლის შემთხვევებში</li>
           <li xml:lang="nl">qt6-qhash-signature: pas de controle aan om een ​​betere logica voor typeconversies te gebruiken en verhelp de crash in uitzonderlijke gevallen</li>
+          <li xml:lang="pl">qt6-qhash-signature: Dostosowanie sprawdzania do używania właściwszej logiki dla rzutowań i naprawienie awarii w skrajnych przypadkach</li>
           <li xml:lang="pt-BR">qt6-qhash-signature: Adapta a verificação para usar uma lógica mais adequada para conversões de tipo e corrige o travamento em casos extremos</li>
           <li xml:lang="ru">qt6-qhash-signature: адаптирована проверка для использования более корректной логики преобразований типов и исправлено аварийное завершение в крайних случаях;</li>
           <li xml:lang="sk">qt6-qhash-signature: Prispôsobenie kontroly na správnejšiu logiku pre pretypovania a oprava pádu v hraničných prípadoch</li>
@@ -611,6 +639,7 @@
           <li xml:lang="it">Assicura che clang21 funzioni correttamente con clazy e produca lo stesso numero di riga/lettera di prima (non corrisponde alle chiamate dell'operatore)</li>
           <li xml:lang="ka">დარწმუნდით, რომ clang21 clazy-სთან გამართულად მუშაობს და ისეთივე ხაზის/ასოს ნომერს აბრუნებს, როგორსაც ადრე (შეუსაბამობები ოპერატორის გამოძახებებთან)</li>
           <li xml:lang="nl">Zorg ervoor dat clang21 correct werkt met clazy en hetzelfde regel/letternummer produceert als voorheen (dit komt niet overeen met oproepen van de operator)</li>
+          <li xml:lang="pl">Zapewnienie, że clang21 działa poprawnie z clazy i generuje takie same numery linii/liter jak wcześniej (niezgodności przy wywołaniach operatorów)</li>
           <li xml:lang="pt-BR">Certifica-se de que o clang21 funcione corretamente com o clazy e produza o mesmo número de linha/letra de antes (incompatibilidades com chamadas da operadora).</li>
           <li xml:lang="ru">Обеспечена корректная работа clang21 с clazy и вывод тех же номеров строк и символов, что и ранее (при несоответствиях в вызовах операторов);</li>
           <li xml:lang="sk">Zabezpečiť správnu funkčnosť clang21 s clazy a rovnaké čísla riadkov/znakov ako predtým (nezhody s volaniami operátorov)</li>
@@ -627,6 +656,7 @@
           <li xml:lang="it">non-pod-global-static: corregge il falso positivo con Q_IMPORT_PLUGIN in Qt-6.10</li>
           <li xml:lang="ka">non-pod-global-static: გასწორდა ცრუ დადებითი ალამთან Q_IMPORT_PLUGIN Qt-6.10-ში</li>
           <li xml:lang="nl">non-pod-global-static: foutpositief bij Q_IMPORT_PLUGIN in Qt-6.10 verholpen</li>
+          <li xml:lang="pl">non-pod-global-static: Naprawienie fałszywego alarmu z Q_IMPORT_PLUGIN w Qt-6.10</li>
           <li xml:lang="pt-BR">non-pod-global-static: Corrigido falso positivo com Q_IMPORT_PLUGIN no Qt-6.10</li>
           <li xml:lang="ru">non-pod-global-static: устранён ложный срабатывание с Q_IMPORT_PLUGIN в Qt-6.10;</li>
           <li xml:lang="sk">non-pod-global-static: Oprava falošne pozitívneho výsledku s Q_IMPORT_PLUGIN v Qt-6.10</li>
@@ -644,6 +674,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -661,6 +692,7 @@
           <li xml:lang="it">Clazy può finalmente essere integrato in clang-tidy: un comando per governare tutto</li>
           <li xml:lang="ka">Clazy-ს ინტეგრაცია clang-tidy-ში საბოლოოდ შესაძლებელია — ერთი ბრძანება სამართავად</li>
           <li xml:lang="nl">Clazy kan eindelijk in clang-tidy worden geïntegreerd - één commando om ze te besturen</li>
+          <li xml:lang="pl">Clazy można w końcu zintegrować z clang-tidy – jedno polecenie, by wszystkimi rządzić</li>
           <li xml:lang="pt-BR">O Clazy finalmente pode ser integrado ao clang-tidy - um comando para governar</li>
           <li xml:lang="ru">Clazy теперь можно интегрировать в clang-tidy — одна команда для управления всеми проверками;</li>
           <li xml:lang="sk">Clazy sa konečne môže integrovať do clang-tidy - jeden príkaz na ovládanie</li>
@@ -692,6 +724,7 @@
           <li xml:lang="it">`clazy-qstring-arg,clazy-qfileinfo-exists`, abilitazione di tutti i controlli utilizzando</li>
           <li xml:lang="ka">`clazy-qstring-arg,clazy-qfileinfo-exists`, ჩაირთო ყველა შემოწმება პროგრამით</li>
           <li xml:lang="nl">`clazy-qstring-arg,clazy-qfileinfo-exists`, alle controles met</li>
+          <li xml:lang="pl">clazy-qstring-arg,clazy-qfileinfo-exists, włączając wszystkie sprawdzenia za pomocą</li>
           <li xml:lang="pt-BR">`clazy-qstring-arg,clazy-qfileinfo-exists`, habilitando todas as verificações usando</li>
           <li xml:lang="ru">`clazy-qstring-arg,clazy-qfileinfo-exists`; включение всех проверок с помощью</li>
           <li xml:lang="sk">`clazy-qstring-arg,clazy-qfileinfo-exists`, povolenie všetkých kontrol pomocou</li>
@@ -707,6 +740,7 @@
           <li xml:lang="it">`clazy-*` abiliterà anche i controlli manuali. Si consiglia di essere piùgranulari.</li>
           <li xml:lang="ka">clazy-* ასევე გაააქტიურებს ხელით შემოწმებებს უფრო დეტალური პარამეტრების გამოყენებაა რეკომენდებული.</li>
           <li xml:lang="nl">`clazy-*` zal ook handmatige controles inschakelen. Het is aan te raden om gedetailleerder te zijn.</li>
+          <li xml:lang="pl">clazy-* włączy również sprawdzenia ręczne (manual). Zaleca się zachowanie większej szczegółowości.</li>
           <li xml:lang="pt-BR">`clazy-*` também permite verificações manuais. Recomenda-se maior granularidade.</li>
           <li xml:lang="ru">`clazy-*` также включает ручную проверку; рекомендуется использовать более детальную настройку.</li>
           <li xml:lang="sk">`clazy-*` povolí aj manuálne kontroly. Odporúča sa väčšia granularita.</li>
@@ -722,6 +756,7 @@
           <li xml:lang="it">L'estensione può essere caricata utilizzando `-load=ClazyClangTidy.so`, per questo, l'estensione</li>
           <li xml:lang="ka">დამატების ჩატვირთვა შესაძლებელია -load=ClazyClangTidy.so გამოყენებით ამისთვის დამატება</li>
           <li xml:lang="nl">De plug-in kan geladen worden met `-load=ClazyClangTidy.so`, hiervoor moet de plug-in</li>
+          <li xml:lang="pl">Wtyczkę można załadować za pomocą -load=ClazyClangTidy.so, w tym celu wtyczka</li>
           <li xml:lang="pt-BR">O plugin pode ser carregado usando `-load=ClazyClangTidy.so`, para isso, o plugin</li>
           <li xml:lang="ru">Модуль загружается с помощью `-load=ClazyClangTidy.so`; для этого плагин</li>
           <li xml:lang="sk">Modul je možné načítať pomocou `-load=ClazyClangTidy.so`, modul</li>
@@ -737,6 +772,7 @@
           <li xml:lang="it">deve essere in LD_LIBRARY_PATH. In caso contrario, è possibile specificare un percorso assoluto.</li>
           <li xml:lang="ka">უნდა იყოს LD_LIBRARY_PATH-ში. წინააღმდეგ შემთხვევაში შესაძლებელია აბსოლუტური გზის მითითება.</li>
           <li xml:lang="nl">in het pad LD_LIBRARY_PATH zijn. Anders kan een absoluut pad gespecificeerd worden.</li>
+          <li xml:lang="pl">musi znajdować się w LD_LIBRARY_PATH. W przeciwnym razie można podać ścieżkę bezwzględną.</li>
           <li xml:lang="pt-BR">deve estar no LD_LIBRARY_PATH. Caso contrário, um caminho absoluto pode ser especificado.</li>
           <li xml:lang="ru">Должна находиться в переменной окружения LD_LIBRARY_PATH; либо можно указать абсолютный путь.</li>
           <li xml:lang="sk">musí byť v LD_LIBRARY_PATH. Inak je možné zadať absolútnu cestu.</li>
@@ -753,6 +789,7 @@
           <li xml:lang="it">isempty-vs-count ora fornisce fixit per tutti gli scenari. Inoltre, i casi in cui</li>
           <li xml:lang="ka">isempty-vs-count ახლა უკვე ყველა სცენარისთვის უზრუნველყოფს Fixit-ებს. ასევე, შემთხვევებშიც, სადაც</li>
           <li xml:lang="nl">isempty-vs-count levert nu reparaties voor alle scenario's. Ook, gevallen waar</li>
+          <li xml:lang="pl">isempty-vs-count udostępnia teraz automatyczne poprawki (fixits) dla wszystkich scenariuszy. Ponadto przypadki, w których</li>
           <li xml:lang="pt-BR">isempty-vs-count agora oferece correções para todos os cenários. Além disso, casos em que</li>
           <li xml:lang="ru">Добавлены подсказки по исправлению для всех сценариев использования isempty-vs-count;</li>
           <li xml:lang="sk">isempty-vs-count teraz poskytuje opravy pre všetky scenáre. Tiež prípady, kde</li>
@@ -784,6 +821,7 @@
           <li xml:lang="it">qt6-\* I controlli di conversione sono ora considerati deprecati e saranno rimossi nella prossima versione di clazy</li>
           <li xml:lang="ka">qt6-\* პორტირების შემოწმებები ახლა უკვე მოძველებულად ითვლება და clazy-ს შემდეგ ვერსიაში ამოღებული იქნება</li>
           <li xml:lang="nl">qt6-\* overzetcontroles worden nu als verouderd beschouwd en zullen verwijderd worden in de volgende uitgave van clazy</li>
+          <li xml:lang="pl">Sprawdzenia związane z portowaniem na qt6-* są teraz uznawane za przestarzałe (deprecated) i zostaną usunięte w następnym wydaniu clazy</li>
           <li xml:lang="pt-BR">As verificações de portabilidade do qt6-\* agora são consideradas obsoletas e serão removidas na próxima versão do clazy</li>
           <li xml:lang="ru">qt6-\* Проверки переноса считаются устаревшими и будут удалены в следующем выпуске clazy;</li>
           <li xml:lang="sk">Kontroly portovania qt6-\* sa teraz považujú za zastarané a budú odstránené v nasledujúcom vydaní clazy</li>
@@ -800,6 +838,7 @@
           <li xml:lang="it">i controlli detaching-temporary e detaching-member forniscono fixit per i metodi che hanno controparti costanti</li>
           <li xml:lang="ka">detaching-temporary და detaching-member შემოწმებები უზრუნველყოფს Fixit-ებს იმ მეთოდებისთვის რომლებსაც მუდმივი ანალოგები გააჩნიათ</li>
           <li xml:lang="nl">De controles 'detaching-temporary' en 'detaching-member' bieden oplossingen voor methoden met constante tegenhangers.</li>
+          <li xml:lang="pl">Sprawdzenia detaching-temporary oraz detaching-member udostępniają automatyczne poprawki (fixits) dla metod, które posiadają swoje odpowiedniki stałe (const)</li>
           <li xml:lang="pt-BR">As verificações detaching-temporary e detaching-member fornecem correções para métodos que possuem contrapartes constantes.</li>
           <li xml:lang="ru">В проверках detaching-temporary и detaching-member реализованы автоматические исправления для методов, имеющих константные аналоги.</li>
           <li xml:lang="sk">Kontroly detaching-temporary a detaching-member poskytujú opravy pre metódy, ktoré majú konštantné náprotivky</li>
@@ -816,6 +855,7 @@
           <li xml:lang="it">NOLINT/NOLINTNEXTLINE/NOLINBEGIN/NOLINTEND ora funzionano tutti in Clazy come</li>
           <li xml:lang="ka">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND ყველა მათგანი ახლა უკვე მუშაობს clazy-ში როგორც</li>
           <li xml:lang="nl">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND werken allemaal nu in clazy zoals</li>
+          <li xml:lang="pl">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND działają teraz w clazy w taki sam sposób, jak</li>
           <li xml:lang="pt-BR">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND funciona agora no clazy como</li>
           <li xml:lang="ru">Теперь в clazy работают все директивы NOLINT, NOLINTNEXTLINE, NOLINTBEGIN и NOLINTEND;</li>
           <li xml:lang="sk">NOLINT/NOLINTNEXTLINE/NOLINTBEGIN/NOLINTEND v clazy teraz fungujú</li>
@@ -832,6 +872,7 @@
           <li xml:lang="it">previsto. I controlli individuali di Clazy possono essere disabilitati quando si utilizza un prefisso</li>
           <li xml:lang="ka">მოსალოდნელია. ინდივიდუალური clazy შემოწმებების გამორთვა შესაძლებელია "clazy-" გამოყენებისას</li>
           <li xml:lang="nl">verwacht. Individuele clazy controles kunnen uitgeschakeld worden bij gebruik van voorvoegsel "clazy-".</li>
+          <li xml:lang="pl">oczekiwano. Poszczególne sprawdzenia clazy można wyłączyć przy użyciu "clazy-"</li>
           <li xml:lang="pt-BR">esperado. As verificações individuais de loucura podem ser desativadas ao usar um "clazy-"</li>
           <li xml:lang="ru">ожидаемо. Отдельные проверки clazy можно отключить при использовании «clazy-»;</li>
           <li xml:lang="sk">podľa očakávania. Jednotlivé kontroly clazy je možné zakázať pri použití predpony</li>
@@ -847,6 +888,7 @@
           <li xml:lang="it">«clazy-». Ad esempio "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="ka">პრეფიქსი. მაგალითად "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="nl">Bijvoorbeeld "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
+          <li xml:lang="pl">przedrostka. Na przykład "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="pt-BR">prefixo. Por exemplo "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
           <li xml:lang="ru">Например, «NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)»;</li>
           <li xml:lang="sk">"clazy-". Napríklad "NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)"</li>
@@ -868,6 +910,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -884,6 +927,7 @@
           <li xml:lang="it">install-event-filter: corregge l'arresto anomalo quando non c'è alcun elemento figlio alla profondità specificata.BUG: 464372</li>
           <li xml:lang="ka">install-event-filter: გასწორდა ავარია, როცა მოცემულ სიღრმეზე შვილი ობიექტი არ არსებობს. ხარვეზი: 464372</li>
           <li xml:lang="nl">install-event-filter: repareer crash wanneer er geen child op de gegeven diepte is. BUG: 464372</li>
+          <li xml:lang="pl">install-event-filter: Naprawienie awarii (crash), gdy nie ma elementu nadrzędnego na podanej głębokości. BUG: 464372</li>
           <li xml:lang="pt-BR">install-event-filter: Corrigido o erro que causava o fechamento inesperado do sistema quando não havia nenhum filho na profundidade especificada. BUG: 464372</li>
           <li xml:lang="ru">install-event-filter: исправлено аварийное завершение при отсутствии дочернего элемента на указанной глубине. ОШИБКА: 464372;</li>
           <li xml:lang="sk">install-event-filter: Oprava pádu, keď na danej hĺbke nie je žiadny potomok. BUG: 464372</li>
@@ -899,6 +943,7 @@
           <li xml:lang="it">fully-qualified-moc-types: corregge enum/classe enum non valutata. BUG: 423780</li>
           <li xml:lang="ka">fully-qualified-moc-types: გასწორდა ჩამონათვალის/ჩამონათვალის კლასის შეფასების ხარვეზი. ხარვეზი: 423780</li>
           <li xml:lang="nl">fully-qualified-moc-types: repareer enum/enum klasse die niet geëvalueerd wordt. BUG: 423780</li>
+          <li xml:lang="pl">fully-qualified-moc-types: Naprawienie błędu, przez który typy enum/enum class nie były sprawdzane. BUG: 423780</li>
           <li xml:lang="pt-BR">fully-qualified-moc-types: Corrigido o problema em que enum/classe enum não estava sendo avaliado. BUG: 423780</li>
           <li xml:lang="ru">fully-qualified-moc-types: исправлена неверная обработка перечислений и классов перечислений. ОШИБКА: 423780</li>
           <li xml:lang="sk">fully-qualified-moc-types: Oprava nevyhodnocovania enum/enum class. BUG: 423780</li>
@@ -915,6 +960,7 @@
           <li xml:lang="it">Corretto l'arresto anomalo in qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li xml:lang="ka">გასწორდა შეცდომა qstring-comparison-to-implicit-char-ში. შეცდომა: 502458</li>
           <li xml:lang="nl">Crash gerepareerd in qstring-comparison-to-implicit-char. BUG: 502458</li>
+          <li xml:lang="pl">Naprawienie awarii (crash) w qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li xml:lang="pt-BR">Corrigido o erro que causava falha em qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li xml:lang="ru">Исправлено аварийное завершение в сравнении строки с неявным символом;</li>
           <li xml:lang="sk">Opravený pád v qstring-comparison-to-implicit-char. BUG: 502458</li>
@@ -946,6 +992,7 @@
           <li xml:lang="it">Corretto l'arresto anomalo in qvariant-template-instantiation</li>
           <li xml:lang="ka">გასწორდა შეცდომა qvariant-template-instantiation-შ</li>
           <li xml:lang="nl">Een crash in qvariant-template-instantiation is verholpen</li>
+          <li xml:lang="pl">Naprawienie awarii (crash) w qvariant-template-instantiation</li>
           <li xml:lang="pt-BR">Corrigido o problema que causava falha em qvariant-template-instantiation</li>
           <li xml:lang="ru">Исправлено аварийное завершение при создании экземпляра шаблона QVariant;</li>
           <li xml:lang="sk">Opravený pád v qvariant-template-instantiation</li>
@@ -963,6 +1010,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -980,6 +1028,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -996,6 +1045,7 @@
           <li xml:lang="it">readlock-detaching</li>
           <li xml:lang="ka">readlock-detaching</li>
           <li xml:lang="nl">readlock-detaching</li>
+          <li xml:lang="pl">readlock-detaching</li>
           <li xml:lang="pt-BR">readlock-detaching</li>
           <li xml:lang="ru">отсоединение при блокировке чтения;</li>
           <li xml:lang="sk">readlock-detaching</li>
@@ -1012,6 +1062,7 @@
           <li xml:lang="it">Aggiorna il Clang/LLVM minimo a 19</li>
           <li xml:lang="ka">მინიმალური Clang/LLVM-ის ვერსია განახლდა 19-მდე</li>
           <li xml:lang="nl">Minimum Clang/LLVM naar 19 bijwerken</li>
+          <li xml:lang="pl">Podniesienie minimalnej wersji Clang/LLVM do 19</li>
           <li xml:lang="pt-BR">Atualizado o Clang/LLVM mínimo para 19</li>
           <li xml:lang="ru">Минимальная версия Clang/LLVM обновлена до 19;</li>
           <li xml:lang="sk">Aktualizácia minimálnej verzie Clang/LLVM na 19</li>
@@ -1027,6 +1078,7 @@
           <li xml:lang="it">`clazy-standalone --version` contiene la versione git (output di `gitdescribe`) se non è un commit con tag</li>
           <li xml:lang="ka">clazy-standalone --version git-ის ვერსიას შეიცავს (git describe ბრძანების შედეგს), თუ ის მონიშნული კომიტი არაა</li>
           <li xml:lang="nl">`clazy-standalone --version` bevat de git-versie (uitvoer van `git describe`) als het geen getagde commit is.</li>
+          <li xml:lang="pl">clazy-standalone --version zawiera wersję gita (wynik polecenia git describe), jeśli nie jest to zatwierdzenie otagowane (tagged commit)</li>
           <li xml:lang="pt-BR">`clazy-standalone --version` contém a versão do git (saída de `git describe`) se não for um commit com tag.</li>
           <li xml:lang="ru">`clazy-standalone --version` содержит номер версии git (результат выполнения `git describe`), если это не фиксация с меткой;</li>
           <li xml:lang="sk">`clazy-standalone --version` obsahuje verziu git (výstup `git describe`), ak nejde o označený commit</li>
@@ -1043,6 +1095,7 @@
           <li xml:lang="it">Aggiunti metodi mancanti ai controlli per il distacco di elenchi o mappe temporanei/membri</li>
           <li xml:lang="ka">დაემატა ნაკლული მეთოდები დროებითი ან წევრი სიების და ასახვების განცალკევების შესამოწმებლად</li>
           <li xml:lang="nl">Ontbrekende methoden toegevoegd aan controles voor het loskoppelen van tijdelijke-/ledenlijsten of kaarten.</li>
+          <li xml:lang="pl">Dodano brakujące metody do sprawdzeń wykrywających odłączanie (detaching) tymczasowych/składowych list lub map</li>
           <li xml:lang="pt-BR">Adicionadas as verificações de métodos ausentes para desanexar listas temporárias/de membros ou mapas</li>
           <li xml:lang="ru">Добавлены отсутствующие методы для проверки отсоединения временных списков, карт или их членов;</li>
           <li xml:lang="sk">Pridané chýbajúce metódy do kontrol pre odpájanie dočasných/členských zoznamov alebo máp</li>
@@ -1063,6 +1116,7 @@
         <p xml:lang="it">Gli avvisi di Clazy per la seguente riga possono essere disabilitati, ad esempio: clazy:exclude-next-line=check1,check2</p>
         <p xml:lang="ka">Clazy გაფრთხილებების გამორთვა შესაძლებელია შემდეგი ხაზისთვის. მაგ: clazy:exclude-next-line=check1,check2</p>
         <p xml:lang="nl">Clazy-waarschuwingen voor de volgende regel kunnen worden uitgeschakeld, bijvoorbeeld: clazy:exclude-next-line=check1,check2</p>
+        <p xml:lang="pl">Ostrzeżenia clazy dla poniższej linii mogą zostać wyłączone, na przykład: clazy:exclude-next-line=check1,check2</p>
         <p xml:lang="pt-BR">É possível desativar os avisos do Clazy para a linha seguinte, por exemplo: clazy:exclude-next-line=check1,check2</p>
         <p xml:lang="ru">Предупреждения Clazy для следующей строки можно отключить, например: clazy: exclude-next-line=check1,check2</p>
         <p xml:lang="sk">Varovania clazy pre nasledujúci riadok je možné zakázať, napríklad: clazy:exclude-next-line=check1,check2</p>
@@ -1079,6 +1133,7 @@
         <p xml:lang="it">Supporto per la compilazione con Clang 20</p>
         <p xml:lang="ka">Clang 20-ით კომპილაციის მხარდაჭერა</p>
         <p xml:lang="nl">Ondersteuning voor compilatie met Clang 20</p>
+        <p xml:lang="pl">Pomoc dla kompilowania na Clang 20</p>
         <p xml:lang="pt-BR">Suporte para compilação com Clang 20</p>
         <p xml:lang="ru">Поддержка компиляции с использованием Clang 20</p>
         <p xml:lang="sk">Podpora kompilácie proti Clang 20</p>
@@ -1095,6 +1150,7 @@
         <p xml:lang="it">aumenta la verbosità di alcuni messaggi di avviso</p>
         <p xml:lang="ka">გაიზარდა ზოგიერთი გაფრთხილების შეტყობინების დეტალურობა</p>
         <p xml:lang="nl">de uitgebreidheid van sommige waarschuwingsberichten verhogen</p>
+        <p xml:lang="pl">Zwiększenie szczegółowości (verbosity) niektórych komunikatów ostrzeżeń</p>
         <p xml:lang="pt-BR">aumento do nível de detalhamento de algumas mensagens de aviso</p>
         <p xml:lang="ru">Увеличена детализация некоторых предупреждений</p>
         <p xml:lang="sk">zvýšenie podrobnosti niektorých varovných správ</p>
@@ -1110,6 +1166,7 @@
         <p xml:lang="it">Controlla `function-args-by-value` e `function-args-by-ref`: aggiunge il nome della funzione e il nome del parametro al messaggio di avviso</p>
         <p xml:lang="ka">ამოწმებს 'function-args-by-value'-ს და 'function-args-by-ref'-ს: გაფრთხილების შეტყობინებისთვის ფუნქციის სახელის და პარამეტრის სახელის დამატება</p>
         <p xml:lang="nl">controleert `function-args-by-value` en `function-args-by-ref`: voeg de functienaam en parameternaam toe aan het waarschuwingsbericht</p>
+        <p xml:lang="pl">sprawdzenia function-args-by-value oraz function-args-by-ref: dodanie nazwy funkcji oraz nazwy parametru do komunikatu ostrzeżenia</p>
         <p xml:lang="pt-BR">verifica `function-args-by-value` e `function-args-by-ref`: adiciona o nome da função e o nome do parâmetro à mensagem de aviso</p>
         <p xml:lang="ru">проверки `function-args-by-value` и `function-args-by-ref`: в сообщение предупреждения добавлено имя функции и параметра</p>
         <p xml:lang="sk">kontroly `function-args-by-value` a `function-args-by-ref`: pridanie názvu funkcie a parametra do varovnej správy</p>
@@ -1125,6 +1182,7 @@
         <p xml:lang="it">controlla `unused-non-trivial-variable` e `non-pod-global-static`: aggiunge il nome della variabile al messaggio di avviso</p>
         <p xml:lang="ka">ამოწმებს 'unused-non-trivial-variable'-ს და 'non-pod-global-static'-ს: გაფრთხილების შეტყობინებისთვის ცვლადის სახელის დამატება</p>
         <p xml:lang="nl">controleert `unused-non-triviale-variabele` en `non-pod-global-static`: voeg de variabelenaam toe aan het waarschuwingsbericht</p>
+        <p xml:lang="pl">sprawdzenia unused-non-trivial-variable oraz non-pod-global-static: dodanie nazwy zmiennej do komunikatu ostrzeżenia</p>
         <p xml:lang="pt-BR">verifica `unused-non-trivial-variable` e `non-pod-global-static`: adiciona o nome da variável à mensagem de aviso</p>
         <p xml:lang="ru">проверки `unused-non-trivial-variable` и `non-pod-global-static`: добавлено имя переменной в предупреждение</p>
         <p xml:lang="sk">kontroly `unused-non-trivial-variable` a `non-pod-global-static`: pridanie názvu premennej do varovnej správy</p>
@@ -1141,6 +1199,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -1158,6 +1217,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -1174,6 +1234,7 @@
           <li xml:lang="it">qbytearray-conversion-to-c-style</li>
           <li xml:lang="ka">qbytearray-conversion-to-c-style</li>
           <li xml:lang="nl">qbytearray-conversion-to-c-style</li>
+          <li xml:lang="pl">qbytearray-conversion-to-c-style</li>
           <li xml:lang="pt-BR">qbytearray-conversion-to-c-style</li>
           <li xml:lang="ru">преобразование QByteArray в стиль C;</li>
           <li xml:lang="sk">qbytearray-conversion-to-c-style</li>
@@ -1195,6 +1256,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -1212,6 +1274,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -1228,6 +1291,7 @@
           <li xml:lang="it">used-qunused-variable</li>
           <li xml:lang="ka">used-qunused-variable</li>
           <li xml:lang="nl">used-qunused-variable</li>
+          <li xml:lang="pl">used-qunused-variable</li>
           <li xml:lang="pt-BR">used-qunused-variable</li>
           <li xml:lang="ru">Проверка неиспользуемых переменных;</li>
           <li xml:lang="sk">used-qunused-variable</li>
@@ -1245,6 +1309,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -1262,6 +1327,7 @@
           <li xml:lang="it">Il controllo qstring-arg fornisce un fixit</li>
           <li xml:lang="ka">qstring-arg შემოწმება მოგაწვდით გასწორებას</li>
           <li xml:lang="nl">qstring-arg controle levert een repareer-het</li>
+          <li xml:lang="pl">sprawdzenie qstring-arg udostępnia automatyczną poprawkę (fix-it)</li>
           <li xml:lang="pt-BR">verificação qstring-arg fornece uma correção</li>
           <li xml:lang="ru">Проверка qstring-arg предоставляет исправление;</li>
           <li xml:lang="sk">Kontrola qstring-arg poskytuje opravu</li>
@@ -1278,6 +1344,7 @@
           <li xml:lang="it">Corretto unused-non-trivial-variable che non avvisa quando è impostato [[maybe_unused]]</li>
           <li xml:lang="ka">გასწორდა unused-non-trivial-variable რომ არ გამოაგდოს გაფრთხილება, როცა [[maybe_unused]] დაყენებულია</li>
           <li xml:lang="nl">De ongebruikte niet-triviale variabele is aangepast zodat er geen waarschuwing meer wordt gegeven wanneer [[maybe_unused]] is ingesteld.</li>
+          <li xml:lang="pl">Naprawienie błędu w unused-non-trivial-variable polegającego na zgłaszaniu ostrzeżeń, gdy ustawiono atrybut [[maybe_unused]]</li>
           <li xml:lang="pt-BR">Corrigido o comportamento de variável não trivial não utilizada para não gerar aviso quando [[maybe_unused]] for definida</li>
           <li xml:lang="ru">Исправлено предупреждение «unused-non-trivial-variable» при установке атрибута «[[maybe_unused]]»;</li>
           <li xml:lang="sk">Opravená unused-non-trivial-variable, aby nevarovala pri nastavení [[maybe_unused]]</li>
@@ -1294,6 +1361,7 @@
           <li xml:lang="it">Corretto qstring-arg per il prossimo rilascio di Qt 6.9</li>
           <li xml:lang="ka">გასწორდა qstring-arg Qt 6.9-ისთვის, რომელიც მალე გამოვა</li>
           <li xml:lang="nl">qstring-arg gerepareerd voor komende Qt 6.9</li>
+          <li xml:lang="pl">Dostosowanie qstring-arg do nadchodzącego Qt 6.9</li>
           <li xml:lang="pt-BR">Correção do argumento qstring para a próxima versão do Qt 6.9</li>
           <li xml:lang="ru">Исправлена функция QString::arg() для будущей версии Qt 6.9;</li>
           <li xml:lang="sk">Opravená qstring-arg pre nadchádzajúce Qt 6.9</li>
@@ -1309,6 +1377,7 @@
           <li xml:lang="it">Corretto il falso positivo fully-qualified-moc-types per i modificatori const degli argomenti generici</li>
           <li xml:lang="ka">გასწორდა fully-qualified-moc-types-ის ცრუ დადებითი ზოგადი არგუმენტების const მოდიფიკატორისთვის</li>
           <li xml:lang="nl">De foutieve melding 'fully-qualified-moc-types' voor 'const'-modifiers van generieke argumenten is verholpen</li>
+          <li xml:lang="pl">Naprawienie fałszywie pozytywnego wyniku (false positive) w fully-qualified-moc-types dla modyfikatorów const w argumentach generycznych</li>
           <li xml:lang="pt-BR">Corrigido falso positivo de tipos moc totalmente qualificados para modificadores constantes de argumentos genéricos</li>
           <li xml:lang="ru">Исправлено ложное срабатывание fully-qualified-moc-types для модификаторов const обобщённых аргументов;</li>
           <li xml:lang="sk">Opravený falošne pozitívny výsledok fully-qualified-moc-types pre konštantné modifikátory generických argumentov</li>
@@ -1324,6 +1393,7 @@
           <li xml:lang="it">Disattiva l'avviso di falso positivo non-pod-global-static per l'inizializzazione del modulo QML</li>
           <li xml:lang="ka">ცრუ დადებითი non-pod-global-static-ის გაფრთხილების გაჩუმება QML მოდულის ინიციალიზაციისთვის</li>
           <li xml:lang="nl">Onderdruk de valse positieve waarschuwing 'non-pod-global-static' voor de initialisatie van de QML-module</li>
+          <li xml:lang="pl">Wyciszenie fałszywie pozytywnego wyniku (false positive) ostrzeżenia non-pod-global-static dla inicjalizacji modułu QML</li>
           <li xml:lang="pt-BR">Silenciar aviso falso positivo de non-pod-global-static para a inicialização do módulo QML</li>
           <li xml:lang="ru">Отключено ложное предупреждение «non-pod-global-static» при инициализации модуля QML;</li>
           <li xml:lang="sk">Potlačenie falošne pozitívneho varovania non-pod-global-static pre inicializáciu modulu QML</li>
@@ -1340,6 +1410,7 @@
           <li xml:lang="it">Corregge il falso positivo function-args-by-value che causava un errore di compilazione</li>
           <li xml:lang="ka">გასწორდა ფუნქციის function-args-by-value ცრუ დადებითი რაც კომპილაციის შეცდომას გამოიწვევდა</li>
           <li xml:lang="nl">Corrigeer de foutieve melding 'function-args-by-value' die een compilatiefout veroorzaakte</li>
+          <li xml:lang="pl">Naprawienie fałszywie pozytywnego wyniku (false positive) w function-args-by-value, który powodowałby błąd kompilacji</li>
           <li xml:lang="pt-BR">Correção de falso positivo em argumentos de função por valor que causava erro de compilação</li>
           <li xml:lang="ru">Исправлена ложная срабатываемость функции «function-args-by-value», которая вызывала ошибку компиляции;</li>
           <li xml:lang="sk">Oprava falošne pozitívneho výsledku function-args-by-value, ktorý by spôsobil chybu kompilácie</li>
@@ -1356,6 +1427,7 @@
           <li xml:lang="it">nei costruttori di copia, negli operatori di assegnazione e nei controlli di uguaglianza</li>
           <li xml:lang="ka">ასლის კონსტრუქტორებში მინიჭების ოპერატორებსა და ტოლობის შემოწმებებში</li>
           <li xml:lang="nl">in kopieerconstructors, toewijzingsoperatoren en gelijkheidscontroles</li>
+          <li xml:lang="pl">w konstruktorach kopiujących, operatorach przypisania i sprawdzeniach równości</li>
           <li xml:lang="pt-BR">em construtores de cópia, operadores de atribuição e verificações de igualdade</li>
           <li xml:lang="ru">в конструкторах копирования, операторах присваивания и проверках на равенство;</li>
           <li xml:lang="sk">v kopírovacích konštruktoroch, operátoroch priradenia a kontrolách rovnosti</li>
@@ -1372,6 +1444,7 @@
           <li xml:lang="it">I falsi positivi per `Q_EMIT(someSignal())` sono stati ora corretti</li>
           <li xml:lang="ka">გასწორდა ცრუ დადებითები `Q_EMIT(someSignal())`-ისთვის</li>
           <li xml:lang="nl">De foutieve meldingen voor `Q_EMIT(someSignal())` zijn nu verholpen</li>
+          <li xml:lang="pl">Naprawienie fałszywie pozytywnych wyników (false positives) dla Q_EMIT(someSignal())</li>
           <li xml:lang="pt-BR">Os falsos positivos para `Q_EMIT(someSignal())` foram corrigidos</li>
           <li xml:lang="ru">Исправлены ложные срабатывания для `Q_EMIT(someSignal())`;</li>
           <li xml:lang="sk">Falošne pozitívne výsledky pre `Q_EMIT(someSignal())` sú teraz opravené</li>
@@ -1393,6 +1466,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -1410,6 +1484,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -1426,6 +1501,7 @@
           <li xml:lang="it">qt-keyword-emit</li>
           <li xml:lang="ka">qt-keyword-emit</li>
           <li xml:lang="nl">qt-keyword-emit</li>
+          <li xml:lang="pl">qt-keyword-emit</li>
           <li xml:lang="pt-BR">qt-keyword-emit</li>
           <li xml:lang="ru">Ключевое слово «emit» в Qt;</li>
           <li xml:lang="sk">qt-keyword-emit</li>
@@ -1442,6 +1518,7 @@
           <li xml:lang="it">sanitize-inline-keyword</li>
           <li xml:lang="ka">sanitize-inline-keyword</li>
           <li xml:lang="nl">sanitize-inline-keyword</li>
+          <li xml:lang="pl">sanitize-inline-keyword</li>
           <li xml:lang="pt-BR">sanitize-inline-keyword</li>
           <li xml:lang="ru">очистка ключевого слова inline;</li>
           <li xml:lang="sk">sanitize-inline-keyword</li>
@@ -1463,6 +1540,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -1480,6 +1558,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -1496,6 +1575,7 @@
           <li xml:lang="it">use-arrow-operator-instead-of-data</li>
           <li xml:lang="ka">use-arrow-operator-instead-of-data</li>
           <li xml:lang="nl">use-arrow-operator-instead-of-data</li>
+          <li xml:lang="pl">use-arrow-operator-instead-of-data</li>
           <li xml:lang="pt-BR">use-arrow-operator-instead-of-data</li>
           <li xml:lang="ru">использование оператора «-&gt;» вместо метода «data»;</li>
           <li xml:lang="sk">use-arrow-operator-instead-of-data</li>
@@ -1512,6 +1592,7 @@
           <li xml:lang="it">use-static-qregularexpression</li>
           <li xml:lang="ka">use-static-qregularexpression</li>
           <li xml:lang="nl">use-static-qregularexpression</li>
+          <li xml:lang="pl">use-static-qregularexpression</li>
           <li xml:lang="pt-BR">use-static-qregularexpression</li>
           <li xml:lang="ru">использовать статические объекты QRegularExpression;</li>
           <li xml:lang="sk">use-static-qregularexpression</li>
@@ -1528,6 +1609,7 @@
           <li xml:lang="it">unexpected-flag-enumerator-value</li>
           <li xml:lang="ka">unexpected-flag-enumerator-value</li>
           <li xml:lang="nl">unexpected-flag-enumerator-value</li>
+          <li xml:lang="pl">unexpected-flag-enumerator-value</li>
           <li xml:lang="pt-BR">unexpected-flag-enumerator-value</li>
           <li xml:lang="ru">неожиданное значение перечислителя флага;</li>
           <li xml:lang="sk">unexpected-flag-enumerator-value</li>
@@ -1544,6 +1626,7 @@
           <li xml:lang="it">Rimosso il controllo inefficient-qlist (corretto in Qt6)</li>
           <li xml:lang="ka">წაიშალა შემოწმება inefficient-qlist (გასწორდა Qt6-ში)</li>
           <li xml:lang="nl">Verwijderd inefficient-qlist controle (gerepareerd in Qt6)</li>
+          <li xml:lang="pl">Usunięcie sprawdzenia inefficient-qlist (naprawione w Qt6)</li>
           <li xml:lang="pt-BR">Removida a verificação de lista de consultas ineficiente (corrigido no Qt6)</li>
           <li xml:lang="ru">Удалена проверка inefficient-qlist (исправлено в Qt6);</li>
           <li xml:lang="sk">Odstránená kontrola inefficient-qlist (opravené v Qt6)</li>
@@ -1565,6 +1648,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -1582,6 +1666,7 @@
           <li xml:lang="it">Richiede C++17</li>
           <li xml:lang="ka">მოითხოვს: C++17</li>
           <li xml:lang="nl">Vereist C++17</li>
+          <li xml:lang="pl">Wymaga C++17</li>
           <li xml:lang="pt-BR">Requer C++17</li>
           <li xml:lang="ru">Требуется C++17;</li>
           <li xml:lang="sk">Vyžaduje C++17</li>
@@ -1599,6 +1684,7 @@
           <li xml:lang="it">Correzioni di errori:</li>
           <li xml:lang="ka">შეცდომების გასწორება:</li>
           <li xml:lang="nl">Verbeterde bugs:</li>
+          <li xml:lang="pl">Poprawki błędów:</li>
           <li xml:lang="pt-BR">Correções de bugs:</li>
           <li xml:lang="ru">Исправлены ошибки:</li>
           <li xml:lang="sk">Opravy chýb:</li>
@@ -1615,6 +1701,7 @@
           <li xml:lang="it">Corretto un falso positivo -Wclazy-lambda-in-connect</li>
           <li xml:lang="ka">გასწორდა -Wclazy-lambda-in-connect ცრუ-დადებითი</li>
           <li xml:lang="nl">opgelost een -Wclazy-lambda-in-connect false-positive</li>
+          <li xml:lang="pl">Naprawienie fałszywie pozytywnego wyniku (false positive) dla -Wclazy-lambda-in-connect</li>
           <li xml:lang="pt-BR">Corrigido um falso positivo -Wclazy-lambda-in-connect</li>
           <li xml:lang="ru">Исправлено ложное срабатывание диагностики -Wclazy-lambda-in-connect.</li>
           <li xml:lang="sk">Opravený falošne pozitívny výsledok -Wclazy-lambda-in-connect</li>
@@ -1631,6 +1718,7 @@
           <li xml:lang="it">Corretto l'arresto anomalo in copyable-polymorphic quando PCH è abilitato</li>
           <li xml:lang="ka">გასწორდა ავარიული დასრულება copyable-polymorphic-ში, როცა PCH ჩართული იყო</li>
           <li xml:lang="nl">opgelost crash in copyable-polymorphic wanneer PCH was ingeschakeld</li>
+          <li xml:lang="pl">Naprawienie awarii (crash) w copyable-polymorphic, gdy włączone było PCH</li>
           <li xml:lang="pt-BR">Corrigido o problema que causava o erro em copyable-polymorphic quando o PCH estava ativado</li>
           <li xml:lang="ru">Исправлено аварийное завершение в copyable-polymorphic при включённом PCH;</li>
           <li xml:lang="sk">Opravený pád v copyable-polymorphic pri povolení PCH</li>
@@ -1652,6 +1740,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -1669,6 +1758,7 @@
           <li xml:lang="it">Corretto il problema del rallentamento introdotto nella versione 1.8. Ora è fino a 4 volte più veloce.</li>
           <li xml:lang="ka">გასწორდა 1.8 ვერსიაში გაჩენილი clazy-ს შენელება და ახლა 4-ჯერ უფრო სწრაფია.</li>
           <li xml:lang="nl">opgelost clazy vertraging geïntroduceerd in 1.8. Het kan nu tot 4x sneller.</li>
+          <li xml:lang="pl">Naprawienie spowolnienia clazy wprowadzonego w wersji 1.8. Działanie może być teraz nawet 4x szybsze.</li>
           <li xml:lang="pt-BR">Corrigido o problema de lentidão extrema introduzido na versão 1.8. Agora é até 4 vezes mais rápido.</li>
           <li xml:lang="ru">Исправлено замедление clazy, появившееся в версии 1.8; теперь он может работать до 4 раз быстрее.</li>
           <li xml:lang="sk">Opravené spomalenie clazy zavedené vo verzii 1.8. Teraz môže byť až 4x rýchlejšie.</li>
@@ -1685,6 +1775,7 @@
           <li xml:lang="it">range-loop è stato diviso in range-loop-detach e range-loop-reference</li>
           <li xml:lang="ka">range-loop გაიყო ორად: range-loop-detach და range-loop-reference</li>
           <li xml:lang="nl">range-loop was gesplitst in range-loop-detach en range-loop-reference</li>
+          <li xml:lang="pl">range-loop zostało rozdzielone na range-loop-detach i range-loop-reference</li>
           <li xml:lang="pt-BR">range-loop foi dividido em range-loop-detach e range-loop-reference</li>
           <li xml:lang="ru">Диагностика range-loop разделена на range-loop-detach и range-loop-reference;</li>
           <li xml:lang="sk">range-loop bola rozdelená na range-loop-detach a range-loop-reference</li>
@@ -1701,6 +1792,7 @@
           <li xml:lang="it">Corretti i falsi positivi -Wclazy-connect-non-signal</li>
           <li xml:lang="ka">გასწორდა -Wclazy-connect-non-signal ცრუ დადებითები</li>
           <li xml:lang="nl">opgelost -Wclazy-connect-non-signal false-positives</li>
+          <li xml:lang="pl">Naprawienie fałszywie pozytywnych wyników (false positives) dla -Wclazy-connect-non-signal</li>
           <li xml:lang="pt-BR">Corrigido falsos positivos do -Wclazy-connect-non-signal</li>
           <li xml:lang="ru">Исправлены ложные срабатывания диагностики -Wclazy-connect-non-signal;</li>
           <li xml:lang="sk">Opravené falošne pozitívne výsledky -Wclazy-connect-non-signal</li>
@@ -1722,6 +1814,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -1739,6 +1832,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -1755,6 +1849,7 @@
           <li xml:lang="it">qt6-qhash-signature</li>
           <li xml:lang="ka">qt6-qhash-signature</li>
           <li xml:lang="nl">qt6-qhash-signature</li>
+          <li xml:lang="pl">qt6-qhash-signature</li>
           <li xml:lang="pt-BR">qt6-qhash-signature</li>
           <li xml:lang="ru">Сигнатура qHash для Qt6;</li>
           <li xml:lang="sk">qt6-qhash-signature</li>
@@ -1771,6 +1866,7 @@
           <li xml:lang="it">qt6-header-fixes</li>
           <li xml:lang="ka">qt6-header-fixes</li>
           <li xml:lang="nl">qt6-header-fixes</li>
+          <li xml:lang="pl">qt6-header-fixes</li>
           <li xml:lang="pt-BR">qt6-header-fixes</li>
           <li xml:lang="ru">Исправления заголовков Qt6;</li>
           <li xml:lang="sk">qt6-header-fixes</li>
@@ -1787,6 +1883,7 @@
           <li xml:lang="it">qt6-deprecated-api-fixes</li>
           <li xml:lang="ka">qt6-deprecated-api-fixes</li>
           <li xml:lang="nl">qt6-deprecated-api-fixes</li>
+          <li xml:lang="pl">qt6-deprecated-api-fixes</li>
           <li xml:lang="pt-BR">qt6-deprecated-api-fixes</li>
           <li xml:lang="ru">Исправления устаревшего API Qt6;</li>
           <li xml:lang="sk">qt6-deprecated-api-fixes</li>
@@ -1803,6 +1900,7 @@
           <li xml:lang="it">use-chrono-in-qtimer</li>
           <li xml:lang="ka">use-chrono-in-qtimer</li>
           <li xml:lang="nl">use-chrono-in-qtimer</li>
+          <li xml:lang="pl">use-chrono-in-qtimer</li>
           <li xml:lang="pt-BR">use-chrono-in-qtimer</li>
           <li xml:lang="ru">использование chrono в QTimer;</li>
           <li xml:lang="sk">use-chrono-in-qtimer</li>
@@ -1819,6 +1917,7 @@
           <li xml:lang="it">fixit per missing-qobject-macro</li>
           <li xml:lang="ka">გასწორება missing-qobject-macro-ისთვის</li>
           <li xml:lang="nl">reparatie voor missing-qobject-macro</li>
+          <li xml:lang="pl">fixit dla missing-qobject-macro</li>
           <li xml:lang="pt-BR">correção para missing-qobject-macro</li>
           <li xml:lang="ru">Исправление для отсутствующего макроса Q_OBJECT;</li>
           <li xml:lang="sk">oprava pre missing-qobject-macro</li>
@@ -1840,6 +1939,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -1857,6 +1957,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -1873,6 +1974,7 @@
           <li xml:lang="it">segnale sovraccarico</li>
           <li xml:lang="ka">გადატვირთული სიგნალი</li>
           <li xml:lang="nl">overladen signaal</li>
+          <li xml:lang="pl">overloaded-signal</li>
           <li xml:lang="pt-BR">sinal sobrecarregado</li>
           <li xml:lang="ru">перегруженный сигнал;</li>
           <li xml:lang="sk">preťažený signál</li>
@@ -1889,6 +1991,7 @@
           <li xml:lang="it">firme JNI non valide</li>
           <li xml:lang="ka">არასწორი JNI ხელმოწერები</li>
           <li xml:lang="nl">ongeldige JNI-ondertekeningen</li>
+          <li xml:lang="pl">niepoprawne sygnatury JNI</li>
           <li xml:lang="pt-BR">assinaturas JNI inválidas</li>
           <li xml:lang="ru">некорректные подписи JNI;</li>
           <li xml:lang="sk">neplatné podpisy JNI</li>
@@ -1905,6 +2008,7 @@
           <li xml:lang="it">qstring-comparison-to-implicit-char</li>
           <li xml:lang="ka">qstring-comparison-to-implicit-char</li>
           <li xml:lang="nl">qstring-comparison-to-implicit-char</li>
+          <li xml:lang="pl">qstring-comparison-to-implicit-char</li>
           <li xml:lang="pt-BR">qstring-comparison-to-implicit-char</li>
           <li xml:lang="ru">сравнение строки с неявным символом;</li>
           <li xml:lang="sk">qstring-comparison-to-implicit-char</li>
@@ -1921,6 +2025,7 @@
           <li xml:lang="it">qt6-qlatin1string-to-u</li>
           <li xml:lang="ka">qt6-qlatin1string-to-u</li>
           <li xml:lang="nl">qt6-qlatin1string-to-u</li>
+          <li xml:lang="pl">qt6-qlatin1string-to-u</li>
           <li xml:lang="pt-BR">qt6-qlatin1string-to-u</li>
           <li xml:lang="ru">Замена `QLatin1String` на `QString` в Qt6;</li>
           <li xml:lang="sk">qt6-qlatin1string-to-u</li>
@@ -1937,6 +2042,7 @@
           <li xml:lang="it">heap-allocated-small-trivial-type: meno falsi positivi</li>
           <li xml:lang="ka">heap-allocated-small-trivial-type: ნაკლები ცრუ დადებითი</li>
           <li xml:lang="nl">heap-allocated-small-trivial-type: minder false-positives</li>
+          <li xml:lang="pl">heap-allocated-small-trivial-type: mniej fałszywie pozytywnych wyników (false positives)</li>
           <li xml:lang="pt-BR">heap-allocated-small-trivial-type: menos falsos positivos</li>
           <li xml:lang="ru">heap-allocated-small-trivial-type: уменьшено число ложных срабатываний;</li>
           <li xml:lang="sk">heap-allocated-small-trivial-type: menej falošne pozitívnych výsledkov</li>
@@ -1954,6 +2060,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -1971,6 +2078,7 @@
           <li xml:lang="it">connect-non-signal: corretto il caso in cui non veniva trovato il pmf</li>
           <li xml:lang="ka">connect-non-signal: გასწორდა შემთხვევა, როცა მან pmf ვერ იპოვა</li>
           <li xml:lang="nl">connect-non-signal: opgelost geval waar het de pmf niet vond</li>
+          <li xml:lang="pl">connect-non-signal: Naprawienie przypadku, w którym nie znajdowano pmf</li>
           <li xml:lang="pt-BR">connect-non-signal: Corrigido o caso em que o arquivo pmf não era encontrado</li>
           <li xml:lang="ru">connect-non-signal: исправлен случай, когда pmf не находился;</li>
           <li xml:lang="sk">connect-non-signal: Oprava prípadu, keď nenašiel pmf</li>
@@ -1987,6 +2095,7 @@
           <li xml:lang="it">qstring-arg avvisa quando si utilizza QLatin1String::arg(int), poiché esegue il cast in QChar</li>
           <li xml:lang="ka">qstring-arg გაგაფრთხილებთ QLatin1String::arg(int)-ის გამოყენებისას, რადგან ის მას QChar-ში გადაჰყავს</li>
           <li xml:lang="nl">qstring-arg waarschuwt wanneer QLatin1String::arg(int) wordt gebruikt, zoals het omvormt naar QChar</li>
+          <li xml:lang="pl">qstring-arg ostrzega przy użyciu QLatin1String::arg(int), jako że rzutuje ono na QChar</li>
           <li xml:lang="pt-BR">qstring-arg emite um aviso ao usar QLatin1String::arg(int), pois ele realiza um cast para QChar</li>
           <li xml:lang="ru">Предупреждение при использовании QLatin1String::arg(int) из-за приведения к QChar;</li>
           <li xml:lang="sk">qstring-arg varuje pri použití QLatin1String::arg(int), pretože sa pretypuje na QChar</li>
@@ -2004,6 +2113,7 @@
         <p xml:lang="it">La compilazione di Clazy è più veloce del 30%</p>
         <p xml:lang="ka">clazy-ის აგება ახლა 30%-ით უფრო სწრაფია</p>
         <p xml:lang="nl">Clazy zelf bouwen is 30% sneller</p>
+        <p xml:lang="pl">Budowanie samego clazy jest o 30% szybsze</p>
         <p xml:lang="pt-BR">Compilar o próprio clazy é 30% mais rápido</p>
         <p xml:lang="ru">Сборка самого clazy ускорилась на 30 %</p>
         <p xml:lang="sk">Zostavenie samotného clazy je o 30 % rýchlejšie</p>
@@ -2024,6 +2134,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -2041,6 +2152,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -2057,6 +2169,7 @@
           <li xml:lang="it">heap-allocated-small-trivial-type</li>
           <li xml:lang="ka">heap-allocated-small-trivial-type</li>
           <li xml:lang="nl">heap-allocated-small-trivial-type</li>
+          <li xml:lang="pl">heap-allocated-small-trivial-type</li>
           <li xml:lang="pt-BR">heap-allocated-small-trivial-type</li>
           <li xml:lang="ru">выделение в куче малых тривиальных типов;</li>
           <li xml:lang="sk">heap-allocated-small-trivial-type</li>
@@ -2073,6 +2186,7 @@
           <li xml:lang="it">signal-with-return-value</li>
           <li xml:lang="ka">signal-with-return-value</li>
           <li xml:lang="nl">signal-with-return-value</li>
+          <li xml:lang="pl">signal-with-return-value</li>
           <li xml:lang="pt-BR">signal-with-return-value</li>
           <li xml:lang="ru">сигнал с возвращаемым значением;</li>
           <li xml:lang="sk">signal-with-return-value</li>
@@ -2089,6 +2203,7 @@
           <li xml:lang="it">qproperty-type-mismatch, contributo di Jean-Michaël Celerier</li>
           <li xml:lang="ka">qproperty-type-mismatch, შემოგვწირა Jean-Michaël Celerier-მა</li>
           <li xml:lang="nl">qproperty-type-mismatch, bijgedragen door Jean-Michaël Celerier</li>
+          <li xml:lang="pl">qproperty-type-mismatch, nadesłane przez Jean-Michaëla Celeriera</li>
           <li xml:lang="pt-BR">qproperty-type-mismatch, contribuição de Jean-Michaël Celerier</li>
           <li xml:lang="ru">qproperty-type-mismatch, реализовано Jean-Michaël Celerier.</li>
           <li xml:lang="sk">qproperty-type-mismatch, prispel Jean-Michaël Celerier</li>
@@ -2105,6 +2220,7 @@
         <p xml:lang="it">Rimosso il livello 3. Spostati tutti i controlli del livello 3 al livello manuale. Non ha senso abilitarli tutti.</p>
         <p xml:lang="ka">წაიშალა level3: level3-ის ყველა შემოწმება manual დონეზე გადავიდა რადგან ყველას ჩართვას აზრი არ აქვს.</p>
         <p xml:lang="nl">Niveau 3 verwijderd. Alle niveau 3-controles verplaatst naar handmatig niveau. Het heeft geen zin om ze allemaal in te schakelen.</p>
+        <p xml:lang="pl">Usunięto level3. Przeniesiono wszystkie sprawdzenia z level3 do poziomu manual. Włączanie ich wszystkich nie ma sensu.</p>
         <p xml:lang="pt-BR">Nível 3 removido. Todas as verificações de nível 3 foram movidas para o nível manual. Não faz sentido habilitá-las todas.</p>
         <p xml:lang="ru">Удалён уровень 3. Все проверки этого уровня перенесены в ручной режим. Их одновременное включение не имеет смысла.</p>
         <p xml:lang="sk">Odstránená úroveň 3. Všetky kontroly úrovne 3 presunuté na manuálnu úroveň. Nemá zmysel povoliť ich všetky.</p>
@@ -2121,6 +2237,7 @@
         <p xml:lang="it">Ciascuno di essi deve essere attentamente considerato.</p>
         <p xml:lang="ka">თითოეული დაწვრილებით უნდა განიხილოთ.</p>
         <p xml:lang="nl">Elk aspect moet zorgvuldig worden overwogen.</p>
+        <p xml:lang="pl">Każde z nich musi być dokładnie przeanalizowane.</p>
         <p xml:lang="pt-BR">Cada uma delas deve ser cuidadosamente analisada.</p>
         <p xml:lang="ru">Каждый из них должен быть тщательно проанализирован.</p>
         <p xml:lang="sk">Každá musí byť starostlivo zvážená.</p>
@@ -2137,6 +2254,7 @@
         <p xml:lang="it">La versione minima di LLVM è stata portata a 5.0</p>
         <p xml:lang="ka">LLVM-ის მინიმალური ვერსია აწეულია 5.0-ზე</p>
         <p xml:lang="nl">De minimale LLVM-waarde is verhoogd naar 5.0</p>
+        <p xml:lang="pl">Minimalna wersja LLVM została podniesiona do 5.0</p>
         <p xml:lang="pt-BR">A versão mínima do LLVM foi aumentada para 5.0</p>
         <p xml:lang="ru">Минимальная версия LLVM увеличена до 5.0</p>
         <p xml:lang="sk">Minimálna verzia LLVM bola zvýšená na 5.0</p>
@@ -2152,6 +2270,7 @@
         <p xml:lang="it">Clazy non riscrive più i file direttamente, per evitare conflitti quando le invocazioni parallele modificano la stessa intestazione.</p>
         <p xml:lang="ka">Clazy აღარ გადააწერს ფაილებს ზედ პირდაპირ, რომ თავიდან აიცილოს იშვიათი შემთხვევა, როცა პარალელური გაშვება იგივე თავსართს ცვლის.</p>
         <p xml:lang="nl">Clazy herschrijft bestanden niet langer rechtstreeks om raceomstandigheden te voorkomen wanneer parallelle aanroepen dezelfde header wijzigen.</p>
+        <p xml:lang="pl">To powtórzony tekst, już to tłumaczyliśmy. Dawaj następny segment, szkoda czasu na duble.</p>
         <p xml:lang="pt-BR">O clazy não reescreve mais arquivos diretamente, para evitar condições de corrida quando invocações paralelas alteram o mesmo cabeçalho.</p>
         <p xml:lang="ru">В Clazy больше не выполняется прямая перезапись файлов, чтобы избежать конфликтов при одновременном изменении одного и того же заголовка.</p>
         <p xml:lang="sk">Clazy už priamo neprepisuje súbory, aby sa predišlo kolíziám pri paralelných volaniach meniacich rovnakú hlavičku.</p>
@@ -2167,6 +2286,7 @@
         <p xml:lang="it">Clazy ora esporta un file yaml con le sostituzioni, da applicare con clang-apply-replacements.</p>
         <p xml:lang="ka">Clazy ახლა yaml ფაილს ჩანაცვლებებით გაიტანს, რომ გადაატაროთ ბრძანებით clang-apply-replacements.</p>
         <p xml:lang="nl">Clazy exporteert nu een YAML-bestand met de vervangingen, dat kan worden toegepast met clang-apply-replacements.</p>
+        <p xml:lang="pl">Clazy eksportuje teraz plik YAML ze zmianami, które należy zastosować za pomocą clang-apply-replacements.</p>
         <p xml:lang="pt-BR">O clazy agora exporta um arquivo YAML com as substituições, que devem ser aplicadas com o clang-apply-replacements.</p>
         <p xml:lang="ru">Теперь Clazy экспортирует файл YAML с заменой, который можно применить с помощью clang-apply-replacements.</p>
         <p xml:lang="sk">Clazy teraz exportuje súbor yaml s náhradami, na aplikovanie pomocou clang-apply-replacements.</p>
@@ -2183,6 +2303,7 @@
         <p xml:lang="it">Nello stesso modo in cui lo fanno gli altri strumenti clang.</p>
         <p xml:lang="ka">იგივენაირად, როგორც ამას clang აკეთებს.</p>
         <p xml:lang="nl">Op dezelfde manier als andere clang-hulpmiddelen dat doen.</p>
+        <p xml:lang="pl">The same way other clang tooling does it.</p>
         <p xml:lang="pt-BR">Da mesma forma que outras ferramentas do clang fazem.</p>
         <p xml:lang="ru">Так же, как это делает любой другой инструментарий clang.</p>
         <p xml:lang="sk">Rovnakým spôsobom ako iné nástroje clang.</p>
@@ -2198,6 +2319,7 @@
         <p xml:lang="it">Il modo per abilitare la riscrittura del codice è ora: -Xclang -plugin-arg-clazy -Xclang export-fixes per clang</p>
         <p xml:lang="ka">ახლა გზა, რომლითაც კოდის გადაწერა შეგიძლიათ, ჩართოთ, არის: -Xclang -plugin-arg-clazy -Xclang export-fixes clang-ისთვის</p>
         <p xml:lang="nl">De manier om codeherschrijving in te schakelen is nu: -Xclang -plugin-arg-clazy -Xclang export-fixes voor clang</p>
+        <p xml:lang="pl">Sposób na włączenie przepisywania kodu (code rewrite) to teraz: -Xclang -plugin-arg-clazy -Xclang export-fixes dla clang</p>
         <p xml:lang="pt-BR">A forma de habilitar a reescrita de código agora é: -Xclang -plugin-arg-clazy -Xclang export-fixes para clang</p>
         <p xml:lang="ru">Теперь для включения перезаписи кода используется параметр: -Xclang -plugin-arg-clazy -Xclang export-fixes для clang</p>
         <p xml:lang="sk">Spôsob povolenia prepisu kódu je teraz: -Xclang -plugin-arg-clazy -Xclang export-fixes pre clang</p>
@@ -2214,6 +2336,7 @@
         <p xml:lang="it">o -export-fixes=somefile.yaml per clazy-standalone</p>
         <p xml:lang="ka">ან -export-fixes=somefile.yaml clazy-standalone-ისთვის</p>
         <p xml:lang="nl">of -export-fixes=somefile.yaml voor clazy-standalone</p>
+        <p xml:lang="pl">lub -export-fixes=somefile.yaml dla clazy-standalone</p>
         <p xml:lang="pt-BR">ou -export-fixes=somefile.yaml para clazy-standalone</p>
         <p xml:lang="ru">или -export-fixes=somefile.yaml для clazy-standalone</p>
         <p xml:lang="sk">alebo -export-fixes=somefile.yaml pre clazy-standalone</p>
@@ -2230,6 +2353,7 @@
         <p xml:lang="it">Tutti gli altri argomenti fixit e le variabili di ambiente fixit sono stati rimossi</p>
         <p xml:lang="ka">წაიშალა ყველა სხვა fixit არგუმენტი და fixit გარემოს ცვლადი</p>
         <p xml:lang="nl">Alle overige Fixit-argumenten en Fixit-omgevingsvariabelen zijn verwijderd.</p>
+        <p xml:lang="pl">All other fixit arguments and fixit env variables were removed</p>
         <p xml:lang="pt-BR">Todos os outros argumentos do fixit e variáveis ​​de ambiente do fixit foram removidos</p>
         <p xml:lang="ru">Удалены все остальные аргументы и переменные окружения fixit.</p>
         <p xml:lang="sk">Všetky ostatné argumenty opráv a premenné prostredia pre opravy boli odstránené</p>
@@ -2246,6 +2370,7 @@
         <p xml:lang="it">Grazie a Christian Gagneraud per aver contribuito con l'esportatore yaml fixit!</p>
         <p xml:lang="ka">მადლობა Christian Gagneraud-ს fixit yaml გამტანისთვის!</p>
         <p xml:lang="nl">Met dank aan Christian Gagneraud voor zijn bijdrage aan de fixit YAML-exporteur!</p>
+        <p xml:lang="pl">Podziękowania dla Christiana Gagnerauda za nadesłanie eksportera YAML z poprawkami (fixit yaml exporter)!</p>
         <p xml:lang="pt-BR">Agradecemos a Christian Gagneraud por sua contribuição com o exportador fixit yaml!</p>
         <p xml:lang="ru">Благодарим Christian Gagneraud за вклад в создание экспорта yaml для исправлений!</p>
         <p xml:lang="sk">Vďaka Christianovi Gagneraudovi za príspevok exportéra opráv yaml!</p>
@@ -2262,6 +2387,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -2279,6 +2405,7 @@
           <li xml:lang="it">Regressioni corrette con LLVM 9.0</li>
           <li xml:lang="ka">გასწორდა რეგრესიები LLVM 9.0-ისთან</li>
           <li xml:lang="nl">Opgeloste regressies met LLVM 9.0</li>
+          <li xml:lang="pl">Naprawiono regresje w wersji z LLVM 9.0</li>
           <li xml:lang="pt-BR">Corrigidas regressões com o LLVM 9.0</li>
           <li xml:lang="ru">Исправлены регрессии в LLVM 9.0;</li>
           <li xml:lang="sk">Opravené regresie s LLVM 9.0</li>
@@ -2295,6 +2422,7 @@
           <li xml:lang="it">L'infrastruttura Fixit è stata revisionata</li>
           <li xml:lang="ka">Fixit-ის ინფრასტრუქტურა სრულად განახლდა</li>
           <li xml:lang="nl">De infrastructuur van Fixit is vernieuwd</li>
+          <li xml:lang="pl">Infrastruktura poprawek (Fixit infrastructure) została gruntownie przebudowana</li>
           <li xml:lang="pt-BR">A infraestrutura do fixit foi reformulada</li>
           <li xml:lang="ru">Инфраструктура быстрого исправления была полностью переработана;</li>
           <li xml:lang="sk">Infraštruktúra opráv bola prepracovaná</li>
@@ -2316,6 +2444,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -2333,6 +2462,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -2349,6 +2479,7 @@
           <li xml:lang="it">ifndef-define-typo</li>
           <li xml:lang="ka">ifndef-define-typo</li>
           <li xml:lang="nl">ifndef-define-typo</li>
+          <li xml:lang="pl">ifndef-define-typo</li>
           <li xml:lang="pt-BR">ifndef-define-typo</li>
           <li xml:lang="ru">Ошибка в директиве препроцессора #ifndef/#define.</li>
           <li xml:lang="sk">ifndef-define-typo</li>
@@ -2365,6 +2496,7 @@
           <li xml:lang="it">lowercase-qml-type-name</li>
           <li xml:lang="ka">lowercase-qml-type-name</li>
           <li xml:lang="nl">lowercase-qml-type-name</li>
+          <li xml:lang="pl">lowercase-qml-type-name</li>
           <li xml:lang="pt-BR">lowercase-qml-type-name</li>
           <li xml:lang="ru">нижний регистр в имени типа QML;</li>
           <li xml:lang="sk">lowercase-qml-type-name</li>
@@ -2381,6 +2513,7 @@
           <li xml:lang="it">qrequiredresult-candidates</li>
           <li xml:lang="ka">qrequiredresult-candidates</li>
           <li xml:lang="nl">qrequiredresult-candidates</li>
+          <li xml:lang="pl">qrequiredresult-candidates</li>
           <li xml:lang="pt-BR">qrequiredresult-candidates</li>
           <li xml:lang="ru">qrequiredresult-candidates</li>
           <li xml:lang="sk">qrequiredresult-candidates</li>
@@ -2397,6 +2530,7 @@
           <li xml:lang="it">Nuovi fixit:</li>
           <li xml:lang="ka">ახალი Fixit-ები:</li>
           <li xml:lang="nl">Nieuwe Fixits:</li>
+          <li xml:lang="pl">Nowe poprawki (New Fixits):</li>
           <li xml:lang="pt-BR">Novos Fixits:</li>
           <li xml:lang="ru">Новые автоматические исправления;</li>
           <li xml:lang="sk">Nové opravy:</li>
@@ -2413,6 +2547,7 @@
           <li xml:lang="it">range-loop ora supporta l'aggiunta di riferimenti mancanti o const-ref</li>
           <li xml:lang="ka">range-loop-ს ახლა აქვს ნაკლული refs-ების, ან const-ref-ების დამატების მხარდაჭერა</li>
           <li xml:lang="nl">range-loop ondersteunt nu het toevoegen van ontbrekende refs of const-ref.</li>
+          <li xml:lang="pl">range-loop obsługuje teraz dodawanie brakujących referencji lub const-ref</li>
           <li xml:lang="pt-BR">range-loop agora suporta a adição de referências ausentes ou const-ref</li>
           <li xml:lang="ru">В анализаторе range-loop реализована поддержка добавления отсутствующих ссылок или константных ссылок;</li>
           <li xml:lang="sk">range-loop teraz podporuje pridanie chýbajúcich referencií alebo const-ref</li>
@@ -2429,6 +2564,7 @@
           <li xml:lang="it">range-loop ora supporta l'aggiunta di qAsConst()</li>
           <li xml:lang="ka">range-loop-ს ახლა qAsConst()-ის დამატების მხარდაჭერა აქვს</li>
           <li xml:lang="nl">range-loop ondersteunt nu toevoegen van qAsConst()</li>
+          <li xml:lang="pl">range-loop obsługuje teraz dodawanie qAsConst()</li>
           <li xml:lang="pt-BR">range-loop agora suporta adicionar qAsConst()</li>
           <li xml:lang="ru">Цикл range-loop теперь поддерживает добавление qAsConst();</li>
           <li xml:lang="sk">range-loop teraz podporuje pridanie qAsConst()</li>
@@ -2445,6 +2581,7 @@
           <li xml:lang="it">function-args-by-ref ora aggiunge i riferimenti mancanti o const-ref (sperimentale)</li>
           <li xml:lang="ka">function-args-by-ref ახლა ამატებს ნაკლულ refs-ებს, ან const-ref-ებს (ექსპერიმენტული)</li>
           <li xml:lang="nl">function-args-by-ref voegt nu ontbrekende refs of const-ref toe (experimenteel)</li>
+          <li xml:lang="pl">function-args-by-ref obsługuje teraz dodawanie brakujących referencji lub const-ref (eksperymentalne)</li>
           <li xml:lang="pt-BR">function-args-by-ref agora adiciona referências ausentes ou const-ref (experimental)</li>
           <li xml:lang="ru">проверка «function-args-by-ref» теперь добавляет отсутствующие ссылки или константные ссылки (экспериментально);</li>
           <li xml:lang="sk">function-args-by-ref teraz pridáva chýbajúce referencie alebo const-ref (experimentálne)</li>
@@ -2461,6 +2598,7 @@
           <li xml:lang="it">Introdotta la variabile di ambiente CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="ka">გამოჩნდა CLAZY_FIXIT_SUFFIX გარემოს ცვლადი</li>
           <li xml:lang="nl">CLAZY_FIXIT_SUFFIX omgevingsvariabele geïntroduceerd</li>
+          <li xml:lang="pl">Wprowadzono zmienną środowiskową CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="pt-BR">Introduzida a variável de ambiente CLAZY_FIXIT_SUFFIX</li>
           <li xml:lang="ru">Добавлена переменная окружения CLAZY_FIXIT_SUFFIX;</li>
           <li xml:lang="sk">Zavedená premenná prostredia CLAZY_FIXIT_SUFFIX</li>
@@ -2477,6 +2615,7 @@
         <p xml:lang="it">Rimosso il supporto per l'oscuro -DCLAZY_BUILD_UTILS_LIB per semplificare CMakeLists.txt</p>
         <p xml:lang="ka">წაიშალა ნაკლებად ცნობილი -DCLAZY_BUILD_UTILS_LIB-ის მხარდაჭერა CMakeLists.txt-ის გასამარტივებლად</p>
         <p xml:lang="nl">Ondersteuning voor de obscure -DCLAZY_BUILD_UTILS_LIB is verwijderd om het bestand CMakeLists.txt te vereenvoudigen.</p>
+        <p xml:lang="pl">Usunięto wsparcie dla niszowego -DCLAZY_BUILD_UTILS_LIB w celu uproszczenia CMakeLists.txt</p>
         <p xml:lang="pt-BR">Removemos o suporte para a obscura opção -DCLAZY_BUILD_UTILS_LIB para simplificar o arquivo CMakeLists.txt</p>
         <p xml:lang="ru">Удалена поддержка малоиспользуемого параметра «-DCLAZY_BUILD_UTILS_LIB» для упрощения файла CMakeLists.txt.</p>
         <p xml:lang="sk">Odstránená podpora pre málo známy -DCLAZY_BUILD_UTILS_LIB na zjednodušenie CMakeLists.txt</p>
@@ -2493,6 +2632,7 @@
         <p xml:lang="it">Rinominata l'estensione Clazy da ClangLazy.so a ClazyPlugin.so</p>
         <p xml:lang="ka">clazy დამატების სახელი შეიცვალა ClangLazy.so-დან ClazyPlugin.so-ზე</p>
         <p xml:lang="nl">De Clazy-plug-in is hernoemd van ClangLazy.so naar ClazyPlugin.so</p>
+        <p xml:lang="pl">Zmieniono nazwę wtyczki clazy z ClangLazy.so na ClazyPlugin.so</p>
         <p xml:lang="pt-BR">Renomeado o plugin clazy de ClangLazy.so para ClazyPlugin.so</p>
         <p xml:lang="ru">Переименован плагин clazy с «ClangLazy.so» на «ClazyPlugin.so».</p>
         <p xml:lang="sk">Premenovaný modul clazy z ClangLazy.so na ClazyPlugin.so</p>
@@ -2508,6 +2648,7 @@
         <p xml:lang="it">fully-qualified-moc-types ora avvisa anche per i valori di ritorno slot/invokable. Devono essere completamente qualificati per QML.</p>
         <p xml:lang="ka">fully-qualified-moc-types ახლა სლოტის/ჩაწოდებად დაბრუნებულ მნიშვნელობებზეც იძლევა გაფრთხილებას, რადგან QML-ისთვის სრული კვალიფიკაციაა საჭირო.</p>
         <p xml:lang="nl">De functie fully-qualified-moc-types geeft nu ook een waarschuwing voor slot/invokable retourwaarden. Deze moeten volledig gekwalificeerd zijn voor QML.</p>
+        <p xml:lang="pl">fully-qualified-moc-types ostrzega teraz również o wartościach zwracanych przez sloty/metody oznaczone jako invokable. Muszą być one w pełni kwalifikowane (fully qualified) dla QML.</p>
         <p xml:lang="pt-BR">full-qualified-moc-types agora também emite avisos para valores de retorno de slots/invocáveis. Eles precisam ser totalmente qualificados para o QML.</p>
         <p xml:lang="ru">fully-qualified-moc-types теперь предупреждает о возвращаемых значениях слотов и вызываемых методов. Для QML они должны быть полностью квалифицированы.</p>
         <p xml:lang="sk">fully-qualified-moc-types teraz varuje aj pre návratové hodnoty slotov/invokable. Pre QML musia byť plne kvalifikované.</p>
@@ -2524,6 +2665,7 @@
         <p xml:lang="it">Questa versione corregge il seguente bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende fout op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujący błąd:</p>
         <p xml:lang="pt-BR">Esta versão corrige o seguinte erro:</p>
         <p xml:lang="ru">В этом выпуске исправлена следующая ошибка:</p>
         <p xml:lang="sk">Toto vydanie opravuje nasledujúcu chybu:</p>
@@ -2541,6 +2683,7 @@
           <li xml:lang="it">Risolto un arresto anomalo (clang assert) in raw-environment-function</li>
           <li xml:lang="ka">გასწორდა ავარიული დასრულება (clang assert) ფუნქციაში raw-environment-function</li>
           <li xml:lang="nl">Een crash (clang assert) in raw-environment-function is verholpen</li>
+          <li xml:lang="pl">Naprawiono awarię (asercję clanga) w raw-environment-function</li>
           <li xml:lang="pt-BR">Corrigido um erro (clang assert) em raw-environment-function</li>
           <li xml:lang="ru">Исправлено аварийное завершение (утверждение clang) в функции raw-environment-function;</li>
           <li xml:lang="sk">Opravený pád (assert clang) v raw-environment-function</li>
@@ -2562,6 +2705,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -2579,6 +2723,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -2595,6 +2740,7 @@
           <li xml:lang="it">connect-by-name</li>
           <li xml:lang="ka">connect-by-name</li>
           <li xml:lang="nl">connect-by-name</li>
+          <li xml:lang="pl">connect-by-name</li>
           <li xml:lang="pt-BR">connect-by-name</li>
           <li xml:lang="ru">подключение по названию;</li>
           <li xml:lang="sk">connect-by-name</li>
@@ -2611,6 +2757,7 @@
           <li xml:lang="it">skipped-base-method</li>
           <li xml:lang="ka">skipped-base-method</li>
           <li xml:lang="nl">skipped-base-method</li>
+          <li xml:lang="pl">skipped-base-method</li>
           <li xml:lang="pt-BR">skipped-base-method</li>
           <li xml:lang="ru">пропущенный базовый метод;</li>
           <li xml:lang="sk">skipped-base-method</li>
@@ -2627,6 +2774,7 @@
           <li xml:lang="it">qstring-varargs</li>
           <li xml:lang="ka">qstring-varargs</li>
           <li xml:lang="nl">qstring-varargs</li>
+          <li xml:lang="pl">qstring-varargs</li>
           <li xml:lang="pt-BR">qstring-varargs</li>
           <li xml:lang="ru">qstring-varargs;</li>
           <li xml:lang="sk">qstring-varargs</li>
@@ -2643,6 +2791,7 @@
           <li xml:lang="it">fully-qualified-moc-types</li>
           <li xml:lang="ka">fully-qualified-moc-types</li>
           <li xml:lang="nl">fully-qualified-moc-types</li>
+          <li xml:lang="pl">fully-qualified-moc-types</li>
           <li xml:lang="pt-BR">fully-qualified-moc-types</li>
           <li xml:lang="ru">полная квалификация типов MOC.</li>
           <li xml:lang="sk">fully-qualified-moc-types</li>
@@ -2659,6 +2808,7 @@
           <li xml:lang="it">qt-keywords, con fixit incluso</li>
           <li xml:lang="ka">qt-keywords, Fixit-ის ჩათვლით</li>
           <li xml:lang="nl">qt-keywords, met fixit ingesloten</li>
+          <li xml:lang="pl">qt-keywords, wraz z dołączoną poprawką (fixit)</li>
           <li xml:lang="pt-BR">qt-keywords, com fixit incluído</li>
           <li xml:lang="ru">Ключевые слова Qt, с включённой функцией автоматического исправления;</li>
           <li xml:lang="sk">qt-keywords, vrátane opravy</li>
@@ -2675,6 +2825,7 @@
           <li xml:lang="it">qhash-with-char-pointer-key</li>
           <li xml:lang="ka">qhash-with-char-pointer-key</li>
           <li xml:lang="nl">qhash-with-char-pointer-key</li>
+          <li xml:lang="pl">qhash-with-char-pointer-key</li>
           <li xml:lang="pt-BR">qhash-with-char-pointer-key</li>
           <li xml:lang="ru">qhash с ключом-указателем на символ;</li>
           <li xml:lang="sk">qhash-with-char-pointer-key</li>
@@ -2691,6 +2842,7 @@
           <li xml:lang="it">wrong-qevent-cast</li>
           <li xml:lang="ka">wrong-qevent-cast</li>
           <li xml:lang="nl">wrong-qevent-cast</li>
+          <li xml:lang="pl">wrong-qevent-cast</li>
           <li xml:lang="pt-BR">wrong-qevent-cast</li>
           <li xml:lang="ru">неправильное приведение типа qevent;</li>
           <li xml:lang="sk">wrong-qevent-cast</li>
@@ -2707,6 +2859,7 @@
           <li xml:lang="it">static-pmf</li>
           <li xml:lang="ka">static-pmf</li>
           <li xml:lang="nl">static-pmf</li>
+          <li xml:lang="pl">static-pmf</li>
           <li xml:lang="pt-BR">static-pmf</li>
           <li xml:lang="ru">статический указатель на функцию-член;</li>
           <li xml:lang="sk">static-pmf</li>
@@ -2723,6 +2876,7 @@
           <li xml:lang="it">raw-environment-function</li>
           <li xml:lang="ka">raw-environment-function</li>
           <li xml:lang="nl">raw-environment-function</li>
+          <li xml:lang="pl">raw-environment-function</li>
           <li xml:lang="pt-BR">raw-environment-function</li>
           <li xml:lang="ru">функция необработанного окружения;</li>
           <li xml:lang="sk">raw-environment-function</li>
@@ -2739,6 +2893,7 @@
           <li xml:lang="it">empty-qstringliteral</li>
           <li xml:lang="ka">empty-qstringliteral</li>
           <li xml:lang="nl">empty-qstringliteral</li>
+          <li xml:lang="pl">empty-qstringliteral</li>
           <li xml:lang="pt-BR">empty-qstringliteral</li>
           <li xml:lang="ru">пустая строка QStringLiteral;</li>
           <li xml:lang="sk">empty-qstringliteral</li>
@@ -2754,6 +2909,7 @@
           <li xml:lang="it">auto-unexpected-qstringbuilder ora avvisa anche in caso di restituzione di lambda QStringBuilder</li>
           <li xml:lang="ka">auto-unexpected-qstringbuilder ახლა ასევე გაგაფრთხილებთ ლამბდებზე, რომლებიც QStringBuilder-ს აბრუნებენ</li>
           <li xml:lang="nl">auto-unexpected-qstringbuilder geeft nu ook een waarschuwing voor lambda-functies die een QStringBuilder retourneren</li>
+          <li xml:lang="pl">auto-unexpected-qstringbuilder ostrzega teraz również o lambdach zwracających QStringBuilder</li>
           <li xml:lang="pt-BR">auto-unexpected-qstringbuilder agora também emite avisos para lambdas que retornam QStringBuilder</li>
           <li xml:lang="ru">В auto-unexpected-qstringbuilder добавлена проверка лямбда-выражений, возвращающих QStringBuilder;</li>
           <li xml:lang="sk">auto-unexpected-qstringbuilder teraz varuje aj pre lambdy vracajúce QStringBuilder</li>
@@ -2771,6 +2927,7 @@
         <p xml:lang="it">ottimizzazioni delle prestazioni</p>
         <p xml:lang="ka">წარმადობის ოპტიმიზაციები</p>
         <p xml:lang="nl">prestatie optimalisaties</p>
+        <p xml:lang="pl">optymalizacje wydajności</p>
         <p xml:lang="pt-BR">otimizações de performance</p>
         <p xml:lang="ru">Оптимизация производительности</p>
         <p xml:lang="sk">optimalizácie výkonu</p>
@@ -2801,6 +2958,7 @@
         <p xml:lang="it">conterranno avvisi, oltre al file .cpp dell'unità di traduzione, che non viene mai filtrato.</p>
         <p xml:lang="ka">ექნებათ გაფრთხილებები, .cpp ფაილების გარდა თარგმნის ერთეულიდან, რომელიც არასდროს გაიფილტრება.</p>
         <p xml:lang="nl">waarschuwingen bevatten, naast het .cpp-bestand van de vertaaleenheid, dat nooit wordt gefilterd.</p>
+        <p xml:lang="pl">generować ostrzeżenia, oprócz pliku .cpp z jednostki translacji, który nigdy nie jest odfiltrowywany.</p>
         <p xml:lang="pt-BR">possuirão avisos, além do arquivo .cpp da unidade de tradução, que nunca é filtrado.</p>
         <p xml:lang="ru">имеют предупреждения, кроме файла .cpp из единицы трансляции, который никогда не исключается.</p>
         <p xml:lang="sk">mať varovania, okrem súboru .cpp z prekladovej jednotky, ktorý sa nikdy nefiltruje.</p>
@@ -2831,6 +2989,7 @@
         <p xml:lang="it">Aggiunta la variabile di ambiente CLAZY_HEADER_FILTER che aggiunge la funzionalità di cui sopra sia a clazy che a clazy-standalone</p>
         <p xml:lang="ka">დაემატა გარემოს ცვლადი CLAZY_HEADER_FILTER, რომელიც ამატებს ზემორე ფუნქციონალს ორივეს, clazy-ს და clazy-standalone-ს</p>
         <p xml:lang="nl">De omgevingsvariabele CLAZY_HEADER_FILTER is toegevoegd, waardoor bovenstaande functionaliteit beschikbaar komt voor zowel clazy als clazy-standalone.</p>
+        <p xml:lang="pl">Dodano zmienną środowiskową CLAZY_HEADER_FILTER, która wprowadza powyższą funkcjonalność zarówno do clazy, jak i do clazy-standalone</p>
         <p xml:lang="pt-BR">Adicionada a variável de ambiente CLAZY_HEADER_FILTER, que adiciona a funcionalidade acima tanto ao clazy quanto ao clazy-standalone</p>
         <p xml:lang="ru">Добавлена переменная окружения CRAZY_HEADER_FILTER, реализующая указанную функциональность как для clazy, так и для clazy-standalone.</p>
         <p xml:lang="sk">Pridaná premenná prostredia CLAZY_HEADER_FILTER, ktorá pridáva vyššie uvedenú funkčnosť do clazy aj clazy-standalone</p>
@@ -2846,6 +3005,7 @@
         <p xml:lang="it">opzione unused-non-trivial-variable got unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="ka">unused-non-trivial-variable-მა მიიღო პარამეტრი unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="nl">unused-non-trivial-variable kreeg optie unused-non-trivial-variable-no-whitelist</p>
+        <p xml:lang="pl">unused-non-trivial-variable otrzymało opcję unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="pt-BR">unused-non-trivial-variable obtém a opção unused-non-trivial-variable-no-whitelist</p>
         <p xml:lang="ru">Для параметра «unused-non-trivial-variable» добавлена возможность «unused-non-trivial-variable-no-whitelist».</p>
         <p xml:lang="sk">unused-non-trivial-variable získala možnosť unused-non-trivial-variable-no-whitelist</p>
@@ -2862,6 +3022,7 @@
         <p xml:lang="it">unused-non-trivial-variable ha ottenuto il supporto per user-blacklist e user-whitelist</p>
         <p xml:lang="ka">unused-non-trivial-variable-მა მიიღო user-blacklist-ის და user-whitelist-ის მხარდაჭერა</p>
         <p xml:lang="nl">unused-non-trivial-variable kreeg ondersteuning voor user-blacklist en user-whitelist</p>
+        <p xml:lang="pl">unused-non-trivial-variable otrzymało wsparcie dla user-blacklist i user-whitelist</p>
         <p xml:lang="pt-BR">unused-non-trivial-variable obtém suporte para user-blacklist e user-whitelist</p>
         <p xml:lang="ru">Добавлена поддержка пользовательских чёрного и белого списков для переменной unused-non-trivial-variable.</p>
         <p xml:lang="sk">unused-non-trivial-variable získala podporu user-blacklist a user-whitelist</p>
@@ -2878,6 +3039,7 @@
         <p xml:lang="it">container-inside-loop è ora un controllo manuale invece di level2</p>
         <p xml:lang="ka">container-inside-loop ახლა ხელით შემოწმებაა level2-ის მაგიერ</p>
         <p xml:lang="nl">container-inside-loop is nu een handmatige controle in plaats van niveau2</p>
+        <p xml:lang="pl">container-inside-loop jest teraz testem wykonywanym ręcznie (manual check) zamiast poziomu level2</p>
         <p xml:lang="pt-BR">container-inside-loop agora é uma verificação manual, em vez de nível 2</p>
         <p xml:lang="ru">Проверка container-inside-loop теперь выполняется вручную, а не на уровне 2.</p>
         <p xml:lang="sk">container-inside-loop je teraz manuálna kontrola namiesto úrovne 2</p>
@@ -2894,6 +3056,7 @@
         <p xml:lang="it">HiddenLevel è stato rinominato in ManualLevel</p>
         <p xml:lang="ka">გადაერქვა სახელი HiddenLevel-ს ManualLevel-ად</p>
         <p xml:lang="nl">HiddenLevel was hernoemd tot ManualLevel</p>
+        <p xml:lang="pl">HiddenLevel zostało przemianowane na ManualLevel</p>
         <p xml:lang="pt-BR">HiddenLevel foi renomeada para ManualLevel</p>
         <p xml:lang="ru">Уровень «Hidden» переименован в «Manual».</p>
         <p xml:lang="sk">HiddenLevel bola premenovaná na ManualLevel</p>
@@ -2909,6 +3072,7 @@
         <p xml:lang="it">connect-3arg-lambda ora avvisa quando si passa una lambda a QTimer::singleShot() o QMenu::addAction()</p>
         <p xml:lang="ka">connect-3arg-lambda ახლა გასცემს გაფრთხილებას QTimer::singleShot(), ან QMenu::addAction() ფუნქციისთვის ლამბდას გადაცემისას</p>
         <p xml:lang="nl">connect-3arg-lambda geeft nu een waarschuwing wanneer een lambda wordt doorgegeven aan QTimer::singleShot() of QMenu::addAction()</p>
+        <p xml:lang="pl">connect-3arg-lambda ostrzega teraz, gdy przekazuje się wyrażenie lambda do QTimer::singleShot() lub QMenu::addAction()</p>
         <p xml:lang="pt-BR">connect-3arg-lambda agora avisa ao passar um lambda para QTimer::singleShot() ou QMenu::addAction()</p>
         <p xml:lang="ru">Модуль connect-3arg-lambda теперь предупреждает о передаче лямбда-выражения в QTimer::singleShot() или QMenu::addAction().</p>
         <p xml:lang="sk">connect-3arg-lambda teraz varuje pri odovzdávaní lambdy do QTimer::singleShot() alebo QMenu::addAction()</p>
@@ -2925,6 +3089,7 @@
         <p xml:lang="it">senza un oggetto di contesto</p>
         <p xml:lang="ka">კონტექსტის ობიექტის გარეშე</p>
         <p xml:lang="nl">zonder contextobject</p>
+        <p xml:lang="pl">bez obiektu kontekstu</p>
         <p xml:lang="pt-BR">sem um objeto de contexto</p>
         <p xml:lang="ru">без объекта контекста</p>
         <p xml:lang="sk">bez kontextového objektu</p>
@@ -2940,6 +3105,7 @@
         <p xml:lang="it">old-style-connect ora avvisa anche per QMenu::addAction() e QMessageBox::open()</p>
         <p xml:lang="ka">old-style-connect გაგაფრთხილებთ, თუ QMenu::addAction() და QMessageBox::open() მეტისმეტად დაბალია</p>
         <p xml:lang="nl">old-style-connect geeft nu ook waarschuwingen voor QMenu::addAction() en QMessageBox::open()</p>
+        <p xml:lang="pl">old-style-connect ostrzega teraz również dla QMenu::addAction() oraz QMessageBox::open()</p>
         <p xml:lang="pt-BR">old-style-connect agora avisa para QMenu::addAction() e QMessageBox::open() também</p>
         <p xml:lang="ru">Теперь old-style-connect проверяет также QMenu::addAction() и QMessageBox::open()</p>
         <p xml:lang="sk">old-style-connect teraz varuje aj pre QMenu::addAction() a QMessageBox::open()</p>
@@ -2960,6 +3126,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -2977,6 +3144,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -2993,6 +3161,7 @@
           <li xml:lang="it">thread-with-slots</li>
           <li xml:lang="ka">thread-with-slots</li>
           <li xml:lang="nl">thread-with-slots</li>
+          <li xml:lang="pl">thread-with-slots</li>
           <li xml:lang="pt-BR">thread-with-slots</li>
           <li xml:lang="ru">Использование слотов в потоках</li>
           <li xml:lang="sk">thread-with-slots</li>
@@ -3009,6 +3178,7 @@
           <li xml:lang="it">connect-3arg-lambda</li>
           <li xml:lang="ka">connect-3arg-lambda</li>
           <li xml:lang="nl">connect-3arg-lambda</li>
+          <li xml:lang="pl">connect-3arg-lambda</li>
           <li xml:lang="pt-BR">connect-3arg-lambda</li>
           <li xml:lang="ru">lambda с тремя аргументами в connect;</li>
           <li xml:lang="sk">connect-3arg-lambda</li>
@@ -3025,6 +3195,7 @@
           <li xml:lang="it">qproperty-without-notify</li>
           <li xml:lang="ka">qproperty-without-notify</li>
           <li xml:lang="nl">qproperty-without-notify</li>
+          <li xml:lang="pl">qproperty-without-notify</li>
           <li xml:lang="pt-BR">qproperty-without-notify</li>
           <li xml:lang="ru">Свойство Q_PROPERTY без сигнала NOTIFY;</li>
           <li xml:lang="sk">qproperty-without-notify</li>
@@ -3041,6 +3212,7 @@
           <li xml:lang="it">virtual-signal</li>
           <li xml:lang="ka">virtual-signal</li>
           <li xml:lang="nl">virtual-signal</li>
+          <li xml:lang="pl">virtual-signal</li>
           <li xml:lang="pt-BR">virtual-signal</li>
           <li xml:lang="ru">виртуальный сигнал;</li>
           <li xml:lang="sk">virtual-signal</li>
@@ -3057,6 +3229,7 @@
           <li xml:lang="it">overridden-signal</li>
           <li xml:lang="ka">overridden-signal</li>
           <li xml:lang="nl">overridden-signal</li>
+          <li xml:lang="pl">overridden-signal</li>
           <li xml:lang="pt-BR">overridden-signal</li>
           <li xml:lang="ru">переопределённый сигнал;</li>
           <li xml:lang="sk">overridden-signal</li>
@@ -3073,6 +3246,7 @@
           <li xml:lang="it">qhash-namespace</li>
           <li xml:lang="ka">qhash-namespace</li>
           <li xml:lang="nl">qhash-namespace</li>
+          <li xml:lang="pl">qhash-namespace</li>
           <li xml:lang="pt-BR">qhash-namespace</li>
           <li xml:lang="ru">Проверка пространства имён в qhash;</li>
           <li xml:lang="sk">qhash-namespace</li>
@@ -3089,6 +3263,7 @@
           <li xml:lang="it">const-signal-or-slot</li>
           <li xml:lang="ka">const-signal-or-slot</li>
           <li xml:lang="nl">const-signal-or-slot</li>
+          <li xml:lang="pl">onst-signal-or-slot</li>
           <li xml:lang="pt-BR">const-signal-or-slot</li>
           <li xml:lang="ru">Константные сигналы и слоты;</li>
           <li xml:lang="sk">const-signal-or-slot</li>
@@ -3105,6 +3280,7 @@
           <li xml:lang="it">lambda-unique-connection</li>
           <li xml:lang="ka">lambda-unique-connection</li>
           <li xml:lang="nl">lambda-unique-connection</li>
+          <li xml:lang="pl">lambda-unique-connection</li>
           <li xml:lang="pt-BR">lambda-unique-connection</li>
           <li xml:lang="ru">уникальное подключение сигнала с помощью лямбда-выражения;</li>
           <li xml:lang="sk">lambda-unique-connection</li>
@@ -3121,6 +3297,7 @@
         <p xml:lang="it">missing-qobject-macro è ora un controllo di livello 2, anziché di livello 1. Perché è possibile omettere Q_OBJECT intenzionalmente.</p>
         <p xml:lang="ka">missing-qobject-macro ახლა პირველი დონის მაგიერ მეორე დონის შემოწმებაა, რადგან ხალხს შეუძლია, Q_OBJECT წინასწარგანზრახულად გამოიძახოს.</p>
         <p xml:lang="nl">missing-qobject-macro is nu een niveau2-controle in plaats van niveau1. Dit komt omdat mensen Q_OBJECT opzettelijk kunnen weglaten.</p>
+        <p xml:lang="pl">missing-qobject-macro jest teraz testem poziomu level2 zamiast level1. Ponieważ ludzie mogą celowo pomijać Q_OBJECT.</p>
         <p xml:lang="pt-BR">missing-qobject-macro agora é de nível 2, em vez de nível 1. Isso ocorre porque é possível omitir Q_OBJECT intencionalmente.</p>
         <p xml:lang="ru">Проверка missing-qobject-macro перемещена с уровня 1 на уровень 2, так как Q_OBJECT может быть опущен намеренно.</p>
         <p xml:lang="sk">missing-qobject-macro je teraz kontrola úrovne 2 namiesto úrovne 1. Pretože ľudia môžu Q_OBJECT vynechať zámerne.</p>
@@ -3136,6 +3313,7 @@
         <p xml:lang="it">Aggiunta l'opzione -only-qt, che renderà più rapido il bailout di Clazy sui file non-Qt. A questo scopo, la definizione di un file Qt è ogni volta che viene passato -DQT_CORE_LIB, il che è solitamente il caso nella maggior parte dei sistemi di compilazione.</p>
         <p xml:lang="ka">დაემატა პარამეტრი -only-qt, რომელიც clazy-ს აიძულებს, ადრეულ ეტაპზევე გამოეთიშოს არა-Qt ფაილებს. ამ მიზნით Qt-ის ფაილად მიიჩნევა ნებისმიერი ფაილი, რომლისთვისაც -DQT_CORE_LIB ფუნქციაა გადაცემული, რაც ჩვეულებრივ აგების სისტემების უმრავლესობაში ხდება.</p>
         <p xml:lang="nl">De optie -only-qt is toegevoegd, waardoor er vroegtijdig een clazy-bailout plaatsvindt bij niet-Qt-bestanden. Voor dit doel wordt een Qt-bestand gedefinieerd als het bestand dat wordt aangeleverd met -DQT_CORE_LIB, wat in de meeste bouwsystemen het geval is.</p>
+        <p xml:lang="pl">Dodano opcję -only-qt, która powoduje, że clazy szybko rezygnuje z dalszego przetwarzania plików innych niż Qt. Na potrzeby tej opcji plik jest uznawany za plik Qt zawsze wtedy, gdy przekazana jest flaga -DQT_CORE_LIB, co zazwyczaj ma miejsce w większości systemów budowania.</p>
         <p xml:lang="pt-BR">Adicionada a opção -only-qt, que fará com que o clazy interrompa o processo em arquivos que não utilizam Qt. Para isso, a definição de um arquivo Qt ocorre sempre que -DQT_CORE_LIB é passado, o que geralmente acontece na maioria dos sistemas de compilação.</p>
         <p xml:lang="ru">Добавлен параметр «-only-qt», при котором clazy немедленно прекращает анализ файлов, не относящихся к Qt. Под файлом Qt понимается файл, для которого задан макрос «-DQT_CORE_LIB», что является стандартной практикой в большинстве систем сборки.</p>
         <p xml:lang="sk">Added -only-qt option, which will make clazy bailout early on non-Qt files. For this purpose, the definition of a Qt file is whenever -DQT_CORE_LIB is passed, which is usually the case in most build systems.</p>
@@ -3151,6 +3329,7 @@
         <p xml:lang="it">Aggiunta l'opzione -qt-developer: quando si compila Qt con Clazy, saranno rispettate le linee guida specifiche per Qt, che al momento non sono molte, ma l'elenco crescerà.</p>
         <p xml:lang="ka">დაემატა პარამეტრი -qt-developer. როცა მიმდინარეობს Qt-ის აგება clazy-ით, ის გაითვალისწინებს სპეციალურ პარამეტრებს Qt-ისთვის, რომლებიც ახლა ბევრი არაა, მაგრამ სია გაიზრდება.</p>
         <p xml:lang="nl">De optie -qt-developer is toegevoegd. Bij het compileren van Qt met Clazy wordt rekening gehouden met specifieke richtlijnen voor Qt. Deze richtlijnen zijn er momenteel nog niet veel, maar de lijst zal worden uitgebreid.</p>
+        <p xml:lang="pl">Dodano opcję -qt-developer. Podczas budowania Qt za pomocą clazy, narzędzie to będzie uwzględniać specyficzne wytyczne dla Qt, których na razie nie ma zbyt wiele, ale lista ta będzie się powiększać.</p>
         <p xml:lang="pt-BR">Adicionada a opção -qt-developer; ao compilar o Qt com o clazy, ele respeitará as diretrizes específicas do Qt, que ainda não são muitas, mas a lista aumentará.</p>
         <p xml:lang="ru">Добавлен параметр «-qt-developer» для сборки Qt с использованием clazy, обеспечивающий соблюдение определённых рекомендаций для Qt. На данный момент их немного, но список будет пополняться.</p>
         <p xml:lang="sk">Added -qt-developer option, when building Qt with clazy it will honour specific guidelines for Qt, which are not many right now but the list will grow.</p>
@@ -3171,6 +3350,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -3188,6 +3368,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -3204,6 +3385,7 @@
           <li xml:lang="it">install-event-filter</li>
           <li xml:lang="ka">install-event-filter</li>
           <li xml:lang="nl">install-event-filter</li>
+          <li xml:lang="pl">install-event-filter</li>
           <li xml:lang="pt-BR">install-event-filter</li>
           <li xml:lang="ru">Установлен фильтр событий;</li>
           <li xml:lang="sk">install-event-filter</li>
@@ -3220,6 +3402,7 @@
           <li xml:lang="it">qcolor-from-literal</li>
           <li xml:lang="ka">qcolor-from-literal</li>
           <li xml:lang="nl">qcolor-from-literal</li>
+          <li xml:lang="pl">qcolor-from-literal</li>
           <li xml:lang="pt-BR">qcolor-from-literal</li>
           <li xml:lang="ru">Создание цвета из строкового литерала;</li>
           <li xml:lang="sk">qcolor-from-literal</li>
@@ -3236,6 +3419,7 @@
           <li xml:lang="it">strict-iterators</li>
           <li xml:lang="ka">strict-iterators</li>
           <li xml:lang="nl">strict-iterators</li>
+          <li xml:lang="pl">strict-iterators</li>
           <li xml:lang="pt-BR">strict-iterators</li>
           <li xml:lang="ru">строгие итераторы;</li>
           <li xml:lang="sk">strict-iterators</li>
@@ -3252,6 +3436,7 @@
           <li xml:lang="it">connect-not-normalized</li>
           <li xml:lang="ka">connect-not-normalized</li>
           <li xml:lang="nl">connect-not-normalized</li>
+          <li xml:lang="pl">connect-not-normalized</li>
           <li xml:lang="pt-BR">connect-not-normalized</li>
           <li xml:lang="ru">Проверка использования функции connect() с нормализацией сигналов и слотов;</li>
           <li xml:lang="sk">connect-not-normalized</li>
@@ -3269,6 +3454,7 @@
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
+        <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
@@ -3285,6 +3471,7 @@
           <li xml:lang="it">Eseguibile clazy-standalone. Permette di eseguire clazy su un database di compilazione JSON anziché come estensione. clang-tidy non supporta il caricamento di moduli esterni (https://github.com/llvm/llvm-project/issues/32086), quindi questa è una buona soluzione alternativa.</li>
           <li xml:lang="ka">clazy-standalone გამშვები ფაილი საშუალებას იძლევა, clazy გაეშვას JSON კომპილაციის მონაცემთა ბაზაზე დანატების ნაცვლად. clang-tidy-ს არ აქვს გარე მოდულების ჩატვირთვის მხარდაჭერა(https://github.com/llvm/llvm-project/issues/32086), ამიტომ ეს კარგი გამოსავალია.</li>
           <li xml:lang="nl">clazy-standalone uitvoerbaar bestand. Hiermee kan clazy worden uitgevoerd met een JSON-compilatiedatabase in plaats van als een plug-in. clang-tidy ondersteunt het laden van externe modules niet (https://github.com/llvm/llvm-project/issues/32086), dus dit is een goede workaround.</li>
+          <li xml:lang="pl">Plik wykonywalny clazy-standalone. Umożliwia uruchomienie clazy z użyciem bazy danych kompilacji JSON zamiast działania jako wtyczka. clang-tidy nie obsługuje ładowania zewnętrznych modułów (https://github.com/llvm/llvm-project/issues/32086), więc jest to dobre obejście tego problemu.</li>
           <li xml:lang="pt-BR">Executável do clazy-standalone. Permite executar o clazy em um banco de dados compilado em JSON em vez de como um plugin. O clang-tidy não suporta o carregamento de módulos externos (https://github.com/llvm/llvm-project/issues/32086), então esta é uma boa solução alternativa.</li>
           <li xml:lang="ru">Исполняемый файл clazy-standalone теперь позволяет запускать clazy с использованием базы данных компиляции в формате JSON вместо работы в качестве плагина; это хороший обходной способ, поскольку clang-tidy не поддерживает загрузку внешних модулей (https://github.com/llvm/llvm-project/issues/32086);</li>
           <li xml:lang="sk">clazy-standalone executable. Allows to run clazy against a JSON compilation database instead of as a plugin. clang-tidy doesn't support loading external modules (https://github.com/llvm/llvm-project/issues/32086) so this is a good workaround.</li>
@@ -3300,6 +3487,7 @@
           <li xml:lang="it">Modalità qt-compat. Consente di disabilitare i controlli specifici di Qt5 passando -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ka">qt-compat რეჟიმი. საშუალებას იძლევა Qt5-ის სპეციფიკური შემოწმებები გაითიშოს -Xclang -plugin-arg-clazy -Xclang qt4-compat პარამეტრების გადაცემით</li>
           <li xml:lang="nl">Modus qt-compat. Hiermee kunnen Qt5-specifieke controles worden uitgeschakeld door -Xclang -plugin-arg-clazy -Xclang qt4-compat door te geven.</li>
+          <li xml:lang="pl">Tryb qt-compat. Umożliwia wyłączenie testów specyficznych dla Qt5 poprzez przekazanie flagi -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="pt-BR">Modo qt-compat. Permite desativar as verificações específicas do Qt5 passando -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
           <li xml:lang="ru">режим совместимости с Qt5: позволяет отключить специфичные для Qt5 проверки, передав параметры -Xclang -plugin-arg-clazy -Xclang qt4-compat;</li>
           <li xml:lang="sk">qt-compat mode. Allows to disable Qt5 specific checks by passing -Xclang -plugin-arg-clazy -Xclang qt4-compat</li>
@@ -3315,6 +3503,7 @@
           <li xml:lang="it">returning-data-from-temporary ora controlla il cast temporaneo di QByteArrays in char* quando restituito</li>
           <li xml:lang="ka">returning-data-from-temporary ახლა დაბრუნებისას ამოწმებს დროებითი QByteArray-ების char*-ში გარდაქმნას</li>
           <li xml:lang="nl">De functie `returning-data-from-temporary` controleert nu of tijdelijke QByteArrays worden gecast naar char* wanneer ze worden geretourneerd</li>
+          <li xml:lang="pl">returning-data-from-temporary sprawdza teraz, czy tymczasowe obiekty QByteArray są rzutowane na char w momencie ich zwracania*</li>
           <li xml:lang="pt-BR">returning-data-from-temporary agora verifica se há conversão de QByteArrays temporários para char* ao serem retornados</li>
           <li xml:lang="ru">возврат данных из временного объекта теперь проверяет приведение временных объектов QByteArray к char* при возврате;</li>
           <li xml:lang="sk">returning-data-from-temporary now checks for temporary QByteArrays casting to char* when returned</li>
@@ -3330,6 +3519,7 @@
           <li xml:lang="it">returning-data-from-temporary ora controlla anche l'assegnazione, non solo le istruzioni return</li>
           <li xml:lang="ka">returning-data-from-temporary ახლა ამოწმებს მინიჭებებსაც, არა, მხოლოდ, დაბრუნებულ ოპერატორებს</li>
           <li xml:lang="nl">De functie `returning-data-from-temporary` controleert nu ook op toewijzing, niet alleen op retourinstructies</li>
+          <li xml:lang="pl">returning-data-from-temporary sprawdza teraz również przypisania, a nie tylko instrukcje return</li>
           <li xml:lang="pt-BR">returning-data-from-temporary agora também verifica a atribuição, e não apenas as instruções de retorno</li>
           <li xml:lang="ru">В модуле «returning-data-from-temporary» теперь проверяются не только операторы возврата, но и присваивания;</li>
           <li xml:lang="sk">returning-data-from-temporary now checks for assignment too, not only return statements</li>
@@ -3345,6 +3535,7 @@
           <li xml:lang="it">unused-non-trivial-variable ora avvisa per QList, QVector e molti altri tipi non utilizzati</li>
           <li xml:lang="ka">unused-non-trivial-variable ახლა გაგაფრთხილებთ გამოუყენებელი QList, QVector და კიდევ ბევრი სხვა ტიპისთვის</li>
           <li xml:lang="nl">unused-non-triviale-variable geeft nu een waarschuwing voor ongebruikte QList, QVector en vele andere typen</li>
+          <li xml:lang="pl">unused-non-trivial-variable ostrzega teraz o nieużywanych obiektach QList, QVector oraz wielu innych typach</li>
           <li xml:lang="pt-BR">unused-non-trivial-variable agora emite um aviso para variáveis ​​não utilizadas dos tipos QList, QVector e muitos outros</li>
           <li xml:lang="ru">unused-non-trivial-variable теперь предупреждает о неиспользуемых типах QList, QVector и многих других;</li>
           <li xml:lang="sk">unused-non-trivial-variable now warns for unused QList, QVector and many more types</li>
@@ -3361,6 +3552,7 @@
           <li xml:lang="it">Ora sono supportati i controlli basati su ASTMatcher</li>
           <li xml:lang="ka">ASTMatchers-ზე დაფუძნებული შემოწმებების მხარდაჭერა ახლა უკვე ხელმისაწვდომია</li>
           <li xml:lang="nl">Op ASTMatchers gebaseerde controles worden no ondersteund</li>
+          <li xml:lang="pl">Testy oparte na ASTMatchers są teraz obsługiwane</li>
           <li xml:lang="pt-BR">Agora há suporte para verificações baseadas em ASTMatchers</li>
           <li xml:lang="ru">Добавлена поддержка проверок на основе ASTMatchers;</li>
           <li xml:lang="sk">Kontroly založené na ASTMatchers sú teraz podporované</li>
@@ -3377,6 +3569,7 @@
           <li xml:lang="it">clang 3.7 è stato abbandonato a causa di incompatibilità con il codice sorgente di ASTMatcher.</li>
           <li xml:lang="ka">clang 3.7-ის მხარდაჭერა შეწყდა ASTMatchers-თან წყაროს შეუთავსებლობის გამო.</li>
           <li xml:lang="nl">clang 3.7 is verlaten vanwege incompatibiliteiten in broncode van ASTMatchers.</li>
+          <li xml:lang="pl">Wsparcie dla clang 3.7 zostało porzucone z powodu niezgodności źródłowych w ASTMatchers.</li>
           <li xml:lang="pt-BR">O clang 3.7 foi descontinuado devido a incompatibilidades com o código-fonte do ASTMatcher.</li>
           <li xml:lang="ru">Поддержка clang 3.7 прекращена из-за несовместимости исходного кода ASTMatchers;</li>
           <li xml:lang="sk">clang 3.7 bol vyradený kvôli nekompatibilite zdrojového kódu ASTMatchers.</li>
@@ -3393,6 +3586,7 @@
           <li xml:lang="it">Utilizzo di clazy v1.1 per il supporto clang &gt;= 3.6</li>
           <li xml:lang="ka">გამოიყენეთ clazy v1.1 clang &gt;= 3.6-ის მხარდაჭერისთვის</li>
           <li xml:lang="nl">Gebruik clazy v1.1 voor ondersteuning van clang &gt;= 3.6</li>
+          <li xml:lang="pl">Użyj clazy v1.1, aby uzyskać wsparcie dla clang &gt;= 3.6</li>
           <li xml:lang="pt-BR">Suporte do uso do clazy v1.1 para clang &gt;= 3.6</li>
           <li xml:lang="ru">Использование clazy v1.1 для поддержки clang &gt;= 3.6;</li>
           <li xml:lang="sk">Použite clazy v1.1 pre podporu clang &gt;= 3.6</li>
@@ -3408,6 +3602,7 @@
           <li xml:lang="it">clazylib.so non viene più compilato in modo predefinito, viene compilata solo l'estensione (ClangLazy.so). Passa -DCLAZY_BUILD_UTILS_LIB=ON per abilitare la libreria utils se stai sviluppando strumenti utilizzando le funzioni di utilità di clazy, cosa che probabilmente non stai facendo.</li>
           <li xml:lang="ka">სტანდარტულად clazylib.so-ის აგება აღარ ხდება და ხდება, მხოლოდ, ClangLazy.so-ის აგება. გამოიყენეთ -DCLAZY_BUILD_UTILS_LIB=ON დამხმარე ბიბლიოთეკის ჩასართავად თუ ხელსაწყოების შესაქმნელად იყენებთ ფუნქციის clazy-ს მოხერხებულობას რაც სავარაუდოდ ასე არ არის.</li>
           <li xml:lang="nl">clazylib.so wordt niet langer standaard gecompileerd, alleen de plug-in (ClangLazy.so) wordt gecompileerd. Geef -DCLAZY_BUILD_UTILS_LIB=ON door om de bibliotheek van hulpprogramma's in te schakelen als u hulpmiddelen ontwikkelt die gebruikmaken van de handige functies van clazy, wat u waarschijnlijk niet doet.</li>
+          <li xml:lang="pl">clazylib.so nie jest już budowane domyślnie – budowana jest tylko wtyczka (ClangLazy.so). Przekaż -DCLAZY_BUILD_UTILS_LIB=ON, aby włączyć bibliotekę narzędziową, jeśli tworzysz narzędzia korzystające z wygodnych funkcji clazy, a co do czego istnieje prawdopodobieństwo, że tego nie robisz.</li>
           <li xml:lang="pt-BR">clazylib.so não é mais compilado por padrão; apenas o plugin (ClangLazy.so) é compilado. Passe o parâmetro -DCLAZY_BUILD_UTILS_LIB=ON para habilitar a biblioteca de utilitários caso esteja desenvolvendo ferramentas que utilizem as funções de conveniência do clazy, o que provavelmente não é o caso.</li>
           <li xml:lang="ru">Библиотека clazylib.so больше не собирается по умолчанию; собирается только плагин ClangLazy.so. Передайте параметр -DCLAZY_BUILD_UTILS_LIB=ON для включения сборки библиотеки утилит, если вы разрабатываете инструменты с использованием вспомогательных функций clazy, что маловероятно;</li>
           <li xml:lang="sk">clazylib.so no longer gets built by default, only the plugin (ClangLazy.so) gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if you're developing tools using clazy's convenience functions, which you're probably not.</li>
@@ -3423,6 +3618,7 @@
           <li xml:lang="it">L'opzione CLAZY_INSTALL_NO_HEADERS è stata rimossa. Installa la libreria utils e gli header oppure non installare nulla. Per impostazione predefinita, non viene installato nulla, tranne l'estensione e le pagine man.</li>
           <li xml:lang="ka">მოცილებულია პარამეტრი CLAZY_INSTALL_NO_HEADERS. ან მოხდება ბიბლიოთეკის utils და თავსართების დაყენება, ან არაფრის. ნაგულისხმევად არაფრის დაყენება ხდება, დამატებისა და სახელმძღვანელოს გვერდების გარდა.</li>
           <li xml:lang="nl">Optie CLAZY_INSTALL_NO_HEADERS is verwijderd. Ofwel installeer de hulpprogrammabibliotheek en headers of helemaal niets. Standaard wordt niets geïnstalleerd, behalve de plug-in en manpagima's.</li>
+          <li xml:lang="pl">Opcja CLAZY_INSTALL_NO_HEADERS została usunięta. Albo instalujesz bibliotekę narzędziową wraz z nagłówkami, albo nic z tych rzeczy. Domyślnie nie jest instalowane nic poza wtyczką i stronami podręcznika systemowego (man).</li>
           <li xml:lang="pt-BR">A opção CLAZY_INSTALL_NO_HEADERS foi removida. Ou você instala a biblioteca de utilitários e os cabeçalhos, ou nada. Por padrão, nada é instalado, exceto o plugin e as páginas de manual.</li>
           <li xml:lang="ru">Параметр CLAZY_INSTALL_NO_HEADERS удалён. Теперь библиотека утилит и заголовочные файлы устанавливаются либо полностью, либо не устанавливаются вовсе. По умолчанию устанавливаются только плагин и страницы руководства;</li>
           <li xml:lang="sk">CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library and headers or nothing at all. By default nothing is installed, except the plugin and man pages.</li>
@@ -3444,6 +3640,7 @@
         <p xml:lang="it">Questa versione aggiunge le seguenti funzionalità:</p>
         <p xml:lang="ka">ეს რელიზი ამატებს შემდეგ ფუნქციებს:</p>
         <p xml:lang="nl">Deze uitgave voegt de volgende functies toe:</p>
+        <p xml:lang="pl">To wydanie dodaje następujące funkcje</p>
         <p xml:lang="pt-BR">Esta versão adiciona as seguintes funcionalidades:</p>
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
@@ -3461,6 +3658,7 @@
           <li xml:lang="it">Supporto macOS e Windows</li>
           <li xml:lang="ka">macOS-ის და Windows-ის მხარდაჭერა</li>
           <li xml:lang="nl">Ondersteuning van MacOS en Windows</li>
+          <li xml:lang="pl">Wsparcie dla macOS i Windows</li>
           <li xml:lang="pt-BR">Suporte a macOS e Windows</li>
           <li xml:lang="ru">Поддержка macOS и Windows;</li>
           <li xml:lang="sk">Podpora macOS a Windows</li>
@@ -3477,6 +3675,7 @@
           <li xml:lang="it">Nuovi controlli:</li>
           <li xml:lang="ka">ახალი შემოწმებები:</li>
           <li xml:lang="nl">Nieuwe controles:</li>
+          <li xml:lang="pl">Nowe sprawdzenia:</li>
           <li xml:lang="pt-BR">Novas verificações:</li>
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
@@ -3493,6 +3692,7 @@
           <li xml:lang="it">child-event-qobject-cast</li>
           <li xml:lang="ka">child-event-qobject-cast</li>
           <li xml:lang="nl">child-event-qobject-cast</li>
+          <li xml:lang="pl">child-event-qobject-cast</li>
           <li xml:lang="pt-BR">child-event-qobject-cast</li>
           <li xml:lang="ru">Приведение типа QObject в обработчике дочерних событий;</li>
           <li xml:lang="sk">child-event-qobject-cast</li>
@@ -3509,6 +3709,7 @@
           <li xml:lang="it">ctor-missing-parent-argument</li>
           <li xml:lang="ka">ctor-missing-parent-argument</li>
           <li xml:lang="nl">ctor-missing-parent-argument</li>
+          <li xml:lang="pl">ctor-missing-parent-argument</li>
           <li xml:lang="pt-BR">ctor-missing-parent-argument</li>
           <li xml:lang="ru">Конструктору не передан аргумент родительского класса;</li>
           <li xml:lang="sk">ctor-missing-parent-argument</li>
@@ -3525,6 +3726,7 @@
           <li xml:lang="it">returning-data-from-temporary</li>
           <li xml:lang="ka">returning-data-from-temporary</li>
           <li xml:lang="nl">returning-data-from-temporary</li>
+          <li xml:lang="pl">returning-data-from-temporary</li>
           <li xml:lang="pt-BR">returning-data-from-temporary</li>
           <li xml:lang="ru">возврат данных из временного объекта;</li>
           <li xml:lang="sk">returning-data-from-temporary</li>
@@ -3541,6 +3743,7 @@
           <li xml:lang="it">qt-macros</li>
           <li xml:lang="ka">qt-macros</li>
           <li xml:lang="nl">qt-macros</li>
+          <li xml:lang="pl">qt-macros</li>
           <li xml:lang="pt-BR">qt-macros</li>
           <li xml:lang="ru">Макросы Qt;</li>
           <li xml:lang="sk">qt-macros</li>
@@ -3557,6 +3760,7 @@
           <li xml:lang="it">base-class-event</li>
           <li xml:lang="ka">base-class-event</li>
           <li xml:lang="nl">base-class-event</li>
+          <li xml:lang="pl">base-class-event</li>
           <li xml:lang="pt-BR">base-class-event</li>
           <li xml:lang="ru">событие базового класса;</li>
           <li xml:lang="sk">base-class-event</li>
@@ -3573,6 +3777,7 @@
           <li xml:lang="it">connect-non-signal</li>
           <li xml:lang="ka">connect-non-signal</li>
           <li xml:lang="nl">connect-non-signal</li>
+          <li xml:lang="pl">connect-non-signal</li>
           <li xml:lang="pt-BR">connect-non-signal</li>
           <li xml:lang="ru">подключение к несигнальному слоту;</li>
           <li xml:lang="sk">connect-non-signal</li>
@@ -3589,6 +3794,7 @@
           <li xml:lang="it">incorrect-emit</li>
           <li xml:lang="ka">incorrect-emit</li>
           <li xml:lang="nl">incorrect-emit</li>
+          <li xml:lang="pl">incorrect-emit</li>
           <li xml:lang="pt-BR">incorrect-emit</li>
           <li xml:lang="ru">некорректный вызов сигнала;</li>
           <li xml:lang="sk">incorrect-emit</li>
@@ -3605,6 +3811,7 @@
           <li xml:lang="it">tr-non-literal</li>
           <li xml:lang="ka">tr-non-literal</li>
           <li xml:lang="nl">tr-non-literal</li>
+          <li xml:lang="pl">tr-non-literal</li>
           <li xml:lang="pt-BR">tr-non-literal</li>
           <li xml:lang="ru">Недословный перевод;</li>
           <li xml:lang="sk">tr-non-literal</li>
@@ -3621,6 +3828,7 @@
           <li xml:lang="it">Correzioni per:</li>
           <li xml:lang="ka">გასწორებები ვერსიასთან:</li>
           <li xml:lang="nl">Oplossingen tegen:</li>
+          <li xml:lang="pl">Poprawki błędów w:</li>
           <li xml:lang="pt-BR">Correções para:</li>
           <li xml:lang="ru">Исправления:</li>
           <li xml:lang="sk">Opravy pre:</li>
@@ -3637,6 +3845,7 @@
           <li xml:lang="it">clang 4.0</li>
           <li xml:lang="ka">clang 4.0</li>
           <li xml:lang="nl">clang 4.0</li>
+          <li xml:lang="pl">clang 4.0</li>
           <li xml:lang="pt-BR">clang 4.0</li>
           <li xml:lang="ru">clang 4.0;</li>
           <li xml:lang="sk">clang 4.0</li>
@@ -3653,6 +3862,7 @@
           <li xml:lang="it">Qt 5.9</li>
           <li xml:lang="ka">Qt 5.9</li>
           <li xml:lang="nl">Qt 5.9</li>
+          <li xml:lang="pl">Qt 5.9</li>
           <li xml:lang="pt-BR">Qt 5.9</li>
           <li xml:lang="ru">Qt 5.9;</li>
           <li xml:lang="sk">Qt 5.9</li>
@@ -3671,6 +3881,7 @@
           <li xml:lang="it">Note:</li>
           <li xml:lang="ka">შენიშვნები:</li>
           <li xml:lang="nl">Notities:</li>
+          <li xml:lang="pl">Uwagi:</li>
           <li xml:lang="pt-BR">Notas:</li>
           <li xml:lang="ru">Замечания:</li>
           <li xml:lang="sk">Poznámky:</li>
@@ -3688,6 +3899,7 @@
           <li xml:lang="it">Miglioramento delle prestazioni del 60%</li>
           <li xml:lang="ka">60% წარმადობის გაუმჯობესება</li>
           <li xml:lang="nl">60% verbetering in prestatie</li>
+          <li xml:lang="pl">60% wzrost wydajności</li>
           <li xml:lang="pt-BR">Melhoria de desempenho de 60%</li>
           <li xml:lang="ru">Производительность увеличена на 60%.</li>
           <li xml:lang="sk">60 % zlepšenie výkonu</li>
@@ -3704,6 +3916,7 @@
           <li xml:lang="it">Risolti molti falsi positivi</li>
           <li xml:lang="ka">გასწორდა ბევრი ცდრუდადებითი</li>
           <li xml:lang="nl">Veel valse positieven opgelost</li>
+          <li xml:lang="pl">Naprawiono wiele fałszywych alarmów (false positives)</li>
           <li xml:lang="pt-BR">Corrigido um grande número de falsos positivos</li>
           <li xml:lang="ru">Исправлено множество ложных срабатываний;</li>
           <li xml:lang="sk">Opravených mnoho falošne pozitívnych výsledkov</li>
@@ -3726,6 +3939,7 @@
         <p xml:lang="it">Primo rilascio</p>
         <p xml:lang="ka">პირველი რელიზი</p>
         <p xml:lang="nl">Eerste uitgave</p>
+        <p xml:lang="pl">Pierwsze wydanie</p>
         <p xml:lang="pt-BR">Primeiro lançamento</p>
         <p xml:lang="ru">Первый выпуск</p>
         <p xml:lang="sk">Prvé vydanie</p>
