@@ -3,9 +3,9 @@
 
 void testVarInitialization()
 {
-    QStringList myList{ "abc", "xyz", "123",};
-    QStringList myList2{ "abc", "xyz",};
-    QList<int> myList3{ 1, 2,};
+    QStringList myList{"abc", "xyz", "123"};
+    QStringList myList2{"abc", "xyz"};
+    QList<int> myList3{1, 2};
 }
 
 void consumeList(QStringList args)
@@ -15,12 +15,12 @@ void consumeList(QStringList args)
 
 void testFunctionArgs()
 {
-    consumeList({ "comsume", "meeee",});
+    consumeList({"comsume", "meeee"});
 }
 void testWithComment()
 {
-    QStringList myList{ "abc", // BLA
+    QStringList myList{"abc", // BLA
 "xyz", // BLUB
 };
-    QStringList myList2{ "abc" /*data1*/, "xyz" /*data2*/,};
+    QStringList myList2{"abc" /*data1*/, "xyz" /*data2*/};
 }
