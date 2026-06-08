@@ -77,7 +77,7 @@ void ModernizeListInitialization::checkOperatorCallListInitialization(clang::Sou
             if (comment.starts_with("//")) {
                 sourceText += ", " + comment + "\n";
             } else {
-                sourceText += +" " + comment + ", ";
+                sourceText += " " + comment + ", ";
             }
         } else {
             sourceText += ", ";
@@ -85,12 +85,24 @@ void ModernizeListInitialization::checkOperatorCallListInitialization(clang::Sou
         replacementTexts.push_back(sourceText);
         opCall = dyn_cast<CXXOperatorCallExpr>(opCall->getArg(0));
     }
+
     if (replacementTexts.empty()) {
         return;
     }
-    std::reverse(replacementTexts.begin(), replacementTexts.end());
 
-    std::string replacementText = "{ ";
+    std::reverse(replacementTexts.begin(), replacementTexts.end());
+    const auto replacementTextMultiline = std::ranges::find_if(replacementTexts, [](std::string text) {
+        return text.ends_with("\n");
+    });
+    if (replacementTextMultiline == replacementTexts.end()) {
+        auto &text = replacementTexts.back();
+        if (text.ends_with(", ")) {
+            // Replace comma with just a space
+            text.replace(text.size() - 2, 2, " ");
+        }
+    }
+
+    std::string replacementText = "{";
     for (auto str : replacementTexts) {
         replacementText += str;
     }
