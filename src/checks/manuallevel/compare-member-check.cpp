@@ -73,6 +73,9 @@ public:
             for (const auto *field : classDecl->fields()) {
                 classFields.push_back(field);
             }
+            if (!methodDecl->getBody()) {
+                return;
+            }
             for (const auto *stmt : methodDecl->getBody()->children()) {
                 const auto *returnStmt = dyn_cast<ReturnStmt>(stmt);
                 if (!returnStmt)
