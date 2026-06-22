@@ -2,10 +2,12 @@
     "tests": [
         {
             "filename": "main.cpp",
+            "qt_major_versions": [6],
             "has_fixits": true
         },
         {
-            "filename": "listproducer.cpp"
+            "filename": "listproducer.cpp",
+            "qt_major_versions": [6]
         }
     ]
 }
