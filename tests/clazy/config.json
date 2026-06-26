@@ -1,5 +1,4 @@
 {
-    "minimum_clang_version": 370,
     "blacklist_platforms": "win32",
     "tests": [
         {

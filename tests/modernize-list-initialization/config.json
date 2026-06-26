@@ -3,7 +3,8 @@
         {
             "filename": "main.cpp",
             "qt_major_versions": [6],
-            "has_fixits": true
+            "has_fixits": true,
+            "minimum_clang_version": 2000
         },
         {
             "filename": "listproducer.cpp",

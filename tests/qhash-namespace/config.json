@@ -5,8 +5,7 @@
             "qt_developer": true
         },
         {
-            "filename": "test_typedef.cpp",
-            "minimum_clang_version": 500
+            "filename": "test_typedef.cpp"
         }
     ]
 }

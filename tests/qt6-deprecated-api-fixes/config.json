@@ -1,5 +1,4 @@
 {
-    "minimum_clang_version": 1000,
     "tests": [
         {
             "filename": "main.cpp",

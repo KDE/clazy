@@ -3,8 +3,7 @@
         {
             "filename": "main.cpp",
             "qt_major_versions": [5],
-            "has_fixits": true,
-            "minimum_clang_version": 1100
+            "has_fixits": true
         }
     ]
 }
