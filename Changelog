@@ -9,6 +9,7 @@ Bugfixes:
 Features:
  * New check modernize-overloaded-connects: Finds QOverload/qOverload/static_cast statements for connects that are no longer needed and suggest removing them.
  In case they are still needed, a fixit using qOverload is provided. QOverload/static_cast statements will have a fixit to modernize.
+ * New check modernize-list-initialization: This check rewrites the code to use modern initializer-list syntax rather than using the pipe operator to put items in.
 Notes:
  * CMake 3.16 is the minimum version for configuring clazy
  * Fix false positives/missing warnings with namespaced Qt and later LLVM 22.x versions
@@ -373,5 +374,3 @@ Released: 2015-06-10
 
 Notes:
  * First release
-
-  - <dont forget changelog entry for modernize-list-initialization>
