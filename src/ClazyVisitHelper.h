@@ -30,4 +30,6 @@ struct Visitors {
 
 bool VisitDecl(clang::Decl *decl, ClazyContext *context, const Visitors &visitors);
 bool VisitStmt(clang::Stmt *stmt, ClazyContext *context, const Visitors &visitors);
+
+bool shouldCheckFile(llvm::StringRef mainFilePath);
 }

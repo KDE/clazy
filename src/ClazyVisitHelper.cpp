@@ -80,4 +80,11 @@ bool VisitStmt(Stmt *stmt, ClazyContext *context, const Visitors &visitors)
     return true;
 }
 
+bool shouldCheckFile(llvm::StringRef mainFilePath)
+{
+    if (mainFilePath.contains(".rcc/qmlcache")) {
+        return false;
+    }
+    return true;
+}
 }

@@ -13,7 +13,6 @@
 #include "FixItExporter.h"
 #include "Utils.h"
 #include "checkbase.h"
-#include "clazy_stl.h"
 
 #include <algorithm>
 #include <clang/AST/ASTConsumer.h>
@@ -104,7 +103,7 @@ ClazyASTAction::ClazyASTAction()
 {
 }
 
-std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef)
+std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerInstance &ci, llvm::StringRef InFile)
 {
     // NOTE: This method needs to be kept reentrant (but not necessarily thread-safe)
     // Might be called from multiple threads via libclang, each thread operates on a different instance though
@@ -112,16 +111,18 @@ std::unique_ptr<clang::ASTConsumer> ClazyASTAction::CreateASTConsumer(CompilerIn
     std::lock_guard<std::mutex> lock(CheckManager::lock());
 
     auto astConsumer = std::make_unique<ClazyASTConsumer>(m_context);
-    for (const auto &requestedCheck : m_checks) {
-        auto *check = requestedCheck.factory();
-        check->m_context = m_context;
-        if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
-            check->enablePreProcessorCallbacks(ci.getPreprocessor());
+    if (clazy::VisitHelper::shouldCheckFile(InFile)) {
+        for (const auto &requestedCheck : m_checks) {
+            auto *check = requestedCheck.factory();
+            check->m_context = m_context;
+            if (requestedCheck.options & RegisteredCheck::Option_PreprocessorCallbacks) {
+                check->enablePreProcessorCallbacks(ci.getPreprocessor());
+            }
+            astConsumer->addCheck({check, requestedCheck});
         }
-        astConsumer->addCheck({check, requestedCheck});
     }
 
-    return std::unique_ptr<clang::ASTConsumer>(astConsumer.release());
+    return astConsumer;
 }
 
 static std::string getEnvVariable(const char *name)
@@ -145,16 +146,6 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
-        m_context = new ClazyContext(&ci.getASTContext(),
-                                     ci.getSourceManager(),
-                                     ci.getASTContext().getLangOpts(),
-                                     ci.getPreprocessor().getPreprocessorOpts(),
-                                     headerFilter,
-                                     ignoreDirs,
-                                     exportFixesFilename,
-                                     {},
-                                     ClazyContext::ClazyOption_None);
-        m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
         PrintHelp(llvm::errs());
         return true;
     }

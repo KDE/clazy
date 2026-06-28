@@ -48,9 +48,9 @@ public:
 
 protected:
     /// @note This function is reentrant
-    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef) override;
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef InFile) override;
     /// @note This function is reentrant
-    bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args_) override;
+    bool ParseArgs(const clang::CompilerInstance &ci, const std::vector<std::string> &args) override;
 
     void PrintHelp(llvm::raw_ostream &ros) const;
     void PrintAnchorHeader(llvm::raw_ostream &ro, RegisteredCheck::List &checks) const;

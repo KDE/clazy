@@ -57,9 +57,8 @@ class ClazyCheck : public ClangTidyCheck
 public:
     ClazyCheck(StringRef CheckName, ClangTidyContext *Context)
         : ClangTidyCheck(CheckName, Context)
-        , m_shouldRunClazyChecks(s_enabledChecks.empty())
+        , m_shouldRunClazyChecks(s_enabledChecks.empty() && clazy::VisitHelper::shouldCheckFile(Context->getCurrentFile()))
         , clangTidyContext(Context)
-        , clazyContext(nullptr)
     {
         // so that we later know which check was registered
         s_enabledChecks.emplace_back(CheckName);
