@@ -11,6 +11,7 @@ Features:
  In case they are still needed, a fixit using qOverload is provided. QOverload/static_cast statements will have a fixit to modernize.
  * New check modernize-list-initialization: This check rewrites the code to use modern initializer-list syntax rather than using the pipe operator to put items in.
  * Ignore generated QML compiled sources since Clazy can't provide meaningful linting
+ * clazy-standalone: new -line-filter option, using the same JSON format as clang-tidy, to restrict warnings to specific line ranges (handy for only linting the lines changed in a diff)
 Notes:
  * CMake 3.16 is the minimum version for configuring clazy
  * Fix false positives/missing warnings with namespaced Qt and later LLVM 22.x versions

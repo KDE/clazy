@@ -1,3 +1,4 @@
+import json
 import os
 
 from . import Args
@@ -114,6 +115,9 @@ def clazy_standalone_command(test: Test, cpp_standard: str, qt: QtInstallation, 
 
     if test.ignore_dirs:
         result = " -ignore-dirs " + test.ignore_dirs + " " + result
+
+    if test.line_filter:
+        result = " -line-filter='" + json.dumps(test.line_filter) + "' " + result
 
     if test.extra_definitions:
         result += " " + test.extra_definitions

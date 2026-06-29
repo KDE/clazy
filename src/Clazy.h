@@ -72,6 +72,7 @@ public:
     explicit ClazyStandaloneASTAction(const std::string &checkList,
                                       const std::string &headerFilter,
                                       const std::string &ignoreDirs,
+                                      const std::string &lineFilter,
                                       const std::string &exportFixesFilename,
                                       const std::vector<std::string> &translationUnitPaths,
                                       ClazyContext::ClazyOptions = ClazyContext::ClazyOption_None);
@@ -83,6 +84,7 @@ private:
     const std::string m_checkList;
     const std::string m_headerFilter;
     const std::string m_ignoreDirs;
+    const std::string m_lineFilter;
     const std::string m_exportFixesFilename;
     const std::vector<std::string> m_translationUnitPaths;
     const ClazyContext::ClazyOptions m_options;

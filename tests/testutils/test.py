@@ -21,6 +21,7 @@ class Test:
         self.qt_developer = False
         self.header_filter = ""
         self.ignore_dirs = ""
+        self.line_filter = None
         self.has_fixits = False
         self.should_run_fixits_test = False
         self.should_run_on_32bit = True

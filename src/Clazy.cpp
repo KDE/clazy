@@ -146,6 +146,17 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
     std::string exportFixesFilename;
 
     if (parseArgument("help", args)) {
+        m_context = new ClazyContext(&ci.getASTContext(),
+                                     ci.getSourceManager(),
+                                     ci.getASTContext().getLangOpts(),
+                                     ci.getPreprocessor().getPreprocessorOpts(),
+                                     headerFilter,
+                                     ignoreDirs,
+                                     {}, // lineFilter
+                                     exportFixesFilename,
+                                     {},
+                                     ClazyContext::ClazyOption_None);
+        m_context->registerPreprocessorCallbacks(ci.getPreprocessor());
         PrintHelp(llvm::errs());
         return true;
     }
@@ -180,6 +191,7 @@ bool ClazyASTAction::ParseArgs(const CompilerInstance &ci, const std::vector<std
                                  ci.getPreprocessor().getPreprocessorOpts(),
                                  headerFilter,
                                  ignoreDirs,
+                                 {}, // lineFilter
                                  exportFixesFilename,
                                  {},
                                  m_options);
@@ -291,12 +303,14 @@ void ClazyASTAction::PrintHelp(llvm::raw_ostream &ros) const
 ClazyStandaloneASTAction::ClazyStandaloneASTAction(const std::string &checkList,
                                                    const std::string &headerFilter,
                                                    const std::string &ignoreDirs,
+                                                   const std::string &lineFilter,
                                                    const std::string &exportFixesFilename,
                                                    const std::vector<std::string> &translationUnitPaths,
                                                    ClazyContext::ClazyOptions options)
     : m_checkList(checkList.empty() ? "level1" : checkList)
     , m_headerFilter(headerFilter.empty() ? getEnvVariable("CLAZY_HEADER_FILTER") : headerFilter)
     , m_ignoreDirs(ignoreDirs.empty() ? getEnvVariable("CLAZY_IGNORE_DIRS") : ignoreDirs)
+    , m_lineFilter(lineFilter)
     , m_exportFixesFilename(exportFixesFilename)
     , m_translationUnitPaths(translationUnitPaths)
     , m_options(options)
@@ -322,6 +336,7 @@ std::unique_ptr<ASTConsumer> ClazyStandaloneASTAction::CreateASTConsumer(Compile
                                      ci.getPreprocessor().getPreprocessorOpts(),
                                      m_headerFilter,
                                      m_ignoreDirs,
+                                     m_lineFilter,
                                      m_exportFixesFilename,
                                      m_translationUnitPaths,
                                      m_options);

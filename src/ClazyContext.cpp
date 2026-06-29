@@ -14,11 +14,65 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/PreprocessorOptions.h>
 #include <clang/Rewrite/Frontend/FixItRewriter.h>
+#include <llvm/Support/JSON.h>
 #include <llvm/Support/Regex.h>
 
 #include <cstdlib>
 
 using namespace clang;
+
+// Parses the -line-filter argument, which uses the same JSON format as clang-tidy, e.g.:
+//   [{"name":"file1.cpp","lines":[[1,3],[5,7]]},{"name":"file2.h"}]
+// An entry without "lines" matches the whole file.
+
+static std::vector<ClazyContext::LineFilterEntry> parseLineFilter(const std::string &lineFilter)
+{
+    std::vector<ClazyContext::LineFilterEntry> result;
+
+    llvm::Expected<llvm::json::Value> parsed = llvm::json::parse(lineFilter);
+    if (!parsed) {
+        llvm::errs() << "clazy: ignoring invalid -line-filter: " << llvm::toString(parsed.takeError()) << "\n";
+        return result;
+    }
+
+    const llvm::json::Array *files = parsed->getAsArray();
+    if (!files) {
+        llvm::errs() << "clazy: ignoring -line-filter, expected as a JSON array\n";
+        return result;
+    }
+
+    for (const llvm::json::Value &fileValue : *files) {
+        const llvm::json::Object *fileObject = fileValue.getAsObject();
+        if (!fileObject) {
+            continue;
+        }
+
+        std::optional<llvm::StringRef> name = fileObject->getString("name");
+        if (!name) {
+            continue;
+        }
+
+        ClazyContext::LineFilterEntry entry;
+        entry.fileName = name->str();
+
+        if (const llvm::json::Array *lines = fileObject->getArray("lines")) {
+            for (const llvm::json::Value &rangeValue : *lines) {
+                const llvm::json::Array *range = rangeValue.getAsArray();
+                if (!range || range->size() != 2) {
+                    continue;
+                }
+                std::optional<int64_t> start = (*range)[0].getAsInteger();
+                std::optional<int64_t> end = (*range)[1].getAsInteger();
+                if (start && end) {
+                    entry.lineRanges.push_back({static_cast<unsigned>(*start), static_cast<unsigned>(*end)});
+                }
+            }
+        }
+
+        result.push_back(std::move(entry));
+    }
+    return result;
+}
 
 ClazyContext::ClazyContext(clang::ASTContext *context,
                            clang::SourceManager &manager,
@@ -26,6 +80,7 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
                            const clang::PreprocessorOptions &pp,
                            const std::string &headerFilter,
                            const std::string &ignoreDirs,
+                           const std::string &lineFilter,
                            std::string exportFixesFilename,
                            const std::vector<std::string> &translationUnitPaths,
                            ClazyOptions opts,
@@ -62,6 +117,10 @@ ClazyContext::ClazyContext(clang::ASTContext *context,
 
     if (!ignoreDirs.empty()) {
         ignoreDirsRegex = std::make_unique<llvm::Regex>(ignoreDirs);
+    }
+
+    if (!lineFilter.empty()) {
+        m_lineFilter = parseLineFilter(lineFilter);
     }
 
     if (exportFixesEnabled() && context) {
@@ -130,4 +189,38 @@ std::string ClazyContext::qtNamespace() const
 bool ClazyContext::usingPreCompiledHeaders() const
 {
     return !m_pp.ImplicitPCHInclude.empty();
+}
+
+bool ClazyContext::passesLineFilter(clang::SourceLocation loc) const
+{
+    if (m_lineFilter.empty()) {
+        return true;
+    }
+
+    const PresumedLoc ploc = sm.getPresumedLoc(loc);
+    if (ploc.isInvalid()) {
+        return true; // Don't drop diagnostics we can't attribute to a location
+    }
+
+    const llvm::StringRef fileName(ploc.getFilename());
+    const unsigned line = ploc.getLine();
+
+    for (const LineFilterEntry &entry : m_lineFilter) {
+        // clang-tidy matches by filename suffix, which copes with relative paths from a diff.
+        if (!fileName.ends_with(entry.fileName)) {
+            continue;
+        }
+
+        if (entry.lineRanges.empty()) {
+            return true; // Whole file is whitelisted
+        }
+
+        for (const LineRange &range : entry.lineRanges) {
+            if (line >= range.start && line <= range.end) {
+                return true;
+            }
+        }
+    }
+
+    return false; // A filter is active and this file/line is not part of it
 }

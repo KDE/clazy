@@ -38,6 +38,15 @@ static cl::opt<std::string>
                   cl::init(""),
                   cl::cat(s_clazyCategory));
 
+static cl::opt<std::string> s_lineFilter("line-filter",
+                                         cl::desc(R"(List of files with line ranges to filter the
+warnings. Uses the same JSON format as clang-tidy, e.g.
+[{"name":"file1.cpp","lines":[[1,3],[5,7]]},{"name":"file2.h"}].
+An entry without "lines" matches the whole file. Useful for only
+reporting warnings on lines touched by a diff.)"),
+                                         cl::init(""),
+                                         cl::cat(s_clazyCategory));
+
 static cl::opt<bool> s_onlyQt("only-qt",
                               cl::desc("Won't emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing."),
                               cl::init(false),
@@ -126,6 +135,7 @@ public:
         return std::make_unique<ClazyStandaloneASTAction>(s_checks.getValue(),
                                                           s_headerFilter.getValue(),
                                                           s_ignoreDirs.getValue(),
+                                                          s_lineFilter.getValue(),
                                                           s_exportFixes.getValue(),
                                                           m_paths,
                                                           options);

@@ -1,0 +1,1 @@
+clazy-standalone/line_filter.cpp:6:5: warning: Use QDateTime::currentSecsSinceEpoch() instead. It is significantly faster [-Wclazy-qdatetime-utc]

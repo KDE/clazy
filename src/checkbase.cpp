@@ -231,6 +231,10 @@ void CheckBase::emitWarning(clang::SourceLocation loc, std::string error, const 
         return;
     }
 
+    if (!m_context->passesLineFilter(loc)) {
+        return;
+    }
+
     if (loc.isMacroID()) {
         if (warningAlreadyEmitted(loc)) {
             return; // For warnings in macro arguments we get a warning in each place the argument is used within the expanded macro, so filter all the dups

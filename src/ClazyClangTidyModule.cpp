@@ -111,7 +111,10 @@ public:
         if (!m_shouldRunClazyChecks) {
             return;
         }
-        clazyContext = new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", {}, {}, emitDiagnostic, true);
+
+        // The empty string after ignoreDirs is the clazy -line-filter - clang-tidy provides its own -line-filter
+        clazyContext =
+            new ClazyContext(nullptr, PP->getSourceManager(), getLangOpts(), PP->getPreprocessorOpts(), "", "", "", "", {}, {}, emitDiagnostic, true);
         clazyContext->registerPreprocessorCallbacks(*PP);
 
         for (const auto &[check, options] : m_allChecks) {

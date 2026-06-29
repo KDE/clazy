@@ -25,6 +25,16 @@
             "filename": "fileToNotIgnore.cpp",
             "ignore_dirs": ".*fileToIgnore.*",
             "checks": ["qdatetime-utc"]
+        },
+        {
+            "filename": "line_filter.cpp",
+            "line_filter": [{"name": "line_filter.cpp", "lines": [[6, 6]]}],
+            "checks": ["qdatetime-utc"]
+        },
+        {
+            "filename": "line_filter_wholefile.cpp",
+            "line_filter": [{"name": "line_filter_wholefile.cpp"}],
+            "checks": ["qdatetime-utc"]
         }
     ]
 }

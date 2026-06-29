@@ -60,12 +60,23 @@ public:
     using ClazyOptions = int;
     using OptionalFileEntryRef = clang::CustomizableOptional<clang::FileEntryRef>;
 
+    struct LineRange {
+        unsigned start;
+        unsigned end;
+    };
+    struct LineFilterEntry {
+        std::string fileName;
+        // Inclusive line ranges. An empty list means the whole file matches.
+        std::vector<LineRange> lineRanges;
+    };
+
     explicit ClazyContext(clang::ASTContext *context, // maybe null, in case we lazy initialize it
                           clang::SourceManager &manager,
                           const clang::LangOptions &lo,
                           const clang::PreprocessorOptions &pp,
                           const std::string &headerFilter,
                           const std::string &ignoreDirs,
+                          const std::string &lineFilter,
                           std::string exportFixesFilename,
                           const std::vector<std::string> &translationUnitPaths,
                           ClazyOptions opts,
@@ -149,6 +160,10 @@ public:
         return !matches;
     }
 
+    // Returns true if the warning at @p loc should be emitted according to the -line-filter.
+    // When no -line-filter was passed this always returns true, so behaviour is unchanged.
+    bool passesLineFilter(clang::SourceLocation loc) const;
+
     bool isMainFile(clang::SourceLocation loc) const
     {
         if (loc.isMacroID()) {
@@ -189,6 +204,7 @@ public:
     clang::Decl *lastDecl = nullptr;
     std::unique_ptr<llvm::Regex> headerFilterRegex;
     std::unique_ptr<llvm::Regex> ignoreDirsRegex;
+    std::vector<LineFilterEntry> m_lineFilter;
     const std::vector<std::string> m_translationUnitPaths;
     const clang::PreprocessorOptions m_pp;
     const WarningReporter p_warningReporter;

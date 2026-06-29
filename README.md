@@ -387,6 +387,21 @@ $ ln -sf /opt/local/libexec/llvm-8.0/include/c++/ /myprefix/include/c++ # Requir
 
 If that doesn't work, run `clang -v` and check what's the InstalledDir. Move clazy-standalone to that folder.
 
+## Filtering warnings by line
+
+`clazy-standalone` accepts a `-line-filter` argument that uses the same JSON format as `clang-tidy`. Only warnings reported on the
+listed line ranges are emitted, which is useful for only reporting on the lines touched by a commit or diff:
+
+```
+clazy-standalone -checks=level1 \
+  -line-filter='[{"name":"widget.cpp","lines":[[40,44]]}]' \
+  -p compile_commands.json widget.cpp
+```
+
+An entry without a `"lines"` member matches the whole file. File names are matched by suffix, so relative paths from a diff work as
+expected. Note that this filters on the location a warning is *reported* at, so a check that reports at a declaration rather than the
+changed statement (for example, function-size style checks) may be filtered out even though an edit inside the body triggered it.
+
 # Clang-Tidy
 
 Clazy optionally builds a plugin for integrating its checks into `clang-tidy`. This needs to be explicitly loaded using `-load=ClazyClangTidy.so`.
