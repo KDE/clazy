@@ -52,6 +52,7 @@
   <summary xml:lang="az">Ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən Clang komplilyatoru qoşması</summary>
   <summary xml:lang="ca">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
   <summary xml:lang="ca-valencia">Un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt</summary>
+  <summary xml:lang="cs">Modul pro kompilátor Clang, který generuje varování týkající se osvědčených postupů pro Qt</summary>
   <summary xml:lang="de">Ein Clang-Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt</summary>
   <summary xml:lang="el">Ένα πρόσθετο μεταγλωττιστή Clang με προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt</summary>
   <summary xml:lang="en-GB">A Clang compiler plugin which emits warnings related to Qt best practices</summary>
@@ -91,6 +92,7 @@
     <p xml:lang="az">Clazy, ən yaxşı Qt təcrübələri ilə əlaqəli xəbərdarlıqları bildirən bir clang kompilyatorudur.</p>
     <p xml:lang="ca">El Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
     <p xml:lang="ca-valencia">Clazy és un connector del compilador Clang que emet avisos relacionats amb les millors pràctiques de les Qt.</p>
+    <p xml:lang="cs">Clazy je modul pro kompilátor Clang, který vydává varování týkající se osvědčených postupů pro Qt.</p>
     <p xml:lang="de">Clazy ist ein Compiler-Modul, das Warnungen in Bezug auf bewährte Techniken für Qt ausgibt.</p>
     <p xml:lang="el">Το Clazy είναι ένα πρόσθετο μεταγλωττιστή clang το οποίο στέλνει προειδοποιήσεις σχετικές με τις βέλτιστες πρακτικές σε Qt.</p>
     <p xml:lang="en-GB">Clazy is a clang compiler plugin which emits warnings related to Qt best practices.</p>
@@ -147,6 +149,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلة التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix l'error següent:</p>
         <p xml:lang="ca-valencia">Esta versió corregix l'error següent:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chybu:</p>
         <p xml:lang="es">Esta versión corrige el siguiente fallo:</p>
         <p xml:lang="fr">Cette version corrige le bogue suivant :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -219,6 +222,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -309,6 +313,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -493,6 +498,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزة التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix la característica següent:</p>
         <p xml:lang="ca-valencia">Esta versió afig la característica següent:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinku:</p>
         <p xml:lang="es">Esta versión añade la siguiente funcionalidad:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולת הבאה:</p>
@@ -566,6 +572,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -668,6 +675,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -904,6 +912,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -1004,6 +1013,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -1193,6 +1203,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -1250,6 +1261,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -1303,6 +1315,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -1460,6 +1473,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -1534,6 +1548,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -1642,6 +1657,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -1734,6 +1750,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -1808,6 +1825,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -1933,6 +1951,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -2054,6 +2073,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -2128,6 +2148,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -2381,6 +2402,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -2438,6 +2460,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -2659,6 +2682,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلة التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix l'error següent:</p>
         <p xml:lang="ca-valencia">Esta versió corregix l'error següent:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chybu:</p>
         <p xml:lang="es">Esta versión corrige el siguiente fallo:</p>
         <p xml:lang="fr">Cette version corrige le bogue suivant :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -2699,6 +2723,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -3120,6 +3145,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -3344,6 +3370,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -3448,6 +3475,7 @@
         <p xml:lang="ar">يصلح هذا الإصدار العلات التالية:</p>
         <p xml:lang="ca">Aquesta versió corregeix els errors següents:</p>
         <p xml:lang="ca-valencia">Esta versió corregix els errors següents:</p>
+        <p xml:lang="cs">Toto vydání opravuje následující chyby:</p>
         <p xml:lang="es">Esta versión corrige los siguientes fallos:</p>
         <p xml:lang="fr">Cette version corrige les bogues suivants :</p>
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
@@ -3634,6 +3662,7 @@
         <p xml:lang="ar">يضيف هذا الإصدار الميزات التالية:</p>
         <p xml:lang="ca">Aquesta versió afegeix les característiques següents:</p>
         <p xml:lang="ca-valencia">Esta versió afig les característiques següents:</p>
+        <p xml:lang="cs">Toto vydání přidává následující novinky:</p>
         <p xml:lang="es">Esta versión añade las siguientes funcionalidades:</p>
         <p xml:lang="fr">Cette version ajoute les fonctionnalités suivantes :</p>
         <p xml:lang="he">המהדורה הזאת מוסיפה את היכולות הבאות:</p>
@@ -3839,6 +3868,7 @@
           <li xml:lang="ar">clang 4.0</li>
           <li xml:lang="ca">clang 4.0</li>
           <li xml:lang="ca-valencia">clang 4.0</li>
+          <li xml:lang="cs">clang 4.0</li>
           <li xml:lang="es">clang 4.0</li>
           <li xml:lang="fr">clang 4.0</li>
           <li xml:lang="he">clang 4.0</li>
@@ -3856,6 +3886,7 @@
           <li xml:lang="ar">Qt 5.9</li>
           <li xml:lang="ca">Qt 5.9</li>
           <li xml:lang="ca-valencia">Qt 5.9</li>
+          <li xml:lang="cs">Qt 5.9</li>
           <li xml:lang="es">Qt 5.9</li>
           <li xml:lang="fr">Qt 5.9</li>
           <li xml:lang="he">Qt 5.9</li>
@@ -3933,6 +3964,7 @@
         <p xml:lang="ar">الإصدار الأول</p>
         <p xml:lang="ca">Primer llançament</p>
         <p xml:lang="ca-valencia">Primer llançament</p>
+        <p xml:lang="cs">První vydání</p>
         <p xml:lang="es">Primera versión</p>
         <p xml:lang="fr">Première version</p>
         <p xml:lang="he">מהדורה ראשונית</p>
