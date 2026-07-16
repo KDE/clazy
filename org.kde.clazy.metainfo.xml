@@ -161,6 +161,7 @@
         <p xml:lang="ru">В этом выпуске исправлена следующая ошибка:</p>
         <p xml:lang="sk">Toto vydanie opravuje nasledujúcu chybu:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednjo napako:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено таку ваду:</p>
         <ul>
@@ -178,6 +179,7 @@
           <li xml:lang="ru">fully-qualified-moc-types: исправлена ложная регрессия для указателей и ссылок в обобщённых типах;</li>
           <li xml:lang="sk">fully-qualified-moc-types: Oprava falošne pozitívnej regresie pre typy ukazovateľov/referencií v generikách.</li>
           <li xml:lang="sl">popolnoma kvalificirani tipi moc: Odpravljena lažno pozitivna regresija za tipe kazalcev/referenc v generičnih kodah.</li>
+          <li xml:lang="sv">fully-qualified-moc-types: Åtgärda falskt positiv regression för pekartyper/referenstyper i generiska objekt.</li>
           <li xml:lang="tr">fully-qualified-moc-types: Fix false positive regression for pointer/reference types in generics.</li>
           <li xml:lang="uk">fully-qualified-moc-types: виправлено регресію з помилковим спрацьовуванням для типів вказівників/посилань у загальних змінних.</li>
         </ul>
@@ -200,6 +202,7 @@
         <p xml:lang="ru">Это выпуск с исправлениями для устранения проблем интеграции с QtCreator и</p>
         <p xml:lang="sk">Toto je opravné vydanie na riešenie problémov s integráciou QtCreator a</p>
         <p xml:lang="sl">To je izdaja popravka za odpravo težav z integracijo QtCreatorja in</p>
+        <p xml:lang="sv">Det här är en programfixutgåva för att åtgärda integrationsproblem med QtCreator och</p>
         <p xml:lang="tr">Bu, QtCreater tümleşim sorunlarını ve</p>
         <p xml:lang="uk">Це проміжних випуск для виправлення проблем з інтеграцією QtCreator і</p>
         <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
@@ -216,6 +219,7 @@
         <p xml:lang="ru">совместимость с новыми версиями Qt. В этом выпуске поддерживаются версии LLVM от 19 до 21.</p>
         <p xml:lang="sk">kompatibility s novými verziami Qt. Toto vydanie podporuje verzie LLVM 19 až 21.</p>
         <p xml:lang="sl">združljivost z novimi različicami Qt. Ta izdaja podpira LLVM različice 19 do 21.</p>
+        <p xml:lang="sv">kompatibilitet med nya Qt-versioner. Den här utgåvan stöder LLVM-versionerna 19 till 21.</p>
         <p xml:lang="tr">yeni Qt sürümleriyle uyumluluk için bir hata yayımıdır. Bu yayım LLVM’nin 19–21 sürümleriyle uyumludur.</p>
         <p xml:lang="uk">сумісністю з новими версіями Qt. У цьому випуску реалізовано підтримку версій LLVM 19 і 21.</p>
         <p>This release fixes the following bugs:</p>
@@ -234,6 +238,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -252,6 +257,7 @@
           <li xml:lang="ru">Диагностика теперь всегда выводится, даже если не содержит автоматических исправлений; это используется</li>
           <li xml:lang="sk">Diagnostiky sa vždy generujú, aj keď neobsahujú opravu. Toto sa používa</li>
           <li xml:lang="sl">Diagnostika se vedno oddaja, tudi če ne vsebuje popravka. To se uporablja</li>
+          <li xml:lang="sv">Diagnostik avges alltid även om den inte innehåller några fixit. Det används</li>
           <li xml:lang="tr">Bir düzeltme içermeseler bile tanılar her zaman gösterilir. Bu, clazy süreçlerinin</li>
           <li xml:lang="uk">Безумовне надсилання діагностичних повідомлень, навіть якщо у них не міститься fixit. Використовується</li>
           <li>for integration in IDEs where the clazy process writes a YAML file containing</li>
@@ -268,6 +274,7 @@
           <li xml:lang="ru">для интеграции в средах разработки, где процесс clazy записывает файл YAML, содержащий</li>
           <li xml:lang="sk">na integráciu do IDE, kde proces clazy zapisuje súbor YAML obsahujúci</li>
           <li xml:lang="sl">za integracijo v IDE, kjer proces clazy zapiše datoteko YAML, ki vsebuje</li>
+          <li xml:lang="sv">för integration i grafiska användargränssnitt där clazy-processen skriver en YAML-fil som innehåller</li>
           <li xml:lang="tr">iletiler, erimler ve isteğe bağlı düzeltmeler içerdiği bir YAML dosyaları yazdığı</li>
           <li xml:lang="uk">для інтеграції з комплексними середовищами розробки, де процес clazy записує файл YAML, у якому містяться</li>
           <li>the messages, ranges and optionally fixits</li>
@@ -285,6 +292,7 @@
           <li xml:lang="ru">сообщения, диапазоны и, опционально, автоматические исправления;</li>
           <li xml:lang="sk">správy, rozsahy a voliteľne opravy</li>
           <li xml:lang="sl">sporočila, obsege in po izbiri popravke</li>
+          <li xml:lang="sv">meddelanden, intervall och valfritt fixits</li>
           <li xml:lang="tr">IDE tümleşimi için gereklidir.</li>
           <li xml:lang="uk">повідомлення, діапазони та необов'язкові повідомлення щодо виправлення</li>
           <li>Adjust readlock-detaching check to work properly with Qt 6.11 changes</li>
@@ -325,6 +333,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -510,6 +519,7 @@
         <p xml:lang="ru">В этом выпуске добавлена следующая возможность:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúcu funkciu:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednjo zmožnost:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktion:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано таку можливість:</p>
         <ul>
@@ -545,6 +555,7 @@
         <p xml:lang="ru">Для компиляции теперь требуется C++20.</p>
         <p xml:lang="sk">Na kompiláciu sa teraz vyžaduje C++20</p>
         <p xml:lang="sl">Za prevajanje je zdaj potreben C++20</p>
+        <p xml:lang="sv">C++20 krävs nu för kompilering</p>
         <p xml:lang="tr">C++20 is now required for compilation</p>
         <p xml:lang="uk">Для збирання тепер потрібен C++20</p>
         <p>qt6-\* porting checks are removed</p>
@@ -584,6 +595,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -687,6 +699,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -924,6 +937,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -1006,6 +1020,7 @@
           <li xml:lang="ru">Исправлено аварийное завершение при создании экземпляра шаблона QVariant;</li>
           <li xml:lang="sk">Opravený pád v qvariant-template-instantiation</li>
           <li xml:lang="sl">Popravljeno sesutje v primeru qvariant-template-instanciation</li>
+          <li xml:lang="sv">Rättade krasch i qvariant-template-instantiation</li>
           <li xml:lang="tr">Fixed crash in qvariant-template-instantiation</li>
           <li xml:lang="uk">Усунено аварійне завершення роботи у qvariant-template-instantiation</li>
         </ul>
@@ -1025,6 +1040,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1043,6 +1059,7 @@
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>readlock-detaching</li>
@@ -1060,6 +1077,7 @@
           <li xml:lang="ru">отсоединение при блокировке чтения;</li>
           <li xml:lang="sk">readlock-detaching</li>
           <li xml:lang="sl">readlock-detaching</li>
+          <li xml:lang="sv">readlock-detaching</li>
           <li xml:lang="tr">readlock-detaching</li>
           <li xml:lang="uk">readlock-detaching</li>
           <li>Update minimum Clang/LLVM to 19</li>
@@ -1077,6 +1095,7 @@
           <li xml:lang="ru">Минимальная версия Clang/LLVM обновлена до 19;</li>
           <li xml:lang="sk">Aktualizácia minimálnej verzie Clang/LLVM na 19</li>
           <li xml:lang="sl">Posodobite minimalnega Clang/LLVM na 19</li>
+          <li xml:lang="sv">Uppdatera minimal Clang/LLVM till 19</li>
           <li xml:lang="tr">Update minimum Clang/LLVM to 19</li>
           <li xml:lang="uk">Оновлено мінімальні вимоги до Clang/LLVM до 19</li>
           <li>`clazy-standalone --version` contains git version ( output of `git describe`) if it is not a tagged commit</li>
@@ -1215,6 +1234,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1233,6 +1253,7 @@
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>qbytearray-conversion-to-c-style</li>
@@ -1250,6 +1271,7 @@
           <li xml:lang="ru">преобразование QByteArray в стиль C;</li>
           <li xml:lang="sk">qbytearray-conversion-to-c-style</li>
           <li xml:lang="sl">qbytearray-conversion-to-c-style</li>
+          <li xml:lang="sv">qbytearray-conversion-to-c-style</li>
           <li xml:lang="tr">qbytearray-conversion-to-c-style</li>
           <li xml:lang="uk">qbytearray-conversion-to-c-style</li>
         </ul>
@@ -1273,6 +1295,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1291,6 +1314,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>used-qunused-variable</li>
@@ -1327,6 +1351,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -1485,6 +1510,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1503,6 +1529,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>qt-keyword-emit</li>
@@ -1520,6 +1547,7 @@
           <li xml:lang="ru">Ключевое слово «emit» в Qt;</li>
           <li xml:lang="sk">qt-keyword-emit</li>
           <li xml:lang="sl">qt-keyword-emit</li>
+          <li xml:lang="sv">qt-keyword-emit</li>
           <li xml:lang="tr">qt-keyword-emit</li>
           <li xml:lang="uk">qt-keyword-emit</li>
           <li>sanitize-inline-keyword</li>
@@ -1537,6 +1565,7 @@
           <li xml:lang="ru">очистка ключевого слова inline;</li>
           <li xml:lang="sk">sanitize-inline-keyword</li>
           <li xml:lang="sl">sanitize-inline-keyword</li>
+          <li xml:lang="sv">sanitize-inline-keyword</li>
           <li xml:lang="tr">sanitize-inline-keyword</li>
           <li xml:lang="uk">sanitize-inline-keyword</li>
         </ul>
@@ -1560,6 +1589,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1578,6 +1608,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>use-arrow-operator-instead-of-data</li>
@@ -1595,6 +1626,7 @@
           <li xml:lang="ru">использование оператора «-&gt;» вместо метода «data»;</li>
           <li xml:lang="sk">use-arrow-operator-instead-of-data</li>
           <li xml:lang="sl">use-arrow-operator-instead-of-data</li>
+          <li xml:lang="sv">use-arrow-operator-instead-of-data</li>
           <li xml:lang="tr">use-arrow-operator-instead-of-data</li>
           <li xml:lang="uk">use-arrow-operator-instead-of-data</li>
           <li>use-static-qregularexpression</li>
@@ -1612,6 +1644,7 @@
           <li xml:lang="ru">использовать статические объекты QRegularExpression;</li>
           <li xml:lang="sk">use-static-qregularexpression</li>
           <li xml:lang="sl">use-static-qregularexpression</li>
+          <li xml:lang="sv">use-static-qregularexpression</li>
           <li xml:lang="tr">use-static-qregularexpression</li>
           <li xml:lang="uk">use-static-qregularexpression</li>
           <li>unexpected-flag-enumerator-value</li>
@@ -1629,6 +1662,7 @@
           <li xml:lang="ru">неожиданное значение перечислителя флага;</li>
           <li xml:lang="sk">unexpected-flag-enumerator-value</li>
           <li xml:lang="sl">unexpected-flag-enumerator-value</li>
+          <li xml:lang="sv">unexpected-flag-enumerator-value</li>
           <li xml:lang="tr">unexpected-flag-enumerator-value</li>
           <li xml:lang="uk">unexpected-flag-enumerator-value</li>
           <li>Removed inefficient-qlist check (Fixed in Qt6)</li>
@@ -1669,6 +1703,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -1687,6 +1722,7 @@
           <li xml:lang="ru">Требуется C++17;</li>
           <li xml:lang="sk">Vyžaduje C++17</li>
           <li xml:lang="sl">Zahteva C++17</li>
+          <li xml:lang="sv">Kräver C++17</li>
           <li xml:lang="tr">Requires C++17</li>
           <li xml:lang="uk">Потребує C++17</li>
           <li>Bugfixes:</li>
@@ -1705,6 +1741,7 @@
           <li xml:lang="ru">Исправлены ошибки:</li>
           <li xml:lang="sk">Opravy chýb:</li>
           <li xml:lang="sl">Popravki napak:</li>
+          <li xml:lang="sv">Felrättningar:</li>
           <li xml:lang="tr">Hata düzeltmeleri:</li>
           <li xml:lang="uk">Виправлення вад:</li>
           <li>Fixed a -Wclazy-lambda-in-connect false-positive</li>
@@ -1762,6 +1799,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -1837,6 +1875,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1855,6 +1894,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>qt6-qhash-signature</li>
@@ -1872,6 +1912,7 @@
           <li xml:lang="ru">Сигнатура qHash для Qt6;</li>
           <li xml:lang="sk">qt6-qhash-signature</li>
           <li xml:lang="sl">qt6-qhash-signature</li>
+          <li xml:lang="sv">qt6-qhash-signature</li>
           <li xml:lang="tr">qt6-qhash-signature</li>
           <li xml:lang="uk">qt6-qhash-signature</li>
           <li>qt6-header-fixes</li>
@@ -1889,6 +1930,7 @@
           <li xml:lang="ru">Исправления заголовков Qt6;</li>
           <li xml:lang="sk">qt6-header-fixes</li>
           <li xml:lang="sl">qt6-header-fixes</li>
+          <li xml:lang="sv">qt6-header-fixes</li>
           <li xml:lang="tr">qt6-header-fixes</li>
           <li xml:lang="uk">qt6-header-fixes</li>
           <li>qt6-deprecated-api-fixes</li>
@@ -1906,6 +1948,7 @@
           <li xml:lang="ru">Исправления устаревшего API Qt6;</li>
           <li xml:lang="sk">qt6-deprecated-api-fixes</li>
           <li xml:lang="sl">qt6-deprecated-api-fixes</li>
+          <li xml:lang="sv">qt6-deprecated-api-fixes</li>
           <li xml:lang="tr">qt6-deprecated-api-fixes</li>
           <li xml:lang="uk">qt6-deprecated-api-fixes</li>
           <li>use-chrono-in-qtimer</li>
@@ -1923,6 +1966,7 @@
           <li xml:lang="ru">использование chrono в QTimer;</li>
           <li xml:lang="sk">use-chrono-in-qtimer</li>
           <li xml:lang="sl">use-chrono-in-qtimer</li>
+          <li xml:lang="sv">use-chrono-in-qtimer</li>
           <li xml:lang="tr">use-chrono-in-qtimer</li>
           <li xml:lang="uk">use-chrono-in-qtimer</li>
           <li>fixit for missing-qobject-macro</li>
@@ -1963,6 +2007,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -1981,6 +2026,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>overloaded signal</li>
@@ -2032,6 +2078,7 @@
           <li xml:lang="ru">сравнение строки с неявным символом;</li>
           <li xml:lang="sk">qstring-comparison-to-implicit-char</li>
           <li xml:lang="sl">qstring-comparison-to-implicit-char</li>
+          <li xml:lang="sv">qstring-comparison-to-implicit-char</li>
           <li xml:lang="tr">qstring-comparison-to-implicit-char</li>
           <li xml:lang="uk">qstring-comparison-to-implicit-char</li>
           <li>qt6-qlatin1string-to-u</li>
@@ -2049,6 +2096,7 @@
           <li xml:lang="ru">Замена `QLatin1String` на `QString` в Qt6;</li>
           <li xml:lang="sk">qt6-qlatin1string-to-u</li>
           <li xml:lang="sl">qt6-qlatin1string-to-u</li>
+          <li xml:lang="sv">qt6-qlatin1string-to-u</li>
           <li xml:lang="tr">qt6-qlatin1string-to-u</li>
           <li xml:lang="uk">qt6-qlatin1string-to-u</li>
           <li>heap-allocated-small-trivial-type: less false-positives</li>
@@ -2066,6 +2114,7 @@
           <li xml:lang="ru">heap-allocated-small-trivial-type: уменьшено число ложных срабатываний;</li>
           <li xml:lang="sk">heap-allocated-small-trivial-type: menej falošne pozitívnych výsledkov</li>
           <li xml:lang="sl">heap-allocated-small-trivial-type: manj lažno pozitivnih</li>
+          <li xml:lang="sv">heap-allocated-small-trivial-type: färre falska positiv</li>
           <li xml:lang="tr">heap-allocated-small-trivial-type: less false-positives</li>
           <li xml:lang="uk">heap-allocated-small-trivial-type: менше фіктивних спрацювань</li>
         </ul>
@@ -2085,6 +2134,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -2160,6 +2210,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -2178,6 +2229,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>heap-allocated-small-trivial-type</li>
@@ -2195,6 +2247,7 @@
           <li xml:lang="ru">выделение в куче малых тривиальных типов;</li>
           <li xml:lang="sk">heap-allocated-small-trivial-type</li>
           <li xml:lang="sl">heap-allocated-small-trivial-type</li>
+          <li xml:lang="sv">heap-allocated-small-trivial-type</li>
           <li xml:lang="tr">heap-allocated-small-trivial-type</li>
           <li xml:lang="uk">heap-allocated-small-trivial-type</li>
           <li>signal-with-return-value</li>
@@ -2212,6 +2265,7 @@
           <li xml:lang="ru">сигнал с возвращаемым значением;</li>
           <li xml:lang="sk">signal-with-return-value</li>
           <li xml:lang="sl">signal-with-return-value</li>
+          <li xml:lang="sv">signal-with-return-value</li>
           <li xml:lang="tr">signal-with-return-value</li>
           <li xml:lang="uk">signal-with-return-value</li>
           <li>qproperty-type-mismatch, contributed by Jean-Michaël Celerier</li>
@@ -2280,6 +2334,7 @@
         <p xml:lang="ru">Минимальная версия LLVM увеличена до 5.0</p>
         <p xml:lang="sk">Minimálna verzia LLVM bola zvýšená na 5.0</p>
         <p xml:lang="sl">Najmanjši LLVM je bil dvignjen na 5,0</p>
+        <p xml:lang="sv">Minimal LLVM ökades till 5.0</p>
         <p xml:lang="tr">Minimum LLVM was bumped to 5.0</p>
         <p xml:lang="uk">Збільшено мінімальну версію LLVM до 5.0</p>
         <p>Clazy no longer rewrites files directly, to avoid races when parallel invocations change the same header.</p>
@@ -2414,6 +2469,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -2432,6 +2488,7 @@
           <li xml:lang="ru">Исправлены регрессии в LLVM 9.0;</li>
           <li xml:lang="sk">Opravené regresie s LLVM 9.0</li>
           <li xml:lang="sl">Popravljene regresije z LLVM 9.0</li>
+          <li xml:lang="sv">Rättade regression med LLVM 9.0</li>
           <li xml:lang="tr">Fixed regressions with LLVM 9.0</li>
           <li xml:lang="uk">Виправлено регресію з LLVM 9.0</li>
           <li>Fixit infrastructure was overhauled</li>
@@ -2472,6 +2529,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -2490,6 +2548,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>ifndef-define-typo</li>
@@ -2507,6 +2566,7 @@
           <li xml:lang="ru">Ошибка в директиве препроцессора #ifndef/#define.</li>
           <li xml:lang="sk">ifndef-define-typo</li>
           <li xml:lang="sl">ifndef-define-typo</li>
+          <li xml:lang="sv">ifndef-define-typo</li>
           <li xml:lang="tr">ifndef-define-typo</li>
           <li xml:lang="uk">ifndef-define-typo</li>
           <li>lowercase-qml-type-name</li>
@@ -2524,6 +2584,7 @@
           <li xml:lang="ru">нижний регистр в имени типа QML;</li>
           <li xml:lang="sk">lowercase-qml-type-name</li>
           <li xml:lang="sl">lowercase-qml-type-name</li>
+          <li xml:lang="sv">lowercase-qml-type-name</li>
           <li xml:lang="tr">lowercase-qml-type-name</li>
           <li xml:lang="uk">lowercase-qml-type-name</li>
           <li>qrequiredresult-candidates</li>
@@ -2541,6 +2602,7 @@
           <li xml:lang="ru">qrequiredresult-candidates</li>
           <li xml:lang="sk">qrequiredresult-candidates</li>
           <li xml:lang="sl">qrequiredresult-candidates</li>
+          <li xml:lang="sv">qrequiredresult-candidates</li>
           <li xml:lang="tr">qrequiredresult-candidates</li>
           <li xml:lang="uk">qrequiredresult-candidates</li>
           <li>New Fixits:</li>
@@ -2558,6 +2620,7 @@
           <li xml:lang="ru">Новые автоматические исправления;</li>
           <li xml:lang="sk">Nové opravy:</li>
           <li xml:lang="sl">Novi popravki:</li>
+          <li xml:lang="sv">Nya fixits:</li>
           <li xml:lang="tr">Yeni onarımlar:</li>
           <li xml:lang="uk">Нові повідомлення про виправлення:</li>
           <li>range-loop now supports adding missing refs or const-ref</li>
@@ -2694,6 +2757,7 @@
         <p xml:lang="ru">В этом выпуске исправлена следующая ошибка:</p>
         <p xml:lang="sk">Toto vydanie opravuje nasledujúcu chybu:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednjo napako:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено таку ваду:</p>
         <ul>
@@ -2735,6 +2799,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -2753,6 +2818,7 @@
           <li xml:lang="ru">Добавлены проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Nova preverjanja:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>connect-by-name</li>
@@ -2770,6 +2836,7 @@
           <li xml:lang="ru">подключение по названию;</li>
           <li xml:lang="sk">connect-by-name</li>
           <li xml:lang="sl">connect-by-name</li>
+          <li xml:lang="sv">connect-by-name</li>
           <li xml:lang="tr">connect-by-name</li>
           <li xml:lang="uk">connect-by-name</li>
           <li>skipped-base-method</li>
@@ -2787,6 +2854,7 @@
           <li xml:lang="ru">пропущенный базовый метод;</li>
           <li xml:lang="sk">skipped-base-method</li>
           <li xml:lang="sl">skipped-base-method</li>
+          <li xml:lang="sv">skipped-base-method</li>
           <li xml:lang="tr">skipped-base-method</li>
           <li xml:lang="uk">skipped-base-method</li>
           <li>qstring-varargs</li>
@@ -2804,6 +2872,7 @@
           <li xml:lang="ru">qstring-varargs;</li>
           <li xml:lang="sk">qstring-varargs</li>
           <li xml:lang="sl">qstring-varargs</li>
+          <li xml:lang="sv">qstring-varargs</li>
           <li xml:lang="tr">qstring-varargs</li>
           <li xml:lang="uk">qstring-varargs</li>
           <li>fully-qualified-moc-types</li>
@@ -2821,6 +2890,7 @@
           <li xml:lang="ru">полная квалификация типов MOC.</li>
           <li xml:lang="sk">fully-qualified-moc-types</li>
           <li xml:lang="sl">fully-qualified-moc-types</li>
+          <li xml:lang="sv">fully-qualified-moc-types</li>
           <li xml:lang="tr">fully-qualified-moc-types</li>
           <li xml:lang="uk">fully-qualified-moc-types</li>
           <li>qt-keywords, with fixit included</li>
@@ -2838,6 +2908,7 @@
           <li xml:lang="ru">Ключевые слова Qt, с включённой функцией автоматического исправления;</li>
           <li xml:lang="sk">qt-keywords, vrátane opravy</li>
           <li xml:lang="sl">qt-keywords, with fixit included</li>
+          <li xml:lang="sv">qt-keywords, med inkluderad fixit</li>
           <li xml:lang="tr">qt-keywords, with fixit included</li>
           <li xml:lang="uk">qt-keywords з включеними підказками щодо виправлення</li>
           <li>qhash-with-char-pointer-key</li>
@@ -2855,6 +2926,7 @@
           <li xml:lang="ru">qhash с ключом-указателем на символ;</li>
           <li xml:lang="sk">qhash-with-char-pointer-key</li>
           <li xml:lang="sl">qhash-with-char-pointer-key</li>
+          <li xml:lang="sv">qhash-with-char-pointer-key</li>
           <li xml:lang="tr">qhash-with-char-pointer-key</li>
           <li xml:lang="uk">qhash-with-char-pointer-key</li>
           <li>wrong-qevent-cast</li>
@@ -2872,6 +2944,7 @@
           <li xml:lang="ru">неправильное приведение типа qevent;</li>
           <li xml:lang="sk">wrong-qevent-cast</li>
           <li xml:lang="sl">wrong-qevent-cast</li>
+          <li xml:lang="sv">wrong-qevent-cast</li>
           <li xml:lang="tr">wrong-qevent-cast</li>
           <li xml:lang="uk">wrong-qevent-cast</li>
           <li>static-pmf</li>
@@ -2889,6 +2962,7 @@
           <li xml:lang="ru">статический указатель на функцию-член;</li>
           <li xml:lang="sk">static-pmf</li>
           <li xml:lang="sl">static-pmf</li>
+          <li xml:lang="sv">static-pmf</li>
           <li xml:lang="tr">static-pmf</li>
           <li xml:lang="uk">static-pmf</li>
           <li>raw-environment-function</li>
@@ -2906,6 +2980,7 @@
           <li xml:lang="ru">функция необработанного окружения;</li>
           <li xml:lang="sk">raw-environment-function</li>
           <li xml:lang="sl">raw-environment-function</li>
+          <li xml:lang="sv">raw-environment-function</li>
           <li xml:lang="tr">raw-environment-function</li>
           <li xml:lang="uk">raw-environment-function</li>
           <li>empty-qstringliteral</li>
@@ -2923,6 +2998,7 @@
           <li xml:lang="ru">пустая строка QStringLiteral;</li>
           <li xml:lang="sk">empty-qstringliteral</li>
           <li xml:lang="sl">empty-qstringliteral</li>
+          <li xml:lang="sv">empty-qstringliteral</li>
           <li xml:lang="tr">empty-qstringliteral</li>
           <li xml:lang="uk">empty-qstringliteral</li>
           <li>auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder</li>
@@ -2957,6 +3033,7 @@
         <p xml:lang="ru">Оптимизация производительности</p>
         <p xml:lang="sk">optimalizácie výkonu</p>
         <p xml:lang="sl">optimizacije delovanja</p>
+        <p xml:lang="sv">prestandaoptimeringar</p>
         <p xml:lang="tr">performance optimizations</p>
         <p xml:lang="uk">оптимізації швидкодії</p>
         <p>Added -header-filter=&lt;regex&gt; option to clazy-standalone. Only headers matching the regexp will</p>
@@ -3157,6 +3234,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -3175,6 +3253,7 @@
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>thread-with-slots</li>
@@ -3192,6 +3271,7 @@
           <li xml:lang="ru">Использование слотов в потоках</li>
           <li xml:lang="sk">thread-with-slots</li>
           <li xml:lang="sl">thread-with-slots</li>
+          <li xml:lang="sv">thread-with-slots</li>
           <li xml:lang="tr">thread-with-slots</li>
           <li xml:lang="uk">thread-with-slots</li>
           <li>connect-3arg-lambda</li>
@@ -3209,6 +3289,7 @@
           <li xml:lang="ru">lambda с тремя аргументами в connect;</li>
           <li xml:lang="sk">connect-3arg-lambda</li>
           <li xml:lang="sl">connect-3arg-lambda</li>
+          <li xml:lang="sv">connect-3arg-lambda</li>
           <li xml:lang="tr">connect-3arg-lambda</li>
           <li xml:lang="uk">connect-3arg-lambda</li>
           <li>qproperty-without-notify</li>
@@ -3226,6 +3307,7 @@
           <li xml:lang="ru">Свойство Q_PROPERTY без сигнала NOTIFY;</li>
           <li xml:lang="sk">qproperty-without-notify</li>
           <li xml:lang="sl">qproperty-without-notify</li>
+          <li xml:lang="sv">qproperty-without-notify</li>
           <li xml:lang="tr">qproperty-without-notify</li>
           <li xml:lang="uk">qproperty-without-notify</li>
           <li>virtual-signal</li>
@@ -3243,6 +3325,7 @@
           <li xml:lang="ru">виртуальный сигнал;</li>
           <li xml:lang="sk">virtual-signal</li>
           <li xml:lang="sl">virtual-signal</li>
+          <li xml:lang="sv">virtual-signal</li>
           <li xml:lang="tr">virtual-signal</li>
           <li xml:lang="uk">virtual-signal</li>
           <li>overridden-signal</li>
@@ -3260,6 +3343,7 @@
           <li xml:lang="ru">переопределённый сигнал;</li>
           <li xml:lang="sk">overridden-signal</li>
           <li xml:lang="sl">overridden-signal</li>
+          <li xml:lang="sv">overridden-signal</li>
           <li xml:lang="tr">overridden-signal</li>
           <li xml:lang="uk">overridden-signal</li>
           <li>qhash-namespace</li>
@@ -3277,6 +3361,7 @@
           <li xml:lang="ru">Проверка пространства имён в qhash;</li>
           <li xml:lang="sk">qhash-namespace</li>
           <li xml:lang="sl">qhash-namespace</li>
+          <li xml:lang="sv">qhash-namespace</li>
           <li xml:lang="tr">qhash-namespace</li>
           <li xml:lang="uk">qhash-namespace</li>
           <li>const-signal-or-slot</li>
@@ -3294,6 +3379,7 @@
           <li xml:lang="ru">Константные сигналы и слоты;</li>
           <li xml:lang="sk">const-signal-or-slot</li>
           <li xml:lang="sl">const-signal-or-slot</li>
+          <li xml:lang="sv">const-signal-or-slot</li>
           <li xml:lang="tr">const-signal-or-slot</li>
           <li xml:lang="uk">const-signal-or-slot</li>
           <li>lambda-unique-connection</li>
@@ -3311,6 +3397,7 @@
           <li xml:lang="ru">уникальное подключение сигнала с помощью лямбда-выражения;</li>
           <li xml:lang="sk">lambda-unique-connection</li>
           <li xml:lang="sl">lambda-unique-connection</li>
+          <li xml:lang="sv">lambda-unique-connection</li>
           <li xml:lang="tr">lambda-unique-connection</li>
           <li xml:lang="uk">lambda-unique-connection</li>
         </ul>
@@ -3382,6 +3469,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -3400,6 +3488,7 @@
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>install-event-filter</li>
@@ -3417,6 +3506,7 @@
           <li xml:lang="ru">Установлен фильтр событий;</li>
           <li xml:lang="sk">install-event-filter</li>
           <li xml:lang="sl">install-event-filter</li>
+          <li xml:lang="sv">install-event-filter</li>
           <li xml:lang="tr">install-event-filter</li>
           <li xml:lang="uk">install-event-filter</li>
           <li>qcolor-from-literal</li>
@@ -3434,6 +3524,7 @@
           <li xml:lang="ru">Создание цвета из строкового литерала;</li>
           <li xml:lang="sk">qcolor-from-literal</li>
           <li xml:lang="sl">qcolor-from-literal</li>
+          <li xml:lang="sv">qcolor-from-literal</li>
           <li xml:lang="tr">qcolor-from-literal</li>
           <li xml:lang="uk">qcolor-from-literal</li>
           <li>strict-iterators</li>
@@ -3451,6 +3542,7 @@
           <li xml:lang="ru">строгие итераторы;</li>
           <li xml:lang="sk">strict-iterators</li>
           <li xml:lang="sl">strict-iterators</li>
+          <li xml:lang="sv">strict-iterators</li>
           <li xml:lang="tr">strict-iterators</li>
           <li xml:lang="uk">strict-iterators</li>
           <li>connect-not-normalized</li>
@@ -3468,6 +3560,7 @@
           <li xml:lang="ru">Проверка использования функции connect() с нормализацией сигналов и слотов;</li>
           <li xml:lang="sk">connect-not-normalized</li>
           <li xml:lang="sl">connect-not-normalized</li>
+          <li xml:lang="sv">connect-not-normalized</li>
           <li xml:lang="tr">connect-not-normalized</li>
           <li xml:lang="uk">connect-not-normalized</li>
         </ul>
@@ -3487,6 +3580,7 @@
         <p xml:lang="ru">В этом выпуске исправлены следующие ошибки:</p>
         <p xml:lang="sk">Táto verzia opravuje nasledujúce chyby:</p>
         <p xml:lang="sl">Ta izdaja odpravlja naslednje napake:</p>
+        <p xml:lang="sv">Den här utgåvan rättar följande fel:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki hataları düzeltir:</p>
         <p xml:lang="uk">У цьому випуску виправлено такі вади:</p>
         <ul>
@@ -3568,6 +3662,7 @@
           <li xml:lang="ru">unused-non-trivial-variable теперь предупреждает о неиспользуемых типах QList, QVector и многих других;</li>
           <li xml:lang="sk">unused-non-trivial-variable now warns for unused QList, QVector and many more types</li>
           <li xml:lang="sl">unused-non-trivial-variable zdaj opozarja na neuporabljene QList, QVector in številne druge vrste</li>
+          <li xml:lang="sv">unused-non-trivial-variable varnar nu för oanvänd QList, QVector och många fler typer</li>
           <li xml:lang="tr">unused-non-trivial-variable now warns for unused QList, QVector and many more types</li>
           <li xml:lang="uk">У новій версії unused-non-trivial-variable попереджає про невикористані QList, QVector і багато інших типів</li>
           <li>ASTMatchers based checks are now supported</li>
@@ -3585,6 +3680,7 @@
           <li xml:lang="ru">Добавлена поддержка проверок на основе ASTMatchers;</li>
           <li xml:lang="sk">Kontroly založené na ASTMatchers sú teraz podporované</li>
           <li xml:lang="sl">Preverjanja na podlagi ASTMatchers so zdaj podprta</li>
+          <li xml:lang="sv">ASTMatchers-baserade kontroller stöds nu</li>
           <li xml:lang="tr">ASTMatchers based checks are now supported</li>
           <li xml:lang="uk">У новій версії передбачено підтримку перевірок на основі ASTMatchers</li>
           <li>clang 3.7 was dropped due to ASTMatchers source incompatibilities.</li>
@@ -3602,6 +3698,7 @@
           <li xml:lang="ru">Поддержка clang 3.7 прекращена из-за несовместимости исходного кода ASTMatchers;</li>
           <li xml:lang="sk">clang 3.7 bol vyradený kvôli nekompatibilite zdrojového kódu ASTMatchers.</li>
           <li xml:lang="sl">clang 3.7 je bil opuščen zaradi nezdružljivosti vira ASTMatchers.</li>
+          <li xml:lang="sv">clang 3.7 togs bort på grund av inkompatibilitet med ASTMatchers-källkod.</li>
           <li xml:lang="tr">clang 3.7 was dropped due to ASTMatchers source incompatibilities.</li>
           <li xml:lang="uk">Відкинуто підтримку clang 3.7 через несумісності з початковим кодом ASTMatchers.</li>
           <li>Use clazy v1.1 for clang &gt;= 3.6 support</li>
@@ -3619,6 +3716,7 @@
           <li xml:lang="ru">Использование clazy v1.1 для поддержки clang &gt;= 3.6;</li>
           <li xml:lang="sk">Použite clazy v1.1 pre podporu clang &gt;= 3.6</li>
           <li xml:lang="sl">Uporabi clazy v1.1 za podporo za clang &gt;= 3.6</li>
+          <li xml:lang="sv">Använd clazy v1.1 för stöd av clang ≥ 3.6</li>
           <li xml:lang="tr">Use clazy v1.1 for clang &gt;= 3.6 support</li>
           <li xml:lang="uk">Скористайтеся clazy v1.1 для отримання підтримки clang &gt;= 3.6</li>
           <li>clazylib.so no longer gets built by default, only the plugin (ClangLazy.so)  gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if  you're developing tools using clazy's convenience functions, which you're  probably not.</li>
@@ -3635,6 +3733,7 @@
           <li xml:lang="ru">Библиотека clazylib.so больше не собирается по умолчанию; собирается только плагин ClangLazy.so. Передайте параметр -DCLAZY_BUILD_UTILS_LIB=ON для включения сборки библиотеки утилит, если вы разрабатываете инструменты с использованием вспомогательных функций clazy, что маловероятно;</li>
           <li xml:lang="sk">clazylib.so no longer gets built by default, only the plugin (ClangLazy.so) gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if you're developing tools using clazy's convenience functions, which you're probably not.</li>
           <li xml:lang="sl">clazylib.so se ne gradi več privzeto, ampak samo vtičnik (ClangLazy.so). Podajte -DCLAZY_BUILD_UTILS_LIB=ON, da omogočite knjižnico pripomočkov, če razvijate orodja z uporabo priročnih funkcij clazy, kar verjetno niste.</li>
+          <li xml:lang="sv">clazylib.so byggs inte längre normalt, bara insticksprogrammet (ClangLazy.so) byggs. Ange -DCLAZY_BUILD_UTILS_LIB=ON för att aktivera biblioteket utils om verktyg utvecklas där bekvämlighetsfunktionerna i clazy används, vilket troligtvis inte är fallet.</li>
           <li xml:lang="tr">clazylib.so no longer gets built by default, only the plugin (ClangLazy.so) gets built. Pass -DCLAZY_BUILD_UTILS_LIB=ON to enable the utils library if you're developing tools using clazy's convenience functions, which you're probably not.</li>
           <li xml:lang="uk">У новій версії типово не збирається clazylib.so, збирається лише додаток (ClangLazy.so). Передайте -DCLAZY_BUILD_UTILS_LIB=ON, щоб увімкнути бібліотеку utils, якщо ви розробляєте інструменти за допомогою зручних функцій clazy, чого ви, ймовірно, не робите.</li>
           <li>CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library  and headers or nothing at all. By default nothing is installed, except  the plugin and man pages.</li>
@@ -3651,6 +3750,7 @@
           <li xml:lang="ru">Параметр CLAZY_INSTALL_NO_HEADERS удалён. Теперь библиотека утилит и заголовочные файлы устанавливаются либо полностью, либо не устанавливаются вовсе. По умолчанию устанавливаются только плагин и страницы руководства;</li>
           <li xml:lang="sk">CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library and headers or nothing at all. By default nothing is installed, except the plugin and man pages.</li>
           <li xml:lang="sl">Možnost CLAZY_INSTALL_NO_HEADERS je bila odstranjena. Ali namestite knjižnico pripomočkov in glave ali pa sploh nič. Privzeto ni nameščeno nič, razen strani vtičnika in priročnika.</li>
+          <li xml:lang="sv">Alternativet CLAZY_INSTALL_NO_HEADERS har tagits bort. Installera antingen biblioteket utils och deklarationsfiler eller ingenting alls. Normalt installeras ingenting, förutom insticksprogrammet och manualsidorna.</li>
           <li xml:lang="tr">CLAZY_INSTALL_NO_HEADERS option was removed. Either install the utils library and headers or nothing at all. By default nothing is installed, except the plugin and man pages.</li>
           <li xml:lang="uk">Було вилучено параметр CLAZY_INSTALL_NO_HEADERS. Встановіть або бібліотеку utils та заголовки, або нічого. Типово не буде встановлено нічого, окрім додатка та сторінок довідки (man).</li>
         </ul>
@@ -3674,6 +3774,7 @@
         <p xml:lang="ru">В этом выпуске добавлены следующие возможности:</p>
         <p xml:lang="sk">Toto vydanie pridáva nasledujúce funkcie:</p>
         <p xml:lang="sl">Ta izdaja dodaja naslednje zmožnosti:</p>
+        <p xml:lang="sv">Den här utgåvan lägger till följande funktioner:</p>
         <p xml:lang="tr">Bu yayım, aşağıdaki özellikleri ekler:</p>
         <p xml:lang="uk">У цьому випуску додано такі можливості:</p>
         <ul>
@@ -3692,6 +3793,7 @@
           <li xml:lang="ru">Поддержка macOS и Windows;</li>
           <li xml:lang="sk">Podpora macOS a Windows</li>
           <li xml:lang="sl">podpora za macOS in Windows</li>
+          <li xml:lang="sv">Stöd för macOS och Windows</li>
           <li xml:lang="tr">macOS and Windows support</li>
           <li xml:lang="uk">Підтримка macOS і Windows</li>
           <li>New checks:</li>
@@ -3709,6 +3811,7 @@
           <li xml:lang="ru">Новые проверки:</li>
           <li xml:lang="sk">Nové kontroly:</li>
           <li xml:lang="sl">Novi pregledi:</li>
+          <li xml:lang="sv">Nya kontroller:</li>
           <li xml:lang="tr">Yeni denetimler:</li>
           <li xml:lang="uk">Нові перевірки:</li>
           <li>child-event-qobject-cast</li>
@@ -3726,6 +3829,7 @@
           <li xml:lang="ru">Приведение типа QObject в обработчике дочерних событий;</li>
           <li xml:lang="sk">child-event-qobject-cast</li>
           <li xml:lang="sl">child-event-qobject-cast</li>
+          <li xml:lang="sv">child-event-qobject-cast</li>
           <li xml:lang="tr">child-event-qobject-cast</li>
           <li xml:lang="uk">child-event-qobject-cast</li>
           <li>ctor-missing-parent-argument</li>
@@ -3743,6 +3847,7 @@
           <li xml:lang="ru">Конструктору не передан аргумент родительского класса;</li>
           <li xml:lang="sk">ctor-missing-parent-argument</li>
           <li xml:lang="sl">ctor-missing-parent-argument</li>
+          <li xml:lang="sv">ctor-missing-parent-argument</li>
           <li xml:lang="tr">ctor-missing-parent-argument</li>
           <li xml:lang="uk">ctor-missing-parent-argument</li>
           <li>returning-data-from-temporary</li>
@@ -3760,6 +3865,7 @@
           <li xml:lang="ru">возврат данных из временного объекта;</li>
           <li xml:lang="sk">returning-data-from-temporary</li>
           <li xml:lang="sl">returning-data-from-temporary</li>
+          <li xml:lang="sv">returning-data-from-temporary</li>
           <li xml:lang="tr">returning-data-from-temporary</li>
           <li xml:lang="uk">returning-data-from-temporary</li>
           <li>qt-macros</li>
@@ -3777,6 +3883,7 @@
           <li xml:lang="ru">Макросы Qt;</li>
           <li xml:lang="sk">qt-macros</li>
           <li xml:lang="sl">qt-macros</li>
+          <li xml:lang="sv">qt-macros</li>
           <li xml:lang="tr">qt-macros</li>
           <li xml:lang="uk">qt-macros</li>
           <li>base-class-event</li>
@@ -3794,6 +3901,7 @@
           <li xml:lang="ru">событие базового класса;</li>
           <li xml:lang="sk">base-class-event</li>
           <li xml:lang="sl">base-class-event</li>
+          <li xml:lang="sv">base-class-event</li>
           <li xml:lang="tr">base-class-event</li>
           <li xml:lang="uk">base-class-event</li>
           <li>connect-non-signal</li>
@@ -3811,6 +3919,7 @@
           <li xml:lang="ru">подключение к несигнальному слоту;</li>
           <li xml:lang="sk">connect-non-signal</li>
           <li xml:lang="sl">connect-non-signal</li>
+          <li xml:lang="sv">connect-non-signal</li>
           <li xml:lang="tr">connect-non-signal</li>
           <li xml:lang="uk">connect-non-signal</li>
           <li>incorrect-emit</li>
@@ -3828,6 +3937,7 @@
           <li xml:lang="ru">некорректный вызов сигнала;</li>
           <li xml:lang="sk">incorrect-emit</li>
           <li xml:lang="sl">incorrect-emit</li>
+          <li xml:lang="sv">incorrect-emit</li>
           <li xml:lang="tr">incorrect-emit</li>
           <li xml:lang="uk">incorrect-emit</li>
           <li>tr-non-literal</li>
@@ -3845,6 +3955,7 @@
           <li xml:lang="ru">Недословный перевод;</li>
           <li xml:lang="sk">tr-non-literal</li>
           <li xml:lang="sl">tr-non-literal</li>
+          <li xml:lang="sv">tr-non-literal</li>
           <li xml:lang="tr">tr-non-literal</li>
           <li xml:lang="uk">tr-non-literal</li>
           <li>Fixes against:</li>
@@ -3862,6 +3973,7 @@
           <li xml:lang="ru">Исправления:</li>
           <li xml:lang="sk">Opravy pre:</li>
           <li xml:lang="sl">Popravki proti:</li>
+          <li xml:lang="sv">Rättningar mot:</li>
           <li xml:lang="tr">Fixes against:</li>
           <li xml:lang="uk">Виправлення для такого:</li>
           <li>clang 4.0</li>
@@ -3880,6 +3992,7 @@
           <li xml:lang="ru">clang 4.0;</li>
           <li xml:lang="sk">clang 4.0</li>
           <li xml:lang="sl">clang 4.0</li>
+          <li xml:lang="sv">clang 4.0</li>
           <li xml:lang="tr">clang 4.0</li>
           <li xml:lang="uk">clang 4.0</li>
           <li>Qt 5.9</li>
@@ -3898,6 +4011,7 @@
           <li xml:lang="ru">Qt 5.9;</li>
           <li xml:lang="sk">Qt 5.9</li>
           <li xml:lang="sl">Qt 5.9</li>
+          <li xml:lang="sv">Qt 5.9</li>
           <li xml:lang="tr">Qt 5.9</li>
           <li xml:lang="ug">Qt 5.9</li>
           <li xml:lang="uk">Qt 5.9</li>
@@ -3917,6 +4031,7 @@
           <li xml:lang="ru">Замечания:</li>
           <li xml:lang="sk">Poznámky:</li>
           <li xml:lang="sl">Opombe:</li>
+          <li xml:lang="sv">Anmärkningar:</li>
           <li xml:lang="tr">Notlar:</li>
           <li xml:lang="ug">ئىزاھ:</li>
           <li xml:lang="uk">Нотатки:</li>
@@ -3935,6 +4050,7 @@
           <li xml:lang="ru">Производительность увеличена на 60%.</li>
           <li xml:lang="sk">60 % zlepšenie výkonu</li>
           <li xml:lang="sl">60% izboljšanje zmogljivosti</li>
+          <li xml:lang="sv">60% prestandaförbättring</li>
           <li xml:lang="tr">60% performance improvement</li>
           <li xml:lang="uk">Пришвидшено на 60%</li>
           <li>Fixed many false positives</li>
@@ -3952,6 +4068,7 @@
           <li xml:lang="ru">Исправлено множество ложных срабатываний;</li>
           <li xml:lang="sk">Opravených mnoho falošne pozitívnych výsledkov</li>
           <li xml:lang="sl">Popravljenih veliko lažnih pozitivnih rezultatov</li>
+          <li xml:lang="sv">Rättade många falska positiv</li>
           <li xml:lang="tr">Fixed many false positives</li>
           <li xml:lang="uk">Виправлено багато хибнопозитивних спрацювань</li>
         </ul>
@@ -3976,6 +4093,7 @@
         <p xml:lang="ru">Первый выпуск</p>
         <p xml:lang="sk">Prvé vydanie</p>
         <p xml:lang="sl">Prva izdaja</p>
+        <p xml:lang="sv">Första utgåva</p>
         <p xml:lang="tr">First release</p>
         <p xml:lang="uk">Перший випуск</p>
       </description>
