@@ -10,8 +10,9 @@
 #ifndef CHECK_BASE_H
 #define CHECK_BASE_H
 
-#include "ClazyContext.h"
-#include "clazy_stl.h" // IWYU pragma: keep
+#include "ClazyContext.h" // IWYU pragma: export
+#include "clazy_stl.h" // IWYU pragma: export
+#include <llvm/Support/Casting.h> // IWYI pragma: export
 
 #include <clang/AST/ASTContext.h>
 #include <clang/ASTMatchers/ASTMatchFinder.h>

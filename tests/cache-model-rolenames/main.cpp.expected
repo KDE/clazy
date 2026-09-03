@@ -1,0 +1,2 @@
+cache-model-rolenames/main.cpp:13:9: warning: roleNames should be cached as static or member variable [-Wclazy-cache-model-rolenames]
+cache-model-rolenames/main.cpp:26:16: warning: roleNames should be cached as static or member variable [-Wclazy-cache-model-rolenames]

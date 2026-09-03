@@ -108,7 +108,7 @@ void ModernizeListInitialization::checkOperatorCallListInitialization(clang::Sou
     }
 
     std::string replacementText = "{";
-    for (auto str : replacementTexts) {
+    for (const auto &str : replacementTexts) {
         replacementText += str;
     }
     if (replacementText[replacementText.length() - 1] == '\n') {

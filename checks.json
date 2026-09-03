@@ -805,6 +805,12 @@
             "level": -1,
             "visits_stmts": true,
             "categories": ["readability"]
+        },
+        {
+            "name": "cache-model-rolenames",
+            "level": -1,
+            "visits_decls": true,
+            "categories": ["performance"]
         }
     ]
 }
