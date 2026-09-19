@@ -52,6 +52,7 @@ private:
     template<typename T>
     std::vector<clang::FixItHint> fixits(int classification, T *callOrCtor);
 
+    clang::SourceLocation signalOrSlotMacroLocation(clang::SourceLocation loc, std::string &macroName) const;
     bool isSignalOrSlot(clang::SourceLocation loc, std::string &macroName) const;
 
     template<typename T>

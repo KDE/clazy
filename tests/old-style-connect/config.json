@@ -6,6 +6,10 @@
             "has_fixits": true
         },
         {
+            "filename": "nodebug_flag.cpp",
+            "extra_definitions": "-DQT_NO_DEBUG"
+        },
+        {
             "filename": "usingnamespace.cpp",
             "has_fixits": true,
             "blacklist_platforms": ["darwin", "win32"]

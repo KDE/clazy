@@ -16,6 +16,7 @@
 #include "QtUtils.h"
 #include "StringUtils.h"
 #include "Utils.h"
+#include "clang/Basic/SourceLocation.h"
 
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclBase.h>
@@ -259,20 +260,36 @@ void OldStyleConnect::VisitMacroExpands(const Token &macroNameTok, const SourceR
     addPrivateSlot({match[1], match[2]});
 }
 
+clang::SourceLocation OldStyleConnect::signalOrSlotMacroLocation(clang::SourceLocation loc, std::string &macroName) const
+{
+    macroName.clear();
+    // Qt internally handles the SLOT/SIGNAL macro differently based on the QT_NO_DEBUG flag
+    // In case it is true, we need to traverse the macro expansion chain to find the original macro name.
+    // When the flag is not set, the macro expands to the qFlagLocation function and thus direct C++ code with macro-args being passed further down
+    while (loc.isMacroID() && loc.isValid()) {
+        macroName = Lexer::getImmediateMacroName(loc, sm(), lo()).str();
+        if (macroName == "SIGNAL" || macroName == "SLOT") {
+            return loc;
+        }
+        loc = sm().getImmediateMacroCallerLoc(loc);
+    }
+    return SourceLocation();
+}
+
 // SIGNAL(foo()) -> foo
 std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 {
     if (!macroLoc.isMacroID()) {
         return "error";
     }
+    std::string dummy;
+    const SourceLocation loc = signalOrSlotMacroLocation(macroLoc, dummy);
 
-    CharSourceRange expansionRange = sm().getImmediateExpansionRange(macroLoc);
-    SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
-    auto charRange = Lexer::getAsCharRange(range, sm(), lo());
+    CharSourceRange expansionRange = sm().getImmediateExpansionRange(loc);
+    auto charRange = Lexer::getAsCharRange(expansionRange.getAsRange(), sm(), lo());
     const std::string text = Lexer::getSourceText(charRange, sm(), lo()).str();
 
     static std::regex rx(R"(\s*(SIGNAL|SLOT)\s*\(\s*(.+)\s*\(.*)");
-
     std::smatch match;
     if (regex_match(text, match, rx)) {
         if (match.size() == 3) {
@@ -287,13 +304,7 @@ std::string OldStyleConnect::signalOrSlotNameFromMacro(SourceLocation macroLoc)
 
 bool OldStyleConnect::isSignalOrSlot(SourceLocation loc, std::string &macroName) const
 {
-    macroName.clear();
-    if (!loc.isMacroID() || loc.isInvalid()) {
-        return false;
-    }
-
-    macroName = Lexer::getImmediateMacroName(loc, sm(), lo()).str();
-    return macroName == "SIGNAL" || macroName == "SLOT";
+    return signalOrSlotMacroLocation(loc, macroName).isValid();
 }
 
 template<typename T>
@@ -461,7 +472,6 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
         }
 
         CharSourceRange expansionRange = sm().getImmediateExpansionRange(s);
-        SourceRange range = SourceRange(expansionRange.getBegin(), expansionRange.getEnd());
 
         const std::string functionPointer = '&' + qualifiedName;
         std::string replacement = functionPointer;
@@ -470,7 +480,7 @@ std::vector<FixItHint> OldStyleConnect::fixits(int classification, T *callOrCtor
             replacement = implicitCallee + ", " + replacement;
         }
 
-        fixits.push_back(FixItHint::CreateReplacement(range, replacement));
+        fixits.push_back(FixItHint::CreateReplacement(expansionRange.getAsRange(), replacement));
         lastRecordDecl = nullptr;
     }
 
