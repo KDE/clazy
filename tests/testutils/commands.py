@@ -27,7 +27,7 @@ def clang_tidy_plugin_name():
 
 
 def clazy_cpp_args(cppStandard):
-    return ' -Wno-unused-value -Qunused-arguments -std=' + cppStandard + ' '
+    return ' -Wno-unused-value -Wno-deprecated-pragma -Qunused-arguments -std=' + cppStandard + ' '
 
 
 def more_clazy_standalone_args():
