@@ -33,7 +33,7 @@ HELP() {
 }
 
 VERSION() {
-    echo "clazy version: @CLAZY_PRINT_VERSION@"
+    echo "clazy version: @CLAZY_VERSION@"
     ${CLANGXX:-clang++} --version | head -1 | awk '{printf("clang version: %s\n",$3)}'
 }
 

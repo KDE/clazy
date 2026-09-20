@@ -8,6 +8,7 @@ Bugfixes:
  * compare-member-check: Fix clazy crashing when methods have no body, BUG: 518098
  * old-style-connect: Do not add ".data()" to QObject connect parameters. This was needed in the past due to an old GCC bug.
  * old-style-connect: Fix check not working when QT_NO_DEBUG compile flag is set
+ * `clazy --version` now always outputs patch version and not just major/minor, BUG: 524877
 Features:
  * New check modernize-overloaded-connects: Finds QOverload/qOverload/static_cast statements for connects that are no longer needed and suggest removing them.
  In case they are still needed, a fixit using qOverload is provided. QOverload/static_cast statements will have a fixit to modernize.
