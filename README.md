@@ -483,6 +483,10 @@ You can also suppress individual warnings by file or by line by inserting commen
 - To disable specific checks in source files for the following line, insert a comment:
   `// clazy:exclude=check1,check2`
 
+- `NOLINT`, `NOLINTNEXTLINE`, `NOLINTBEGIN`, and `NOLINTEND` are also supported by clazy.
+  Individual clazy checks can be disabled using a `clazy-` prefix, for example:
+  `NOLINTNEXTLINE(clazy-qfileinfo-exists, clazy-qstring-arg)`
+
 Don't include the `clazy-` prefix. If, for example, you want to disable qstring-allocations you would write:
 `// clazy:exclude=qstring-allocations` not `clazy-qstring-allocations`.
 
