@@ -5,3 +5,5 @@ modernize-list-initialization/main.cpp:12:24: warning: Use initializer-list synt
 modernize-list-initialization/main.cpp:22:17: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
 modernize-list-initialization/main.cpp:26:23: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
 modernize-list-initialization/main.cpp:29:24: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:39:23: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]
+modernize-list-initialization/main.cpp:40:24: warning: Use initializer-list syntax [-Wclazy-modernize-list-initialization]

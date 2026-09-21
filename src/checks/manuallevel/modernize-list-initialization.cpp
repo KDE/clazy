@@ -7,6 +7,8 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
+#include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
 #include "clang/AST/ParentMap.h"
 
 #include <algorithm>
@@ -57,37 +59,52 @@ void ModernizeListInitialization::VisitStmt(clang::Stmt *stmt)
     }
 }
 
+std::string ModernizeListInitialization::createReplacementTextWithComments(clang::Expr *expr)
+{
+    std::string sourceText = getSourceText(expr).str();
+
+#if LLVM_VERSION_MAJOR < 20
+    auto token = Lexer::findNextToken(expr->getEndLoc(), sm(), lo());
+#else
+    auto token = Lexer::findNextToken(expr->getEndLoc(), sm(), lo(), true);
+#endif
+    if (token.has_value() && token.value().is(tok::TokenKind::comment)) {
+        std::string comment = getSourceText(CharSourceRange::getTokenRange(token->getLocation())).str();
+        if (comment.starts_with("//")) {
+            sourceText += ", " + comment + "\n";
+        } else {
+            sourceText += " " + comment + ", ";
+        }
+    } else {
+        sourceText += ", ";
+    }
+    return sourceText;
+}
+
 void ModernizeListInitialization::checkOperatorCallListInitialization(clang::SourceRange fixitSourceRange, clang::CXXOperatorCallExpr *operatorCall)
 {
     std::vector<std::string> replacementTexts;
     auto opCall = operatorCall;
+
     while (opCall && opCall->getNumArgs() > 0) {
-        auto firstArg = opCall->getArg(1);
-        std::string sourceText = getSourceText(firstArg).str();
-#if LLVM_VERSION_MAJOR < 20
-        auto token = Lexer::findNextToken(firstArg->getEndLoc(), sm(), lo());
-#else
-        auto token = Lexer::findNextToken(firstArg->getEndLoc(), sm(), lo(), true);
-#endif
-        if (token.has_value() && token.value().is(tok::TokenKind::comment)) {
-            std::string comment = getSourceText(CharSourceRange::getTokenRange(token->getLocation())).str();
-            if (comment.starts_with("//")) {
-                sourceText += ", " + comment + "\n";
-            } else {
-                sourceText += " " + comment + ", ";
-            }
-        } else {
-            sourceText += ", ";
-        }
-        replacementTexts.push_back(sourceText);
+        replacementTexts.push_back(createReplacementTextWithComments(opCall->getArg(1)));
 
         if (auto *materializeTemp = dyn_cast<MaterializeTemporaryExpr>(opCall->getArg(0))) {
-            if (auto *bindTemp = dyn_cast<CXXBindTemporaryExpr>(materializeTemp->getSubExpr())) {
+            Expr *subExpr = materializeTemp->getSubExpr();
+            // Skip a CXXFunctionalCastExpr that might be in between, like QStringList(produceList())
+            if (auto *subCast = dyn_cast<CXXFunctionalCastExpr>(materializeTemp->getSubExpr())) {
+                subExpr = subCast->getSubExpr();
+            }
+            if (auto *bindTemp = dyn_cast<CXXBindTemporaryExpr>(subExpr)) {
                 if (isa<CallExpr>(bindTemp->getSubExpr())) {
                     return; // abort since we have a function that produced the initial list
                 }
+                if (auto *constructExpr = dyn_cast<CXXConstructExpr>(bindTemp->getSubExpr()); constructExpr && constructExpr->getNumArgs() == 1) {
+                    replacementTexts.push_back(createReplacementTextWithComments(constructExpr->getArg(0)));
+                }
             }
         }
+
         opCall = dyn_cast<CXXOperatorCallExpr>(opCall->getArg(0));
     }
 

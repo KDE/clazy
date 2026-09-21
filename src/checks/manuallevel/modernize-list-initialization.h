@@ -7,6 +7,7 @@
 #define CLAZY_MODERNIZE_LIST_INITIALIZATION_H
 
 #include "checkbase.h"
+#include <string>
 
 /**
  * See README-modernize-list-initialization.md for more info.
@@ -19,6 +20,7 @@ public:
 
 private:
     void checkOperatorCallListInitialization(clang::SourceRange fixitSourceRange, clang::CXXOperatorCallExpr *operatorCall);
+    std::string createReplacementTextWithComments(clang::Expr *expr);
     std::vector<clang::CallExpr *> m_alreadyCheckedOperatorCalls;
 };
 

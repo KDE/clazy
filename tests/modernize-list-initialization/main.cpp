@@ -33,3 +33,9 @@ void testFromList()
 {
     QStringList abc = QVector<QString>::fromList({"abc"}) << "xyz";
 }
+
+void testWithInitialArgument()
+{
+    QStringList myList = QStringList("initial") << "abc" << "xyz";
+    QStringList myList2 = QStringList(produceString()) << "abc" << "xyz";
+}
