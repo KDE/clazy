@@ -33,6 +33,12 @@ set(CLAZY_PLUGIN_SRCS # Sources for the plugin
   ${CLAZY_SHARED_SRCS}
 )
 
+set_property(
+  SOURCE ${CMAKE_CURRENT_LIST_DIR}/src/ClazyStandaloneMain.cpp
+  APPEND PROPERTY COMPILE_DEFINITIONS
+    CLAZY_VERSION="${CLAZY_VERSION}"
+)
+
 if (MSVC)
   set(CLAZY_STANDALONE_SRCS
     ${CLAZY_SHARED_SRCS}
