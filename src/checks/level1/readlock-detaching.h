@@ -1,6 +1,5 @@
 /*
-    Copyright (C) 2025 Author <your@email>
-
+    SPDX-FileCopyrightText: 2025 <alexander.lohnau@gmx.de>
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 

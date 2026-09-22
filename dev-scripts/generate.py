@@ -73,10 +73,24 @@ def write_file(filename: str, contents):
 
 def get_copyright():
     year = datetime.datetime.now().year
-    author = os.getenv('GIT_AUTHOR_NAME', 'Author')
-    email = os.getenv('GIT_AUTHOR_EMAIL', 'your@email')
-    return "%s %s <%s>" % (year, author, email)
 
+    def git_config(key, fallback):
+        try:
+            result = subprocess.run(
+                ["git", "config", "--get", key],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip()
+        except OSError:
+            pass
+        return fallback
+
+    author = git_config("user.name", "Author")
+    email = git_config("user.email", "your@email")
+    return "%s %s <%s>" % (year, author, email)
 
 class Check:
     def __init__(self):
@@ -398,7 +412,6 @@ def create_checks(checks):
         edit_changelog = False
         include_file = check.path() + check.include()
         cpp_file = check.path() + check.cpp_filename()
-        copyright = get_copyright()
         include_missing = not os.path.exists(include_file)
         cpp_missing = not os.path.exists(cpp_file)
         if include_missing:
@@ -415,7 +428,7 @@ def create_checks(checks):
                 contents = contents.replace('%1', check.include_guard())
                 contents = contents.replace('%2', check.get_class_name())
                 contents = contents.replace('%3', check.name)
-                contents = contents.replace('%4', copyright)
+                contents = contents.replace('%4', get_copyright())
                 write_file(include_file, contents)
                 print("Created " + include_file)
                 edit_changelog = True
@@ -432,7 +445,7 @@ def create_checks(checks):
                 contents = read_file(templates_path() + 'check.cpp')
                 contents = contents.replace('%1', check.include())
                 contents = contents.replace('%2', check.get_class_name())
-                contents = contents.replace('%3', copyright)
+                contents = contents.replace('%3', get_copyright())
                 write_file(cpp_file, contents)
                 print("Created " + cpp_file)
             generated = True
