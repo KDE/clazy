@@ -16,6 +16,7 @@ Features:
  * Ignore generated QML compiled sources since Clazy can't provide meaningful linting
  * clazy-standalone: new -line-filter option, using the same JSON format as clang-tidy, to restrict warnings to specific line ranges (handy for only linting the lines changed in a diff)
  * New check "cache-model-rolenames"
+ * New `run-clazy-clang-tidy` script that wraps clang-tidy, loads the Clazy plugin and excludes `moc_compilation.cpp` files to speed up linting and reduce noise
 Notes:
  * CMake 3.16 is the minimum version for configuring clazy
  * Fix false positives/missing warnings with namespaced Qt and later LLVM 22.x versions
