@@ -24,3 +24,9 @@ void testWithInitialArgument()
 {
     QStringList myList = QStringList(produceList()) << "abc" << "xyz";
 }
+
+QStringList testWithVariable()
+{
+    QStringList myVar = produceList();
+    return myVar << "somevalue";
+}

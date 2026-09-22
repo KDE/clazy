@@ -7,6 +7,7 @@
 #include "QtUtils.h"
 #include "TypeUtils.h"
 #include "Utils.h"
+#include "clang/AST/DeclBase.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/AST/ParentMap.h"
@@ -89,12 +90,22 @@ void ModernizeListInitialization::checkOperatorCallListInitialization(clang::Sou
     while (opCall && opCall->getNumArgs() > 0) {
         replacementTexts.push_back(createReplacementTextWithComments(opCall->getArg(1)));
 
-        if (auto *materializeTemp = dyn_cast<MaterializeTemporaryExpr>(opCall->getArg(0))) {
+        Expr *firstArg = opCall->getArg(0);
+        opCall = dyn_cast<CXXOperatorCallExpr>(firstArg);
+        auto *materializeTemp = dyn_cast<MaterializeTemporaryExpr>(firstArg);
+
+        // if we are the last element in the operator call chain and we have no MaterializeTemporaryExpr, we might pipe into a local var => abort
+        if (!opCall && !materializeTemp) {
+            return;
+        }
+
+        if (materializeTemp) {
             Expr *subExpr = materializeTemp->getSubExpr();
             // Skip a CXXFunctionalCastExpr that might be in between, like QStringList(produceList())
             if (auto *subCast = dyn_cast<CXXFunctionalCastExpr>(materializeTemp->getSubExpr())) {
                 subExpr = subCast->getSubExpr();
             }
+
             if (auto *bindTemp = dyn_cast<CXXBindTemporaryExpr>(subExpr)) {
                 if (isa<CallExpr>(bindTemp->getSubExpr())) {
                     return; // abort since we have a function that produced the initial list
@@ -104,8 +115,6 @@ void ModernizeListInitialization::checkOperatorCallListInitialization(clang::Sou
                 }
             }
         }
-
-        opCall = dyn_cast<CXXOperatorCallExpr>(opCall->getArg(0));
     }
 
     if (replacementTexts.empty()) {
