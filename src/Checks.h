@@ -47,6 +47,7 @@
 #include "checks/level1/install-event-filter.h"
 #include "checks/level1/modernize-overloaded-connects.h"
 #include "checks/level1/non-pod-global-static.h"
+#include "checks/level1/operator-brackets-insertion.h"
 #include "checks/level1/overridden-signal.h"
 #include "checks/level1/post-event.h"
 #include "checks/level1/qdeleteall.h"
@@ -201,6 +202,7 @@ void CheckManager::registerChecks()
     registerCheck(check<InstallEventFilter>("install-event-filter", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<ModernizeOverloadedConnects>("modernize-overloaded-connects", CheckLevel1, RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<NonPodGlobalStatic>("non-pod-global-static", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));
+    registerCheck(check<OperatorBracketsInsertion>("operator-brackets-insertion", CheckLevel1, RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<OverriddenSignal>("overridden-signal", CheckLevel1, RegisteredCheck::Option_VisitsDecls, true));
     registerCheck(check<PostEvent>("post-event", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));
     registerCheck(check<QDeleteAll>("qdeleteall", CheckLevel1, RegisteredCheck::Option_VisitsStmts, true));

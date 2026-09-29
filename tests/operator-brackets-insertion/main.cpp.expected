@@ -1,0 +1,5 @@
+operator-brackets-insertion/main.cpp:17:9: warning: Using operator[] on a QMap/QHash in a read context inserts a value if the key is missing; use value() or contains() instead [-Wclazy-operator-brackets-insertion]
+operator-brackets-insertion/main.cpp:19:24: warning: Using operator[] on a QMap/QHash in a read context inserts a value if the key is missing; use value() or contains() instead [-Wclazy-operator-brackets-insertion]
+operator-brackets-insertion/main.cpp:21:9: warning: Using operator[] on a QMap/QHash in a read context inserts a value if the key is missing; use value() or contains() instead [-Wclazy-operator-brackets-insertion]
+operator-brackets-insertion/main.cpp:28:5: warning: Using operator[] on a QMap/QHash in a read context inserts a value if the key is missing; use value() or contains() instead [-Wclazy-operator-brackets-insertion]
+operator-brackets-insertion/main.cpp:33:5: warning: Using operator[] on a QMap/QHash in a read context inserts a value if the key is missing; use value() or contains() instead [-Wclazy-operator-brackets-insertion]

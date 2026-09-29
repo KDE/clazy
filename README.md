@@ -297,6 +297,7 @@ clazy runs all checks from level1 by default.
   - [install-event-filter](docs/checks/README-install-event-filter.md)
   - [modernize-overloaded-connects](docs/checks/README-modernize-overloaded-connects.md)
   - [non-pod-global-static](docs/checks/README-non-pod-global-static.md)
+  - [operator-brackets-insertion](docs/checks/README-operator-brackets-insertion.md)
   - [overridden-signal](docs/checks/README-overridden-signal.md)
   - [post-event](docs/checks/README-post-event.md)
   - [qdeleteall](docs/checks/README-qdeleteall.md)

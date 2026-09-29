@@ -811,6 +811,12 @@
             "level": -1,
             "visits_decls": true,
             "categories": ["performance"]
+        },
+        {
+            "name": "operator-brackets-insertion",
+            "level": 1,
+            "visits_stmts": true,
+            "categories": ["performance", "containers"]
         }
     ]
 }

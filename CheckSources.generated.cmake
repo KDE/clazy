@@ -73,6 +73,7 @@ set(CLAZY_CHECKS_SRCS ${CLAZY_CHECKS_SRCS}
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/install-event-filter.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/modernize-overloaded-connects.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/non-pod-global-static.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/operator-brackets-insertion.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/overridden-signal.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/post-event.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/checks/level1/qdeleteall.cpp
