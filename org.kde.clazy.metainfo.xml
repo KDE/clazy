@@ -206,7 +206,7 @@
         <p xml:lang="uk">Це проміжних випуск для виправлення проблем з інтеграцією QtCreator і</p>
         <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
         <p xml:lang="ar">التوافق مع الإصدارات الجديدة من Qt. يدعم هذا الإصدار إصدارات LLVM من 19 إلى 21.</p>
-        <p xml:lang="ca">la compatibilitat amb les versiones noves de les Qt. Aquesta versió permet les versions 19 a 21 del LLVM.</p>
+        <p xml:lang="ca">la compatibilitat amb les versions noves de les Qt. Aquesta versió permet les versions 19 a 21 del LLVM.</p>
         <p xml:lang="ca-valencia">la compatibilitat amb les versiones noves de les Qt. Esta versió permet les versions 19 a 21 de LLVM.</p>
         <p xml:lang="es">la compatibilidad con nuevas versiones de Qt. Este lanzamiento es compatible con las versiones 19 a 21 de LLVM.</p>
         <p xml:lang="he">תאימות לגרסאות Qt חדשות. המהדורה הזאת תומכת בגרסאות 19 עד 21 של LLVM.</p>
@@ -860,7 +860,7 @@
           <li xml:lang="uk">де довжина порівнюється за допомогою "== 0", "&lt; 1", "&gt; 0" і додає підказки щодо виправлення.</li>
           <li>qt6-\* Porting checks are considered deprecated now and will be removed in the next release of clazy</li>
           <li xml:lang="ar">تعد فحوصات النقل qt6-\* مهجورة الآن وستزال في الإصدار القادم من كلازي</li>
-          <li xml:lang="ca">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la propera versió de clazy</li>
+          <li xml:lang="ca">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la pròxima versió de clazy</li>
           <li xml:lang="ca-valencia">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la propera versió de clazy</li>
           <li xml:lang="es">Las comprobaciones de adaptación a qt6-\* se consideran obsoletas ahora y se eliminarán en la próxima versión de clazy.</li>
           <li xml:lang="he">בדיקות הסבה מסוג qt6-\* נחשבות למיושנות מעתה והן תוסרנה במהדורה הבאה של clazy</li>
@@ -1435,7 +1435,7 @@
           <li xml:lang="uk">Виправлено unused-non-trivial-variable так, щоб перевірка не попереджала, якщо встановлено [[maybe_unused]]</li>
           <li>Fixed qstring-arg for upcoming Qt 6.9</li>
           <li xml:lang="ar">إصلاح qstring-arg لنسخة Qt 6.9 القادمة</li>
-          <li xml:lang="ca">S'ha corregit qstring-arg per a les properes Qt 6.9</li>
+          <li xml:lang="ca">S'ha corregit qstring-arg per a les pròximes Qt 6.9</li>
           <li xml:lang="ca-valencia">S'ha corregit qstring-arg per a les properes Qt 6.9</li>
           <li xml:lang="es">Se ha corregido qstring-arg para el próximo Qt 6.9.</li>
           <li xml:lang="fr">Correction de « qstring-arg » pour la prochaine version 6.9 de Qt</li>
@@ -2386,7 +2386,7 @@
         <p xml:lang="uk">Рішення про кожну з них слід приймати зважено.</p>
         <p>Minimum LLVM was bumped to 5.0</p>
         <p xml:lang="ar">رُفع الحد الأدنى لـ LLVM إلى 5.0</p>
-        <p xml:lang="ca">El LLVM mínim s'ha pujat a 5.0</p>
+        <p xml:lang="ca">El LLVM mínim ha pujat a 5.0</p>
         <p xml:lang="ca-valencia">LLVM mínim s'ha pujat a 5.0</p>
         <p xml:lang="es">El LLVM mínimo se ha aumentado a 5.0.</p>
         <p xml:lang="fr">La version minimale de LLVM a été portée vers la version 5.0</p>
@@ -2421,7 +2421,7 @@
         <p xml:lang="uk">Нова версія Clazy не переписує файли безпосередньо, щоб уникнути конфліктів з паралельними викликами змін того самого заголовка.</p>
         <p>Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements.</p>
         <p xml:lang="ar">يصدر كلازي الآن ملف yaml بالاستبدالات، ليُطبق باستخدام clang-apply-replacements.</p>
-        <p xml:lang="ca">EL Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
+        <p xml:lang="ca">El Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
         <p xml:lang="ca-valencia">EL Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
         <p xml:lang="es">Clazy exporta ahora un archivo yaml con las sustituciones, que se aplican con clang-apply-replacements.</p>
         <p xml:lang="he">Clazy מייצא מעתה קובץ yaml עם ההחלפות, מתאים להחלה עם clang-apply-replacements.</p>
@@ -3084,7 +3084,7 @@
           <li xml:lang="uk">empty-qstringliteral</li>
           <li>auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder</li>
           <li xml:lang="ar">يحذر auto-unexpected-qstringbuilder الآن أيضًا من دوال لامبدا التي تعيد QStringBuilder</li>
-          <li xml:lang="ca">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
+          <li xml:lang="ca">auto-unexpected-qstringbuilder ara també avisa de les lambdes que retorna el QStringBuilder</li>
           <li xml:lang="ca-valencia">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
           <li xml:lang="es">auto-unexpected-qstringbuilder también muestra ahora advertencias para las lambdas que devuelven un QStringBuilder.</li>
           <li xml:lang="he">auto-unexpected-qstringbuilder מזהיר מעתה גם על למדות שמחזירות QStringBuilder</li>
@@ -3120,7 +3120,7 @@
         <p xml:lang="uk">оптимізації швидкодії</p>
         <p>Added -header-filter=&lt;regex&gt; option to clazy-standalone. Only headers matching the regexp will</p>
         <p xml:lang="ar">إضافة الخيار -header-filter=&lt;regex&gt; إلى clazy-standalone. فقط الترويسات التي تطابق التعبير النمطي هي التي</p>
-        <p xml:lang="ca">S'ha afegit l'opció -header-filter=&lt;regex&gt; al clazy-standalone. Només ha faran les capçaleres que coincideixin amb l'expressió regular</p>
+        <p xml:lang="ca">S'ha afegit l'opció -header-filter=&lt;regex&gt; al clazy-standalone. Només ho faran les capçaleres que coincideixin amb l'expressió regular</p>
         <p xml:lang="ca-valencia">S'ha afegit l'opció -header-filter=&lt;regex&gt; a clazy-standalone. Només ha faran les capçaleres que coincidisquen amb l'expressió regular</p>
         <p xml:lang="es">Se ha añadido la opción -header-filter=&lt;regex&gt; a clazy-standalone. Solo las cabeceras que satisfagan la expresión regular</p>
         <p xml:lang="he">האפשרות ‎-header-filter=&lt;regex&gt; נוספה ל־clazy-standalone. רק לכותרות שעונות על הביטוי הרגולרי</p>
