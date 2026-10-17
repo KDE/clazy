@@ -207,7 +207,7 @@
         <p>compatibility with new Qt versions. This release supports LLVM versions 19 to 21.</p>
         <p xml:lang="ar">التوافق مع الإصدارات الجديدة من Qt. يدعم هذا الإصدار إصدارات LLVM من 19 إلى 21.</p>
         <p xml:lang="ca">la compatibilitat amb les versions noves de les Qt. Aquesta versió permet les versions 19 a 21 del LLVM.</p>
-        <p xml:lang="ca-valencia">la compatibilitat amb les versiones noves de les Qt. Esta versió permet les versions 19 a 21 de LLVM.</p>
+        <p xml:lang="ca-valencia">la compatibilitat amb les versions noves de les Qt. Esta versió permet les versions 19 a 21 de LLVM.</p>
         <p xml:lang="es">la compatibilidad con nuevas versiones de Qt. Este lanzamiento es compatible con las versiones 19 a 21 de LLVM.</p>
         <p xml:lang="he">תאימות לגרסאות Qt חדשות. המהדורה הזאת תומכת בגרסאות 19 עד 21 של LLVM.</p>
         <p xml:lang="it">compatibilità con le nuove versioni di Qt. Questa versione supporta le versioni di LLVM dalla 19 alla 21.</p>
@@ -861,7 +861,7 @@
           <li>qt6-\* Porting checks are considered deprecated now and will be removed in the next release of clazy</li>
           <li xml:lang="ar">تعد فحوصات النقل qt6-\* مهجورة الآن وستزال في الإصدار القادم من كلازي</li>
           <li xml:lang="ca">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la pròxima versió de clazy</li>
-          <li xml:lang="ca-valencia">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la propera versió de clazy</li>
+          <li xml:lang="ca-valencia">qt6-\* L'adaptació de les comprovacions ara es consideren obsoletes i s'eliminaran en la pròxima versió de clazy</li>
           <li xml:lang="es">Las comprobaciones de adaptación a qt6-\* se consideran obsoletas ahora y se eliminarán en la próxima versión de clazy.</li>
           <li xml:lang="he">בדיקות הסבה מסוג qt6-\* נחשבות למיושנות מעתה והן תוסרנה במהדורה הבאה של clazy</li>
           <li xml:lang="it">qt6-\* I controlli di conversione sono ora considerati deprecati e saranno rimossi nella prossima versione di clazy</li>
@@ -1008,7 +1008,7 @@
           <li>Fixed crash in qstring-comparison-to-implicit-char. BUG: 502458</li>
           <li xml:lang="ar">إصلاح انهيار في qstring-comparison-to-implicit-char. علة: 502458</li>
           <li xml:lang="ca">S'ha corregit una fallada a qstring-comparison-to-implicit-char. ERROR: 502458</li>
-          <li xml:lang="ca-valencia">S'ha corregit una fallada a qstring-comparison-to-implicit-char. ERROR: 502458</li>
+          <li xml:lang="ca-valencia">S'ha esmenat una fallada a qstring-comparison-to-implicit-char. ERROR: 502458</li>
           <li xml:lang="es">Se ha corregido un fallo en qstring-comparison-to-implicit-char. Fallo: 502458.</li>
           <li xml:lang="fr">Correction du plantage dans qstring-comparison-to-implicit-char. Bogue : 502458</li>
           <li xml:lang="he">תוקנה קריסה ב־qstring-comparison-to-implicit-char. תקלה: 502458</li>
@@ -1026,7 +1026,7 @@
           <li>Fixed crash when fully-qualified-moc-types encounters signals with expressions like "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="ar">إصلاح انهيار عندما يواجه fully-qualified-moc-types إشارات بتعبيرات مثل "std::bitset&lt;int(8)&gt;"</li>
           <li xml:lang="ca">S'ha corregit una fallada quan fully-qualified-moc-types troba senyals amb expressions com «std::bitset&lt;int(8)&gt;»</li>
-          <li xml:lang="ca-valencia">S'ha corregit una fallada quan fully-qualified-moc-types troba senyals amb expressions com «std::bitset&lt;int(8)&gt;»</li>
+          <li xml:lang="ca-valencia">S'ha esmenat una fallada quan fully-qualified-moc-types troba senyals amb expressions com «std::bitset&lt;int(8)&gt;»</li>
           <li xml:lang="es">Se ha corregido un fallo cuando fully-qualified-moc-types encuentra señales con expresiones semejantes a «std::bitset&lt;int(8)&gt;».</li>
           <li xml:lang="he">תוקנה קריסה כאשר fully-qualified-moc-types נתקלת באותו עם ביטויים כגון „std::bitset&lt;int(8)&gt;”</li>
           <li xml:lang="it">Corretto l'arresto anomalo quando fully-qualified-moc-types incontra segnali con espressioni come "std::bitset&lt;int(8)&gt;"</li>
@@ -1042,7 +1042,7 @@
           <li>Fixed crash in qvariant-template-instantiation</li>
           <li xml:lang="ar">إصلاح انهيار في qvariant-template-instantiation</li>
           <li xml:lang="ca">S'ha corregit una fallada a qvariant-template-instantiation</li>
-          <li xml:lang="ca-valencia">S'ha corregit una fallada a qvariant-template-instantiation</li>
+          <li xml:lang="ca-valencia">S'ha esmenat una fallada a qvariant-template-instantiation</li>
           <li xml:lang="es">Se ha corregido un fallo en qvariant-template-instantiation</li>
           <li xml:lang="fr">Correction du plantage dans qvariant-template-instantiation</li>
           <li xml:lang="he">תוקנה קריסה ב־qvariant-template-instantiation</li>
@@ -1436,7 +1436,7 @@
           <li>Fixed qstring-arg for upcoming Qt 6.9</li>
           <li xml:lang="ar">إصلاح qstring-arg لنسخة Qt 6.9 القادمة</li>
           <li xml:lang="ca">S'ha corregit qstring-arg per a les pròximes Qt 6.9</li>
-          <li xml:lang="ca-valencia">S'ha corregit qstring-arg per a les properes Qt 6.9</li>
+          <li xml:lang="ca-valencia">S'ha corregit qstring-arg per a les pròximes Qt 6.9</li>
           <li xml:lang="es">Se ha corregido qstring-arg para el próximo Qt 6.9.</li>
           <li xml:lang="fr">Correction de « qstring-arg » pour la prochaine version 6.9 de Qt</li>
           <li xml:lang="he">תוקן qstring-arg ל־Qt 6.9 שקרב ובא.</li>
@@ -1454,7 +1454,7 @@
           <li>Fixed fully-qualified-moc-types false positive for const modifiers of generic arguments</li>
           <li xml:lang="ar">إصلاح الإيجابيات الزائفة في fully-qualified-moc-types لمغيرات const في المعاملات العامة</li>
           <li xml:lang="ca">S'han corregit els tipus falsos positius de fully-qualified-moc-types per als modificadors «const» d'arguments genèrics</li>
-          <li xml:lang="ca-valencia">S'han corregit els tipus falsos positius de fully-qualified-moc-types per als modificadors «const» d'arguments genèrics</li>
+          <li xml:lang="ca-valencia">S'han esmenat els tipus falsos positius de fully-qualified-moc-types per als modificadors «const» d'arguments genèrics</li>
           <li xml:lang="es">Se ha corregido el falso positivo de fully-qualified-moc-types false para modificadores «const» de los argumentos genéricos.</li>
           <li xml:lang="he">תוקן חיובי כוזב מול fully-qualified-moc-types עבור מחליפי קבועים של ארגומנטים כלליים</li>
           <li xml:lang="it">Corretto il falso positivo fully-qualified-moc-types per i modificatori const degli argomenti generici</li>
@@ -1524,7 +1524,7 @@
           <li>False positives for `Q_EMIT(someSignal())` are now fixed</li>
           <li xml:lang="ar">أُصلحت الإيجابيات الزائفة لـ `Q_EMIT(someSignal())` الآن</li>
           <li xml:lang="ca">S'han corregit els falsos positius de `Q_EMIT(someSignal())`</li>
-          <li xml:lang="ca-valencia">S'han corregit els falsos positius de `Q_EMIT(someSignal())`</li>
+          <li xml:lang="ca-valencia">S'han esmenat els falsos positius de `Q_EMIT(someSignal())`</li>
           <li xml:lang="es">Los falsos positivos para `Q_EMIT(unaSeñal())` se han corregido.</li>
           <li xml:lang="fr">Les faux positifs pour « Q_EMIT(someSignal()) » sont maintenant corrigés</li>
           <li xml:lang="he">חיוביים כוזבים עבור `Q_EMIT(someSignal())` תקינים מעתה</li>
@@ -1816,7 +1816,7 @@
           <li>Fixed crash in copyable-polymorphic when PCH was enabled</li>
           <li xml:lang="ar">إصلاح انهيار في copyable-polymorphic عند تفعيل PCH</li>
           <li xml:lang="ca">S'ha corregit una fallada a copyable-polymorphic quan s'ha activat el PCH</li>
-          <li xml:lang="ca-valencia">S'ha corregit una fallada a copyable-polymorphic quan s'ha activat el PCH</li>
+          <li xml:lang="ca-valencia">S'ha esmenat una fallada a copyable-polymorphic quan s'ha activat el PCH</li>
           <li xml:lang="es">Se ha corregido un fallo en copyable-polymorphic cuando se activa PCH.</li>
           <li xml:lang="fr">Correction d'un plantage dans copyable-polymorphic lorsque PCH était activé</li>
           <li xml:lang="he">תוקנה קריסה ב־copyable-polymorphic כש־PCH היה פעיל</li>
@@ -1895,7 +1895,7 @@
           <li>Fixed -Wclazy-connect-non-signal false positives</li>
           <li xml:lang="ar">إصلاح إيجابيات زائفة في -Wclazy-connect-non-signal</li>
           <li xml:lang="ca">S'han corregit els falsos positius de -Wclazy-connect-non-signal</li>
-          <li xml:lang="ca-valencia">S'han corregit els falsos positius de -Wclazy-connect-non-signal</li>
+          <li xml:lang="ca-valencia">S'han esmenat els falsos positius de -Wclazy-connect-non-signal</li>
           <li xml:lang="es">Se han corregido los falsos positivos de -Wclazy-connect-non-signal.</li>
           <li xml:lang="fr">Correction des faux positifs de -Wclazy-connect-non-signal</li>
           <li xml:lang="he">תוקנו חיוביים כוזבים עם ‎-Wclazy-connect-non-signal</li>
@@ -2237,7 +2237,7 @@
         <p>Building clazy itself is 30% faster</p>
         <p xml:lang="ar">بناء كلازي نفسه أسرع بنسبة 30%</p>
         <p xml:lang="ca">La construcció del mateix clazy és un 30% més ràpida</p>
-        <p xml:lang="ca-valencia">La construcció del mateix clazy és un 30% més ràpida</p>
+        <p xml:lang="ca-valencia">La construcció del mateix clazy és un 30 % més ràpida</p>
         <p xml:lang="es">La compilación del propio clazy es un 30 % más rápida.</p>
         <p xml:lang="fr">La compilation de Clazy elle-même est 30 % plus rapide</p>
         <p xml:lang="he">הבנייה של clazy עצמו מהירה ב־30%</p>
@@ -2387,7 +2387,7 @@
         <p>Minimum LLVM was bumped to 5.0</p>
         <p xml:lang="ar">رُفع الحد الأدنى لـ LLVM إلى 5.0</p>
         <p xml:lang="ca">El LLVM mínim ha pujat a 5.0</p>
-        <p xml:lang="ca-valencia">LLVM mínim s'ha pujat a 5.0</p>
+        <p xml:lang="ca-valencia">LLVM mínim ha pujat a 5.0</p>
         <p xml:lang="es">El LLVM mínimo se ha aumentado a 5.0.</p>
         <p xml:lang="fr">La version minimale de LLVM a été portée vers la version 5.0</p>
         <p xml:lang="he">גרסת ה־LLVM המזערית עלתה ל־5.0</p>
@@ -2422,7 +2422,7 @@
         <p>Clazy now exports a yaml file with the replacements, to be applied with clang-apply-replacements.</p>
         <p xml:lang="ar">يصدر كلازي الآن ملف yaml بالاستبدالات، ليُطبق باستخدام clang-apply-replacements.</p>
         <p xml:lang="ca">El Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
-        <p xml:lang="ca-valencia">EL Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
+        <p xml:lang="ca-valencia">Clazy ara exporta un fitxer yaml amb els reemplaçaments, que s'aplicarà amb clang-apply-replacements.</p>
         <p xml:lang="es">Clazy exporta ahora un archivo yaml con las sustituciones, que se aplican con clang-apply-replacements.</p>
         <p xml:lang="he">Clazy מייצא מעתה קובץ yaml עם ההחלפות, מתאים להחלה עם clang-apply-replacements.</p>
         <p xml:lang="it">Clazy ora esporta un file yaml con le sostituzioni, da applicare con clang-apply-replacements.</p>
@@ -2844,7 +2844,7 @@
           <li>Fixed a crash (clang assert) in raw-environment-function</li>
           <li xml:lang="ar">إصلاح انهيار (clang assert) في raw-environment-function</li>
           <li xml:lang="ca">S'ha corregit una fallada (asserció del clang) a raw-environment-function</li>
-          <li xml:lang="ca-valencia">S'ha corregit una fallada (asserció de clang) a raw-environment-function</li>
+          <li xml:lang="ca-valencia">S'ha esmenat una fallada (asserció de clang) a raw-environment-function</li>
           <li xml:lang="es">Se ha corregido un fallo (clang assert) en raw-environment-function.</li>
           <li xml:lang="fr">Correction d'un plantage (Assertion clang) dans raw-environment-function</li>
           <li xml:lang="he">תוקנה קריסה (clang assert) ב־raw-environment-function</li>
@@ -3085,7 +3085,7 @@
           <li>auto-unexpected-qstringbuilder now also warns for lambdas returning QStringBuilder</li>
           <li xml:lang="ar">يحذر auto-unexpected-qstringbuilder الآن أيضًا من دوال لامبدا التي تعيد QStringBuilder</li>
           <li xml:lang="ca">auto-unexpected-qstringbuilder ara també avisa de les lambdes que retorna el QStringBuilder</li>
-          <li xml:lang="ca-valencia">auto-unexpected-qstringbuilder ara també avisa de les lambdas que retorna el QStringBuilder</li>
+          <li xml:lang="ca-valencia">auto-unexpected-qstringbuilder ara també avisa de les lambdes que retorna el QStringBuilder</li>
           <li xml:lang="es">auto-unexpected-qstringbuilder también muestra ahora advertencias para las lambdas que devuelven un QStringBuilder.</li>
           <li xml:lang="he">auto-unexpected-qstringbuilder מזהיר מעתה גם על למדות שמחזירות QStringBuilder</li>
           <li xml:lang="it">auto-unexpected-qstringbuilder ora avvisa anche in caso di restituzione di lambda QStringBuilder</li>
@@ -3121,7 +3121,7 @@
         <p>Added -header-filter=&lt;regex&gt; option to clazy-standalone. Only headers matching the regexp will</p>
         <p xml:lang="ar">إضافة الخيار -header-filter=&lt;regex&gt; إلى clazy-standalone. فقط الترويسات التي تطابق التعبير النمطي هي التي</p>
         <p xml:lang="ca">S'ha afegit l'opció -header-filter=&lt;regex&gt; al clazy-standalone. Només ho faran les capçaleres que coincideixin amb l'expressió regular</p>
-        <p xml:lang="ca-valencia">S'ha afegit l'opció -header-filter=&lt;regex&gt; a clazy-standalone. Només ha faran les capçaleres que coincidisquen amb l'expressió regular</p>
+        <p xml:lang="ca-valencia">S'ha afegit l'opció -header-filter=&lt;regex&gt; a clazy-standalone. Només ho faran les capçaleres que coincidisquen amb l'expressió regular</p>
         <p xml:lang="es">Se ha añadido la opción -header-filter=&lt;regex&gt; a clazy-standalone. Solo las cabeceras que satisfagan la expresión regular</p>
         <p xml:lang="he">האפשרות ‎-header-filter=&lt;regex&gt; נוספה ל־clazy-standalone. רק לכותרות שעונות על הביטוי הרגולרי</p>
         <p xml:lang="it">Aggiunta l'opzione -header-filter=&lt;regex&gt; a clazy-standalone. Solo le intestazioni corrispondenti all'espressione regolare</p>
@@ -4137,7 +4137,7 @@
           <li>60% performance improvement</li>
           <li xml:lang="ar">تحسين في الأداء بنسبة 60%</li>
           <li xml:lang="ca">Millora el rendiment un 60%</li>
-          <li xml:lang="ca-valencia">Millora el rendiment un 60%</li>
+          <li xml:lang="ca-valencia">Millora el rendiment un 60 %</li>
           <li xml:lang="es">Mejora el rendimiento un 60 %</li>
           <li xml:lang="fr">Amélioration des performances de 60%</li>
           <li xml:lang="he">60% שיפורי ביצועים</li>
