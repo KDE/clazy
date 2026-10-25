@@ -50,11 +50,13 @@ void ClazyASTConsumer::addCheck(const std::pair<CheckBase *, RegisteredCheck> &c
     CheckBase *checkBase = check.first;
     m_visitors.addCheck(check.second.options, checkBase);
     checkBase->registerASTMatchers(*m_matchFinder);
+    m_createdChecks.emplace_back(checkBase);
 }
 
 ClazyASTConsumer::~ClazyASTConsumer()
 {
     delete m_matchFinder;
+    m_createdChecks.clear();
     delete m_context;
 }
 

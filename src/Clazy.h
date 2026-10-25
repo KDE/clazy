@@ -118,6 +118,7 @@ private:
     ClazyContext *const m_context;
     clazy::VisitHelper::Visitors m_visitors;
     clang::ast_matchers::MatchFinder *m_matchFinder = nullptr;
+    std::vector<std::unique_ptr<CheckBase>> m_createdChecks;
 };
 
 #endif
