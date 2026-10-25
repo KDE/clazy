@@ -223,5 +223,6 @@ int main(int argc, const char **argv)
 
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList(), std::make_shared<PCHContainerOperations>(), fs);
 
-    return tool.run(new ClazyToolActionFactory(optionsParser.getSourcePathList()));
+    ClazyToolActionFactory factory(optionsParser.getSourcePathList());
+    return tool.run(&factory);
 }
