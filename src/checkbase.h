@@ -216,7 +216,6 @@ private:
     std::string tag() const;
     friend class ClazyPreprocessorCallbacks;
     friend class ClazyAstMatcherCallback;
-    ClazyPreprocessorCallbacks *const m_preprocessorCallbacks;
     std::vector<unsigned int> m_emittedWarningsInMacro;
     std::vector<unsigned int> m_emittedManualFixItsWarningsInMacro;
     std::vector<std::pair<clang::SourceLocation, std::string>> m_queuedManualInterventionWarnings;
