@@ -31,6 +31,7 @@
   <name xml:lang="ka">Clazy</name>
   <name xml:lang="ko">Clazy</name>
   <name xml:lang="lt">Clazy</name>
+  <name xml:lang="nb">Clazy</name>
   <name xml:lang="nl">Clazy</name>
   <name xml:lang="nn">Clazy</name>
   <name xml:lang="pl">Clazy</name>
@@ -154,6 +155,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge il seguente bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende fout op:</p>
         <p xml:lang="pl">To wydanie naprawia następujący błąd:</p>
         <p xml:lang="pt-BR">Esta versão corrige o seguinte erro:</p>
@@ -197,6 +199,7 @@
         <p xml:lang="he">זאת מהדורת טלאי לתיקון בעיות שילוב מול QtCreator וגם</p>
         <p xml:lang="it">Questa è una versione di correzione per risolvere i problemi di integrazione di QtCreator e</p>
         <p xml:lang="ka">ეს შეცდომების გასწორების ვერსიაა QtCreator-თან ინტეგრაციისა და</p>
+        <p xml:lang="nb">En programfiks for QtCreator som fikser integrasjonsfeil og</p>
         <p xml:lang="nl">Dit is een patch-uitgave om integratieproblemen met QtCreator op te lossen en</p>
         <p xml:lang="pl">To wydanie poprawkowe naprawia problemy z integracją z QtCreator oraz</p>
         <p xml:lang="pt-BR">Esta é uma versão de correção para solucionar problemas de integração com o Qt Creator e</p>
@@ -215,6 +218,7 @@
         <p xml:lang="he">תאימות לגרסאות Qt חדשות. המהדורה הזאת תומכת בגרסאות 19 עד 21 של LLVM.</p>
         <p xml:lang="it">compatibilità con le nuove versioni di Qt. Questa versione supporta le versioni di LLVM dalla 19 alla 21.</p>
         <p xml:lang="ka">ახალ Qt-ის ვერსიებთან თავსებადობის პრობლემების აღმოსაფხვრელად. ამ ვერსიას აქვს LLVM-ის ვერსიების მხარდაჭერა 19-დან 21-მდე.</p>
+        <p xml:lang="nb">kompatibilitet med nyere Qt-versjoner. Denne utgaven støtter LLVM-versjonene 19 til og med 21.</p>
         <p xml:lang="nl">compatibiliteit met nieuwe Qt-versies. Deze uitgave ondersteunt LLVM-versies 19 tot en met 21.</p>
         <p xml:lang="pl">zgodność z nowymi wersjami Qt. To wydanie obsługuje wersje LLVM od 19 do 21.</p>
         <p xml:lang="pt-BR">a compatibilidade com novas versões do Qt. Esta versão suporta as versões LLVM 19 a 21.</p>
@@ -234,6 +238,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -334,6 +339,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -579,6 +585,7 @@
         <p xml:lang="he">מעתה נדרשת תאימות לתקינת C++ 20 לצורך הידור</p>
         <p xml:lang="it">C++20 è ora richiesto per la compilazione</p>
         <p xml:lang="ka">კომპილაციისთვის ახლა აუცილებელია C++20</p>
+        <p xml:lang="nb">C++20 kreves for kompilering</p>
         <p xml:lang="nl">Voor compilatie is nu C++20 vereist</p>
         <p xml:lang="pl">C++20 jest teraz wymagane</p>
         <p xml:lang="pt-BR">Agora é necessário o C++20 para compilação</p>
@@ -621,6 +628,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -999,6 +1007,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -1444,6 +1453,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -1821,6 +1831,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -1841,6 +1852,7 @@
           <li xml:lang="he">דורש C++ 17</li>
           <li xml:lang="it">Richiede C++17</li>
           <li xml:lang="ka">მოითხოვს: C++17</li>
+          <li xml:lang="nb">Krever C++17</li>
           <li xml:lang="nl">Vereist C++17</li>
           <li xml:lang="pl">Wymaga C++17</li>
           <li xml:lang="pt-BR">Requer C++17</li>
@@ -1860,6 +1872,7 @@
           <li xml:lang="he">תיקוני תקלות:</li>
           <li xml:lang="it">Correzioni di errori:</li>
           <li xml:lang="ka">შეცდომების გასწორება:</li>
+          <li xml:lang="nb">Feilfikser:</li>
           <li xml:lang="nl">Verbeterde bugs:</li>
           <li xml:lang="pl">Poprawki błędów:</li>
           <li xml:lang="pt-BR">Correções de bugs:</li>
@@ -1922,6 +1935,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -2278,6 +2292,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -2643,6 +2658,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -2953,6 +2969,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge il seguente bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende fout op:</p>
         <p xml:lang="pl">To wydanie naprawia następujący błąd:</p>
         <p xml:lang="pt-BR">Esta versão corrige o seguinte erro:</p>
@@ -3834,6 +3851,7 @@
         <p xml:lang="he">המהדורה הזאת מתקנת את התקלות הבאות:</p>
         <p xml:lang="it">Questa versione corregge i seguenti bug:</p>
         <p xml:lang="ka">ამ რელიზში გასწორდა შემდეგი ხარვეზები:</p>
+        <p xml:lang="nb">Denne utgaven fikser følgende feil:</p>
         <p xml:lang="nl">Deze uitgave lost de volgende bugs op:</p>
         <p xml:lang="pl">To wydanie naprawia następujące błędy:</p>
         <p xml:lang="pt-BR">Esta versão corrige os seguintes bugs:</p>
@@ -4062,6 +4080,7 @@
           <li xml:lang="he">תמיכה ב־macOS וב־Windows</li>
           <li xml:lang="it">Supporto macOS e Windows</li>
           <li xml:lang="ka">macOS-ის და Windows-ის მხარდაჭერა</li>
+          <li xml:lang="nb">Støtte for macOS og Windows</li>
           <li xml:lang="nl">Ondersteuning van MacOS en Windows</li>
           <li xml:lang="pl">Wsparcie dla macOS i Windows</li>
           <li xml:lang="pt-BR">Suporte a macOS e Windows</li>
@@ -4157,6 +4176,7 @@
           <li xml:lang="he">qt-macros</li>
           <li xml:lang="it">qt-macros</li>
           <li xml:lang="ka">qt-macros</li>
+          <li xml:lang="nb">qt-makroer</li>
           <li xml:lang="nl">qt-macros</li>
           <li xml:lang="pl">qt-macros</li>
           <li xml:lang="pt-BR">qt-macros</li>
@@ -4271,6 +4291,7 @@
           <li xml:lang="he">clang 4.0</li>
           <li xml:lang="it">clang 4.0</li>
           <li xml:lang="ka">clang 4.0</li>
+          <li xml:lang="nb">clang 4.0</li>
           <li xml:lang="nl">clang 4.0</li>
           <li xml:lang="pl">clang 4.0</li>
           <li xml:lang="pt-BR">clang 4.0</li>
@@ -4290,6 +4311,7 @@
           <li xml:lang="he">Qt 5.9</li>
           <li xml:lang="it">Qt 5.9</li>
           <li xml:lang="ka">Qt 5.9</li>
+          <li xml:lang="nb">Qt 5.9</li>
           <li xml:lang="nl">Qt 5.9</li>
           <li xml:lang="pl">Qt 5.9</li>
           <li xml:lang="pt-BR">Qt 5.9</li>
@@ -4309,6 +4331,7 @@
           <li xml:lang="he">הערות:</li>
           <li xml:lang="it">Note:</li>
           <li xml:lang="ka">შენიშვნები:</li>
+          <li xml:lang="nb">Merknader:</li>
           <li xml:lang="nl">Notities:</li>
           <li xml:lang="pl">Uwagi:</li>
           <li xml:lang="pt-BR">Notas:</li>
@@ -4329,6 +4352,7 @@
           <li xml:lang="he">60% שיפורי ביצועים</li>
           <li xml:lang="it">Miglioramento delle prestazioni del 60%</li>
           <li xml:lang="ka">60% წარმადობის გაუმჯობესება</li>
+          <li xml:lang="nb">60% ytelsesøkning</li>
           <li xml:lang="nl">60% verbetering in prestatie</li>
           <li xml:lang="pl">60% wzrost wydajności</li>
           <li xml:lang="pt-BR">Melhoria de desempenho de 60%</li>
@@ -4373,6 +4397,7 @@
         <p xml:lang="he">מהדורה ראשונית</p>
         <p xml:lang="it">Primo rilascio</p>
         <p xml:lang="ka">პირველი რელიზი</p>
+        <p xml:lang="nb">Første utgave</p>
         <p xml:lang="nl">Eerste uitgave</p>
         <p xml:lang="pl">Pierwsze wydanie</p>
         <p xml:lang="pt-BR">Primeiro lançamento</p>
