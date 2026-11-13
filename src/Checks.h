@@ -87,6 +87,7 @@
 #include "checks/manuallevel/jnisignatures.h"
 #include "checks/manuallevel/modernize-list-initialization.h"
 #include "checks/manuallevel/qbytearray-conversion-to-c-style.h"
+#include "checks/manuallevel/qdebug-printf-style.h"
 #include "checks/manuallevel/qhash-with-char-pointer-key.h"
 #include "checks/manuallevel/qproperty-type-mismatch.h"
 #include "checks/manuallevel/qrequiredresult-candidates.h"
@@ -132,6 +133,8 @@ void CheckManager::registerChecks()
     registerCheck(check<ModernizeListInitialization>("modernize-list-initialization", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, false));
     registerCheck(check<QBytearrayConversionToCStyle>("qbytearray-conversion-to-c-style", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
     registerFixIt(1, "fix-qbytearray-conversion-to-c-style", "qbytearray-conversion-to-c-style");
+    registerCheck(check<QDebugPrintfStyle>("qdebug-printf-style", ManualCheckLevel, RegisteredCheck::Option_VisitsStmts, true));
+    registerFixIt(1, "fix-qdebug-printf-style", "qdebug-printf-style");
     registerCheck(check<QHashWithCharPointerKey>("qhash-with-char-pointer-key", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls, false));
     registerCheck(check<QPropertyTypeMismatch>("qproperty-type-mismatch", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls | RegisteredCheck::Option_PreprocessorCallbacks | RegisteredCheck::Option_VisitAllTypeDefs, false));
     registerCheck(check<QRequiredResultCandidates>("qrequiredresult-candidates", ManualCheckLevel, RegisteredCheck::Option_VisitsDecls, false));

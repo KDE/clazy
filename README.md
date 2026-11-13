@@ -232,6 +232,7 @@ clazy runs all checks from level1 by default.
   - [jni-signatures](docs/checks/README-jni-signatures.md)
   - [modernize-list-initialization](docs/checks/README-modernize-list-initialization.md)
   - [qbytearray-conversion-to-c-style](docs/checks/README-qbytearray-conversion-to-c-style.md) (fix-qbytearray-conversion-to-c-style)
+  - [qdebug-printf-style](docs/checks/README-qdebug-printf-style.md) (fix-qdebug-printf-style)
   - [qhash-with-char-pointer-key](docs/checks/README-qhash-with-char-pointer-key.md)
   - [qproperty-type-mismatch](docs/checks/README-qproperty-type-mismatch.md)
   - [qrequiredresult-candidates](docs/checks/README-qrequiredresult-candidates.md)

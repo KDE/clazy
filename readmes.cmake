@@ -10,6 +10,7 @@ SET(README_manuallevel_FILES
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-jni-signatures.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-modernize-list-initialization.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qbytearray-conversion-to-c-style.md
+    ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qdebug-printf-style.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qhash-with-char-pointer-key.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qproperty-type-mismatch.md
     ${CMAKE_CURRENT_LIST_DIR}/docs/checks/README-qrequiredresult-candidates.md

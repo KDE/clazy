@@ -43,6 +43,19 @@
             "preprocessor_callbacks": true
         },
         {
+            "name": "qdebug-printf-style",
+            "class_name": "QDebugPrintfStyle",
+            "level": -1,
+            "categories": ["performance"],
+            "visits_stmts": true,
+            "can_ignore_includes": true,
+            "fixits": [
+                {
+                    "name": "qdebug-printf-style"
+                }
+            ]
+        },
+        {
             "name": "signal-with-return-value",
             "level": -1,
             "visits_decls": true
